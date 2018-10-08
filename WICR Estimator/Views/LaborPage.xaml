@@ -71,7 +71,7 @@
                 <DataGridTemplateColumn Header="">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox x:Name="includeMe" Command="{Binding DataContext.CheckboxCommand,ElementName=MaterialGrid}"
+                            <CheckBox Command="{Binding DataContext.CheckboxCommand,ElementName=MaterialGrid}"
                                       CommandParameter="{Binding Name}"
                                       IsChecked="{Binding IsMaterialChecked,
                                 UpdateSourceTrigger=PropertyChanged}"

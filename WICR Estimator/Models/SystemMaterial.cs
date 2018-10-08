@@ -12,7 +12,7 @@ namespace WICR_Estimator.Models
 
         private bool ismaterialchecked;
         private bool isMaterialEnabled;
-        public EstimateType Type { get; set; }
+        //public EstimateType Type { get; set; }
         public bool IsWWR { get; set; }
         public bool IsCheckboxDependent { get; set; }
         public bool IsReadOnly { get; set; }
