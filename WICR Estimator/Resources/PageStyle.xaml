@@ -1,0 +1,141 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:WICR_Estimator.Resources">
+
+    <Style x:Key="NavigateButton" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="#00000000"/>
+        <Setter Property="BorderBrush" Value="#00000000"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="1"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <ContentPresenter 
+                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                        Margin="{TemplateBinding Padding}" 
+                        RecognizesAccessKey="True" 
+                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--DataGridCell Style-->
+    <Style TargetType="DataGrid" x:Key="WICRDataGrid">
+
+    </Style>
+    <Style TargetType="DataGridCell"  x:Key="WICRDataGridCell">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="#46ADD6"/>
+                <Setter Property="Foreground" Value="Black"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style  x:Key="WICRDataGridColumnHeader" TargetType="{x:Type DataGridColumnHeader}">
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="FontWeight" Value="Black" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+                    <Grid>
+                        <Border x:Name="columnHeaderBorder" BorderThickness="1" Padding="5,5,5,5">
+                            <Border.BorderBrush>
+                                <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
+                                    <GradientStop Offset="0" Color="Black"/>
+                                    <GradientStop Offset="1" Color="#FF6CA8DC" />
+                                </LinearGradientBrush>
+                            </Border.BorderBrush>
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                    <GradientStop Offset="0" Color="#BAEFFD" />
+                                    <GradientStop Offset="1" Color="#1092C6" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+			     VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+				SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <!--Button 1 Styling-->
+    <Style x:Key="ButtonTemplate" TargetType="Button">
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Height" Value="35"/>
+        <Setter Property="Width" Value="170"/>
+    </Style>
+    <Style TargetType="{x:Type ListViewItem}">
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Foreground" Value="Black"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <!--Project Template-->
+    <DataTemplate x:Key="ProjectTemplate">
+        <StackPanel Orientation="Horizontal" Background="#00C0E0FF">
+            <Image x:Name="tickImage" Source="..\Images\tick.png" Height="25"
+                      Visibility="Hidden"/>
+            <TextBlock Text="{Binding Path=Name}"
+                           FontWeight="SemiBold"
+                           FontSize="15"/>
+        </StackPanel>
+        <DataTemplate.Triggers>
+            <DataTrigger
+                Binding="{Binding
+                    RelativeSource={RelativeSource
+                        Mode=FindAncestor,
+                        AncestorType={x:Type ListBoxItem}},
+                        Path=IsSelected}"
+                Value="True">
+                <Setter TargetName="tickImage"
+                Property="Visibility"
+                Value="Visible"/>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+    <Style TargetType="Label" x:Key="LabelStyle1">
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="FontFamily" Value="Arial"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+    </Style>
+    <Style TargetType="TextBlock" x:Key="TextBlockStyle1">
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="FontFamily" Value="Arial"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="HorizontalAlignment"  Value="Right"/>
+    </Style>
+    <Style TargetType="TextBox" x:Key="TextBoxStyle">
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="FontFamily" Value="Arial"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="HorizontalContentAlignment"  Value="Center"/>
+        <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="BorderThickness"  Value="1"/>
+    </Style>
+    <Style x:Key="cbTB" TargetType="{x:Type CheckBox}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ElementName=qtyTb, Path=IsEnabled}" Value="True">
+                <Setter Property="CheckBox.IsChecked" Value="True"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

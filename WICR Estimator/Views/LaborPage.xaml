@@ -1,0 +1,300 @@
+﻿<UserControl x:Class="WICR_Estimator.Views.LaborPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WICR_Estimator.Views"
+              xmlns:conv="clr-namespace:WICR_Estimator.Converters"
+             mc:Ignorable="d" 
+              d:DesignHeight="700" d:DesignWidth="1200">
+    <UserControl.Resources>
+
+        <conv:CheckBoxVisibilityConverter x:Key="checkBoxConv"/>
+        <conv:EnableTextboxConverter x:Key="textboxConv"/>
+        <conv:QtyTextboxConverter x:Key="qtyTextboxConv"/>
+        <Style TargetType="Label" x:Key="LabelStyle1">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="TextBlockStyle1">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment"  Value="Right"/>
+        </Style>
+        <Style TargetType="TextBox" x:Key="TextBoxStyle">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalContentAlignment"  Value="Center"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness"  Value="1"/>
+        </Style>
+        <Style x:Key="cbTB" TargetType="{x:Type CheckBox}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=qtyTb, Path=IsEnabled}" Value="True">
+                    <Setter Property="CheckBox.IsChecked" Value="True"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width=".7*"/>
+            <ColumnDefinition Width=".3*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <DataGrid AutoGenerateColumns="False" 
+                  HorizontalAlignment="Left"
+                  Name="MaterialGrid" 
+                  Margin="10"
+                  VerticalAlignment="Top" 
+                  CanUserAddRows="False"
+                  ItemsSource="{Binding Labor,UpdateSourceTrigger=PropertyChanged}" Grid.RowSpan="4" Grid.ColumnSpan="2">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox x:Name="includeMe" Command="{Binding DataContext.CheckboxCommand,ElementName=MaterialGrid}"
+                                      CommandParameter="{Binding Name}"
+                                      IsChecked="{Binding IsMaterialChecked,
+                                UpdateSourceTrigger=PropertyChanged}"
+                                      IsEnabled="{Binding IsMaterialEnabled,
+                                UpdateSourceTrigger=PropertyChanged}">
+
+                            </CheckBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="System Material">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Name}"
+                                     IsReadOnly="True"
+                                     >
+                            </TextBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Operation">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Operation,UpdateSourceTrigger=PropertyChanged}"
+                                     IsEnabled="False"
+                            >
+                            </TextBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Sq ft or Lf Area Vertical" Visibility="Hidden" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding SMSqftV,UpdateSourceTrigger=PropertyChanged}"
+                                     IsReadOnly="True">
+                            </TextBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Binding="{Binding ProductionRateVert,UpdateSourceTrigger=PropertyChanged}"
+                                    IsReadOnly="True" Visibility="Hidden">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="Production Rate Verticle" 
+                                   TextWrapping="Wrap"  Width="Auto"/>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="Sq ft or Lf Area Horizontal" Visibility="Visible">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding SMSqftH,UpdateSourceTrigger=PropertyChanged}"
+                                     IsReadOnly="True">
+                            </TextBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Binding="{Binding ProductionRateHor,UpdateSourceTrigger=PropertyChanged}"
+                                    IsReadOnly="True" Visibility="Visible">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="Production Rate Horizontal" 
+                                   TextWrapping="Wrap"  Width="Auto"/>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                
+                <DataGridTemplateColumn Header="Sq ft or Lf Area Stairs" Visibility="Visible">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding SMSqftSt,UpdateSourceTrigger=PropertyChanged}"
+                                     IsReadOnly="True">
+                            </TextBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Binding="{Binding ProductionRateSt,UpdateSourceTrigger=PropertyChanged}"
+                                    IsReadOnly="True" Visibility="Visible">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="Production Rate Stairs" 
+                                   TextWrapping="Wrap"  Width="Auto"/>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="#Hours">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Hours,UpdateSourceTrigger=PropertyChanged}"
+                                     Name="HoursTb"
+                                    IsEnabled="{Binding Path=Name,Converter={StaticResource qtyTextboxConv}}"/>
+                        </DataTemplate>
+
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Binding="{Binding SetUpTime,UpdateSourceTrigger=PropertyChanged}"
+                                    IsReadOnly="True">
+               
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding LaborExtension,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}"
+                                    IsReadOnly="True">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="Labor Extension"  
+                                   TextWrapping="Wrap"  Width="Auto"/>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding MaterialExtension,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}"
+                                    IsReadOnly="True">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="Material Extension"  
+                                   TextWrapping="Wrap"  Width="Auto"/>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                
+            </DataGrid.Columns>
+
+        </DataGrid>
+        <GroupBox x:Name="grp1" 
+                  Grid.Row="6" 
+                  Header="Total ($)"
+                  BorderBrush="Black" 
+                  BorderThickness="1">
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="9*"/>
+                    <ColumnDefinition Width="25*"/>
+                    <ColumnDefinition Width="132*"/>
+                    <ColumnDefinition Width="166*"/>
+                    <ColumnDefinition Width="165*"/>
+                    <ColumnDefinition Width="166*"/>
+                    <ColumnDefinition Width="165*"/>
+
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Margin="1,10,10,10" Grid.Column="1" Grid.ColumnSpan="2">
+                    <TextBlock Text="Qty" 
+                               HorizontalAlignment="Center"/>
+                    <TextBox Text="{Binding SumQty,UpdateSourceTrigger=PropertyChanged ,StringFormat={}{0:C0}.00}" 
+                             FocusManager.FocusedElement="{Binding ElementName=AddButton}"
+                             IsReadOnly="True"
+                             Style="{StaticResource TextBoxStyle}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="3" Margin="5,10,10,10">
+                    <TextBlock Text="Material Price" 
+                               HorizontalAlignment="Center"/>
+                    <TextBox Text="{Binding SumMatPrice,
+                        UpdateSourceTrigger=PropertyChanged ,StringFormat={}{0:C0}.00}" 
+                             IsReadOnly="True"
+                             Style="{StaticResource TextBoxStyle}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="4" Margin="5,10,10,10" >
+                    <TextBlock Text="Material Extn" 
+                               HorizontalAlignment="Center"/>
+                    <TextBox Text="{Binding SumTotalMatExt,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}" 
+                             IsReadOnly="True" 
+                            Style="{StaticResource TextBoxStyle}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="5" Margin="5,10,10,10">
+                    <TextBlock Text="Weight" 
+                               HorizontalAlignment="Center"/>
+                    <TextBox Text="{Binding SumWeight,UpdateSourceTrigger=PropertyChanged}"
+                             IsReadOnly="True"
+                             Style="{StaticResource TextBoxStyle}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="6" Margin="5,10,10,10">
+                    <TextBlock Text="Freight Weight" 
+                               HorizontalAlignment="Center" />
+                    <TextBox Text="{Binding SumFreight,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}"
+                             IsReadOnly="True"
+                             Style="{StaticResource TextBoxStyle}"/>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+        <!--Column 1 Element-->
+        <!--Row 0 ELement-->
+        <GroupBox x:Name="OtherCost" Grid.Column="0" Grid.Row="1" 
+                  Header="Other Cost" Foreground="Maroon"
+                  FontFamily="Arial"
+                  FontSize="12"
+                  FontWeight="Bold"
+                  BorderBrush="DarkBlue"
+                  BorderThickness="0.5" >
+
+
+            <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Left"
+                      Name="OtherCostGrid" VerticalAlignment="Top"
+                      Margin="0,10,10,10"
+                      Grid.Column="1"
+                      CanUserAddRows="false"                      
+                  ItemsSource="{Binding OtherLMaterials,UpdateSourceTrigger=PropertyChanged}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Items" 
+                                    IsReadOnly="True"
+                                    Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="Unit"
+                                    Binding="{Binding Units,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="Labor Unit Price ($)"
+                                    Binding="{Binding LaborUnitPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}"/>
+                    <DataGridTextColumn Header="Labor Price($)" 
+                                        IsReadOnly="True"
+                                        Binding="{Binding LaborPrice,Mode=OneWay,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}"/>
+                </DataGrid.Columns>
+
+            </DataGrid>
+
+        </GroupBox>
+        
+        <StackPanel Grid.Row="6" Grid.Column="1">
+
+            <Button Command="{Binding CalculateCostCommand}"                   
+                    Height="35" Margin="20"
+                    Background="White"
+                    HorizontalAlignment="Center"
+                     Grid.Row="3" Grid.Column="3">
+
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Calculate" VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"
+                                   Margin="0,0,5,0" FontSize="12" FontWeight="bold"/>
+                        <Image Source="../Images/Calculator.png"
+                               Height="25" Width="36"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+        </StackPanel>
+        <!--Column 1 Element-->
+    </Grid>
+</UserControl>
