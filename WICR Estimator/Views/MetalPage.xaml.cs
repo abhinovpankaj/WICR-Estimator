@@ -12,8 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using WICR_Estimator.ViewModels;
-using WICR_Estimator.Views;
 
 namespace WICR_Estimator.Views
 {
@@ -22,11 +20,9 @@ namespace WICR_Estimator.Views
     /// </summary>
     public partial class MetalPage : UserControl
     {
-        public MetalViewModel metalVM ;
         public MetalPage()
         {
             InitializeComponent();
-                       
         }
     }
 }

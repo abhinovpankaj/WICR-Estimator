@@ -18,13 +18,23 @@ namespace WICR_Estimator.ViewModels
         private ICommand _calculateCostCommand;
         private ICommand _removeCommand;
         private int AddInt = 2;
+        private IList<IList<object>> pWage;
+        private double prevailingWage;
+        private double deductionOnLargeJob;
+        private bool isPrevailingWage;
+        private bool isDiscount;
+        private string vendorName;
+        private IList<IList<object>> metalDetails;
+        private double laborRate;
         public MetalViewModel()
         {
             Metals = new ObservableCollection<Metal>();
             MiscMetals = new ObservableCollection<MiscMetal>();
-            Metals=GetMetals();
+            MetalViewModelAsync();
+            Metals =GetMetals();
             MiscMetals=GetMiscMetals();
             mName = "Copper";
+            
             JobSetup.OnJobSetupChange += JobSetup_OnJobSetupChange;
             updateLaborCost();
             updateMaterialCost();
@@ -36,9 +46,29 @@ namespace WICR_Estimator.ViewModels
             if (Js!=null)
             {
                 MetalName = Js.MaterialName;
+                isPrevailingWage = Js.IsPrevalingWage;
+                isDiscount = Js.HasDiscount;
+                vendorName = Js.VendorName;
             }
             updateLaborCost();
             updateMaterialCost();
+
+        }
+        private void MetalViewModelAsync()
+        {
+            
+            if (pWage == null)
+            {
+                //pWage = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E60:E61");
+                GSData gsData = DataSerializer.DSInstance.deserializeGoogleData();
+                pWage = gsData.LaborData;
+                double.TryParse(gsData.LaborRate[0][0].ToString(),out laborRate);
+                Nails= double.Parse(gsData.MetalData[21][1].ToString());
+                metalDetails = gsData.MetalData;
+            }
+            
+            double.TryParse(pWage[0][0].ToString(), out prevailingWage);    
+            double.TryParse(pWage[1][0].ToString(), out deductionOnLargeJob);
 
         }
         #region Properties
@@ -55,7 +85,19 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
-
+        private double nails=15;
+        public double Nails
+        {
+            get { return nails; }
+            set
+            {
+                if (value != nails)
+                {
+                    nails = value;
+                    OnPropertyChanged("Nails");
+                }
+            }
+        }
         private double totalLaborCost;
         public double TotalLaborCost
         {
@@ -201,39 +243,109 @@ namespace WICR_Estimator.ViewModels
         public ObservableCollection<Metal> GetMetals()
         {
             ObservableCollection<Metal> met = new ObservableCollection<Metal>();
-            met.Add(new Metal("L - METAL / FLASHING", 56, 23.43, 1, 0.912, false));
-            met.Add(new Metal("DRIP EDGE METAL", 56, 23.43, 1, 0.564, false));
-            met.Add(new Metal("STAIR METAL 4X6", 80, 23.43, 135, 0.912, true));
-            met.Add(new Metal("STAIR METAL 3X3", 80, 23.43, 240, 0.54, true));
-            met.Add(new Metal("DOOR SADDLES (4 ft.)", 2, 23.43, 1, 30.216, false));
-            met.Add(new Metal("DOOR SADDLES (6 ft.)", 2, 23.43, 2, 30.852, false));
-            met.Add(new Metal("DOOR SADDLES (8 ft.)", 2, 23.43, 3, 33.072, false));
-            met.Add(new Metal("DOOR SADDLES (10 ft.)", 2, 23.43, 6, 50.688, false));
-            met.Add(new Metal("INSIDE CORNER", 12, 23.43, 1, 7.5, false));
-            met.Add(new Metal("OUTSIDE CORNER", 12, 23.43, 1, 7.5, false));
-            met.Add(new Metal("INSIDE EDGE CORNER", 12, 23.43, 1, 5.664, false));
-            met.Add(new Metal("OUTSIDE EDGE CORNER", 12, 23.43, 1, 5.028, false));
-            met.Add(new Metal("DOOR CORNERS SET OF 2 (L&R)", 12, 23.43, 1, 11.388, false));
-            met.Add(new Metal("STRINGER TRANSITION CAP", 12, 23.43, 1, 9.348, false));
-            met.Add(new Metal("DRIP TERMINATION", 12, 23.43, 1, 12.468, false));
-            met.Add(new Metal("2 inch CHIVON DRAINS", 4, 23.43, 1, 25.44, false));
-            met.Add(new Metal("STANDARD SCUPPER 4x4x9", 7, 23.43, 1, 30.852, false));
-            met.Add(new Metal("SCUPPER WITH A COLLAR 4x4x9", 4, 23.43, 1, 38.796, false));
-            met.Add(new Metal("POST COLLARS 4x4 w/  KERF", 7, 23.43, 1, 12.084, false));
+            met.Add(new Metal("L - METAL / FLASHING",getMetalPR(0), laborRate,1, getMetalMP(0), false));
+            met.Add(new Metal("DRIP EDGE METAL", getMetalPR(1), laborRate, 1, getMetalMP(1), false));
+            met.Add(new Metal("STAIR METAL 4X6", getMetalPR(2), laborRate, getUnits(0), getMetalMP(2), true));
+            met.Add(new Metal("STAIR METAL 3X3", getMetalPR(3), laborRate, getUnits(1), getMetalMP(3), true));
+            met.Add(new Metal("DOOR SADDLES (4 ft.)", getMetalPR(4), laborRate, 1, getMetalMP(4), false));
+            met.Add(new Metal("DOOR SADDLES (6 ft.)", getMetalPR(5) ,laborRate, 2, getMetalMP(5), false));
+            met.Add(new Metal("DOOR SADDLES (8 ft.)", getMetalPR(6), laborRate, 3, getMetalMP(6), false));
+            met.Add(new Metal("DOOR SADDLES (10 ft.)", getMetalPR(7), laborRate, 6, getMetalMP(7), false));
+            met.Add(new Metal("INSIDE CORNER", getMetalPR(8), laborRate, 1, getMetalMP(8), false));
+            met.Add(new Metal("OUTSIDE CORNER", getMetalPR(9), laborRate, 1, getMetalMP(9), false));
+            met.Add(new Metal("INSIDE EDGE CORNER", getMetalPR(10), laborRate, 1, getMetalMP(10), false));
+            met.Add(new Metal("OUTSIDE EDGE CORNER", getMetalPR(11), laborRate, 1, getMetalMP(11), false));
+            met.Add(new Metal("DOOR CORNERS SET OF 2 (L&R)", getMetalPR(12), laborRate, 1, getMetalMP(12), false));
+            met.Add(new Metal("STRINGER TRANSITION CAP", getMetalPR(13), laborRate, 1, getMetalMP(13), false));
+            met.Add(new Metal("DRIP TERMINATION", getMetalPR(14), laborRate, 1, getMetalMP(14), false));
+            met.Add(new Metal("2 inch CHIVON DRAINS", getMetalPR(15), laborRate, 1, getMetalMP(15), false));
+            met.Add(new Metal("STANDARD SCUPPER 4x4x9", getMetalPR(16), laborRate, 1, getMetalMP(16), false));
+            met.Add(new Metal("SCUPPER WITH A COLLAR 4x4x9", getMetalPR(17), laborRate, 1, getMetalMP(17), false));
+            met.Add(new Metal("POST COLLARS 4x4 w/  KERF", getMetalPR(18), laborRate, 1, getMetalMP(18), false));       
             return met;
         }
+        private double getMetalMP(int rowN)
+        {
+            double val=0;
+            
+            if (rowN==19 ||rowN==20)
+            {
+                double.TryParse(metalDetails[rowN][2].ToString(), out val);
+            }
+            else
+                double.TryParse(metalDetails[rowN][7].ToString(), out val);
+            return val;
+        }
+        private double getUnits(int unitNo)
+        {
+            double unit=0;
+            if (unitNo==0)
+            {
+                double.TryParse(metalDetails[2][0].ToString(), out unit);
+            }
+            else if(unitNo==1)
+                double.TryParse(metalDetails[3][0].ToString(), out unit);
+            else if (unitNo==2)
+            {
+                double.TryParse(metalDetails[19][0].ToString(), out unit);
+            }
+            else if (unitNo == 3)
+            {
+                double.TryParse(metalDetails[20][0].ToString(), out unit);
+            }
+            return unit;
+        }
+        private double getMetalPR(int rowN)
+        {
+            int colN=1;
+            double val = 0;
+            switch (MetalName)
+                {
+                    case "Copper":
+                        colN = 1;
+                        break;
+                    case "Steel":
+                        colN = 2;
+                        break;
+                    case "Stainless Steel":
+                        colN = 3;
+                        break;
+                    default:
+                        colN = 1;
+                        break;
+                }
+            if (vendorName != "Chivon")
+            {
+                colN = colN + 3;
+            }
+            double.TryParse(metalDetails[rowN][colN].ToString(),out val);
+            return val;
+        }
+
         public ObservableCollection<MiscMetal> GetMiscMetals()
         {
             ObservableCollection<MiscMetal> misc = new ObservableCollection<MiscMetal>();
-            misc.Add(new MiscMetal { Name = "Pins & Loads for metal over concrete", Units = 1512, UnitPrice = 0, MaterialPrice = 0.25, IsReadOnly = true });
-            misc.Add(new MiscMetal { Name = "Nosing for Concrete risers", Units = 30, UnitPrice = 4.69, MaterialPrice = 0, IsReadOnly = true });
+            misc.Add(new MiscMetal { Name = "Pins & Loads for metal over concrete", Units = getUnits(2), UnitPrice = getUnitPrice(0), MaterialPrice = getMetalMP(19), IsReadOnly = true });
+            misc.Add(new MiscMetal { Name = "Nosing for Concrete risers", Units = getUnits(3), UnitPrice = getUnitPrice(0), MaterialPrice = getMetalMP(20), IsReadOnly = true });
             misc.Add(new MiscMetal { Name = "OTHER DRAINS TO BE ITEMIZED", Units = 1, UnitPrice = 8, MaterialPrice = 15, IsReadOnly = false });
             return misc;
         }
+        private double getUnitPrice(int unit)
+        {
+            double val = 0;
+            if (unit==0)
+            {
+                double.TryParse(metalDetails[19][3].ToString(), out val);
+            }
+            else
+                double.TryParse(metalDetails[20][3].ToString(), out val);
 
+            return val;
+        }
         private void updateMaterialCost()
         {
             double stairCost = 0;
+            double nl = Nails / 100;
             IEnumerable<Metal> stairMetals = metals.Where(x => x.IsStairMetal == false && x.Name.Contains("STAIR"));
             if (stairMetals != null)
             {
@@ -241,28 +353,41 @@ namespace WICR_Estimator.ViewModels
             }
             if (metals.Count>0 && miscMetals.Count>0)
             {
-                double misSum = miscMetals.Select(x => x.MaterialExtension).Sum();
-                TotalMaterialCost = metals.Select(x => x.MaterialExtension).Sum() +
-                miscMetals.Select(x => x.MaterialExtension).Sum() - stairCost;
+                double misSum = metals.Select(x => x.MaterialExtension).Sum() * nl;
+                TotalMaterialCost = ((metals.Select(x => x.MaterialExtension).Sum()) +
+                miscMetals.Select(x => x.MaterialExtension).Sum() - stairCost ) + misSum; 
             }
             
         }
+    
         private void updateLaborCost()
         {
-
+           
             double stairCost = 0;
             IEnumerable<Metal> stairMetals = metals.Where(x => x.IsStairMetal == false && x.Name.Contains("STAIR"));
             if (stairMetals != null)
             {
                 stairCost = stairMetals.Select(x => x.LaborExtension).Sum();
             }
-            if (metals.Count>0 && miscMetals.Count>0)
+            ////Calculate Labor Cost
+            double misSum = miscMetals.Select(x => x.LaborExtension).Sum();
+            misSum = (metals.Select(x => x.LaborExtension).Sum() +
+            miscMetals.Select(x => x.LaborExtension).Sum() - stairCost);
+                        
+            if (isPrevailingWage  )
             {
-                double misSum = miscMetals.Select(x => x.LaborExtension).Sum();
-                TotalLaborCost = metals.Select(x => x.LaborExtension).Sum() +
-                miscMetals.Select(x => x.LaborExtension).Sum() - stairCost;
+                TotalLaborCost = misSum * (1 + prevailingWage + deductionOnLargeJob);
             }
-            
+            else
+                TotalLaborCost = misSum * (1 + deductionOnLargeJob);
+
+            if (!isDiscount && !isPrevailingWage)
+            {
+                if (metals.Count > 0 && miscMetals.Count > 0)
+                {
+                    TotalLaborCost = misSum;
+                }
+            }
         }
     }
 }

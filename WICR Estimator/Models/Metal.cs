@@ -30,8 +30,8 @@ namespace WICR_Estimator.Models
                 }
             }
         }
-        private int units;
-        public int Units
+        private double units;
+        public double Units
         {
             get
 
@@ -49,7 +49,7 @@ namespace WICR_Estimator.Models
                 }
             }
         }
-        public int ProductionRate { get; set; }
+        public double ProductionRate { get; set; }
         public double NoOfHrs
         {
             get
@@ -115,7 +115,7 @@ namespace WICR_Estimator.Models
             }
         }
 
-        public Metal(string name,int productionRate,double laborRate,int units,double materialPrice,bool isStairMetal,double specialPricing=0)
+        public Metal(string name,double productionRate,double laborRate,double units,double materialPrice,bool isStairMetal,double specialPricing=0)
             :this()
         {
             this.ProductionRate = productionRate;

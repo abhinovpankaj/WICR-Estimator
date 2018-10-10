@@ -9,8 +9,11 @@ using System.Windows.Input;
 
 namespace WICR_Estimator.ViewModels
 {
+    
     public class MaterialViewModel:BaseViewModel
     {
+
+        public Totals MaterialTotals;
         #region privatefields
         private ObservableCollection<SystemMaterial> systemMaterials;
         private ObservableCollection<OtherItem> otherMaterials;
@@ -84,6 +87,7 @@ namespace WICR_Estimator.ViewModels
                 if (value!=sumFreight)
                 {
                     sumFreight = value;
+                    MaterialTotals.MaterialFreightTotal = value;
                     OnPropertyChanged("SumFreight");
                 }
             }
@@ -110,6 +114,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != sumTotalMatExt)
                 {
                     sumTotalMatExt = value;
+                    MaterialTotals.MaterialExtTotal = value;
                     OnPropertyChanged("SumTotalMatExt");
                 }
             }
@@ -188,7 +193,9 @@ namespace WICR_Estimator.ViewModels
                 if (value != totalSubContractLaborCostBrkp)
                 {
                     totalSubContractLaborCostBrkp = value;
+                    MaterialTotals.SubContractLabor = value;
                     OnPropertyChanged("TotalSubContractLaborCostBrkp");
+                    OnPropertyChanged("matTotals");
                 }
             }
         }
@@ -202,6 +209,7 @@ namespace WICR_Estimator.ViewModels
                 {
                     totalOCExtension = value;
                     OnPropertyChanged("TotalOCExtension");
+                   
                 }
             }
         }
@@ -215,6 +223,7 @@ namespace WICR_Estimator.ViewModels
                 {
                     totalSCExtension = value;
                     OnPropertyChanged("TotalSCExtension");
+                    
                 }
             }
         }
@@ -222,6 +231,7 @@ namespace WICR_Estimator.ViewModels
 
         public MaterialViewModel()
         {
+            MaterialTotals = new Totals();
             SystemMaterials = new ObservableCollection<SystemMaterial>();
             OtherMaterials = new ObservableCollection<OtherItem>();
             SubContractLaborItems = new ObservableCollection<LaborContract>();
@@ -233,6 +243,7 @@ namespace WICR_Estimator.ViewModels
             FetchMaterialValuesAsync();
             JobSetup.OnJobSetupChange += JobSetup_OnJobSetupChange;
             CheckboxCommand = new DelegateCommand(ApplyCheckUnchecks, canApply);
+            
         }
         #region commands
         private bool canApply(object obj)
@@ -244,7 +255,7 @@ namespace WICR_Estimator.ViewModels
                     return true;
                 }
                 else
-                    return false;
+                    return getCheckboxCheckStatus(obj.ToString());
             }
             else
                 return true;
@@ -273,16 +284,22 @@ namespace WICR_Estimator.ViewModels
                         mat.IsMaterialChecked = false;
                         mat.IsMaterialEnabled = true;
                     }
-                    if (mat.Name== "Resistite Regular White" || mat.Name == "Resistite Regular Or Smooth White(Knock Down Or Smooth)"
-                        ||mat.Name== "Custom Texture Skip Trowel(Resistite Smooth White)")
+                    if (mat.Name== "Resistite Regular Gray") 
                     {
-                        mat.IsMaterialChecked = true;
+                        mat.Name = "Resistite Regular White";
+                        mat.MaterialPrice = double.Parse(materialDetails[13][0].ToString()) ;
                     }
-                    if (mat.Name == "Resistite Regular Gray"|| mat.Name == "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)"
-                        || mat.Name== "Custom Texture Skip Trowel(Resistite Smooth Gray)")
+                    if(mat.Name == "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)")
                     {
-                        mat.IsMaterialChecked = false;
+                        mat.Name = "Resistite Regular Or Smooth White(Knock Down Or Smooth)";
+                        mat.MaterialPrice = double.Parse(materialDetails[15][0].ToString());
                     }
+                    if(mat.Name == "Custom Texture Skip Trowel(Resistite Smooth Gray)")
+                    {
+                        mat.Name = "Custom Texture Skip Trowel(Resistite Smooth White)";
+                        mat.MaterialPrice = double.Parse(materialDetails[21][0].ToString());
+                    }
+                    
                 }
             }
             if (obj.ToString() == "Vista Paint Acripoxy")
@@ -299,15 +316,20 @@ namespace WICR_Estimator.ViewModels
                         mat.IsMaterialChecked = false;
                         mat.IsMaterialEnabled = true;
                     }
-                    if (mat.Name == "Resistite Regular White" || mat.Name == "Resistite Regular Or Smooth White(Knock Down Or Smooth)"
-                        || mat.Name == "Custom Texture Skip Trowel(Resistite Smooth White)")
+                    if (mat.Name == "Resistite Regular White")
                     {
-                        mat.IsMaterialChecked = false;
+                        mat.Name = "Resistite Regular Gray";
+                        mat.MaterialPrice = double.Parse(materialDetails[12][0].ToString());
                     }
-                    if (mat.Name == "Resistite Regular Gray" || mat.Name == "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)"
-                        || mat.Name == "Custom Texture Skip Trowel(Resistite Smooth Gray)")
+                    if (mat.Name == "Resistite Regular Or Smooth White(Knock Down Or Smooth)")
                     {
-                        mat.IsMaterialChecked = true;
+                        mat.Name = "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)";
+                        mat.MaterialPrice = double.Parse(materialDetails[14][0].ToString());
+                    }
+                    if (mat.Name == "Custom Texture Skip Trowel(Resistite Smooth White)")
+                    {
+                        mat.Name = "Custom Texture Skip Trowel(Resistite Smooth Gray)";
+                        mat.MaterialPrice = double.Parse(materialDetails[20][0].ToString());
                     }
                 }
             }
@@ -327,23 +349,28 @@ namespace WICR_Estimator.ViewModels
                         mat.IsMaterialChecked = false;
                         mat.IsMaterialEnabled = true;
                     }
-                    if (mat.Name == "Resistite Regular White" || mat.Name == "Resistite Regular Or Smooth White(Knock Down Or Smooth)"
-                        || mat.Name == "Custom Texture Skip Trowel(Resistite Smooth White)")
+                    if (mat.Name == "Resistite Regular White")
                     {
-                        mat.IsMaterialChecked = false;
+                        mat.Name = "Resistite Regular Gray";
+                        mat.MaterialPrice = double.Parse(materialDetails[12][0].ToString());
                     }
-                    if (mat.Name == "Resistite Regular Gray" || mat.Name == "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)"
-                        || mat.Name == "Custom Texture Skip Trowel(Resistite Smooth Gray)")
+                    if (mat.Name == "Resistite Regular Or Smooth White(Knock Down Or Smooth)")
                     {
-                        mat.IsMaterialChecked = true;
+                        mat.Name = "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)";
+                        mat.MaterialPrice = double.Parse(materialDetails[14][0].ToString());
+                    }
+                    if (mat.Name == "Custom Texture Skip Trowel(Resistite Smooth White)")
+                    {
+                        mat.Name = "Custom Texture Skip Trowel(Resistite Smooth Gray)";
+                        mat.MaterialPrice = double.Parse(materialDetails[20][0].ToString());
                     }
                 }
             }
 
-            if (obj.ToString() == "Neotex Standard Powder(Body Coat)" || obj.ToString() == "Neotex Standard Powder(Body Coat 1)")
+            if (obj.ToString() == "Neotex Standard Powder(Body Coat)" || obj.ToString() == "Neotex Standard Powder(Body Coat) 1")
             {
                 var materials = SystemMaterials.Where(x => x.IsCheckboxDependent == true).ToList();
-                bool coat, coat1=false;
+                bool coat=false, coat1=false;
                 SystemMaterial neomat=null;
                 foreach (SystemMaterial mat in materials)
                 {
@@ -360,26 +387,37 @@ namespace WICR_Estimator.ViewModels
                         neomat = mat;
                     }
                 }
-                if (coat1==false&&coat1==false)
+                if (coat==false&&coat1==false)
                 {
                     if (neomat!=null)
                     {
                         neomat.IsMaterialChecked = false;
-                    }                    
-                }            
+                    }   
+                                     
+                }
+                else
+                {
+                    if (neomat != null)
+                    {
+                        neomat.IsMaterialChecked = true;
+                    }
+                }
+                               
             }
         }
         
         #endregion
         //Get data from googlesheets
-        private async void FetchMaterialValuesAsync()
+        private void FetchMaterialValuesAsync()
         {
             if (materialDetails == null)
             {
-                materialDetails = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "H33:K59");
+                //materialDetails = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "H33:K59");
+                materialDetails = DataSerializer.DSInstance.deserializeGoogleData(DataType.Material); 
             }
             
             SystemMaterials = GetSystemMaterial();
+            setCheckBoxes();
             OtherMaterials = GetOtherMaterials();
             SubContractLaborItems = GetLaborItems();
             calculateTotals();
@@ -387,28 +425,26 @@ namespace WICR_Estimator.ViewModels
             CalculateCostBreakup();
         }
 
-        //private ObservableCollection<LaborContract> GetLaborItems()
-        //{
-            
-        //}
-
+        
         private ObservableCollection<OtherItem> GetOtherMaterials()
         {
             ObservableCollection<OtherItem>  om = new ObservableCollection<OtherItem>();
-            om.Add(new OtherItem { Name = "Access issues?"});
-            om.Add(new OtherItem { Name = "Additional prep?"});
-            om.Add(new OtherItem { Name = "Additional labor?"});
-            om.Add(new OtherItem { Name = "Alternate material?"});
-            om.Add(new OtherItem { Name = "Additional Move ons?"});
+            om.Add(new OtherItem { Name = "Access issues?", IsReadOnly=true});
+            om.Add(new OtherItem { Name = "Additional prep?", IsReadOnly = true });
+            om.Add(new OtherItem { Name = "Additional labor?", IsReadOnly = true });
+            om.Add(new OtherItem { Name = "Alternate material?", IsReadOnly = true });
+            om.Add(new OtherItem { Name = "Additional Move ons?", IsReadOnly = true });
             return om;
         }
         private ObservableCollection<LaborContract> GetLaborItems()
         {
             ObservableCollection<LaborContract> SC = new ObservableCollection<LaborContract>();
-            SC.Add(new LaborContract { Name = "" });          
+            SC.Add(new LaborContract { Name = "" });
+            SC.Add(new LaborContract { Name = "" });
+            SC.Add(new LaborContract { Name = "" });
             return SC;
         }
-        //Logic to check uncheck materials
+        
         #region IcommandSection
         public ICommand AddRowCommand
         {
@@ -500,10 +536,9 @@ namespace WICR_Estimator.ViewModels
 
         private void CalculateCost(object obj)
         {
-            calculateRLqty();
-            neotaxQty();
             calculateTotals();
             CalOCTotal();
+            CalSCTotal();
             CalculateCostBreakup();
         }
 
@@ -543,8 +578,6 @@ namespace WICR_Estimator.ViewModels
                     case "RESISTITE LIQUID":
                     case "LIP COLOR":
                     case "RESISTITE UNIVERSAL PRIMER(ADD 50% WATER)":
-                    //case "AJ-44A DRESSING(SEALER)":
-                    //case "VISTA PAINT ACRIPOXY":
                     case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
                     case "WEATHER SEAL XL TWO COATS":
                     case "STAIR NOSING FROM DEXOTEX":
@@ -558,26 +591,26 @@ namespace WICR_Estimator.ViewModels
                 switch (materialName.ToUpper())
                 {
                     case "LIGHT CRACK REPAIR":
-                    case "RESISTITE REGULAR OVER TEXTURE (#55 BAG)":
+                    case "RESISTITE REGULAR OVER TEXTURE(#55 BAG)":
                     case "30# DIVORCING FELT (200 SQ FT) FROM FORD WHOLESALE":
-                    case "RP FABRIC 10 INCH WIDE X(300 LF) FROM ACME":
+                    case "RP FABRIC 10 INCH WIDE X (300 LF) FROM ACME":
                     case "GLASMAT #4 (1200 SQ FT) FROM ACME":
                     case "CPC MEMBRANE":
                     case "NEOTEX-38 PASTE":
-                    case "NEOTEX STANDARD POWDER (BODY COAT)":
-                    case "NEOTEX STANDARD POWDER(BODY COAT)1":
+                    case "NEOTEX STANDARD POWDER(BODY COAT)":
+                    case "NEOTEX STANDARD POWDER(BODY COAT) 1":
                     case "RESISTITE LIQUID":
                     case "RESISTITE REGULAR GRAY":
                     case "RESISTITE REGULAR WHITE":
                     case "RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)":
                     //case "RESISTITE REGULAR OR SMOOTH GRAY (KNOCK DOWN OR SMOOTH)":
                     case "LIP COLOR":
-                    case "AJ-44A DRESSING (SEALER)":
+                    //case "AJ-44A DRESSING (SEALER)":
                     case "RESISTITE UNIVERSAL PRIMER(ADD 50% WATER)":
-                    case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)":
-                    case "VISTA PAINT ACRIPOXY":
+                    case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
+                    //case "VISTA PAINT ACRIPOXY":
                     case "Stair Nosing From Dexotex":
-                    //case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)":
+                    //case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
                     case "WEATHER SEAL XL TWO COATS":
                         return true;
                     default:
@@ -596,7 +629,7 @@ namespace WICR_Estimator.ViewModels
                     case "LIP COLOR":
                     case "AJ-44A DRESSING(SEALER)":
                     case "VISTA PAINT ACRIPOXY":
-                    case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
+                    case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
                     case "WEATHER SEAL XL TWO COATS":
                     case "STAIR NOSING FROM DEXOTEX":
                         return true;
@@ -611,16 +644,16 @@ namespace WICR_Estimator.ViewModels
                     case "LIGHT CRACK REPAIR":
                     case "RESISTITE REGULAR OVER TEXTURE(#55 BAG)":
                     case "30# DIVORCING FELT (200 SQ FT) FROM FORD WHOLESALE":
-                    case "RP FABRIC 10 INCH WIDE X(300 LF) FROM ACME":
+                    case "RP FABRIC 10 INCH WIDE X (300 LF) FROM ACME":
                     case "GLASMAT #4 (1200 SQ FT) FROM ACME":
                     case "CPC MEMBRANE":
                     case "NEOTEX STANDARD POWDER(BODY COAT)":
                     case "NEOTEX STANDARD POWDER(BODY COAT) 1":
-                    case "RESISTITE REGULAR GRAY":
+                    case "RESISTITE REGULAR WHITE":
                     case "LIP COLOR":
                     case "AJ-44A DRESSING(SEALER)":
                     case "VISTA PAINT ACRIPOXY":
-                    case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)":
+                    case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
                     case "WEATHER SEAL XL TWO COATS":
                          return true;
                     default:
@@ -630,7 +663,7 @@ namespace WICR_Estimator.ViewModels
             return false;
         }
 
-
+        
         public ObservableCollection<SystemMaterial> GetSystemMaterial()
         {
             
@@ -639,61 +672,64 @@ namespace WICR_Estimator.ViewModels
             double mp;
             double w;
             double lfArea;
+            if (weatherWearType=="Weather Wear Rehab")
+            {
+                int.TryParse(materialDetails[0][2].ToString(), out cov);
+                double.TryParse(materialDetails[0][0].ToString(), out mp);
+                double.TryParse(materialDetails[0][3].ToString(), out w);
+                lfArea = getlfArea("Light Crack Repair");
+                smP.Add(new SystemMaterial
+                {
+                    IsWWR = true,
+                    IsMaterialChecked = getCheckboxCheckStatus("Light Crack Repair"),
+                    IsMaterialEnabled = getCheckboxEnabledStatus("Light Crack Repair"),
+                    Name = "Light Crack Repair",
+                    SMUnits = "Sq Ft",
+                    SMSqft = lfArea,
+                    Coverage = cov,
+                    MaterialPrice = mp,
+                    Weight = w,
+                    Qty = getQuantity("Light Crack Repair", cov, lfArea),
 
-            int.TryParse(materialDetails[0][2].ToString(), out cov);
-            double.TryParse(materialDetails[0][0].ToString(), out mp);
-            double.TryParse(materialDetails[0][3].ToString(), out w);
-            lfArea = getlfArea("Light Crack Repair");
-            smP.Add(new SystemMaterial
-            {
-                IsWWR = true,
-                IsMaterialChecked = getCheckboxCheckStatus("Light Crack Repair"),
-                IsMaterialEnabled = getCheckboxEnabledStatus("Light Crack Repair"),
-                Name = "Light Crack Repair",
-                SMUnits = "Sq Ft",
-                SMSqft =lfArea ,
-                Coverage=cov,
-                MaterialPrice = mp,
-                Weight = w,
-                Qty = getQuantity("Light Crack Repair", cov, lfArea),
-                
-            });
-            int.TryParse(materialDetails[1][2].ToString(), out cov);
-            double.TryParse(materialDetails[1][0].ToString(), out mp);
-            double.TryParse(materialDetails[1][3].ToString(), out w);
-            lfArea = getlfArea("Large Crack Repair");
-            smP.Add(new SystemMaterial
-            {
-                IsWWR=true,
-                IsMaterialChecked = getCheckboxCheckStatus("Large Crack Repair"),
-                IsMaterialEnabled = getCheckboxEnabledStatus("Large Crack Repair"),
-                Name = "Large Crack Repair",
-                SMUnits = "LF",
-                SMSqft = lfArea,
-                Coverage = cov,
-                MaterialPrice = mp,
-                Weight = w,
-                Qty = getQuantity("Large Crack Repair", cov, lfArea),
-                
-            });
-            int.TryParse(materialDetails[2][2].ToString(), out cov);
-            double.TryParse(materialDetails[2][0].ToString(), out mp);
-            double.TryParse(materialDetails[2][3].ToString(), out w);
-            lfArea = getlfArea("Bubble Repair(Measure Sq Ft)");
-            smP.Add(new SystemMaterial
-            {
-                IsWWR = true,
-                IsMaterialChecked = getCheckboxCheckStatus("Bubble Repair(Measure Sq Ft)"),
-                IsMaterialEnabled = getCheckboxEnabledStatus("Bubble Repair(Measure Sq Ft)"),
-                Name = "Bubble Repair(Measure Sq Ft)",
-                SMUnits = "Sq Ft",
-                SMSqft =lfArea,
-                Coverage = cov,
-                MaterialPrice = mp,
-                Weight = w,
-                Qty = getQuantity("Bubble Repair(Measure Sq Ft)", cov, lfArea),
-                
-            });
+                });
+                int.TryParse(materialDetails[1][2].ToString(), out cov);
+                double.TryParse(materialDetails[1][0].ToString(), out mp);
+                double.TryParse(materialDetails[1][3].ToString(), out w);
+                lfArea = getlfArea("Large Crack Repair");
+                smP.Add(new SystemMaterial
+                {
+                    IsWWR = true,
+                    IsMaterialChecked = getCheckboxCheckStatus("Large Crack Repair"),
+                    IsMaterialEnabled = getCheckboxEnabledStatus("Large Crack Repair"),
+                    Name = "Large Crack Repair",
+                    SMUnits = "LF",
+                    SMSqft = lfArea,
+                    Coverage = cov,
+                    MaterialPrice = mp,
+                    Weight = w,
+                    Qty = getQuantity("Large Crack Repair", cov, lfArea),
+
+                });
+                int.TryParse(materialDetails[2][2].ToString(), out cov);
+                double.TryParse(materialDetails[2][0].ToString(), out mp);
+                double.TryParse(materialDetails[2][3].ToString(), out w);
+                lfArea = getlfArea("Bubble Repair(Measure Sq Ft)");
+                smP.Add(new SystemMaterial
+                {
+                    IsWWR = true,
+                    IsMaterialChecked = getCheckboxCheckStatus("Bubble Repair(Measure Sq Ft)"),
+                    IsMaterialEnabled = getCheckboxEnabledStatus("Bubble Repair(Measure Sq Ft)"),
+                    Name = "Bubble Repair(Measure Sq Ft)",
+                    SMUnits = "Sq Ft",
+                    SMSqft = lfArea,
+                    Coverage = cov,
+                    MaterialPrice = mp,
+                    Weight = w,
+                    Qty = getQuantity("Bubble Repair(Measure Sq Ft)", cov, lfArea),
+
+                });
+            }
+            
             int.TryParse(materialDetails[3][2].ToString(), out cov);
             double.TryParse(materialDetails[3][0].ToString(), out mp);
             double.TryParse(materialDetails[3][3].ToString(), out w);
@@ -807,6 +843,7 @@ namespace WICR_Estimator.ViewModels
             lfArea = getlfArea("Neotex Standard Powder(Body Coat)");
             smP.Add(new SystemMaterial
             {
+                IsCheckboxDependent = true,
                 IsMaterialChecked = getCheckboxCheckStatus("Neotex Standard Powder(Body Coat)"),
                 IsMaterialEnabled = getCheckboxEnabledStatus("Neotex Standard Powder(Body Coat)"),
                 Name = "Neotex Standard Powder(Body Coat)",
@@ -824,6 +861,7 @@ namespace WICR_Estimator.ViewModels
             lfArea = getlfArea("Neotex Standard Powder(Body Coat) 1");
             smP.Add(new SystemMaterial
             {
+                IsCheckboxDependent=true,
                 IsMaterialChecked = getCheckboxCheckStatus("Neotex Standard Powder(Body Coat) 1"),
                 IsMaterialEnabled = getCheckboxEnabledStatus("Neotex Standard Powder(Body Coat) 1"),
                 Name = "Neotex Standard Powder(Body Coat) 1",
@@ -853,24 +891,24 @@ namespace WICR_Estimator.ViewModels
                 Qty = getQuantity("Resistite Liquid", cov, lfArea),
                 
             });
-            int.TryParse(materialDetails[12][2].ToString(), out cov);
-            double.TryParse(materialDetails[12][0].ToString(), out mp);
-            double.TryParse(materialDetails[12][3].ToString(), out w);
-            lfArea = getlfArea("Resistite Regular Gray");
-            smP.Add(new SystemMaterial
-            {
-                IsCheckboxDependent = true,
-                IsMaterialChecked = getCheckboxCheckStatus("Resistite Regular Gray"),
-                IsMaterialEnabled = getCheckboxEnabledStatus("Resistite Regular Gray"),
-                Name = "Resistite Regular Gray",
-                SMUnits = "55 LB BAG",
-                SMSqft = lfArea,
-                Coverage = cov,
-                MaterialPrice = mp,
-                Weight = w,
-                Qty = getQuantity("Resistite Regular Gray", cov, lfArea),
+            //int.TryParse(materialDetails[12][2].ToString(), out cov);
+            //double.TryParse(materialDetails[12][0].ToString(), out mp);
+            //double.TryParse(materialDetails[12][3].ToString(), out w);
+            //lfArea = getlfArea("Resistite Regular Gray");
+            //smP.Add(new SystemMaterial
+            //{
+            //    IsCheckboxDependent = true,
+            //    IsMaterialChecked = getCheckboxCheckStatus("Resistite Regular Gray"),
+            //    IsMaterialEnabled = getCheckboxEnabledStatus("Resistite Regular Gray"),
+            //    Name = "Resistite Regular Gray",
+            //    SMUnits = "55 LB BAG",
+            //    SMSqft = lfArea,
+            //    Coverage = cov,
+            //    MaterialPrice = mp,
+            //    Weight = w,
+            //    Qty = getQuantity("Resistite Regular Gray", cov, lfArea),
                 
-            });
+            //});
             int.TryParse(materialDetails[13][2].ToString(), out cov);
             double.TryParse(materialDetails[13][0].ToString(), out mp);
             double.TryParse(materialDetails[13][3].ToString(), out w);
@@ -889,24 +927,24 @@ namespace WICR_Estimator.ViewModels
                 Qty = getQuantity("Resistite Regular White", cov, lfArea),
 
             });
-            int.TryParse(materialDetails[14][2].ToString(), out cov);
-            double.TryParse(materialDetails[14][0].ToString(), out mp);
-            double.TryParse(materialDetails[14][3].ToString(), out w);
-            lfArea=getlfArea("Resistite Regular Or Smooth Gray(Knock Down Or Smooth)");
-            smP.Add(new SystemMaterial
-            {
-                IsCheckboxDependent=true,
-                IsMaterialChecked = getCheckboxCheckStatus("Resistite Regular Or Smooth Gray(Knock Down Or Smooth)"),
-                IsMaterialEnabled = getCheckboxEnabledStatus("Resistite Regular Or Smooth Gray(Knock Down Or Smooth)"),
-                Name = "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)",
-                SMUnits = "40 LB BAG",
-                SMSqft = lfArea,
-                Coverage =cov,
-                MaterialPrice = mp,
-                Weight = w,
-                Qty = getQuantity("Resistite Regular Or Smooth Gray(Knock Down Or Smooth)", cov, lfArea),
+            //int.TryParse(materialDetails[14][2].ToString(), out cov);
+            //double.TryParse(materialDetails[14][0].ToString(), out mp);
+            //double.TryParse(materialDetails[14][3].ToString(), out w);
+            //lfArea=getlfArea("Resistite Regular Or Smooth Gray(Knock Down Or Smooth)");
+            //smP.Add(new SystemMaterial
+            //{
+            //    IsCheckboxDependent=true,
+            //    IsMaterialChecked = getCheckboxCheckStatus("Resistite Regular Or Smooth Gray(Knock Down Or Smooth)"),
+            //    IsMaterialEnabled = getCheckboxEnabledStatus("Resistite Regular Or Smooth Gray(Knock Down Or Smooth)"),
+            //    Name = "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)",
+            //    SMUnits = "40 LB BAG",
+            //    SMSqft = lfArea,
+            //    Coverage =cov,
+            //    MaterialPrice = mp,
+            //    Weight = w,
+            //    Qty = getQuantity("Resistite Regular Or Smooth Gray(Knock Down Or Smooth)", cov, lfArea),
                 
-            });
+            //});
             int.TryParse(materialDetails[15][2].ToString(), out cov);
             double.TryParse(materialDetails[15][0].ToString(), out mp);
             double.TryParse(materialDetails[15][3].ToString(), out w);
@@ -932,7 +970,7 @@ namespace WICR_Estimator.ViewModels
             smP.Add(new SystemMaterial
             {
                 IsCheckboxDependent=true,
-                IsMaterialChecked = getCheckboxCheckStatus("Aj-44A Dressing(Sealer)"),
+                IsMaterialChecked = false ,//getCheckboxCheckStatus("Aj-44A Dressing(Sealer)"),
                 IsMaterialEnabled = getCheckboxEnabledStatus("Aj-44A Dressing(Sealer)"),
                 Name = "Aj-44A Dressing(Sealer)",
                 SMUnits = "5 GAL PAIL",
@@ -950,7 +988,7 @@ namespace WICR_Estimator.ViewModels
             smP.Add(new SystemMaterial
             {
                 IsCheckboxDependent=true,
-                IsMaterialChecked = getCheckboxCheckStatus("Vista Paint Acripoxy"),
+                IsMaterialChecked = false,
                 IsMaterialEnabled = getCheckboxEnabledStatus("Vista Paint Acripoxy"),
                 Name = "Vista Paint Acripoxy",
                 SMUnits = "5 GAL PAIL",
@@ -997,24 +1035,24 @@ namespace WICR_Estimator.ViewModels
                 Qty = getQuantity("Resistite Universal Primer(Add 50% Water)", cov, lfArea),
                 
             });
-            int.TryParse(materialDetails[20][2].ToString(), out cov);
-            double.TryParse(materialDetails[20][0].ToString(), out mp);
-            double.TryParse(materialDetails[20][3].ToString(), out w);
-            lfArea = getlfArea("Custom Texture Skip Trowel(Resistite Smooth Gray)");
-            smP.Add(new SystemMaterial
-            {
-                IsCheckboxDependent=true,
-                IsMaterialChecked = getCheckboxCheckStatus("Custom Texture Skip Trowel(Resistite Smooth Gray)"),
-                IsMaterialEnabled = getCheckboxEnabledStatus("Custom Texture Skip Trowel(Resistite Smooth Gray)"),
-                Name = "Custom Texture Skip Trowel(Resistite Smooth Gray)",
-                SMUnits = "Sq Ft",
-                SMSqft = lfArea,
-                Coverage = cov,
-                MaterialPrice = mp,
-                Weight = w,
-                Qty = getQuantity("Custom Texture Skip Trowel(Resistite Smooth Gray)", cov, lfArea),
+            //int.TryParse(materialDetails[20][2].ToString(), out cov);
+            //double.TryParse(materialDetails[20][0].ToString(), out mp);
+            //double.TryParse(materialDetails[20][3].ToString(), out w);
+            //lfArea = getlfArea("Custom Texture Skip Trowel(Resistite Smooth Gray)");
+            //smP.Add(new SystemMaterial
+            //{
+            //    IsCheckboxDependent=true,
+            //    IsMaterialChecked = getCheckboxCheckStatus("Custom Texture Skip Trowel(Resistite Smooth Gray)"),
+            //    IsMaterialEnabled = getCheckboxEnabledStatus("Custom Texture Skip Trowel(Resistite Smooth Gray)"),
+            //    Name = "Custom Texture Skip Trowel(Resistite Smooth Gray)",
+            //    SMUnits = "Sq Ft",
+            //    SMSqft = lfArea,
+            //    Coverage = cov,
+            //    MaterialPrice = mp,
+            //    Weight = w,
+            //    Qty = getQuantity("Custom Texture Skip Trowel(Resistite Smooth Gray)", cov, lfArea),
                 
-            });
+            //});
             int.TryParse(materialDetails[21][2].ToString(), out cov);
             double.TryParse(materialDetails[21][0].ToString(), out mp);
             double.TryParse(materialDetails[21][3].ToString(), out w);
@@ -1116,9 +1154,31 @@ namespace WICR_Estimator.ViewModels
                 //Qty = getQuantity("Stucco Material Remove And Replace (Lf)", cov, lfArea),
                 
             });
-            
 
+            
             return smP;
+        }
+        private void setCheckBoxes()
+        {
+            var materials = SystemMaterials.Where(x => x.IsCheckboxDependent == true).ToList();
+            SystemMaterial lipMat=null;
+            foreach (SystemMaterial mat in materials)
+            {
+                if (mat.Name == "Lip Color")
+                {
+                    lipMat = mat;
+                    mat.IsMaterialChecked = true;
+                }
+                if (mat.Name == "Aj-44A Dressing(Sealer)")
+                {
+                    mat.IsMaterialChecked = false;
+                }
+                if (mat.Name == "Vista Paint Acripoxy")
+                {
+                    mat.IsMaterialChecked = false;
+                }
+            }
+            lipMat.IsMaterialChecked = true;
         }
         //Event handler to get JobSetup change updates.
         private void JobSetup_OnJobSetupChange(object sender, EventArgs e)
@@ -1132,8 +1192,7 @@ namespace WICR_Estimator.ViewModels
                 riserCount = js.RiserCount;
                 deckPerimeter = js.DeckPerimeter;
             }
-            FetchMaterialValuesAsync();
-            
+            FetchMaterialValuesAsync();           
         }
         private double getQuantity(string materialName,double coverage,double lfArea)
         {
@@ -1142,7 +1201,7 @@ namespace WICR_Estimator.ViewModels
                 case "LIGHT CRACK REPAIR":
                 case "RESISTITE REGULAR OVER TEXTURE(#55 BAG)":
                 case "30# DIVORCING FELT (200 SQ FT) FROM FORD WHOLESALE":
-                case "RP FABRIC 10 INCH WIDE X(300 LF) FROM ACME":
+                case "RP FABRIC 10 INCH WIDE X (300 LF) FROM ACME":
                 case "GLASMAT #4 (1200 SQ FT) FROM ACME":
                 case "CPC MEMBRANE":
                 case "NEOTEX STANDARD POWDER(BODY COAT)":
@@ -1152,10 +1211,11 @@ namespace WICR_Estimator.ViewModels
                 case "RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)":
                 case "RESISTITE REGULAR OR SMOOTH GRAY(KNOCK DOWN OR SMOOTH)":
                 case "LIP COLOR":
-                case "AJ-44A DRESSING (SEALER)":
+                case "AJ-44A DRESSING(SEALER)":
                 case "VISTA PAINT ACRIPOXY":
                 case "RESISTITE UNIVERSAL PRIMER(ADD 50% WATER)":
                 case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
+                case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
                 case "WEATHER SEAL XL TWO COATS":
                     return Math.Round(lfArea / coverage,2);
 
@@ -1173,10 +1233,14 @@ namespace WICR_Estimator.ViewModels
         private double calculateRLqty()
         {
             double val1, val2, val3,val4;
-            double.TryParse(materialDetails[12][2].ToString(), out val1);
-            double.TryParse(materialDetails[13][2].ToString(), out val2);
-            double.TryParse(materialDetails[17][2].ToString(), out val3);
+            double.TryParse(materialDetails[13][2].ToString(), out val1);
+            double.TryParse(materialDetails[15][2].ToString(), out val2);
+            double.TryParse(materialDetails[21][2].ToString(), out val3);
             double.TryParse(materialDetails[3][2].ToString(), out val4);
+            val1 = getQuantity("RESISTITE REGULAR WHITE", val1, getlfArea("RESISTITE REGULAR WHITE"));
+            val2 = getQuantity("RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)", val2, getlfArea("RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)"));
+            val3 = getQuantity("CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)", val3, getlfArea("CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)"));
+            val4 = getQuantity("RESISTITE REGULAR OVER TEXTURE(#55 BAG)", val4, getlfArea("RESISTITE REGULAR OVER TEXTURE(#55 BAG)"));
             double qty=(val1+val2+val3)*0.33 + val4 / 5;
             return qty;
         }
@@ -1186,6 +1250,8 @@ namespace WICR_Estimator.ViewModels
             double val1, val2;
             double.TryParse(materialDetails[9][2].ToString(), out val1);
             double.TryParse(materialDetails[10][2].ToString(), out val2);
+            val1 = getQuantity("NEOTEX STANDARD POWDER(BODY COAT)", val1, getlfArea("NEOTEX STANDARD POWDER(BODY COAT)"));
+            val2 = getQuantity("NEOTEX STANDARD POWDER(BODY COAT) 1", val2, getlfArea("NEOTEX STANDARD POWDER(BODY COAT) 1"));
             return (val2 * 1.5 + val1 * 1.25) / 5;
         }
 
@@ -1210,7 +1276,8 @@ namespace WICR_Estimator.ViewModels
                 case "AJ-44A DRESSING(SEALER)":
                 case "VISTA PAINT ACRIPOXY":
                 case "RESISTITE UNIVERSAL PRIMER(ADD 50% WATER)":
-                case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)":
+                case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
+                case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
                 case "WEATHER SEAL XL TWO COATS":
                     return Math.Round((riserCount * stairWidth * 2 ) +totalSqft,2);
                 case "STAIR NOSING FROM DEXOTEX":
@@ -1247,7 +1314,7 @@ namespace WICR_Estimator.ViewModels
                 if (SubContractLaborItems.Count > 0)
                 {
                     ///sumtotal              
-                   // TotalSCExtension = Math.Round(SubContractLaborItems.Select(x => x.MaterialExtensionConlbrcst).Sum(), 2);
+                   TotalSCExtension = Math.Round(SubContractLaborItems.Select(x => x.MaterialExtensionConlbrcst).Sum(), 2);
                 }
             }
 
@@ -1260,10 +1327,9 @@ namespace WICR_Estimator.ViewModels
                 SumQty = Math.Round(systemMaterials.Select(x => x.Qty).Sum(),2);
                 SumMatPrice = Math.Round(systemMaterials.Select(x => x.MaterialPrice).Sum(), 2);
                 SumTotalMatExt = Math.Round(systemMaterials.Select(x => x.MaterialExtension).Sum(), 2);
-                SumWeight = Math.Round(systemMaterials.Select(x => x.Weight).Sum(), 2);
-                
+                SumWeight = Math.Round(systemMaterials.Select(x => x.FreightExtension).Sum(), 2);
                 //Total Freight
-                             
+                        
                 SumFreight = Math.Round(FreightCalculator(SumWeight), 2);
             }
         }

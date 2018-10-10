@@ -1,0 +1,131 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace WICR_Estimator
+{
+    public class DataSerializer
+    {
+        private static DataSerializer dsInstance = null;
+        private static object sync = new object();
+        public  GSData googleData;
+        DataSerializer()
+        {
+            googleData = new GSData();
+            //googleData = deserializeGoogleData();
+        }
+
+        public static DataSerializer DSInstance
+        {
+            get
+            {
+                lock(sync)
+                {
+                    if (dsInstance == null)
+                    {
+                        dsInstance = new DataSerializer();
+                    }
+                    return dsInstance;
+                }
+            }
+        }
+
+        public void serializeGoogleData(IList<IList<object>> gData,DataType DataType)
+        {
+            switch (DataType)
+            {
+                case DataType.Labor:
+                    googleData.LaborData = gData;
+                    break;
+                case DataType.Material:
+                    googleData.MaterialData = gData;
+                    break;
+                case DataType.Metal:
+                    googleData.MetalData = gData;
+                    break;
+                case DataType.Slope:
+                    googleData.SlopeData = gData;
+                    break;
+                case DataType.Rate:
+                    googleData.LaborRate = gData;
+                    break;
+                default:
+                    break;
+            }
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//GoogleData.dat";
+            IFormatter formatter = new BinaryFormatter();
+            Stream stream = new FileStream(path, FileMode.Create, FileAccess.Write);
+
+            formatter.Serialize(stream, googleData);
+            stream.Close();
+        }
+
+        public void serializeGoogleData(GSData gData)
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//GoogleData.dat";
+            IFormatter formatter = new BinaryFormatter();
+            Stream stream = new FileStream(path, FileMode.Create, FileAccess.Write);
+
+            formatter.Serialize(stream, gData);
+            stream.Close();
+        }
+        public GSData deserializeGoogleData()
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//GoogleData.dat";
+            IFormatter formatter = new BinaryFormatter();
+            try
+            {
+                Stream stream = new FileStream(path, FileMode.Open, FileAccess.Read);
+                GSData objnew = (GSData)formatter.Deserialize(stream);
+                return objnew;
+            }
+            catch (FileNotFoundException ex)
+            {
+                return null;
+            }
+            
+        }
+        public IList<IList<object>> deserializeGoogleData(DataType dataType)
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//GoogleData.dat";
+            IFormatter formatter = new BinaryFormatter();
+            try
+            {
+                Stream stream = new FileStream(path, FileMode.Open, FileAccess.Read);
+                GSData objnew = (GSData)formatter.Deserialize(stream);
+                switch (dataType)
+                {
+                    case DataType.Labor:
+                        return objnew.LaborData;
+
+                    case DataType.Material:
+                        return objnew.MaterialData;
+
+                    case DataType.Metal:
+                        return objnew.MetalData;
+
+                    case DataType.Slope:
+                        return objnew.SlopeData;
+
+                    case DataType.Rate:
+                        return objnew.LaborRate;
+
+                    default:
+                        return null;
+                }
+            }
+            catch (FileNotFoundException ex)
+            {
+                return null;
+            }
+            
+           
+        }
+
+    }
+}

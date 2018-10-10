@@ -12,7 +12,7 @@ namespace WICR_Estimator.Models
 
         public static event EventHandler OnJobSetupChange;
         public JobSetup()
-        {
+        { 
             IsApprovedForSandCement = true;
             IsPrevalingWage = true;
             HasDiscount = true;
@@ -22,6 +22,11 @@ namespace WICR_Estimator.Models
             WeatherWearType = "";
             DeckPerimeter = 300;
             WeatherWearType = "Weather Wear";
+            DeckCount = 1;
+            VendorName = "Chivon";
+            MaterialName = "Copper";
+            
+
         }
         private string weatherWearType;
         public string WeatherWearType
@@ -238,7 +243,11 @@ namespace WICR_Estimator.Models
         {
             get
             {
-                GetLaborRateAsync();
+                if (laborRate==0)
+                {
+                    var rate=DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate);
+                    laborRate = double.Parse(rate[0][0].ToString());
+                }
                 return laborRate;
             }
             set
@@ -254,26 +263,7 @@ namespace WICR_Estimator.Models
                 }
             }
         }
-
-        
-        private async void GetLaborRateAsync()
-        {
-            try
-            { 
-            var values =await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E2");
-            if (values != null && values.Count > 0)
-            {
-                LaborRate= double.Parse(values[0][0].ToString());
-            }
-            else
-                LaborRate = 23.43;
-            }
-            catch
-            {
-                LaborRate = 23.43;
-            }
-        }
-
+ 
         private bool hasSpecialMaterial;
         public bool HasSpecialMaterial
         {

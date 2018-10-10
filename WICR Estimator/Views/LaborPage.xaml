@@ -112,7 +112,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Binding="{Binding ProductionRateVert,UpdateSourceTrigger=PropertyChanged}"
+                <DataGridTextColumn Binding="{Binding VerticleProductionRate,UpdateSourceTrigger=PropertyChanged}"
                                     IsReadOnly="True" Visibility="Hidden">
                     <DataGridTextColumn.Header>
                         <TextBlock Text="Production Rate Verticle" 
@@ -129,25 +129,25 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Binding="{Binding ProductionRateHor,UpdateSourceTrigger=PropertyChanged}"
+                <DataGridTextColumn Binding="{Binding HorizontalProductionRate,UpdateSourceTrigger=PropertyChanged}"
                                     IsReadOnly="True" Visibility="Visible">
                     <DataGridTextColumn.Header>
                         <TextBlock Text="Production Rate Horizontal" 
                                    TextWrapping="Wrap"  Width="Auto"/>
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
-                
+
                 <DataGridTemplateColumn Header="Sq ft or Lf Area Stairs" Visibility="Visible">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding SMSqftSt,UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox Text="{Binding stairSqft,UpdateSourceTrigger=PropertyChanged}"
                                      IsReadOnly="True">
                             </TextBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Binding="{Binding ProductionRateSt,UpdateSourceTrigger=PropertyChanged}"
+                <DataGridTextColumn Binding="{Binding stairsProductionRate,UpdateSourceTrigger=PropertyChanged}"
                                     IsReadOnly="True" Visibility="Visible">
                     <DataGridTextColumn.Header>
                         <TextBlock Text="Production Rate Stairs" 
@@ -164,25 +164,24 @@
 
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Binding="{Binding SetUpTime,UpdateSourceTrigger=PropertyChanged}"
+                <DataGridTextColumn Header="SetUp Min Charges" Binding="{Binding SetupMinCharge,UpdateSourceTrigger=PropertyChanged}"
                                     IsReadOnly="True">
-               
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding LaborExtension,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}"
+                <DataGridTextColumn Binding="{Binding LaborExtension,UpdateSourceTrigger=PropertyChanged ,StringFormat={}{0:C}}"
                                     IsReadOnly="True">
                     <DataGridTextColumn.Header>
                         <TextBlock Text="Labor Extension"  
                                    TextWrapping="Wrap"  Width="Auto"/>
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding MaterialExtension,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}"
+                <DataGridTextColumn Binding="{Binding MaterialExtension,UpdateSourceTrigger=PropertyChanged ,StringFormat={}{0:C}}"
                                     IsReadOnly="True">
                     <DataGridTextColumn.Header>
                         <TextBlock Text="Material Extension"  
                                    TextWrapping="Wrap"  Width="Auto"/>
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
-                
+
             </DataGrid.Columns>
 
         </DataGrid>
@@ -206,7 +205,7 @@
                 <StackPanel Margin="1,10,10,10" Grid.Column="1" Grid.ColumnSpan="2">
                     <TextBlock Text="Qty" 
                                HorizontalAlignment="Center"/>
-                    <TextBox Text="{Binding SumQty,UpdateSourceTrigger=PropertyChanged ,StringFormat={}{0:C0}.00}" 
+                    <TextBox Text="{Binding SumQty,UpdateSourceTrigger=PropertyChanged }" 
                              FocusManager.FocusedElement="{Binding ElementName=AddButton}"
                              IsReadOnly="True"
                              Style="{StaticResource TextBoxStyle}"/>
@@ -215,14 +214,14 @@
                     <TextBlock Text="Material Price" 
                                HorizontalAlignment="Center"/>
                     <TextBox Text="{Binding SumMatPrice,
-                        UpdateSourceTrigger=PropertyChanged ,StringFormat={}{0:C0}.00}" 
+                        UpdateSourceTrigger=PropertyChanged ,StringFormat={}{0:C}}" 
                              IsReadOnly="True"
                              Style="{StaticResource TextBoxStyle}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="4" Margin="5,10,10,10" >
                     <TextBlock Text="Material Extn" 
                                HorizontalAlignment="Center"/>
-                    <TextBox Text="{Binding SumTotalMatExt,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}" 
+                    <TextBox Text="{Binding SumTotalMatExt,UpdateSourceTrigger=PropertyChanged ,StringFormat={}{0:C}}" 
                              IsReadOnly="True" 
                             Style="{StaticResource TextBoxStyle}"/>
                 </StackPanel>
@@ -236,7 +235,7 @@
                 <StackPanel Grid.Column="6" Margin="5,10,10,10">
                     <TextBlock Text="Freight Weight" 
                                HorizontalAlignment="Center" />
-                    <TextBox Text="{Binding SumFreight,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}"
+                    <TextBox Text="{Binding SumFreight,UpdateSourceTrigger=PropertyChanged ,StringFormat={}{0:C}}"
                              IsReadOnly="True"
                              Style="{StaticResource TextBoxStyle}"/>
                 </StackPanel>
@@ -266,22 +265,22 @@
                     <DataGridTextColumn Header="Unit"
                                     Binding="{Binding Units,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTextColumn Header="Labor Unit Price ($)"
-                                    Binding="{Binding LaborUnitPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}"/>
+                                    Binding="{Binding LaborUnitPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C}}"/>
                     <DataGridTextColumn Header="Labor Price($)" 
                                         IsReadOnly="True"
-                                        Binding="{Binding LaborPrice,Mode=OneWay,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}"/>
+                                        Binding="{Binding LaborPrice,Mode=OneWay,UpdateSourceTrigger=PropertyChanged ,StringFormat={}{0:C}}"/>
                 </DataGrid.Columns>
 
             </DataGrid>
 
         </GroupBox>
-        
+
         <StackPanel Grid.Row="6" Grid.Column="1">
 
             <Button Command="{Binding CalculateCostCommand}"                   
                     Height="35" Margin="20"
                     Background="White"
-                    HorizontalAlignment="Center"
+                    HorizontalAlignment="right"
                      Grid.Row="3" Grid.Column="3">
 
                 <Button.Content>

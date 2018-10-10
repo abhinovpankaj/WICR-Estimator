@@ -1,12 +1,997 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WICR_Estimator.Models;
 using WICR_Estimator.ViewModels;
 namespace WICR_Estimator.ViewModels
 {
-   public class LaborViewModel : BaseViewModel
+    public class LaborViewModel : BaseViewModel
     {
+
+        #region Properties
+        private ObservableCollection<Labor> Labors;
+        private IList<IList<Object>> laborDetails;
+        private double totalSqft;
+        private double deckPerimeter;
+        private double riserCount;
+        private int deckCount;
+        private bool isApprovedforCement;
+        private bool isPrevailingWage;
+        private string weatherWearType;
+        private double stairWidth;
+
+        private Totals materialTotals;
+
+        #endregion
+        #region public properties
+        public DelegateCommand CheckboxCommand { get; set; }
+
+        public ObservableCollection<Labor> labor
+        {
+            get
+            {
+                return labor;
+            }
+            set
+            {
+                if (value != labor)
+                {
+                    labor = value;
+                    OnPropertyChanged("Labor");
+                }
+            }
+        }
+
+
+        #endregion
+
+        public LaborViewModel()
+        {
+            Labors = new ObservableCollection<Labor>();
+            getLaborDetailsAsync();
+            // Labors = CreateLabors();
+            JobSetup.OnJobSetupChange += JobSetup_OnJobSetupChange;
+        }
+        public LaborViewModel(Totals matTotals)
+            : this()
+        {
+            materialTotals = matTotals;
+        }
+        private void JobSetup_OnJobSetupChange(object sender, EventArgs e)
+        {
+            JobSetup js = sender as JobSetup;
+            if (js != null)
+            {
+                stairWidth = 4.5;
+                totalSqft = 1000;
+                deckPerimeter = js.DeckPerimeter;
+                riserCount = js.RiserCount;
+                deckCount = js.DeckCount;
+                isApprovedforCement = js.IsApprovedForSandCement;
+                isPrevailingWage = js.IsPrevalingWage;
+            }
+            getLaborDetailsAsync();
+        }
+
+        #region private methods
+        private async void getLaborDetailsAsync()
+        {
+            if (laborDetails == null)
+            {
+                laborDetails = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "D60:E81");
+            }
+            Labors = CreateLabors();
+        }
+        private double Calhours(string Material, double prodRH, double prodRV, double prodRS, double sqH, double sqV, double sqS)
+        {
+            double calh = 0;
+
+            if (Material != "N")
+            {
+                if (prodRH == 0 && prodRV == 0 && prodRS == 0)
+                {
+                    calh = 0;
+                }
+                else if (prodRH == 0 && prodRV == 0)
+                {
+                    calh = Math.Round(sqS / prodRS, 2);
+                }
+                else if (prodRH == 0 && prodRV == 0)
+                {
+                    calh = Math.Round(sqS / prodRS, 2);
+                }
+                else if (prodRS == 0 && prodRV == 0)
+                {
+                    calh = Math.Round(sqH / prodRH, 2);
+                }
+                else if (prodRH == 0 && prodRS == 0)
+                {
+                    calh = Math.Round(sqV / prodRV, 2);
+                }
+                else if (prodRV == 0)
+                {
+                    calh = Math.Round(((sqH / prodRH) + (sqS / prodRS)), 2);
+                }
+                else if (prodRH == 0)
+                {
+                    calh = Math.Round(((sqV / prodRV) + (sqS / prodRS)), 2);
+                }
+                else if (prodRS == 0)
+                {
+                    calh = Math.Round(((sqV / prodRV) + (sqH / prodRH)), 2);
+                }
+                else if (prodRS != 0 && prodRV != 0 && prodRH != 0)
+                {
+                    calh = Math.Round(((sqV / prodRV) + (sqH / prodRH) + (sqS / prodRS)), 2);
+                }
+            }
+            return calh;
+        }
+        private double getSqFtAreaH(string materialName)
+        {
+            switch (materialName.ToUpper())
+            {
+                case "LIGHT CRACK REPAIR":
+                case "RESISTITE REGULAR OVER TEXTURE(#55 BAG)":
+                case "30# DIVORCING FELT (200 SQ FT) FROM FORD WHOLESALE":
+                case "GLASMAT #4 (1200 SQ FT) FROM ACME":
+                case "CPC MEMBRANE":
+                case "RP FABRIC 10 INCH WIDE X(300 LF) FROM ACME":
+                case "NEOTEX STANDARD POWDER(BODY COAT)":
+                case "NEOTEX STANDARD POWDER(BODY COAT) 1":
+                case "RESISTITE REGULAR WHITE":
+                case "RESISTITE REGULAR GRAY":
+                case "RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)":
+                case "RESISTITE REGULAR OR SMOOTH GRAY(KNOCK DOWN OR SMOOTH)":
+                case "RESISTITE UNIVERSAL PRIMER(ADD 50% WATER)":
+                case "VISTA PAINT ACRIPOXY":
+                case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
+                    return 1000;
+                case "LARGE CRACK REPAIR":
+                case "BUBBLE REPAIR MAJOR SQFT":
+                    return 0;// from System material
+                case "Glasmat #4 (1200 Sq Ft) From Acme":
+                case "NEOTEX-38 PASTE":
+                case "RESISTITE LIQUID":
+                case "Rp Fabric 10 Inch Wide X (300 Lf) From Acme":
+                case "Stair Nosing From Dexotex":
+                case "Extra Stair Nosing Lf":
+                    return 0;
+                default:
+                    return 0;
+            }
+        }
+        private ObservableCollection<Labor> CreateLabors()
+        {
+            ObservableCollection<Labor> labor = new ObservableCollection<Labor>();
+
+            double sp; // Setup minimum charges from google sheet
+            double prs; ///Production rate stairs from google sheet
+            double spr;
+            double sqh;
+            double lfArea;
+            string MatName;
+
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            // lfArea = getlfArea("Light Crack Repair");
+            MatName = "Light Crack Repair";
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+                IsChecked = true, ///get from Material
+                IsMaterialChecked = getCheckboxCheckStatus("Light Crack Repair"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Light Crack Repair"),
+                Name = "Light Crack Repair",
+
+                Operation = "CAULK",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+
+
+            });
+
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+            MatName = "Large Crack Repair";
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+                IsChecked = true, ///get from Material
+                IsMaterialChecked = getCheckboxCheckStatus("Large Crack Repair"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Large Crack Repair"),
+                Name = "Large Crack Repair",
+                Operation = "GRIND,BURLAP,BODY,GROUT",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            MatName = "Bubble Repair(Measure Sq Ft)";
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+
+                IsMaterialChecked = getCheckboxCheckStatus("Bubble Repair(Measure Sq Ft)"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Bubble Repair(Measure Sq Ft)"),
+                Name = "Bubble Repair(Measure Sq Ft)",
+                Operation = "CUT OUT, FILL, GLASS, BODY & GROUT",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            MatName = "Resistite Regular Over Texture(#55 Bag)";
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+
+                IsMaterialChecked = getCheckboxCheckStatus("Resistite Regular Over Texture(#55 Bag)"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Resistite Regular Over Texture(#55 Bag)"),
+                Name = "Resistite Regular Over Texture(#55 Bag)",
+                Operation = "3/32 INCH THICK TROWEL DOWN",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            MatName = "30# Divorcing Felt (200 Sq Ft) From Ford Wholesale";
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+
+                IsMaterialChecked = getCheckboxCheckStatus("30# Divorcing Felt (200 Sq Ft) From Ford Wholesale"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("30# Divorcing Felt (200 Sq Ft) From Ford Wholesale"),
+                Name = "30# Divorcing Felt (200 Sq Ft) From Ford Wholesale",
+                Operation = "SLIP SHEET",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            lfArea = getlfArea("Rp Fabric 10 Inch Wide X (300 Lf) From Acme");
+            MatName = "Rp Fabric 10 Inch Wide X (300 Lf) From Acme";
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+
+                IsMaterialChecked = getCheckboxCheckStatus("Rp Fabric 10 Inch Wide X (300 Lf) From Acme"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Rp Fabric 10 Inch Wide X (300 Lf) From Acme"),
+                Name = "Rp Fabric 10 Inch Wide X (300 Lf) From Acme",
+                Operation = "DETAIL STAIRS ONLY",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            lfArea = getlfArea("Glasmat #4 (1200 Sq Ft) From Acme");
+            MatName = "Glasmat #4 (1200 Sq Ft) From Acme";
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+
+                IsMaterialChecked = getCheckboxCheckStatus("Glasmat #4 (1200 Sq Ft) From Acme"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Glasmat #4 (1200 Sq Ft) From Acme"),
+                Name = "Glasmat #4 (1200 Sq Ft) From Acme",
+                Operation = "INSTALL FIELD GLASS",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            MatName = "Cpc Membrane";
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+                IsMaterialChecked = getCheckboxCheckStatus("Cpc Membrane"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Cpc Membrane"),
+                Name = "Cpc Membrane",
+                Operation = "SATURATE GLASS & DETAIL PERIMETER",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            MatName = "Neotex-38 Paste";
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+                //  IsCheckboxDependent = true,
+                IsMaterialChecked = getCheckboxCheckStatus("Neotex-38 Paste"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Neotex-38 Paste"),
+                Name = "Neotex-38 Paste",
+                Operation = "ADD TO BODY COAT",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            lfArea = getlfArea("Neotex Standard Powder(Body Coat)");
+            MatName = "Neotex Standard Powder(Body Coat)";
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+                IsMaterialChecked = getCheckboxCheckStatus("Neotex Standard Powder(Body Coat)"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Neotex Standard Powder(Body Coat)"),
+                Name = "Neotex Standard Powder(Body Coat)",
+                Operation = "TROWEL",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            lfArea = getlfArea("Neotex Standard Powder(Body Coat) 1");
+            MatName = "Neotex Standard Powder(Body Coat) 1";
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+                IsMaterialChecked = getCheckboxCheckStatus("Neotex Standard Powder(Body Coat) 1"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Neotex Standard Powder(Body Coat) 1"),
+                Name = "Neotex Standard Powder(Body Coat) 1",
+                Operation = "TROWEL",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            lfArea = getlfArea("Resistite Liquid");
+            MatName = "Resistite Liquid";
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+                // IsCheckboxDependent = true,
+                IsMaterialChecked = getCheckboxCheckStatus("Resistite Liquid"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Resistite Liquid"),
+                Name = "Resistite Liquid",
+                Operation = "ADD TO TAN FILLER",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            lfArea = getlfArea("Resistite Regular Gray");
+            MatName = "Resistite Regular Gray";
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+                // IsCheckboxDependent = true,
+                IsMaterialChecked = getCheckboxCheckStatus("Resistite Regular Gray"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Resistite Regular Gray"),
+                Name = "Resistite Regular Gray",
+                Operation = "TROWEL",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            MatName = "Resistite Regular White";
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+                //  IsCheckboxDependent = true,
+                IsMaterialChecked = getCheckboxCheckStatus("Resistite Regular White"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Resistite Regular White"),
+                Name = "Resistite Regular White",
+                Operation = "TROWEL",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            MatName = "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)";
+            lfArea = getlfArea("Resistite Regular Or Smooth Gray(Knock Down Or Smooth)");
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+                //  IsCheckboxDependent = true,
+                IsMaterialChecked = getCheckboxCheckStatus("Resistite Regular Or Smooth Gray(Knock Down Or Smooth)"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Resistite Regular Or Smooth Gray(Knock Down Or Smooth)"),
+                Name = "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)",
+                Operation = "TROWEL",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            MatName = "Resistite Regular Or Smooth White(Knock Down Or Smooth)";
+            lfArea = getlfArea("Resistite Regular Or Smooth White(Knock Down Or Smooth)");
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+                //  IsCheckboxDependent = true,
+                IsMaterialChecked = getCheckboxCheckStatus("Resistite Regular Or Smooth White(Knock Down Or Smooth)"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Resistite Regular Or Smooth White(Knock Down Or Smooth)"),
+                Name = "Resistite Regular Or Smooth White(Knock Down Or Smooth)",
+                Operation = "TROWEL",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            lfArea = getlfArea("Aj-44A Dressing(Sealer)");
+            MatName = "Aj-44A Dressing(Sealer)";
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+                //  IsCheckboxDependent = true,
+                IsMaterialChecked = getCheckboxCheckStatus("Aj-44A Dressing(Sealer)"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Aj-44A Dressing(Sealer)"),
+                Name = "Aj-44A Dressing(Sealer)",
+                Operation = "ROLL 2 COATS",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            MatName = "Vista Paint Acripoxy";
+            lfArea = getlfArea("Vista Paint Acripoxy");
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+                //   IsCheckboxDependent = true,
+                IsMaterialChecked = getCheckboxCheckStatus("Vista Paint Acripoxy"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Vista Paint Acripoxy"),
+                Name = "Vista Paint Acripoxy",
+                Operation = "ROLL 2 COATS",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            lfArea = getlfArea("Lip Color");
+            MatName = "Lip Color";
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+                //  IsCheckboxDependent = true,
+                IsMaterialChecked = getCheckboxCheckStatus("Lip Color"), //nOT FOUND
+                IsMaterialEnabled = getCheckboxEnabledStatus("Lip Color"),
+                Name = "Lip Color",
+                Operation = "TROWEL",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+            });
+
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            MatName = "Resistite Universal Primer(Add 50% Water)";
+            lfArea = getlfArea("Resistite Universal Primer(Add 50% Water)");
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+                IsMaterialChecked = getCheckboxCheckStatus("Resistite Universal Primer(Add 50% Water)"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Resistite Universal Primer(Add 50% Water)"),
+                Name = "Resistite Universal Primer(Add 50% Water)",
+                Operation = "PREPARE AND PRIME: SPRAY OR ROLL",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            lfArea = getlfArea("Custom Texture Skip Trowel(Resistite Smooth Gray)");
+            MatName = "Custom Texture Skip Trowel(Resistite Smooth Gray)";
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+                //    IsCheckboxDependent = true,
+                IsMaterialChecked = getCheckboxCheckStatus("Custom Texture Skip Trowel(Resistite Smooth Gray)"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Custom Texture Skip Trowel(Resistite Smooth Gray)"),
+                Name = "Custom Texture Skip Trowel(Resistite Smooth Gray)",
+                Operation = "TROWEL",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            lfArea = getlfArea("Custom Texture Skip Trowel(Resistite Smooth White)");
+            MatName = "Custom Texture Skip Trowel(Resistite Smooth White)";
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+                // IsCheckboxDependent = true,
+                IsMaterialChecked = getCheckboxCheckStatus("Custom Texture Skip Trowel(Resistite Smooth White)"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Custom Texture Skip Trowel(Resistite Smooth White)"),
+                Name = "Custom Texture Skip Trowel(Resistite Smooth White)",
+                Operation = "TROWEL",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            MatName = "Weather Seal XL two Coats";
+            lfArea = getlfArea("Weather Seal XL two Coats"); //nOT FOUND
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+                IsMaterialChecked = getCheckboxCheckStatus("Weather Seal XL two Coats"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Weather Seal XL two Coats"),
+                Name = "Weather Seal XL two Coats",
+                Operation = "CAULK",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            MatName = "Stair Nosing From Dexotex";
+            lfArea = getlfArea("Stair Nosing From Dexotex");
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+                IsMaterialChecked = getCheckboxCheckStatus("Stair Nosing From Dexotex"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Stair Nosing From Dexotex"),
+                Name = "Stair Nosing From Dexotex",
+                Operation = "NAIL OR SCREW",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            MatName = "Extra Stair Nosing Lf";
+            lfArea = getlfArea("Extra Stair Nosing Lf");
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+                IsMaterialChecked = getCheckboxCheckStatus("Extra Stair Nosing Lf"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Extra Stair Nosing Lf"),
+                Name = "Extra Stair Nosing Lf",
+                Operation = "NAIL OR SCREW",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            MatName = "Plywood 3/4 & Blocking(# Of 4X8 Sheets)";
+            lfArea = getlfArea("Plywood 3/4 & Blocking(# Of 4X8 Sheets)");
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+                IsMaterialChecked = getCheckboxCheckStatus("Plywood 3/4 & Blocking(# Of 4X8 Sheets)"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Plywood 3/4 & Blocking(# Of 4X8 Sheets)"),
+                Name = "Plywood 3/4 & Blocking(# Of 4X8 Sheets)",
+                Operation = "Remove and replace dry rot ",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+
+            });
+            double.TryParse(laborDetails[0][0].ToString(), out sp);
+            double.TryParse(laborDetails[0][3].ToString(), out prs);
+            double.TryParse(laborDetails[0][0].ToString(), out spr);
+            double.TryParse(laborDetails[0][3].ToString(), out sqh);
+
+            MatName = "Stucco Material Remove And Replace (Lf)";
+            sqh = getSqFtAreaH(MatName);
+            labor.Add(new Labor
+            {
+                IsMaterialChecked = getCheckboxCheckStatus("Stucco Material Remove And Replace (Lf)"),
+                IsMaterialEnabled = getCheckboxEnabledStatus("Stucco Material Remove And Replace (Lf)"),
+                Name = "Stucco Material Remove And Replace (Lf)",
+                Operation = "Remove and replace 12 inches of stucco ",
+                SMSqftV = 0.0,
+                VerticalProductionRate = 0,
+                SMSqftH = sqh,
+                HorizontalProductionRate = prs,
+                StairsProductionRate = spr,
+                StairSqft = sp,
+                Hours = Calhours(MatName, prs, 0, spr, sqh, 0, sp)
+
+            });
+
+
+            return labor;
+        }
+        private double getQuantity(string materialName, double coverage, double lfArea)
+        {
+            switch (materialName.ToUpper())
+            {
+                case "LIGHT CRACK REPAIR":
+                case "RESISTITE REGULAR OVER TEXTURE(#55 BAG)":
+                case "30# DIVORCING FELT (200 SQ FT) FROM FORD WHOLESALE":
+                case "RP FABRIC 10 INCH WIDE X(300 LF) FROM ACME":
+                case "GLASMAT #4 (1200 SQ FT) FROM ACME":
+                case "CPC MEMBRANE":
+                case "NEOTEX STANDARD POWDER(BODY COAT)":
+                case "NEOTEX STANDARD POWDER(BODY COAT) 1":
+                case "RESISTITE REGULAR WHITE":
+                case "RESISTITE REGULAR GRAY":
+                case "RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)":
+                case "RESISTITE REGULAR OR SMOOTH GRAY(KNOCK DOWN OR SMOOTH)":
+                case "LIP COLOR":
+                case "AJ-44A DRESSING (SEALER)":
+                case "VISTA PAINT ACRIPOXY":
+                case "RESISTITE UNIVERSAL PRIMER(ADD 50% WATER)":
+                case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
+                case "WEATHER SEAL XL TWO COATS":
+                    return Math.Round(lfArea / coverage, 2);
+
+                case "STAIR NOSING FROM DEXOTEX":
+                    return Math.Round(lfArea * stairWidth, 2);
+                case "NEOTEX-38 PASTE":
+                    return Math.Round(neotaxQty(), 2);
+                case "RESISTITE LIQUID":
+                    return Math.Round(calculateRLqty());
+                default:
+                    return 0;
+            }
+        }
+        private double calculateRLqty()
+        {
+            double val1, val2, val3, val4;
+            double.TryParse(laborDetails[12][2].ToString(), out val1);
+            double.TryParse(laborDetails[13][2].ToString(), out val2);
+            double.TryParse(laborDetails[17][2].ToString(), out val3);
+            double.TryParse(laborDetails[3][2].ToString(), out val4);
+            double qty = (val1 + val2 + val3) * 0.33 + val4 / 5;
+            return qty;
+        }
+
+        private double neotaxQty()
+        {
+            double val1, val2;
+            double.TryParse(laborDetails[9][2].ToString(), out val1);
+            double.TryParse(laborDetails[10][2].ToString(), out val2);
+            return (val2 * 1.5 + val1 * 1.25) / 5;
+        }
+        private bool getCheckboxCheckStatus(string materialName)
+        {
+            if (weatherWearType == "Weather Wear")
+            {
+                switch (materialName.ToUpper())
+                {
+                    case "RESISTITE REGULAR OVER TEXTURE(#55 BAG)":
+                    case "30# DIVORCING FELT (200 SQ FT) FROM FORD WHOLESALE":
+                    case "RP FABRIC 10 INCH WIDE X (300 LF) FROM ACME":
+                    case "GLASMAT #4 (1200 SQ FT) FROM ACME":
+                    case "CPC MEMBRANE":
+                    case "NEOTEX-38 PASTE":
+                    case "NEOTEX STANDARD POWDER(BODY COAT)":
+                    case "NEOTEX STANDARD POWDER(BODY COAT) 1":
+                    case "RESISTITE LIQUID":
+                    case "LIP COLOR":
+                    case "RESISTITE UNIVERSAL PRIMER(ADD 50% WATER)":
+                    //case "AJ-44A DRESSING(SEALER)":
+                    //case "VISTA PAINT ACRIPOXY":
+                    case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
+                    case "WEATHER SEAL XL TWO COATS":
+                    case "STAIR NOSING FROM DEXOTEX":
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+            else if (weatherWearType == "Weather Wear Rehab")
+            {
+                switch (materialName.ToUpper())
+                {
+                    case "LIGHT CRACK REPAIR":
+                    case "RESISTITE REGULAR OVER TEXTURE (#55 BAG)":
+                    case "30# DIVORCING FELT (200 SQ FT) FROM FORD WHOLESALE":
+                    case "RP FABRIC 10 INCH WIDE X(300 LF) FROM ACME":
+                    case "GLASMAT #4 (1200 SQ FT) FROM ACME":
+                    case "CPC MEMBRANE":
+                    case "NEOTEX-38 PASTE":
+                    case "NEOTEX STANDARD POWDER (BODY COAT)":
+                    case "NEOTEX STANDARD POWDER(BODY COAT)1":
+                    case "RESISTITE LIQUID":
+                    case "RESISTITE REGULAR GRAY":
+                    case "RESISTITE REGULAR WHITE":
+                    case "RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)":
+                    //case "RESISTITE REGULAR OR SMOOTH GRAY (KNOCK DOWN OR SMOOTH)":
+                    case "LIP COLOR":
+                    case "AJ-44A DRESSING (SEALER)":
+                    case "RESISTITE UNIVERSAL PRIMER(ADD 50% WATER)":
+                    case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)":
+                    case "VISTA PAINT ACRIPOXY":
+                    case "Stair Nosing From Dexotex":
+                    //case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)":
+                    case "WEATHER SEAL XL TWO COATS":
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+            return false;
+        }
+        private bool getCheckboxEnabledStatus(string materialName)
+        {
+            if (weatherWearType == "Weather Wear")
+            {
+                switch (materialName.ToUpper())
+                {
+                    case "RESISTITE REGULAR OVER TEXTURE(#55 BAG)":
+                    case "LIP COLOR":
+                    case "AJ-44A DRESSING(SEALER)":
+                    case "VISTA PAINT ACRIPOXY":
+                    case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
+                    case "WEATHER SEAL XL TWO COATS":
+                    case "STAIR NOSING FROM DEXOTEX":
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+            else if (weatherWearType == "Weather Wear Rehab")
+            {
+                switch (materialName.ToUpper())
+                {
+                    case "LIGHT CRACK REPAIR":
+                    case "RESISTITE REGULAR OVER TEXTURE(#55 BAG)":
+                    case "30# DIVORCING FELT (200 SQ FT) FROM FORD WHOLESALE":
+                    case "RP FABRIC 10 INCH WIDE X(300 LF) FROM ACME":
+                    case "GLASMAT #4 (1200 SQ FT) FROM ACME":
+                    case "CPC MEMBRANE":
+                    case "NEOTEX STANDARD POWDER(BODY COAT)":
+                    case "NEOTEX STANDARD POWDER(BODY COAT) 1":
+                    case "RESISTITE REGULAR GRAY":
+                    case "LIP COLOR":
+                    case "AJ-44A DRESSING(SEALER)":
+                    case "VISTA PAINT ACRIPOXY":
+                    case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)":
+                    case "WEATHER SEAL XL TWO COATS":
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+            return false;
+        }
+
+        private double getlfArea(string materialName)
+        {
+            string upp = materialName.ToUpper();
+            switch (materialName.ToUpper())
+            {
+                case "LIGHT CRACK REPAIR":
+                case "30# DIVORCING FELT (200 SQ FT) FROM FORD WHOLESALE":
+                case "GLASMAT #4 (1200 SQ FT) FROM ACME":
+                    return totalSqft;
+                case "RESISTITE REGULAR OVER TEXTURE(#55 BAG)":
+                case "CPC MEMBRANE":
+                case "NEOTEX STANDARD POWDER(BODY COAT)":
+                case "NEOTEX STANDARD POWDER(BODY COAT) 1":
+                case "RESISTITE REGULAR WHITE":
+                case "RESISTITE REGULAR GRAY":
+                case "RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)":
+                case "RESISTITE REGULAR OR SMOOTH GRAY(KNOCK DOWN OR SMOOTH)":
+                case "LIP COLOR":
+                case "AJ-44A DRESSING(SEALER)":
+                case "VISTA PAINT ACRIPOXY":
+                case "RESISTITE UNIVERSAL PRIMER(ADD 50% WATER)":
+                case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)":
+                case "WEATHER SEAL XL TWO COATS":
+                    return Math.Round((riserCount * stairWidth * 2) + totalSqft, 2);
+                case "STAIR NOSING FROM DEXOTEX":
+                    return riserCount;
+                case "RP FABRIC 10 INCH WIDE X (300 LF) FROM ACME":
+                    return Math.Round(deckPerimeter + stairWidth * riserCount * 2, 2);
+                default:
+                    return 0;
+            }
+        }
+        #endregion
     }
 }

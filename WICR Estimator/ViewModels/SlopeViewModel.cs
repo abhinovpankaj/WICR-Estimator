@@ -47,13 +47,18 @@ namespace WICR_Estimator.ViewModels
             }
             set
             {
-                if (value!=overrideManually)
+                if (value != overrideManually)
                 {
                     overrideManually = value;
                     if (!overrideManually)
                     {
+
+                        totalmixesman = 0;
+                        averagemixesprice = 0;
                         CalculateGridTotal();
                         CalculateTotalMixes();
+                        OnPropertyChanged("TotalMixesMan");
+                        OnPropertyChanged("AverageMixesPrice");
                     }
                     else
                         CalculateManual();
@@ -80,7 +85,7 @@ namespace WICR_Estimator.ViewModels
                 if (slopes != value)
                 {
                     slopes = value;
-                    OnPropertyChanged("Slopes");                   
+                    OnPropertyChanged("Slopes");
                 }
             }
         }
@@ -92,13 +97,15 @@ namespace WICR_Estimator.ViewModels
             }
             set
             {
-                if (value!=totalmixesman)
+                if (overrideManually && value != totalmixesman)
                 {
                     totalmixesman = value;
                     CalculateManual();
                     OnPropertyChanged("TotalMixesMan");
                 }
-                
+
+
+
             }
         }
         public double AverageMixesPrice
@@ -109,13 +116,16 @@ namespace WICR_Estimator.ViewModels
             }
             set
             {
-                if (averagemixesprice!=value)
+                if (overrideManually && averagemixesprice != value)
                 {
                     averagemixesprice = value;
                     CalculateManual();
                     OnPropertyChanged("AverageMixesPrice");
                 }
-                
+                else
+                    averagemixesprice = 0;
+
+
             }
         }
 
@@ -215,7 +225,7 @@ namespace WICR_Estimator.ViewModels
         {
             get
             {
-               return sumtotal;
+                return sumtotal;
             }
             set
             {
@@ -276,15 +286,15 @@ namespace WICR_Estimator.ViewModels
 
         public SlopeViewModel()
         {
-            Slopes = new ObservableCollection<Slope>();           
+            Slopes = new ObservableCollection<Slope>();
             SlopeViewModelAsync();
-            JobSetup.OnJobSetupChange += JobSetup_OnJobSetupChange;            
+            JobSetup.OnJobSetupChange += JobSetup_OnJobSetupChange;
         }
 
         private void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {
             JobSetup js = sender as JobSetup;
-            if (js!=null)
+            if (js != null)
             {
                 isApprovedForCement = js.IsApprovedForSandCement;
                 isPrevailingWage = js.IsPrevalingWage;
@@ -293,21 +303,24 @@ namespace WICR_Estimator.ViewModels
 
             SlopeViewModelAsync();
             CalculateGridTotal();
-            CalculateTotalMixes();           
+            CalculateTotalMixes();
         }
-       
-        private async void SlopeViewModelAsync()
+
+        private void SlopeViewModelAsync()
         {
-            if (perMixRates==null)
+            if (perMixRates == null)
             {
-                perMixRates = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "P25:Q30");
+                //perMixRates = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "P25:Q30");
+                perMixRates = DataSerializer.DSInstance.deserializeGoogleData(DataType.Slope);
+                laborRate = double.Parse(DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate)[0][0].ToString());
             }
             if (pWage == null)
             {
-                pWage = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E60:E61");
+                //pWage = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E60:E61");
+                pWage = DataSerializer.DSInstance.deserializeGoogleData(DataType.Labor);
             }
             Slopes = CreateSlopes();
-            
+
             double.TryParse(pWage[0][0].ToString(), out prevailingWage);
             double.TryParse(pWage[1][0].ToString(), out deductionOnLargeJob);
             CalculateGridTotal();
@@ -321,11 +334,11 @@ namespace WICR_Estimator.ViewModels
             slopes.Add(new Slope
             {
                 Thickness = "1/4 inch Average",
-                DeckCount=6,
-                Sqft =1,
-                GSLaborRate =getGSLaborRate("1/4 inch Average"),
-                LaborRate=laborRate,
-                PricePerMix =getPricePerMix("1/4 inch Average", isApprovedForCement)
+                DeckCount = 6,
+                Sqft = 1,
+                GSLaborRate = getGSLaborRate("1/4 inch Average"),
+                LaborRate = laborRate,
+                PricePerMix = getPricePerMix("1/4 inch Average", isApprovedForCement)
             });
             slopes.Add(new Slope
             {
@@ -336,7 +349,7 @@ namespace WICR_Estimator.ViewModels
                 LaborRate = laborRate,
                 PricePerMix = getPricePerMix("1/2 inch Average", isApprovedForCement)
             });
-            
+
             slopes.Add(new Slope
             {
                 Thickness = "3/4 inch Average",
@@ -393,7 +406,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
 
-        private double getPricePerMix(string thickness,bool isApproved)
+        private double getPricePerMix(string thickness, bool isApproved)
         {
             double result;
             if (isApproved)
@@ -436,6 +449,7 @@ namespace WICR_Estimator.ViewModels
                 LaborCost = Math.Round(SumTotalLaborExt, 2);
 
                 MinimumLaborCost = 6 * laborRate;
+
                 double lCost = LaborCost > MinimumLaborCost ? LaborCost : MinimumLaborCost;
                 if (isPrevailingWage)
                 {
@@ -443,6 +457,7 @@ namespace WICR_Estimator.ViewModels
                 }
                 else
                     TotalLaborCost = lCost * (1 + deductionOnLargeJob);
+
                 TotalMaterialCost = Math.Round(SumTotalMatExt, 2);
                 TotalWeight = Math.Round(50 * SumTotalMixes, 2);
                 TotalFrightCost = Math.Round(FreightCalculator(TotalWeight), 2);
@@ -514,12 +529,15 @@ namespace WICR_Estimator.ViewModels
                 ///sumtotal              
                 SumTotal = Math.Round(Slopes.Select(x => x.Total).Sum(), 2);
 
-                ///sumtotalmixes
-                SumTotalMixes = Math.Round(Slopes.Select(x => x.TotalMixes).Sum(), 2);
+                if (overrideManually == false)
+                {
+                    ///sumtotalmixes
+                    SumTotalMixes = Math.Round(Slopes.Select(x => x.TotalMixes).Sum(), 2);
 
-                ///sumtotalmatext
+                    ///sumtotalmatext
 
-                SumTotalMatExt = Math.Round(Slopes.Select(x => x.MaterialExtensionSlope).Sum(), 2);
+                    SumTotalMatExt = Math.Round(Slopes.Select(x => x.MaterialExtensionSlope).Sum(), 2);
+                }
                 //sumtotallaborext
 
                 SumTotalLaborExt = Math.Round(Slopes.Select(x => x.LaborExtensionSlope).Sum(), 2);
@@ -550,6 +568,7 @@ namespace WICR_Estimator.ViewModels
         private void CalculateCost(object obj)
         {
             CalculateTotalMixes();
+
             CalculateGridTotal();
         }
         #endregion

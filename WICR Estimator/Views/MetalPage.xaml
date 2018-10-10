@@ -77,7 +77,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Binding="{Binding SpecialMetalPricing  ,StringFormat={}{0:C0}.00 }"
+                    <DataGridTextColumn Binding="{Binding SpecialMetalPricing ,StringFormat={}{0:C} }"
                                     IsReadOnly="False">
                         <DataGridTextColumn.Header >
                             <!--07-10-18-->
@@ -88,11 +88,11 @@
                     <!--07-10-18-->
                     <DataGridTextColumn Header="Labor Extension($)"
                                         IsReadOnly="True" 
-                                        Binding="{Binding LaborExtension  ,StringFormat={}{0:C0}.00}"/>
+                                        Binding="{Binding LaborExtension  ,StringFormat={}{0:C}}"/>
                     <!--07-10-18-->
                     <DataGridTextColumn Header="Material Extension($)"
                                     IsReadOnly="True"
-                                    Binding="{Binding MaterialExtension ,StringFormat={}{0:C0}.00}"/>
+                                    Binding="{Binding MaterialExtension ,StringFormat={}{0:C}}"/>
                 </DataGrid.Columns>
 
             </DataGrid>
@@ -137,15 +137,16 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Labor Extension($)" 
-                                        IsReadOnly="True"
-                                        Binding="{Binding LaborExtension,Mode=OneWay}"/>
                     <DataGridTextColumn Header="Material Price($)" 
                                         IsReadOnly="{Binding IsReadOnly}"
-                                        Binding="{Binding MaterialPrice}"/>
+                                        Binding="{Binding MaterialPrice ,StringFormat={}{0:C}}"/>
+                    <DataGridTextColumn Header="Labor Extension($)" 
+                                        IsReadOnly="True"
+                                        Binding="{Binding LaborExtension,Mode=OneWay ,StringFormat={}{0:C}}"/>
+
                     <DataGridTextColumn Header="Material Extension($)"
                                     IsReadOnly="True"
-                                    Binding="{Binding MaterialExtension,Mode=OneWay}"/>
+                                    Binding="{Binding MaterialExtension,Mode=OneWay,StringFormat={}{0:C}}"/>
                 </DataGrid.Columns>
 
             </DataGrid>
@@ -157,27 +158,47 @@
                   HorizontalAlignment="Center" Width="350">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="59.957"/>
+                    <ColumnDefinition Width="177.043"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <StackPanel>
+                <StackPanel Grid.ColumnSpan="3">
                     <TextBlock Text="Metal Type" Margin="5"/>
                     <TextBlock Text="Labor Total Cost" Margin="5"/>
                     <TextBlock Text="Material Total Cost"  Margin="5"/>
                 </StackPanel>
-                <StackPanel Grid.Column="1">
+                <StackPanel Grid.Column="2">
                     <TextBox Text="{Binding MetalName}" Background="LightGray"
                        Margin="5" IsEnabled="False"/>
                     <!--07-10-18-->
                     <TextBox IsEnabled="False"  Margin="5"
-                             Text="{Binding TotalLaborCost,UpdateSourceTrigger=PropertyChanged  ,StringFormat={}{0:C0}.00}"/>
+                             Text="{Binding TotalLaborCost,UpdateSourceTrigger=PropertyChanged ,StringFormat={}{0:C}}"/>
                     <TextBox IsEnabled="False"  Margin="5"
-                            Text="{Binding TotalMaterialCost,UpdateSourceTrigger=PropertyChanged  ,StringFormat={}{0:C0}.00}" />
+                            Text="{Binding TotalMaterialCost,UpdateSourceTrigger=PropertyChanged  ,StringFormat={}{0:C}}" />
                     <!--07-10-18-->
                 </StackPanel>
             </Grid>
         </GroupBox>
-        <StackPanel Grid.Column="1" Grid.Row="1" 
+        <GroupBox Header="Nails, caulk + overage on metal Percentage"
+                  Grid.Row="1" Grid.Column="1" FontSize="16" Height="70"
+                  BorderBrush="Black" Margin="5" BorderThickness="0.5"
+                  HorizontalAlignment="Center" Width="350">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="54.638"/>
+                    <ColumnDefinition Width="5.362"/>
+                    <ColumnDefinition Width="177.043"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="3">
+
+                    <TextBox Text="{Binding Nails, StringFormat='\{0\}%'}" Background="LightGray"
+                       Margin="5" IsEnabled="False" />
+
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+        <StackPanel Grid.Column="2" Grid.Row="1" 
                     Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom">
@@ -203,7 +224,7 @@
                     Margin="0,0,2,0">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
-                       
+
                         <Image Source="../Images/Minus.ico"
                                Height="25"/>
                     </StackPanel>

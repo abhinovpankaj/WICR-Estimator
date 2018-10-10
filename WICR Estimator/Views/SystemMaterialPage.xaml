@@ -53,22 +53,22 @@
             <ColumnDefinition Width=".3*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            
         </Grid.RowDefinitions>
 
         <DataGrid AutoGenerateColumns="False" 
                   HorizontalAlignment="Left"
                   Name="MaterialGrid" 
                   Margin="10"
+                  Grid.RowSpan="5"
                   VerticalAlignment="Top" 
                   CanUserAddRows="False"
-                  ItemsSource="{Binding SystemMaterials,UpdateSourceTrigger=PropertyChanged}" Grid.RowSpan="6">
+                  ItemsSource="{Binding SystemMaterials,UpdateSourceTrigger=PropertyChanged}" >
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="">
                     <DataGridTemplateColumn.CellTemplate>
@@ -126,12 +126,14 @@
                         <DataTemplate>
                             <TextBox Text="{Binding Qty,UpdateSourceTrigger=PropertyChanged}"
                                      Name="qtyTb"
-                                    IsEnabled="{Binding Path=Name,Converter={StaticResource qtyTextboxConv}}"/>
+                                    IsEnabled="{Binding Path=Name,
+                                Converter={StaticResource qtyTextboxConv}}"/>
                         </DataTemplate>
 
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Binding="{Binding MaterialPrice,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}"
+                <DataGridTextColumn Binding="{Binding MaterialPrice,
+                    UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"
                                     IsReadOnly="True">
 
                     <DataGridTextColumn.Header>
@@ -140,7 +142,8 @@
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Binding="{Binding MaterialExtension,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}"
+                <DataGridTextColumn Binding="{Binding MaterialExtension,
+                    UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"
                                     IsReadOnly="True">
                     <DataGridTextColumn.Header>
                         <TextBlock Text="Material Extension"  
@@ -154,7 +157,8 @@
                                    TextWrapping="Wrap"  Width="Auto"/>
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding FreightExtension,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00  }"
+                <DataGridTextColumn Binding="{Binding FreightExtension,
+                    UpdateSourceTrigger=PropertyChanged,StringFormat='c'  }"
                                     IsReadOnly="True">
                     <DataGridTextColumn.Header>
                         <TextBlock Text="Extension"  
@@ -164,8 +168,8 @@
                 <DataGridTemplateColumn Header="Special Pricing($)">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding SpecialMaterialPricing,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}"
-                                     IsEnabled="True"
+                            <TextBox Text="{Binding SpecialMaterialPricing,
+                                UpdateSourceTrigger=PropertyChanged}"
                             >
                             </TextBox>
                         </DataTemplate>
@@ -174,7 +178,7 @@
             </DataGrid.Columns>
 
         </DataGrid>
-        <GroupBox x:Name="grp1" 
+        <!--<GroupBox x:Name="grp1" 
                   Grid.Row="6" 
                   Header="Total ($)"
                   BorderBrush="Black" 
@@ -194,7 +198,8 @@
                 <StackPanel Margin="1,10,10,10" Grid.Column="1" Grid.ColumnSpan="2">
                     <TextBlock Text="Qty" 
                                HorizontalAlignment="Center"/>
-                    <TextBox Text="{Binding SumQty,UpdateSourceTrigger=PropertyChanged ,StringFormat={}{0:C0}.00}" 
+                    <TextBox Text="{Binding SumQty,
+                        UpdateSourceTrigger=PropertyChanged}" 
                              FocusManager.FocusedElement="{Binding ElementName=AddButton}"
                              IsReadOnly="True"
                              Style="{StaticResource  TextBoxStyle}"/>
@@ -203,14 +208,15 @@
                     <TextBlock Text="Material Price" 
                                HorizontalAlignment="Center"/>
                     <TextBox Text="{Binding SumMatPrice,
-                        UpdateSourceTrigger=PropertyChanged ,StringFormat={}{0:C0}.00}" 
+                        UpdateSourceTrigger=PropertyChanged ,StringFormat='c'}" 
                              IsReadOnly="True"
                              Style="{StaticResource TextBoxStyle}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="4" Margin="5,10,10,10" >
                     <TextBlock Text="Material Extn" 
                                HorizontalAlignment="Center"/>
-                    <TextBox Text="{Binding SumTotalMatExt,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}" 
+                    <TextBox Text="{Binding SumTotalMatExt,
+                        UpdateSourceTrigger=PropertyChanged,StringFormat='c'}" 
                              IsReadOnly="True" 
                             Style="{StaticResource TextBoxStyle}"/>
                 </StackPanel>
@@ -224,15 +230,18 @@
                 <StackPanel Grid.Column="6" Margin="5,10,10,10">
                     <TextBlock Text="Freight Weight" 
                                HorizontalAlignment="Center" />
-                    <TextBox Text="{Binding SumFreight,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}"
+                    <TextBox Text="{Binding SumFreight,
+                        UpdateSourceTrigger=PropertyChanged}"
                              IsReadOnly="True"
                              Style="{StaticResource TextBoxStyle}"/>
                 </StackPanel>
             </Grid>
-        </GroupBox>
+        </GroupBox>-->
+        
         <!--Column 1 Element-->
         <!--Row 0 ELement-->
-        <GroupBox x:Name="OtherCost" Grid.Column="1" Grid.Row="0" 
+        <Grid Grid.Column="1">
+            <GroupBox x:Name="OtherCost" 
                   Header="Other Cost" Foreground="Maroon"
                   FontFamily="Arial"
                   FontSize="12"
@@ -241,42 +250,51 @@
                   BorderThickness="0.5" >
 
 
-            <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Left"
+                <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Left"
                       Name="OtherCostGrid" VerticalAlignment="Top"
                       Margin="0,10,10,10"
                       Grid.Column="1"
                       CanUserAddRows="false"                      
                   ItemsSource="{Binding OtherMaterials,UpdateSourceTrigger=PropertyChanged}">
-                <DataGrid.Columns>
-                    <!--<DataGridTextColumn Header="Items" 
+                    <DataGrid.Columns>
+                        <!--<DataGridTextColumn Header="Items" 
                                     IsReadOnly="True"
                                     Binding="{Binding Name}"/>-->
 
-                    <DataGridTemplateColumn Header="Items" IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}"
-                                     IsEnabled="{Binding Name,Converter={StaticResource textboxConv}}">
+                        <DataGridTemplateColumn Header="Items" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}"
+                                     IsReadOnly="{Binding IsReadOnly}">
 
-                                </TextBox>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Quantity"
-                                    Binding="{Binding Quantity,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-                    <DataGridTextColumn Header="Metarial Price ($)"
-                                    Binding="{Binding MaterialPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}"/>
-                    <DataGridTextColumn Header="Extension($)" 
+                                    </TextBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Quantity"
+                                    Binding="{Binding Quantity,
+                        Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn Header="Material Price ($)"
+                                    Binding="{Binding MaterialPrice,
+                        Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn Header="Extension($)" 
                                         IsReadOnly="True"
-                                        Binding="{Binding Extension,Mode=OneWay,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}"/>
-                </DataGrid.Columns>
+                                        Binding="{Binding Extension,Mode=OneWay,
+                        UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
+                    </DataGrid.Columns>
 
-            </DataGrid>
+                </DataGrid>
 
-        </GroupBox>
+            </GroupBox>
+        </Grid>
+        
         <!--Row 0 ELement-->
         <!--Row 1 ELement-->
-        <GroupBox Header ="Other Cost Total " Grid.Column="1" Grid.Row="1" Foreground="Blue" FontSize="12" FontWeight="Bold">
+        <GroupBox Header ="Other Cost Total "
+                  Grid.Column="1"
+                  Grid.Row="1" 
+                  Foreground="Blue" 
+                  FontSize="12" FontWeight="Bold">
             <StackPanel 
                     Orientation="Horizontal"
                     HorizontalAlignment="Center"
@@ -316,7 +334,7 @@
                          IsEnabled="False"                        
                          Margin="5"                       
                          Height="25"  Width="100"  Style="{StaticResource TextBoxStyle}"                
-                         Text="{Binding TotalOCExtension, UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}"/>
+                         Text="{Binding TotalOCExtension, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
                 </StackPanel>
                 <!--<Button Command="{Binding CalculateCostCommand}"
                     Content="Calculate"
@@ -328,96 +346,60 @@
         </GroupBox>
         <!--Row 1 ELement End-->
         <!--Row 2 ELement-->
-        <GroupBox x:Name="SubContract" Grid.Column="1" Grid.Row="2"
-                  Header="Sub Contract Labor Cost" Foreground="Maroon"
+        <GroupBox x:Name="SubContract" Grid.Column="1" 
+                  Grid.Row="2"
+                  Header="Sub Contract Labor"
                   FontFamily="Arial"
-                  FontSize="12"
                   FontWeight="Bold"
+                  Foreground="Blue"
+                  FontSize="12" 
                   BorderBrush="DarkBlue"
                   BorderThickness="0.5"  >
-
-            <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Left"
+            <StackPanel>
+                <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Left"
                       Name="SubConlbrcstGrid" VerticalAlignment="Top"
                      
                        Margin="0,10,10,10" Grid.Column="1"
                       CanUserAddRows="false"                      
-                  ItemsSource="{Binding OtherItem,UpdateSourceTrigger=PropertyChanged}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Enter Labor Details" 
+                  ItemsSource="{Binding SubContractLaborItems,UpdateSourceTrigger=PropertyChanged}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Enter Labor Details" 
                                     IsReadOnly="True"
                                     Binding="{Binding LaborDetailsConlbrcst}"/>
-                    <DataGridTextColumn Header="Units"
+                        <DataGridTextColumn Header="Units"
                                     IsReadOnly="{Binding IsReadOnly,Source= UnitConlbrcst}"
                                     Binding="{Binding UnitConlbrcst}"/>
-                    <DataGridTextColumn Header="Unit Price ($)"
+                        <DataGridTextColumn Header="Unit Price ($)"
                                     IsReadOnly="{Binding IsReadOnly}"
-                                    Binding="{Binding UnitPriceConlbrcst,StringFormat={}{0:C0}.00}"/>
-                    <DataGridTextColumn Header="Extension($)" 
+                                    Binding="{Binding UnitPriceConlbrcst}"/>
+                        <DataGridTextColumn Header="Extension($)" 
                                         IsReadOnly="True"
-                                        Binding="{Binding MaterialExtensionConlbrcst,Mode=OneWay,StringFormat={}{0:C0}.00}"/>
-                </DataGrid.Columns>
+                                        Binding="{Binding MaterialExtensionConlbrcst,
+                        UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
+                    </DataGrid.Columns>
 
-            </DataGrid>
-
-        </GroupBox>
-        <!--Row 2 ELement-->
-        <!--Row 3 ELement-->
-        <GroupBox Header ="SubContract Cost Total " Grid.Column="1" Grid.Row="3" Foreground="Blue" FontSize="12" FontWeight="Bold">
-            <StackPanel 
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Bottom">
-                <Button Name="AddOButton" Background="White"
-                    HorizontalAlignment="Right"
-                                        Height="30"
-                    Command="{Binding AddORowCommand}">
-                    <Button.Content>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="../Images/Plus.ico"
-                               Height="25"/>
-                        </StackPanel>
-                    </Button.Content>
-                </Button>
-                <Button Name="RemoveOCommand"  Command="{Binding RemoveOCommand}"                   
-                    Height="30"
-                    Margin="5"
-                    Background="White"
-                    HorizontalAlignment="Right"
-                   >
-                    <Button.Content>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="../Images/Minus.ico"
-                               Height="25"/>
-                        </StackPanel>
-                    </Button.Content>
-                </Button>
-                <StackPanel>
+                </DataGrid>
+                <StackPanel Orientation="Horizontal">
                     <Label Content="Total ($) :" Grid.Row="0" Grid.Column="1"  
                        Margin="5"
                        Style="{StaticResource LabelStyle1}"  FontSize="12" Background="FloralWhite"
                        />
-                </StackPanel>
-                <StackPanel >
                     <TextBox x:Name="TotalSCExtension"
                          IsEnabled="False"                        
                          Margin="5"                       
                          Height="25"  Width="100"  Style="{StaticResource TextBoxStyle}"                
-                         Text="{Binding TotalSCExtension, UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}"/>
+                         Text="{Binding TotalSCExtension, 
+                        UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
                 </StackPanel>
-                <!--<Button Command="{Binding CalculateCostCommand}"
-                    Content="Calculate"
-                    Height="30"
-                    Width="100" Background="White"
-                    HorizontalAlignment="Right"
-                    Margin="30,10,10,10"/>-->
             </StackPanel>
+            
+
         </GroupBox>
-        <!--Row 3 ELement End-->
-        <!--Row 4 ELement -->
+        
         <GroupBox x:Name="groupBoxMisc" 
                   Margin="10"
                   Grid.Column="1"
-                Grid.Row="5"
+                Grid.Row="3"
                   Header="Total Material Cost Breakup"
                   Foreground="Blue"
                   FontFamily="Arial"
@@ -462,36 +444,40 @@
                          Margin="5,16,5,6"
                          Grid.Column="2"
                          Height="25" Width="150"
-                         Text="{Binding TotalMaterialCostbrkp,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}"/>
+                         Text="{Binding TotalMaterialCostbrkp,
+                    UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
                 <TextBox x:Name="TotalWeightbrkp"
                          IsEnabled="False" Grid.Row="1" 
                          Grid.Column="2"
                          Margin="5,1,5,6"
-                         Text="{Binding TotalWeightbrkp,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}" Height="25" Width="150" />
+                         Text="{Binding TotalWeightbrkp,
+                    UpdateSourceTrigger=PropertyChanged}" Height="25" Width="150" />
                 <TextBox x:Name="TotalFreightCostBrkp"
                          IsEnabled="False"
                          Grid.Row="2"
                          Margin="5,0,5,5"
                          Grid.Column="2"
-                         Text="{Binding TotalFreightCostBrkp,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C0}.00}" Height="25" Width="150" />
+                         Text="{Binding TotalFreightCostBrkp,
+                    UpdateSourceTrigger=PropertyChanged,StringFormat='c'}" Height="25" Width="150" />
                 <TextBox x:Name="TotalSubContractLaborCostBrkp"
                          IsEnabled="False"
                          Grid.Row="3"
                          Margin="5,0,5,5"
                          Grid.Column="2"
-                         Text="{Binding TotalSubContractLaborCostBrkp,UpdateSourceTrigger=PropertyChanged}" Height="25" Width="150" />
+                         Text="{Binding TotalSubContractLaborCostBrkp,StringFormat='c',
+                    UpdateSourceTrigger=PropertyChanged}" Height="25" Width="150" />
                 
 
             </Grid>
         </GroupBox>
         <!--Row 4 ELement End -->
-        <StackPanel Grid.Row="6" Grid.Column="1">
+        
 
             <Button Command="{Binding CalculateCostCommand}"                   
-                    Height="35" Margin="20"
+                    Height="35" Margin="0,0,0,5"
                     Background="White"
                     HorizontalAlignment="Center"
-                     Grid.Row="3" Grid.Column="3">
+                     Grid.Row="4" Grid.Column="1">
 
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
@@ -503,7 +489,7 @@
                     </StackPanel>
                 </Button.Content>
             </Button>
-        </StackPanel>
+        
         <!--Column 1 Element-->
     </Grid>
 </UserControl>

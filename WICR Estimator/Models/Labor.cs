@@ -10,24 +10,96 @@ namespace WICR_Estimator.Models
     {
         public Labor()
         {
+            IsMaterialEnabled = true;
         }
-
-        public string Name { get; set; }
+        public Labor(bool ismChecked, string prjestimate, string operation, double vProdrate, double smSqftV, double hProdrate, double smSqftH, double stairsProdrate,
+        double stairSqft, double hours)
+            : this()
+        {
+            this.HorizontalProductionRate = hProdrate;
+            this.SMSqftH = smSqftH;
+            this.VerticalProductionRate = vProdrate;
+            this.SMSqftV = smSqftV;
+            this.Operation = operation;
+            this.StairsProductionRate = stairSqft;
+            this.StairSqft = stairSqft;
+            this.Hours = hours;
+        }
+        public bool IsChecked { get; set; }
+        private bool ismaterialchecked;
+        private bool isMaterialEnabled;
         public string Operation { get; set; }
         public double VerticalSqft { get; set; }
-        public double  VerticalProductionRate { get; set; }
+        public double VerticalProductionRate { get; set; }
         public double LaborRate { get; set; }
-        private double horizontalSqft;
-        public double HorizontalSqft
+
+        public string Name { get; set; }
+        public bool IsMaterialChecked
         {
-            get { return horizontalSqft; }
+            get
+            {
+                return ismaterialchecked;
+            }
+            set
+            {
+                if (value != ismaterialchecked)
+                {
+                    ismaterialchecked = value;
+                    OnPropertyChanged("IsMaterialChecked");
+                }
+            }
+        }
+        public bool IsMaterialEnabled
+        {
+            get
+            {
+                return isMaterialEnabled;
+            }
+            set
+            {
+                if (value != isMaterialEnabled)
+                {
+                    isMaterialEnabled = value;
+                    OnPropertyChanged("IsMaterialEnabled");
+                }
+            }
+        }
+        private Double qtysm;
+        public double Qty
+        {
+            get
+
+            {
+                return qtysm;
+            }
+            set
+            {
+                if (qtysm != value)
+                {
+                    qtysm = value;
+                    if (qtysm != 0)
+                    {
+                        IsMaterialChecked = true;
+                    }
+                    else
+                        IsMaterialChecked = false;
+                    OnPropertyChanged("Qty");
+                    OnPropertyChanged("MatExtension");
+                    OnPropertyChanged("FreightExtension");
+                }
+            }
+        }
+        private double sMSqftH;
+        public double SMSqftH
+        {
+            get { return sMSqftH; }
 
             set
             {
-                if (value!=horizontalSqft)
+                if (value != sMSqftH)
                 {
-                    horizontalSqft = value;
-                    OnPropertyChanged("HorizontalSqft");
+                    sMSqftH = value;
+                    OnPropertyChanged("SMSqftH");
                 }
             }
         }
@@ -42,6 +114,34 @@ namespace WICR_Estimator.Models
                 {
                     horizontalProductionRate = value;
                     OnPropertyChanged("HorizontalProductionRate");
+                }
+            }
+        }
+        private double sMSqftV;
+        public double SMSqftV
+        {
+            get { return sMSqftV; }
+
+            set
+            {
+                if (value != sMSqftV)
+                {
+                    sMSqftV = value;
+                    OnPropertyChanged("SMSqftV");
+                }
+            }
+        }
+        private double verticleProductionRate;
+        public double VerticleProductionRate
+        {
+            get { return verticleProductionRate; }
+
+            set
+            {
+                if (value != verticleProductionRate)
+                {
+                    verticleProductionRate = value;
+                    OnPropertyChanged("VerticleProductionRate");
                 }
             }
         }
@@ -87,6 +187,7 @@ namespace WICR_Estimator.Models
                 }
             }
         }
+
         public double SetupMinCharge { get; set; }
         //private double setupMinCharge;
         //public double SetupMinCharge
@@ -120,7 +221,7 @@ namespace WICR_Estimator.Models
         {
             get
             {
-                return (Hours + SetupMinCharge) *LaborRate;
+                return (Hours + SetupMinCharge) * LaborRate;
             }
 
         }

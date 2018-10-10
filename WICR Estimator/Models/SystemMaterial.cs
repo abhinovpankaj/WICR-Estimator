@@ -174,7 +174,19 @@ namespace WICR_Estimator.Models
         //        return LaborRate;/// ProductionRate;
         //    }
         //}
-        public string Name { get; set; }
+        private string name;
+        public string Name
+        { get { return name; }
+            set
+            {
+                if (name!=value)
+                {
+                    name = value;
+                    OnPropertyChanged("Name");
+                }
+                
+            }
+        }
         public bool IsMaterialChecked
         {
             get
@@ -247,7 +259,7 @@ namespace WICR_Estimator.Models
                 if (specialMaterialPricing != value)
                 {
                     specialMaterialPricing = value;
-                    OnPropertyChanged("specialMaterialPricing");
+                    OnPropertyChanged("SpecialMaterialPricing");
                     OnPropertyChanged("MaterialExtension");
                 }
             }
@@ -264,7 +276,7 @@ namespace WICR_Estimator.Models
     public class OtherItem:BaseViewModel
     {
         public string Name { get; set; }
-
+        public bool IsReadOnly { get; set; }
         private double quantity;
         public double Quantity
         {
@@ -309,7 +321,7 @@ namespace WICR_Estimator.Models
     public class LaborContract : BaseViewModel
     {
         public string Name { get; set; }
-
+        
         private double unitconlbrcst;
         public double UnitConlbrcst
         {

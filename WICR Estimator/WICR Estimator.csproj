@@ -97,8 +97,10 @@
     <Compile Include="Converters\CheckboxVisibilityConverter.cs" />
     <Compile Include="Converters\EnableTextboxConverter.cs" />
     <Compile Include="Converters\QtyTextboxConv.cs" />
+    <Compile Include="DataSerializer.cs" />
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="GoogleUtility\SpreadSheetConnect.cs" />
+    <Compile Include="GSData.cs" />
     <Compile Include="IPageViewModel.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Models\Labor.cs" />
@@ -106,17 +108,18 @@
     <Compile Include="Models\Metal.cs" />
     <Compile Include="Models\Project.cs" />
     <Compile Include="Models\Slope.cs" />
+    <Compile Include="Models\Totals.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\LaborViewModel.cs" />
     <Compile Include="ViewModels\MaterialViewModel.cs" />
+    <Compile Include="ViewModels\MetalViewModel.cs" />
     <Compile Include="ViewModels\ProjectViewModel.cs" />
     <Compile Include="ViewModels\SlopeViewModel.cs" />
     <Compile Include="ViewModels\WeatherWearViewModel.cs" />
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\MetalViewModel.cs" />
     <Compile Include="Views\JobSetupPage.xaml.cs">
       <DependentUpon>JobSetupPage.xaml</DependentUpon>
     </Compile>
