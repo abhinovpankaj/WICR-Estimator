@@ -14,6 +14,7 @@ namespace WICR_Estimator.ViewModels
         #region Properties
         private ObservableCollection<Labor> Labors;
         private IList<IList<Object>> laborDetails;
+        private IList<IList<Object>> materialDetails;
         private double totalSqft;
         private double deckPerimeter;
         private double riserCount;
@@ -77,11 +78,13 @@ namespace WICR_Estimator.ViewModels
         }
 
         #region private methods
-        private async void getLaborDetailsAsync()
+        private void getLaborDetailsAsync()
         {
             if (laborDetails == null)
             {
-                laborDetails = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "D60:E81");
+                GSData gData=DataSerializer.DSInstance.deserializeGoogleData();
+                laborDetails = gData.LaborData;
+                materialDetails = gData.MaterialData;
             }
             Labors = CreateLabors();
         }
@@ -164,6 +167,8 @@ namespace WICR_Estimator.ViewModels
                     return 0;
             }
         }
+        //everydetail here while initializing Labors collection would be coming from Materialdetails,
+        //need to modify laborDetails array to materialDetails array.
         private ObservableCollection<Labor> CreateLabors()
         {
             ObservableCollection<Labor> labor = new ObservableCollection<Labor>();
@@ -992,6 +997,65 @@ namespace WICR_Estimator.ViewModels
                     return 0;
             }
         }
+        #endregion
+
+        #region abhinov 10oct
+        private double getTotals(double laborCost,double materialCost,double freightCost,double subcontractLabor)
+        {
+            double res = 0;
+            double slopeTotal = laborCost;
+            
+            if (isPrevailingWage)
+            {
+                double.TryParse(laborDetails[4][0].ToString(), out res);
+                slopeTotal = slopeTotal + laborCost * res;
+            }
+            else
+            {
+                double.TryParse(laborDetails[2][0].ToString(), out res);
+                slopeTotal = slopeTotal + laborCost * res;
+                double.TryParse(laborDetails[3][0].ToString(), out res);
+                slopeTotal = slopeTotal + laborCost * res;
+            }
+            
+            double.TryParse(laborDetails[5][0].ToString(), out res);
+            slopeTotal = slopeTotal + laborCost * res;
+            double.TryParse(laborDetails[6][0].ToString(), out res);
+            double tax = res * (freightCost + materialCost)+materialCost+freightCost;//freight+material including tax
+
+            slopeTotal = slopeTotal + tax;
+            //subcontrctlabor
+            double.TryParse(laborDetails[8][0].ToString(), out res);
+            double subCLabor = subcontractLabor * res;
+            //profitMargin
+            double pmAdd;
+            double.TryParse(laborDetails[8][0].ToString(), out pmAdd);
+            double profitMarginAdd = (slopeTotal * pmAdd) *(1+ pmAdd) ;
+
+            //Profit deduct for special metal
+            double.TryParse(laborDetails[9][0].ToString(), out res);
+            double specialMetalDeduction =materialCost*res ;
+            //profit margin
+            double pm;
+            double.TryParse(laborDetails[10][0].ToString(), out pm);
+            double TotalCost = (slopeTotal / pm) + profitMarginAdd+specialMetalDeduction+subCLabor;
+
+            double.TryParse(laborDetails[11][0].ToString(), out res);
+            double generalLiability = TotalCost * res / pm;
+            double.TryParse(laborDetails[12][0].ToString(), out res);
+            double directExpense = TotalCost * res / pm;
+            double.TryParse(laborDetails[13][0].ToString(), out res);
+            double contigency = TotalCost * res / pm;
+            double ins, fuel, addup;
+            double.TryParse(laborDetails[14][0].ToString(), out ins);
+            double.TryParse(laborDetails[15][0].ToString(), out fuel);
+            double.TryParse(laborDetails[16][0].ToString(), out addup);
+            double restTotal = TotalCost * (ins + fuel + addup);
+
+            return Math.Round(TotalCost + generalLiability + directExpense + contigency + restTotal,2);
+        }
+
+        
         #endregion
     }
 }
