@@ -10,6 +10,7 @@ namespace WICR_Estimator.Models
     public class Totals:BaseViewModel
     {
         //public event EventHandler OnTotalsChange;
+        public double  LaborExtTotal { get; set; }
         private double matExtTotal;
         public double MaterialExtTotal
         {

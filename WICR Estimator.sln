@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WICR Estimator", "WICR Estimator\WICR Estimator.csproj", "{D516A4E2-3DFE-4AF8-BE2D-AEA2D0F6124B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WICR Test", "WICR Test\WICR Test.csproj", "{4AF2FE68-8C20-4323-AE05-289E73B86A10}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{D516A4E2-3DFE-4AF8-BE2D-AEA2D0F6124B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D516A4E2-3DFE-4AF8-BE2D-AEA2D0F6124B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D516A4E2-3DFE-4AF8-BE2D-AEA2D0F6124B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AF2FE68-8C20-4323-AE05-289E73B86A10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AF2FE68-8C20-4323-AE05-289E73B86A10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AF2FE68-8C20-4323-AE05-289E73B86A10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AF2FE68-8C20-4323-AE05-289E73B86A10}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

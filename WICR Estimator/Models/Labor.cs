@@ -25,7 +25,7 @@ namespace WICR_Estimator.Models
             this.StairSqft = stairSqft;
             this.Hours = hours;
         }
-        public bool IsChecked { get; set; }
+        //public bool IsChecked { get; set; }
         private bool ismaterialchecked;
         private bool isMaterialEnabled;
         public string Operation { get; set; }
@@ -64,31 +64,7 @@ namespace WICR_Estimator.Models
                 }
             }
         }
-        private Double qtysm;
-        public double Qty
-        {
-            get
-
-            {
-                return qtysm;
-            }
-            set
-            {
-                if (qtysm != value)
-                {
-                    qtysm = value;
-                    if (qtysm != 0)
-                    {
-                        IsMaterialChecked = true;
-                    }
-                    else
-                        IsMaterialChecked = false;
-                    OnPropertyChanged("Qty");
-                    OnPropertyChanged("MatExtension");
-                    OnPropertyChanged("FreightExtension");
-                }
-            }
-        }
+         
         private double sMSqftH;
         public double SMSqftH
         {

@@ -21,10 +21,14 @@ namespace WICR_Estimator.ViewModels
         private int deckCount;
         private bool isApprovedforCement;
         private bool isPrevailingWage;
-        private string weatherWearType;
+        private bool isSpecialMetal;
         private double stairWidth;
+        private string weatherWearType;
+        private bool isDiscounted;
 
         private Totals materialTotals;
+        private Totals metalTotals;
+        private Totals slopeTotals;
 
         #endregion
         #region public properties
@@ -54,25 +58,33 @@ namespace WICR_Estimator.ViewModels
             Labors = new ObservableCollection<Labor>();
             getLaborDetailsAsync();
             // Labors = CreateLabors();
-            JobSetup.OnJobSetupChange += JobSetup_OnJobSetupChange;
+            JobSetup.OnJobSetupChange += JobSetup_OnJobSetupChange;            
         }
-        public LaborViewModel(Totals matTotals)
+        //constructor to get values from Other VMs.
+        public LaborViewModel(Totals matTotals,Totals metTotals,Totals slpTotals)
             : this()
         {
+            //use these values to calculate all the Slope,metala nd material Total.calling the same function
+            
             materialTotals = matTotals;
+            metalTotals = metTotals;
+            slopeTotals = slpTotals;
         }
         private void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {
             JobSetup js = sender as JobSetup;
             if (js != null)
             {
-                stairWidth = 4.5;
-                totalSqft = 1000;
+                stairWidth = js.StairWidth;
+                totalSqft = js.TotalSqft;
                 deckPerimeter = js.DeckPerimeter;
                 riserCount = js.RiserCount;
                 deckCount = js.DeckCount;
                 isApprovedforCement = js.IsApprovedForSandCement;
                 isPrevailingWage = js.IsPrevalingWage;
+                isSpecialMetal = js.HasSpecialMaterial;
+                weatherWearType = js.WeatherWearType;
+                isDiscounted = js.HasDiscount;             
             }
             getLaborDetailsAsync();
         }
@@ -86,7 +98,7 @@ namespace WICR_Estimator.ViewModels
                 laborDetails = gData.LaborData;
                 materialDetails = gData.MaterialData;
             }
-            Labors = CreateLabors();
+            //Labors = CreateLabors();
         }
         private double Calhours(string Material, double prodRH, double prodRV, double prodRS, double sqH, double sqV, double sqS)
         {
@@ -809,58 +821,7 @@ namespace WICR_Estimator.ViewModels
 
             return labor;
         }
-        private double getQuantity(string materialName, double coverage, double lfArea)
-        {
-            switch (materialName.ToUpper())
-            {
-                case "LIGHT CRACK REPAIR":
-                case "RESISTITE REGULAR OVER TEXTURE(#55 BAG)":
-                case "30# DIVORCING FELT (200 SQ FT) FROM FORD WHOLESALE":
-                case "RP FABRIC 10 INCH WIDE X(300 LF) FROM ACME":
-                case "GLASMAT #4 (1200 SQ FT) FROM ACME":
-                case "CPC MEMBRANE":
-                case "NEOTEX STANDARD POWDER(BODY COAT)":
-                case "NEOTEX STANDARD POWDER(BODY COAT) 1":
-                case "RESISTITE REGULAR WHITE":
-                case "RESISTITE REGULAR GRAY":
-                case "RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)":
-                case "RESISTITE REGULAR OR SMOOTH GRAY(KNOCK DOWN OR SMOOTH)":
-                case "LIP COLOR":
-                case "AJ-44A DRESSING (SEALER)":
-                case "VISTA PAINT ACRIPOXY":
-                case "RESISTITE UNIVERSAL PRIMER(ADD 50% WATER)":
-                case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
-                case "WEATHER SEAL XL TWO COATS":
-                    return Math.Round(lfArea / coverage, 2);
-
-                case "STAIR NOSING FROM DEXOTEX":
-                    return Math.Round(lfArea * stairWidth, 2);
-                case "NEOTEX-38 PASTE":
-                    return Math.Round(neotaxQty(), 2);
-                case "RESISTITE LIQUID":
-                    return Math.Round(calculateRLqty());
-                default:
-                    return 0;
-            }
-        }
-        private double calculateRLqty()
-        {
-            double val1, val2, val3, val4;
-            double.TryParse(laborDetails[12][2].ToString(), out val1);
-            double.TryParse(laborDetails[13][2].ToString(), out val2);
-            double.TryParse(laborDetails[17][2].ToString(), out val3);
-            double.TryParse(laborDetails[3][2].ToString(), out val4);
-            double qty = (val1 + val2 + val3) * 0.33 + val4 / 5;
-            return qty;
-        }
-
-        private double neotaxQty()
-        {
-            double val1, val2;
-            double.TryParse(laborDetails[9][2].ToString(), out val1);
-            double.TryParse(laborDetails[10][2].ToString(), out val2);
-            return (val2 * 1.5 + val1 * 1.25) / 5;
-        }
+        
         private bool getCheckboxCheckStatus(string materialName)
         {
             if (weatherWearType == "Weather Wear")
@@ -965,41 +926,24 @@ namespace WICR_Estimator.ViewModels
             return false;
         }
 
-        private double getlfArea(string materialName)
+        //Caculate Labor Totals
+        private void calculateLaborTotals()
         {
-            string upp = materialName.ToUpper();
-            switch (materialName.ToUpper())
+            double preWage=0,laborDeduction=0;
+            if (isPrevailingWage)
             {
-                case "LIGHT CRACK REPAIR":
-                case "30# DIVORCING FELT (200 SQ FT) FROM FORD WHOLESALE":
-                case "GLASMAT #4 (1200 SQ FT) FROM ACME":
-                    return totalSqft;
-                case "RESISTITE REGULAR OVER TEXTURE(#55 BAG)":
-                case "CPC MEMBRANE":
-                case "NEOTEX STANDARD POWDER(BODY COAT)":
-                case "NEOTEX STANDARD POWDER(BODY COAT) 1":
-                case "RESISTITE REGULAR WHITE":
-                case "RESISTITE REGULAR GRAY":
-                case "RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)":
-                case "RESISTITE REGULAR OR SMOOTH GRAY(KNOCK DOWN OR SMOOTH)":
-                case "LIP COLOR":
-                case "AJ-44A DRESSING(SEALER)":
-                case "VISTA PAINT ACRIPOXY":
-                case "RESISTITE UNIVERSAL PRIMER(ADD 50% WATER)":
-                case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)":
-                case "WEATHER SEAL XL TWO COATS":
-                    return Math.Round((riserCount * stairWidth * 2) + totalSqft, 2);
-                case "STAIR NOSING FROM DEXOTEX":
-                    return riserCount;
-                case "RP FABRIC 10 INCH WIDE X (300 LF) FROM ACME":
-                    return Math.Round(deckPerimeter + stairWidth * riserCount * 2, 2);
-                default:
-                    return 0;
+                double.TryParse(laborDetails[0][0].ToString(), out preWage);
             }
-        }
-        #endregion
+            if (isDiscounted)
+            {
+                double.TryParse(laborDetails[0][1].ToString(), out laborDeduction);
+            }
+            IEnumerable<Labor> selectedLabors = Labors.Where(x => x.IsMaterialChecked == true).ToList();
+            double totalHrs=Math.Round(selectedLabors.Select(x=>x.Hours).Sum(),2);
 
-        #region abhinov 10oct
+            double totalLaborUnitPrice = Math.Round(selectedLabors.Select(x => x.LaborUnitPrice).Sum() * (1 + preWage + laborDeduction));
+            double totalLaborExtension = Math.Round(selectedLabors.Select(x => x.LaborExtension).Sum());
+        }
         private double getTotals(double laborCost,double materialCost,double freightCost,double subcontractLabor)
         {
             double res = 0;
@@ -1030,14 +974,17 @@ namespace WICR_Estimator.ViewModels
             //profitMargin
             double pmAdd;
             double.TryParse(laborDetails[8][0].ToString(), out pmAdd);
-            double profitMarginAdd = (slopeTotal * pmAdd) *(1+ pmAdd) ;
-
-            //Profit deduct for special metal
-            double.TryParse(laborDetails[9][0].ToString(), out res);
-            double specialMetalDeduction =materialCost*res ;
+            double profitMarginAdd = (slopeTotal * pmAdd) *(1+ pmAdd) ;            
             //profit margin
             double pm;
             double.TryParse(laborDetails[10][0].ToString(), out pm);
+            double specialMetalDeduction = 0;
+            if (isSpecialMetal)
+            {
+                //Profit deduct for special metal
+                double.TryParse(laborDetails[9][0].ToString(), out res);
+                specialMetalDeduction = materialCost * res;
+            }
             double TotalCost = (slopeTotal / pm) + profitMarginAdd+specialMetalDeduction+subCLabor;
 
             double.TryParse(laborDetails[11][0].ToString(), out res);
@@ -1051,11 +998,11 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(laborDetails[15][0].ToString(), out fuel);
             double.TryParse(laborDetails[16][0].ToString(), out addup);
             double restTotal = TotalCost * (ins + fuel + addup);
-
+            //calculated Profit Margin,currently not being used.
+            double ProfitMargin = TotalCost - slopeTotal;
             return Math.Round(TotalCost + generalLiability + directExpense + contigency + restTotal,2);
         }
-
-        
+                
         #endregion
     }
 }
