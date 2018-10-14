@@ -45,7 +45,7 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-
+        
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -82,6 +82,7 @@
 
                             </CheckBox>
                         </DataTemplate>
+                        
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Select Project for Estimate">
@@ -89,9 +90,11 @@
                         <DataTemplate>
                             <TextBox Text="{Binding Name}"
                                      IsReadOnly="True"
-                                     >
+                                     KeyboardNavigation.IsTabStop="False">
                             </TextBox>
+                            
                         </DataTemplate>
+                    
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Units">
@@ -99,6 +102,7 @@
                         <DataTemplate>
                             <TextBox Text="{Binding SMUnits,UpdateSourceTrigger=PropertyChanged}"
                                      IsEnabled="False"
+                                     KeyboardNavigation.IsTabStop="False"
                             >
                             </TextBox>
                         </DataTemplate>
@@ -108,14 +112,15 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox Text="{Binding SMSqft,UpdateSourceTrigger=PropertyChanged}"
-                                     IsReadOnly="True">
+                                     IsReadOnly="True"
+                                     KeyboardNavigation.IsTabStop="False">
                             </TextBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
                 <DataGridTextColumn Binding="{Binding Coverage,UpdateSourceTrigger=PropertyChanged}"
-                                    IsReadOnly="True">
+                                    IsReadOnly="True" KeyboardNavigation.IsTabStop="False">
                     <DataGridTextColumn.Header>
                         <TextBlock Text="Coverage" 
                                    TextWrapping="Wrap"  Width="Auto"/>
@@ -127,6 +132,8 @@
                             <TextBox Text="{Binding Qty,UpdateSourceTrigger=PropertyChanged}"
                                      Name="qtyTb"
                                     IsEnabled="{Binding Path=Name,
+                                Converter={StaticResource qtyTextboxConv}}"
+                                     KeyboardNavigation.IsTabStop="{Binding Path=Name,
                                 Converter={StaticResource qtyTextboxConv}}"/>
                         </DataTemplate>
 
@@ -134,7 +141,8 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Binding="{Binding MaterialPrice,
                     UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"
-                                    IsReadOnly="True">
+                                    IsReadOnly="True" KeyboardNavigation.IsTabStop="False"
+                                    >
 
                     <DataGridTextColumn.Header>
                         <TextBlock Text="Material Price $" 
@@ -144,14 +152,14 @@
 
                 <DataGridTextColumn Binding="{Binding MaterialExtension,
                     UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"
-                                    IsReadOnly="True">
+                                    IsReadOnly="True" KeyboardNavigation.IsTabStop="False">
                     <DataGridTextColumn.Header>
                         <TextBlock Text="Material Extension"  
                                    TextWrapping="Wrap"  Width="Auto"/>
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding Weight,UpdateSourceTrigger=PropertyChanged}"
-                                    IsReadOnly="True">
+                                    IsReadOnly="True" KeyboardNavigation.IsTabStop="False">
                     <DataGridTextColumn.Header>
                         <TextBlock Text="Weight"  
                                    TextWrapping="Wrap"  Width="Auto"/>
@@ -159,7 +167,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding FreightExtension,
                     UpdateSourceTrigger=PropertyChanged,StringFormat='c'  }"
-                                    IsReadOnly="True">
+                                    IsReadOnly="True" KeyboardNavigation.IsTabStop="False">
                     <DataGridTextColumn.Header>
                         <TextBlock Text="Extension"  
                                    TextWrapping="Wrap"  Width="Auto"/>

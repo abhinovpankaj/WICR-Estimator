@@ -30,21 +30,29 @@
                 Grid.Row="1"
                 BorderThickness="0,2,0,0">
             <ItemsControl ItemsSource="{Binding PageViewModels}" 
-                          HorizontalAlignment="Center">
+                          >
                 <ItemsControl.ItemTemplate>
+                    
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal"
+                        <WrapPanel Orientation="Horizontal"
                                     HorizontalAlignment="Center">
                             <Button Content="{Binding Name}"
-                                Command="{Binding DataContext.ChangePageCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                Command="{Binding DataContext.ChangePageCommand,
+                                RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                                 CommandParameter="{Binding }"
                                 Margin="2,5"
                                 Width="100"
                                 Height="30"/>
-                        </StackPanel>
+                        </WrapPanel>
                         
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel HorizontalAlignment="Center"
+                            Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
             </ItemsControl>
         </Border>
         

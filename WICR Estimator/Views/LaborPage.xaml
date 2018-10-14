@@ -79,7 +79,8 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox Text="{Binding Name}"
-                                     IsReadOnly="True" TextWrapping="WrapWithOverflow"
+                                     IsReadOnly="True"
+                                     KeyboardNavigation.IsTabStop="False"
                                      >
                             </TextBox>
                         </DataTemplate>
@@ -90,6 +91,7 @@
                         <DataTemplate>
                             <TextBox Text="{Binding Operation,UpdateSourceTrigger=PropertyChanged}"
                                      IsEnabled="False"
+                                     KeyboardNavigation.IsTabStop="False"
                             >
                             </TextBox>
                         </DataTemplate>
@@ -99,14 +101,16 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox Text="{Binding SMSqftV,UpdateSourceTrigger=PropertyChanged}"
-                                     IsReadOnly="True">
+                                     IsReadOnly="True"
+                                     KeyboardNavigation.IsTabStop="False">
                             </TextBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
                 <DataGridTextColumn Binding="{Binding VerticleProductionRate,UpdateSourceTrigger=PropertyChanged}"
-                                    IsReadOnly="True">
+                                    IsReadOnly="True"
+                                    KeyboardNavigation.IsTabStop="False">
                     <DataGridTextColumn.Header>
                         <TextBlock Text="P/Rate V" 
                                    TextWrapping="Wrap"  Width="Auto"/>
@@ -117,14 +121,16 @@
                         <DataTemplate>
                             <TextBox Text="{Binding SMSqftH,
                                 UpdateSourceTrigger=PropertyChanged}"
-                                     IsReadOnly="True" Width="Auto">
+                                     IsReadOnly="True" Width="Auto"
+                                     KeyboardNavigation.IsTabStop="False">
                             </TextBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
                 <DataGridTextColumn Binding="{Binding HorizontalProductionRate,UpdateSourceTrigger=PropertyChanged}"
-                                    IsReadOnly="True">
+                                    IsReadOnly="True"
+                                    KeyboardNavigation.IsTabStop="False">
                     <DataGridTextColumn.Header>
                         <TextBlock Text="P/Rate H" 
                                    TextWrapping="Wrap"  Width="Auto"/>
@@ -135,14 +141,16 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox Text="{Binding StairSqft,UpdateSourceTrigger=PropertyChanged}"
-                                     IsReadOnly="True">
+                                     IsReadOnly="True"
+                                     KeyboardNavigation.IsTabStop="False">
                             </TextBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
                 <DataGridTextColumn Binding="{Binding StairsProductionRate,UpdateSourceTrigger=PropertyChanged}"
-                                    IsReadOnly="True" Visibility="Visible">
+                                    IsReadOnly="True" Visibility="Visible"
+                                    KeyboardNavigation.IsTabStop="False">
                     <DataGridTextColumn.Header>
                         <TextBlock Text="P/R Stairs" 
                                    TextWrapping="Wrap"  Width="Auto"/>
@@ -153,18 +161,21 @@
                         <DataTemplate>
                             <TextBox Text="{Binding Hours,UpdateSourceTrigger=PropertyChanged}"
                                      Name="HoursTb"
+                                     KeyboardNavigation.IsTabStop="{Binding Path=Name,Converter={StaticResource qtyTextboxConv}}"
                                     IsEnabled="{Binding Path=Name,Converter={StaticResource qtyTextboxConv}}"/>
                         </DataTemplate>
 
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="SetUp Min Charges" Binding="{Binding SetupMinCharge,UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"
-                                    IsReadOnly="True">
+                                    IsReadOnly="True"
+                                    KeyboardNavigation.IsTabStop="False">
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Labor Unit Price"
                                     Binding="{Binding LaborUnitPrice,                   
                     UpdateSourceTrigger=PropertyChanged,StringFormat='c' }"
-                                    IsReadOnly="True">
+                                    IsReadOnly="True"
+                                    KeyboardNavigation.IsTabStop="False">
 
                 </DataGridTextColumn>
 
@@ -172,7 +183,8 @@
                 <DataGridTextColumn Header ="Labor Extension"
                                     Binding="{Binding LaborExtension,
                     UpdateSourceTrigger=PropertyChanged ,StringFormat='c'}"
-                                    IsReadOnly="True">
+                                    IsReadOnly="True"
+                                    KeyboardNavigation.IsTabStop="False">
                 </DataGridTextColumn>
             </DataGrid.Columns>
 
