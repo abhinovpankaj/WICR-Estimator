@@ -12,6 +12,7 @@ namespace WICR_Estimator.ViewModels
 {
     public class MetalViewModel:BaseViewModel
     {
+        public Totals MetalTotals;
         private ObservableCollection<Metal> metals;
         private ObservableCollection<MiscMetal> miscMetals;
         private ICommand _addRowCommand;
@@ -30,15 +31,16 @@ namespace WICR_Estimator.ViewModels
         {
             Metals = new ObservableCollection<Metal>();
             MiscMetals = new ObservableCollection<MiscMetal>();
+            MetalTotals = new Totals { TabName = "Metal" };
+            MetalName = "Copper";
+            vendorName = "Chivon";
             MetalViewModelAsync();
             Metals =GetMetals();
             MiscMetals=GetMiscMetals();
-            mName = "Copper";
             
             JobSetup.OnJobSetupChange += JobSetup_OnJobSetupChange;
-            updateLaborCost();
-            updateMaterialCost();
-        }
+            CalculateCost(null);
+}
 
         private void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {
@@ -50,8 +52,9 @@ namespace WICR_Estimator.ViewModels
                 isDiscount = Js.HasDiscount;
                 vendorName = Js.VendorName;
             }
-            updateLaborCost();
-            updateMaterialCost();
+            Metals = GetMetals();
+            MiscMetals = GetMiscMetals();
+            CalculateCost(null);
 
         }
         private void MetalViewModelAsync()
@@ -227,6 +230,8 @@ namespace WICR_Estimator.ViewModels
         {
             updateLaborCost();
             updateMaterialCost();
+            MetalTotals.MaterialExtTotal = TotalMaterialCost;
+            MetalTotals.LaborExtTotal = TotalLaborCost;
         }
         #endregion
         private bool CanAddRows(object obj)
@@ -326,7 +331,7 @@ namespace WICR_Estimator.ViewModels
         {
             ObservableCollection<MiscMetal> misc = new ObservableCollection<MiscMetal>();
             misc.Add(new MiscMetal { Name = "Pins & Loads for metal over concrete", Units = getUnits(2), UnitPrice = getUnitPrice(0), MaterialPrice = getMetalMP(19), IsReadOnly = true });
-            misc.Add(new MiscMetal { Name = "Nosing for Concrete risers", Units = getUnits(3), UnitPrice = getUnitPrice(0), MaterialPrice = getMetalMP(20), IsReadOnly = true });
+            misc.Add(new MiscMetal { Name = "Nosing for Concrete risers", Units = getUnits(3), UnitPrice = getUnitPrice(1), MaterialPrice = getMetalMP(20), IsReadOnly = true });
             misc.Add(new MiscMetal { Name = "OTHER DRAINS TO BE ITEMIZED", Units = 1, UnitPrice = 8, MaterialPrice = 15, IsReadOnly = false });
             return misc;
         }
@@ -354,8 +359,8 @@ namespace WICR_Estimator.ViewModels
             if (metals.Count>0 && miscMetals.Count>0)
             {
                 double misSum = metals.Select(x => x.MaterialExtension).Sum() * nl;
-                TotalMaterialCost = ((metals.Select(x => x.MaterialExtension).Sum()) +
-                miscMetals.Select(x => x.MaterialExtension).Sum() - stairCost ) + misSum; 
+                TotalMaterialCost = Math.Round(((metals.Select(x => x.MaterialExtension).Sum()) +
+                miscMetals.Select(x => x.MaterialExtension).Sum() - stairCost ) + misSum,2); 
             }
             
         }
@@ -376,16 +381,16 @@ namespace WICR_Estimator.ViewModels
                         
             if (isPrevailingWage  )
             {
-                TotalLaborCost = misSum * (1 + prevailingWage + deductionOnLargeJob);
+                TotalLaborCost = Math.Round(misSum * (1 + prevailingWage + deductionOnLargeJob),2);
             }
             else
-                TotalLaborCost = misSum * (1 + deductionOnLargeJob);
+                TotalLaborCost = Math.Round(misSum * (1 + deductionOnLargeJob),2);
 
             if (!isDiscount && !isPrevailingWage)
             {
                 if (metals.Count > 0 && miscMetals.Count > 0)
                 {
-                    TotalLaborCost = misSum;
+                    TotalLaborCost = Math.Round(misSum,2);
                 }
             }
         }

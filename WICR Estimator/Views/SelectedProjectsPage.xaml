@@ -23,7 +23,8 @@
             <TabControl.ContentTemplate>
                 <DataTemplate>
                     <DockPanel>
-                        <TabControl TabStripPlacement="Left">
+                        <TabControl TabStripPlacement="Left"
+                                     >
                             <TabItem Header="Job Setup" Background="LightBlue">
                                 <TabItem.Content>
                                     <Grid Margin="0,0,0,0" Background="LightBlue"
@@ -67,7 +68,7 @@
                                 <TabItem.Content>
                                     <Grid Margin="0,0,0,0" 
                                       Background="LightBlue" 
-                                          DataContext="{Binding LaborViewModel}">
+                                          DataContext="{Binding MaterialViewModel}">
                                         <local:LaborPage/>
                                     </Grid>
                                 </TabItem.Content>

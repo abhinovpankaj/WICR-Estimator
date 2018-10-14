@@ -16,9 +16,13 @@ namespace WICR_Estimator.Models
         public bool IsWWR { get; set; }
         public bool IsCheckboxDependent { get; set; }
         public bool IsReadOnly { get; set; }
+        public string Operation { get; set; }
+        public double VerticalSqft { get; set; }
+        public double VerticalProductionRate { get; set; }
+
+        public static event EventHandler OnQTyChanged;
         public SystemMaterial()
         {
-            IsMaterialEnabled = true;
             
         }
 
@@ -37,7 +41,109 @@ namespace WICR_Estimator.Models
             this.SMUnits = smunits;
 
         }
+        
         #region Properties
+        private double sMSqftH;
+        public double SMSqftH
+        {
+            get { return sMSqftH; }
+
+            set
+            {
+                if (value != sMSqftH)
+                {
+                    sMSqftH = value;
+                    OnPropertyChanged("SMSqftH");
+                }
+            }
+        }
+        private double horizontalProductionRate;
+        public double HorizontalProductionRate
+        {
+            get { return horizontalProductionRate; }
+
+            set
+            {
+                if (value != horizontalProductionRate)
+                {
+                    horizontalProductionRate = value;
+                    OnPropertyChanged("HorizontalProductionRate");
+                }
+            }
+        }
+        private double sMSqftV;
+        public double SMSqftV
+        {
+            get { return sMSqftV; }
+
+            set
+            {
+                if (value != sMSqftV)
+                {
+                    sMSqftV = value;
+                    OnPropertyChanged("SMSqftV");
+                }
+            }
+        }
+        private double verticleProductionRate;
+        public double VerticleProductionRate
+        {
+            get { return verticleProductionRate; }
+
+            set
+            {
+                if (value != verticleProductionRate)
+                {
+                    verticleProductionRate = value;
+                    OnPropertyChanged("VerticleProductionRate");
+                }
+            }
+        }
+        private double stairsProductionRate;
+        public double StairsProductionRate
+        {
+            get { return stairsProductionRate; }
+
+            set
+            {
+                if (value != stairsProductionRate)
+                {
+                    stairsProductionRate = value;
+                    OnPropertyChanged("StairsProductionRate");
+                }
+            }
+        }
+        private double stairSqft;
+        public double StairSqft
+        {
+            get { return stairSqft; }
+
+            set
+            {
+                if (value != stairSqft)
+                {
+                    stairSqft = value;
+                    OnPropertyChanged("StairSqft");
+                }
+            }
+        }
+        private double hours;
+        public double Hours
+        {
+            get { return hours; }
+
+            set
+            {
+                if (value != hours)
+                {
+                    hours = value;
+                    OnPropertyChanged("Hours");
+                    OnPropertyChanged("LaborExtension");
+                }
+            }
+        }
+
+        public double SetupMinCharge { get; set; }
         private int coverage;
         public int Coverage
         {
@@ -162,18 +268,30 @@ namespace WICR_Estimator.Models
                     else
                         IsMaterialChecked = false;
                     OnPropertyChanged("Qty");
-                    OnPropertyChanged("MatExtension");
+                    OnPropertyChanged("MaterialExtension");
                     OnPropertyChanged("FreightExtension");
+                    OnPropertyChanged("LaborExtension");
+                    if (OnQTyChanged!=null)
+                    {
+                        OnQTyChanged(this.Name, EventArgs.Empty);
+                    }
                 }
             }
         }
-        //public double LaborUnitPrice
-        //{
-        //    get
-        //    {
-        //        return LaborRate;/// ProductionRate;
-        //    }
-        //}
+        private double laborUnitPrice;
+        public double LaborUnitPrice
+        {
+            get { return laborUnitPrice; }
+
+            set
+            {
+                if (value != laborUnitPrice)
+                {
+                    laborUnitPrice = value;
+                    OnPropertyChanged("LaborUnitPrice");
+                }
+            }
+        }
         private string name;
         public string Name
         { get { return name; }
@@ -199,6 +317,7 @@ namespace WICR_Estimator.Models
                 {
                     ismaterialchecked = value;
                     OnPropertyChanged("IsMaterialChecked");
+                    OnPropertyChanged("SystemMaterials");
                 }
             }
         }
@@ -217,22 +336,7 @@ namespace WICR_Estimator.Models
                 }
             }
         }
-        //public bool IsMaterialVisible
-        //{
-        //    get
-        //    {
-        //        return isMaterialVisible;
-        //    }
-        //    set
-        //    {
-        //        if (value != isMaterialVisible)
-        //        {
-        //            isMaterialVisible = value;
-        //            OnPropertyChanged("IsMaterialVisible");
-        //        }
-        //    }
-        //}
-        //private double materialextension;
+        
         public double MaterialExtension
         {
             get
@@ -263,6 +367,22 @@ namespace WICR_Estimator.Models
                     OnPropertyChanged("MaterialExtension");
                 }
             }
+        }
+        private double laborextn;
+        public double LaborExtension
+        {
+            get
+            {
+                return laborextn;                
+            }       
+            set
+            {
+                if (value!=laborextn)
+                {
+                    laborextn = value;
+                    OnPropertyChanged("LaborExtension");
+                }
+            }   
         }
         #endregion
         public enum EstimateType

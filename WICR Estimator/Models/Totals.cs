@@ -9,8 +9,24 @@ namespace WICR_Estimator.Models
 {
     public class Totals:BaseViewModel
     {
-        //public event EventHandler OnTotalsChange;
-        public double  LaborExtTotal { get; set; }
+        public event EventHandler OnTotalsChange;
+        public string TabName { get; set; }
+        private double laborextTotal;
+        public double  LaborExtTotal
+        { get { return laborextTotal; }
+            set
+            {
+                if (value!=laborextTotal)
+                {
+                    laborextTotal = value;
+                    OnPropertyChanged("LaborExtTotal");
+                    if (OnTotalsChange != null)
+                    {
+                        OnTotalsChange(this, EventArgs.Empty);
+                    }
+                }
+            }
+        }
         private double matExtTotal;
         public double MaterialExtTotal
         {
@@ -21,10 +37,10 @@ namespace WICR_Estimator.Models
                 {
                     matExtTotal = value;
                     OnPropertyChanged("MaterialExtTotal");
-                    //if (OnTotalsChange!=null)
-                    //{
-                    //    OnTotalsChange(this, EventArgs.Empty);
-                    //}
+                    if (OnTotalsChange != null)
+                    {
+                        OnTotalsChange(this, EventArgs.Empty);
+                    }
                 }
             }
         }
@@ -38,10 +54,10 @@ namespace WICR_Estimator.Models
                 {
                     frTotal = value;
                     OnPropertyChanged("MaterialFreightTotal");
-                    //if (OnTotalsChange != null)
-                    //{
-                    //    OnTotalsChange(this, EventArgs.Empty);
-                    //}
+                    if (OnTotalsChange != null)
+                    {
+                        OnTotalsChange(this, EventArgs.Empty);
+                    }
                 }
             }
         }
@@ -55,10 +71,10 @@ namespace WICR_Estimator.Models
                 {
                     scLabor = value;
                     OnPropertyChanged("SubContractLabor");
-                    //if (OnTotalsChange != null)
-                    //{
-                    //    OnTotalsChange(this, EventArgs.Empty);
-                    //}
+                    if (OnTotalsChange != null)
+                    {
+                        OnTotalsChange(this, EventArgs.Empty);
+                    }
                 }
             }
         }

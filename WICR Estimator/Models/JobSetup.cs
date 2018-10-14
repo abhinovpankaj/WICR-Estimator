@@ -14,7 +14,7 @@ namespace WICR_Estimator.Models
         public JobSetup()
         { 
             IsApprovedForSandCement = true;
-            IsPrevalingWage = true;
+            IsPrevalingWage = false;
             HasDiscount = true;
             StairWidth = 4.5;
             TotalSqft = 1000;
@@ -24,9 +24,7 @@ namespace WICR_Estimator.Models
             WeatherWearType = "Weather Wear";
             DeckCount = 1;
             VendorName = "Chivon";
-            MaterialName = "Copper";
-            
-
+            MaterialName = "Copper";          
         }
         private string weatherWearType;
         public string WeatherWearType

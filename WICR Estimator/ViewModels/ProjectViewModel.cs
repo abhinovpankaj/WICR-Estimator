@@ -45,6 +45,7 @@ namespace WICR_Estimator.ViewModels
         #region Methods
         private async void initializeApp()
         {
+            #region Google
             if (!IsgoogleApiCalled)
             {
                 IsgoogleApiCalled = true;
@@ -63,6 +64,7 @@ namespace WICR_Estimator.ViewModels
                     System.Threading.Thread.Sleep(2000);
                 }
             }
+            #endregion
 
             if (EnabledProjects == null)
             {
@@ -87,12 +89,9 @@ namespace WICR_Estimator.ViewModels
                     }
                     if (prj.MaterialViewModel == null)
                     {
-                        prj.MaterialViewModel = new MaterialViewModel();
+                        prj.MaterialViewModel = new MaterialViewModel(prj.MetalViewModel.MetalTotals,prj.SlopeViewModel.SlopeTotals);
                     }
-                    if (prj.LaborViewModel == null)
-                    {
-                        prj.LaborViewModel = new LaborViewModel();
-                    }
+                    
                 }
             }
             

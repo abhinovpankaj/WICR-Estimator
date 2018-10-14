@@ -13,6 +13,7 @@ namespace WICR_Estimator.ViewModels
     {
 
         #region Private Properties
+        public Totals SlopeTotals;
         private ObservableCollection<Slope> slopes;
         private bool isApprovedForCement;
         private bool isPrevailingWage;
@@ -35,10 +36,11 @@ namespace WICR_Estimator.ViewModels
         private double prevailingWage;
         private double deductionOnLargeJob;
         private bool overrideManually;
+        private bool hasDiscount;
         #endregion
 
         #region public properties
-
+        
         public bool OverrideManually
         {
             get
@@ -287,8 +289,10 @@ namespace WICR_Estimator.ViewModels
         public SlopeViewModel()
         {
             Slopes = new ObservableCollection<Slope>();
+            SlopeTotals = new Totals { TabName = "Slope" };
+            isApprovedForCement = true;
             SlopeViewModelAsync();
-            JobSetup.OnJobSetupChange += JobSetup_OnJobSetupChange;
+            JobSetup.OnJobSetupChange += JobSetup_OnJobSetupChange;           
         }
 
         private void JobSetup_OnJobSetupChange(object sender, EventArgs e)
@@ -299,11 +303,11 @@ namespace WICR_Estimator.ViewModels
                 isApprovedForCement = js.IsApprovedForSandCement;
                 isPrevailingWage = js.IsPrevalingWage;
                 laborRate = js.LaborRate;
+                hasDiscount = js.HasDiscount;
             }
 
             SlopeViewModelAsync();
-            CalculateGridTotal();
-            CalculateTotalMixes();
+            
         }
 
         private void SlopeViewModelAsync()
@@ -325,6 +329,10 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(pWage[1][0].ToString(), out deductionOnLargeJob);
             CalculateGridTotal();
             CalculateTotalMixes();
+
+            SlopeTotals.LaborExtTotal = TotalLaborCost;
+            SlopeTotals.MaterialExtTotal = TotalMaterialCost;
+            SlopeTotals.MaterialFreightTotal = TotalFrightCost;
         }
 
         #region private methods
@@ -453,10 +461,20 @@ namespace WICR_Estimator.ViewModels
                 double lCost = LaborCost > MinimumLaborCost ? LaborCost : MinimumLaborCost;
                 if (isPrevailingWage)
                 {
-                    TotalLaborCost = lCost * (1 + prevailingWage + deductionOnLargeJob);
+                    if (hasDiscount)
+                        TotalLaborCost = lCost * (1 + prevailingWage + deductionOnLargeJob);
+                    else
+                        TotalLaborCost = lCost * (1 + deductionOnLargeJob);
+
                 }
                 else
-                    TotalLaborCost = lCost * (1 + deductionOnLargeJob);
+                {
+                    if (hasDiscount)
+                        TotalLaborCost = lCost * (1 + deductionOnLargeJob);
+                    else
+                        TotalLaborCost = lCost ;
+                }
+                    
 
                 TotalMaterialCost = Math.Round(SumTotalMatExt, 2);
                 TotalWeight = Math.Round(50 * SumTotalMixes, 2);
@@ -520,7 +538,7 @@ namespace WICR_Estimator.ViewModels
             result = frCalc;
             return result;
         }
-        ///07-10-18
+        
         private void CalculateGridTotal()
         {
 
@@ -570,6 +588,11 @@ namespace WICR_Estimator.ViewModels
             CalculateTotalMixes();
 
             CalculateGridTotal();
+
+            SlopeTotals.LaborExtTotal = TotalLaborCost;
+            SlopeTotals.MaterialExtTotal = TotalMaterialCost;
+            SlopeTotals.MaterialFreightTotal = TotalFrightCost;
+
         }
         #endregion
     }

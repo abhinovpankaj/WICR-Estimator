@@ -110,28 +110,27 @@ namespace WICR_Estimator.Models
                 if (materialViewModel != value)
                 {
                     materialViewModel = value;
-                    OnPropertyChanged("MaterialViewModel");
-
+                    
                 }
             }
         }
-        private LaborViewModel laborViewModel;
-        public LaborViewModel LaborViewModel
-        {
-            get
-            {
-                return laborViewModel;
-            }
-            set
-            {
-                if (laborViewModel != value)
-                {
-                    laborViewModel = value;
-                    OnPropertyChanged("LaborViewModel");
+        //private LaborViewModel laborViewModel;
+        //public LaborViewModel LaborViewModel
+        //{
+        //    get
+        //    {
+        //        return laborViewModel;
+        //    }
+        //    set
+        //    {
+        //        if (laborViewModel != value)
+        //        {
+        //            laborViewModel = value;
+        //            OnPropertyChanged("LaborViewModel");
 
-                }
-            }
-        }
+        //        }
+        //    }
+        //}
         public static event EventHandler OnSelectedProjectChange;
     }
 }
