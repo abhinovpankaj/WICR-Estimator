@@ -108,17 +108,21 @@
                       
                   ItemsSource="{Binding MiscMetals,UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Description Of Misc Metal" 
-                                    IsReadOnly="True"
-                                    Binding="{Binding Name}"/>
-                    <!--<DataGridTextColumn Header="Units"
-                                    IsReadOnly="{Binding IsReadOnly,Source= MiscMetals}"
-                                    Binding="{Binding Units}"/>-->
+                    
+                    <DataGridTemplateColumn Header="Description Of Misc Metal">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}"
+                                     IsReadOnly="{Binding IsReadOnly}">
+                                </TextBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="Units">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox Text="{Binding Units,UpdateSourceTrigger=PropertyChanged}"
-                                     IsEnabled="{Binding Name,Converter={StaticResource textboxConv}}">
+                                     IsReadOnly="{Binding IsReadOnly}">
 
                                 </TextBox>
                             </DataTemplate>
@@ -131,7 +135,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox Text="{Binding UnitPrice,UpdateSourceTrigger=PropertyChanged}"
-                                     IsEnabled="{Binding Name,Converter={StaticResource textboxConv}}">
+                                     IsReadOnly="{Binding IsReadOnly}">
 
                                 </TextBox>
                             </DataTemplate>
@@ -139,7 +143,8 @@
                     </DataGridTemplateColumn>
                     <DataGridTextColumn Header="Material Price($)" 
                                         IsReadOnly="{Binding IsReadOnly}"
-                                        Binding="{Binding MaterialPrice ,StringFormat={}{0:C}}"/>
+                                        Binding="{Binding MaterialPrice ,
+                        StringFormat={}{0:C}}"/>
                     <DataGridTextColumn Header="Labor Extension($)" 
                                         IsReadOnly="True"
                                         Binding="{Binding LaborExtension,Mode=OneWay ,StringFormat={}{0:C}}"/>

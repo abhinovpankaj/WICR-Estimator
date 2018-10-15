@@ -57,7 +57,8 @@
                   ItemsSource="{Binding Slopes,UpdateSourceTrigger=PropertyChanged}">
             <DataGrid.Columns>
 
-                <DataGridTemplateColumn Header="Thickness">
+                <DataGridTemplateColumn Header="Thickness"
+                                        FocusManager.IsFocusScope="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -227,7 +228,7 @@
                          Margin="5"
                          VerticalContentAlignment="Center"
                          Height="25" Width="150"  
-                         Text="{Binding TotalMixesMan,UpdateSourceTrigger=PropertyChanged}">
+                         Text="{Binding TotalMixesMan}">
 
                 </TextBox>
                 <!--07-10-18-->
@@ -238,7 +239,7 @@
                          Height="25"
                          Margin="5,0,5,5"
                          Width="150"
-                         Text="{Binding AverageMixesPrice ,UpdateSourceTrigger=PropertyChanged }">
+                         Text="{Binding AverageMixesPrice }">
                 </TextBox>
 
             </Grid>

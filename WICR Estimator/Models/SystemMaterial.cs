@@ -217,7 +217,6 @@ namespace WICR_Estimator.Models
         {
             get
             {
-                extension = Weight * Qty;
                 return extension;
             }
             set
@@ -236,6 +235,7 @@ namespace WICR_Estimator.Models
         {
             get
             {
+                
                 return materialPrice;
             }
             set
@@ -336,17 +336,26 @@ namespace WICR_Estimator.Models
                 }
             }
         }
-        
+
+        private double matExt;
         public double MaterialExtension
         {
+            set {
+                if (matExt!=value)
+                {
+                    matExt = value;
+                    OnPropertyChanged("MaterialExtension");
+                }
+            }
             get
             {
-                if (SpecialMaterialPricing == 0)
+                if (SpecialMaterialPricing != 0)
                 {
-                    return MaterialPrice * Qty;
+                    matExt = SpecialMaterialPricing * Qty;
                 }
                 else
-                    return SpecialMaterialPricing * Qty;
+                    matExt = MaterialPrice * Qty;
+                return matExt;
             }
         }
         private double specialMaterialPricing;
