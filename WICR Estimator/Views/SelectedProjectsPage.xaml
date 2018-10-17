@@ -73,6 +73,16 @@
                                     </Grid>
                                 </TabItem.Content>
                             </TabItem>
+                            <TabItem Header="Calculation Details"
+                                 VerticalAlignment="Bottom">
+                                <TabItem.Content>
+                                    <Grid Margin="0,0,0,0" 
+                                      Background="LightBlue" 
+                                          DataContext="{Binding MaterialViewModel}">
+                                        <local:CalculationDetailsPage/>
+                                    </Grid>
+                                </TabItem.Content>
+                            </TabItem>
                         </TabControl>
                     </DockPanel>
                 </DataTemplate>

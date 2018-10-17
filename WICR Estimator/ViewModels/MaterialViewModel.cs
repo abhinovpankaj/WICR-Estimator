@@ -16,7 +16,7 @@ namespace WICR_Estimator.ViewModels
         public Totals MetalTotals { set; get; }
 
         public Totals SlopeTotals { set; get; }
-
+        public List<CostBreakup> LCostBreakUp { get; set; }
         #region privatefields
         private ObservableCollection<SystemMaterial> systemMaterials;
         private ObservableCollection<OtherItem> otherMaterials;
@@ -48,6 +48,7 @@ namespace WICR_Estimator.ViewModels
             
             SystemMaterials = new ObservableCollection<SystemMaterial>();
             OtherMaterials = new ObservableCollection<OtherItem>();
+            
             OtherLaborMaterials = new ObservableCollection<OtherItem>();
             SubContractLaborItems = new ObservableCollection<LaborContract>();
             weatherWearType = "Weather Wear";
@@ -398,16 +399,19 @@ namespace WICR_Estimator.ViewModels
                     {
                         mat.Name = "Resistite Regular White";
                         mat.MaterialPrice = double.Parse(materialDetails[13][0].ToString());
+                        mat.Weight = double.Parse(materialDetails[13][3].ToString());
                     }
                     if (mat.Name == "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)")
                     {
                         mat.Name = "Resistite Regular Or Smooth White(Knock Down Or Smooth)";
                         mat.MaterialPrice = double.Parse(materialDetails[15][0].ToString());
+                        mat.Weight= double.Parse(materialDetails[15][3].ToString());
                     }
                     if (mat.Name == "Custom Texture Skip Trowel(Resistite Smooth Gray)")
                     {
                         mat.Name = "Custom Texture Skip Trowel(Resistite Smooth White)";
                         mat.MaterialPrice = double.Parse(materialDetails[21][0].ToString());
+                        mat.Weight = double.Parse(materialDetails[21][3].ToString());
                     }
 
                 }
@@ -430,16 +434,19 @@ namespace WICR_Estimator.ViewModels
                     {
                         mat.Name = "Resistite Regular Gray";
                         mat.MaterialPrice = double.Parse(materialDetails[12][0].ToString());
+                        mat.Weight = double.Parse(materialDetails[12][3].ToString());
                     }
                     if (mat.Name == "Resistite Regular Or Smooth White(Knock Down Or Smooth)")
                     {
                         mat.Name = "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)";
                         mat.MaterialPrice = double.Parse(materialDetails[14][0].ToString());
+                        mat.Weight = double.Parse(materialDetails[14][3].ToString());
                     }
                     if (mat.Name == "Custom Texture Skip Trowel(Resistite Smooth White)")
                     {
                         mat.Name = "Custom Texture Skip Trowel(Resistite Smooth Gray)";
                         mat.MaterialPrice = double.Parse(materialDetails[20][0].ToString());
+                        mat.Weight = double.Parse(materialDetails[20][3].ToString());
                     }
                 }
             }
@@ -463,16 +470,19 @@ namespace WICR_Estimator.ViewModels
                     {
                         mat.Name = "Resistite Regular Gray";
                         mat.MaterialPrice = double.Parse(materialDetails[12][0].ToString());
+                        mat.Weight = double.Parse(materialDetails[12][3].ToString());
                     }
                     if (mat.Name == "Resistite Regular Or Smooth White(Knock Down Or Smooth)")
                     {
                         mat.Name = "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)";
                         mat.MaterialPrice = double.Parse(materialDetails[14][0].ToString());
+                        mat.Weight = double.Parse(materialDetails[14][3].ToString());
                     }
                     if (mat.Name == "Custom Texture Skip Trowel(Resistite Smooth White)")
                     {
                         mat.Name = "Custom Texture Skip Trowel(Resistite Smooth Gray)";
                         mat.MaterialPrice = double.Parse(materialDetails[20][0].ToString());
+                        mat.Weight = double.Parse(materialDetails[20][3].ToString());
                     }
                 }
             }
@@ -567,7 +577,7 @@ namespace WICR_Estimator.ViewModels
             CalculateCostBreakup();
             calculateLaborTotals();
             calculateLaborHrs();
-            
+            populateCalculation();
         }
 
         private void setExceptionValues()
@@ -1866,23 +1876,24 @@ namespace WICR_Estimator.ViewModels
                     return 0;
             }
         }
-
         /// Other Cost Total
 
         private void CalOCTotal()
         {
-
-            if (OtherMaterials.Count > 0)
+            if (OtherLaborMaterials!=null&& OtherMaterials!=null)
             {
                 if (OtherMaterials.Count > 0)
                 {
-                    ///sumtotal              
                     TotalOCExtension = OtherMaterials.Select(x => x.Extension).Sum();
+
+                }
+                if (OtherLaborMaterials.Count > 0)
+                {
+                    TotalOCLaborExtension = OtherLaborMaterials.Select(x => x.Extension).Sum();
                 }
             }
-
-        }
-        
+            
+        }     
         /// SubContract Cost
         private void CalSCTotal()
         {
@@ -1983,6 +1994,8 @@ namespace WICR_Estimator.ViewModels
         #endregion
 
         #region LaborSheet
+        public double TotalOCLaborExtension { get; set; }
+
         #region LaborSheet TotalProperties
 
         #endregion
@@ -2077,7 +2090,7 @@ namespace WICR_Estimator.ViewModels
                 TotalSlopingPrice = getTotals(SlopeTotals.LaborExtTotal, SlopeTotals.MaterialExtTotal, SlopeTotals.MaterialFreightTotal, 0);
                 TotalMetalPrice = getTotals(MetalTotals.LaborExtTotal, MetalTotals.MaterialExtTotal, MetalTotals.MaterialFreightTotal, 0);
             }
-            
+            //,
             TotalSystemPrice = getTotals(TotalLaborExtension, TotalMaterialCostbrkp, TotalFreightCostBrkp, TotalSubContractLaborCostBrkp);
             TotalSubcontractLabor = 0;
             TotalSale = TotalSlopingPrice + TotalMetalPrice + TotalSystemPrice+ TotalSubcontractLabor;
@@ -2149,5 +2162,219 @@ namespace WICR_Estimator.ViewModels
         }
         #endregion
         #endregion
+
+        public void populateCalculation()
+        {
+            LCostBreakUp = new List<CostBreakup>();
+            double facValue = 0;
+            double totalJobCostM = 0;
+            double totalJobCostS = 0;
+            double totalJobCostSy = 0;
+            double.TryParse(laborDetails[2][0].ToString(), out facValue);
+            
+            
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "Workers Comp TL > $24.00",
+                CalFactor = facValue,
+                MetalCost = facValue * MetalTotals.LaborExtTotal,
+                SlopeCost = facValue * SlopeTotals.LaborExtTotal,
+                SystemCost = facValue * TotalLaborExtension
+            });
+            
+            double.TryParse(laborDetails[3][0].ToString(), out facValue);
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "Workers Comp All < $23.99",
+                CalFactor = facValue,
+                MetalCost = facValue * MetalTotals.LaborExtTotal,
+                SlopeCost = facValue * SlopeTotals.LaborExtTotal,
+                SystemCost = facValue * TotalLaborExtension
+            });
+            
+            double.TryParse(laborDetails[4][0].ToString(), out facValue);
+                      
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "Workers Comp Prevailing Wage",
+                CalFactor = facValue,
+                MetalCost = isPrevailingWage? facValue * MetalTotals.LaborExtTotal:0,
+                SlopeCost = isPrevailingWage ? facValue * SlopeTotals.LaborExtTotal:0,
+                SystemCost = isPrevailingWage ? facValue * TotalLaborExtension:0
+            });
+            double.TryParse(laborDetails[5][0].ToString(), out facValue);
+
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "Payroll Expense (SS, ET, Uemp, Dis, Medicare)",
+                CalFactor = facValue,
+                MetalCost = facValue * MetalTotals.LaborExtTotal,
+                SlopeCost = facValue * SlopeTotals.LaborExtTotal,
+                SystemCost = facValue * TotalLaborExtension
+            });
+            double.TryParse(laborDetails[6][0].ToString(), out facValue);
+
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "Tax",
+                CalFactor = facValue,
+                MetalCost = facValue *( MetalTotals.MaterialExtTotal+MetalTotals.MaterialFreightTotal),
+                SlopeCost = facValue * (SlopeTotals.MaterialExtTotal + SlopeTotals.MaterialFreightTotal),
+                SystemCost = facValue * (TotalMaterialCostbrkp+TotalFreightCostBrkp)
+            });
+
+            
+            totalJobCostM = LCostBreakUp.Select(x => x.MetalCost).Sum()+MetalTotals.LaborExtTotal;
+            totalJobCostS = LCostBreakUp.Select(x => x.SlopeCost).Sum()+SlopeTotals.LaborExtTotal;
+            totalJobCostSy = LCostBreakUp.Select(x => x.SystemCost).Sum()+ TotalLaborExtension;
+
+            
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "Total Job Cost",
+                CalFactor = 0,
+                MetalCost = totalJobCostM,
+                SlopeCost = totalJobCostS,
+                SystemCost = totalJobCostSy
+            });
+
+            
+            double.TryParse(laborDetails[7][0].ToString(), out facValue);
+            double psy1 = facValue * (TotalSubContractLaborCostBrkp);
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "Profit Margin on subcontract labor= 35 %",
+                CalFactor = facValue,
+                MetalCost = 0,
+                SlopeCost = 0,
+                SystemCost = psy1
+            });
+
+            double.TryParse(laborDetails[8][0].ToString(), out facValue);
+            double pm2, ps2, psy2;
+            pm2 = totalJobCostM * facValue * (1 + facValue);
+            ps2 = totalJobCostS * facValue * (1 + facValue);
+            psy2 = totalJobCostSy * facValue * (1 + facValue);
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "Profit Margin add",
+                CalFactor = facValue,
+                MetalCost =pm2 ,
+                SlopeCost =ps2 ,
+                SystemCost = psy2
+            });
+
+            double.TryParse(laborDetails[9][0].ToString(), out facValue);
+            
+            double pm3 = isDiscounted ? facValue * MetalTotals.MaterialExtTotal:0;
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "Profit deduct for special metal",
+                CalFactor = facValue,
+                MetalCost = pm3,
+                SlopeCost = 0,
+                SystemCost = 0
+            });
+            double pm;
+            double.TryParse(laborDetails[10][0].ToString(), out pm);
+
+            double totalCostM = (totalJobCostM - MetalTotals.SubContractLabor) / pm + (MetalTotals.SubContractLabor +
+                pm2 + pm3);
+            double totalCostS = (totalJobCostS - SlopeTotals.SubContractLabor) / pm + (SlopeTotals.SubContractLabor +
+                ps2);
+            double totalCostSy = (totalJobCostSy - TotalSubContractLaborCostBrkp) / pm + (TotalSubContractLaborCostBrkp +
+                psy2+psy1);
+
+            double.TryParse(laborDetails[11][0].ToString(), out facValue);
+            
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "General Liability",
+                CalFactor = facValue,
+                MetalCost = totalCostM*facValue /pm,
+                SlopeCost = totalCostS * facValue / pm,
+                SystemCost = totalCostSy * facValue / pm
+            });
+            double finalMCost = totalCostM + (totalCostM * facValue / pm);
+            double finalSCost = totalCostS+(totalCostS * facValue / pm);
+            double  finalSyCost = totalCostSy+( totalCostSy * facValue / pm);
+
+            double.TryParse(laborDetails[12][0].ToString(), out facValue);
+
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "Direct Expense (Gas, Small Tools, Etc,)",
+                CalFactor = facValue,
+                MetalCost = totalCostM * facValue / pm,
+                SlopeCost = totalCostS * facValue / pm,
+                SystemCost = totalCostSy * facValue / pm
+            });
+             finalMCost = totalCostM + (totalCostM * facValue / pm);
+             finalSCost = totalCostS + (totalCostS * facValue / pm);
+             finalSyCost = totalCostSy + (totalCostSy * facValue / pm);
+            double.TryParse(laborDetails[13][0].ToString(), out facValue);
+
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "Contingency",
+                CalFactor = facValue,
+                MetalCost = totalCostM * facValue / pm,
+                SlopeCost = totalCostS * facValue / pm,
+                SystemCost = totalCostSy * facValue / pm
+            });
+            finalMCost = totalCostM + (totalCostM * facValue / pm);
+            finalSCost = totalCostS + (totalCostS * facValue / pm);
+            finalSyCost = totalCostSy + (totalCostSy * facValue / pm);
+            double.TryParse(laborDetails[14][0].ToString(), out facValue);
+
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "Insurance Increase Fund (5 % on total sale)",
+                CalFactor = facValue,
+                MetalCost = totalCostM * facValue,
+                SlopeCost = totalCostS * facValue ,
+                SystemCost = totalCostSy * facValue
+            });
+            finalMCost = totalCostM + (totalCostM * facValue );
+            finalSCost = totalCostS + (totalCostS * facValue );
+            finalSyCost = totalCostSy + (totalCostSy * facValue );
+            double.TryParse(laborDetails[15][0].ToString(), out facValue);
+
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "Fuel/Sur Chg (1-PRICE OF GAS) /-40",
+                CalFactor = facValue,
+                MetalCost = totalCostM * facValue ,
+                SlopeCost = totalCostS * facValue ,
+                SystemCost = totalCostSy * facValue 
+            });
+            finalMCost = totalCostM + (totalCostM * facValue );
+            finalSCost = totalCostS + (totalCostS * facValue );
+            finalSyCost = totalCostSy + (totalCostSy * facValue);
+
+            double.TryParse(laborDetails[16][0].ToString(), out facValue);
+
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "Add mark up to total job price",
+                CalFactor = facValue,
+                MetalCost = totalCostM * facValue ,
+                SlopeCost = totalCostS * facValue ,
+                SystemCost = totalCostSy * facValue 
+            });
+            finalMCost = totalCostM + (totalCostM * facValue );
+            finalSCost = totalCostS + (totalCostS * facValue );
+            finalSyCost = totalCostSy + (totalCostSy * facValue);
+
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "Profit Margin",
+                CalFactor = 0,
+                MetalCost = finalMCost-totalJobCostM,
+                SlopeCost = finalSCost-totalJobCostS,
+                SystemCost = finalSyCost-totalJobCostSy
+            });
+        }
+
     }
 }

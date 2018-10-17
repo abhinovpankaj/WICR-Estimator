@@ -207,8 +207,9 @@ namespace WICR_Estimator.Models
                 if (weight != value)
                 {
                     weight = value;
+                    FreightExtension = value * Qty;
                     OnPropertyChanged("Weight");
-                    OnPropertyChanged("MaterialExtension");
+                    OnPropertyChanged("FreightExtension");
                 }
             }
         }
@@ -225,8 +226,7 @@ namespace WICR_Estimator.Models
                 {
                     extension = value;
                     OnPropertyChanged("FreightExtension");
-                    OnPropertyChanged("MaterialExtension");
-                   
+                    
                 }
             }
         }
@@ -243,6 +243,7 @@ namespace WICR_Estimator.Models
                 if (materialPrice != value)
                 {
                     materialPrice = value;
+                    MaterialExtension = Qty * value;
                     OnPropertyChanged("MaterialPrice");
                     OnPropertyChanged("MaterialExtension");
                 }
@@ -268,6 +269,8 @@ namespace WICR_Estimator.Models
                     else
                         IsMaterialChecked = false;
                     OnPropertyChanged("Qty");
+                    MaterialExtension = value * materialPrice;
+                    FreightExtension = value * weight;
                     OnPropertyChanged("MaterialExtension");
                     OnPropertyChanged("FreightExtension");
                     OnPropertyChanged("LaborExtension");

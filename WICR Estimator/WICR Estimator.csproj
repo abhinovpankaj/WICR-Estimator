@@ -103,6 +103,7 @@
     <Compile Include="GSData.cs" />
     <Compile Include="IPageViewModel.cs" />
     <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="Models\CostBreakup.cs" />
     <Compile Include="Models\Labor.cs" />
     <Compile Include="Models\SystemMaterial.cs" />
     <Compile Include="Models\Metal.cs" />
@@ -117,6 +118,9 @@
     <Compile Include="ViewModels\ProjectViewModel.cs" />
     <Compile Include="ViewModels\SlopeViewModel.cs" />
     <Compile Include="ViewModels\WeatherWearViewModel.cs" />
+    <Compile Include="Views\CalculationDetailsPage.xaml.cs">
+      <DependentUpon>CalculationDetailsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
@@ -151,6 +155,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Resources\PageStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CalculationDetailsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

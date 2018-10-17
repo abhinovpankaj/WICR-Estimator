@@ -13,9 +13,9 @@ namespace WICR_Estimator.Models
         public static event EventHandler OnJobSetupChange;
         public JobSetup()
         { 
-            IsApprovedForSandCement = true;
+            IsApprovedForSandCement = false;
             IsPrevalingWage = false;
-            HasDiscount = true;
+            HasDiscount = false;
             StairWidth = 4.5;
             TotalSqft = 1000;
             RiserCount =30;

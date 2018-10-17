@@ -585,9 +585,8 @@ namespace WICR_Estimator.ViewModels
 
         private void CalculateCost(object obj)
         {
-            CalculateTotalMixes();
-
             CalculateGridTotal();
+            CalculateTotalMixes();           
 
             SlopeTotals.LaborExtTotal = TotalLaborCost;
             SlopeTotals.MaterialExtTotal = TotalMaterialCost;
