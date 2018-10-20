@@ -24,5 +24,7 @@ namespace WICR_Estimator.Views
         {
             InitializeComponent();
         }
+
+        
     }
 }

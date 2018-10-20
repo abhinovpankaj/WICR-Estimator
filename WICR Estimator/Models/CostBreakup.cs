@@ -13,5 +13,6 @@ namespace WICR_Estimator.Models
         public double SlopeCost { get; set; }
         public double MetalCost { get; set; }
         public double SystemCost { get; set; }
+        public System.Windows.Visibility HideCalFactor { get; set; }
     }
 }

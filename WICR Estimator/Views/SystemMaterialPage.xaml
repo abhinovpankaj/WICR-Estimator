@@ -68,6 +68,7 @@
                   Grid.RowSpan="5"
                   VerticalAlignment="Top" 
                   CanUserAddRows="False"
+                  FrozenColumnCount ="2"
                   ItemsSource="{Binding SystemMaterials,UpdateSourceTrigger=PropertyChanged}" >
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="">
@@ -271,7 +272,7 @@
                         <DataGridTemplateColumn Header="Items" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}"
+                                    <TextBox Text="{Binding Name,UpdateSourceTrigger=LostFocus}"
                                      IsReadOnly="{Binding IsReadOnly}">
 
                                     </TextBox>

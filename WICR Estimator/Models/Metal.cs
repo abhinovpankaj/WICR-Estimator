@@ -13,7 +13,7 @@ namespace WICR_Estimator.Models
         public MetalType Type { get; set; }
         public string Name { get; set; }
         public string Size { get; set; }
-        public bool IsReadOnly { get; set; }
+        public bool IsEditable { get; set; }
         private bool isStairMetal;
         public bool IsStairMetal
         {

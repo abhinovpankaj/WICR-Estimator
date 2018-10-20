@@ -15,6 +15,7 @@ namespace WICR_Estimator.Models
         //public EstimateType Type { get; set; }
         public bool IsWWR { get; set; }
         public bool IsCheckboxDependent { get; set; }
+        public bool IncludeInLaborMinCharge { get; set; }
         public bool IsReadOnly { get; set; }
         public string Operation { get; set; }
         public double VerticalSqft { get; set; }
@@ -404,10 +405,25 @@ namespace WICR_Estimator.Models
             // "Lip Color"
         }
     }
-
+    
     public class OtherItem:BaseViewModel
     {
-        public string Name { get; set; }
+
+        private string name;
+        public string Name
+        { get { return name; }
+            set
+
+            { if (value != name)
+                {
+                    name = value;
+                    OnPropertyChanged("Name");
+                }
+
+                    
+           }
+        }
+
         public bool IsReadOnly { get; set; }
         private double quantity;
         public double Quantity
@@ -439,7 +455,38 @@ namespace WICR_Estimator.Models
             }
 
         }
+        private double lquantity;
+        public double LQuantity
+        {
+            get { return lquantity; }
+
+            set
+            {
+                if (value != lquantity)
+                {
+                    lquantity = value;
+                    UpdateUI();
+                }
+            }
+
+        }
+        private double lmaterialPrice;
+        public double LMaterialPrice
+        {
+            get { return lmaterialPrice; }
+
+            set
+            {
+                if (value != lmaterialPrice)
+                {
+                    lmaterialPrice = value;
+                    UpdateUI();
+                }
+            }
+
+        }
         public double Extension { get { return Quantity * MaterialPrice; } }
+        public double LExtension { get { return LQuantity * LMaterialPrice; } }
 
         private void UpdateUI()
 
@@ -447,12 +494,28 @@ namespace WICR_Estimator.Models
             OnPropertyChanged("Quantity");
             OnPropertyChanged("MaterialPrice");
             OnPropertyChanged("Extension");
+            OnPropertyChanged("LQuantity");
+            OnPropertyChanged("LMaterialPrice");
+            OnPropertyChanged("LExtension");
         }       
     }
 
     public class LaborContract : BaseViewModel
     {
-        public string Name { get; set; }
+        private string name;
+        public string Name
+        {
+            get
+            { return name; }
+            set
+            {
+                if (name!=value)
+                {
+                    name = value;
+                    OnPropertyChanged("Name");
+                }
+            }
+        }
         
         private double unitconlbrcst;
         public double UnitConlbrcst

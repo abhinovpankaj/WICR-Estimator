@@ -11,6 +11,8 @@ namespace WICR_Estimator.ViewModels
     class ProjectViewModel : BaseViewModel, IPageViewModel
     {
         private static bool IsgoogleApiCalled;
+        public static System.Windows.Visibility IsAdminloggedIn { get; set; }
+        private bool loginWindowShown;
         private ObservableCollection<Project> enabledProjects;
         public ProjectViewModel(ObservableCollection<Project> enabledProjects)
             :this()
@@ -20,11 +22,29 @@ namespace WICR_Estimator.ViewModels
 
 
         public ProjectViewModel()
-        {  
-            initializeApp();                                      
+        {
+            //if (!loginWindowShown)
+            //{
+            //    LoginWindow login = new LoginWindow();
+            //    LoginWindow.onOKClick += LoginWindow_onOKClick;
+            //    login.ShowDialog();
+            //    loginWindowShown = true;
+            //}
+            
+            initializeApp();
+            do
+            {
+                System.Threading.Thread.Sleep(1000);
+            } while (!System.IO.File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//GoogleData.dat"));
+        }
+
+        private void LoginWindow_onOKClick(object sender, EventArgs e)
+        {
+            IsAdminloggedIn = (System.Windows.Visibility)sender;
+            OnPropertyChanged("IsAdminloggedIn");
         }
         #region Properties
-        
+
         public ObservableCollection<Project> EnabledProjects
         {
             get
@@ -43,7 +63,7 @@ namespace WICR_Estimator.ViewModels
         #endregion
 
         #region Methods
-        private async void initializeApp()
+        private void initializeApp()
         {
             #region Google
             if (!IsgoogleApiCalled)
@@ -53,15 +73,25 @@ namespace WICR_Estimator.ViewModels
                 if (values == null)
                 {
                     DataSerializer.DSInstance.googleData = new GSData();
-                    DataSerializer.DSInstance.googleData.LaborRate = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E2");
 
-                    DataSerializer.DSInstance.googleData.MetalData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "F3:M24");
+                    //DataSerializer.DSInstance.googleData.LaborRate = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E2");
+                    DataSerializer.DSInstance.googleData.LaborRate = GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E2");
 
-                    DataSerializer.DSInstance.googleData.SlopeData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "P25:Q30");
-                    DataSerializer.DSInstance.googleData.MaterialData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "H33:N59");
-                    DataSerializer.DSInstance.googleData.LaborData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E60:E76");
+                    //DataSerializer.DSInstance.googleData.MetalData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "F3:M24");
+                    DataSerializer.DSInstance.googleData.MetalData =  GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "F3:M24");
+
+                    //DataSerializer.DSInstance.googleData.SlopeData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "P25:Q30");
+                    DataSerializer.DSInstance.googleData.SlopeData =  GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "P25:Q30");
+
+                    //DataSerializer.DSInstance.googleData.MaterialData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "H33:N59");
+                    DataSerializer.DSInstance.googleData.MaterialData =  GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "H33:N59");
+
+                    //DataSerializer.DSInstance.googleData.LaborData =  await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E60:E76");
+                    DataSerializer.DSInstance.googleData.LaborData = GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E60:E76");
+
                     DataSerializer.DSInstance.serializeGoogleData(DataSerializer.DSInstance.googleData);
-                    System.Threading.Thread.Sleep(2000);
+                    
+                    
                 }
             }
             #endregion

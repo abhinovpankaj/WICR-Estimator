@@ -306,10 +306,23 @@ namespace WICR_Estimator.ViewModels
                 hasDiscount = js.HasDiscount;
             }
 
-            SlopeViewModelAsync();
+            reCalculate();
             
         }
 
+        private void reCalculate()
+        {
+            foreach (Slope slp in Slopes)
+            {
+                slp.PricePerMix = getPricePerMix(slp.Thickness, isApprovedForCement);
+            }
+            CalculateGridTotal();
+            CalculateTotalMixes();
+
+            SlopeTotals.LaborExtTotal = TotalLaborCost;
+            SlopeTotals.MaterialExtTotal = TotalMaterialCost;
+            SlopeTotals.MaterialFreightTotal = TotalFrightCost;
+        }
         private void SlopeViewModelAsync()
         {
             if (perMixRates == null)

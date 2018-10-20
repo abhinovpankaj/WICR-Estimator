@@ -74,7 +74,7 @@
                                 </TabItem.Content>
                             </TabItem>
                             <TabItem Header="Calculation Details"
-                                 VerticalAlignment="Bottom">
+                                 VerticalAlignment="Bottom" Visibility="{Binding IsAdminloggedIn}">
                                 <TabItem.Content>
                                     <Grid Margin="0,0,0,0" 
                                       Background="LightBlue" 

@@ -11,25 +11,14 @@
         <conv:CheckBoxVisibilityConverter x:Key="checkBoxConv"/>
         <conv:EnableTextboxConverter x:Key="textboxConv"/>
 
-        <!--<Style TargetType="DataGridCell" x:Key="GridStyleCell">
-                        <Style.Triggers>
-                            -->
-        <!-- Highlight selected rows (standard)-->
-        <!--
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="#CD000000" />
-                                <Setter Property="BorderBrush" Value="#CD000000" />
-                                <Setter Property="Foreground" Value="White" />
-                            </Trigger>
-                        </Style.Triggers>
-
-                        -->
-        <!--Make cells non-selectable-->
-        <!--
-                        <Setter Property="Focusable" Value="False"/>
-                        <Setter Property="IsTabStop" Value="False"/>
-                        </Style>-->
-
+        <Style TargetType="{x:Type TextBox}" x:Key="editableTextbox">
+            <!--<EventSetter Event="GotKeyboardFocus" Handler="TextBox_GotKeyboardFocus"/>-->
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="True">
+                    <Setter Property="Background" Value="LightYellow" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -44,7 +33,7 @@
 
             <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Left"
                   Name="MetalGrid" VerticalAlignment="Top"
-                  Margin="10"
+                  Margin="10" IsTabStop="False"
                   CanUserAddRows="false"
                   ItemsSource="{Binding Metals}">
                 <DataGrid.Columns>
@@ -71,20 +60,26 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox Text="{Binding Units,UpdateSourceTrigger=PropertyChanged}"
-                                     IsEnabled="{Binding Name,Converter={StaticResource textboxConv}}">
+                                     IsEnabled="{Binding Name,Converter={StaticResource textboxConv}}"
+                                         Style="{StaticResource editableTextbox }">
 
                                 </TextBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Binding="{Binding SpecialMetalPricing ,StringFormat={}{0:C} }"
-                                    IsReadOnly="False">
-                        <DataGridTextColumn.Header >
-                            <!--07-10-18-->
-                            <TextBlock Text="Special Material Pricing($)" 
-                                   TextWrapping="Wrap"/>
-                        </DataGridTextColumn.Header>
-                    </DataGridTextColumn>
+                    <DataGridTemplateColumn 
+                                        Header="Special Material Pricing($)">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding SpecialMetalPricing ,StringFormat={}{0:C},UpdateSourceTrigger=LostFocus}"
+                                    IsEnabled="True" Style="{StaticResource  editableTextbox}"
+                                         >
+                                    
+                                </TextBox> 
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        
+                    </DataGridTemplateColumn>
                     <!--07-10-18-->
                     <DataGridTextColumn Header="Labor Extension($)"
                                         IsReadOnly="True" 
@@ -113,7 +108,8 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}"
-                                     IsReadOnly="{Binding IsReadOnly}">
+                                     IsEnabled="{Binding IsEditable}"
+                                         Style="{StaticResource editableTextbox}">
                                 </TextBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -122,7 +118,8 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox Text="{Binding Units,UpdateSourceTrigger=PropertyChanged}"
-                                     IsReadOnly="{Binding IsReadOnly}">
+                                     IsEnabled="{Binding IsEditable}"
+                                         Style="{StaticResource editableTextbox}">
 
                                 </TextBox>
                             </DataTemplate>
@@ -135,16 +132,27 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox Text="{Binding UnitPrice,UpdateSourceTrigger=PropertyChanged}"
-                                     IsReadOnly="{Binding IsReadOnly}">
+                                     IsEnabled="{Binding IsEditable}"
+                                         Style="{StaticResource editableTextbox}">
 
                                 </TextBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Material Price($)" 
-                                        IsReadOnly="{Binding IsReadOnly}"
-                                        Binding="{Binding MaterialPrice ,
-                        StringFormat={}{0:C}}"/>
+                    <DataGridTemplateColumn Header="Material Price($)">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding MaterialPrice,UpdateSourceTrigger=PropertyChanged,
+                                    StringFormat={}{0:C}}"
+                                     IsEnabled="{Binding IsEditable}"
+                                         
+                                         Style="{StaticResource editableTextbox}">
+
+                                </TextBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                   
                     <DataGridTextColumn Header="Labor Extension($)" 
                                         IsReadOnly="True"
                                         Binding="{Binding LaborExtension,Mode=OneWay ,StringFormat={}{0:C}}"/>
@@ -174,11 +182,11 @@
                 </StackPanel>
                 <StackPanel Grid.Column="2">
                     <TextBox Text="{Binding MetalName}" Background="LightGray"
-                       Margin="5" IsEnabled="False"/>
+                       Margin="5" IsReadOnly="True"/>
                     <!--07-10-18-->
-                    <TextBox IsEnabled="False"  Margin="5"
+                    <TextBox IsReadOnly="True"  Margin="5"
                              Text="{Binding TotalLaborCost,UpdateSourceTrigger=PropertyChanged ,StringFormat={}{0:C}}"/>
-                    <TextBox IsEnabled="False"  Margin="5"
+                    <TextBox IsReadOnly="True"  Margin="5"
                             Text="{Binding TotalMaterialCost,UpdateSourceTrigger=PropertyChanged  ,StringFormat={}{0:C}}" />
                     <!--07-10-18-->
                 </StackPanel>

@@ -51,9 +51,19 @@ namespace WICR_Estimator.ViewModels
                 isPrevailingWage = Js.IsPrevalingWage;
                 isDiscount = Js.HasDiscount;
                 vendorName = Js.VendorName;
+                if (Js.HasSpecialPricing)
+                {
+                    ShowSpecialPriceColumn = System.Windows.Visibility.Visible;
+                }
+                else
+                    ShowSpecialPriceColumn = System.Windows.Visibility.Hidden;
             }
-            Metals = GetMetals();
-            MiscMetals = GetMiscMetals();
+            int i = 0;
+            foreach (Metal metal in Metals)
+            {
+                metal.ProductionRate = getMetalPR(i);
+                i++;
+            }
             CalculateCost(null);
 
         }
@@ -75,6 +85,22 @@ namespace WICR_Estimator.ViewModels
 
         }
         #region Properties
+        private System.Windows.Visibility showSpecialPriceColumn= System.Windows.Visibility.Hidden;
+        public System.Windows.Visibility ShowSpecialPriceColumn
+        {
+            get
+            {
+                return showSpecialPriceColumn;
+            }
+            set
+            {
+                if (showSpecialPriceColumn!=value)
+                {
+                    showSpecialPriceColumn = value;
+                    OnPropertyChanged("ShowSpecialPriceColumn");
+                }
+            }
+        }
         private string mName;
         public string MetalName
         {
@@ -242,13 +268,13 @@ namespace WICR_Estimator.ViewModels
         private void AddRow(object obj)
         {
             AddInt = AddInt + 1;
-            MiscMetals.Add(new MiscMetal { Name = "Misc Metal", Units = 1, MaterialPrice = 0, UnitPrice = 0, IsReadOnly = false });          
+            MiscMetals.Add(new MiscMetal { Name = "Misc Metal", Units = 1, MaterialPrice = 0, UnitPrice = 0, IsEditable = true });          
         }
 
         public ObservableCollection<Metal> GetMetals()
         {
             ObservableCollection<Metal> met = new ObservableCollection<Metal>();
-            met.Add(new Metal("L - METAL / FLASHING",getMetalPR(0), laborRate,1, getMetalMP(0), false));
+            met.Add(new Metal("L - METAL / FLASHING",getMetalPR(0), laborRate,1, getMetalMP(0),false));
             met.Add(new Metal("DRIP EDGE METAL", getMetalPR(1), laborRate, 1, getMetalMP(1), false));
             met.Add(new Metal("STAIR METAL 4X6", getMetalPR(2), laborRate, getUnits(0), getMetalMP(2), true));
             met.Add(new Metal("STAIR METAL 3X3", getMetalPR(3), laborRate, getUnits(1), getMetalMP(3), true));
@@ -330,9 +356,9 @@ namespace WICR_Estimator.ViewModels
         public ObservableCollection<MiscMetal> GetMiscMetals()
         {
             ObservableCollection<MiscMetal> misc = new ObservableCollection<MiscMetal>();
-            misc.Add(new MiscMetal { Name = "Pins & Loads for metal over concrete", Units = getUnits(2), UnitPrice = getUnitPrice(0), MaterialPrice = getMetalMP(19), IsReadOnly = true });
-            misc.Add(new MiscMetal { Name = "Nosing for Concrete risers", Units = getUnits(3), UnitPrice = getUnitPrice(1), MaterialPrice = getMetalMP(20), IsReadOnly = true });
-            misc.Add(new MiscMetal { Name = "OTHER DRAINS TO BE ITEMIZED", Units = 1, UnitPrice = 8, MaterialPrice = 15, IsReadOnly = false });
+            misc.Add(new MiscMetal { Name = "Pins & Loads for metal over concrete", Units = getUnits(2), UnitPrice = getUnitPrice(0), MaterialPrice = getMetalMP(19), IsEditable = false });
+            misc.Add(new MiscMetal { Name = "Nosing for Concrete risers", Units = getUnits(3), UnitPrice = getUnitPrice(1), MaterialPrice = getMetalMP(20), IsEditable = false });
+            misc.Add(new MiscMetal { Name = "OTHER DRAINS TO BE ITEMIZED", Units = 1, UnitPrice = 8, MaterialPrice = 15, IsEditable = true });
             return misc;
         }
         private double getUnitPrice(int unit)
