@@ -19,14 +19,16 @@ namespace WICR_Estimator.GoogleUtility
         private static readonly object lockobj=new object();
         static string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
         static string ApplicationName = "WICR Estimator";
+        private static UserCredential credential;
+        private static SheetsService service ;
+        private static string spreadsheetId = "1pQG-Z9vaaWhCjCUiG1XqmEj1Pjavoz86RCfG6-ews2k";
 
         public async static Task<IList<IList<Object>>> GetDataFromGoogleSheetsAsync(string projectName, DataType datatype)
         {
-            UserCredential credential;
-            //lock (lockobj)
-            //{
+            if (credential==null)
+            {
                 using (var stream =
-                new FileStream(@"GoogleUtility\credentials.json", FileMode.Open, FileAccess.Read,FileShare.ReadWrite))
+                new FileStream(@"GoogleUtility\credentials.json", FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
                     string credPath = "token.json";
                     credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
@@ -37,18 +39,21 @@ namespace WICR_Estimator.GoogleUtility
                         new FileDataStore(credPath, true)).Result;
                     //Console.WriteLine("Credential file saved to: " + credPath);
                 }
-            //}
-            
+            }
 
             // Create Google Sheets API service.
-            var service = new SheetsService(new BaseClientService.Initializer()
+            if (service==null)
             {
-                HttpClientInitializer = credential,
-                ApplicationName = ApplicationName,
-            });
+                service = new SheetsService(new BaseClientService.Initializer()
+                {
+                    HttpClientInitializer = credential,
+                    ApplicationName = ApplicationName,
+                });
+            }
+            
 
             // Define request parameters.
-            String spreadsheetId = "1pQG-Z9vaaWhCjCUiG1XqmEj1Pjavoz86RCfG6-ews2k";
+            
             String range =  "Pricing!" + GetRangeFromXML(projectName, datatype);
             SpreadsheetsResource.ValuesResource.GetRequest request =
                     service.Spreadsheets.Values.Get(spreadsheetId, range);

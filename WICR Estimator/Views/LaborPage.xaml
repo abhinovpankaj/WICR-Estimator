@@ -648,7 +648,7 @@
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,2">
                         <TextBlock Width="100"
-                            Text="{Binding TotalSubContractLaborCostBrkp,UpdateSourceTrigger=PropertyChanged}"/>
+                            Text="$0.00"/>
                     </Border>
                     
                 </ListBoxItem>
@@ -663,6 +663,54 @@
             </ListBox>
             <ListBox VerticalAlignment="Center"  Background="AliceBlue"
                      Grid.Column="4">
+                <ListBoxItem HorizontalAlignment="Center">
+                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,1">
+                        <TextBlock Text="Sub-Contract Labor"
+                           HorizontalAlignment="Stretch"
+                               Width="100" FontWeight="Bold"/>
+                    </Border>
+
+                </ListBoxItem>
+                <ListBoxItem HorizontalAlignment="Center">
+                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,1">
+                        <TextBlock Width="100"
+                            Text="{Binding SlopeTotals.SubContractLabor,UpdateSourceTrigger=PropertyChanged}"/>
+                    </Border>
+                </ListBoxItem>
+                <ListBoxItem HorizontalAlignment="Center">
+                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,1">
+                        <TextBlock Width="100" Text="{Binding MetalTotals.SubContractLabor,UpdateSourceTrigger=PropertyChanged}"/>
+                    </Border>
+                </ListBoxItem>
+                <ListBoxItem HorizontalAlignment="Center">
+                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,1">
+                        <TextBlock Width="100"
+                                   Text="$0.00"/>
+                    </Border>
+                </ListBoxItem>
+                <ListBoxItem HorizontalAlignment="Center">
+                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,2">
+                        <TextBlock Width="100"
+                            Text="{Binding TotalSubContractLaborCostBrkp,UpdateSourceTrigger=PropertyChanged}"/>
+                    </Border>
+
+                </ListBoxItem>
+                <ListBoxItem HorizontalAlignment="Center"  Margin="0,5,0,0">
+                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,0">
+                        <TextBlock HorizontalAlignment="Stretch" Width="100"
+                                   FontWeight="Bold"
+                        Text="{Binding AllTabsFreightTotal,StringFormat='c'}"/>
+                    </Border>
+                </ListBoxItem>
+            </ListBox>
+            <ListBox VerticalAlignment="Center"  Background="AliceBlue"
+                     Grid.Column="5">
                 <ListBoxItem HorizontalAlignment="Center">
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">

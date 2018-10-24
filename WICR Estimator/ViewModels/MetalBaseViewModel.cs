@@ -317,10 +317,24 @@ namespace WICR_Estimator.ViewModels
 
             if (isPrevailingWage)
             {
-                TotalLaborCost = Math.Round(misSum * (1 + prevailingWage + deductionOnLargeJob), 2);
+                if (isDiscount)
+                {
+                    TotalLaborCost = Math.Round(misSum * (1 + prevailingWage + deductionOnLargeJob), 2);
+                }
+                else
+                    TotalLaborCost = Math.Round(misSum * (1 + prevailingWage), 2);
+
             }
             else
-                TotalLaborCost = Math.Round(misSum * (1 + deductionOnLargeJob), 2);
+            {
+                if (isDiscount)
+                {
+                    TotalLaborCost = Math.Round(misSum * (1 + deductionOnLargeJob), 2);
+                }
+                else
+                    TotalLaborCost = Math.Round(misSum , 2);
+            }
+                
 
             if (!isDiscount && !isPrevailingWage)
             {

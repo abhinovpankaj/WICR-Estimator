@@ -36,6 +36,7 @@ namespace WICR_Estimator.ViewModels
         public double deductionOnLargeJob;
         public bool overrideManually;
         public bool hasDiscount;
+        private double manualAvgMixPrice;
         #endregion
 
         public SlopeBaseViewModel()
@@ -68,8 +69,8 @@ namespace WICR_Estimator.ViewModels
                         OnPropertyChanged("TotalMixesMan");
                         OnPropertyChanged("AverageMixesPrice");
                     }
-                    else
-                        CalculateManual();
+                    
+
                     OnPropertyChanged("OverrideManually");
                 }
             }
@@ -81,6 +82,8 @@ namespace WICR_Estimator.ViewModels
             TotalMaterialCost = SumTotalMatExt;
             TotalWeight = Math.Round(50 * TotalMixesMan, 2);
             TotalFrightCost = Math.Round(FreightCalculator(TotalWeight), 2);
+            TotalLaborCost = Math.Round(TotalMixesMan *manualAvgMixPrice,2);
+            SumTotalLaborExt= Math.Round(TotalMixesMan * manualAvgMixPrice,2); 
         }
         public ObservableCollection<Slope> Slopes
         {
@@ -111,9 +114,6 @@ namespace WICR_Estimator.ViewModels
                     CalculateManual();
                     OnPropertyChanged("TotalMixesMan");
                 }
-
-
-
             }
         }
         public double AverageMixesPrice
@@ -306,7 +306,9 @@ namespace WICR_Estimator.ViewModels
             {
                 //pWage = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E60:E61");
                 pWage = DataSerializer.DSInstance.deserializeGoogleData(DataType.Labor, projectName);
+                
             }
+            double.TryParse(perMixRates[6][1].ToString(), out manualAvgMixPrice);
             double.TryParse(pWage[0][0].ToString(), out prevailingWage);
             double.TryParse(pWage[1][0].ToString(), out deductionOnLargeJob);
 

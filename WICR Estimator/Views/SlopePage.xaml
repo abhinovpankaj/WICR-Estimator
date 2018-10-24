@@ -328,6 +328,7 @@ Text="{Binding TotalMaterialCost,UpdateSourceTrigger=PropertyChanged ,StringForm
                        />
                 <Label Content="Total Labor Cost ($)"
                        Grid.Row="5"
+                       Margin="0,20,0,0"
                        Style="{StaticResource LabelStyle1}" 
                        />
                 <!--07-10-18-->
@@ -351,7 +352,7 @@ Text="{Binding TotalMaterialCost,UpdateSourceTrigger=PropertyChanged ,StringForm
                          IsEnabled="False"
                          Grid.Row="5"
                          VerticalContentAlignment="Center"
-                         Margin="5,0,5,5"
+                         Margin="5,20,5,5"
                          Grid.Column="1"
                          Text="{Binding TotalLaborCost,UpdateSourceTrigger=PropertyChanged  ,StringFormat={}{0:C}}" Height="25" Width="150" />
 

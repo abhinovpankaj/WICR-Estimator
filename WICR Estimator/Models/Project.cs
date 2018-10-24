@@ -110,7 +110,7 @@ namespace WICR_Estimator.Models
                 if (materialViewModel != value)
                 {
                     materialViewModel = value;
-                    
+                    OnPropertyChanged("MaterialViewModel");
                 }
             }
         }

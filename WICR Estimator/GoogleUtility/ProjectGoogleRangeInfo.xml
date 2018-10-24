@@ -3,9 +3,9 @@
   <WeatherWear>
     <RateRange>E2</RateRange>
     <MetalRange>F3:M24</MetalRange>
-    <LaborRange>E60:E76</LaborRange>
-    <SlopeRange>P25:Q30</SlopeRange>
-    <MaterialRange>H33:N59</MaterialRange>
+    <LaborRange>E61:E80</LaborRange>
+    <SlopeRange>P25:Q31</SlopeRange>
+    <MaterialRange>H34:N60</MaterialRange>
   </WeatherWear>
   <DexotexResistite>
     <RateRange>E2</RateRange>

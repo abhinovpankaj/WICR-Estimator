@@ -59,7 +59,7 @@ namespace WICR_Estimator.ViewModels
         #endregion
 
         #region Methods
-        private void initializeApp()
+        private async void initializeApp()
         {
           
             if (EnabledProjects == null)
@@ -77,21 +77,21 @@ namespace WICR_Estimator.ViewModels
                         {
                             DataSerializer.DSInstance.googleData = new GSData();
 
-                            //DataSerializer.DSInstance.googleData.LaborRate = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E2");
+                            //DataSerializer.DSInstance.googleData.LaborRate =  GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E2");
 
-                            DataSerializer.DSInstance.googleData.LaborRate = GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets(prj.Name,DataType.Rate);
+                            DataSerializer.DSInstance.googleData.LaborRate = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name,DataType.Rate);
 
-                            //DataSerializer.DSInstance.googleData.MetalData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "F3:M24");
-                            DataSerializer.DSInstance.googleData.MetalData = GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets(prj.Name, DataType.Metal);
+                            //DataSerializer.DSInstance.googleData.MetalData =  GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "F3:M24");
+                            DataSerializer.DSInstance.googleData.MetalData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Metal);
 
-                            //DataSerializer.DSInstance.googleData.SlopeData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "P25:Q30");
-                            DataSerializer.DSInstance.googleData.SlopeData = GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets(prj.Name, DataType.Slope);
+                            //DataSerializer.DSInstance.googleData.SlopeData =  GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "P25:Q30");
+                            DataSerializer.DSInstance.googleData.SlopeData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Slope);
 
-                            //DataSerializer.DSInstance.googleData.MaterialData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "H33:N59");
-                            DataSerializer.DSInstance.googleData.MaterialData = GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets(prj.Name, DataType.Material);
+                            //DataSerializer.DSInstance.googleData.MaterialData =  GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "H33:N59");
+                            DataSerializer.DSInstance.googleData.MaterialData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Material);
 
-                            //DataSerializer.DSInstance.googleData.LaborData =  await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E60:E76");
-                            DataSerializer.DSInstance.googleData.LaborData = GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets(prj.Name, DataType.Labor);
+                            //DataSerializer.DSInstance.googleData.LaborData =   GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E60:E76");
+                            DataSerializer.DSInstance.googleData.LaborData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Labor);
 
                             DataSerializer.DSInstance.serializeGoogleData(DataSerializer.DSInstance.googleData, prj.Name);
                 
