@@ -30,7 +30,7 @@
                 <ResourceDictionary Source="Resources\PageStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-
         
+
     </Application.Resources>
 </Application>

@@ -10,9 +10,9 @@ namespace WICR_Estimator.ViewModels
 {
     class ProjectViewModel : BaseViewModel, IPageViewModel
     {
-        private static bool IsgoogleApiCalled;
+        //private static bool IsgoogleApiCalled;
         public static System.Windows.Visibility IsAdminloggedIn { get; set; }
-        private bool loginWindowShown;
+        //private bool loginWindowShown;
         private ObservableCollection<Project> enabledProjects;
         public ProjectViewModel(ObservableCollection<Project> enabledProjects)
             :this()
@@ -65,37 +65,7 @@ namespace WICR_Estimator.ViewModels
         #region Methods
         private void initializeApp()
         {
-            #region Google
-            if (!IsgoogleApiCalled)
-            {
-                IsgoogleApiCalled = true;
-                var values = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate);
-                if (values == null)
-                {
-                    DataSerializer.DSInstance.googleData = new GSData();
-
-                    //DataSerializer.DSInstance.googleData.LaborRate = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E2");
-                    DataSerializer.DSInstance.googleData.LaborRate = GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E2");
-
-                    //DataSerializer.DSInstance.googleData.MetalData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "F3:M24");
-                    DataSerializer.DSInstance.googleData.MetalData =  GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "F3:M24");
-
-                    //DataSerializer.DSInstance.googleData.SlopeData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "P25:Q30");
-                    DataSerializer.DSInstance.googleData.SlopeData =  GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "P25:Q30");
-
-                    //DataSerializer.DSInstance.googleData.MaterialData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "H33:N59");
-                    DataSerializer.DSInstance.googleData.MaterialData =  GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "H33:N59");
-
-                    //DataSerializer.DSInstance.googleData.LaborData =  await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E60:E76");
-                    DataSerializer.DSInstance.googleData.LaborData = GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E60:E76");
-
-                    DataSerializer.DSInstance.serializeGoogleData(DataSerializer.DSInstance.googleData);
-                    
-                    
-                }
-            }
-            #endregion
-
+          
             if (EnabledProjects == null)
             {
                 EnabledProjects = new ObservableCollection<Project>();
@@ -105,13 +75,40 @@ namespace WICR_Estimator.ViewModels
             {
                 foreach (Project prj in EnabledProjects)
                 {
+                    #region Google
+                    var values = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, prj.Name);
+                        if (values == null)
+                        {
+                            DataSerializer.DSInstance.googleData = new GSData();
+
+                            //DataSerializer.DSInstance.googleData.LaborRate = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E2");
+
+                            DataSerializer.DSInstance.googleData.LaborRate = GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets(prj.Name,DataType.Rate);
+
+                            //DataSerializer.DSInstance.googleData.MetalData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "F3:M24");
+                            DataSerializer.DSInstance.googleData.MetalData = GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets(prj.Name, DataType.Metal);
+
+                            //DataSerializer.DSInstance.googleData.SlopeData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "P25:Q30");
+                            DataSerializer.DSInstance.googleData.SlopeData = GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets(prj.Name, DataType.Slope);
+
+                            //DataSerializer.DSInstance.googleData.MaterialData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "H33:N59");
+                            DataSerializer.DSInstance.googleData.MaterialData = GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets(prj.Name, DataType.Material);
+
+                            //DataSerializer.DSInstance.googleData.LaborData =  await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E60:E76");
+                            DataSerializer.DSInstance.googleData.LaborData = GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets(prj.Name, DataType.Labor);
+
+                            DataSerializer.DSInstance.serializeGoogleData(DataSerializer.DSInstance.googleData, prj.Name);
+                
+                        }
+                    
+                    #endregion
                     if (prj.ProjectJobSetUp == null)
                     {
-                        prj.ProjectJobSetUp = new JobSetup();
+                        prj.ProjectJobSetUp = new JobSetup(prj.Name);                                             
                     }
                     if (prj.MetalViewModel == null)
                     {
-                        prj.MetalViewModel = new MetalViewModel();
+                        prj.MetalViewModel = ViewModelInstanceFactory.GetViewModelInstance(prj.Name);
                     }
                     if (prj.SlopeViewModel == null)
                     {
@@ -119,7 +116,7 @@ namespace WICR_Estimator.ViewModels
                     }
                     if (prj.MaterialViewModel == null)
                     {
-                        prj.MaterialViewModel = new MaterialViewModel(prj.MetalViewModel.MetalTotals,prj.SlopeViewModel.SlopeTotals);
+                        prj.MaterialViewModel = new MaterialViewModel(prj.MetalViewModel.MetalTotals, prj.SlopeViewModel.SlopeTotals);
                     }
                     
                 }

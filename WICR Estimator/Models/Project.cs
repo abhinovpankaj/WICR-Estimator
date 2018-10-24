@@ -64,8 +64,8 @@ namespace WICR_Estimator.Models
         }
         public int Rank { get; set; }
         public JobSetup ProjectJobSetUp { get; set; }
-        private MetalViewModel metalViewModel;
-        public MetalViewModel MetalViewModel
+        private MetalBaseViewModel metalViewModel;
+        public MetalBaseViewModel MetalViewModel
         {
             get
             {

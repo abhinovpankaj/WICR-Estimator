@@ -707,10 +707,7 @@
                     </Border>
                 </ListBoxItem>
             </ListBox>
-            <Button Height="40"
-                    Margin="10,0,0,0"
-                    Grid.Column="5"
-                    Content="See Details"></Button>
+            
         </Grid>
     </Grid>
 </UserControl>

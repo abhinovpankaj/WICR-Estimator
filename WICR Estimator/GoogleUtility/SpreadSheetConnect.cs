@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace WICR_Estimator.GoogleUtility
 {
@@ -19,7 +20,7 @@ namespace WICR_Estimator.GoogleUtility
         static string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
         static string ApplicationName = "WICR Estimator";
 
-        public async static Task<IList<IList<Object>>> GetDataFromGoogleSheetsAsync(string sheetName,string dataRange )
+        public async static Task<IList<IList<Object>>> GetDataFromGoogleSheetsAsync(string projectName, DataType datatype)
         {
             UserCredential credential;
             //lock (lockobj)
@@ -48,7 +49,7 @@ namespace WICR_Estimator.GoogleUtility
 
             // Define request parameters.
             String spreadsheetId = "1pQG-Z9vaaWhCjCUiG1XqmEj1Pjavoz86RCfG6-ews2k";
-            String range = sheetName + "!" + dataRange;
+            String range =  "Pricing!" + GetRangeFromXML(projectName, datatype);
             SpreadsheetsResource.ValuesResource.GetRequest request =
                     service.Spreadsheets.Values.Get(spreadsheetId, range);
 
@@ -59,8 +60,31 @@ namespace WICR_Estimator.GoogleUtility
             return values;
             
         }
-
-        public static IList<IList<Object>> GetDataFromGoogleSheets(string sheetName, string dataRange)
+        private static XmlDocument doc;
+        
+        private static string GetRangeFromXML(string projectName,DataType datatype )
+        {
+            string prjName="";
+            if (doc==null)
+            {
+                doc = new XmlDocument();
+                doc.Load(@"GoogleUtility\ProjectGoogleRangeInfo.xml");
+            }
+            switch (projectName)
+            {
+                case "Weather Wear":
+                    prjName = "WeatherWear";
+                    break;
+                case "Dexotex Resistite":
+                    prjName = "DexotexResistite";
+                    break;
+                default:
+                    break;
+            }
+            XmlNode node = doc.DocumentElement.SelectSingleNode("/Projects/"+prjName+ "/"+datatype+"Range");
+            return node.InnerText;
+        }
+        public static IList<IList<Object>> GetDataFromGoogleSheets(string projectName, DataType datatype)
         {
             UserCredential credential;
             //lock (lockobj)
@@ -89,7 +113,7 @@ namespace WICR_Estimator.GoogleUtility
 
             // Define request parameters.
             String spreadsheetId = "1pQG-Z9vaaWhCjCUiG1XqmEj1Pjavoz86RCfG6-ews2k";
-            String range = sheetName + "!" + dataRange;
+            String range =  "Pricing!" + GetRangeFromXML(projectName,datatype);
             SpreadsheetsResource.ValuesResource.GetRequest request =
                     service.Spreadsheets.Values.Get(spreadsheetId, range);
 

@@ -424,11 +424,17 @@ namespace WICR_Estimator.ViewModels
                     if (mat.Name == "Resistite Regular Gray")
                     {
                         mat.Name = "Resistite Regular White";
-                        mat.MaterialPrice = double.Parse(materialDetails[13][0].ToString());
-                        mat.Weight = double.Parse(materialDetails[13][3].ToString());
-                        mat.HorizontalProductionRate= double.Parse(materialDetails[13][4].ToString());
-                        mat.StairsProductionRate = double.Parse(materialDetails[13][5].ToString());
-                        mat.SetupMinCharge = double.Parse(materialDetails[13][6].ToString());
+                        double matVal = 0;
+                        double.TryParse(materialDetails[13][0].ToString(),out matVal);
+                        mat.MaterialPrice = matVal;
+                        double.TryParse(materialDetails[13][3].ToString(),out matVal);
+                        mat.Weight = matVal;
+                        double.TryParse(materialDetails[13][4].ToString(), out matVal);
+                        mat.HorizontalProductionRate= matVal;
+                        double.TryParse(materialDetails[13][5].ToString(),out matVal);
+                        mat.StairsProductionRate = matVal;
+                        double.TryParse(materialDetails[13][6].ToString(), out matVal);
+                        mat.SetupMinCharge = matVal; 
                         OnPropertyChanged("SetupMinCharge");
                         mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                         mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
@@ -438,11 +444,17 @@ namespace WICR_Estimator.ViewModels
                     if (mat.Name == "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)")
                     {
                         mat.Name = "Resistite Regular Or Smooth White(Knock Down Or Smooth)";
-                        mat.MaterialPrice = double.Parse(materialDetails[15][0].ToString());
-                        mat.Weight= double.Parse(materialDetails[15][3].ToString());
-                        mat.HorizontalProductionRate = double.Parse(materialDetails[15][4].ToString());
-                        mat.StairsProductionRate = double.Parse(materialDetails[15][5].ToString());
-                        mat.SetupMinCharge = double.Parse(materialDetails[15][6].ToString());
+                        double matVal = 0;
+                        double.TryParse(materialDetails[15][0].ToString(), out matVal);
+                        mat.MaterialPrice = matVal;
+                        double.TryParse(materialDetails[15][3].ToString(), out matVal);
+                        mat.Weight = matVal;
+                        double.TryParse(materialDetails[15][4].ToString(), out matVal);
+                        mat.HorizontalProductionRate = matVal;
+                        double.TryParse(materialDetails[15][5].ToString(), out matVal);
+                        mat.StairsProductionRate = matVal;
+                        double.TryParse(materialDetails[15][6].ToString(), out matVal);
+                        mat.SetupMinCharge = matVal;
                         OnPropertyChanged("SetupMinCharge");
                         mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                         mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
@@ -451,11 +463,17 @@ namespace WICR_Estimator.ViewModels
                     if (mat.Name == "Custom Texture Skip Trowel(Resistite Smooth Gray)")
                     {
                         mat.Name = "Custom Texture Skip Trowel(Resistite Smooth White)";
-                        mat.MaterialPrice = double.Parse(materialDetails[21][0].ToString());
-                        mat.Weight = double.Parse(materialDetails[21][3].ToString());
-                        mat.HorizontalProductionRate = double.Parse(materialDetails[21][4].ToString());
-                        mat.StairsProductionRate = double.Parse(materialDetails[21][5].ToString());
-                        mat.SetupMinCharge = double.Parse(materialDetails[21][6].ToString());
+                        double matVal = 0;
+                        double.TryParse(materialDetails[21][0].ToString(), out matVal);
+                        mat.MaterialPrice = matVal;
+                        double.TryParse(materialDetails[21][3].ToString(), out matVal);
+                        mat.Weight = matVal;
+                        double.TryParse(materialDetails[21][4].ToString(), out matVal);
+                        mat.HorizontalProductionRate = matVal;
+                        double.TryParse(materialDetails[21][5].ToString(), out matVal);
+                        mat.StairsProductionRate = matVal;
+                        double.TryParse(materialDetails[21][6].ToString(), out matVal);
+                        mat.SetupMinCharge = matVal;
                         OnPropertyChanged("SetupMinCharge");
                         mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                         mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
@@ -483,11 +501,17 @@ namespace WICR_Estimator.ViewModels
                     if (mat.Name == "Resistite Regular White")
                     {
                         mat.Name = "Resistite Regular Gray";
-                        mat.MaterialPrice = double.Parse(materialDetails[12][0].ToString());
-                        mat.Weight = double.Parse(materialDetails[12][3].ToString());
-                        mat.HorizontalProductionRate = double.Parse(materialDetails[12][4].ToString());
-                        mat.StairsProductionRate = double.Parse(materialDetails[12][5].ToString());
-                        mat.SetupMinCharge = double.Parse(materialDetails[12][6].ToString());
+                        double matVal = 0;
+                        double.TryParse(materialDetails[12][0].ToString(), out matVal);
+                        mat.MaterialPrice = matVal;
+                        double.TryParse(materialDetails[12][3].ToString(), out matVal);
+                        mat.Weight = matVal;
+                        double.TryParse(materialDetails[12][4].ToString(), out matVal);
+                        mat.HorizontalProductionRate = matVal;
+                        double.TryParse(materialDetails[12][5].ToString(), out matVal);
+                        mat.StairsProductionRate = matVal;
+                        double.TryParse(materialDetails[12][6].ToString(), out matVal);
+                        mat.SetupMinCharge = matVal;
                         OnPropertyChanged("SetupMinCharge");
                         mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                         mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
@@ -496,11 +520,17 @@ namespace WICR_Estimator.ViewModels
                     if (mat.Name == "Resistite Regular Or Smooth White(Knock Down Or Smooth)")
                     {
                         mat.Name = "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)";
-                        mat.MaterialPrice = double.Parse(materialDetails[14][0].ToString());
-                        mat.Weight = double.Parse(materialDetails[14][3].ToString());
-                        mat.HorizontalProductionRate = double.Parse(materialDetails[14][4].ToString());
-                        mat.StairsProductionRate = double.Parse(materialDetails[14][5].ToString());
-                        mat.SetupMinCharge = double.Parse(materialDetails[14][6].ToString());
+                        double matVal = 0;
+                        double.TryParse(materialDetails[14][0].ToString(), out matVal);
+                        mat.MaterialPrice = matVal;
+                        double.TryParse(materialDetails[14][3].ToString(), out matVal);
+                        mat.Weight = matVal;
+                        double.TryParse(materialDetails[14][4].ToString(), out matVal);
+                        mat.HorizontalProductionRate = matVal;
+                        double.TryParse(materialDetails[14][5].ToString(), out matVal);
+                        mat.StairsProductionRate = matVal;
+                        double.TryParse(materialDetails[14][6].ToString(), out matVal);
+                        mat.SetupMinCharge = matVal;
                         OnPropertyChanged("SetupMinCharge");
                         mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                         mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
@@ -509,11 +539,17 @@ namespace WICR_Estimator.ViewModels
                     if (mat.Name == "Custom Texture Skip Trowel(Resistite Smooth White)")
                     {
                         mat.Name = "Custom Texture Skip Trowel(Resistite Smooth Gray)";
-                        mat.MaterialPrice = double.Parse(materialDetails[20][0].ToString());
-                        mat.Weight = double.Parse(materialDetails[20][3].ToString());
-                        mat.HorizontalProductionRate = double.Parse(materialDetails[20][4].ToString());
-                        mat.StairsProductionRate = double.Parse(materialDetails[20][5].ToString());
-                        mat.SetupMinCharge = double.Parse(materialDetails[20][6].ToString());
+                        double matVal = 0;
+                        double.TryParse(materialDetails[20][0].ToString(), out matVal);
+                        mat.MaterialPrice = matVal;
+                        double.TryParse(materialDetails[20][3].ToString(), out matVal);
+                        mat.Weight = matVal;
+                        double.TryParse(materialDetails[20][4].ToString(), out matVal);
+                        mat.HorizontalProductionRate = matVal;
+                        double.TryParse(materialDetails[20][5].ToString(), out matVal);
+                        mat.StairsProductionRate = matVal;
+                        double.TryParse(materialDetails[20][6].ToString(), out matVal);
+                        mat.SetupMinCharge = matVal;
                         OnPropertyChanged("SetupMinCharge");
                         mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                         mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
@@ -542,11 +578,18 @@ namespace WICR_Estimator.ViewModels
                     if (mat.Name == "Resistite Regular White")
                     {
                         mat.Name = "Resistite Regular Gray";
-                        mat.MaterialPrice = double.Parse(materialDetails[12][0].ToString());
-                        mat.Weight = double.Parse(materialDetails[12][3].ToString());
-                        mat.HorizontalProductionRate = double.Parse(materialDetails[12][4].ToString());
-                        mat.StairsProductionRate = double.Parse(materialDetails[12][5].ToString());
-                        mat.SetupMinCharge = double.Parse(materialDetails[12][6].ToString());
+                        double matVal = 0;
+                        double.TryParse(materialDetails[12][0].ToString(), out matVal);
+                        mat.MaterialPrice = matVal;
+                        double.TryParse(materialDetails[12][3].ToString(), out matVal);
+                        mat.Weight = matVal;
+                        double.TryParse(materialDetails[12][4].ToString(), out matVal);
+                        mat.HorizontalProductionRate = matVal;
+                        double.TryParse(materialDetails[12][5].ToString(), out matVal);
+                        mat.StairsProductionRate = matVal;
+                        double.TryParse(materialDetails[12][6].ToString(), out matVal);
+                        mat.SetupMinCharge = matVal;
+                        OnPropertyChanged("SetupMinCharge");
                         mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                         mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                         mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
@@ -554,11 +597,18 @@ namespace WICR_Estimator.ViewModels
                     if (mat.Name == "Resistite Regular Or Smooth White(Knock Down Or Smooth)")
                     {
                         mat.Name = "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)";
-                        mat.MaterialPrice = double.Parse(materialDetails[14][0].ToString());
-                        mat.Weight = double.Parse(materialDetails[14][3].ToString());
-                        mat.HorizontalProductionRate = double.Parse(materialDetails[14][4].ToString());
-                        mat.StairsProductionRate = double.Parse(materialDetails[14][5].ToString());
-                        mat.SetupMinCharge = double.Parse(materialDetails[14][6].ToString());
+                        double matVal = 0;
+                        double.TryParse(materialDetails[14][0].ToString(), out matVal);
+                        mat.MaterialPrice = matVal;
+                        double.TryParse(materialDetails[14][3].ToString(), out matVal);
+                        mat.Weight = matVal;
+                        double.TryParse(materialDetails[14][4].ToString(), out matVal);
+                        mat.HorizontalProductionRate = matVal;
+                        double.TryParse(materialDetails[14][5].ToString(), out matVal);
+                        mat.StairsProductionRate = matVal;
+                        double.TryParse(materialDetails[14][6].ToString(), out matVal);
+                        mat.SetupMinCharge = matVal;
+                        OnPropertyChanged("SetupMinCharge");
                         mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                         mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                         mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
@@ -566,11 +616,18 @@ namespace WICR_Estimator.ViewModels
                     if (mat.Name == "Custom Texture Skip Trowel(Resistite Smooth White)")
                     {
                         mat.Name = "Custom Texture Skip Trowel(Resistite Smooth Gray)";
-                        mat.MaterialPrice = double.Parse(materialDetails[20][0].ToString());
-                        mat.Weight = double.Parse(materialDetails[20][3].ToString());
-                        mat.HorizontalProductionRate = double.Parse(materialDetails[20][4].ToString());
-                        mat.StairsProductionRate = double.Parse(materialDetails[20][5].ToString());
-                        mat.SetupMinCharge = double.Parse(materialDetails[20][6].ToString());
+                        double matVal = 0;
+                        double.TryParse(materialDetails[20][0].ToString(), out matVal);
+                        mat.MaterialPrice = matVal;
+                        double.TryParse(materialDetails[20][3].ToString(), out matVal);
+                        mat.Weight = matVal;
+                        double.TryParse(materialDetails[20][4].ToString(), out matVal);
+                        mat.HorizontalProductionRate = matVal;
+                        double.TryParse(materialDetails[20][5].ToString(), out matVal);
+                        mat.StairsProductionRate = matVal;
+                        double.TryParse(materialDetails[20][6].ToString(), out matVal);
+                        mat.SetupMinCharge = matVal;
+                        OnPropertyChanged("SetupMinCharge");
                         mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                         mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                         mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
@@ -661,7 +718,7 @@ namespace WICR_Estimator.ViewModels
             {
                 //materialDetails = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "H33:K59");
                
-                GSData gData = DataSerializer.DSInstance.deserializeGoogleData();
+                GSData gData = DataSerializer.DSInstance.deserializeGoogleData("Weather Wear");
                 laborDetails = gData.LaborData;
                 materialDetails = gData.MaterialData;
                 double.TryParse(gData.LaborRate[0][0].ToString(), out laborRate);

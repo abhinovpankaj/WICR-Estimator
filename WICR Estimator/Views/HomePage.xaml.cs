@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,6 +30,14 @@ namespace WICR_Estimator.Views
             InitializeComponent();
             //HomeVM = new HomeViewModel();
             //this.DataContext = HomeVM;
+        }
+
+        private void refreshGData_Click(object sender, RoutedEventArgs e)
+        {
+            if(System.IO.Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR"))
+            {
+                Directory.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR",true);
+            }
         }
 
         //private void ListBox_Selected(object sender, RoutedEventArgs e)

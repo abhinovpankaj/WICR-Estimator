@@ -10,10 +10,9 @@
     <UserControl.Resources>
         <conv:CheckBoxVisibilityConverter x:Key="checkBoxConv"/>
         <conv:EnableTextboxConverter x:Key="textboxConv"/>
-
         <Style TargetType="{x:Type TextBox}" x:Key="editableTextbox">
-            <!--<EventSetter Event="GotKeyboardFocus" Handler="TextBox_GotKeyboardFocus"/>-->
-            <Style.Triggers>
+            
+            <Style.Triggers >
                 <Trigger Property="IsEnabled" Value="True">
                     <Setter Property="Background" Value="LightYellow" />
                 </Trigger>

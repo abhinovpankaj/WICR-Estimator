@@ -35,7 +35,7 @@ namespace WICR_Estimator
             }
         }
 
-        public void serializeGoogleData(IList<IList<object>> gData,DataType DataType)
+        public void serializeGoogleData(IList<IList<object>> gData,DataType DataType,string ProjectName)
         {
             switch (DataType)
             {
@@ -57,7 +57,10 @@ namespace WICR_Estimator
                 default:
                     break;
             }
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//GoogleData.dat";
+            if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\"))
+                Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\");
+
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\" + ProjectName+"_GoogleData.dat";
             IFormatter formatter = new BinaryFormatter();
             Stream stream = new FileStream(path, FileMode.Create, FileAccess.Write);
 
@@ -65,18 +68,21 @@ namespace WICR_Estimator
             stream.Close();
         }
 
-        public void serializeGoogleData(GSData gData)
+        public void serializeGoogleData(GSData gData,string ProjectName)
         {
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//GoogleData.dat";
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\" + ProjectName + "_GoogleData.dat";
+            if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\"))
+                Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\");
             IFormatter formatter = new BinaryFormatter();
             Stream stream = new FileStream(path, FileMode.Create, FileAccess.Write);
 
+            
             formatter.Serialize(stream, gData);
             stream.Close();
         }
-        public GSData deserializeGoogleData()
+        public GSData deserializeGoogleData(string ProjectName)
         {
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//GoogleData.dat";
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\" + ProjectName + "_GoogleData.dat";
             IFormatter formatter = new BinaryFormatter();
             try
             {
@@ -90,9 +96,13 @@ namespace WICR_Estimator
             }
             
         }
-        public IList<IList<object>> deserializeGoogleData(DataType dataType)
+        public IList<IList<object>> deserializeGoogleData(DataType dataType,string ProjectName)
         {
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//GoogleData.dat";
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\" + ProjectName + "_GoogleData.dat";
+            if (!File.Exists(path))
+            {
+                return null;
+            }
             IFormatter formatter = new BinaryFormatter();
             try
             {

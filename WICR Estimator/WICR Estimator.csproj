@@ -113,10 +113,13 @@
     <Compile Include="Models\Project.cs" />
     <Compile Include="Models\Slope.cs" />
     <Compile Include="Models\Totals.cs" />
+    <Compile Include="ViewModelInstanceFactory.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\DexoMetalViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\LaborViewModel.cs" />
     <Compile Include="ViewModels\MaterialViewModel.cs" />
+    <Compile Include="ViewModels\MetalBaseViewModel.cs" />
     <Compile Include="ViewModels\MetalViewModel.cs" />
     <Compile Include="ViewModels\ProjectViewModel.cs" />
     <Compile Include="ViewModels\SlopeViewModel.cs" />
@@ -254,6 +257,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\calculator.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GoogleUtility\ProjectGoogleRangeInfo.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

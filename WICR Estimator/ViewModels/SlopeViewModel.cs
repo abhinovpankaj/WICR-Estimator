@@ -328,13 +328,13 @@ namespace WICR_Estimator.ViewModels
             if (perMixRates == null)
             {
                 //perMixRates = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "P25:Q30");
-                perMixRates = DataSerializer.DSInstance.deserializeGoogleData(DataType.Slope);
-                laborRate = double.Parse(DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate)[0][0].ToString());
+                perMixRates = DataSerializer.DSInstance.deserializeGoogleData(DataType.Slope, "Weather Wear");
+                double.TryParse(DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, "Weather Wear")[0][0].ToString(),out laborRate);
             }
             if (pWage == null)
             {
                 //pWage = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E60:E61");
-                pWage = DataSerializer.DSInstance.deserializeGoogleData(DataType.Labor);
+                pWage = DataSerializer.DSInstance.deserializeGoogleData(DataType.Labor, "Weather Wear");
             }
             Slopes = CreateSlopes();
 

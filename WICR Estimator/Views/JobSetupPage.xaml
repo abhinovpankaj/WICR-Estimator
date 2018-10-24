@@ -47,8 +47,9 @@
                 Padding="0,0,0,15">
             <StackPanel HorizontalAlignment="Stretch" Margin="5">
                 <TextBlock Style="{StaticResource FieldHeader}"
-                       Text="Weather Wear Type"/>
-                <ComboBox Text="{Binding WeatherWearType}" >
+                       Text="Weather Wear Type"
+                           Visibility="{Binding ShowWeatherWearDD}"/>
+                <ComboBox Text="{Binding WeatherWearType}" Visibility="{Binding ShowWeatherWearDD}" >
                     <ComboBoxItem Content="Weather Wear"/>
                     <ComboBoxItem Content="Weather Wear Rehab"/>
                 </ComboBox>
@@ -138,7 +139,7 @@
                 <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding TotalSqft}"/>
                 <TextBlock Style="{StaticResource FieldHeader}"
-                       Text="Linear Footage of Deck Perimeter"
+                       Text="{Binding DeckLabel}"
                            />
                 <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding DeckPerimeter }"/>

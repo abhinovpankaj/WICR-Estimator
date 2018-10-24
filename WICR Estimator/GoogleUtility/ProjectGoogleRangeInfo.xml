@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Projects>
+  <WeatherWear>
+    <RateRange>E2</RateRange>
+    <MetalRange>F3:M24</MetalRange>
+    <LaborRange>E60:E76</LaborRange>
+    <SlopeRange>P25:Q30</SlopeRange>
+    <MaterialRange>H33:N59</MaterialRange>
+  </WeatherWear>
+  <DexotexResistite>
+    <RateRange>E2</RateRange>
+    <MetalRange>G80:H98</MetalRange>
+    <LaborRange>P25:Q30</LaborRange>
+    <SlopeRange>H33:N59</SlopeRange>
+    <MaterialRange>E60:E76</MaterialRange>
+  </DexotexResistite>
+</Projects>

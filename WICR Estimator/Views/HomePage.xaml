@@ -159,6 +159,10 @@
                     Style="{StaticResource ButtonTemplate}"/>
             <Button Content="Create Summary Sheet"
                     Style="{StaticResource ButtonTemplate}"/>
+            <Button Content="Refresh Google Data"
+                    x:Name="refreshGData"
+                    Click="refreshGData_Click"
+                    Style="{StaticResource ButtonTemplate}"/>
         </StackPanel>
     </Grid>
 </UserControl>

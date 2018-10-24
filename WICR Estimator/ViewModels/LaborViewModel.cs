@@ -103,7 +103,7 @@ namespace WICR_Estimator.ViewModels
         {
             if (laborDetails == null)
             {
-                GSData gData=DataSerializer.DSInstance.deserializeGoogleData();
+                GSData gData=DataSerializer.DSInstance.deserializeGoogleData("Weather Wear");
                 laborDetails = gData.LaborData;
                 materialDetails = gData.MaterialData;
             }

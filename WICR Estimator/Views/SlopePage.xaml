@@ -29,9 +29,14 @@
             <Setter Property="HorizontalAlignment"  Value="Right"/>
 
         </Style>
-        <!--<Style TargetType="TextBox" x:Key="TextBoxStyle1">
-            <Setter Property ="BindingGroup"   Value="Right"/>
-        </Style>-->
+        <Style TargetType="{x:Type TextBox}" x:Key="editableTextbox">
+
+            <Style.Triggers >
+                <Trigger Property="IsEnabled" Value="True">
+                    <Setter Property="Background" Value="LightYellow" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -73,7 +78,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox Text="{Binding Sqft,UpdateSourceTrigger=PropertyChanged}"
-                                     IsEnabled="{Binding Sqft,Converter={StaticResource textboxConv}}"
+                                     Style="{StaticResource editableTextbox}"
                             >
                             </TextBox>
                         </DataTemplate>
@@ -83,7 +88,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox Text="{Binding DeckCount,UpdateSourceTrigger=PropertyChanged}"
-                                     IsEnabled="{Binding DeckCount,Converter={StaticResource textboxConv}}">
+                                     Style="{StaticResource editableTextbox}">
 
                             </TextBox>
                         </DataTemplate>
@@ -226,6 +231,7 @@
                 <TextBox x:Name="TotalMixesMan"
                          Grid.Column="2"
                          Margin="5"
+                         Style="{StaticResource editableTextbox}"
                          VerticalContentAlignment="Center"
                          Height="25" Width="150"  
                          Text="{Binding TotalMixesMan}">
@@ -235,6 +241,7 @@
                 <TextBox x:Name="AverageMixesPrice"
                          Grid.Row="1" 
                          Grid.Column="2"
+                          Style="{StaticResource editableTextbox}"
                          VerticalContentAlignment="Center"
                          Height="25"
                          Margin="5,0,5,5"

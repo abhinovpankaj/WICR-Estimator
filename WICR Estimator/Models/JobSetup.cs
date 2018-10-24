@@ -9,7 +9,7 @@ namespace WICR_Estimator.Models
 {
     public class JobSetup:BaseViewModel
     {
-
+        private string ProjectName;
         public static event EventHandler OnJobSetupChange;
         public JobSetup()
         { 
@@ -25,6 +25,11 @@ namespace WICR_Estimator.Models
             DeckCount = 1;
             VendorName = "Chivon";
             MaterialName = "Copper";          
+        }
+        public JobSetup(string name)
+            :this()
+        {
+            ProjectName = name;
         }
         private string weatherWearType;
         public string WeatherWearType
@@ -44,6 +49,28 @@ namespace WICR_Estimator.Models
                 }
             }
         }
+        
+        public string DeckLabel
+        {
+            get
+            {
+                if (ProjectName == "Weather Wear")
+                    return "Linear Footage of Deck Perimeter";
+                else
+                    return "Lf Perimeter for Burlap and Membrane";
+            }
+        }
+        public System.Windows.Visibility ShowWeatherWearDD
+        {
+            get
+            {
+                if (ProjectName == "Weather Wear")
+                    return System.Windows.Visibility.Visible;
+                else
+                    return System.Windows.Visibility.Collapsed;
+            }
+        }
+
         private string jobName;
         public string JobName
         {
@@ -243,8 +270,8 @@ namespace WICR_Estimator.Models
             {
                 if (laborRate==0)
                 {
-                    var rate=DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate);
-                    laborRate = double.Parse(rate[0][0].ToString());
+                    var rate=DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate,"Weather Wear");
+                    double.TryParse(rate[0][0].ToString(),out laborRate);
                 }
                 return laborRate;
             }
