@@ -98,7 +98,7 @@
                            IsChecked="{Binding IsPrevalingWage}"/>
                 <CheckBox  Style="{StaticResource CheckBoxStyle}"
                            IsChecked="{Binding IsFlashingRequired}"
-                           Content="Metal Flashing?"/>
+                           Content="Metal Flashing Over Concrete?"/>
                 <CheckBox  Style="{StaticResource CheckBoxStyle}"
                            IsChecked="{Binding HasSpecialPricing}"
                        Content="Special Material Pricing"/>

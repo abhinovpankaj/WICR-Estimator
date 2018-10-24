@@ -32,10 +32,6 @@ namespace WICR_Estimator.ViewModels
             //}
             
             initializeApp();
-            do
-            {
-                System.Threading.Thread.Sleep(1000);
-            } while (!System.IO.File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//GoogleData.dat"));
         }
 
         private void LoginWindow_onOKClick(object sender, EventArgs e)
@@ -108,7 +104,7 @@ namespace WICR_Estimator.ViewModels
                     }
                     if (prj.MetalViewModel == null)
                     {
-                        prj.MetalViewModel = ViewModelInstanceFactory.GetViewModelInstance(prj.Name);
+                        prj.MetalViewModel = ViewModelInstanceFactory.GetMetalViewModelInstance(prj.Name);
                     }
                     if (prj.SlopeViewModel == null)
                     {

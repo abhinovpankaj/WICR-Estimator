@@ -49,7 +49,19 @@ namespace WICR_Estimator.Models
                 }
             }
         }
-        public double ProductionRate { get; set; }
+        private double pr;
+        public double ProductionRate
+        {
+            get { return pr; }
+            set
+            {
+                if (value!=pr)
+                {
+                    pr = value;
+                    OnPropertyChanged("ProductionRate");
+                }
+            }
+        }
         public double NoOfHrs
         {
             get

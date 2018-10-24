@@ -9,7 +9,7 @@
   </WeatherWear>
   <DexotexResistite>
     <RateRange>E2</RateRange>
-    <MetalRange>G80:H98</MetalRange>
+    <MetalRange>F80:M101</MetalRange>
     <LaborRange>P25:Q30</LaborRange>
     <SlopeRange>H33:N59</SlopeRange>
     <MaterialRange>E60:E76</MaterialRange>

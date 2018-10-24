@@ -9,7 +9,7 @@ namespace WICR_Estimator
 {
     public static class ViewModelInstanceFactory
     {
-        public static MetalBaseViewModel GetViewModelInstance(string projectName)
+        public static MetalBaseViewModel GetMetalViewModelInstance(string projectName)
         {
             switch (projectName)
             {
@@ -20,6 +20,20 @@ namespace WICR_Estimator
                 default:
                     return null;
                     
+            }
+        }
+
+        public static SlopeBaseViewModel GetSlopeViewModelInstance(string projectName)
+        {
+            switch (projectName)
+            {
+                case "Weather Wear":
+                    return new SlopeViewModel();
+                case "Dexotex Resistite":
+                    return new DexoSlopeViewModel();
+                default:
+                    return null;
+
             }
         }
     }

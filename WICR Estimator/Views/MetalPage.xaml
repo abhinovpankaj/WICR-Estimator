@@ -66,6 +66,9 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Production Rate"
+                                        IsReadOnly="True" 
+                                        Binding="{Binding ProductionRate ,StringFormat={}{0:C}}"/>
                     <DataGridTemplateColumn 
                                         Header="Special Material Pricing($)">
                         <DataGridTemplateColumn.CellTemplate>

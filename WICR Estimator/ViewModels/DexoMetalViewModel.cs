@@ -12,7 +12,10 @@ namespace WICR_Estimator.ViewModels
     {
         public DexoMetalViewModel()
         {
+            GetMetalDetailsFromGoogle("Dexotex Resistite");
             Metals = this.GetMetals();
+            MiscMetals = this.GetMiscMetals();
+            CalculateCost(null);
         }
         
         public ObservableCollection<Metal> GetMetals()
@@ -43,7 +46,11 @@ namespace WICR_Estimator.ViewModels
 
         public ObservableCollection<MiscMetal> GetMiscMetals()
         {
-            return null;
+            ObservableCollection<MiscMetal> misc = new ObservableCollection<MiscMetal>();
+            misc.Add(new MiscMetal { Name = "Pins & Loads for metal over concrete", Units = getUnits(2), UnitPrice = getUnitPrice(0), MaterialPrice = getMetalMP(19), IsEditable = false });
+            misc.Add(new MiscMetal { Name = "Nosing for Concrete risers", Units = getUnits(3), UnitPrice = getUnitPrice(1), MaterialPrice = getMetalMP(20), IsEditable = false });
+            misc.Add(new MiscMetal { Name = "OTHER DRAINS TO BE ITEMIZED", Units = 1, UnitPrice = 8, MaterialPrice = 15, IsEditable = true });
+            return misc;
         }
     }
 }
