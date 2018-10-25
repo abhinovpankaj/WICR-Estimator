@@ -8,8 +8,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="1200">
     <UserControl.Resources>
-       
-
         <conv:CheckBoxVisibilityConverter x:Key="checkBoxConv"/>
         <conv:EnableTextboxConverter x:Key="textboxConv"/>
         <conv:QtyTextboxConverter x:Key="qtyTextboxConv"/>
@@ -69,7 +67,21 @@
                   VerticalAlignment="Top" 
                   CanUserAddRows="False"
                   FrozenColumnCount ="2"
+                  
                   ItemsSource="{Binding SystemMaterials,UpdateSourceTrigger=PropertyChanged}" >
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsMaterialChecked}" Value="False">
+                            <Setter Property="Background" Value="Gray"></Setter>
+                        </DataTrigger>
+                        <!--<DataTrigger Binding="{Binding IsMaterialChecked}" Value="True">
+                            <Setter Property="Background" Value="Green"></Setter>
+                        </DataTrigger>-->
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="">
                     <DataGridTemplateColumn.CellTemplate>

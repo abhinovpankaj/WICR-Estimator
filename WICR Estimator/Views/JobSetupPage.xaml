@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WICR_Estimator.Views"
       mc:Ignorable="d" 
-      d:DesignHeight="400" d:DesignWidth="700"
+      d:DesignHeight="400" d:DesignWidth="1000"
       >
     <UserControl.Resources>
         <Style x:Key="FieldHeader" TargetType="TextBlock">
@@ -17,6 +17,7 @@
         <Style x:Key="CheckBoxStyle" TargetType="CheckBox">
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Margin" Value="5"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
 
@@ -54,14 +55,15 @@
                     <ComboBoxItem Content="Weather Wear Rehab"/>
                 </ComboBox>
                 <TextBlock Style="{StaticResource FieldHeader}"
-                       Text="Material"/>
-                <ComboBox Text="{Binding MaterialName}">
-                    <ComboBoxItem Content="Copper"/>
-                    <ComboBoxItem Content="Regular Steel"/>
-                    <ComboBoxItem Content="Stainless Steel"/>
+                       Text="Metal Material Type"/>
+                <ComboBox Text="{Binding MaterialName}"
+                          Width="180">
+                    <ComboBoxItem Content="16oz Copper"/>
+                    <ComboBoxItem Content="24ga. Galvanized Primed Steel"/>
+                    <ComboBoxItem Content="26 ga. Type 304 Stainless Steel"/>
                 </ComboBox>
                 <TextBlock Style="{StaticResource FieldHeader}"
-                       Text="Vendor Name"/>
+                       Text="Metal Vendor Name"/>
                 <ComboBox Text="{Binding VendorName,UpdateSourceTrigger=PropertyChanged}">
                     <ComboBoxItem Content="Chivon"/>
                     <ComboBoxItem Content="Thunder Bird"/>
@@ -87,6 +89,7 @@
                 Grid.Column="1"
                 Background="AliceBlue"
                 Margin="10"
+                Width="350"
                 Padding="0,0,0,15">
             <StackPanel>
             <StackPanel>
@@ -104,8 +107,13 @@
                        Content="Special Material Pricing"/>
                 <CheckBox  Style="{StaticResource CheckBoxStyle}"
                            IsChecked="{Binding HasDiscount}"
-                       Content="Discount?"/>
-            </StackPanel>
+                       Content="Labor Discount Large Project (over 1,000 sq. ft.)"/>
+                <CheckBox  Style="{StaticResource CheckBoxStyle}"
+                           IsChecked="{Binding HasContingencyDisc}">
+                        <TextBlock Text="Contingency Discount for Large New Construction Project (over 1,000 sq. ft.)"
+                                       TextWrapping="Wrap"/>
+                </CheckBox>
+                </StackPanel>
                 <Border BorderBrush="Black"
                         BorderThickness="0,1,0,0">
                     <StackPanel VerticalAlignment="Center"
@@ -120,6 +128,7 @@
                          HorizontalAlignment="Center"
                      Margin="5"/>
                         <Slider Maximum="10" Value="{Binding StairWidth}"
+                                Width="250"
                     TickPlacement="BottomRight"
                     TickFrequency=".5" IsSnapToTickEnabled="True" Name="slWidth"
                     />
@@ -144,17 +153,57 @@
                 <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding DeckPerimeter }"/>
                 <TextBlock Style="{StaticResource FieldHeader}"
-                       Text="# Risers (3.5-4 FT Wide)"/>
+                       Text="Stair Risers - Confirm stair width"/>
                 <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding RiserCount}"/>
                 <TextBlock Style="{StaticResource FieldHeader}"
                        Text="# Decks"/>
                 <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding DeckCount}"/>
-                <TextBlock Style="{StaticResource FieldHeader}"
-                       Text="MarkUp % "/>
+                <!--<TextBlock Style="{StaticResource FieldHeader}"
+                       Text="Mark Up % "/>
                 <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding MarkupPercentage}"/>
+                         Text="{Binding MarkupPercentage}"/>-->
+                <StackPanel VerticalAlignment="Center"
+                   
+                   Margin="5">
+                    <TextBlock Text="Mark Up %" HorizontalAlignment="Left"
+                           Style="{StaticResource FieldHeader}"/>
+                    <TextBox Text="{Binding ElementName=markup,
+                             Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                             TextAlignment="Right"
+                             Width="40" 
+                             HorizontalAlignment="Left"
+                             Margin="5"/>
+                    <Slider Value="{Binding StairWidth}" Maximum="100"
+                            Width="250" x:Name="markup"
+                            Minimum="{Binding MinMarkUp}"
+                            LargeChange="5"
+                            SmallChange="0.5"
+                            TickPlacement="BottomRight"
+                            TickFrequency="1" IsSnapToTickEnabled="True"
+                            />
+                </StackPanel>
+                <CheckBox Content="Enter less than (-10%)"
+                          Margin="10" x:Name="cbpasswordSection"
+                          Foreground="#FF2A6DCD">
+                </CheckBox>
+                <StackPanel>
+                    <PasswordBox Margin="10" Width="140"></PasswordBox>
+                    <Button HorizontalAlignment="Center" Content="OK"
+                            Command="{Binding EnableMoreMarkup}"/>
+                    <StackPanel.Style>
+                        <Style TargetType="{x:Type StackPanel}">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=cbpasswordSection,
+                                    Path=IsChecked}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                </StackPanel>
             </StackPanel>   
         </Border>
               

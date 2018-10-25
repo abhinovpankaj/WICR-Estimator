@@ -24,12 +24,43 @@ namespace WICR_Estimator.Models
             WeatherWearType = "Weather Wear";
             DeckCount = 1;
             VendorName = "Chivon";
-            MaterialName = "Copper";          
+            MaterialName = "Copper";
+            EnableMoreMarkup = new DelegateCommand(CanAddMoreMarkup, canAdd);
+            MinMarkUp = -10;
         }
+
+        private bool canAdd(object obj)
+        {
+            return true;
+        }
+
+        private void CanAddMoreMarkup(object obj)
+        {
+            MinMarkUp = -50;
+        }
+
         public JobSetup(string name)
             :this()
         {
             ProjectName = name;
+        }
+
+        public double MinMarkUp { get; set; }
+        public DelegateCommand EnableMoreMarkup { get; private set; }
+
+        
+        private bool hasContingencyDisc;
+        public bool HasContingencyDisc
+        {
+            get { return hasContingencyDisc; }
+            set
+            {
+                if (value!= hasContingencyDisc)
+                {
+                    hasContingencyDisc = value;
+                    OnPropertyChanged("HasContingencyDisc");
+                }
+            }
         }
         private string weatherWearType;
         public string WeatherWearType

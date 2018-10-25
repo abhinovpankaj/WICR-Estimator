@@ -111,25 +111,25 @@
                 <DataGridTextColumn Header ="Slope Cost"
                                     Binding="{Binding SlopeCost}"
                                     IsReadOnly="False"/>
-                <DataGridTextColumn Header ="System and Other"
+                <DataGridTextColumn Header ="System Cost"
                                     Binding="{Binding SystemNOther}"
-                                    IsReadOnly="False"/>
-                <DataGridTextColumn Header ="Sub Contract Cost" 
-                                    Binding="{Binding SubContractCost}"
-                                    IsReadOnly="False"/>
-                <DataGridTextColumn Header ="Labor Cost" 
-                                    Binding="{Binding LaborCost}"
                                     IsReadOnly="False"/>
                 <DataGridTextColumn Header ="Material Cost" 
                                     Binding="{Binding MaterialCost}"
                                     IsReadOnly="False"/>
+                <DataGridTextColumn Header ="Labor Cost" 
+                                    Binding="{Binding LaborCost}"
+                                    IsReadOnly="False"/>
+                
                 <DataGridTextColumn Header ="Labor %" 
                                     Binding="{Binding LaborPercentage}"
                                     IsReadOnly="False"/>
                 <DataGridTextColumn Header ="Total Cost" 
                                     Binding="{Binding TotalCost}"
                                     IsReadOnly="False"/>
-                
+                <!--<DataGridTextColumn Header ="Sub Contract Cost" 
+                                    Binding="{Binding SubContractCost}"
+                                    IsReadOnly="False"/>-->
             </DataGrid.Columns>
             <!--<i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
@@ -151,6 +151,10 @@
                        FontSize="14"/>
             <TextBox Margin="5,0,5,10"
                      FontSize="14"/>
+            <DatePicker Margin="5" Height="30"
+                        FontSize="14"
+                        VerticalContentAlignment="Center"
+                        HorizontalContentAlignment="Left"/>
             <Button Content="Load Estimate" Margin="5" 
                     Style="{StaticResource ButtonTemplate}"/>
             <Button Content="Save Estimate" 
