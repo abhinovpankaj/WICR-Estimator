@@ -35,12 +35,12 @@ namespace WICR_Estimator.ViewModels
         private bool isDiscounted;
         private IList<IList<Object>> laborDetails;
         private IList<IList<object>> materialDetails;
-        
+        private double costPerSquareFeet;
         private ICommand _addRowCommand;
         private ICommand _calculateCostCommand;
         private ICommand _removeCommand;
         private int AddInt = 4;
-
+        private int deckCount;
 
         #endregion
 
@@ -61,6 +61,7 @@ namespace WICR_Estimator.ViewModels
             isDiscounted = false;
             isPrevailingWage = false;
             isApprovedforCement = false;
+            deckCount = 1;
             
             JobSetup.OnJobSetupChange += JobSetup_OnJobSetupChange;
             SystemMaterial.OnQTyChanged += (s, e) => { setExceptionValues(); };
@@ -143,6 +144,19 @@ namespace WICR_Estimator.ViewModels
                     otherMaterials = value;
                     OnPropertyChanged("OtherMaterials");
                     CalOCTotal();
+                }
+            }
+        }
+        
+        public double CostPerSquareFeet
+        {
+            get { return costPerSquareFeet; }
+            set
+            {
+                if (value != costPerSquareFeet)
+                {
+                    costPerSquareFeet = value;
+                    OnPropertyChanged("CostPerSquareFeet");
                 }
             }
         }
@@ -289,6 +303,22 @@ namespace WICR_Estimator.ViewModels
                 {
                     totalSCExtension = value;
                     OnPropertyChanged("TotalSCExtension");
+
+                }
+            }
+        }
+        
+
+        private double subContractMarkup;
+        public double SubContractMarkup
+        {
+            get { return subContractMarkup; }
+            set
+            {
+                if (value != subContractMarkup)
+                {
+                    subContractMarkup = value;
+                    OnPropertyChanged("SubContractMarkup");
 
                 }
             }
@@ -718,11 +748,13 @@ namespace WICR_Estimator.ViewModels
             {
                 //materialDetails = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "H33:K59");
                
-                GSData gData = DataSerializer.DSInstance.deserializeGoogleData("Weather Wear");
+                GSData gData = DataSerializer.DSInstance.deserializeGoogleData("Dexotex Weather Wear");
                 laborDetails = gData.LaborData;
                 materialDetails = gData.MaterialData;
                 double.TryParse(gData.LaborRate[0][0].ToString(), out laborRate);
-                
+                double facVal = 0;
+                double.TryParse(laborDetails[7][0].ToString(), out facVal);
+                SubContractMarkup = facVal;
             }
             
             SystemMaterials = GetSystemMaterial();
@@ -1909,6 +1941,7 @@ namespace WICR_Estimator.ViewModels
             sqStairs = getSqFtStairs("Extra Stair Nosing Lf"); //getvalue from systemMaterial
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
             labrExt = (calcHrs != 0) ? (setUpMin + calcHrs) * laborRate : 0;
+            qty = 1;
             smP.Add(new SystemMaterial
             {
                 IsMaterialChecked = getCheckboxCheckStatus("Extra Stair Nosing Lf"),
@@ -1920,6 +1953,7 @@ namespace WICR_Estimator.ViewModels
                 Coverage = cov,
                 MaterialPrice = mp,
                 Weight =w,
+                Qty=qty,
                 SMSqftH = sqh,
                 Operation = "NAIL OR SCREW",
                 HorizontalProductionRate = hprRate,
@@ -1961,11 +1995,12 @@ namespace WICR_Estimator.ViewModels
                 StairsProductionRate = pRateStairs,
                 StairSqft = getSqFtStairs("Plywood 3/4 & Blocking(# Of 4X8 Sheets)"),
                 SetupMinCharge = setUpMin,
-                Hours = calcHrs,
+                Hours = calcHrs, Qty=qty,
                 LaborExtension = labrExt,
                 LaborUnitPrice = labrExt / qty,
                 FreightExtension = w * qty,
                 MaterialExtension = mp * qty
+                
             });
             int.TryParse(materialDetails[26][2].ToString(), out cov);
             double.TryParse(materialDetails[26][0].ToString(), out mp);
@@ -1989,7 +2024,7 @@ namespace WICR_Estimator.ViewModels
                 MaterialPrice =mp,
                 IncludeInLaborMinCharge = true,
                 Weight = w,
-                //Qty = getQuantity("Stucco Material Remove And Replace (Lf)", cov, lfArea),
+                Qty = qty,
                 SMSqftH = sqh,
                 Operation = "Remove and replace dry rot",
                 HorizontalProductionRate = hprRate,
@@ -2242,6 +2277,7 @@ namespace WICR_Estimator.ViewModels
                 TotalWeightbrkp = SumWeight;
                 TotalFreightCostBrkp = FreightCalculator(TotalWeightbrkp);
                 TotalSubContractLaborCostBrkp = TotalSCExtension;
+                CostPerSquareFeet = Math.Round(TotalMaterialCostbrkp /(totalSqft+ deckCount), 2);
             }
         }
         #endregion
@@ -2536,13 +2572,13 @@ namespace WICR_Estimator.ViewModels
                 HideCalFactor = System.Windows.Visibility.Hidden
             });
 
-            
             double.TryParse(laborDetails[7][0].ToString(), out facValue);
-            double psy1 = facValue * (TotalSubContractLaborCostBrkp);
+            SubContractMarkup = facValue;
+            double psy1 = SubContractMarkup * (TotalSubContractLaborCostBrkp);
             LCostBreakUp.Add(new CostBreakup
             {
                 Name = "Profit Margin on subcontract labor= 35 %",
-                CalFactor = facValue,
+                CalFactor = SubContractMarkup,
                 MetalCost = 0,
                 SlopeCost = 0,
                 SystemCost = psy1

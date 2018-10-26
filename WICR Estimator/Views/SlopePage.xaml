@@ -279,7 +279,7 @@
                 <Label Content="Total Weight"
                        Style="{StaticResource LabelStyle1}"
                        />
-                <Label Content="Total Fright Cost ($)" 
+                <Label Content="Total Freight Cost ($)" 
                        Grid.Row="1"
                        Style="{StaticResource LabelStyle1}"
                        />

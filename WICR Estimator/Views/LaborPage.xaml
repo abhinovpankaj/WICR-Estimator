@@ -18,7 +18,10 @@
             <Setter Property="FontSize" Value="11"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="Black"/>
         </Style>
         <Style TargetType="TextBlock" x:Key="TextBlockStyle1">
             <Setter Property="Foreground" Value="Black"/>
@@ -76,98 +79,19 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="System Material">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBox Text="{Binding Name}"
-                                     IsReadOnly="True"
-                                     KeyboardNavigation.IsTabStop="False"
-                                     >
-                            </TextBox>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Operation">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBox Text="{Binding Operation,UpdateSourceTrigger=PropertyChanged}"
-                                     IsEnabled="False"
-                                     KeyboardNavigation.IsTabStop="False"
-                            >
-                            </TextBox>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Sqft V">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBox Text="{Binding SMSqftV,UpdateSourceTrigger=PropertyChanged}"
-                                     IsReadOnly="True"
-                                     KeyboardNavigation.IsTabStop="False">
-                            </TextBox>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-
-                <DataGridTextColumn Binding="{Binding VerticleProductionRate,UpdateSourceTrigger=PropertyChanged}"
+                <DataGridTextColumn Header="System Material" KeyboardNavigation.IsTabStop="False"
+                                        Binding="{Binding Name }"
+                                    IsReadOnly="True">
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Operation" KeyboardNavigation.IsTabStop="False"
                                     IsReadOnly="True"
-                                    KeyboardNavigation.IsTabStop="False">
-                    <DataGridTextColumn.Header>
-                        <TextBlock Text="P/Rate V" 
-                                   TextWrapping="Wrap"  Width="Auto"/>
-                    </DataGridTextColumn.Header>
+                                    Binding="{Binding Operation}">
                 </DataGridTextColumn>
-                <DataGridTemplateColumn Header="Sqft H">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBox Text="{Binding SMSqftH,
-                                UpdateSourceTrigger=PropertyChanged}"
-                                     IsReadOnly="True" Width="Auto"
-                                     KeyboardNavigation.IsTabStop="False">
-                            </TextBox>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-
-                <DataGridTextColumn Binding="{Binding HorizontalProductionRate,UpdateSourceTrigger=PropertyChanged}"
-                                    IsReadOnly="True"
-                                    KeyboardNavigation.IsTabStop="False">
-                    <DataGridTextColumn.Header>
-                        <TextBlock Text="P/Rate H" 
-                                   TextWrapping="Wrap"  Width="Auto"/>
-                    </DataGridTextColumn.Header>
+                
+                <DataGridTextColumn Header="#Hours" KeyboardNavigation.IsTabStop="False"
+                                    Binding="{Binding Hours, StringFormat={}{0:n2}}">
+                    
                 </DataGridTextColumn>
-
-                <DataGridTemplateColumn Header="Sqft Stairs">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBox Text="{Binding StairSqft,UpdateSourceTrigger=PropertyChanged}"
-                                     IsReadOnly="True"
-                                     KeyboardNavigation.IsTabStop="False">
-                            </TextBox>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-
-                <DataGridTextColumn Binding="{Binding StairsProductionRate,UpdateSourceTrigger=PropertyChanged}"
-                                    IsReadOnly="True" Visibility="Visible"
-                                    KeyboardNavigation.IsTabStop="False">
-                    <DataGridTextColumn.Header>
-                        <TextBlock Text="P/R Stairs" 
-                                   TextWrapping="Wrap"  Width="Auto"/>
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
-                <DataGridTemplateColumn Header="#Hours">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBox Text="{Binding Hours,UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"
-                                     Name="HoursTb"
-                                     KeyboardNavigation.IsTabStop="{Binding Path=Name,Converter={StaticResource qtyTextboxConv}}"
-                                    IsEnabled="{Binding Path=Name,Converter={StaticResource qtyTextboxConv}}"/>
-                        </DataTemplate>
-
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="SetUp Min Charges" Binding="{Binding SetupMinCharge,UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"
                                     IsReadOnly="True"
                                     KeyboardNavigation.IsTabStop="False">
@@ -179,14 +103,37 @@
                                     KeyboardNavigation.IsTabStop="False">
 
                 </DataGridTextColumn>
-
-
                 <DataGridTextColumn Header ="Labor Extension"
                                     Binding="{Binding LaborExtension,
                     UpdateSourceTrigger=PropertyChanged ,StringFormat='c'}"
                                     IsReadOnly="True"
                                     KeyboardNavigation.IsTabStop="False">
                 </DataGridTextColumn>
+                <!--<DataGridTextColumn Header="Sqft V" IsReadOnly="True" Binding="{Binding SMSqftV}"
+                                     KeyboardNavigation.IsTabStop="False">
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Binding="{Binding VerticleProductionRate,UpdateSourceTrigger=PropertyChanged}"
+                                    IsReadOnly="True" Header="P/Rate V"
+                                    KeyboardNavigation.IsTabStop="False">
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding SMSqftH}"
+                                    IsReadOnly="True" Header="Sqft H"
+                                    KeyboardNavigation.IsTabStop="False">
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Binding="{Binding HorizontalProductionRate,UpdateSourceTrigger=PropertyChanged}"
+                                    IsReadOnly="True" Header="P/Rate H"
+                                    KeyboardNavigation.IsTabStop="False">
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding StairSqft,UpdateSourceTrigger=PropertyChanged}"
+                                    IsReadOnly="True" Header="Sqft Stairs"
+                                    KeyboardNavigation.IsTabStop="False">
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding StairsProductionRate,UpdateSourceTrigger=PropertyChanged}"
+                                    IsReadOnly="True" Header="P/R Stairs"
+                                    KeyboardNavigation.IsTabStop="False">
+                </DataGridTextColumn>-->
             </DataGrid.Columns>
 
         </DataGrid>
@@ -281,13 +228,13 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
+                    <!--<RowDefinition Height="*"/>-->
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
+                    <!--<RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>-->
                 </Grid.RowDefinitions>
                 <Label Content="Total hours"
                        Style="{StaticResource LabelStyle1}"/>
@@ -301,87 +248,116 @@
                        Style="{StaticResource LabelStyle1}"/>
                 <Label Content="Drive hours" Grid.Row="5"
                        Style="{StaticResource LabelStyle1}"/>
-                <Border BorderThickness="0,2,0,0" Margin="2,2,2,10"
+                <Border BorderThickness="0,2,0,0" Margin="2,10,2,10"
                         BorderBrush="Black" Grid.Row="6"
                         Grid.ColumnSpan="2"/>
-                <Label Content="Total Setup Time" Grid.Row="7"
+                <!--<Label Content="Total Setup Time" Grid.Row="7"
+                   Style="{StaticResource LabelStyle1}"/>-->
+                <Label Content="Labor Cost per SQ. FT." Grid.Row="7"
                    Style="{StaticResource LabelStyle1}"/>
-                <Label Content="Total Labor Unit Price" Grid.Row="8"
+                <Label Content="Total Labor Cost" Grid.Row="8"
                    Style="{StaticResource LabelStyle1}"/>
-                <Label Content="Labor Extension" Grid.Row="9"
-                   Style="{StaticResource LabelStyle1}"/>
-                <TextBlock IsEnabled="False"                        
-                         Margin="5" Grid.Column="1"                      
+                <Border Grid.Column="1" BorderBrush="Black"
+                        BorderThickness="0,0,0,1">
+                    <TextBlock IsEnabled="False"                        
+                         Margin="5"                    
                          Width="100"
                          FontSize="14"               
                          Text="{Binding TotalHrsLabor,  StringFormat={}{0:n2},
                     UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock IsEnabled="False"                        
-                         Margin="5" Grid.Column="1"                      
-                         Width="100" Grid.Row="1"
+                </Border>
+                <Border Grid.Column="1" Grid.Row="1" BorderBrush="Black"
+                        BorderThickness="0,0,0,1">
+                    <TextBlock IsEnabled="False"                        
+                         Margin="5"                       
+                         Width="100"
                           FontSize="14"              
                          Text="{Binding TotalHrsSystemLabor,
                     UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
-                <TextBlock IsEnabled="False"                        
-                         Margin="5" Grid.Column="1"                      
-                         Width="100" Grid.Row="2"
+                </Border>
+                <Border Grid.Column="1"  Grid.Row="2" BorderBrush="Black"
+                        BorderThickness="0,0,0,1">
+                    <TextBlock IsEnabled="False"                        
+                         Margin="5"                     
+                         Width="100"
                            FontSize="14"              
                          Text="{Binding TotalHrsMetalLabor,
                     UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
-                <TextBlock IsEnabled="False"                        
-                         Margin="5" Grid.Column="1"                      
-                         Width="100" Grid.Row="3"
-                          FontSize="14"              
-                         Text="{Binding TotalHrsSlopeLabor, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
-                <TextBlock IsEnabled="False"                        
-                         Margin="5" Grid.Column="1"                      
-                         Width="100" Grid.Row="4"
+                </Border>
+                <Border Grid.Column="1"  Grid.Row="3" BorderBrush="Black"
+                        BorderThickness="0,0,0,1">
+                    <TextBlock IsEnabled="False"                        
+                         Margin="5"                      
+                         Width="100"
+                         FontSize="14"              
+                         Text="{Binding TotalHrsSlopeLabor, UpdateSourceTrigger=PropertyChanged,
+                        StringFormat={}{0:n2}}"/>
+                </Border>
+                <Border Grid.Column="1"  Grid.Row="4" BorderBrush="Black"
+                        BorderThickness="0,0,0,1">
+                    <TextBlock IsEnabled="False"                      
+                         Width="100" 
                          FontSize="14"                
-                         Text="{Binding TotalHrsFreightLabor, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
-                <TextBlock IsEnabled="False"                        
+                         Text="{Binding TotalHrsFreightLabor, 
+                        UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
+                </Border>
+                <Border Grid.Column="1"  Grid.Row="5" BorderBrush="Black"
+                        BorderThickness="0,0,0,1">
+                    <TextBlock IsEnabled="False"                        
                          Margin="5" Grid.Column="1"                      
-                         Width="100" Grid.Row="5"
+                         Width="100"
                          FontSize="14"                
                          Text="{Binding TotalHrsDriveLabor, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
-                <TextBlock IsEnabled="False"                        
-                         Margin="5" Grid.Column="1"                      
-                         Width="100" Grid.Row="7"
+                </Border>
+                <!--<Border Grid.Column="1"  Grid.Row="7" BorderBrush="Black"
+                        BorderThickness="0,0,0,1">
+                    <TextBlock IsEnabled="False"                        
+                         Margin="5"                    
+                         Width="100"
                            FontSize="14"            
                          Text="{Binding TotalSetupTimeLabor, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
-                <TextBlock IsEnabled="False"                        
-                         Margin="5" Grid.Column="1"                      
-                         Width="100" Grid.Row="8"
-                           FontSize="14"              
+                </Border>-->
+                <Border Grid.Column="1"  Grid.Row="7" BorderBrush="Black"
+                        BorderThickness="0,0,0,1">
+                    <TextBlock IsEnabled="False"                        
+                         Margin="5"                       
+                         Width="100"
+                         FontSize="14"              
                          Text="{Binding TotalLaborUnitPrice, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
-                <TextBlock IsEnabled="False"                        
-                         Margin="5" Grid.Column="1"                      
-                         Width="100" Grid.Row="9"
+                </Border>
+                <Border Grid.Column="1"  Grid.Row="8" BorderBrush="Black"
+                        BorderThickness="0,0,0,1">
+                    <TextBlock IsEnabled="False"                        
+                         Margin="5"                      
+                         Width="100"
                            FontSize="14"             
                          Text="{Binding TotalLaborExtension, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
+                </Border>
                 
-                    <CheckBox Content="ADD LABOR FOR MINIMUM CHARGE" Grid.Row="10"
-                              Grid.ColumnSpan="2" Margin="20,5,20,0"
+                
+                    <CheckBox Content="ADD LABOR FOR MINIMUM CHARGE" Grid.Row="9"
+                              Grid.ColumnSpan="2" Margin="20,15,20,0"
                               IsChecked="{Binding AddLaborMinCharge}"
                           FontSize="15"
                           />
-                    <TextBlock Text="Total Hours" Margin="20,5"
+                    <!--<TextBlock Text="Total Hours" Margin="20,5"
                            HorizontalAlignment="Right"
-                               Grid.Row="11"/>
-                <TextBlock Text="Setup Min Charge" Margin="20,5"
+                               Grid.Row="11"/>-->
+                <!--<TextBlock Text="Setup Min Charge" Margin="20,5"
                            HorizontalAlignment="Right"
-                               Grid.Row="12"/>
-                <TextBlock Text="{Binding LaborMinChargeHrs}" Margin="5"
-                           Grid.Column="1"  Grid.Row="11"/>
-                <TextBlock Text="{Binding LaborMinChargeMinSetup}" Margin="5"
-                           Grid.Column="1"  Grid.Row="12"/>
-                <TextBlock Text="Labor Unit price" Margin="20,5"
+                               Grid.Row="12"/>-->
+                <!--<TextBlock Text="{Binding LaborMinChargeHrs}" Margin="5"
+                           Grid.Column="1"  Grid.Row="11"/>-->
+                <!--<TextBlock Text="{Binding LaborMinChargeMinSetup}" Margin="5"
+                           Grid.Column="1"  Grid.Row="12"/>-->
+                <!--<TextBlock Text="Labor Unit price" Margin="20,5"
                            HorizontalAlignment="Right"
                                Grid.Row="13"/>
                 <TextBlock Text="Labor Extension" Margin="20,5"
                            HorizontalAlignment="Right"
                                Grid.Row="14"/>
                 <TextBlock Text="{Binding LaborMinChargeLaborUnitPrice}"  Margin="5" Grid.Column="1"  Grid.Row="13"/>
-                <TextBlock Text="{Binding LaborMinChargeLaborExtension}"   Margin="5" Grid.Column="1"  Grid.Row="14"/>
+                <TextBlock Text="{Binding LaborMinChargeLaborExtension}"   Margin="5" Grid.Column="1"  Grid.Row="14"/>-->
 
             </Grid>
             <!--<GroupBox Grid.Row="3"

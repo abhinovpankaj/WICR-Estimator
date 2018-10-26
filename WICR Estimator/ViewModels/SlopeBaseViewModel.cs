@@ -82,8 +82,11 @@ namespace WICR_Estimator.ViewModels
             TotalMaterialCost = SumTotalMatExt;
             TotalWeight = Math.Round(50 * TotalMixesMan, 2);
             TotalFrightCost = Math.Round(FreightCalculator(TotalWeight), 2);
-            TotalLaborCost = Math.Round(TotalMixesMan *manualAvgMixPrice,2);
-            SumTotalLaborExt= Math.Round(TotalMixesMan * manualAvgMixPrice,2); 
+            SumTotalLaborExt = Math.Round(TotalMixesMan * manualAvgMixPrice, 2);
+            MinimumLaborCost = 6 * laborRate;
+            TotalLaborCost = MinimumLaborCost > SumTotalLaborExt ? MinimumLaborCost : SumTotalLaborExt;
+
+
         }
         public ObservableCollection<Slope> Slopes
         {

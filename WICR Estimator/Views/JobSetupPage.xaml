@@ -50,13 +50,16 @@
                 <TextBlock Style="{StaticResource FieldHeader}"
                        Text="Weather Wear Type"
                            Visibility="{Binding ShowWeatherWearDD}"/>
-                <ComboBox Text="{Binding WeatherWearType}" Visibility="{Binding ShowWeatherWearDD}" >
+                <ComboBox Text="{Binding WeatherWearType}" Width="180"
+                          Visibility="{Binding ShowWeatherWearDD}" HorizontalAlignment="Left"
+                          Margin="5,0,0,0">
                     <ComboBoxItem Content="Weather Wear"/>
                     <ComboBoxItem Content="Weather Wear Rehab"/>
                 </ComboBox>
                 <TextBlock Style="{StaticResource FieldHeader}"
                        Text="Metal Material Type"/>
-                <ComboBox Text="{Binding MaterialName}"
+                <ComboBox Text="{Binding MaterialName}" HorizontalAlignment="Left"
+                          Margin="5,0,0,0"
                           Width="180">
                     <ComboBoxItem Content="16oz Copper"/>
                     <ComboBoxItem Content="24ga. Galvanized Primed Steel"/>
@@ -64,10 +67,18 @@
                 </ComboBox>
                 <TextBlock Style="{StaticResource FieldHeader}"
                        Text="Metal Vendor Name"/>
-                <ComboBox Text="{Binding VendorName,UpdateSourceTrigger=PropertyChanged}">
+                <ComboBox Width="180" HorizontalAlignment="Left"
+                          Margin="5,0,0,0"
+                          Text="{Binding VendorName,UpdateSourceTrigger=PropertyChanged}">
                     <ComboBoxItem Content="Chivon"/>
                     <ComboBoxItem Content="Thunder Bird"/>
                 </ComboBox>
+                <TextBlock Style="{StaticResource FieldHeader}"
+                           Margin="5,30,10,0"
+                       Text="NOTE:DIFFERENT PRODUCT USED"/>
+                <TextBox Margin="5,0,5,0" Height="30"
+                         Text="{Binding SpecialProductName,UpdateSourceTrigger=LostFocus}"
+                         VerticalContentAlignment="Center"/>
                 <StackPanel Orientation="Horizontal" Background="LightGray"
                             Margin="0,30,0,0" Visibility="Hidden"
                             >
@@ -175,7 +186,7 @@
                              Width="40" 
                              HorizontalAlignment="Left"
                              Margin="5"/>
-                    <Slider Value="{Binding StairWidth}" Maximum="100"
+                    <Slider Value="{Binding MarkupPercentage}" Maximum="100"
                             Width="250" x:Name="markup"
                             Minimum="{Binding MinMarkUp}"
                             LargeChange="5"
@@ -186,13 +197,21 @@
                 </StackPanel>
                 <CheckBox Content="Enter less than (-10%)"
                           Margin="10" x:Name="cbpasswordSection"
-                          Foreground="#FF2A6DCD">
+                          Foreground="#FF2A6DCD"
+                          IsChecked="{Binding AllowMoreMarkUp}">
                 </CheckBox>
-                <StackPanel>
-                    <PasswordBox Margin="10" Width="140"></PasswordBox>
-                    <Button HorizontalAlignment="Center" Content="OK"
-                            Command="{Binding EnableMoreMarkup}"/>
-                    <StackPanel.Style>
+                <TextBlock Text="{Binding LoginMessage}"
+                           Margin="10,0,0,0" Foreground="Red"/>
+                <StackPanel Visibility="{Binding HidePasswordSection}">
+                    <TextBlock Margin="10,0,0,0" Text="Enter Password"
+                               Foreground="#FF2A6DCD"/>
+                    <PasswordBox x:Name="passwordbox" Margin="10" Width="140"
+                                 HorizontalAlignment="Left"/>
+                    <Button HorizontalAlignment="Left" Content="OK"
+                            Margin="10,0,0,0"
+                            Command="{Binding EnableMoreMarkupCommand}" 
+                            CommandParameter="{Binding ElementName=passwordbox}"/>
+                    <!--<StackPanel.Style>
                         <Style TargetType="{x:Type StackPanel}">
                             <Setter Property="Visibility" Value="Hidden"/>
                             <Style.Triggers>
@@ -202,7 +221,7 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </StackPanel.Style>
+                    </StackPanel.Style>-->
                 </StackPanel>
             </StackPanel>   
         </Border>

@@ -14,6 +14,8 @@ namespace WICR_Estimator.Models
         public string Name { get; set; }
         public string Size { get; set; }
         public bool IsEditable { get; set; }
+        public string MetalDimensions { get; set; }
+
         private bool isStairMetal;
         public bool IsStairMetal
         {

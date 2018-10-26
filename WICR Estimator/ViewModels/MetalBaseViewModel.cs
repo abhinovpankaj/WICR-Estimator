@@ -26,7 +26,8 @@ namespace WICR_Estimator.ViewModels
         protected string vendorName;
         protected IList<IList<object>> metalDetails;
         protected double laborRate;
-
+        protected double RiserCount;
+        protected double stairWidth;
         public MetalBaseViewModel()
         {
             Metals = new ObservableCollection<Metal>();
@@ -35,7 +36,8 @@ namespace WICR_Estimator.ViewModels
 
             MetalName = "Copper";
             vendorName = "Chivon";
-
+            RiserCount = 30;
+            stairWidth = 4.5;
         }
 
 
@@ -233,10 +235,12 @@ namespace WICR_Estimator.ViewModels
             double unit = 0;
             if (unitNo == 0)
             {
-                double.TryParse(metalDetails[2][0].ToString(), out unit);
+                //double.TryParse(metalDetails[2][0].ToString(), out unit);
+                unit = RiserCount * 2.25 * 2;
             }
             else if (unitNo == 1)
-                double.TryParse(metalDetails[3][0].ToString(), out unit);
+                //double.TryParse(metalDetails[3][0].ToString(), out unit);
+                unit = RiserCount * 4 * 2;
             else if (unitNo == 2)
             {
                 double.TryParse(metalDetails[19][0].ToString(), out unit);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using WICR_Estimator.ViewModels;
 
 namespace WICR_Estimator.Models
@@ -25,20 +26,78 @@ namespace WICR_Estimator.Models
             DeckCount = 1;
             VendorName = "Chivon";
             MaterialName = "Copper";
-            EnableMoreMarkup = new DelegateCommand(CanAddMoreMarkup, canAdd);
+            EnableMoreMarkupCommand = new DelegateCommand(CanAddMoreMarkup, canAdd);
             MinMarkUp = -10;
+            AllowMoreMarkUp = false;
+            HidePasswordSection = System.Windows.Visibility.Hidden;
         }
 
         private bool canAdd(object obj)
         {
             return true;
         }
-
+        public System.Windows.Visibility HidePasswordSection { get; set; }
+        public string LoginMessage { get; set; }
         private void CanAddMoreMarkup(object obj)
         {
-            MinMarkUp = -50;
+            var passwordBox = obj as PasswordBox;
+            var password = passwordBox.Password;
+            if (password == "737373")
+            {
+                MinMarkUp = -50;
+                passwordBox.Password = "";
+                OnPropertyChanged("MinMarkUp");
+                LoginMessage = "You can add MarkUp less than -10%";
+                HidePasswordSection = System.Windows.Visibility.Hidden;
+                OnPropertyChanged("HidePasswordSection");
+            }
+            else
+            {
+                passwordBox.Password = "";
+                LoginMessage = "Incorrect Password.";
+                
+            }
+            OnPropertyChanged("LoginMessage");
         }
 
+        private string specialProductName;
+        public string SpecialProductName
+        {
+            get { return specialProductName; }
+            set
+            {
+                if (value!=specialProductName)
+                {
+                    specialProductName = value;
+                    OnPropertyChanged("SpecialProductName");
+                }
+            }
+        }
+        private bool allowMoreMarkup;
+        public bool AllowMoreMarkUp
+        {
+            get { return allowMoreMarkup; }
+            set
+            {
+                if (value!=allowMoreMarkup)
+                {
+                    allowMoreMarkup = value;
+                    OnPropertyChanged("AllowMoreMarkUp");
+                    if (!value)
+                    {
+                        MinMarkUp = -10;
+                        LoginMessage = "";
+                        OnPropertyChanged("MinMarkUp");
+                        OnPropertyChanged("LoginMessage");
+                        HidePasswordSection = System.Windows.Visibility.Hidden;
+                        
+                    }
+                    else
+                        HidePasswordSection = System.Windows.Visibility.Visible;
+                    OnPropertyChanged("HidePasswordSection");
+                }
+            }
+        }
         public JobSetup(string name)
             :this()
         {
@@ -46,7 +105,20 @@ namespace WICR_Estimator.Models
         }
 
         public double MinMarkUp { get; set; }
-        public DelegateCommand EnableMoreMarkup { get; private set; }
+
+        private DelegateCommand enableMMCommand;
+        public DelegateCommand EnableMoreMarkupCommand
+        {
+            get { return enableMMCommand; }
+            set
+            {
+                if (value!=enableMMCommand)
+                {
+                    enableMMCommand = value;
+                    OnPropertyChanged("EnableMoreMarkupCommand");
+                }
+            }
+        }
 
         
         private bool hasContingencyDisc;
@@ -95,7 +167,7 @@ namespace WICR_Estimator.Models
         {
             get
             {
-                if (ProjectName == "Weather Wear")
+                if (ProjectName == "Dexotex Weather Wear")
                     return System.Windows.Visibility.Visible;
                 else
                     return System.Windows.Visibility.Collapsed;
