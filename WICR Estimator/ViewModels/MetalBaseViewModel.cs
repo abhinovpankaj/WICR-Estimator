@@ -14,6 +14,7 @@ namespace WICR_Estimator.ViewModels
         public Totals MetalTotals;
         private ObservableCollection<Metal> metals;
         private ObservableCollection<MiscMetal> miscMetals;
+        private ObservableCollection<AddOnMetal> addOnMetals;
         private ICommand _addRowCommand;
         
         private ICommand _removeCommand;
@@ -135,6 +136,22 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+
+        public ObservableCollection<AddOnMetal> AddOnMetals
+        {
+            get
+            {
+                return addOnMetals;
+            }
+            set
+            {
+                if (addOnMetals != value)
+                {
+                    addOnMetals = value;
+                    OnPropertyChanged("AddOnMetals");
+                }
+            }
+        }
         public ObservableCollection<MiscMetal> MiscMetals
         {
             get
@@ -222,7 +239,7 @@ namespace WICR_Estimator.ViewModels
         {
             double val = 0;
 
-            if (rowN == 19 || rowN == 20)
+            if (rowN == 37 || rowN == 38)
             {
                 double.TryParse(metalDetails[rowN][2].ToString(), out val);
             }
@@ -240,14 +257,14 @@ namespace WICR_Estimator.ViewModels
             }
             else if (unitNo == 1)
                 //double.TryParse(metalDetails[3][0].ToString(), out unit);
-                unit = RiserCount * 4 * 2;
+                unit = RiserCount * stairWidth * 2;
             else if (unitNo == 2)
             {
-                double.TryParse(metalDetails[19][0].ToString(), out unit);
+                double.TryParse(metalDetails[37][0].ToString(), out unit);
             }
             else if (unitNo == 3)
             {
-                double.TryParse(metalDetails[20][0].ToString(), out unit);
+                double.TryParse(metalDetails[38][0].ToString(), out unit);
             }
             return unit;
         }
@@ -257,13 +274,13 @@ namespace WICR_Estimator.ViewModels
             double val = 0;
             switch (MetalName)
             {
-                case "Copper":
+                case "16oz Copper":
                     colN = 1;
                     break;
-                case "Regular Steel":
+                case "24ga. Galvanized Primed Steel":
                     colN = 2;
                     break;
-                case "Stainless Steel":
+                case "26 ga. Type 304 Stainless Steel":
                     colN = 3;
                     break;
                 default:
@@ -309,6 +326,7 @@ namespace WICR_Estimator.ViewModels
         {
 
             double stairCost = 0;
+            double addOnMetalCost = 0;
             IEnumerable<Metal> stairMetals = Metals.Where(x => x.IsStairMetal == false && x.Name.Contains("STAIR"));
             if (stairMetals != null)
             {
@@ -316,7 +334,14 @@ namespace WICR_Estimator.ViewModels
             }
             ////Calculate Labor Cost
             double misSum = MiscMetals.Select(x => x.LaborExtension).Sum();
-            misSum = (Metals.Select(x => x.LaborExtension).Sum() +
+            //New Changes for Addon Metals
+            IEnumerable<AddOnMetal> selectedAddOnMetals = addOnMetals.Where(x => x.IsMetalChecked);
+            if (selectedAddOnMetals.Count()>0)
+            {
+                addOnMetalCost = selectedAddOnMetals.Select(x => x.LaborExtension).Sum();
+            }
+
+            misSum = (Metals.Select(x => x.LaborExtension).Sum() + addOnMetalCost+
             MiscMetals.Select(x => x.LaborExtension).Sum() - stairCost);
 
             if (isPrevailingWage)
@@ -338,26 +363,17 @@ namespace WICR_Estimator.ViewModels
                 else
                     TotalLaborCost = Math.Round(misSum , 2);
             }
-                
-
-            if (!isDiscount && !isPrevailingWage)
-            {
-                if (Metals.Count > 0 && MiscMetals.Count > 0)
-                {
-                    TotalLaborCost = Math.Round(misSum, 2);
-                }
-            }
-        }
+    }
 
         protected double getUnitPrice(int unit)
         {
             double val = 0;
             if (unit == 0)
             {
-                double.TryParse(metalDetails[19][3].ToString(), out val);
+                double.TryParse(metalDetails[37][3].ToString(), out val);
             }
             else
-                double.TryParse(metalDetails[20][3].ToString(), out val);
+                double.TryParse(metalDetails[38][3].ToString(), out val);
 
             return val;
         }
@@ -365,20 +381,24 @@ namespace WICR_Estimator.ViewModels
         {
             double stairCost = 0;
             double nl = Nails / 100;
+            double addOnMetalCost = 0;
             IEnumerable<Metal> stairMetals = Metals.Where(x => x.IsStairMetal == false && x.Name.Contains("STAIR"));
             if (stairMetals != null)
             {
                 stairCost = stairMetals.Select(x => x.MaterialExtension).Sum();
             }
+            IEnumerable<AddOnMetal> selectedAddOnMetals = addOnMetals.Where(x => x.IsMetalChecked);
+            if (selectedAddOnMetals.Count() > 0)
+            {
+                addOnMetalCost = selectedAddOnMetals.Select(x => x.LaborExtension).Sum();
+            }
             if (Metals.Count > 0 && MiscMetals.Count > 0)
             {
                 double misSum = Metals.Select(x => x.MaterialExtension).Sum() * nl;
-                TotalMaterialCost = Math.Round(((Metals.Select(x => x.MaterialExtension).Sum()) +
+                TotalMaterialCost = Math.Round(((Metals.Select(x => x.MaterialExtension).Sum()) + addOnMetalCost+
                 MiscMetals.Select(x => x.MaterialExtension).Sum() - stairCost) + misSum, 2);
             }
 
         }
-
-
     }
 }

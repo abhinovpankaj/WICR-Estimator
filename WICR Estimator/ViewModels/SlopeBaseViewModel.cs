@@ -36,6 +36,7 @@ namespace WICR_Estimator.ViewModels
         public double deductionOnLargeJob;
         public bool overrideManually;
         public bool hasDiscount;
+        private string slopeMaterialName;
         private double manualAvgMixPrice;
         #endregion
 
@@ -47,7 +48,21 @@ namespace WICR_Estimator.ViewModels
         }
 
         #region public properties
-
+        public string SlopeMaterialName
+        {
+            get
+            {
+                return slopeMaterialName;
+            }
+            set
+            {
+                if (value!=slopeMaterialName)
+                {
+                    slopeMaterialName = value;
+                    OnPropertyChanged("SlopeMaterialName");
+                }
+            }
+        }
         public bool OverrideManually
         {
             get

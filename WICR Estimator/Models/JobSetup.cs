@@ -10,26 +10,28 @@ namespace WICR_Estimator.Models
 {
     public class JobSetup:BaseViewModel
     {
-        private string ProjectName;
+        private string projectname;
+        public string ProjectName
+        {
+            get { return projectname; }
+            set
+            {
+                if (value!=projectname)
+                {
+                    projectname = value;
+                    OnPropertyChanged("ProjectName");
+                    if (OnProjectNameChange != null)
+                    {
+                        OnProjectNameChange(this, EventArgs.Empty);
+                    }
+                }
+            }
+        }
         public static event EventHandler OnJobSetupChange;
+        public event EventHandler OnProjectNameChange;
         public JobSetup()
         { 
-            IsApprovedForSandCement = false;
-            IsPrevalingWage = false;
-            HasDiscount = false;
-            StairWidth = 4.5;
-            TotalSqft = 1000;
-            RiserCount =30;
-            WeatherWearType = "";
-            DeckPerimeter = 300;
-            WeatherWearType = "Weather Wear";
-            DeckCount = 1;
-            VendorName = "Chivon";
-            MaterialName = "Copper";
-            EnableMoreMarkupCommand = new DelegateCommand(CanAddMoreMarkup, canAdd);
-            MinMarkUp = -10;
-            AllowMoreMarkUp = false;
-            HidePasswordSection = System.Windows.Visibility.Hidden;
+            
         }
 
         private bool canAdd(object obj)
@@ -70,6 +72,11 @@ namespace WICR_Estimator.Models
                 {
                     specialProductName = value;
                     OnPropertyChanged("SpecialProductName");
+                    ProjectName = value;
+                    if (ProjectName=="")
+                    {
+                        ProjectName = "Dexotex Weather Wear";
+                    }              
                 }
             }
         }
@@ -102,6 +109,23 @@ namespace WICR_Estimator.Models
             :this()
         {
             ProjectName = name;
+            HidePasswordSection = System.Windows.Visibility.Collapsed;
+            IsApprovedForSandCement = false;
+            IsPrevalingWage = false;
+            HasDiscount = false;
+            StairWidth = 4.5;
+            TotalSqft = 1000;
+            RiserCount = 30;
+            WeatherWearType = "";
+            DeckPerimeter = 300;
+            WeatherWearType = "Weather Wear";
+            DeckCount = 1;
+            VendorName = "Chivon";
+            MaterialName = "Copper";
+            EnableMoreMarkupCommand = new DelegateCommand(CanAddMoreMarkup, canAdd);
+            MinMarkUp = -10;
+            AllowMoreMarkUp = false;
+            //HidePasswordSection = System.Windows.Visibility.Hidden;
         }
 
         public double MinMarkUp { get; set; }
@@ -144,7 +168,13 @@ namespace WICR_Estimator.Models
                 {
                     weatherWearType = value;
                     OnPropertyChanged("WeatherWearType");
-                    OnPropertyChanged("VendorName");
+                    if (value.Contains("Rehab"))
+                    {
+                        ProjectName = ProjectName + " Rehab";
+                    }
+                    else
+                        ProjectName = ProjectName.Replace( " Rehab","");
+
                     if (OnJobSetupChange != null)
                     {
                         OnJobSetupChange(this, EventArgs.Empty);
@@ -167,7 +197,7 @@ namespace WICR_Estimator.Models
         {
             get
             {
-                if (ProjectName == "Dexotex Weather Wear")
+                if (ProjectName == "Dexotex Weather Wear" || ProjectName == "Dexotex Weather Wear Rehab")
                     return System.Windows.Visibility.Visible;
                 else
                     return System.Windows.Visibility.Collapsed;
@@ -373,7 +403,7 @@ namespace WICR_Estimator.Models
             {
                 if (laborRate==0)
                 {
-                    var rate=DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate,"Weather Wear");
+                    var rate=DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate,"Dexotex Weather Wear");
                     double.TryParse(rate[0][0].ToString(),out laborRate);
                 }
                 return laborRate;

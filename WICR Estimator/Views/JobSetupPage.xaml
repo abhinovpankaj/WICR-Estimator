@@ -49,9 +49,9 @@
             <StackPanel HorizontalAlignment="Stretch" Margin="5">
                 <TextBlock Style="{StaticResource FieldHeader}"
                        Text="Weather Wear Type"
-                           Visibility="{Binding ShowWeatherWearDD}"/>
+                           />
                 <ComboBox Text="{Binding WeatherWearType}" Width="180"
-                          Visibility="{Binding ShowWeatherWearDD}" HorizontalAlignment="Left"
+                          HorizontalAlignment="Left"
                           Margin="5,0,0,0">
                     <ComboBoxItem Content="Weather Wear"/>
                     <ComboBoxItem Content="Weather Wear Rehab"/>

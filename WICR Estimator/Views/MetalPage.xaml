@@ -19,7 +19,8 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    <Grid>
+    
+    <Grid >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -28,18 +29,15 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel>
-
-            <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Left"
+        <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Left"
                   Name="MetalGrid" VerticalAlignment="Top"
                   Margin="10" IsTabStop="False"
                   CanUserAddRows="false"
                   ItemsSource="{Binding Metals}">
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
-
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsStairMetal}" Value="False">
+                            <DataTrigger Binding="{Binding ElementName=includeMe,Path=IsChecked}" Value="False">
                                 <Setter Property="Background" Value="Gray"/>
                                 <Setter Property="Foreground" Value="Gray"/>
                             </DataTrigger>
@@ -110,19 +108,15 @@
                 </DataGrid.Columns>
 
             </DataGrid>
-
-        </StackPanel>
-
-        <StackPanel Grid.Column="1">
-            <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Left"
+        <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Left"
                       Name="MiscMetalGrid" VerticalAlignment="Top"
-                      Margin="0,10,10,10"
-                      Grid.Column="1"
+                      Margin="10"
+                      Grid.Row="1"
                       CanUserAddRows="false"
                       
                   ItemsSource="{Binding MiscMetals,UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Columns>
-                    
+
                     <DataGridTemplateColumn Header="Description Of Misc Metal">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -171,7 +165,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                   
+
                     <DataGridTextColumn Header="Labor Extension($)" 
                                         IsReadOnly="True"
                                         Binding="{Binding LaborExtension,Mode=OneWay ,StringFormat={}{0:C}}"/>
@@ -182,104 +176,182 @@
                 </DataGrid.Columns>
 
             </DataGrid>
+        <Grid Grid.Column="1" Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Left"
+                  Name="AddOnMetalGrid" VerticalAlignment="Top"
+                  Margin="10" IsTabStop="False"
+                  Grid.Column="1"
+                  CanUserAddRows="false"
+                  ItemsSource="{Binding AddOnMetals}">
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsMetalChecked}" Value="True">
+                                <!--<Setter Property="Background" Value="Gray"/>-->
+                                <Setter Property="Foreground" Value="Blue"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsMetalChecked,
+                                UpdateSourceTrigger=PropertyChanged}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn FocusManager.IsFocusScope="False"
+                                            Header="Material Name"
+                                            Binding="{Binding Name}"/>
+                    <DataGridTemplateColumn Header="Size">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding MetalDimensions,UpdateSourceTrigger=LostFocus}"
+                                    IsEnabled="True" Style="{StaticResource  editableTextbox}"
+                                         />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
 
-        </StackPanel>
-        <GroupBox Header="Total All Metals"
-                  Grid.Row="1" FontSize="16"
-                  BorderBrush="Black" Margin="5"
-                  HorizontalAlignment="Center" Width="350">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="59.957"/>
-                    <ColumnDefinition Width="177.043"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.ColumnSpan="3">
-                    <TextBlock Text="Metal Type" Margin="5"/>
-                    <TextBlock Text="Labor Total Cost" Margin="5"/>
-                    <TextBlock Text="Material Total Cost"  Margin="5"/>
-                </StackPanel>
-                <StackPanel Grid.Column="2">
-                    <TextBox Text="{Binding MetalName}" Background="LightGray"
-                       Margin="5" IsReadOnly="True"/>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Units">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Units,UpdateSourceTrigger=PropertyChanged}"
+                                     IsEnabled="{Binding Name,Converter={StaticResource textboxConv}}"
+                                         Style="{StaticResource editableTextbox }">
+
+                                </TextBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Metal Price"
+                                        IsReadOnly="True" 
+                                        Binding="{Binding MaterialPrice ,StringFormat={}{0:C}}"/>
+                    <DataGridTemplateColumn 
+                                        Header="Special Material Pricing($)">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding SpecialMetalPricing ,StringFormat={}{0:C},UpdateSourceTrigger=LostFocus}"
+                                    IsEnabled="True" Style="{StaticResource  editableTextbox}"
+                                         >
+
+                                </TextBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+
+                    </DataGridTemplateColumn>
                     <!--07-10-18-->
-                    <TextBox IsReadOnly="True"  Margin="5"
+                    <DataGridTextColumn Header="Labor Extension($)"
+                                        IsReadOnly="True" 
+                                        Binding="{Binding LaborExtension  ,StringFormat={}{0:C}}"/>
+                    <!--07-10-18-->
+                    <DataGridTextColumn Header="Material Extension($)"
+                                    IsReadOnly="True"
+                                    Binding="{Binding MaterialExtension ,StringFormat={}{0:C}}"/>
+                </DataGrid.Columns>
+
+            </DataGrid>
+
+            <GroupBox Header="Total All Metals"
+                  Grid.Row="1" FontSize="14"
+                  BorderBrush="Black" Margin="2"
+                  HorizontalAlignment="Right" Width="350">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Metal Type" Grid.Row="0" Margin="5"/>
+                    <TextBlock Text="Nails, caulk + overage on metal"
+                                   VerticalAlignment="Center" Grid.Row="1"
+                                   Margin="5"/>
+                    <TextBlock Text="Labor Total Cost" Grid.Row="2"
+                                   VerticalAlignment="Center"
+                                   Margin="5"/>
+                    <TextBlock Text="Material Total Cost" Grid.Row="3"
+                                   VerticalAlignment="Center"
+                                   Margin="5"/>
+                    
+                    
+                        <TextBox Text="{Binding MetalName}" Background="LightGray"
+                       Margin="5" IsReadOnly="True" Grid.Column="1"
+                                />
+                        <TextBox Text="{Binding Nails, StringFormat='\{0\}%'}" Background="LightGray"
+                       Margin="5" IsReadOnly="True" Grid.Column="1" Grid.Row="1"/>
+
+                    <TextBox IsReadOnly="True"  Margin="5" Grid.Row="2" Grid.Column="1"
                              Text="{Binding TotalLaborCost,UpdateSourceTrigger=PropertyChanged ,StringFormat={}{0:C}}"/>
-                    <TextBox IsReadOnly="True"  Margin="5"
+                    <TextBox IsReadOnly="True"  Margin="5" Grid.Row="3" Grid.Column="1"
                             Text="{Binding TotalMaterialCost,UpdateSourceTrigger=PropertyChanged  ,StringFormat={}{0:C}}" />
-                    <!--07-10-18-->
-                </StackPanel>
-            </Grid>
-        </GroupBox>
-        <GroupBox Header="Nails, caulk + overage on metal Percentage"
-                  Grid.Row="1" Grid.Column="1" FontSize="16" Height="70"
-                  BorderBrush="Black" Margin="5" BorderThickness="0.5"
-                  HorizontalAlignment="Center" Width="350">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="54.638"/>
-                    <ColumnDefinition Width="5.362"/>
-                    <ColumnDefinition Width="177.043"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="3">
 
-                    <TextBox Text="{Binding Nails, StringFormat='\{0\}%'}" Background="LightGray"
-                       Margin="5" IsEnabled="False" />
-
-                </StackPanel>
-            </Grid>
-        </GroupBox>
-        <StackPanel Grid.Column="2" Grid.Row="1" 
+                </Grid>
+            </GroupBox>
+            <StackPanel Grid.Row="2" 
                     Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom">
-            <Button  Background="White" HorizontalAlignment="Right"
+
+                <Button  Background="White" HorizontalAlignment="Right"
                     Margin="5,0,2,0"
                     Height="30"
+                    ToolTip="Add New Misc Metal"
                     Command="{Binding AddRowCommand}" >
-                <Button.Content>
-                    <StackPanel Orientation="Horizontal">
-                        <!--<TextBlock Text="Add" VerticalAlignment="Center"
-                                   HorizontalAlignment="Left"
-                                   Margin="0,0,5,0"/>-->
-                        <Image Source="../Images/Plus.ico"
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="../Images/Plus.ico"
                                Height="25"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
-            <Button Command="{Binding RemoveCommand}"
-                  
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <Button Command="{Binding RemoveCommand}"
+                        ToolTip="Remove last added Misc Metal"
                     Height="30"
                     Background="White"
                     HorizontalAlignment="Right"
                     Margin="0,0,2,0">
-                <Button.Content>
-                    <StackPanel Orientation="Horizontal">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
 
-                        <Image Source="../Images/Minus.ico"
+                            <Image Source="../Images/Minus.ico"
                                Height="25"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
 
-            <Button Command="{Binding CalculateCostCommand}"
-                    
+                <Button Command="{Binding CalculateCostCommand}"
+                    ToolTip="Calculate Labor and Material Costs"
                     Height="30"
                     Width="100" Background="White"
                     HorizontalAlignment="Right"
                     Margin="30,10,10,10" 
                      IsEnabled="{Binding AddRowCommand}">
-                <Button.Content>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Calculate" VerticalAlignment="Center"
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Calculate" VerticalAlignment="Center"
                                    HorizontalAlignment="Left"
                                    Margin="0,0,5,0" FontSize="12" FontWeight="bold"/>
-                        <Image Source="../Images/Calculator.png"
+                            <Image Source="../Images/Calculator.png"
                                Height="25" Width="36"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
-        </StackPanel>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+        </Grid>
+        
+       
     </Grid>
 </UserControl>

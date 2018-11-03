@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using WICR_Estimator.Models;
@@ -13,11 +14,13 @@ namespace WICR_Estimator.ViewModels
 {
     class HomeViewModel:BaseViewModel,IPageViewModel
     {
-        
+        public static event EventHandler OnLoggedAsAdmin;
         public HomeViewModel()
         {
             FillProjects();
-            Project.OnSelectedProjectChange += Project_OnSelectedProjectChange;            
+            Project.OnSelectedProjectChange += Project_OnSelectedProjectChange;
+            HidePasswordSection = System.Windows.Visibility.Hidden;
+            ShowCalculationDetails = new DelegateCommand(CanShowCalculationDetails, canShow);
         }
 
         private void Project_OnSelectedProjectChange(object sender, EventArgs e)
@@ -27,6 +30,47 @@ namespace WICR_Estimator.ViewModels
         }
         #region Properties\Commands
 
+        public string LoginMessage { get; set; }
+        private bool showLogin;
+        public bool ShowLogin
+        {
+            get { return showLogin; }
+            set
+            {
+                if (value!=showLogin)
+                {
+                    showLogin = value;
+                    OnPropertyChanged("ShowLogin");
+                    if (!value)
+                    {                    
+                        LoginMessage = "";
+                        OnPropertyChanged("LoginMessage");
+                        HidePasswordSection = System.Windows.Visibility.Hidden;
+                        if (OnLoggedAsAdmin != null)
+                        {
+                            OnLoggedAsAdmin(false, EventArgs.Empty);
+                        }
+                    }
+                    else
+                        HidePasswordSection = System.Windows.Visibility.Visible;
+                    OnPropertyChanged("HidePasswordSection");
+                }
+            }
+        }
+        private DelegateCommand showCalculationDetails;
+        public DelegateCommand ShowCalculationDetails
+        {
+            get { return showCalculationDetails; }
+            set
+            {
+                if (value != showCalculationDetails)
+                {
+                    showCalculationDetails = value;
+                    OnPropertyChanged("ShowCalculationDetails");
+                }
+            }
+        }
+        public System.Windows.Visibility HidePasswordSection { get; set; }
         private ObservableCollection<Project> projects;
         public ObservableCollection<Project> Projects
         {
@@ -91,9 +135,41 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
-        
+
         #endregion
         #region Methods
+        private bool canShow(object obj)
+        {
+            return true;
+        }
+        private void CanShowCalculationDetails(object obj)
+        {
+            var passwordBox = obj as PasswordBox;
+            var password = passwordBox.Password;
+            if (password == "737373")
+            {
+                passwordBox.Password = "";
+                LoginMessage = "Calculation Details Would be Visbible Now.";
+
+                HidePasswordSection = System.Windows.Visibility.Hidden;
+                OnPropertyChanged("HidePasswordSection");
+                if (OnLoggedAsAdmin!=null)
+                {
+                    OnLoggedAsAdmin(true, EventArgs.Empty);
+                }
+                
+            }
+            else
+            {
+                passwordBox.Password = "";
+                LoginMessage = "Incorrect Password.";
+                if (OnLoggedAsAdmin != null)
+                {
+                    OnLoggedAsAdmin(false, EventArgs.Empty);
+                }
+            }
+            OnPropertyChanged("LoginMessage");
+        }
         void FillProjects()
         {
             Projects = new ObservableCollection<Project>();

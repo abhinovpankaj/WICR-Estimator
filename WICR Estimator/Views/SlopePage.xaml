@@ -45,11 +45,11 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <!--07-10-18-->
-            <RowDefinition Height="250"/>
+            <RowDefinition Height="Auto"/>
             <!--07-10-18-->
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
 
         </Grid.RowDefinitions>
 
@@ -131,6 +131,7 @@
         </DataGrid>
         <GroupBox x:Name="grp1" 
                   Grid.Row="1" 
+                  Margin="10"
                   Header="Total ($)"
                   BorderBrush="Black" 
                   BorderThickness="1" >
@@ -201,7 +202,16 @@
                       FontWeight="Bold"
                       IsChecked="{Binding OverrideManually}"/>
         </StackPanel>
-
+        <StackPanel Grid.Column="1" Background="LightGray"
+                    Margin="10,5,10,5"
+                    Grid.Row="2" Orientation="Horizontal">
+            <TextBlock Text="Slope Material" FontSize="15"
+                       VerticalAlignment="Center"
+                       Margin="10"/>
+            <TextBlock Text="{ Binding SlopeMaterialName}" FontSize="14"
+                       VerticalAlignment="Center"
+                       Margin="10" Width="220"/>
+        </StackPanel>
         <GroupBox x:Name="groupBox2"
                   IsEnabled="{Binding ElementName=OverrideCheckbox,
             Path=IsChecked}"
@@ -255,7 +265,6 @@
         <GroupBox x:Name="groupBoxMisc" 
                   Margin="10"
                   Grid.Column="1"
-                  Grid.RowSpan="2"
                   Header="Total Section"
                   Foreground="Blue"
                   FontFamily="Arial"
@@ -272,8 +281,8 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <!--<RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>-->
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Label Content="Total Weight"
@@ -318,21 +327,21 @@ Text="{Binding TotalMaterialCost,UpdateSourceTrigger=PropertyChanged ,StringForm
                         <!--////{}{0:C}-->
                     </StackPanel>
                 </Border>
-                <Label Content="Labor Cost ($) " Grid.Row="3"
+                <!--<Label Content="Labor Cost ($) " Grid.Row="3"
                        Margin="5,15,5,5"
                        Style="{StaticResource LabelStyle1}"
                        />
                 <Label Content="Minimum Labor Cost ($)"
                        Grid.Row="4"
                        Style="{StaticResource LabelStyle1}"
-                       />
+                       />-->
                 <Label Content="Total Labor Cost ($)"
                        Grid.Row="5"
                        Margin="0,20,0,0"
                        Style="{StaticResource LabelStyle1}" 
                        />
                 <!--07-10-18-->
-                <TextBox x:Name="LaborCost"
+                <!--<TextBox x:Name="LaborCost"
                          IsEnabled="False"
                          Grid.Row="3"
                          VerticalContentAlignment="Center"
@@ -340,14 +349,14 @@ Text="{Binding TotalMaterialCost,UpdateSourceTrigger=PropertyChanged ,StringForm
                          Grid.Column="1"
                          Height="25" Width="150"
                          Text="{Binding LaborCost,UpdateSourceTrigger=PropertyChanged ,StringFormat={} {0:C}}"/>
-                <!--07-10-18-->
+                --><!--07-10-18--><!--
                 <TextBox x:Name="MinimumLaborCost"
                          IsEnabled="False" Grid.Row="4" 
                          Grid.Column="1"
                          VerticalContentAlignment="Center"
                          Margin="5,0,5,5"
                          Text="{Binding MinimumLaborCost,UpdateSourceTrigger=PropertyChanged  ,StringFormat={}{0:C}}" Height="25" Width="150" />
-                <!--07-10-18-->
+                --><!--07-10-18-->
                 <TextBox x:Name="TotalLaborCost"
                          IsEnabled="False"
                          Grid.Row="5"
@@ -358,11 +367,13 @@ Text="{Binding TotalMaterialCost,UpdateSourceTrigger=PropertyChanged ,StringForm
 
             </Grid>
         </GroupBox>
-        <Button Command="{Binding CalculateCostCommand}" Grid.Row="4" Grid.Column="1"
-                    
-                    Height="30"
-                    Background="White"
-                    HorizontalAlignment="Right"
+        <Button Command="{Binding CalculateCostCommand}" 
+                Grid.Row="4" Grid.Column="1"
+                VerticalAlignment="Bottom"   
+                Height="30"
+                Margin="0,5,25,5"
+                Background="White"
+                HorizontalAlignment="Right"
                    
                      IsEnabled="{Binding AddRowCommand}">
             <Button.Content>

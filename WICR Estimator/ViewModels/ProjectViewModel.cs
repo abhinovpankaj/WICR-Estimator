@@ -11,34 +11,31 @@ namespace WICR_Estimator.ViewModels
     class ProjectViewModel : BaseViewModel, IPageViewModel
     {
         //private static bool IsgoogleApiCalled;
-        public static System.Windows.Visibility IsAdminloggedIn { get; set; }
+        public System.Windows.Visibility IsAdminloggedIn { get; set; }
         //private bool loginWindowShown;
         private ObservableCollection<Project> enabledProjects;
         public ProjectViewModel(ObservableCollection<Project> enabledProjects)
             :this()
         {
             EnabledProjects = enabledProjects;
+            
         }
 
+        private void HomeViewModel_OnLoggedAsAdmin(object sender, EventArgs e)
+        {
+            IsAdminloggedIn = (bool)sender?System.Windows.Visibility.Visible: System.Windows.Visibility.Hidden;
+            OnPropertyChanged("IsAdminloggedIn");
+        }
 
         public ProjectViewModel()
         {
-            //if (!loginWindowShown)
-            //{
-            //    LoginWindow login = new LoginWindow();
-            //    LoginWindow.onOKClick += LoginWindow_onOKClick;
-            //    login.ShowDialog();
-            //    loginWindowShown = true;
-            //}
-            
+            HomeViewModel.OnLoggedAsAdmin += HomeViewModel_OnLoggedAsAdmin;
+            //IsAdminloggedIn = System.Windows.Visibility.Collapsed;
+            OnPropertyChanged("IsAdminloggedIn");
             initializeApp();
         }
 
-        private void LoginWindow_onOKClick(object sender, EventArgs e)
-        {
-            IsAdminloggedIn = (System.Windows.Visibility)sender;
-            OnPropertyChanged("IsAdminloggedIn");
-        }
+        
         #region Properties
 
         public ObservableCollection<Project> EnabledProjects
@@ -100,7 +97,9 @@ namespace WICR_Estimator.ViewModels
                     #endregion
                     if (prj.ProjectJobSetUp == null)
                     {
-                        prj.ProjectJobSetUp = new JobSetup(prj.Name);                                             
+                        prj.ProjectJobSetUp = new JobSetup(prj.Name);
+                        prj.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
+                                                                   
                     }
                     if (prj.MetalViewModel == null)
                     {
@@ -114,15 +113,30 @@ namespace WICR_Estimator.ViewModels
                     {
                         prj.MaterialViewModel = new MaterialViewModel(prj.MetalViewModel.MetalTotals, prj.SlopeViewModel.SlopeTotals);
                     }
-                    
                 }
-            }
-            
+            }          
 
         }
-        
-        #endregion
 
+        private void ProjectJobSetUp_OnProjectNameChange(object sender, EventArgs e)
+        {
+            foreach (Project item in EnabledProjects)
+            {
+                item.Name = item.ProjectJobSetUp.ProjectName;
+            }
+            //JobSetup js = sender as JobSetup;
+            //if (js != null)
+            //{
+
+            //}
+        }
+
+        private void ProjectJobSetUp_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            
+        }
+
+        #endregion
 
         public string Name
         {

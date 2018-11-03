@@ -668,9 +668,15 @@ namespace WICR_Estimator.ViewModels
             }
             //update Add labor for minimum cost
             LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false && x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
+
             LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate);
             LaborMinChargeLaborUnitPrice = LaborMinChargeLaborExtension / (riserCount + totalSqft);
-
+            if (LaborMinChargeMinSetup + LaborMinChargeHrs<20)
+            {
+                AddLaborMinCharge = true;
+            }
+            else
+                AddLaborMinCharge = false;
             OnPropertyChanged("LaborMinChargeHrs");
             OnPropertyChanged("LaborMinChargeLaborExtension");
             OnPropertyChanged("LaborMinChargeLaborUnitPrice");
@@ -2572,6 +2578,45 @@ namespace WICR_Estimator.ViewModels
                 HideCalFactor = System.Windows.Visibility.Hidden
             });
 
+            double.TryParse(laborDetails[17][0].ToString(), out facValue);
+            double pm4 = facValue * MetalTotals.LaborExtTotal;
+            double ps4 = facValue * SlopeTotals.LaborExtTotal;
+            double psy4 = facValue * TotalLaborExtension;
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "Profit Margin on Labor",
+                CalFactor = facValue,
+                MetalCost =pm4 ,
+                SlopeCost = ps4,
+                SystemCost =psy4 
+            });
+
+            double.TryParse(laborDetails[18][0].ToString(), out facValue);
+            double pm5 = facValue * MetalTotals.LaborExtTotal;
+            double ps5 = facValue * SlopeTotals.LaborExtTotal;
+            double psy5 = facValue * TotalLaborExtension;
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "Profit Margin on Material",
+                CalFactor = facValue,
+                MetalCost = pm5,
+                SlopeCost = ps5,
+                SystemCost = psy5
+            });
+
+            double.TryParse(laborDetails[19][0].ToString(), out facValue);
+            double pm6 = facValue * MetalTotals.LaborExtTotal;
+            double ps6 = facValue * SlopeTotals.LaborExtTotal;
+            double psy6 = facValue * TotalLaborExtension;
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "Profit Margin on Freight",
+                CalFactor = facValue,
+                MetalCost = pm6,
+                SlopeCost = ps6,
+                SystemCost = psy6
+            });
+
             double.TryParse(laborDetails[7][0].ToString(), out facValue);
             SubContractMarkup = facValue;
             double psy1 = SubContractMarkup * (TotalSubContractLaborCostBrkp);
@@ -2584,6 +2629,7 @@ namespace WICR_Estimator.ViewModels
                 SystemCost = psy1
             });
 
+            
             double.TryParse(laborDetails[8][0].ToString(), out facValue);
             double pm2, ps2, psy2;
             pm2 = totalJobCostM * facValue * (1 + facValue);
@@ -2613,11 +2659,11 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(laborDetails[10][0].ToString(), out pm);
 
             double totalCostM = (totalJobCostM - MetalTotals.SubContractLabor) / pm + (MetalTotals.SubContractLabor +
-                pm2 + pm3);
+                pm2 + pm3+pm4+pm5+pm6);
             double totalCostS = (totalJobCostS - SlopeTotals.SubContractLabor) / pm + (SlopeTotals.SubContractLabor +
-                ps2);
+                ps2+ps4+ps5+ps6);
             double totalCostSy = (totalJobCostSy - TotalSubContractLaborCostBrkp) / pm + (TotalSubContractLaborCostBrkp +
-                psy2+psy1);
+                psy2+psy1+psy4+psy5+psy6);
 
             LCostBreakUp.Add(new CostBreakup
             {
@@ -2629,6 +2675,7 @@ namespace WICR_Estimator.ViewModels
                 HideCalFactor = System.Windows.Visibility.Hidden
             });
 
+            
             double.TryParse(laborDetails[11][0].ToString(), out facValue);
             
             LCostBreakUp.Add(new CostBreakup

@@ -74,7 +74,9 @@
                                 </TabItem.Content>
                             </TabItem>
                             <TabItem Header="Calculation Details"
-                                 VerticalAlignment="Bottom" Visibility="{Binding IsAdminloggedIn}">
+                                     VerticalAlignment="Bottom" 
+                                     Visibility="{Binding DataContext.IsAdminloggedIn,
+                                     RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}">
                                 <TabItem.Content>
                                     <Grid Margin="0,0,0,0" 
                                       Background="LightBlue" 

@@ -106,6 +106,7 @@
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="Models\AddOnMetal.cs" />
     <Compile Include="Models\CostBreakup.cs" />
     <Compile Include="Models\Labor.cs" />
     <Compile Include="Models\SystemMaterial.cs" />

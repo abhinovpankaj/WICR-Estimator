@@ -140,7 +140,7 @@
         <Grid Grid.Column="1" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
         
@@ -161,26 +161,12 @@
                            Background="FloralWhite"/>
 
                     <TextBox x:Name="TotalOCExtension"
-                         IsEnabled="False"                        
-                         Margin="5"                       
-                         Height="25"  Width="100"  Style="{StaticResource TextBoxStyle}"                
-                         Text="{Binding TotalOCLaborExtension, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
-                    <Button Command="{Binding CalculateCostCommand}"                   
-                    Height="35" Margin="40,5,0,5"
-                    Background="White"
-                    HorizontalAlignment="right"
-                     Grid.Row="3" Grid.Column="3">
-
-                        <Button.Content>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Calculate" VerticalAlignment="Center"
-                                   HorizontalAlignment="Left"
-                                   Margin="0,0,5,0" FontSize="12" FontWeight="bold"/>
-                                <Image Source="../Images/Calculator.png"
-                               Height="25" Width="36"/>
-                            </StackPanel>
-                        </Button.Content>
-                    </Button>
+                             IsEnabled="False"
+                             VerticalContentAlignment="Center"
+                             Margin="5"                       
+                             Height="25"  Width="100"  Style="{StaticResource TextBoxStyle}"                
+                             Text="{Binding TotalOCLaborExtension, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
+                    
                 </StackPanel>
                 <DataGrid AutoGenerateColumns="False"
                           HorizontalAlignment="Left"
@@ -260,7 +246,7 @@
                 <Border Grid.Column="1" BorderBrush="Black"
                         BorderThickness="0,0,0,1">
                     <TextBlock IsEnabled="False"                        
-                         Margin="5"                    
+                         Margin="5"                
                          Width="100"
                          FontSize="14"               
                          Text="{Binding TotalHrsLabor,  StringFormat={}{0:n2},
@@ -309,15 +295,9 @@
                          FontSize="14"                
                          Text="{Binding TotalHrsDriveLabor, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
                 </Border>
-                <!--<Border Grid.Column="1"  Grid.Row="7" BorderBrush="Black"
-                        BorderThickness="0,0,0,1">
-                    <TextBlock IsEnabled="False"                        
-                         Margin="5"                    
-                         Width="100"
-                           FontSize="14"            
-                         Text="{Binding TotalSetupTimeLabor, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
-                </Border>-->
-                <Border Grid.Column="1"  Grid.Row="7" BorderBrush="Black"
+                
+                <Border Grid.Column="1"  Grid.Row="7" 
+                        BorderBrush="Black"
                         BorderThickness="0,0,0,1">
                     <TextBlock IsEnabled="False"                        
                          Margin="5"                       
@@ -328,19 +308,20 @@
                 <Border Grid.Column="1"  Grid.Row="8" BorderBrush="Black"
                         BorderThickness="0,0,0,1">
                     <TextBlock IsEnabled="False"                        
-                         Margin="5"                      
-                         Width="100"
-                           FontSize="14"             
-                         Text="{Binding TotalLaborExtension, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
+                               Margin="5"                      
+                               Width="100"
+                               FontSize="14"             
+                               Text="{Binding TotalLaborExtension, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
                 </Border>
                 
                 
                     <CheckBox Content="ADD LABOR FOR MINIMUM CHARGE" Grid.Row="9"
-                              Grid.ColumnSpan="2" Margin="20,15,20,0"
+                              Grid.ColumnSpan="2" Margin="20,35,20,0"
                               IsChecked="{Binding AddLaborMinCharge}"
                           FontSize="15"
                           />
-                    <!--<TextBlock Text="Total Hours" Margin="20,5"
+                
+                <!--<TextBlock Text="Total Hours" Margin="20,5"
                            HorizontalAlignment="Right"
                                Grid.Row="11"/>-->
                 <!--<TextBlock Text="Setup Min Charge" Margin="20,5"
@@ -360,6 +341,25 @@
                 <TextBlock Text="{Binding LaborMinChargeLaborExtension}"   Margin="5" Grid.Column="1"  Grid.Row="14"/>-->
 
             </Grid>
+            <Button Command="{Binding CalculateCostCommand}"                   
+                    Height="35"
+                    Margin="40,100,22,5"
+                    Background="White"
+                    Grid.Row="2"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="right"
+                    >
+
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Calculate" VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"
+                                   Margin="0,0,5,0" FontSize="12" FontWeight="bold"/>
+                        <Image Source="../Images/Calculator.png"
+                               Height="25" Width="36"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
             <!--<GroupBox Grid.Row="3"
                        Margin="0,20,0,0"
                       Header="Sales Price from Other Tabs" FontSize="15"
@@ -426,16 +426,36 @@
         </Grid>
         <Grid Grid.Row="1" Margin="10,2,2,2"
              Background="AliceBlue" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
                 
             </Grid.ColumnDefinitions>
-            <ListBox VerticalAlignment="Center" Background="AliceBlue">
+            <Border Grid.ColumnSpan="2" Background="Black">
+                <TextBlock Text="TOTAL COST FOR CUSTOMER"
+                           HorizontalAlignment="Center"
+                           Foreground="White"
+                           FontSize="14" FontWeight="Bold"/>
+            </Border>
+            <Border Grid.Column="2" Grid.ColumnSpan="4" Background="Black"
+                    BorderBrush="Blue" BorderThickness="2,0,0,0">
+                <TextBlock Text="TOTAL WICR JOB COST" 
+                           Foreground="White"
+                           HorizontalAlignment="Center"
+                           FontSize="14" FontWeight="Bold"
+                           />
+            </Border>
+            
+            <ListBox Background="AliceBlue"
+                     Grid.Row="1">
                 
                 <ListBoxItem HorizontalAlignment="Center"
                              FontWeight="Bold">
@@ -491,9 +511,57 @@
                     </Border>
                 </ListBoxItem>
             </ListBox>
-            <ListBox VerticalAlignment="Center"  Background="AliceBlue"
+            <ListBox Grid.Row="1"
+                     Background="AliceBlue"
                      Grid.Column="1">
-                <ListBoxItem >
+                <ListBoxItem HorizontalAlignment="Center">
+                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,1">
+                        <TextBlock Text="Total Sales"
+                           HorizontalAlignment="Stretch"
+                               Width="100" FontWeight="Bold"/>
+                    </Border>
+
+                </ListBoxItem>
+                <ListBoxItem HorizontalAlignment="Center">
+                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,1">
+                        <TextBlock Width="100"
+                            Text="{Binding TotalSlopingPrice,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
+                    </Border>
+                </ListBoxItem>
+                <ListBoxItem HorizontalAlignment="Center">
+                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,1">
+                        <TextBlock Width="100" Text="{Binding TotalMetalPrice,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
+                    </Border>
+                </ListBoxItem>
+                <ListBoxItem HorizontalAlignment="Center">
+                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,1">
+                        <TextBlock Width="100" Text="{Binding TotalSystemPrice,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
+                    </Border>
+                </ListBoxItem>
+                <ListBoxItem HorizontalAlignment="Center">
+                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,2">
+                        <TextBlock Width="100"
+                            Text="{Binding TotalSubcontractLabor,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
+                    </Border>
+                </ListBoxItem>
+                <ListBoxItem HorizontalAlignment="Center"  Margin="0,5,0,0">
+                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,0">
+                        <TextBlock HorizontalAlignment="Stretch" Width="100"
+                                   FontWeight="Bold"
+                        Text="{Binding TotalSale,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
+                    </Border>
+                </ListBoxItem>
+            </ListBox>
+
+            <ListBox Grid.Row="1"  Background="AliceBlue"
+                     Grid.Column="2">
+                <ListBoxItem HorizontalAlignment="Center">
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
                         <TextBlock Text="Labor" HorizontalAlignment="Stretch"
@@ -543,8 +611,8 @@
                     </Border>
                 </ListBoxItem>
             </ListBox>
-            <ListBox VerticalAlignment="Center"  Background="AliceBlue"
-                     Grid.Column="2">
+            <ListBox Grid.Row="1"  Background="AliceBlue"
+                     Grid.Column="3">
                 <ListBoxItem HorizontalAlignment="Center">
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
@@ -588,8 +656,8 @@
                     </Border>
                 </ListBoxItem>
             </ListBox>
-            <ListBox VerticalAlignment="Center"  Background="AliceBlue"
-                     Grid.Column="3">
+            <ListBox Grid.Row="1"  Background="AliceBlue"
+                     Grid.Column="4">
                 <ListBoxItem HorizontalAlignment="Center">
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
@@ -637,8 +705,8 @@
                     </Border>
                 </ListBoxItem>
             </ListBox>
-            <ListBox VerticalAlignment="Center"  Background="AliceBlue"
-                     Grid.Column="4">
+            <ListBox Grid.Row="1"  Background="AliceBlue"
+                     Grid.Column="5">
                 <ListBoxItem HorizontalAlignment="Center">
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
@@ -682,52 +750,6 @@
                         <TextBlock HorizontalAlignment="Stretch" Width="100"
                                    FontWeight="Bold"
                         Text="{Binding AllTabsSubContractTotal,StringFormat='c'}"/>
-                    </Border>
-                </ListBoxItem>
-            </ListBox>
-            <ListBox VerticalAlignment="Center"  Background="AliceBlue"
-                     Grid.Column="5">
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
-                            BorderThickness="0,0,0,1">
-                        <TextBlock Text="Total Sales"
-                           HorizontalAlignment="Stretch"
-                               Width="100" FontWeight="Bold"/>
-                    </Border>
-
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
-                            BorderThickness="0,0,0,1">
-                        <TextBlock Width="100"
-                            Text="{Binding TotalSlopingPrice,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
-                            BorderThickness="0,0,0,1">
-                        <TextBlock Width="100" Text="{Binding TotalMetalPrice,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
-                            BorderThickness="0,0,0,1">
-                        <TextBlock Width="100" Text="{Binding TotalSystemPrice,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
-                            BorderThickness="0,0,0,2">
-                        <TextBlock Width="100"
-                            Text="{Binding TotalSubcontractLabor,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center"  Margin="0,5,0,0">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
-                            BorderThickness="0,0,0,0">
-                        <TextBlock HorizontalAlignment="Stretch" Width="100"
-                                   FontWeight="Bold"
-                        Text="{Binding TotalSale,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
                     </Border>
                 </ListBoxItem>
             </ListBox>

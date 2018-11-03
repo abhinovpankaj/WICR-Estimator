@@ -167,6 +167,23 @@
                     x:Name="refreshGData"
                     Click="refreshGData_Click"
                     Style="{StaticResource ButtonTemplate}"/>
+            <CheckBox Content="Login As Admin"
+                          Margin="10" x:Name="cbpasswordSection"
+                          Foreground="#FF2A6DCD"
+                          IsChecked="{Binding ShowLogin}">
+            </CheckBox>
+            <TextBlock Text="{Binding LoginMessage}"
+                           Margin="10,0,0,0" Foreground="Red"/>
+            <StackPanel Visibility="{Binding HidePasswordSection}">
+                <TextBlock Margin="10,0,0,0" Text="Enter Password"
+                               Foreground="#FF2A6DCD"/>
+                <PasswordBox x:Name="passwordbox" Margin="10" Width="140"
+                                 HorizontalAlignment="Left"/>
+                <Button HorizontalAlignment="Left" Content="OK"
+                            Margin="10,0,0,0"
+                            Command="{Binding ShowCalculationDetails}" 
+                            CommandParameter="{Binding ElementName=passwordbox}"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -14,7 +14,7 @@ namespace WICR_Estimator.ViewModels
 
         public SlopeViewModel()
         {
-            GetSlopeDetailsFromGoogle("Weather Wear");
+            GetSlopeDetailsFromGoogle("Dexotex Weather Wear");
             Slopes = CreateSlopes();
             CalculateAll();        
             JobSetup.OnJobSetupChange += JobSetup_OnJobSetupChange;           
@@ -26,6 +26,7 @@ namespace WICR_Estimator.ViewModels
             if (js != null)
             {
                 isApprovedForCement = js.IsApprovedForSandCement;
+                SlopeMaterialName = isApprovedForCement ? "Sand and Cement" : "Dexotex A-81 Underlayment1";
                 isPrevailingWage = js.IsPrevalingWage;
                 laborRate = js.LaborRate;
                 hasDiscount = js.HasDiscount;

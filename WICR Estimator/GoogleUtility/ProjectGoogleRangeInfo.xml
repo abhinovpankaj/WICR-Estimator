@@ -2,10 +2,10 @@
 <Projects>
   <WeatherWear>
     <RateRange>E2</RateRange>
-    <MetalRange>F3:M24</MetalRange>
-    <LaborRange>E61:E80</LaborRange>
-    <SlopeRange>P25:Q31</SlopeRange>
-    <MaterialRange>H34:N60</MaterialRange>
+    <MetalRange>F3:M42</MetalRange>
+    <LaborRange>E246:E265</LaborRange>
+    <SlopeRange>P85:Q93</SlopeRange>
+    <MaterialRange>H94:N120</MaterialRange>
   </WeatherWear>
   <DexotexResistite>
     <RateRange>E2</RateRange>

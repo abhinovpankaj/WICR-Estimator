@@ -277,10 +277,11 @@
                 </StackPanel>
                 <StackPanel >
                     <TextBox x:Name="TotalOCExtension"
-                         IsEnabled="False"                        
-                         Margin="5"                       
-                         Height="25"  Width="100"  Style="{StaticResource TextBoxStyle}"                
-                         Text="{Binding TotalOCExtension, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
+                             IsEnabled="False"                        
+                             Margin="5"    
+                             VerticalContentAlignment="Center"
+                             Height="25"  Width="100"  Style="{StaticResource TextBoxStyle}"                
+                             Text="{Binding TotalOCExtension, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
                 </StackPanel>
                 <!--<Button Command="{Binding CalculateCostCommand}"
                     Content="Calculate"
@@ -331,7 +332,8 @@
                        Style="{StaticResource LabelStyle1}"  FontSize="12" Background="FloralWhite"
                        />
                     <TextBox x:Name="TotalSCExtension"
-                         IsEnabled="False"                        
+                         IsEnabled="False" 
+                             VerticalContentAlignment="Center"
                          Margin="0,5,5,5"                       
                          Height="25"  Width="80"  Style="{StaticResource TextBoxStyle}"                
                          Text="{Binding TotalSCExtension, 
@@ -342,10 +344,11 @@
                            FontSize="12" 
                            Background="FloralWhite"
                        />
-                    <TextBox Margin="0,5,5,5"                       
-                         Height="25"  Width="50"  Style="{StaticResource editableTextbox}"                
-                         Text="{Binding SubContractMarkup, 
-                        UpdateSourceTrigger=LostFocus,StringFormat='c'}"/>
+                    <TextBox Margin="0,5,5,5" 
+                             VerticalContentAlignment="Center"
+                             Height="25"  Width="50"  Style="{StaticResource editableTextbox}"                
+                             Text="{Binding SubContractMarkup, 
+                            UpdateSourceTrigger=LostFocus,StringFormat='c'}"/>
                 </StackPanel>
             </StackPanel>
             
@@ -399,6 +402,7 @@
                        />
                 <TextBox x:Name="TotalMaterialCostbrkp"
                          IsEnabled="False"
+                         VerticalContentAlignment="Center"
                          Grid.Row="0"
                          Margin="5,16,5,6"
                          Grid.Column="2"
@@ -409,6 +413,7 @@
                          IsEnabled="False" Grid.Row="1" 
                          Grid.Column="2"
                          Margin="5,1,5,6"
+                         VerticalContentAlignment="Center"
                          Text="{Binding TotalWeightbrkp,
                     UpdateSourceTrigger=PropertyChanged}" Height="25" Width="150" />
                 <TextBox x:Name="TotalFreightCostBrkp"
@@ -416,12 +421,14 @@
                          Grid.Row="2"
                          Margin="5,0,5,5"
                          Grid.Column="2"
+                         VerticalContentAlignment="Center"
                          Text="{Binding TotalFreightCostBrkp,
                     UpdateSourceTrigger=PropertyChanged,StringFormat='c'}" Height="25" Width="150" />
                 <TextBox x:Name="TotalSubContractLaborCostBrkp"
                          IsEnabled="False"
                          Grid.Row="3"
                          Margin="5,0,5,5"
+                         VerticalContentAlignment="Center"
                          Grid.Column="2"
                          Text="{Binding TotalSubContractLaborCostBrkp,StringFormat='c',
                     UpdateSourceTrigger=PropertyChanged}" Height="25" Width="150" />
@@ -429,6 +436,7 @@
                          IsEnabled="False"
                          Grid.Row="4"
                          Margin="5,0,5,5"
+                         VerticalContentAlignment="Center"
                          Grid.Column="2"
                          Text="{Binding CostPerSquareFeet,StringFormat='c',
                     UpdateSourceTrigger=PropertyChanged}" Height="25" Width="150" />
@@ -439,10 +447,10 @@
         
 
             <Button Command="{Binding CalculateCostCommand}"                   
-                    Height="35" Margin="0,5,5,5"
+                    Height="35" Margin="0,5,22,5"
                     Background="White"
                     HorizontalAlignment="Right"
-                     Grid.Row="4" Grid.Column="1">
+                    Grid.Row="4" Grid.Column="1">
 
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
