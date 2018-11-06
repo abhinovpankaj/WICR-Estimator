@@ -11,7 +11,7 @@ namespace WICR_Estimator.ViewModels
     class ProjectViewModel : BaseViewModel, IPageViewModel
     {
         //private static bool IsgoogleApiCalled;
-        public System.Windows.Visibility IsAdminloggedIn { get; set; }
+        
         //private bool loginWindowShown;
         private ObservableCollection<Project> enabledProjects;
         public ProjectViewModel(ObservableCollection<Project> enabledProjects)
@@ -20,24 +20,52 @@ namespace WICR_Estimator.ViewModels
             EnabledProjects = enabledProjects;
             
         }
+        //private System.Windows.Visibility isAdminloggedIn=System.Windows.Visibility.Hidden;
 
+        //public System.Windows.Visibility IsAdminloggedIn
+        //{
+        //    get { return isAdminloggedIn; }
+
+        //    set
+        //    {
+        //        if (value != isAdminloggedIn)
+        //        {
+        //            isAdminloggedIn = value;
+        //            OnPropertyChanged(nameof(IsAdminloggedIn));
+        //        }
+        //    }
+        //}
+
+        private static bool isAdminloggedIn ;
+
+        public  static bool IsAdminloggedIn
+        {
+            get { return isAdminloggedIn; }
+
+            set
+            {
+                if (value != isAdminloggedIn)
+                {
+                    isAdminloggedIn = value;
+                    //OnPropertyChanged("IsAdminloggedIn");
+                }
+            }
+        }
         private void HomeViewModel_OnLoggedAsAdmin(object sender, EventArgs e)
         {
-            IsAdminloggedIn = (bool)sender?System.Windows.Visibility.Visible: System.Windows.Visibility.Hidden;
-            OnPropertyChanged("IsAdminloggedIn");
+            //IsAdminloggedIn = (bool)sender ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden; 
+            IsAdminloggedIn = (bool)sender;
         }
 
         public ProjectViewModel()
         {
-            HomeViewModel.OnLoggedAsAdmin += HomeViewModel_OnLoggedAsAdmin;
-            //IsAdminloggedIn = System.Windows.Visibility.Collapsed;
-            OnPropertyChanged("IsAdminloggedIn");
             initializeApp();
+            HomeViewModel.OnLoggedAsAdmin += HomeViewModel_OnLoggedAsAdmin;
         }
 
-        
-        #region Properties
 
+        #region Properties
+       
         public ObservableCollection<Project> EnabledProjects
         {
             get
@@ -93,8 +121,9 @@ namespace WICR_Estimator.ViewModels
                             DataSerializer.DSInstance.serializeGoogleData(DataSerializer.DSInstance.googleData, prj.Name);
                 
                         }
-                    
+
                     #endregion
+                    
                     if (prj.ProjectJobSetUp == null)
                     {
                         prj.ProjectJobSetUp = new JobSetup(prj.Name);

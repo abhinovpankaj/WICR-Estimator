@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:WICR_Estimator.Views"
       xmlns:conv="clr-namespace:WICR_Estimator.Converters"
       mc:Ignorable="d" 
+      x:Name="selectedprojectControl"
       d:DesignHeight="600" d:DesignWidth="700"
       >
     <UserControl.Resources>
@@ -23,8 +24,7 @@
             <TabControl.ContentTemplate>
                 <DataTemplate>
                     <DockPanel>
-                        <TabControl TabStripPlacement="Left"
-                                     >
+                        <TabControl TabStripPlacement="Left">
                             <TabItem Header="Job Setup" Background="LightBlue">
                                 <TabItem.Content>
                                     <Grid Margin="0,0,0,0" Background="LightBlue"
@@ -73,12 +73,15 @@
                                     </Grid>
                                 </TabItem.Content>
                             </TabItem>
-                            <TabItem Header="Calculation Details"
-                                     VerticalAlignment="Bottom" 
-                                     Visibility="{Binding DataContext.IsAdminloggedIn,
-                                     RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}">
-                                <TabItem.Content>
+                            <TabItem Header="Calculation Details"                        
+                                     VerticalAlignment="Bottom"
+                                     IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor,
+                                     AncestorLevel = 1,
+                                     AncestorType={x:Type UserControl}}, Path=DataContext.IsAdminloggedIn}">
+                                
+                                <TabItem.Content >
                                     <Grid Margin="0,0,0,0" 
+                                          
                                       Background="LightBlue" 
                                           DataContext="{Binding MaterialViewModel}">
                                         <local:CalculationDetailsPage/>

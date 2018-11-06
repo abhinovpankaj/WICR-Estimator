@@ -45,8 +45,7 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <!--<DataGridTextColumn Header="Metal Type" IsReadOnly="True"
-                                    Binding="{Binding Name}"/>-->
+                   
                     <DataGridTemplateColumn FocusManager.IsFocusScope="False"
                                             Header="Material Name">
                         <DataGridTemplateColumn.CellTemplate>

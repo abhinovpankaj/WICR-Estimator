@@ -39,12 +39,10 @@ namespace WICR_Estimator.ViewModels
             {
                 if (value!=showLogin)
                 {
-                    showLogin = value;
-                    OnPropertyChanged("ShowLogin");
+                    showLogin = value;                    
                     if (!value)
                     {                    
                         LoginMessage = "";
-                        OnPropertyChanged("LoginMessage");
                         HidePasswordSection = System.Windows.Visibility.Hidden;
                         if (OnLoggedAsAdmin != null)
                         {
@@ -53,7 +51,10 @@ namespace WICR_Estimator.ViewModels
                     }
                     else
                         HidePasswordSection = System.Windows.Visibility.Visible;
+
                     OnPropertyChanged("HidePasswordSection");
+                    OnPropertyChanged("LoginMessage");
+                    OnPropertyChanged("ShowLogin");
                 }
             }
         }

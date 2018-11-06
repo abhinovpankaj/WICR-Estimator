@@ -44,7 +44,8 @@ namespace WICR_Estimator.ViewModels
         {
             Slopes = new ObservableCollection<Slope>();
             SlopeTotals = new Totals { TabName = "Slope" };
-            isApprovedForCement = true;            
+            isApprovedForCement = false;
+            SlopeMaterialName = "Dexotex A-81 Underlayment";
         }
 
         #region public properties

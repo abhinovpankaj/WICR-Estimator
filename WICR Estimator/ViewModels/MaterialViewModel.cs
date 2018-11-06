@@ -62,14 +62,12 @@ namespace WICR_Estimator.ViewModels
             isPrevailingWage = false;
             isApprovedforCement = false;
             deckCount = 1;
-            
             JobSetup.OnJobSetupChange += JobSetup_OnJobSetupChange;
             SystemMaterial.OnQTyChanged += (s, e) => { setExceptionValues(); };
-            CheckboxCommand = new DelegateCommand(ApplyCheckUnchecks, canApply);            
+            CheckboxCommand = new DelegateCommand(ApplyCheckUnchecks, canApply);                      
         }
 
         
-
         public MaterialViewModel(Totals metalTotals,Totals slopeTotals)
             :this()
         {
@@ -2483,6 +2481,7 @@ namespace WICR_Estimator.ViewModels
         #endregion
         #endregion
 
+        
         public void populateCalculation()
         {
             LCostBreakUp = new List<CostBreakup>();

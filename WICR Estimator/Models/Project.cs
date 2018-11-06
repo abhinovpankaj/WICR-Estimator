@@ -40,6 +40,8 @@ namespace WICR_Estimator.Models
 
             }
         }
+        
+
         public double LaborPercentage { get; set; }
         public double TotalCost { get; set; }
         private bool isSelectedProject;
