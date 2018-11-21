@@ -121,6 +121,7 @@
                             <TextBox Text="{Binding Name}"
                                      IsReadOnly="True"
                                      KeyboardNavigation.IsTabStop="False">
+                                
                             </TextBox>
                             
                         </DataTemplate>

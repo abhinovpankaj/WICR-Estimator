@@ -43,7 +43,7 @@
                         <TextBlock Text="{Binding Name}"
                                    Margin="5,0,5,0"
                                    Width="250"/>
-                        <TextBlock Text="{Binding CalFactor}"
+                        <TextBlock Text="{Binding CalFactor,UpdateSourceTrigger=PropertyChanged}"
                                    Visibility="{Binding HideCalFactor}"
                                    FontWeight="Bold" Margin="5,0,5,0"
                                    Width="80"/>

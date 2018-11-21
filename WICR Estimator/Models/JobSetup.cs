@@ -38,6 +38,19 @@ namespace WICR_Estimator.Models
         {
             return true;
         }
+        private string jobDate;
+        public string JobDate
+        {
+            get { return jobDate; }
+            set
+            {
+                if (value!=jobDate)
+                {
+                    jobDate = value;
+                    OnPropertyChanged("JobDate");
+                }
+            }
+        }
         public System.Windows.Visibility HidePasswordSection { get; set; }
         public string LoginMessage { get; set; }
         private void CanAddMoreMarkup(object obj)
@@ -155,6 +168,10 @@ namespace WICR_Estimator.Models
                 {
                     hasContingencyDisc = value;
                     OnPropertyChanged("HasContingencyDisc");
+                    if (OnJobSetupChange != null)
+                    {
+                        OnJobSetupChange(this, EventArgs.Empty);
+                    }
                 }
             }
         }

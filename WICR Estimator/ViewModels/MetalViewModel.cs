@@ -38,6 +38,8 @@ namespace WICR_Estimator.ViewModels
                 isPrevailingWage = Js.IsPrevalingWage;
                 isDiscount = Js.HasDiscount;
                 vendorName = Js.VendorName;
+                stairWidth = Js.StairWidth;
+                isFlash=Js.IsFlashingRequired;
                 if (Js.HasSpecialPricing)
                 {
                     ShowSpecialPriceColumn = System.Windows.Visibility.Visible;
@@ -45,14 +47,30 @@ namespace WICR_Estimator.ViewModels
                 else
                     ShowSpecialPriceColumn = System.Windows.Visibility.Hidden;
             }
-            int i = 0;
-            foreach (Metal metal in Metals)
+            
+            var met = GetMetals();
+            for (int i = 0; i < Metals.Count; i++)
             {
-                metal.ProductionRate = getMetalPR(i);
-                i++;
+                double units = Metals[i].Units;
+                Metals[i] = met[i];
+                if (!Metals[i].Name.Contains("STAIR METAL"))
+                {
+                    Metals[i].Units = units;
+                }
+                
             }
+            var addOnMet = GetAddOnMetals();
+            for (int i = 0; i < AddOnMetals.Count; i++)
+            {
+                double units = AddOnMetals[i].Units;
+                AddOnMetals[i] = addOnMet[i];
+                if (!AddOnMetals[i].Name.Contains("STAIR METAL"))
+                {
+                    AddOnMetals[i].Units = units;
+                }
+            }
+            
             CalculateCost(null);
-
         }
      
 
@@ -73,7 +91,7 @@ namespace WICR_Estimator.ViewModels
             met.Add(new Metal("OUTSIDE EDGE CORNER", getMetalPR(23), laborRate, 0, getMetalMP(23), false));
             met.Add(new Metal("DOOR CORNERS SET OF 2 (L&R)", getMetalPR(24), laborRate, 0, getMetalMP(24), false));
             met.Add(new Metal("STRINGER TRANSITION CAP", getMetalPR(25), laborRate, 0, getMetalMP(25), false));
-            //met.Add(new Metal("DRIP TERMINATION", getMetalPR(14), laborRate, 0, getMetalMP(14), false));
+            met.Add(new Metal("DRIP TERMINATION", getMetalPR(40), laborRate, 0, getMetalMP(40), false));
             met.Add(new Metal("2 inch CHIVON DRAINS", getMetalPR(29), laborRate,0, getMetalMP(29), false));
             met.Add(new Metal("STANDARD SCUPPER 4x4x9", getMetalPR(32), laborRate, 0, getMetalMP(32), false));
             met.Add(new Metal("SCUPPER WITH A COLLAR 4x4x9", getMetalPR(33), laborRate, 0, getMetalMP(33), false));
@@ -87,7 +105,7 @@ namespace WICR_Estimator.ViewModels
             ObservableCollection<MiscMetal> misc = new ObservableCollection<MiscMetal>();
             misc.Add(new MiscMetal { Name = "Pins & Loads for metal over concrete", Units = getUnits(2), UnitPrice = getUnitPrice(0), MaterialPrice = getMetalMP(37), IsEditable = false });
             misc.Add(new MiscMetal { Name = "Nosing for Concrete risers", Units = getUnits(3), UnitPrice = getUnitPrice(1), MaterialPrice = getMetalMP(38), IsEditable = false });
-            misc.Add(new MiscMetal { Name = "OTHER DRAINS TO BE ITEMIZED", Units = 1, UnitPrice = 8, MaterialPrice = getMetalPR(39), IsEditable = true });
+            misc.Add(new MiscMetal { Name = "OTHER DRAINS TO BE ITEMIZED", Units = 1, UnitPrice = 8, MaterialPrice =0, IsEditable = true });
             return misc;
         } 
         
@@ -99,7 +117,7 @@ namespace WICR_Estimator.ViewModels
             met.Add(new AddOnMetal("L - METAL / FLASHING 4X8", getMetalPR(1), laborRate, 0, getMetalMP(1), false));
             met.Add(new AddOnMetal("DRIP EDGE METAL 4X4", getMetalPR(3), laborRate, 1, getMetalMP(3), false));
             met.Add(new AddOnMetal("DRIP EDGE METAL 3X4", getMetalPR(4), laborRate, 1, getMetalMP(4), false));
-            met.Add(new AddOnMetal("STAIR METAL 4X10", getMetalPR(6), laborRate, getUnits(0), getMetalMP(6), true));
+            met.Add(new AddOnMetal("STAIR METAL 4X10", getMetalPR(6), laborRate, getUnits(1), getMetalMP(6), true));
             met.Add(new AddOnMetal("STAIR METAL 4X8", getMetalPR(7), laborRate, getUnits(1), getMetalMP(7), true));
             met.Add(new AddOnMetal("Door Pan 10' - 12'", getMetalPR(11), laborRate, 1, getMetalMP(11), false));
             met.Add(new AddOnMetal("Door Pan 8'", getMetalPR(12), laborRate, 2, getMetalMP(12), false));
@@ -109,10 +127,10 @@ namespace WICR_Estimator.ViewModels
             met.Add(new AddOnMetal("CORNER DRIP TERMINATION", getMetalPR(26), laborRate, 1, getMetalMP(26), false));
             met.Add(new AddOnMetal("OFFSET DRIP TERMINATION", getMetalPR(27), laborRate, 1, getMetalMP(27), false));
             met.Add(new AddOnMetal("SRAIGHT DRIP TERMINATION", getMetalPR(28), laborRate, 1, getMetalMP(28), false));
-            met.Add(new AddOnMetal("STANDARD SCUPPER 2x4x9", getMetalPR(31), laborRate, 1, getMetalMP(31), false));
-            met.Add(new AddOnMetal("STANDARD SCUPPER 3x4x9", getMetalPR(32), laborRate, 1, getMetalMP(32), false));
-            met.Add(new AddOnMetal("OVERFLOW SCUPPER", getMetalPR(35), laborRate, 1, getMetalMP(35), false));
-            met.Add(new AddOnMetal("TWO STAGE SCUPPER", getMetalPR(36), laborRate, 1, getMetalMP(36), false));
+            met.Add(new AddOnMetal("STANDARD SCUPPER 2x4x9", getMetalPR(30), laborRate, 1, getMetalMP(30), false));
+            met.Add(new AddOnMetal("STANDARD SCUPPER 3x4x9", getMetalPR(31), laborRate, 1, getMetalMP(31), false));
+            met.Add(new AddOnMetal("OVERFLOW SCUPPER", getMetalPR(34), laborRate, 1, getMetalMP(34), false));
+            met.Add(new AddOnMetal("TWO STAGE SCUPPER", getMetalPR(35), laborRate, 1, getMetalMP(35), false));
             return met;
         }    
     }

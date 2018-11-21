@@ -17,7 +17,8 @@ namespace WICR_Estimator.ViewModels
         public Totals MetalTotals { set; get; }
 
         public Totals SlopeTotals { set; get; }
-        public List<CostBreakup> LCostBreakUp { get; set; }
+        private ObservableCollection<CostBreakup> lCostBreakUp;
+        
         #region privatefields
         private ObservableCollection<SystemMaterial> systemMaterials;
         private ObservableCollection<OtherItem> otherMaterials;
@@ -41,6 +42,7 @@ namespace WICR_Estimator.ViewModels
         private ICommand _removeCommand;
         private int AddInt = 4;
         private int deckCount;
+        private bool hasContingencyDisc;
 
         #endregion
 
@@ -76,6 +78,7 @@ namespace WICR_Estimator.ViewModels
             MetalTotals.OnTotalsChange += MetalTotals_OnTotalsChange;
 
             SlopeTotals.OnTotalsChange += MetalTotals_OnTotalsChange;
+            getDatafromGoogle();
             FetchMaterialValuesAsync();
             calculateLaborHrs();
         }
@@ -351,6 +354,19 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        public ObservableCollection<CostBreakup> LCostBreakUp
+        {
+            get { return lCostBreakUp; }
+            set
+            {
+                if (value != lCostBreakUp)
+                {
+                    lCostBreakUp = value;
+                    OnPropertyChanged("LCostBreakUp");
+                }
+            }
+        }
+            
         public double TotalHrsLabor { get; set; }
         public double TotalHrsSystemLabor { get; set; }
         public double TotalHrsMetalLabor { get; set; }
@@ -746,12 +762,12 @@ namespace WICR_Estimator.ViewModels
         
         #endregion
         //Get data from googlesheets
-        private void FetchMaterialValuesAsync()
+        private void getDatafromGoogle()
         {
             if (materialDetails == null)
             {
                 //materialDetails = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "H33:K59");
-               
+
                 GSData gData = DataSerializer.DSInstance.deserializeGoogleData("Dexotex Weather Wear");
                 laborDetails = gData.LaborData;
                 materialDetails = gData.MaterialData;
@@ -760,6 +776,9 @@ namespace WICR_Estimator.ViewModels
                 double.TryParse(laborDetails[7][0].ToString(), out facVal);
                 SubContractMarkup = facVal;
             }
+        }
+        private void FetchMaterialValuesAsync()
+        {         
             
             SystemMaterials = GetSystemMaterial();
             setExceptionValues();
@@ -934,6 +953,7 @@ namespace WICR_Estimator.ViewModels
                 isSpecialMetal = js.HasSpecialMaterial;
                 isDiscounted = js.HasDiscount;
                 isApprovedforCement = js.IsApprovedForSandCement;
+                hasContingencyDisc = js.HasContingencyDisc;
             }
             FetchMaterialValuesAsync();
         }
@@ -2484,7 +2504,7 @@ namespace WICR_Estimator.ViewModels
         
         public void populateCalculation()
         {
-            LCostBreakUp = new List<CostBreakup>();
+            LCostBreakUp = new ObservableCollection<CostBreakup>();
             double facValue = 0;
             double totalJobCostM = 0;
             double totalJobCostS = 0;
@@ -2702,7 +2722,12 @@ namespace WICR_Estimator.ViewModels
              finalMCost = totalCostM + (totalCostM * facValue / pm);
              finalSCost = totalCostS + (totalCostS * facValue / pm);
              finalSyCost = totalCostSy + (totalCostSy * facValue / pm);
-            double.TryParse(laborDetails[13][0].ToString(), out facValue);
+
+            if (hasContingencyDisc)
+                double.TryParse(laborDetails[13][0].ToString(), out facValue);
+                
+            else
+                facValue = 0;
 
             LCostBreakUp.Add(new CostBreakup
             {

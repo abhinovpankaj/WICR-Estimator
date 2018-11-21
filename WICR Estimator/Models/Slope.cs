@@ -91,10 +91,19 @@ namespace WICR_Estimator.Models
                 }
             }
         }
-        
+        private double priceperMix;
         public double PricePerMix
         {
-            get;set;
+            get { return priceperMix; }
+            set
+            {
+                if (value!=priceperMix)
+                {
+                    priceperMix = value;
+                    OnPropertyChanged("PricePerMix");
+                    OnPropertyChanged("MaterialExtensionSlope");
+                }
+            }
         }
 
         public double MaterialExtensionSlope

@@ -29,13 +29,14 @@ namespace WICR_Estimator.ViewModels
         protected double laborRate;
         protected double RiserCount;
         protected double stairWidth;
+        protected bool isFlash;
         public MetalBaseViewModel()
         {
             Metals = new ObservableCollection<Metal>();
             MiscMetals = new ObservableCollection<MiscMetal>();
             MetalTotals = new Totals { TabName = "Metal" };
 
-            MetalName = "Copper";
+            MetalName = "16oz Copper";
             vendorName = "Chivon";
             RiserCount = 30;
             stairWidth = 4.5;
@@ -235,16 +236,46 @@ namespace WICR_Estimator.ViewModels
             return true;
         }
         #endregion
+        protected double getMetalPR(int rowN)
+        {
+            double val = 0;          
+                double.TryParse(metalDetails[rowN][1].ToString(), out val);
+
+            return val;
+        }
         protected double getMetalMP(int rowN)
         {
+            int colN ;
             double val = 0;
-
-            if (rowN == 37 || rowN == 38)
+            if (rowN == 37||rowN==38)
             {
                 double.TryParse(metalDetails[rowN][2].ToString(), out val);
             }
+            
             else
-                double.TryParse(metalDetails[rowN][7].ToString(), out val);
+            {
+                switch (MetalName)
+                {
+                    case "16oz Copper":
+                        colN = 4;
+                        break;
+                    case "24ga. Galvanized Primed Steel":
+                        colN = 2;
+                        break;
+                    case "26 ga. Type 304 Stainless Steel":
+                        colN = 3;
+                        break;
+                    default:
+                        colN = 4;
+                        break;
+                }
+                if (vendorName != "Chivon")
+                {
+                    colN = colN + 3;
+                }
+                double.TryParse(metalDetails[rowN][colN].ToString(), out val);
+            }
+            
             return val;
         }
         protected double getUnits(int unitNo)
@@ -260,40 +291,17 @@ namespace WICR_Estimator.ViewModels
                 unit = RiserCount * stairWidth * 2;
             else if (unitNo == 2)
             {
-                double.TryParse(metalDetails[37][0].ToString(), out unit);
+                unit = isFlash ? (Metals[0].Units+ Metals[1].Units + Metals[2].Units + Metals[3].Units)*stairWidth : 0; 
+                //double.TryParse(metalDetails[37][0].ToString(), out unit);
             }
             else if (unitNo == 3)
             {
-                double.TryParse(metalDetails[38][0].ToString(), out unit);
+                unit = isFlash ? RiserCount : 0;
+                //double.TryParse(metalDetails[38][0].ToString(), out unit);
             }
             return unit;
         }
-        protected double getMetalPR(int rowN)
-        {
-            int colN = 1;
-            double val = 0;
-            switch (MetalName)
-            {
-                case "16oz Copper":
-                    colN = 1;
-                    break;
-                case "24ga. Galvanized Primed Steel":
-                    colN = 2;
-                    break;
-                case "26 ga. Type 304 Stainless Steel":
-                    colN = 3;
-                    break;
-                default:
-                    colN = 1;
-                    break;
-            }
-            if (vendorName != "Chivon")
-            {
-                colN = colN + 3;
-            }
-            double.TryParse(metalDetails[rowN][colN].ToString(), out val);
-            return val;
-        }
+        
 
         public void GetMetalDetailsFromGoogle(string projectName)
         {
@@ -304,7 +312,7 @@ namespace WICR_Estimator.ViewModels
                 pWage = gsData.LaborData;
                 double.TryParse(gsData.LaborRate[0][0].ToString(), out laborRate);
                 double nails;
-                double.TryParse(gsData.MetalData[21][1].ToString(), out nails);
+                double.TryParse(gsData.MetalData[39][1].ToString(), out nails);
                 Nails = nails;
                 metalDetails = gsData.MetalData;
             }
@@ -316,6 +324,8 @@ namespace WICR_Estimator.ViewModels
 
         public void CalculateCost(object obj)
         {
+            MiscMetals[0].Units = getUnits(2);
+            MiscMetals[1].Units = getUnits(3);
             updateLaborCost();
             updateMaterialCost();
             MetalTotals.MaterialExtTotal = TotalMaterialCost;

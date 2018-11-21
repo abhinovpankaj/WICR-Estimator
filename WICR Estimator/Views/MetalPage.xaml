@@ -104,7 +104,8 @@
                     <DataGridTextColumn Header="Material Extension($)"
                                     IsReadOnly="True"
                                     Binding="{Binding MaterialExtension ,StringFormat={}{0:C}}"/>
-                </DataGrid.Columns>
+                
+            </DataGrid.Columns>
 
             </DataGrid>
         <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Left"
@@ -178,7 +179,7 @@
         <Grid Grid.Column="1" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Left"

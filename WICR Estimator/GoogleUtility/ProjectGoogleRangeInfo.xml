@@ -2,7 +2,7 @@
 <Projects>
   <WeatherWear>
     <RateRange>E2</RateRange>
-    <MetalRange>F3:M42</MetalRange>
+    <MetalRange>F3:M43</MetalRange>
     <LaborRange>E246:E265</LaborRange>
     <SlopeRange>P85:Q93</SlopeRange>
     <MaterialRange>H94:N120</MaterialRange>

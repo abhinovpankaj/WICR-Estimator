@@ -509,7 +509,7 @@ namespace WICR_Estimator.ViewModels
                 ///sumtotal              
                 SumTotal = Math.Round(Slopes.Select(x => x.Total).Sum(), 2);
 
-                if (overrideManually == false)
+                if (OverrideManually == false)
                 {
                     ///sumtotalmixes
                     SumTotalMixes = Math.Round(Slopes.Select(x => x.TotalMixes).Sum(), 2);
@@ -517,10 +517,11 @@ namespace WICR_Estimator.ViewModels
                     ///sumtotalmatext
 
                     SumTotalMatExt = Math.Round(Slopes.Select(x => x.MaterialExtensionSlope).Sum(), 2);
-                }
-                //sumtotallaborext
+                    //sumtotallaborext
 
-                SumTotalLaborExt = Math.Round(Slopes.Select(x => x.LaborExtensionSlope).Sum(), 2);
+                    SumTotalLaborExt = Math.Round(Slopes.Select(x => x.LaborExtensionSlope).Sum(), 2);
+                }
+                
             }
 
         }
