@@ -101,11 +101,12 @@ namespace WICR_Estimator.ViewModels
                 }
             }
             calculateLaborHrs();
+            populateCalculation();
 
         }
         #region public properties
 
-        #region Material
+        #region Material Properties
         public DelegateCommand CheckboxCommand { get; set; }
         public ObservableCollection<LaborContract> SubContractLaborItems
         {
@@ -326,7 +327,7 @@ namespace WICR_Estimator.ViewModels
         }
         #endregion
 
-        #region Labor
+        #region Labor Properties
 
         private bool addLaborMinCharge;
         public bool AddLaborMinCharge
@@ -1015,8 +1016,8 @@ namespace WICR_Estimator.ViewModels
                 switch (materialName.ToUpper())
                 {
                     case "LIGHT CRACK REPAIR":
-                    case "LARGE CRACK REPAIR":
-                    case "BUBBLE REPAIR(MEASURE SQ FT)":
+                    //case "LARGE CRACK REPAIR":
+                    //case "BUBBLE REPAIR(MEASURE SQ FT)":
                     case "RESISTITE REGULAR OVER TEXTURE(#55 BAG)":
                     case "30# DIVORCING FELT (200 SQ FT) FROM FORD WHOLESALE":
                     case "RP FABRIC 10 INCH WIDE X (300 LF) FROM ACME":
@@ -2509,9 +2510,34 @@ namespace WICR_Estimator.ViewModels
             double totalJobCostM = 0;
             double totalJobCostS = 0;
             double totalJobCostSy = 0;
+            double.TryParse(laborDetails[0][0].ToString(), out facValue);
+            double fac1 = isPrevailingWage ? facValue : 0;
+            double.TryParse(laborDetails[1][0].ToString(), out facValue);
+            double fac2 = isDiscounted ? facValue : 0;
+            double calbackfactor = 1 + fac1+fac2 ;
+
+            
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "Prevailing Wage (Including Marina's Salary)",
+                CalFactor =fac1,
+                MetalCost =(MetalTotals.LaborExtTotal /calbackfactor)*fac1,
+                SlopeCost = (SlopeTotals.LaborExtTotal / calbackfactor)*fac1,
+                SystemCost = (TotalLaborExtension / calbackfactor) * fac1
+            });
+
+            
+
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "Deduct on Labor for large jobs",
+                CalFactor = fac2,
+                MetalCost = (MetalTotals.LaborExtTotal / calbackfactor) * fac2,
+                SlopeCost = (SlopeTotals.LaborExtTotal / calbackfactor) * fac2,
+                SystemCost = (TotalLaborExtension / calbackfactor) * fac2
+            });
             double.TryParse(laborDetails[2][0].ToString(), out facValue);
-            
-            
+                       
             LCostBreakUp.Add(new CostBreakup
             {
                 Name = "Workers Comp TL > $24.00",
@@ -2598,42 +2624,42 @@ namespace WICR_Estimator.ViewModels
             });
 
             double.TryParse(laborDetails[17][0].ToString(), out facValue);
-            double pm4 = facValue * MetalTotals.LaborExtTotal;
-            double ps4 = facValue * SlopeTotals.LaborExtTotal;
-            double psy4 = facValue * TotalLaborExtension;
+            double pm4 = facValue * (MetalTotals.LaborExtTotal+MetalTotals.MaterialExtTotal+MetalTotals.SubContractLabor+MetalTotals.MaterialFreightTotal);
+            //double ps4 = facValue * SlopeTotals.LaborExtTotal;
+            //double psy4 = facValue * TotalLaborExtension;
             LCostBreakUp.Add(new CostBreakup
             {
-                Name = "Profit Margin on Labor",
+                Name = "Profit Margin on Metal",
                 CalFactor = facValue,
                 MetalCost =pm4 ,
-                SlopeCost = ps4,
-                SystemCost =psy4 
+                SlopeCost = 0,
+                SystemCost =0 
             });
 
             double.TryParse(laborDetails[18][0].ToString(), out facValue);
-            double pm5 = facValue * MetalTotals.LaborExtTotal;
-            double ps5 = facValue * SlopeTotals.LaborExtTotal;
-            double psy5 = facValue * TotalLaborExtension;
+            //double pm5 = facValue * MetalTotals.LaborExtTotal;
+            //double ps5 = facValue * SlopeTotals.LaborExtTotal;
+            double psy5 = facValue * (TotalLaborExtension+TotalFreightCostBrkp+TotalMaterialCostbrkp);
             LCostBreakUp.Add(new CostBreakup
             {
                 Name = "Profit Margin on Material",
                 CalFactor = facValue,
-                MetalCost = pm5,
-                SlopeCost = ps5,
+                MetalCost = 0,
+                SlopeCost = 0,
                 SystemCost = psy5
             });
 
             double.TryParse(laborDetails[19][0].ToString(), out facValue);
-            double pm6 = facValue * MetalTotals.LaborExtTotal;
-            double ps6 = facValue * SlopeTotals.LaborExtTotal;
-            double psy6 = facValue * TotalLaborExtension;
+            //double pm6 = facValue * MetalTotals.LaborExtTotal;
+            double ps6 = facValue * (SlopeTotals.LaborExtTotal+SlopeTotals.MaterialExtTotal+SlopeTotals.MaterialFreightTotal);
+            //double psy6 = facValue * TotalLaborExtension;
             LCostBreakUp.Add(new CostBreakup
             {
-                Name = "Profit Margin on Freight",
+                Name = "Profit Margin on Slope",
                 CalFactor = facValue,
-                MetalCost = pm6,
+                //MetalCost = pm6,
                 SlopeCost = ps6,
-                SystemCost = psy6
+                //SystemCost = psy6
             });
 
             double.TryParse(laborDetails[7][0].ToString(), out facValue);
@@ -2678,11 +2704,11 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(laborDetails[10][0].ToString(), out pm);
 
             double totalCostM = (totalJobCostM - MetalTotals.SubContractLabor) / pm + (MetalTotals.SubContractLabor +
-                pm2 + pm3+pm4+pm5+pm6);
+                pm2 + pm3 + pm4);  //+pm5+pm6);
             double totalCostS = (totalJobCostS - SlopeTotals.SubContractLabor) / pm + (SlopeTotals.SubContractLabor +
-                ps2+ps4+ps5+ps6);
+                ps2+ps6); //ps4 + ps5 +
             double totalCostSy = (totalJobCostSy - TotalSubContractLaborCostBrkp) / pm + (TotalSubContractLaborCostBrkp +
-                psy2+psy1+psy4+psy5+psy6);
+                psy2+psy1+psy5); //psy4+ psy6
 
             LCostBreakUp.Add(new CostBreakup
             {
