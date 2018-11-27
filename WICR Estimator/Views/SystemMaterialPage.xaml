@@ -339,7 +339,7 @@
                          Height="25"  Width="80"  Style="{StaticResource TextBoxStyle}"                
                          Text="{Binding TotalSCExtension, 
                         UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
-                    <Label Content="SubContract Markup" Grid.Column="1"  
+                    <Label Content="SubContract Markup%" Grid.Column="1"  
                        Margin="5,5,0,5"
                        Style="{StaticResource LabelStyle1}"
                            FontSize="12" 
@@ -349,7 +349,7 @@
                              VerticalContentAlignment="Center"
                              Height="25"  Width="50"  Style="{StaticResource editableTextbox}"                
                              Text="{Binding SubContractMarkup, 
-                            UpdateSourceTrigger=LostFocus,StringFormat='c'}"/>
+                            UpdateSourceTrigger=LostFocus}"/>
                 </StackPanel>
             </StackPanel>
             

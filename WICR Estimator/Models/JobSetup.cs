@@ -38,7 +38,7 @@ namespace WICR_Estimator.Models
         {
             return true;
         }
-        private string jobDate;
+        private string jobDate=DateTime.Today.ToShortDateString();
         public string JobDate
         {
             get { return jobDate; }
@@ -303,6 +303,13 @@ namespace WICR_Estimator.Models
                 if (value != totalSqft)
                 {
                     totalSqft = value;
+
+                    
+                    if (value>=1000)
+                        HasContingencyDisc = true;
+                    else
+                        HasContingencyDisc = false;
+                    OnPropertyChanged("HasContingencyDisc");
                     OnPropertyChanged("TotalSqft");
                     if (OnJobSetupChange != null)
                     {

@@ -150,7 +150,7 @@ namespace WICR_Estimator.ViewModels
             if (password == "737373")
             {
                 passwordBox.Password = "";
-                LoginMessage = "Calculation Details Would be Visbible Now.";
+                LoginMessage = "Calculation Details Are Visible Now.";
 
                 HidePasswordSection = System.Windows.Visibility.Hidden;
                 OnPropertyChanged("HidePasswordSection");

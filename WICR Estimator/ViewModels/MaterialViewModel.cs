@@ -64,6 +64,7 @@ namespace WICR_Estimator.ViewModels
             isPrevailingWage = false;
             isApprovedforCement = false;
             deckCount = 1;
+            
             JobSetup.OnJobSetupChange += JobSetup_OnJobSetupChange;
             SystemMaterial.OnQTyChanged += (s, e) => { setExceptionValues(); };
             CheckboxCommand = new DelegateCommand(ApplyCheckUnchecks, canApply);                      
@@ -79,7 +80,10 @@ namespace WICR_Estimator.ViewModels
 
             SlopeTotals.OnTotalsChange += MetalTotals_OnTotalsChange;
             getDatafromGoogle();
-            FetchMaterialValuesAsync();
+            FetchMaterialValuesAsync(false);
+            double facValue;
+            double.TryParse(laborDetails[7][0].ToString(), out facValue);
+            SubContractMarkup = facValue;
             calculateLaborHrs();
         }
 
@@ -320,6 +324,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != subContractMarkup)
                 {
                     subContractMarkup = value;
+                    populateCalculation();
                     OnPropertyChanged("SubContractMarkup");
 
                 }
@@ -778,10 +783,25 @@ namespace WICR_Estimator.ViewModels
                 SubContractMarkup = facVal;
             }
         }
-        private void FetchMaterialValuesAsync()
-        {         
-            
+        private void FetchMaterialValuesAsync(bool hasSetupChanged)
+        {
+            Dictionary<string, double> qtyList = new Dictionary<string, double>();
+            //if (hasSetupChanged)
+            //{               
+                foreach (SystemMaterial item in SystemMaterials)
+                {
+                    if (item.Name== "Stucco Material Remove And Replace (Lf)"||item.Name== "Plywood 3/4 & Blocking(# Of 4X8 Sheets)"||
+                        item.Name== "Extra Stair Nosing Lf"||item.Name== "Bubble Repair(Measure Sq Ft)"||item.Name== "Large Crack Repair")
+                    {
+                        qtyList.Add(item.Name, item.Qty);
+                    }
+                }
+            //}
             SystemMaterials = GetSystemMaterial();
+
+            if(hasSetupChanged)
+                restoreQuantities(qtyList);
+
             setExceptionValues();
             setCheckBoxes();
             if (OtherMaterials.Count==0)
@@ -798,10 +818,27 @@ namespace WICR_Estimator.ViewModels
             
             calculateMaterialTotals();
             CalOCTotal();
-            CalculateCostBreakup();
             calculateLaborTotals();
+            CalculateCostBreakup();
             calculateLaborHrs();
             populateCalculation();
+        }
+
+        private void restoreQuantities(Dictionary<string, double> qtyList)
+        {
+            foreach (SystemMaterial item in SystemMaterials)
+            {
+                if (item.Name == "Stucco Material Remove And Replace (Lf)" || item.Name == "Plywood 3/4 & Blocking(# Of 4X8 Sheets)" ||
+                    item.Name == "Extra Stair Nosing Lf"||item.Name == "Bubble Repair(Measure Sq Ft)" || item.Name == "Large Crack Repair")
+                {
+                    if (qtyList.ContainsKey(item.Name))
+                    {
+                        item.Qty = qtyList[item.Name];
+                    }
+                   
+                }
+                
+            }
         }
 
         private void setExceptionValues()
@@ -956,7 +993,7 @@ namespace WICR_Estimator.ViewModels
                 isApprovedforCement = js.IsApprovedForSandCement;
                 hasContingencyDisc = js.HasContingencyDisc;
             }
-            FetchMaterialValuesAsync();
+            FetchMaterialValuesAsync(true);
         }
         private void reCalculate()
         {
@@ -2071,24 +2108,29 @@ namespace WICR_Estimator.ViewModels
         private void setCheckBoxes()
         {
             var materials = SystemMaterials.Where(x => x.IsCheckboxDependent == true).ToList();
-            SystemMaterial lipMat=null;
+            SystemMaterial lipMat1=null;
+            SystemMaterial lipMat2 = null;
             foreach (SystemMaterial mat in materials)
             {
                 if (mat.Name == "Lip Color")
-                {
-                    lipMat = mat;
-                    mat.IsMaterialChecked = true;
+                {                  
+                    mat.IsMaterialChecked = false;
                 }
                 if (mat.Name == "Aj-44A Dressing(Sealer)")
                 {
+                    lipMat1 = mat;
                     mat.IsMaterialChecked = false;
                 }
                 if (mat.Name == "Vista Paint Acripoxy")
                 {
+                    lipMat2 = mat;
                     mat.IsMaterialChecked = false;
                 }
             }
-            lipMat.IsMaterialChecked = true;
+            if (weatherWearType == "Weather Wear Rehab")
+                lipMat2.IsMaterialChecked = true;
+            else
+                lipMat1.IsMaterialChecked = true;
         }
 
         
@@ -2180,7 +2222,7 @@ namespace WICR_Estimator.ViewModels
                 case "WEATHER SEAL XL TWO COATS":
                     return (riserCount * stairWidth * 2 ) +totalSqft;
                 case "RESISTITE REGULAR OVER TEXTURE(#55 BAG)":
-                    return (riserCount * 4 * 2) + totalSqft;//stairWidth=4
+                    return (riserCount * stairWidth * 2) + totalSqft;//stairWidth=4
                 case "STAIR NOSING FROM DEXOTEX":
                     return riserCount;
                 case "RP FABRIC 10 INCH WIDE X (300 LF) FROM ACME":
@@ -2202,7 +2244,8 @@ namespace WICR_Estimator.ViewModels
                 }
                 if (OtherLaborMaterials.Count > 0)
                 {
-                    TotalOCLaborExtension = OtherLaborMaterials.Select(x => x.Extension).Sum();
+                    TotalOCLaborExtension = OtherLaborMaterials.Select(x => x.LExtension).Sum();
+                    OnPropertyChanged("TotalOCLaborExtension");
                 }
             }
             
@@ -2406,7 +2449,7 @@ namespace WICR_Estimator.ViewModels
 
             TotalLaborExtension = AddLaborMinCharge ? (selectedLabors.Select(x => x.LaborExtension).Sum()+LaborMinChargeLaborExtension) * (1 + preWage + laborDeduction):
                 selectedLabors.Select(x => x.LaborExtension).Sum()  *(1 + preWage + laborDeduction);
-
+            TotalLaborExtension = TotalLaborExtension + TotalOCLaborExtension;
             if (SlopeTotals!=null && MetalTotals!=null)
             {
                 TotalSlopingPrice = getTotals(SlopeTotals.LaborExtTotal, SlopeTotals.MaterialExtTotal, SlopeTotals.MaterialFreightTotal, 0);
@@ -2662,12 +2705,12 @@ namespace WICR_Estimator.ViewModels
                 //SystemCost = psy6
             });
 
-            double.TryParse(laborDetails[7][0].ToString(), out facValue);
-            SubContractMarkup = facValue;
+            //double.TryParse(laborDetails[7][0].ToString(), out facValue);
+            //SubContractMarkup = facValue;
             double psy1 = SubContractMarkup * (TotalSubContractLaborCostBrkp);
             LCostBreakUp.Add(new CostBreakup
             {
-                Name = "Profit Margin on subcontract labor= 35 %",
+                Name = "Profit Margin on subcontract labor",
                 CalFactor = SubContractMarkup,
                 MetalCost = 0,
                 SlopeCost = 0,
