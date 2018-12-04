@@ -42,7 +42,7 @@ namespace WICR_Estimator.Models
                 {
                     sqft = value;
                     OnPropertyChanged("Sqft");
-                    //changeProperty();
+                    changeProperty();
                 }
             }
         }
@@ -60,7 +60,7 @@ namespace WICR_Estimator.Models
                 {
                     deckCount = value;
                     OnPropertyChanged("DeckCount");
-                    //changeProperty();
+                    changeProperty();
                 }
             }
         }
@@ -132,7 +132,7 @@ namespace WICR_Estimator.Models
             OnPropertyChanged("MaterialExtensionSlope");
             OnPropertyChanged("Total");
             OnPropertyChanged("TotalMixes");
-            OnPropertyChanged("AverageMixesPrice");
+            //OnPropertyChanged("AverageMixesPrice");
         }
     }
 }

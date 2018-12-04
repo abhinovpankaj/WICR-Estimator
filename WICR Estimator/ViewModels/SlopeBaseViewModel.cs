@@ -80,8 +80,8 @@ namespace WICR_Estimator.ViewModels
 
                         totalmixesman = 0;
                         averagemixesprice = 0;
-                        CalculateGridTotal();
-                        CalculateTotalMixes();
+                        //CalculateGridTotal();
+                        //CalculateTotalMixes();
                         OnPropertyChanged("TotalMixesMan");
                         OnPropertyChanged("AverageMixesPrice");
                     }

@@ -17,6 +17,23 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style TargetType="{x:Type TextBox}" x:Key="addOnTextBox">
+            <Setter Property="Background" Value="Gray" />
+            <Setter Property="Foreground" Value="Gray"/>
+            <Style.Triggers>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding IsMetalChecked}" Value="True"/>
+                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled}" Value="True" />
+                    </MultiDataTrigger.Conditions>
+                    <MultiDataTrigger.Setters>
+                        <Setter Property="Background" Value="LightYellow" />
+                        <Setter Property="Foreground" Value="Black"/>
+                    </MultiDataTrigger.Setters>
+                </MultiDataTrigger>
+
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
     
     <Grid >
@@ -190,9 +207,9 @@
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsMetalChecked}" Value="True">
+                            <DataTrigger Binding="{Binding IsMetalChecked}" Value="false">
                                 <Setter Property="Background" Value="Gray"/>
-                                <!--<Setter Property="Foreground" Value="Blue"/>-->
+                                <Setter Property="Foreground" Value="Gray"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -206,30 +223,36 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn FocusManager.IsFocusScope="False"
-                                            Header="Material Name"
-                                            Binding="{Binding Name}"/>
+                    <DataGridTemplateColumn FocusManager.IsFocusScope="False"
+                                            Header="Material Name">
+
+                        <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                                <TextBlock Text="{Binding Name}"
+                                       >
+                                    <TextBlock.Style>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="Foreground" Value="White"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsMetalChecked}" Value="True">
+                                                    <Setter Property="Foreground" Value="Black"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        
+                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="Size">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding MetalDimensions,UpdateSourceTrigger=LostFocus}"
-                                    IsEnabled="True" 
-                                         >
-                                    <TextBox.Style>
-                                        <Style TargetType="{x:Type TextBox}">
-                                            <Setter Property="Foreground" Value="Black" />
-
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsMetalChecked}" Value="False">
-                                                    <Setter Property="Foreground" Value="White" />
-                                                </DataTrigger>
-                                                <Trigger Property="IsEnabled" Value="True">
-                                                    <Setter Property="Background" Value="LightYellow" />
-                                                </Trigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBox.Style>
-
+                                <TextBox x:Name="txtSize" Text="{Binding MetalDimensions,
+                                    UpdateSourceTrigger=LostFocus}"
+                                    IsEnabled="True" Style="{StaticResource addOnTextBox}">
+                                    
                                 </TextBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -240,7 +263,7 @@
                             <DataTemplate>
                                 <TextBox Text="{Binding Units,UpdateSourceTrigger=PropertyChanged}"
                                      IsEnabled="{Binding Name,Converter={StaticResource textboxConv}}"
-                                         Style="{StaticResource editableTextbox }">
+                                         Style="{StaticResource addOnTextBox }">
 
                                 </TextBox>
                             </DataTemplate>
@@ -254,7 +277,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox Text="{Binding SpecialMetalPricing ,StringFormat={}{0:C},UpdateSourceTrigger=LostFocus}"
-                                    IsEnabled="True" Style="{StaticResource  editableTextbox}"
+                                    IsEnabled="True" Style="{StaticResource  addOnTextBox}"
                                          >
 
                                 </TextBox>
