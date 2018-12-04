@@ -11,7 +11,6 @@
         <conv:CheckBoxVisibilityConverter x:Key="checkBoxConv"/>
         <conv:EnableTextboxConverter x:Key="textboxConv"/>
         <Style TargetType="{x:Type TextBox}" x:Key="editableTextbox">
-            
             <Style.Triggers >
                 <Trigger Property="IsEnabled" Value="True">
                     <Setter Property="Background" Value="LightYellow" />
@@ -192,8 +191,8 @@
                     <Style TargetType="DataGridRow">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsMetalChecked}" Value="True">
-                                <!--<Setter Property="Background" Value="Gray"/>-->
-                                <Setter Property="Foreground" Value="Blue"/>
+                                <Setter Property="Background" Value="Gray"/>
+                                <!--<Setter Property="Foreground" Value="Blue"/>-->
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -202,7 +201,7 @@
                     <DataGridTemplateColumn Header="">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsMetalChecked,
+                                <CheckBox x:Name="mChbox" IsChecked="{Binding IsMetalChecked,
                                 UpdateSourceTrigger=PropertyChanged}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -214,8 +213,24 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox Text="{Binding MetalDimensions,UpdateSourceTrigger=LostFocus}"
-                                    IsEnabled="True" Style="{StaticResource  editableTextbox}"
-                                         />
+                                    IsEnabled="True" 
+                                         >
+                                    <TextBox.Style>
+                                        <Style TargetType="{x:Type TextBox}">
+                                            <Setter Property="Foreground" Value="Black" />
+
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsMetalChecked}" Value="False">
+                                                    <Setter Property="Foreground" Value="White" />
+                                                </DataTrigger>
+                                                <Trigger Property="IsEnabled" Value="True">
+                                                    <Setter Property="Background" Value="LightYellow" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBox.Style>
+
+                                </TextBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
 

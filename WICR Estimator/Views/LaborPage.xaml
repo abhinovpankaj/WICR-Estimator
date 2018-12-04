@@ -718,7 +718,7 @@
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,2">
                         <TextBlock Width="100"
-                            Text="$0.00"/>
+                            Text="0"/>
                     </Border>
                     
                 </ListBoxItem>
@@ -759,7 +759,7 @@
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
                         <TextBlock Width="100"
-                                   Text="$0.00"/>
+                                   Text="0"/>
                     </Border>
                 </ListBoxItem>
                 <ListBoxItem HorizontalAlignment="Center">

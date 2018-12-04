@@ -32,6 +32,10 @@
                        FontWeight="Bold"
                        Foreground="White"
                        Margin="5"/>
+            <TextBlock Text="Sub-Contract" Width="80"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       Margin="5"/>
         </StackPanel>
         <ListView Name="Calculationdetails"
                   Grid.Row="1"
@@ -54,6 +58,9 @@
                                    Margin="5,0,5,0"
                                    Width="80"/>
                         <TextBlock Text="{Binding SystemCost  }"
+                                   Margin="5,0,5,0"
+                                   Width="80"/>
+                        <TextBlock Text="{Binding SubContractLaborCost}"
                                    Margin="5,0,5,0"
                                    Width="80"/>
                         

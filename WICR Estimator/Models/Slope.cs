@@ -41,7 +41,8 @@ namespace WICR_Estimator.Models
                 if (value != sqft)
                 {
                     sqft = value;
-                    changeProperty();
+                    OnPropertyChanged("Sqft");
+                    //changeProperty();
                 }
             }
         }
@@ -58,7 +59,8 @@ namespace WICR_Estimator.Models
                 if (value != deckCount)
                 {
                     deckCount = value;
-                    changeProperty();
+                    OnPropertyChanged("DeckCount");
+                    //changeProperty();
                 }
             }
         }

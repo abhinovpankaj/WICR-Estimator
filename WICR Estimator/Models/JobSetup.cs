@@ -185,12 +185,12 @@ namespace WICR_Estimator.Models
                 {
                     weatherWearType = value;
                     OnPropertyChanged("WeatherWearType");
-                    if (value.Contains("Rehab"))
-                    {
-                        ProjectName = ProjectName + " Rehab";
-                    }
-                    else
-                        ProjectName = ProjectName.Replace( " Rehab","");
+                    //if (value.Contains("Rehab"))
+                    //{
+                    //    ProjectName = ProjectName + " Rehab";
+                    //}
+                    //else
+                    //    ProjectName = ProjectName.Replace( " Rehab","");
 
                     if (OnJobSetupChange != null)
                     {
