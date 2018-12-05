@@ -400,7 +400,7 @@ namespace WICR_Estimator.ViewModels
             IEnumerable<AddOnMetal> selectedAddOnMetals = addOnMetals.Where(x => x.IsMetalChecked);
             if (selectedAddOnMetals.Count() > 0)
             {
-                addOnMetalCost = selectedAddOnMetals.Select(x => x.LaborExtension).Sum();
+                addOnMetalCost = selectedAddOnMetals.Select(x => x.MaterialExtension).Sum();
             }
             if (Metals.Count > 0 && MiscMetals.Count > 0)
             {

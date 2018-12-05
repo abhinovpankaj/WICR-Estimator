@@ -10,9 +10,42 @@ namespace WICR_Estimator.Models
     public class Project: BaseViewModel
     {
         public string Name { get; set; }
-        public double MetalCost { get; set; }
-        public double SlopeCost { get; set; }
-        public double  SystemNOther { get; set; }
+        public double MetalCost
+        {
+            get
+            {
+                if (MaterialViewModel != null)
+                {
+                    return MaterialViewModel.TotalMetalPrice;
+                }
+                else
+                    return 0;
+            }
+        }
+        public double SlopeCost
+        {
+            get
+            {
+                if (MaterialViewModel != null)
+                {
+                    return MaterialViewModel.TotalSlopingPrice;
+                }
+                else
+                    return 0;
+            }
+        }
+        public double  SystemNOther
+        {
+            get
+            {
+                if (MaterialViewModel != null)
+                {
+                    return MaterialViewModel.TotalSystemPrice;
+                }
+                else
+                    return 0;
+            }
+        }
         public double SubContractCost { get; set; }
         public double LaborCost
         {
@@ -42,8 +75,29 @@ namespace WICR_Estimator.Models
         }
         
 
-        public double LaborPercentage { get; set; }
-        public double TotalCost { get; set; }
+        public double LaborPercentage
+        {
+            get
+            {
+                if (MaterialViewModel != null)
+                {
+                    return Math.Round(MaterialViewModel.AllTabsLaborTotal/ MaterialViewModel.TotalSale,4);
+                }
+                else
+                    return 0;
+            }
+        }
+        public double TotalCost {
+            get
+            {
+                if (MaterialViewModel != null)
+                {
+                    return MaterialViewModel.TotalSale;
+                }
+                else
+                    return 0;
+            }
+        }
         private bool isSelectedProject;
         public bool IsSelectedProject
         {

@@ -601,7 +601,9 @@
                             BorderThickness="0,0,0,1">
                         <TextBlock  HorizontalAlignment="Stretch"
                                      Width="100"
-                        Text="{Binding SlopeTotals.LaborExtTotal,UpdateSourceTrigger=PropertyChanged}"/>
+                        Text="{Binding SlopeTotals.LaborExtTotal,
+                             StringFormat=N2,
+                            UpdateSourceTrigger=PropertyChanged}"/>
                     </Border>
                 </ListBoxItem>
                 <ListBoxItem HorizontalAlignment="Center">
@@ -609,14 +611,14 @@
                             BorderThickness="0,0,0,1">
                         <TextBlock HorizontalAlignment="Stretch"
                                     Width="100"
-                        Text="{Binding MetalTotals.LaborExtTotal,UpdateSourceTrigger=PropertyChanged}"/>
+                        Text="{Binding MetalTotals.LaborExtTotal,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
                     </Border>
                 </ListBoxItem>
                 <ListBoxItem HorizontalAlignment="Center">
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock Text="{Binding TotalLaborExtension,UpdateSourceTrigger=PropertyChanged
-                            ,StringFormat='c'}"
+                        <TextBlock Text="{Binding TotalLaborExtension, StringFormat=N2,UpdateSourceTrigger=PropertyChanged
+                            }"
                                     Width="100"
                                HorizontalAlignment="Stretch"/>
                     </Border>
@@ -650,21 +652,22 @@
                 <ListBoxItem HorizontalAlignment="Center">
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock Width="100" Text="{Binding SlopeTotals.MaterialExtTotal,UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Width="100" Text="{Binding SlopeTotals.MaterialExtTotal,
+                            UpdateSourceTrigger=PropertyChanged,StringFormat=N2}"/>
                     </Border>
                 </ListBoxItem>
                 <ListBoxItem HorizontalAlignment="Center">
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock Width="100" Text="{Binding MetalTotals.MaterialExtTotal,UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Width="100" Text="{Binding MetalTotals.MaterialExtTotal,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
                     </Border>
                 </ListBoxItem>
                 <ListBoxItem HorizontalAlignment="Center">
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
                         <TextBlock Width="100" 
-                                   Text="{Binding TotalMaterialCostbrkp,
-                            UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
+                                   Text="{Binding TotalMaterialCostbrkp
+                            , StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
                     </Border>
                 </ListBoxItem>
                 <ListBoxItem HorizontalAlignment="Center">
@@ -697,21 +700,21 @@
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
                         <TextBlock Width="100"
-                            Text="{Binding SlopeTotals.MaterialFreightTotal,UpdateSourceTrigger=PropertyChanged}"/>
+                            Text="{Binding SlopeTotals.MaterialFreightTotal,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
                     </Border>
                 </ListBoxItem>
                 <ListBoxItem HorizontalAlignment="Center">
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock Width="100" Text="{Binding MetalTotals.MaterialFreightTotal,UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Width="100" Text="{Binding MetalTotals.MaterialFreightTotal,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
                     </Border>
                 </ListBoxItem>
                 <ListBoxItem HorizontalAlignment="Center">
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
                         <TextBlock Width="100"
-                                   Text="{Binding TotalFreightCostBrkp,
-                            UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
+                                   Text="{Binding TotalFreightCostBrkp, StringFormat=N2
+                            ,UpdateSourceTrigger=PropertyChanged}"/>
                     </Border>
                 </ListBoxItem>
                 <ListBoxItem HorizontalAlignment="Center">
@@ -746,13 +749,13 @@
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
                         <TextBlock Width="100"
-                            Text="{Binding SlopeTotals.SubContractLabor,UpdateSourceTrigger=PropertyChanged}"/>
+                            Text="{Binding SlopeTotals.SubContractLabor,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
                     </Border>
                 </ListBoxItem>
                 <ListBoxItem HorizontalAlignment="Center">
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock Width="100" Text="{Binding MetalTotals.SubContractLabor,UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Width="100" Text="{Binding MetalTotals.SubContractLabor,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
                     </Border>
                 </ListBoxItem>
                 <ListBoxItem HorizontalAlignment="Center">
@@ -766,7 +769,8 @@
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,2">
                         <TextBlock Width="100"
-                            Text="{Binding TotalSubContractLaborCostBrkp,UpdateSourceTrigger=PropertyChanged}"/>
+                            Text="{Binding TotalSubContractLaborCostBrkp,
+                            StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
                     </Border>
 
                 </ListBoxItem>

@@ -107,25 +107,25 @@
                 <DataGridTextColumn Header="Name" IsReadOnly="True"
                                     Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Metal Cost" 
-                                    Binding="{Binding MetalCost}"/>
+                                    Binding="{Binding MetalCost,StringFormat='c'}"/>
                 <DataGridTextColumn Header ="Slope Cost"
-                                    Binding="{Binding SlopeCost}"
+                                    Binding="{Binding SlopeCost,StringFormat='c'}"
                                     IsReadOnly="False"/>
                 <DataGridTextColumn Header ="System Cost"
-                                    Binding="{Binding SystemNOther}"
+                                    Binding="{Binding SystemNOther,StringFormat='c'}"
                                     IsReadOnly="False"/>
                 <DataGridTextColumn Header ="Material Cost" 
-                                    Binding="{Binding MaterialCost}"
+                                    Binding="{Binding MaterialCost,StringFormat='c'}"
                                     IsReadOnly="False"/>
                 <DataGridTextColumn Header ="Labor Cost" 
-                                    Binding="{Binding LaborCost}"
+                                    Binding="{Binding LaborCost,StringFormat='c'}"
                                     IsReadOnly="False"/>
                 
                 <DataGridTextColumn Header ="Labor %" 
                                     Binding="{Binding LaborPercentage}"
                                     IsReadOnly="False"/>
                 <DataGridTextColumn Header ="Total Cost" 
-                                    Binding="{Binding TotalCost}"
+                                    Binding="{Binding TotalCost,StringFormat='c'}"
                                     IsReadOnly="False"/>
                 <!--<DataGridTextColumn Header ="Sub Contract Cost" 
                                     Binding="{Binding SubContractCost}"
