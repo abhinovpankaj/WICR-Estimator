@@ -49,13 +49,13 @@
             <StackPanel HorizontalAlignment="Stretch" Margin="5">
                 <DatePicker Margin="5" Height="30"
                             FontSize="14"
-                            Text="{Binding JobDate}"
+                            Text="{Binding JobDate,UpdateSourceTrigger=LostFocus}"
                             VerticalContentAlignment="Center"
                             HorizontalContentAlignment="Left"/>
                 <TextBlock Style="{StaticResource FieldHeader}"
                        Text="Weather Wear Type"
                            />
-                <ComboBox Text="{Binding WeatherWearType}" Width="180"
+                <ComboBox Text="{Binding WeatherWearType,UpdateSourceTrigger=LostFocus}" Width="180"
                           HorizontalAlignment="Left"
                           Margin="5,0,0,0">
                     <ComboBoxItem Content="Weather Wear"/>
@@ -63,7 +63,7 @@
                 </ComboBox>
                 <TextBlock Style="{StaticResource FieldHeader}"
                        Text="Metal Material Type"/>
-                <ComboBox Text="{Binding MaterialName}" HorizontalAlignment="Left"
+                <ComboBox Text="{Binding MaterialName,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left"
                           Margin="5,0,0,0"
                           Width="180">
                     <ComboBoxItem Content="16oz Copper"/>
@@ -110,22 +110,22 @@
             <StackPanel>
             <StackPanel>
                 <CheckBox Style="{StaticResource CheckBoxStyle}"
-                          IsChecked="{Binding IsApprovedForSandCement}"
+                          IsChecked="{Binding IsApprovedForSandCement,UpdateSourceTrigger=PropertyChanged}"
                           Content="Approved for Sand &amp; Cement?"/>
                 <CheckBox  Style="{StaticResource CheckBoxStyle}"
                            Content="Prevailing Wages"
-                           IsChecked="{Binding IsPrevalingWage}"/>
+                           IsChecked="{Binding IsPrevalingWage,UpdateSourceTrigger=PropertyChanged}"/>
                 <CheckBox  Style="{StaticResource CheckBoxStyle}"
-                           IsChecked="{Binding IsFlashingRequired}"
+                           IsChecked="{Binding IsFlashingRequired,UpdateSourceTrigger=PropertyChanged}"
                            Content="Metal Flashing Over Concrete?"/>
                 <CheckBox  Style="{StaticResource CheckBoxStyle}"
-                           IsChecked="{Binding HasSpecialPricing}"
+                           IsChecked="{Binding HasSpecialPricing,UpdateSourceTrigger=PropertyChanged}"
                        Content="Special Material Pricing"/>
                 <CheckBox  Style="{StaticResource CheckBoxStyle}"
-                           IsChecked="{Binding HasDiscount}"
+                           IsChecked="{Binding HasDiscount,UpdateSourceTrigger=PropertyChanged}"
                        Content="Labor Discount Large Project (over 1,000 sq. ft.)"/>
                 <CheckBox  Style="{StaticResource CheckBoxStyle}"
-                           IsChecked="{Binding HasContingencyDisc}">
+                           IsChecked="{Binding HasContingencyDisc,UpdateSourceTrigger=PropertyChanged}">
                         <TextBlock Text="Contingency Discount for Large New Construction Project (over 1,000 sq. ft.)"
                                        TextWrapping="Wrap"/>
                 </CheckBox>
@@ -162,20 +162,20 @@
                 <TextBlock Style="{StaticResource FieldHeader}"
                        Text="Total Sq Ft"/>
                 <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding TotalSqft}"/>
+                         Text="{Binding TotalSqft,UpdateSourceTrigger=LostFocus}"/>
                 <TextBlock Style="{StaticResource FieldHeader}"
                        Text="{Binding DeckLabel}"
                            />
                 <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding DeckPerimeter }"/>
+                         Text="{Binding DeckPerimeter ,UpdateSourceTrigger=LostFocus}"/>
                 <TextBlock Style="{StaticResource FieldHeader}"
                        Text="Stair Risers - Confirm stair width"/>
                 <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding RiserCount}"/>
+                         Text="{Binding RiserCount,UpdateSourceTrigger=LostFocus}"/>
                 <TextBlock Style="{StaticResource FieldHeader}"
                        Text="# Decks"/>
                 <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding DeckCount}"/>
+                         Text="{Binding DeckCount,UpdateSourceTrigger=LostFocus}"/>
                 <!--<TextBlock Style="{StaticResource FieldHeader}"
                        Text="Mark Up % "/>
                 <TextBox Style="{StaticResource TextBoxStyle}"

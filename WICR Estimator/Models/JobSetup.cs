@@ -118,8 +118,7 @@ namespace WICR_Estimator.Models
                 }
             }
         }
-        public JobSetup(string name)
-            :this()
+        public JobSetup(string name)            
         {
             ProjectName = name;
             HidePasswordSection = System.Windows.Visibility.Collapsed;

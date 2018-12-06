@@ -402,7 +402,18 @@ namespace WICR_Estimator.ViewModels
         public double LaborMinChargeMinSetup { get; set; }
         public double LaborMinChargeLaborExtension { get; set; }
         public double LaborMinChargeLaborUnitPrice { get; set; }
-
+        public double MarkUpPerc
+        {
+            get { return markUpPerc; }
+            set
+            {
+                if (value!= markUpPerc)
+                {
+                    markUpPerc = value;
+                    OnPropertyChanged("MarkUpPerc");
+                }
+            }
+        }
         private void calculateLaborHrs()
         {
             TotalHrsDriveLabor=totalSqft < 1001 ? 10 : totalSqft / 1000 * 10;
@@ -972,6 +983,7 @@ namespace WICR_Estimator.ViewModels
             CalculateCostBreakup();
             calculateLaborTotals();
             calculateLaborHrs();
+            populateCalculation();
         }
 
         private bool CanAddRows(object obj)
@@ -999,7 +1011,7 @@ namespace WICR_Estimator.ViewModels
                 isDiscounted = js.HasDiscount;
                 isApprovedforCement = js.IsApprovedForSandCement;
                 hasContingencyDisc = js.HasContingencyDisc;
-                markUpPerc = js.MarkupPercentage;
+                MarkUpPerc = js.MarkupPercentage;
             }
             FetchMaterialValuesAsync(true);
         }
@@ -2880,8 +2892,13 @@ namespace WICR_Estimator.ViewModels
             finalSCost = finalSCost + (totalCostS * facValue );
             finalSyCost = finalSyCost + (totalCostSy * facValue);
             finalSubLabCost = finalSubLabCost + (totalCostSbLabor * facValue);
-            double.TryParse(laborDetails[16][0].ToString(), out facValue);
 
+            
+            double.TryParse(laborDetails[16][0].ToString(), out facValue);
+            if (MarkUpPerc!=0)
+            {
+                facValue = MarkUpPerc;
+            }
             LCostBreakUp.Add(new CostBreakup
             {
                 Name = "Add mark up to total job price",
@@ -2905,10 +2922,10 @@ namespace WICR_Estimator.ViewModels
                 HideCalFactor =  System.Windows.Visibility.Hidden
             });
 
-            TotalMetalPrice = finalMCost*(1+markUpPerc/100);
-            TotalSlopingPrice = finalSCost * (1 + markUpPerc / 100);
-            TotalSystemPrice = finalSyCost * (1 + markUpPerc / 100);
-            TotalSubcontractLabor = finalSubLabCost * (1 + markUpPerc / 100);
+            TotalMetalPrice = finalMCost; //*(1+markUpPerc/100);
+            TotalSlopingPrice = finalSCost; //* (1 + markUpPerc / 100);
+            TotalSystemPrice = finalSyCost; //* (1 + markUpPerc / 100);
+            TotalSubcontractLabor = finalSubLabCost; // * (1 + markUpPerc / 100);
             TotalSale = TotalMetalPrice + TotalSlopingPrice + TotalSystemPrice + TotalSubcontractLabor;
             OnPropertyChanged("TotalMetalPrice");
             OnPropertyChanged("TotalSlopingPrice");

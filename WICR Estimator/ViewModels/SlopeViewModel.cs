@@ -36,8 +36,8 @@ namespace WICR_Estimator.ViewModels
                 laborRate = js.LaborRate;
                 hasDiscount = js.HasDiscount;
             }
+            CalculateAll();
 
-            
         }       
    
         private ObservableCollection<Slope> CreateSlopes()

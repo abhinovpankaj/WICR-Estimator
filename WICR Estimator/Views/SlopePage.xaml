@@ -55,6 +55,7 @@
 
         <DataGrid AutoGenerateColumns="False" 
                   HorizontalAlignment="Left"
+                  CanUserSortColumns="False"
                   Name="SlopeGrid" 
                   Margin="10"
                   VerticalAlignment="Top" 

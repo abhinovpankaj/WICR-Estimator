@@ -69,9 +69,11 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <DataGrid AutoGenerateColumns="False" 
                   HorizontalAlignment="Left"
+                  CanUserSortColumns="False"
                   Name="MaterialGrid" 
                   FrozenColumnCount ="2"
                   Margin="10,0,0,0"
@@ -194,6 +196,7 @@
 
                         </StackPanel>
                         <DataGrid AutoGenerateColumns="False"
+                                  CanUserSortColumns="False"
                           HorizontalAlignment="Left"
                       Name="OtherCostGrid" 
                           VerticalAlignment="Top"
@@ -348,25 +351,7 @@
                           FontSize="15"
                           />
                 
-                <!--<TextBlock Text="Total Hours" Margin="20,5"
-                           HorizontalAlignment="Right"
-                               Grid.Row="11"/>-->
-                <!--<TextBlock Text="Setup Min Charge" Margin="20,5"
-                           HorizontalAlignment="Right"
-                               Grid.Row="12"/>-->
-                <!--<TextBlock Text="{Binding LaborMinChargeHrs}" Margin="5"
-                           Grid.Column="1"  Grid.Row="11"/>-->
-                <!--<TextBlock Text="{Binding LaborMinChargeMinSetup}" Margin="5"
-                           Grid.Column="1"  Grid.Row="12"/>-->
-                <!--<TextBlock Text="Labor Unit price" Margin="20,5"
-                           HorizontalAlignment="Right"
-                               Grid.Row="13"/>
-                <TextBlock Text="Labor Extension" Margin="20,5"
-                           HorizontalAlignment="Right"
-                               Grid.Row="14"/>
-                <TextBlock Text="{Binding LaborMinChargeLaborUnitPrice}"  Margin="5" Grid.Column="1"  Grid.Row="13"/>
-                <TextBlock Text="{Binding LaborMinChargeLaborExtension}"   Margin="5" Grid.Column="1"  Grid.Row="14"/>-->
-
+               
             </Grid>
         <Button Command="{Binding CalculateCostCommand}"                   
                     Height="35"
@@ -386,68 +371,7 @@
                     </StackPanel>
                 </Button.Content>
             </Button>
-            <!--<GroupBox Grid.Row="3"
-                       Margin="0,20,0,0"
-                      Header="Sales Price from Other Tabs" FontSize="15"
-                      FontWeight="Bold">
-                <StackPanel >
-                    
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Label Content="Sloping" 
-                           Style="{StaticResource LabelStyle1}"/>
-                        <TextBlock Text="{Binding TotalSlopingPrice,StringFormat='c'}"
-                               Height="30" Grid.Column="1"
-                               Margin="10,0,0,0"
-                               Width="140"/>
-
-                        <Label Content="Metal"  Grid.Row="1" 
-                           Style="{StaticResource LabelStyle1}"/>
-                        <TextBlock Text="{Binding TotalMetalPrice,StringFormat='c'}"
-                               Height="30" Grid.Column="1"
-                               Grid.Row="1"
-                               Margin="10,0,0,0"
-                               Width="140"/>
-                        <Label Content="System and Other Costs" 
-                           Grid.Row="2"
-                           Style="{StaticResource LabelStyle1}"/>
-                        <TextBlock Text="{Binding TotalSystemPrice,StringFormat='c'}"
-                               Height="30" Grid.Column="1"
-                               Grid.Row="2"
-                               Margin="10,0,0,0"
-                               Width="140"/>
-
-                        <Label Content="Subcontract Labor"  Grid.Row="3" 
-                           Style="{StaticResource LabelStyle1}"/>
-                        <TextBlock Text="{Binding TotalSubcontractLabor,StringFormat='c'}"
-                               Height="30" Grid.Column="1"
-                               Grid.Row="3"
-                               Margin="10,0,0,0"
-                               Width="140"/>
-                        <Border BorderBrush="Black" BorderThickness="0,2,0,0"
-                            Grid.Row="4"
-                            Grid.ColumnSpan="2"/>
-                        <Label Content="Total Sale"  Grid.Row="5" 
-                           Style="{StaticResource LabelStyle1}"/>
-                        <TextBlock Text="{Binding TotalSale,StringFormat='c'}"
-                               Height="30" Grid.Column="1"
-                               Grid.Row="5"
-                               Margin="10,0,0,0"
-                               Width="140"/>
-                    </Grid>
-                </StackPanel>
-            </GroupBox>-->
+          
             
         </Grid>
         <Grid Grid.Row="1" Margin="10,2,2,2"
@@ -627,7 +551,7 @@
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,2">
                         <TextBlock HorizontalAlignment="Stretch" Width="100"
-                        Text="{Binding TotalSubcontractLabor,UpdateSourceTrigger=PropertyChanged}"/>
+                        Text="0"/>
                     </Border>
                 </ListBoxItem>
                 <ListBoxItem HorizontalAlignment="Center"  Margin="0,5,0,0">
@@ -673,7 +597,7 @@
                 <ListBoxItem HorizontalAlignment="Center">
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,2">
-                        <TextBlock  Width="100" Text="{Binding TotalSubcontractLabor,UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock  Width="100" Text="0"/>
                     </Border>
                 </ListBoxItem>
                 <ListBoxItem HorizontalAlignment="Center"  Margin="0,5,0,0">
@@ -785,5 +709,11 @@
             </ListBox>
             
         </Grid>
+        <StackPanel Orientation="Horizontal" Background="Aquamarine"
+                    Margin="0,5,0,5"
+                    Grid.Row="2">
+            <TextBlock  Text="Markup %" Margin="10,5,5,5" FontWeight="SemiBold"/>
+            <TextBlock Margin="20,5,5,5" Text="{Binding MarkUpPerc}"/>
+        </StackPanel>
     </Grid>
 </UserControl>
