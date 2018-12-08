@@ -52,22 +52,27 @@ namespace WICR_Estimator.ViewModels
             for (int i = 0; i < Metals.Count; i++)
             {
                 double units = Metals[i].Units;
+                double sp = Metals[i].SpecialMetalPricing;
                 Metals[i] = met[i];
                 if (!Metals[i].Name.Contains("STAIR METAL"))
                 {
                     Metals[i].Units = units;
                 }
-                
+                Metals[i].SpecialMetalPricing = sp;
             }
             var addOnMet = GetAddOnMetals();
             for (int i = 0; i < AddOnMetals.Count; i++)
             {
                 double units = AddOnMetals[i].Units;
+                double sp = AddOnMetals[i].SpecialMetalPricing;
+                bool ischecked = AddOnMetals[i].IsMetalChecked;
                 AddOnMetals[i] = addOnMet[i];
                 if (!AddOnMetals[i].Name.Contains("STAIR METAL"))
                 {
                     AddOnMetals[i].Units = units;
                 }
+                AddOnMetals[i].IsMetalChecked = ischecked;
+                AddOnMetals[i].SpecialMetalPricing = sp;
             }
             
             CalculateCost(null);

@@ -2897,7 +2897,7 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(laborDetails[16][0].ToString(), out facValue);
             if (MarkUpPerc!=0)
             {
-                facValue = MarkUpPerc;
+                facValue = MarkUpPerc / 100;
             }
             LCostBreakUp.Add(new CostBreakup
             {
