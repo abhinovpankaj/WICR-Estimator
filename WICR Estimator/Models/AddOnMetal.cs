@@ -21,8 +21,8 @@ namespace WICR_Estimator.Models
                 }
             }
         }
-        public AddOnMetal(string name, double productionRate, double laborRate, double units, double materialPrice, bool isStairMetal, double specialPricing = 0)
-            :base(name,  productionRate,  laborRate,  units,  materialPrice,  isStairMetal,  specialPricing = 0)
+        public AddOnMetal(string name,string size, double productionRate, double laborRate, double units, double materialPrice, bool isStairMetal, double specialPricing = 0)
+            :base(name,size,  productionRate,  laborRate,  units,  materialPrice,  isStairMetal,  specialPricing = 0)
         {
         }
     }

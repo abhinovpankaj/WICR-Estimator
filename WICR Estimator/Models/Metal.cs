@@ -12,9 +12,9 @@ namespace WICR_Estimator.Models
         private double LaborRate;
         public MetalType Type { get; set; }
         public string Name { get; set; }
-        public string Size { get; set; }
+        
         public bool IsEditable { get; set; }
-        public string MetalDimensions { get; set; }
+        //public string MetalDimensions { get; set; }
 
         private bool isStairMetal;
         public bool IsStairMetal
@@ -61,6 +61,20 @@ namespace WICR_Estimator.Models
                 {
                     pr = value;
                     OnPropertyChanged("ProductionRate");
+                }
+            }
+        }
+
+        private string size;
+        public string Size
+        {
+            get { return size; }
+            set
+            {
+                if (value!=size)
+                {
+                    size = value;
+                    OnPropertyChanged("Size");
                 }
             }
         }
@@ -129,7 +143,7 @@ namespace WICR_Estimator.Models
             }
         }
 
-        public Metal(string name,double productionRate,double laborRate,double units,double materialPrice,bool isStairMetal,double specialPricing=0)
+        public Metal(string name,string size,double productionRate,double laborRate,double units,double materialPrice,bool isStairMetal,double specialPricing=0)
             :this()
         {
             this.ProductionRate = productionRate;
@@ -139,6 +153,7 @@ namespace WICR_Estimator.Models
             this.MaterialPrice = materialPrice;
             this.Name = name;
             this.IsStairMetal = isStairMetal;
+            this.Size = size;
         }
         public Metal()
         { }

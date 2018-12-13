@@ -368,7 +368,7 @@ namespace WICR_Estimator.ViewModels
                     if (hasDiscount)
                         TotalLaborCost = lCost * (1 + prevailingWage + deductionOnLargeJob);
                     else
-                        TotalLaborCost = lCost * (1 + deductionOnLargeJob);
+                        TotalLaborCost = lCost * (1 + prevailingWage);
 
                 }
                 else

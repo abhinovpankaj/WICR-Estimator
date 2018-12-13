@@ -79,7 +79,8 @@
                     <DataGridTemplateColumn Header="Size">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding MetalDimensions,UpdateSourceTrigger=LostFocus}"
+                                <TextBox Text="{Binding Size,UpdateSourceTrigger=LostFocus}"
+                                         HorizontalAlignment="Stretch"
                                     IsEnabled="True" Style="{StaticResource  editableTextbox}"
                                          />
                             </DataTemplate>
@@ -252,8 +253,9 @@
                     <DataGridTemplateColumn Header="Size">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox x:Name="txtSize" Text="{Binding MetalDimensions,
+                                <TextBox x:Name="txtSize" Text="{Binding Size,
                                     UpdateSourceTrigger=LostFocus}"
+                                         HorizontalAlignment="Stretch"
                                     IsEnabled="True" Style="{StaticResource addOnTextBox}">
                                     
                                 </TextBox>
