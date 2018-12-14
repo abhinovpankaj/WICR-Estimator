@@ -203,7 +203,7 @@ namespace WICR_Estimator.Models
         {
             get
             {
-                if (ProjectName == "Weather Wear")
+                if (ProjectName == "Dexotex Weather Wear" || ProjectName == "Dexotex Weather Wear Rehab")
                     return "Linear Footage of Deck Perimeter";
                 else
                     return "Lf Perimeter for Burlap and Membrane";
@@ -426,7 +426,7 @@ namespace WICR_Estimator.Models
             {
                 if (laborRate==0)
                 {
-                    var rate=DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate,"Dexotex Weather Wear");
+                    var rate=DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate,projectname);
                     double.TryParse(rate[0][0].ToString(),out laborRate);
                 }
                 return laborRate;

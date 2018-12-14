@@ -31,6 +31,16 @@
                         <Setter Property="Foreground" Value="Black"/>
                     </MultiDataTrigger.Setters>
                 </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding IsMetalChecked}" Value="True"/>
+                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled}" Value="False" />
+                    </MultiDataTrigger.Conditions>
+                    <MultiDataTrigger.Setters>
+                        <Setter Property="Background" Value="White" />
+                        <Setter Property="Foreground" Value="Black"/>
+                    </MultiDataTrigger.Setters>
+                </MultiDataTrigger>
 
             </Style.Triggers>
         </Style>
@@ -256,8 +266,19 @@
                                 <TextBox x:Name="txtSize" Text="{Binding Size,
                                     UpdateSourceTrigger=LostFocus}"
                                          HorizontalAlignment="Stretch"
-                                    IsEnabled="True" Style="{StaticResource addOnTextBox}">
-                                    
+                                    IsEnabled="True" >
+                                    <TextBox.Style>
+                                        <Style TargetType="{x:Type TextBox}">
+                                            <Setter Property="Foreground" Value="White"/>
+                                            <Setter Property="Background" Value="Gray"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsMetalChecked}" Value="True">
+                                                    <Setter Property="Foreground" Value="Black"/>
+                                                    <Setter Property="Background" Value="White"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBox.Style>
                                 </TextBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

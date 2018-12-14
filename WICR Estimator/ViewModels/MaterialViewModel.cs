@@ -416,7 +416,7 @@ namespace WICR_Estimator.ViewModels
         }
         private void calculateLaborHrs()
         {
-            TotalHrsDriveLabor=totalSqft < 1001 ? 10 : totalSqft / 1000 * 10;
+            TotalHrsDriveLabor=totalSqft < 1001 ? 10 : Math.Ceiling(totalSqft / 1000 * 10);
             TotalHrsFreightLabor = AllTabsFreightTotal / laborRate;
             OnPropertyChanged("TotalHrsFreightLabor");
             TotalHrsSystemLabor = isPrevailingWage ? (TotalLaborExtension / laborRate) * .445 - TotalHrsDriveLabor :
@@ -1012,6 +1012,7 @@ namespace WICR_Estimator.ViewModels
                 isApprovedforCement = js.IsApprovedForSandCement;
                 hasContingencyDisc = js.HasContingencyDisc;
                 MarkUpPerc = js.MarkupPercentage;
+                deckCount = js.DeckCount;
             }
             FetchMaterialValuesAsync(true);
         }
@@ -2407,7 +2408,7 @@ namespace WICR_Estimator.ViewModels
                 case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
                 case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
                 case "AJ-44A DRESSING(SEALER)":
-                    return 1000;
+                    return totalSqft;
                 case "LARGE CRACK REPAIR":
                 case "BUBBLE REPAIR MAJOR SQFT":
                 case "NEOTEX-38 PASTE":

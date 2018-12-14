@@ -27,7 +27,7 @@ namespace WICR_Estimator.ViewModels
         protected string vendorName;
         protected IList<IList<object>> metalDetails;
         protected double laborRate;
-        protected double RiserCount;
+        protected double riserCount;
         protected double stairWidth;
         protected bool isFlash;
         public MetalBaseViewModel()
@@ -38,7 +38,7 @@ namespace WICR_Estimator.ViewModels
 
             MetalName = "16oz Copper";
             vendorName = "Chivon";
-            RiserCount = 30;
+            riserCount = 30;
             stairWidth = 4.5;
         }
 
@@ -284,11 +284,11 @@ namespace WICR_Estimator.ViewModels
             if (unitNo == 0)
             {
                 //double.TryParse(metalDetails[2][0].ToString(), out unit);
-                unit = RiserCount * 2.25 * 2;
+                unit = riserCount * 2.25 * 2;
             }
             else if (unitNo == 1)
                 //double.TryParse(metalDetails[3][0].ToString(), out unit);
-                unit = RiserCount * stairWidth * 2;
+                unit = riserCount * stairWidth * 2;
             else if (unitNo == 2)
             {
                 unit = isFlash ? (Metals[0].Units+ Metals[1].Units + Metals[2].Units + Metals[3].Units)*stairWidth : 0; 
@@ -296,7 +296,7 @@ namespace WICR_Estimator.ViewModels
             }
             else if (unitNo == 3)
             {
-                unit = isFlash ? RiserCount : 0;
+                unit = isFlash ? riserCount : 0;
                 //double.TryParse(metalDetails[38][0].ToString(), out unit);
             }
             return unit;
@@ -307,7 +307,7 @@ namespace WICR_Estimator.ViewModels
         {
             if (pWage == null)
             {
-                //pWage = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E60:E61");
+                
                 GSData gsData = DataSerializer.DSInstance.deserializeGoogleData(projectName);
                 pWage = gsData.LaborData;
                 double.TryParse(gsData.LaborRate[0][0].ToString(), out laborRate);

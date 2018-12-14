@@ -12,12 +12,37 @@ namespace WICR_Estimator.ViewModels
     {
         public DexoMetalViewModel()
         {
-            GetMetalDetailsFromGoogle("Dexotex Resistite");
+            GetMetalDetailsFromGoogle("Dexotex Barrier Gaurd");
             Metals = this.GetMetals();
             MiscMetals = this.GetMiscMetals();
+            AddOnMetals = this.GetAddOnMetals();
             CalculateCost(null);
         }
-        
+
+        public ObservableCollection<AddOnMetal> GetAddOnMetals()
+        {
+            ObservableCollection<AddOnMetal> met = new ObservableCollection<AddOnMetal>();
+            met.Add(new AddOnMetal("L - METAL / FLASHING", "4X10", getMetalPR(0), laborRate, 0, getMetalMP(0), false));
+            met.Add(new AddOnMetal("L - METAL / FLASHING", "4X8", getMetalPR(1), laborRate, 0, getMetalMP(1), false));
+            met.Add(new AddOnMetal("DRIP EDGE METAL", "4X4", getMetalPR(3), laborRate, 1, getMetalMP(3), false));
+            met.Add(new AddOnMetal("DRIP EDGE METAL", "3X4", getMetalPR(4), laborRate, 1, getMetalMP(4), false));
+            met.Add(new AddOnMetal("STAIR METAL", "4X10", getMetalPR(6), laborRate, getUnits(1), getMetalMP(6), true));
+            met.Add(new AddOnMetal("STAIR METAL", "4X8", getMetalPR(7), laborRate, getUnits(1), getMetalMP(7), true));
+            met.Add(new AddOnMetal("Door Pan", "10' - 12'", getMetalPR(11), laborRate, 1, getMetalMP(11), false));
+            met.Add(new AddOnMetal("Door Pan", "8'", getMetalPR(12), laborRate, 2, getMetalMP(12), false));
+            met.Add(new AddOnMetal("Door Pan", "6'", getMetalPR(13), laborRate, 3, getMetalMP(13), false));
+            met.Add(new AddOnMetal("Door Pan", "4'", getMetalPR(14), laborRate, 6, getMetalMP(14), false));
+            met.Add(new AddOnMetal("Door Pan", "3'", getMetalPR(15), laborRate, 6, getMetalMP(15), false));
+            met.Add(new AddOnMetal("CORNER DRIP TERMINATION", "", getMetalPR(26), laborRate, 1, getMetalMP(26), false));
+            met.Add(new AddOnMetal("OFFSET DRIP TERMINATION", "", getMetalPR(27), laborRate, 1, getMetalMP(27), false));
+            met.Add(new AddOnMetal("SRAIGHT DRIP TERMINATION", "", getMetalPR(28), laborRate, 1, getMetalMP(28), false));
+            met.Add(new AddOnMetal("STANDARD SCUPPER", "2x4x9", getMetalPR(30), laborRate, 1, getMetalMP(30), false));
+            met.Add(new AddOnMetal("STANDARD SCUPPER", "3x4x9", getMetalPR(31), laborRate, 1, getMetalMP(31), false));
+            met.Add(new AddOnMetal("OVERFLOW SCUPPER", "", getMetalPR(34), laborRate, 1, getMetalMP(34), false));
+            met.Add(new AddOnMetal("TWO STAGE SCUPPER", "", getMetalPR(35), laborRate, 1, getMetalMP(35), false));
+            return met;
+        }
+
         public ObservableCollection<Metal> GetMetals()
         {
             ObservableCollection<Metal> met = new ObservableCollection<Metal>();
@@ -52,5 +77,7 @@ namespace WICR_Estimator.ViewModels
             misc.Add(new MiscMetal { Name = "OTHER DRAINS TO BE ITEMIZED", Units = 1, UnitPrice = 8, MaterialPrice = 15, IsEditable = true });
             return misc;
         }
+
+
     }
 }

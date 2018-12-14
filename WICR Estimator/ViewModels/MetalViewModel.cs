@@ -40,6 +40,7 @@ namespace WICR_Estimator.ViewModels
                 vendorName = Js.VendorName;
                 stairWidth = Js.StairWidth;
                 isFlash=Js.IsFlashingRequired;
+                riserCount= Js.RiserCount;
                 if (Js.HasSpecialPricing)
                 {
                     ShowSpecialPriceColumn = System.Windows.Visibility.Visible;

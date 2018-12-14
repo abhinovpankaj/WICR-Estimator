@@ -29,14 +29,7 @@
         </Style>
     </UserControl.Resources>
     <Grid Background="LightBlue">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
@@ -53,9 +46,10 @@
                             VerticalContentAlignment="Center"
                             HorizontalContentAlignment="Left"/>
                 <TextBlock Style="{StaticResource FieldHeader}"
-                       Text="Weather Wear Type"
+                       Text="Weather Wear Type" Visibility="{Binding ShowWeatherWearDD}"
                            />
-                <ComboBox Text="{Binding WeatherWearType,UpdateSourceTrigger=LostFocus}" Width="180"
+                <ComboBox Text="{Binding WeatherWearType,UpdateSourceTrigger=LostFocus}" 
+                          Width="180" Visibility="{Binding ShowWeatherWearDD}"
                           HorizontalAlignment="Left"
                           Margin="5,0,0,0">
                     <ComboBoxItem Content="Weather Wear"/>
@@ -144,7 +138,7 @@
                          HorizontalAlignment="Center"
                      Margin="5"/>
                         <Slider Maximum="10" Value="{Binding StairWidth}"
-                                Width="250"
+                                Width="250" 
                     TickPlacement="BottomRight"
                     TickFrequency=".5" IsSnapToTickEnabled="True" Name="slWidth"
                     />
