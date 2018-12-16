@@ -44,7 +44,7 @@ namespace WICR_Estimator.ViewModels
         {
             Slopes = new ObservableCollection<Slope>();
             SlopeTotals = new Totals { TabName = "Slope" };
-            isApprovedForCement = false;
+            isApprovedForCement = true;
             SlopeMaterialName = "Dexotex A-81 Underlayment";
         }
 
@@ -91,19 +91,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
-        private void CalculateManual()
-        {
-            SumTotalMixes = TotalMixesMan;
-            SumTotalMatExt = AverageMixesPrice * TotalMixesMan;
-            TotalMaterialCost = SumTotalMatExt;
-            TotalWeight = Math.Round(50 * TotalMixesMan, 2);
-            TotalFrightCost = Math.Round(FreightCalculator(TotalWeight), 2);
-            SumTotalLaborExt = Math.Round(TotalMixesMan * manualAvgMixPrice, 2);
-            MinimumLaborCost = 6 * laborRate;
-            TotalLaborCost = MinimumLaborCost > SumTotalLaborExt ? MinimumLaborCost : SumTotalLaborExt;
-
-
-        }
+        
         public ObservableCollection<Slope> Slopes
         {
             get
@@ -312,7 +300,35 @@ namespace WICR_Estimator.ViewModels
         #endregion
 
         #region Methods
+        private void CalculateManual()
+        {
+            SumTotalMixes = TotalMixesMan;
+            SumTotalMatExt = AverageMixesPrice * TotalMixesMan;
+            TotalMaterialCost = SumTotalMatExt;
+            TotalWeight = Math.Round(50 * TotalMixesMan, 2);
+            TotalFrightCost = Math.Round(FreightCalculator(TotalWeight), 2);
+            SumTotalLaborExt = Math.Round(TotalMixesMan * manualAvgMixPrice, 2);
+            MinimumLaborCost = 6 * laborRate;
+            TotalLaborCost = MinimumLaborCost > SumTotalLaborExt ? MinimumLaborCost : SumTotalLaborExt;
 
+            if (isPrevailingWage)
+            {
+                if (hasDiscount)
+                    TotalLaborCost = TotalLaborCost * (1 + prevailingWage + deductionOnLargeJob);
+                else
+                    TotalLaborCost = TotalLaborCost * (1 + prevailingWage);
+
+            }
+            else
+            {
+                if (hasDiscount)
+                    TotalLaborCost = TotalLaborCost * (1 + deductionOnLargeJob);
+                else
+                    TotalLaborCost = TotalLaborCost;
+            }
+
+
+        }
         public void GetSlopeDetailsFromGoogle(string projectName)
         {
             if (perMixRates == null)
@@ -331,6 +347,77 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(pWage[0][0].ToString(), out prevailingWage);
             double.TryParse(pWage[1][0].ToString(), out deductionOnLargeJob);
 
+        }
+        public void JobSetup_OnJobSetupChange(object sender, EventArgs e)
+        {
+            JobSetup js = sender as JobSetup;
+            if (js != null)
+            {
+                if (isApprovedForCement != js.IsApprovedForSandCement)
+                {
+                    isApprovedForCement = js.IsApprovedForSandCement;
+                    SlopeMaterialName = isApprovedForCement ? "Sand and Cement" : "Dexotex A-81 Underlayment1";
+                    reCalculate();
+                }
+
+                isPrevailingWage = js.IsPrevalingWage;
+                laborRate = js.LaborRate;
+                hasDiscount = js.HasDiscount;
+            }
+            CalculateAll();
+
+        }
+        public virtual ObservableCollection<Slope> CreateSlopes()
+        {
+            ObservableCollection<Slope> slopes = new ObservableCollection<Slope>();
+            slopes.Add(new Slope
+            {
+                Thickness = "1/4 inch Average",
+                DeckCount = 0,
+                Sqft = 0,
+                GSLaborRate = getGSLaborRate("1/4 inch Average"),
+                LaborRate = laborRate,
+                PricePerMix = getPricePerMix("1/4 inch Average", isApprovedForCement)
+            });
+            slopes.Add(new Slope
+            {
+                Thickness = "1/2 inch Average",
+                DeckCount = 0,
+                Sqft = 0,
+                GSLaborRate = getGSLaborRate("1/2 inch Average"),
+                LaborRate = laborRate,
+                PricePerMix = getPricePerMix("1/2 inch Average", isApprovedForCement)
+            });
+
+            slopes.Add(new Slope
+            {
+                Thickness = "3/4 inch Average",
+                DeckCount = 0,
+                Sqft = 0,
+                GSLaborRate = getGSLaborRate("3/4 inch Average"),
+                LaborRate = laborRate,
+                PricePerMix = getPricePerMix("3/4 inch Average", isApprovedForCement)
+            });
+            slopes.Add(new Slope
+            {
+                Thickness = "1 inch Average",
+                DeckCount = 0,
+                Sqft = 0,
+                GSLaborRate = getGSLaborRate("1 inch Average"),
+                LaborRate = laborRate,
+                PricePerMix = getPricePerMix("1 inch Average", isApprovedForCement)
+            });
+            slopes.Add(new Slope
+            {
+                Thickness = "1 1/4 inch Average",
+                DeckCount = 0,
+                Sqft = 0,
+                GSLaborRate = getGSLaborRate("1 1/4 inch Average"),
+                LaborRate = laborRate,
+                PricePerMix = getPricePerMix("1 1/4 inch Average", isApprovedForCement)
+            });
+
+            return slopes;
         }
         public void CalculateAll()
         {

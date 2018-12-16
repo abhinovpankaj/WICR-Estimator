@@ -116,10 +116,11 @@
     <Compile Include="Models\Totals.cs" />
     <Compile Include="ViewModelInstanceFactory.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\DexoMaterialViewModel.cs" />
     <Compile Include="ViewModels\DexoMetalViewModel.cs" />
     <Compile Include="ViewModels\DexoSlopeViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
-    <Compile Include="ViewModels\LaborViewModel.cs" />
+    <Compile Include="ViewModels\MaterialBaseViewModel.cs" />
     <Compile Include="ViewModels\MaterialViewModel.cs" />
     <Compile Include="ViewModels\MetalBaseViewModel.cs" />
     <Compile Include="ViewModels\MetalViewModel.cs" />

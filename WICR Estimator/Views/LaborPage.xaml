@@ -60,6 +60,13 @@
 
             </Style.Triggers>
         </Style>
+        <Style TargetType="{x:Type DataGridCell}" x:Key="editableCell">
+            <Style.Triggers >
+                <Trigger Property="IsReadOnly" Value="False">
+                    <Setter Property="Background" Value="LightYellow" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -202,7 +209,7 @@
                           VerticalAlignment="Top"
                       Margin="5,10,10,10"
                       Grid.Column="1"
-                          
+                          CellStyle="{StaticResource editableCell}"
                       CanUserAddRows="false"                      
                   ItemsSource="{Binding OtherLaborMaterials,UpdateSourceTrigger=PropertyChanged}">
                             <DataGrid.Columns>
@@ -219,7 +226,7 @@
                                 <DataGridTextColumn Header="Unit"
                                     Binding="{Binding LQuantity,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                                 <DataGridTextColumn Header="Labor Unit Price ($)"
-                                    Binding="{Binding LMaterialPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C}}"/>
+                                    Binding="{Binding LMaterialPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                                 <DataGridTextColumn Header="Labor Price($)" 
                                         IsReadOnly="True"
                                         Binding="{Binding LExtension,Mode=OneWay,UpdateSourceTrigger=PropertyChanged ,StringFormat={}{0:C}}"/>

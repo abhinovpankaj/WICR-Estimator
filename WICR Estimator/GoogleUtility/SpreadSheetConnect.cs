@@ -77,11 +77,12 @@ namespace WICR_Estimator.GoogleUtility
             }
             switch (projectName)
             {
-                case "Weather Wear":
+                case "Dexotex Weather Wear":
+                case "Dexotex Weather Wear Rehab":
                     prjName = "WeatherWear";
                     break;
-                case "Dexotex Resistite":
-                    prjName = "DexotexResistite";
+                case "Dexotex Barrier Gaurd":
+                    prjName = "DexotexBarrier";
                     break;
                 default:
                     break;

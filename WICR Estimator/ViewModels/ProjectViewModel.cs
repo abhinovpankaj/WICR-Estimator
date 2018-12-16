@@ -132,15 +132,16 @@ namespace WICR_Estimator.ViewModels
                     }
                     if (prj.MetalViewModel == null)
                     {
-                        prj.MetalViewModel = ViewModelInstanceFactory.GetMetalViewModelInstance(prj.Name);
+                        prj.MetalViewModel = ViewModelInstanceFactory.GetMetalViewModelInstance(prj.Name,prj.ProjectJobSetUp);
                     }
                     if (prj.SlopeViewModel == null)
                     {
-                        prj.SlopeViewModel = new SlopeViewModel();
+                        prj.SlopeViewModel = ViewModelInstanceFactory.GetSlopeViewModelInstance(prj.Name,prj.ProjectJobSetUp);
                     }
                     if (prj.MaterialViewModel == null)
                     {
-                        prj.MaterialViewModel = new MaterialViewModel(prj.MetalViewModel.MetalTotals, prj.SlopeViewModel.SlopeTotals);
+                        prj.MaterialViewModel = ViewModelInstanceFactory.GetMaterialViewModelInstance(prj.Name,prj.MetalViewModel.MetalTotals,
+                            prj.SlopeViewModel.SlopeTotals,prj.ProjectJobSetUp);
                     }
                 }
             }          

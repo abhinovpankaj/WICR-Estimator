@@ -10,12 +10,67 @@ namespace WICR_Estimator.ViewModels
 {
     public class DexoMetalViewModel:MetalBaseViewModel
     {
-        public DexoMetalViewModel()
+        public DexoMetalViewModel(JobSetup js)
         {
             GetMetalDetailsFromGoogle("Dexotex Barrier Gaurd");
             Metals = this.GetMetals();
             MiscMetals = this.GetMiscMetals();
             AddOnMetals = this.GetAddOnMetals();
+            js.OnJobSetupChange += Js_OnJobSetupChange;
+            CalculateCost(null);
+        }
+
+        private void Js_OnJobSetupChange(object sender, EventArgs e)
+        {
+            JobSetup js = sender as JobSetup;
+            OnJobSetupChange(js);
+        }
+        public void OnJobSetupChange(JobSetup Js)
+        {
+            if (Js != null)
+            {
+                MetalName = Js.MaterialName;
+                isPrevailingWage = Js.IsPrevalingWage;
+                isDiscount = Js.HasDiscount;
+                vendorName = Js.VendorName;
+                stairWidth = Js.StairWidth;
+                isFlash = Js.IsFlashingRequired;
+                riserCount = Js.RiserCount;
+                if (Js.HasSpecialPricing)
+                {
+                    ShowSpecialPriceColumn = System.Windows.Visibility.Visible;
+                }
+                else
+                    ShowSpecialPriceColumn = System.Windows.Visibility.Hidden;
+            }
+
+            var met = GetMetals();
+            for (int i = 0; i < Metals.Count; i++)
+            {
+                double units = Metals[i].Units;
+                double sp = Metals[i].SpecialMetalPricing;
+                Metals[i] = met[i];
+                if (!Metals[i].Name.Contains("STAIR METAL"))
+                {
+                    Metals[i].Units = units;
+                }
+                Metals[i].SpecialMetalPricing = sp;
+            }
+            var addOnMet = GetAddOnMetals();
+            for (int i = 0; i < AddOnMetals.Count; i++)
+            {
+                double units = AddOnMetals[i].Units;
+                double sp = AddOnMetals[i].SpecialMetalPricing;
+                bool ischecked = AddOnMetals[i].IsMetalChecked;
+                AddOnMetals[i] = addOnMet[i];
+                if (!AddOnMetals[i].Name.Contains("STAIR METAL"))
+                {
+                    AddOnMetals[i].Units = units;
+                }
+                AddOnMetals[i].IsMetalChecked = ischecked;
+                AddOnMetals[i].SpecialMetalPricing = sp;
+            }
+
             CalculateCost(null);
         }
 
@@ -68,7 +123,6 @@ namespace WICR_Estimator.ViewModels
             return met;
         }
     
-
         public ObservableCollection<MiscMetal> GetMiscMetals()
         {
             ObservableCollection<MiscMetal> misc = new ObservableCollection<MiscMetal>();

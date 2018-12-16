@@ -81,7 +81,7 @@ namespace WICR_Estimator.Models
             {
                 if (MaterialViewModel != null)
                 {
-                    return Math.Round(MaterialViewModel.AllTabsLaborTotal/ MaterialViewModel.TotalSale,4);
+                    return Math.Round(MaterialViewModel.AllTabsLaborTotal/ MaterialViewModel.TotalSale *100,2);
                 }
                 else
                     return 0;
@@ -137,8 +137,8 @@ namespace WICR_Estimator.Models
                 }
             }
         }
-        private SlopeViewModel slopeViewModel;
-        public SlopeViewModel SlopeViewModel
+        private SlopeBaseViewModel slopeViewModel;
+        public SlopeBaseViewModel SlopeViewModel
         {
             get
             {
@@ -154,8 +154,8 @@ namespace WICR_Estimator.Models
                 }
             }
         }
-        private MaterialViewModel materialViewModel;
-        public MaterialViewModel MaterialViewModel
+        private MaterialBaseViewModel materialViewModel;
+        public MaterialBaseViewModel MaterialViewModel
         {
             get
             {

@@ -27,7 +27,7 @@ namespace WICR_Estimator.Models
                 }
             }
         }
-        public static event EventHandler OnJobSetupChange;
+        public event EventHandler OnJobSetupChange;
         public event EventHandler OnProjectNameChange;
         public JobSetup()
         { 
@@ -122,7 +122,7 @@ namespace WICR_Estimator.Models
         {
             ProjectName = name;
             HidePasswordSection = System.Windows.Visibility.Collapsed;
-            IsApprovedForSandCement = false;
+            IsApprovedForSandCement = true;
             IsPrevalingWage = false;
             HasDiscount = false;
             StairWidth = 4.5;
