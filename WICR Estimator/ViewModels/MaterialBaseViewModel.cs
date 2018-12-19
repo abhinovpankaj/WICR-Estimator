@@ -21,19 +21,19 @@ namespace WICR_Estimator.ViewModels
         private ObservableCollection<OtherItem> otherLaborMaterials;
         private ObservableCollection<LaborContract> subContractLaborItems;
         private string weatherWearType;
-        private double totalSqft;
-        private double stairWidth;
-        private int riserCount;
+        public double totalSqft;
+        public double stairWidth;
+        public int riserCount;
         private double markUpPerc;
-        private double deckPerimeter;
+        public double deckPerimeter;
         private bool isApprovedforCement;
-        private double laborRate;
+        public double laborRate;
         private bool isPrevailingWage;
         private bool isSpecialMetal;
         private bool hasSpecialPricing;
         private bool isDiscounted;
-        private IList<IList<Object>> laborDetails;
-        private IList<IList<object>> materialDetails;
+        public IList<IList<Object>> laborDetails;
+        public IList<IList<object>> materialDetails;
         private double costPerSquareFeet;
         private ICommand _addRowCommand;
         private ICommand _calculateCostCommand;
@@ -81,6 +81,74 @@ namespace WICR_Estimator.ViewModels
             getDatafromGoogle(Js.ProjectName);          
             
             //calculateLaborHrs();
+        }
+
+        public SystemMaterial getSMObject(int seq, string matName, string unit)
+        {
+            int cov;
+            double mp;
+            double w;
+            double lfArea;
+            double setUpMin = 0; // Setup minimum charges from google sheet, col 6
+            double pRateStairs = 0; ///Production rate stairs from google sheet, col 5
+            double hprRate = 0;///Horizontal Production rate  from google sheet, col 4
+            //double vprRate = 0;///Vertical Production rate  from google sheet, col 1
+            double sqh = 0;
+            double labrExt = 0;
+            double calcHrs = 0;
+            double sqStairs = 0;
+            double qty = 0;
+
+
+            int.TryParse(materialDetails[seq][2].ToString(), out cov);
+            double.TryParse(materialDetails[seq][0].ToString(), out mp);
+            double.TryParse(materialDetails[seq][3].ToString(), out w);
+            lfArea = getlfArea(matName);
+            double.TryParse(materialDetails[seq][6].ToString(), out setUpMin);
+            double.TryParse(materialDetails[seq][5].ToString(), out pRateStairs);
+            double.TryParse(materialDetails[seq][4].ToString(), out hprRate);
+            sqh = getSqFtAreaH(matName);
+            sqStairs = getSqFtStairs(matName);
+            calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
+            labrExt = (calcHrs != 0) ? (setUpMin + calcHrs) * laborRate : 0;
+            qty = getQuantity(matName, cov, lfArea);
+            if (lfArea == -1)
+            {
+                lfArea = qty;
+            }
+            if (sqh == -1)
+            {
+                sqh = qty;
+            }
+            if (sqStairs == -1)
+            {
+                sqStairs = qty;
+            }
+            return (new SystemMaterial
+            {
+
+                IsMaterialChecked = getCheckboxCheckStatus(matName),
+                IsMaterialEnabled = getCheckboxEnabledStatus(matName),
+                Name = matName,
+                SMUnits = unit,
+                SMSqft = lfArea,
+                Coverage = cov,
+                MaterialPrice = mp,
+                Weight = w,
+                Qty = qty,
+                SMSqftH = sqh,
+                Operation = matName,
+                HorizontalProductionRate = hprRate,
+                StairsProductionRate = pRateStairs,
+                StairSqft = sqStairs,
+                SetupMinCharge = setUpMin,
+                Hours = calcHrs,
+                LaborExtension = labrExt,
+                LaborUnitPrice = labrExt / (riserCount + totalSqft),
+                FreightExtension = w * qty,
+                MaterialExtension = mp * qty
+
+            });
         }
 
         private void MetalTotals_OnTotalsChange(object sender, EventArgs e)
@@ -454,7 +522,7 @@ namespace WICR_Estimator.ViewModels
 
         }
 
-        private void ApplyCheckUnchecks(object obj)
+        public virtual void ApplyCheckUnchecks(object obj)
         {
             if (obj == null)
             {
@@ -813,10 +881,13 @@ namespace WICR_Estimator.ViewModels
                 {
 
                     double sp = SystemMaterials[i].SpecialMaterialPricing;
+                    bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
+                    bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
                     SystemMaterials[i] = sysMat[i];
 
                     SystemMaterials[i].SpecialMaterialPricing = sp;
-
+                    SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                    SystemMaterials[i].IsMaterialChecked = iscbChecked;
                     if (SystemMaterials[i].Name == "Stucco Material Remove And Replace (Lf)" || SystemMaterials[i].Name == "Plywood 3/4 & Blocking(# Of 4X8 Sheets)" ||
                     SystemMaterials[i].Name == "Extra Stair Nosing Lf" || SystemMaterials[i].Name == "Bubble Repair(Measure Sq Ft)"
                             || SystemMaterials[i].Name == "Large Crack Repair")
@@ -867,23 +938,65 @@ namespace WICR_Estimator.ViewModels
         {
             if (SystemMaterials.Count != 0)
             {
-                SystemMaterial item = SystemMaterials.First(x => x.Name == "Extra Stair Nosing Lf");
-                item.StairSqft = item.Qty;
-                item.Hours = CalculateHrs(0, 0, item.StairSqft, item.StairsProductionRate);
-                item.LaborExtension = (item.Hours + item.SetupMinCharge) * laborRate;
-                item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
+                SystemMaterial item = SystemMaterials.Where(x => x.Name == "Extra stair nosing lf").FirstOrDefault();
+                if (item!=null)
+                {
+                    item.StairSqft = item.Qty;
+                    item.Hours = CalculateHrs(0, 0, item.StairSqft, item.StairsProductionRate);
+                    item.LaborExtension = (item.Hours + item.SetupMinCharge) * laborRate;
+                    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
+                    
+                }
+                
 
-                item = SystemMaterials.First(x => x.Name == "Plywood 3/4 & Blocking(# Of 4X8 Sheets)");
-                item.SMSqftH = item.Qty * 32;
-                item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
-                item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
-                item.LaborUnitPrice = item.LaborExtension / item.Qty;
+                item = SystemMaterials.Where(x => x.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)").FirstOrDefault();
+                if (item!=null)
+                {
+                    item.SMSqftH = item.Qty * 32;
+                    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
+                    item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
+                    item.LaborUnitPrice = item.LaborExtension / item.Qty;
+                }
 
-                item = SystemMaterials.First(x => x.Name == "Stucco Material Remove And Replace (Lf)");
-                item.SMSqftH = item.Qty;
-                item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
-                item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
-                item.LaborUnitPrice = item.LaborExtension / item.Qty;
+                item = SystemMaterials.Where(x => x.Name == "Stucco Material Remove and replace (LF)").FirstOrDefault();
+                if (item!=null)
+                {
+                    item.SMSqftH = item.Qty;
+                    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
+                    item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
+                    item.LaborUnitPrice = item.LaborExtension / item.Qty;
+                }
+                
+                //=======================================
+                item = SystemMaterials.Where(x => x.Name == "Extra Stair Nosing Lf").FirstOrDefault();
+                if (item!=null)
+                {
+                    item.StairSqft = item.Qty;
+                    item.Hours = CalculateHrs(0, 0, item.StairSqft, item.StairsProductionRate);
+                    item.LaborExtension = (item.Hours + item.SetupMinCharge) * laborRate;
+                    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
+                }
+                
+
+                item = SystemMaterials.Where(x => x.Name == "Plywood 3/4 & Blocking(# Of 4X8 Sheets)").FirstOrDefault();
+                if (item!=null)
+                {
+                    item.SMSqftH = item.Qty * 32;
+                    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
+                    item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
+                    item.LaborUnitPrice = item.LaborExtension / item.Qty;
+                }
+                
+
+                item = SystemMaterials.Where(x => x.Name == "Stucco Material Remove And Replace (Lf)").FirstOrDefault();
+                if (item!=null)
+                {
+                    item.SMSqftH = item.Qty;
+                    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
+                    item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
+                    item.LaborUnitPrice = item.LaborExtension / item.Qty;
+                }
+                
             }
 
         }
@@ -1002,7 +1115,7 @@ namespace WICR_Estimator.ViewModels
 
         #region methods
         //Event handler to get JobSetup change updates.
-        private void JobSetup_OnJobSetupChange(object sender, EventArgs e)
+        public virtual void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {
             JobSetup js = sender as JobSetup;
             if (js != null)
@@ -1159,7 +1272,7 @@ namespace WICR_Estimator.ViewModels
             return false;
         }
 
-        private double CalculateHrs(double horzSft, double prodHor, double stairSqft, double prodStair)
+        public double CalculateHrs(double horzSft, double prodHor, double stairSqft, double prodStair)
         {
             double val1 = prodHor != 0 ? horzSft / prodHor : 0;
             double val2 = prodStair != 0 ? stairSqft / prodStair : 0;
@@ -2181,7 +2294,7 @@ namespace WICR_Estimator.ViewModels
 
 
         #region Material
-        private double getQuantity(string materialName, double coverage, double lfArea)
+        public virtual double getQuantity(string materialName, double coverage, double lfArea)
         {
             switch (materialName.ToUpper())
             {
@@ -2242,7 +2355,7 @@ namespace WICR_Estimator.ViewModels
             return (val2 * 1.5 + val1 * 1.25) / 5;
         }
 
-        private double getlfArea(string materialName)
+        public virtual double getlfArea(string materialName)
         {
             string upp = materialName.ToUpper();
             switch (materialName.ToUpper())
@@ -2270,7 +2383,7 @@ namespace WICR_Estimator.ViewModels
                 case "RESISTITE REGULAR OVER TEXTURE(#55 BAG)":
                     return (riserCount * stairWidth * 2) + totalSqft;//stairWidth=4
                 case "STAIR NOSING FROM DEXOTEX":
-                    return riserCount;
+                    return riserCount*stairWidth;
                 case "RP FABRIC 10 INCH WIDE X (300 LF) FROM ACME":
                     return deckPerimeter + stairWidth * riserCount * 2;
                 default:
@@ -2402,7 +2515,7 @@ namespace WICR_Estimator.ViewModels
         #region LaborSheet TotalProperties
 
         #endregion
-        private double getSqFtAreaH(string materialName)
+        public virtual double getSqFtAreaH(string materialName)
         {
             switch (materialName.ToUpper())
             {
@@ -2435,7 +2548,7 @@ namespace WICR_Estimator.ViewModels
                     return 0;
             }
         }
-        private double getSqFtStairs(string materialName)
+        public virtual double getSqFtStairs(string materialName)
         {
             switch (materialName.ToUpper())
             {
@@ -2592,7 +2705,7 @@ namespace WICR_Estimator.ViewModels
         #endregion
 
 
-        public void populateCalculation()
+        public virtual void populateCalculation()
         {
             LCostBreakUp = new ObservableCollection<CostBreakup>();
             double facValue = 0;

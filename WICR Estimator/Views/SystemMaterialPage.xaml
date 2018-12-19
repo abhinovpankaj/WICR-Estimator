@@ -46,14 +46,14 @@
         <Style TargetType="{x:Type TextBox}" x:Key="editableTextbox">
 
             <Style.Triggers >
-                <Trigger Property="IsEnabled" Value="True">
-                    <Setter Property="Background" Value="LightYellow" />
-                </Trigger>
+                
                 <DataTrigger Binding="{Binding IsMaterialChecked}" Value="False">
                         <Setter Property="Background" Value="Gray"/>
                         <Setter Property="Foreground" Value="Gray"/>
                 </DataTrigger>
-                
+                <Trigger Property="IsEnabled" Value="True">
+                    <Setter Property="Background" Value="LightYellow" />
+                </Trigger>
             </Style.Triggers>
         </Style>
         <Style TargetType="{x:Type DataGridCell}" x:Key="editableCell">
@@ -104,7 +104,8 @@
                 <DataGridTemplateColumn Header="" KeyboardNavigation.IsTabStop="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox x:Name="includeMe" Command="{Binding DataContext.CheckboxCommand,ElementName=MaterialGrid}"
+                            <CheckBox x:Name="includeMe" Command="{Binding DataContext.CheckboxCommand,
+                                ElementName=MaterialGrid}"
                                       CommandParameter="{Binding Name}"
                                       IsChecked="{Binding IsMaterialChecked,
                                 UpdateSourceTrigger=PropertyChanged}"

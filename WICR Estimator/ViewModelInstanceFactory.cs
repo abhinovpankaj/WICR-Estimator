@@ -15,9 +15,11 @@ namespace WICR_Estimator
             switch (projectName)
             {
                 case "Dexotex Weather Wear":
+                case "Enduro Kote Metal":
                     return new MetalViewModel(Js);
                 case "Dexotex Barrier Gaurd":
                     return new DexoMetalViewModel(Js);
+                
                 default:
                     return null;
                     
@@ -29,6 +31,7 @@ namespace WICR_Estimator
             switch (projectName)
             {
                 case "Dexotex Weather Wear":
+                case "Enduro Kote Metal":
                     return new SlopeViewModel(Js);
                 case "Dexotex Barrier Gaurd":
                     return new DexoSlopeViewModel(Js);
@@ -46,6 +49,8 @@ namespace WICR_Estimator
                     return new MaterialViewModel(metalT,slopeT,Js);
                 case "Dexotex Barrier Gaurd":
                     return new DexoMaterialViewModel(metalT,slopeT,Js);
+                case "Enduro Kote Metal":
+                    return new EnduroKoteMaterialViewModel(metalT, slopeT, Js);
                 default:
                     return null;
 

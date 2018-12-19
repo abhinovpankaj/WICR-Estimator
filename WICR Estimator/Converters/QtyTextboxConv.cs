@@ -19,8 +19,12 @@ namespace WICR_Estimator.Converters
                     case "Bubble Repair(Measure Sq Ft)":
                     case "Large Crack Repair":
                     case "Extra Stair Nosing Lf":
+                    case "Extra stair nosing lf":
+                    case "Plywood 3/4 & blocking (# of 4x8 sheets)":
                     case "Plywood 3/4 & Blocking(# Of 4X8 Sheets)":
                     case "Stucco Material Remove And Replace (Lf)":
+                    case "Stucco Material Remove and replace (LF)":
+                    case "R&R Sealant 1/2 to 3/4 inch control joints (Sonneborn NP-2)":
                         return true;
                     default:
                         return false;                       
