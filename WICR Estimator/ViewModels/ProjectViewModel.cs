@@ -130,19 +130,31 @@ namespace WICR_Estimator.ViewModels
                         prj.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
                                                                    
                     }
-                    if (prj.MetalViewModel == null)
+                    if (prj.Name=="Weather Wear Reseal")
                     {
-                        prj.MetalViewModel = ViewModelInstanceFactory.GetMetalViewModelInstance(prj.Name,prj.ProjectJobSetUp);
+                        if (prj.MaterialViewModel == null)
+                        {
+                            prj.MaterialViewModel = ViewModelInstanceFactory.GetMaterialViewModelInstance(prj.Name, null,
+                                null, prj.ProjectJobSetUp);
+                        }
                     }
-                    if (prj.SlopeViewModel == null)
+                    else
                     {
-                        prj.SlopeViewModel = ViewModelInstanceFactory.GetSlopeViewModelInstance(prj.Name,prj.ProjectJobSetUp);
+                        if (prj.MetalViewModel == null)
+                        {
+                            prj.MetalViewModel = ViewModelInstanceFactory.GetMetalViewModelInstance(prj.Name, prj.ProjectJobSetUp);
+                        }
+                        if (prj.SlopeViewModel == null)
+                        {
+                            prj.SlopeViewModel = ViewModelInstanceFactory.GetSlopeViewModelInstance(prj.Name, prj.ProjectJobSetUp);
+                        }
+                        if (prj.MaterialViewModel == null)
+                        {
+                            prj.MaterialViewModel = ViewModelInstanceFactory.GetMaterialViewModelInstance(prj.Name, prj.MetalViewModel.MetalTotals,
+                                prj.SlopeViewModel.SlopeTotals, prj.ProjectJobSetUp);
+                        }
                     }
-                    if (prj.MaterialViewModel == null)
-                    {
-                        prj.MaterialViewModel = ViewModelInstanceFactory.GetMaterialViewModelInstance(prj.Name,prj.MetalViewModel.MetalTotals,
-                            prj.SlopeViewModel.SlopeTotals,prj.ProjectJobSetUp);
-                    }
+                    
                 }
             }          
 

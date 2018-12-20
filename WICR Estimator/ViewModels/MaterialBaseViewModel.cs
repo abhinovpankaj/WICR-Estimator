@@ -840,6 +840,13 @@ namespace WICR_Estimator.ViewModels
                 }
 
             }
+            if (obj.ToString()== "Custom Texture Skip Trowel(Resistite Smooth Gray)"||
+                obj.ToString()== "Custom Texture Skip Trowel(Resistite Smooth White)"||
+                obj.ToString()== "Resistite Regular Over Texture(#55 Bag)")
+            {
+                calculateRLqty();
+            }
+            
         }
 
         #endregion
@@ -875,6 +882,7 @@ namespace WICR_Estimator.ViewModels
             }
             
             var sysMat = GetSystemMaterial();
+
             if (hasSetupChanged)
             {
                 for (int i = 0; i < SystemMaterials.Count; i++)
@@ -907,6 +915,7 @@ namespace WICR_Estimator.ViewModels
 
             setExceptionValues();
             setCheckBoxes();
+            calculateRLqty();
 
             if (OtherMaterials.Count == 0)
             {
@@ -1120,7 +1129,7 @@ namespace WICR_Estimator.ViewModels
             JobSetup js = sender as JobSetup;
             if (js != null)
             {
-                weatherWearType = js.WeatherWearType;
+                //weatherWearType = js.WeatherWearType;
                 totalSqft = js.TotalSqft;
                 stairWidth = js.StairWidth;
                 riserCount = js.RiserCount;
@@ -1134,6 +1143,7 @@ namespace WICR_Estimator.ViewModels
                 deckCount = js.DeckCount;
             }
             FetchMaterialValuesAsync(true);
+            
         }
         //notused
         private void reCalculate()
@@ -2320,29 +2330,69 @@ namespace WICR_Estimator.ViewModels
                     return lfArea / coverage;
 
                 case "STAIR NOSING FROM DEXOTEX":
-                    return lfArea * stairWidth;
+                    return lfArea*stairWidth ;
                 case "NEOTEX-38 PASTE":
                     return neotaxQty();
                 case "RESISTITE LIQUID":
-                    return calculateRLqty();
+                    return 0;
                 default:
                     return 0;
             }
         }
 
-        private double calculateRLqty()
+        public virtual void calculateRLqty()
         {
-            double val1, val2, val3, val4;
-            double.TryParse(materialDetails[13][2].ToString(), out val1);
-            double.TryParse(materialDetails[15][2].ToString(), out val2);
-            double.TryParse(materialDetails[21][2].ToString(), out val3);
-            double.TryParse(materialDetails[3][2].ToString(), out val4);
-            val1 = getQuantity("RESISTITE REGULAR WHITE", val1, getlfArea("RESISTITE REGULAR WHITE"));
-            val2 = getQuantity("RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)", val2, getlfArea("RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)"));
-            val3 = getQuantity("CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)", val3, getlfArea("CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)"));
-            val4 = getQuantity("RESISTITE REGULAR OVER TEXTURE(#55 BAG)", val4, getlfArea("RESISTITE REGULAR OVER TEXTURE(#55 BAG)"));
-            double qty = (val1 + val2 + val3) * 0.33 + val4 / 5;
-            return qty;
+            double val1=0, val2=0, val3 = 0, val4 = 0;
+            double qty = 0;
+            SystemMaterial skipMat;
+            
+                double.TryParse(materialDetails[13][2].ToString(), out val1);
+                double.TryParse(materialDetails[15][2].ToString(), out val2);
+                //double.TryParse(materialDetails[21][2].ToString(), out val3);
+                //double.TryParse(materialDetails[3][2].ToString(), out val4);
+                val1 = getQuantity("RESISTITE REGULAR WHITE", val1, getlfArea("RESISTITE REGULAR WHITE"));
+                val2 = getQuantity("RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)", val2, getlfArea("RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)"));
+
+                skipMat = SystemMaterials.Where(x => x.Name.ToUpper() == "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)").FirstOrDefault();
+                if (skipMat != null)
+                {
+                    if (skipMat.IsMaterialChecked)
+                    {
+                        val3 = skipMat.Qty;
+                    }
+                    else
+                        val3 = 0;
+                }
+                skipMat = SystemMaterials.Where(x => x.Name.ToUpper() == "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)").FirstOrDefault();
+                if (skipMat != null)
+                {
+                    if (skipMat.IsMaterialChecked)
+                    {
+                        val3 = skipMat.Qty;
+                    }
+                    else
+                        val3 = 0;
+                }
+
+                skipMat = SystemMaterials.Where(x => x.Name.ToUpper() == "RESISTITE REGULAR OVER TEXTURE(#55 BAG)").FirstOrDefault();
+                if (skipMat != null)
+                {
+                    if (skipMat.IsMaterialChecked)
+                    {
+                        val4 = skipMat.Qty;
+                    }
+                    else
+                        val4 = 0;
+                }
+
+                qty = (val1 + val2 + val3) * 0.33 + val4 / 5;
+
+           
+            skipMat = SystemMaterials.Where(x => x.Name == "Resistite Liquid").FirstOrDefault();
+            if (skipMat != null)
+            {
+                skipMat.Qty = qty;
+            }
         }
 
         private double neotaxQty()
@@ -2383,7 +2433,7 @@ namespace WICR_Estimator.ViewModels
                 case "RESISTITE REGULAR OVER TEXTURE(#55 BAG)":
                     return (riserCount * stairWidth * 2) + totalSqft;//stairWidth=4
                 case "STAIR NOSING FROM DEXOTEX":
-                    return riserCount*stairWidth;
+                    return riserCount;
                 case "RP FABRIC 10 INCH WIDE X (300 LF) FROM ACME":
                     return deckPerimeter + stairWidth * riserCount * 2;
                 default:

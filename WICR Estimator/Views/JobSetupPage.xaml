@@ -45,7 +45,7 @@
                             Text="{Binding JobDate,UpdateSourceTrigger=LostFocus}"
                             VerticalContentAlignment="Center"
                             HorizontalContentAlignment="Left"/>
-                <TextBlock Style="{StaticResource FieldHeader}"
+                <!--<TextBlock Style="{StaticResource FieldHeader}"
                        Text="Weather Wear Type" Visibility="{Binding ShowWeatherWearDD}"
                            />
                 <ComboBox Text="{Binding WeatherWearType,UpdateSourceTrigger=LostFocus}" 
@@ -54,7 +54,7 @@
                           Margin="5,0,0,0">
                     <ComboBoxItem Content="Weather Wear"/>
                     <ComboBoxItem Content="Weather Wear Rehab"/>
-                </ComboBox>
+                </ComboBox>-->
                 <TextBlock Style="{StaticResource FieldHeader}"
                        Text="Metal Material Type"/>
                 <ComboBox Text="{Binding MaterialName,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left"

@@ -176,9 +176,10 @@ namespace WICR_Estimator.ViewModels
             Projects = new ObservableCollection<Project>();
             //SelectedProjects = new List<Project>();
             Projects.Add(new Project { Name = "Dexotex Weather Wear", Rank = 1 });
-            Projects.Add(new Project { Name = "Dexotex Barrier Gaurd", Rank = 2 });
-            Projects.Add(new Project { Name = "Enduro Kote Metal", Rank = 3 });
-            Projects.Add(new Project { Name = "Weather Wear Reseal", Rank = 4 });
+            Projects.Add(new Project { Name = "Dexotex Weather Wear Rehab", Rank = 2 });
+            Projects.Add(new Project { Name = "Dexotex Barrier Gaurd", Rank = 3 });
+            Projects.Add(new Project { Name = "Enduro Kote Metal", Rank = 4 });
+            Projects.Add(new Project { Name = "Weather Wear Reseal", Rank = 5 });
         }
 
         #endregion

@@ -137,6 +137,7 @@ namespace WICR_Estimator.Models
             EnableMoreMarkupCommand = new DelegateCommand(CanAddMoreMarkup, canAdd);
             MinMarkUp = -10;
             AllowMoreMarkUp = false;
+            
             //HidePasswordSection = System.Windows.Visibility.Hidden;
         }
 

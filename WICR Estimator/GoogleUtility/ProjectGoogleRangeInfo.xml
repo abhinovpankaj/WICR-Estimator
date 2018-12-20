@@ -7,6 +7,13 @@
     <SlopeRange>P85:Q93</SlopeRange>
     <MaterialRange>H94:N120</MaterialRange>
   </WeatherWear>
+  <WeatherWearRehab>
+    <RateRange>E2</RateRange>
+    <MetalRange>F3:M43</MetalRange>
+    <LaborRange>E246:E265</LaborRange>
+    <SlopeRange>P85:Q93</SlopeRange>
+    <MaterialRange>H94:N120</MaterialRange>
+  </WeatherWearRehab>
   <DexotexBarrier>
     <RateRange>E2</RateRange>
     <MetalRange>F3:M43</MetalRange>
@@ -17,7 +24,7 @@
 <EnduroKote>
     <RateRange>E2</RateRange>
     <MetalRange>F3:M43</MetalRange>
-    <LaborRange>E412:E428</LaborRange>
+    <LaborRange>E412:E431</LaborRange>
     <SlopeRange>P301:Q309</SlopeRange>
     <MaterialRange>H380:N396</MaterialRange>
   </EnduroKote>

@@ -84,6 +84,12 @@ namespace WICR_Estimator.GoogleUtility
                 case "Dexotex Barrier Gaurd":
                     prjName = "DexotexBarrier";
                     break;
+                case "Enduro Kote Metal":
+                    prjName = "EnduroKote";
+                    break;
+                case "Weather Wear Reseal":
+                    prjName = "WeatherWearReseal";
+                    break;
                 default:
                     break;
             }

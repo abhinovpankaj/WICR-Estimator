@@ -25,11 +25,9 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("2.5 Galvanized Lathe (18 s.f.) no less than 12 per sq ft.", "EA");
             materialNames.Add("Staples (3/4 Inch Crown, Box of 13,500)", "BOX");
             materialNames.Add("ENDURO ELA-98 BINDER (2 COATS)", "5 GAL PAIL");
-
             materialNames.Add("3/4 oz. Fiberglass (2000 sq ft rolls Purchased from Hill Brothers )", "ROLL");
             materialNames.Add("Base Coat EKC Cementitious Mix", "50 LB BAG");
             materialNames.Add("Second Coat Skim Coat EKC Cementitious Mix", "50 LB BAG");
-            materialNames.Add("Resistite textured knockdown finish (smooth or regular per customer)Gray", "55 LB BAG");
             
             materialNames.Add("Texture Coat EKC Cementitious Mix", "50 LB BAG");
             
@@ -105,7 +103,7 @@ namespace WICR_Estimator.ViewModels
             else
                 SystemMaterials = sysMat;
 
-            //setExceptionValues();
+            setExceptionValues();
             //setCheckBoxes();
             if (OtherMaterials.Count == 0)
             {
@@ -135,9 +133,9 @@ namespace WICR_Estimator.ViewModels
                     return 0.00000001;
                 case "":
                     return deckPerimeter;
-                case "Plywood 3 / 4 & blocking(# of 4x8 sheets)":
+                case "Plywood 3/4 & blocking (# of 4x8 sheets)":
                 case "Stucco Material Remove and replace(LF)":
-                    return -1;
+                    return 0;
                 default:
                     return totalSqft;
 
@@ -157,11 +155,11 @@ namespace WICR_Estimator.ViewModels
                 case "Texture Coat EKC Cementitious Mix":
                 case "Select Y for protection coat over membrane below tile(GU80-1 TOP COAT)":
                     return riserCount * 4 * 2;
-                case "Staples(3 / 4 Inch Crown, Box of 13, 500)":
+                case "Staples(3/4 Inch Crown, Box of 13, 500)":
                 case "EKL Acrylic Emulsion":
                 case "Caulk, dymonic 100":
                 case "Preparation after construction and 50/50 primer":
-                case "Plywood 3 / 4 & blocking(# of 4x8 sheets)":
+                case "Plywood 3/4 & blocking (# of 4x8 sheets)":
                 case "Stucco Material Remove and replace(LF)":
                     return 0.00000001;
                 case "EKS Acrylic Top Coat":
@@ -188,7 +186,7 @@ namespace WICR_Estimator.ViewModels
                     return riserCount * 4;
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
                 case "Stucco Material Remove and replace (LF)":
-                    return -1;
+                    return 0;
                 default:
                     return totalSqft + riserCount * 4 * 2;
             }
@@ -205,7 +203,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
 
-        private double getEKLQnty()
+        private void getEKLQnty()
         {
             double qty = 0;
             foreach (var item in SystemMaterials)
@@ -216,32 +214,12 @@ namespace WICR_Estimator.ViewModels
                     qty = qty + item.Qty;
                 }
             }
-            return qty / 5;
+            SystemMaterials.Where(x=>x.Name== "EKL Acrylic Emulsion").FirstOrDefault().Qty= qty / 5;
            
         }
 
         public override bool getCheckboxCheckStatus(string materialName)
         {
-            //return base.getCheckboxCheckStatus(materialName);
-            //            2.5 Galvanized Lathe (18 s.f.) no less than 12 per sq ft.
-            //Staples(3 / 4 Inch Crown, Box of 13, 500)
-            //ENDURO ELA-98 BINDER(2 COATS)
-            //3 / 4 oz.Fiberglass(2000 sq ft rolls Purchased from Hill Brothers )
-            //Base Coat EKC Cementitious Mix
-            //Second Coat Skim Coat EKC Cementitious Mix
-            //Texture Coat EKC Cementitious Mix
-            //EKL Acrylic Emulsion
-            //EKS Acrylic Top Coat
-            //Caulk, dymonic 100
-            //Preparation after construction and 50 / 50 primer
-            //  Select Y for protection coat over membrane below tile(GU80 - 1 TOP COAT)
-
-
-            //  Stair Nosing
-            //  Extra stair nosing lf
-            //  ADD LABOR FOR MINIMUM CHARGE
-            //  Plywood 3 / 4 & blocking(# of 4x8 sheets)
-            //Stucco Material Remove and replace(LF)
             switch (materialName)
             {
                 case "Select Y for protection coat over membrane below tile(GU80-1 TOP COAT)":
@@ -267,6 +245,45 @@ namespace WICR_Estimator.ViewModels
                     return false;
             }
         }
-         
+
+        public override void setExceptionValues()
+        {
+            //base.setExceptionValues();
+            if (SystemMaterials.Count != 0)
+            {
+                SystemMaterial item = SystemMaterials.Where(x => x.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)").FirstOrDefault();
+                if (item != null)
+                {
+                    item.SMSqftH = item.Qty;
+                    item.SMSqft = item.Qty;
+                    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
+                    item.LaborExtension = (item.Hours + item.SetupMinCharge) * laborRate;
+                    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
+
+                }
+                item = SystemMaterials.Where(x => x.Name == "Stucco Material Remove and replace (LF)").FirstOrDefault();
+                if (item != null)
+                {
+
+                    item.SMSqft = item.Qty;
+                    item.SMSqftH = item.Qty;
+                    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
+                    item.LaborExtension = (item.Hours + item.SetupMinCharge) * laborRate;
+                    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
+
+                }
+                item = SystemMaterials.Where(x => x.Name == "Extra stair nosing lf").FirstOrDefault();
+                if (item != null)
+                {
+
+                    item.SMSqft = item.Qty;
+                    item.SMSqftH = item.Qty;
+                    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
+                    item.LaborExtension = (item.Hours + item.SetupMinCharge) * laborRate;
+                    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
+
+                }
+            }
+        }
     }
 }

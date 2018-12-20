@@ -54,7 +54,7 @@ namespace WICR_Estimator.ViewModels
             foreach (SystemMaterial item in SystemMaterials)
             {
                 if (item.Name == "Stucco Material Remove And Replace (Lf)" || item.Name == "Plywood 3/4 & Blocking(# Of 4X8 Sheets)" ||
-                    item.Name == "Extra Stair Nosing Lf")
+                    item.Name == "Extra Stair Nosing Lf"||item.Name== "R&R Sealant 1/2 to 3/4 inch control joints (Sonneborn NP-2)")
                 {
                     qtyList.Add(item.Name, item.Qty);
                 }
@@ -78,8 +78,8 @@ namespace WICR_Estimator.ViewModels
                     SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
                     SystemMaterials[i].IsMaterialChecked = iscbChecked;
                     if (SystemMaterials[i].Name == "Stucco Material Remove And Replace (Lf)" || SystemMaterials[i].Name == "Plywood 3/4 & Blocking(# Of 4X8 Sheets)" ||
-                    SystemMaterials[i].Name == "Extra Stair Nosing Lf" || SystemMaterials[i].Name == "Bubble Repair(Measure Sq Ft)"
-                            || SystemMaterials[i].Name == "Large Crack Repair")
+                    SystemMaterials[i].Name == "Extra Stair Nosing Lf" 
+                            || SystemMaterials[i].Name == "R&R Sealant 1/2 to 3/4 inch control joints (Sonneborn NP-2)")
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
@@ -92,6 +92,7 @@ namespace WICR_Estimator.ViewModels
 
             }
             #endregion
+
             else
                 SystemMaterials = sysMat;
 
@@ -135,8 +136,8 @@ namespace WICR_Estimator.ViewModels
             int k = 0;
             foreach (string key in materialNames.Keys)
             {
-                
-                smCollection.Add(getSMObject(k, key, materialNames[key]));
+                SystemMaterial sm = getSMObject(k, key, materialNames[key]);
+                smCollection.Add(sm);
                 if (key == "Resistite textured knockdown finish (smooth or regular per customer)Gray"||
                     key== "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)")
                 {
@@ -144,6 +145,14 @@ namespace WICR_Estimator.ViewModels
                 }
                 else
                     k++;
+                if (key== "RP FABRIC 10 INCH WIDE X (300 LF)")
+                {
+                    sm.VerticalProductionRate = 100;
+                    sm.VerticalSqft = deckPerimeter;
+                    sm.Hours = deckPerimeter / 100;
+                    sm.LaborExtension = (sm.SetupMinCharge + sm.Hours) * laborRate;
+                    sm.LaborUnitPrice = sm.LaborExtension / (riserCount+totalSqft);
+                }
             }
             return smCollection;
 
@@ -197,6 +206,7 @@ namespace WICR_Estimator.ViewModels
                 case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)":
                 case "Aj-44A Dressing(Sealer)":
                 case "Vista Paint Acripoxy":
+                case "RP FABRIC 10 INCH WIDE X (300 LF)":
                 case "Lip Color":
                 case "Weather Seal XL Coat":
                 case "Glass mat #4 1200 SF ROLL FROM ACME":
@@ -209,7 +219,11 @@ namespace WICR_Estimator.ViewModels
             }
         }
 
-        private double resistiteQty()
+        private void setValuesRPFabric()
+        {
+
+        }
+        private void resistiteQty()
         {
             double qty = 0;
             foreach (var item in SystemMaterials)
@@ -219,10 +233,14 @@ namespace WICR_Estimator.ViewModels
                     item.Name== "Underlay over rough surface (Resistite regular 150 sq ft per mix)"||
                     item.Name == "Resistite textured knockdown finish (smooth or regular per customer)White")
                 {
-                    qty = qty + item.Qty;
+                    if (item.IsMaterialChecked)
+                    {
+                        qty = qty + item.Qty;
+                    }
+                    
                 }
             }
-            return qty / 5;
+            SystemMaterials.Where(x=>x.Name== "Resistite Liquid ").FirstOrDefault().Qty= (qty / 5);
         }
 
         public override double getSqFtStairs(string materialName)
@@ -286,6 +304,8 @@ namespace WICR_Estimator.ViewModels
                     return deckPerimeter + stairWidth * 2;
                 case "R&R Sealant 1/2 to 3/4 inch control joints (Sonneborn NP-2)":
                     return -1;
+                case "Stair Nosing From Dexotex":
+                    return riserCount; ;
                 default:
                     return 0;
             }
@@ -353,13 +373,21 @@ namespace WICR_Estimator.ViewModels
                     return false;
             }
         }
-       
+
         //Handler to rest values of materials on basis of Lipcolor,Vista Aj44 seletion
         public override void ApplyCheckUnchecks(object obj)
         {
             if (obj == null)
             {
                 return;
+            }
+            //set RL Qty
+            if (obj.ToString() == "Underlay over membrane (Resistite regular 150 sq ft per mix )" ||
+                obj.ToString() == "Underlay over rough surface (Resistite regular 150 sq ft per mix)" ||
+                obj.ToString() == "Resistite textured knockdown finish (smooth or regular per customer)Gray"||
+                obj.ToString() == "Resistite textured knockdown finish (smooth or regular per customer)White")
+            {
+                resistiteQty();
             }
             #region LipColorVistaAj44 checkbox logic
             if (obj.ToString() == "Lip Color")
@@ -557,7 +585,8 @@ namespace WICR_Estimator.ViewModels
             OnPropertyChanged("LaborMinChargeHrs");
             OnPropertyChanged("LaborMinChargeLaborExtension");
             OnPropertyChanged("LaborMinChargeLaborUnitPrice");
-          
+
+            
         }
 
         //for lipcolor vista,AJ44
@@ -578,6 +607,25 @@ namespace WICR_Estimator.ViewModels
                 if (mat.Name == "Vista Paint Acripoxy")
                 {                   
                     mat.IsMaterialChecked = false;
+                }
+            }
+        }
+
+        public override void setExceptionValues()
+        {
+            base.setExceptionValues();
+            if (SystemMaterials.Count != 0)
+            {
+                
+                SystemMaterial item = SystemMaterials.Where(x => x.Name == "R&R Sealant 1/2 to 3/4 inch control joints (Sonneborn NP-2)").FirstOrDefault();
+                if (item != null)
+                {
+                    item.SMSqft = item.Qty;
+                    item.SMSqftH = item.Qty;
+                    item.Hours = CalculateHrs(item.SMSqft,item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
+                    item.LaborExtension = (item.Hours + item.SetupMinCharge) * laborRate;
+                    item.LaborUnitPrice = item.LaborExtension / item.Qty;
+
                 }
             }
         }

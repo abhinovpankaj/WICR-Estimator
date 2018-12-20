@@ -129,6 +129,7 @@
     <Compile Include="ViewModels\SlopeBaseViewModel.cs" />
     <Compile Include="ViewModels\SlopeViewModel.cs" />
     <Compile Include="ViewModels\WeatherWearViewModel.cs" />
+    <Compile Include="ViewModels\WWRehabMaterialViewModel.cs" />
     <Compile Include="Views\CalculationDetailsPage.xaml.cs">
       <DependentUpon>CalculationDetailsPage.xaml</DependentUpon>
     </Compile>
