@@ -334,7 +334,7 @@
                                         Header="Special Material Pricing($)">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding SpecialMetalPricing ,StringFormat={}{0:C},UpdateSourceTrigger=LostFocus}"
+                                <TextBox Text="{Binding SpecialMetalPricing,UpdateSourceTrigger=LostFocus}"
                                     IsEnabled="True" Style="{StaticResource  addOnTextBox}"
                                          >
 

@@ -75,14 +75,29 @@ namespace WICR_Estimator.ViewModels
         {
             MetalTotals = metalTotals;
             SlopeTotals = slopeTotals;
-            MetalTotals.OnTotalsChange += MetalTotals_OnTotalsChange;
+            if (MetalTotals!=null)
+            {
+                MetalTotals.OnTotalsChange += MetalTotals_OnTotalsChange;
+            }
 
-            SlopeTotals.OnTotalsChange += MetalTotals_OnTotalsChange;
+            if (SlopeTotals!=null)
+            {
+                SlopeTotals.OnTotalsChange += MetalTotals_OnTotalsChange;
+            }
+            
             getDatafromGoogle(Js.ProjectName);          
             
             //calculateLaborHrs();
         }
-
+        public virtual double CalculateLabrExtn(double calhrs,double setupMin)
+        {
+            return (calhrs != 0) ? (setupMin + calhrs) * laborRate : 0;
+        }
+        public virtual double getLaborUnitPrice(double laborExtension,double riserCount,
+            double totalSqft, double sqftVert = 0, double sqftHor = 0,double sqftStairs = 0,string matName="")
+        {
+            return laborExtension / (riserCount + totalSqft);
+        }
         public SystemMaterial getSMObject(int seq, string matName, string unit)
         {
             int cov;
@@ -110,7 +125,8 @@ namespace WICR_Estimator.ViewModels
             sqh = getSqFtAreaH(matName);
             sqStairs = getSqFtStairs(matName);
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
-            labrExt = (calcHrs != 0) ? (setUpMin + calcHrs) * laborRate : 0;
+            //labrExt = (calcHrs != 0) ? (setUpMin + calcHrs) * laborRate : 0;
+            labrExt = CalculateLabrExtn(calcHrs, setUpMin);
             qty = getQuantity(matName, cov, lfArea);
             if (lfArea == -1)
             {
@@ -144,7 +160,7 @@ namespace WICR_Estimator.ViewModels
                 SetupMinCharge = setUpMin,
                 Hours = calcHrs,
                 LaborExtension = labrExt,
-                LaborUnitPrice = labrExt / (riserCount + totalSqft),
+                LaborUnitPrice = getLaborUnitPrice(labrExt, riserCount, totalSqft,0,sqh,sqStairs, matName),//labrExt / (riserCount + totalSqft),
                 FreightExtension = w * qty,
                 MaterialExtension = mp * qty
 
@@ -956,9 +972,8 @@ namespace WICR_Estimator.ViewModels
                     item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
                     
                 }
-                
 
-                item = SystemMaterials.Where(x => x.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)").FirstOrDefault();
+                item = SystemMaterials.Where(x => x.Name == "Plywood 3/4 & blocking(# of 4x8 sheets)").FirstOrDefault();
                 if (item!=null)
                 {
                     item.SMSqftH = item.Qty * 32;
@@ -2586,7 +2601,7 @@ namespace WICR_Estimator.ViewModels
                 case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
                 case "AJ-44A DRESSING(SEALER)":
                     return totalSqft;
-                case "LARGE CRACK REPAIR":
+                
                 case "BUBBLE REPAIR MAJOR SQFT":
                 case "NEOTEX-38 PASTE":
                 case "EXTRA STAIR NOSING LF":
@@ -2594,6 +2609,7 @@ namespace WICR_Estimator.ViewModels
                 case "RP FABRIC 10 INCH WIDE X(300 LF) FROM ACME":
                 case "STAIR NOSING FROM DEXOTEX":
                     return 0;
+                 
                 default:
                     return 0;
             }

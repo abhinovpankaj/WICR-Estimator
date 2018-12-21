@@ -55,6 +55,8 @@ namespace WICR_Estimator
                     return new DexoMaterialViewModel(metalT,slopeT,Js);
                 case "Enduro Kote Metal":
                     return new EnduroKoteMaterialViewModel(metalT, slopeT, Js);
+                case "Weather Wear Reseal":
+                    return new WWResealMaterialViewModel(metalT, slopeT, Js);
                 default:
                     return null;
 

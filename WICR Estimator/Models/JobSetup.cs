@@ -88,7 +88,7 @@ namespace WICR_Estimator.Models
                     ProjectName = value;
                     if (ProjectName=="")
                     {
-                        ProjectName = "Dexotex Weather Wear";
+                        //ProjectName = "Dexotex Weather Wear";
                     }              
                 }
             }
@@ -128,9 +128,9 @@ namespace WICR_Estimator.Models
             StairWidth = 4.5;
             TotalSqft = 1000;
             RiserCount = 30;
-            WeatherWearType = "";
+                       
             DeckPerimeter = 300;
-            WeatherWearType = "Weather Wear";
+            //WeatherWearType = "Weather Wear";
             DeckCount = 1;
             VendorName = "Chivon";
             MaterialName = "Copper";
@@ -175,30 +175,30 @@ namespace WICR_Estimator.Models
                 }
             }
         }
-        private string weatherWearType;
-        public string WeatherWearType
-        {
-            get { return weatherWearType; }
-            set
-            {
-                if (value!=weatherWearType)
-                {
-                    weatherWearType = value;
-                    OnPropertyChanged("WeatherWearType");
-                    if (value.Contains("Rehab"))
-                    {
-                        ProjectName = ProjectName + " Rehab";
-                    }
-                    else
-                        ProjectName = ProjectName.Replace(" Rehab", "");
+        //private string weatherWearType;
+        //public string WeatherWearType
+        //{
+        //    get { return weatherWearType; }
+        //    set
+        //    {
+        //        if (value!=weatherWearType)
+        //        {
+        //            weatherWearType = value;
+        //            OnPropertyChanged("WeatherWearType");
+        //            if (value.Contains("Rehab"))
+        //            {
+        //                ProjectName = ProjectName + " Rehab";
+        //            }
+        //            else
+        //                ProjectName = ProjectName.Replace(" Rehab", "");
 
-                    if (OnJobSetupChange != null)
-                    {
-                        OnJobSetupChange(this, EventArgs.Empty);
-                    }
-                }
-            }
-        }
+        //            if (OnJobSetupChange != null)
+        //            {
+        //                OnJobSetupChange(this, EventArgs.Empty);
+        //            }
+        //        }
+        //    }
+        //}
         
         public string DeckLabel
         {
@@ -210,16 +210,16 @@ namespace WICR_Estimator.Models
                     return "Lf Perimeter for Burlap and Membrane";
             }
         }
-        public System.Windows.Visibility ShowWeatherWearDD
-        {
-            get
-            {
-                if (ProjectName == "Dexotex Weather Wear" || ProjectName == "Dexotex Weather Wear Rehab")
-                    return System.Windows.Visibility.Visible;
-                else
-                    return System.Windows.Visibility.Collapsed;
-            }
-        }
+        //public System.Windows.Visibility ShowWeatherWearDD
+        //{
+        //    get
+        //    {
+        //        if (ProjectName == "Dexotex Weather Wear" || ProjectName == "Dexotex Weather Wear Rehab")
+        //            return System.Windows.Visibility.Visible;
+        //        else
+        //            return System.Windows.Visibility.Collapsed;
+        //    }
+        //}
 
         private string jobName;
         public string JobName

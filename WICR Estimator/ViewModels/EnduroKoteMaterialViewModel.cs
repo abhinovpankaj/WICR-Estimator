@@ -57,6 +57,29 @@ namespace WICR_Estimator.ViewModels
 
         }
 
+        public override double CalculateLabrExtn(double calhrs, double setupMin)
+        {
+            return base.CalculateLabrExtn(calhrs, setupMin);
+
+        }
+        public override double getLaborUnitPrice(double laborExtension, double riserCount, double totalSqft,double sqftVert=0,double sqftHor=0,
+            double sqftStairs=0,string materialName="")
+        {
+            //return base.getLaborUnitPrice(laborExtension, riserCount, totalSqft);
+            if (materialName=="Stair Nosing" || materialName == "Extra stair nosing lf")
+            {
+                return laborExtension / (totalSqft + riserCount);
+            }
+            else if (materialName == "Caulk, dymonic 100")
+            {
+                return laborExtension/ (sqftVert + sqftHor + sqftStairs+deckPerimeter);
+            }
+            else
+                return laborExtension / (sqftVert + sqftHor + sqftStairs);
+
+
+        }
+
         public override void FetchMaterialValuesAsync(bool hasSetupChanged)
         {
             Dictionary<string, double> qtyList = new Dictionary<string, double>();
@@ -125,13 +148,13 @@ namespace WICR_Estimator.ViewModels
             switch (materialName)
 
             {
-                case "Staples(3 / 4 Inch Crown, Box of 13, 500)":
+                case "Staples(3/4 Inch Crown, Box of 13, 500)":
                 case "EKL Acrylic Emulsion":
                 case "Stair Nosing":
                 case "Extra stair nosing lf":
                 case "Preparation after construction and 50/50 primer":
                     return 0.00000001;
-                case "":
+                case "Caulk, dymonic 100":
                     return deckPerimeter;
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
                 case "Stucco Material Remove and replace(LF)":
@@ -148,14 +171,14 @@ namespace WICR_Estimator.ViewModels
             switch (materialName)
             {
                 case "2.5 Galvanized Lathe (18 s.f.) no less than 12 per sq ft.":
-                case "ENDURO ELA-98 BINDER(2 COATS)":
-                case "3/4 oz.Fiberglass(2000 sq ft rolls Purchased from Hill Brothers )":
+                case "ENDURO ELA-98 BINDER (2 COATS)":
+                case "3/4 oz. Fiberglass (2000 sq ft rolls Purchased from Hill Brothers )":
                 case "Base Coat EKC Cementitious Mix":
                 case "Second Coat Skim Coat EKC Cementitious Mix":
-                case "Texture Coat EKC Cementitious Mix":
-                case "Select Y for protection coat over membrane below tile(GU80-1 TOP COAT)":
+                
+                case "Select Y for protection coat over membrane below tile (GU80-1 TOP COAT)":
                     return riserCount * 4 * 2;
-                case "Staples(3/4 Inch Crown, Box of 13, 500)":
+                case "Staples (3/4 Inch Crown, Box of 13, 500)":
                 case "EKL Acrylic Emulsion":
                 case "Caulk, dymonic 100":
                 case "Preparation after construction and 50/50 primer":
@@ -163,6 +186,7 @@ namespace WICR_Estimator.ViewModels
                 case "Stucco Material Remove and replace(LF)":
                     return 0.00000001;
                 case "EKS Acrylic Top Coat":
+                case "Texture Coat EKC Cementitious Mix":
                     return riserCount * 4.5 * 2;
                 case "Stair Nosing":
                     return riserCount * 3.5;
@@ -257,8 +281,8 @@ namespace WICR_Estimator.ViewModels
                     item.SMSqftH = item.Qty;
                     item.SMSqft = item.Qty;
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
-                    item.LaborExtension = (item.Hours + item.SetupMinCharge) * laborRate;
-                    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
+                    item.LaborExtension = item.Hours >= item.SetupMinCharge?item.Hours * laborRate:item.SetupMinCharge*laborRate;
+                    item.LaborUnitPrice = item.LaborExtension / (item.SMSqftH + item.SMSqftV+item.StairSqft);
 
                 }
                 item = SystemMaterials.Where(x => x.Name == "Stucco Material Remove and replace (LF)").FirstOrDefault();
@@ -268,8 +292,8 @@ namespace WICR_Estimator.ViewModels
                     item.SMSqft = item.Qty;
                     item.SMSqftH = item.Qty;
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
-                    item.LaborExtension = (item.Hours + item.SetupMinCharge) * laborRate;
-                    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
+                    item.LaborExtension = item.Hours >= item.SetupMinCharge ? item.Hours * laborRate : item.SetupMinCharge * laborRate;
+                    item.LaborUnitPrice = item.LaborExtension / (item.SMSqftH + item.SMSqftV + item.StairSqft);
 
                 }
                 item = SystemMaterials.Where(x => x.Name == "Extra stair nosing lf").FirstOrDefault();
@@ -279,7 +303,7 @@ namespace WICR_Estimator.ViewModels
                     item.SMSqft = item.Qty;
                     item.SMSqftH = item.Qty;
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
-                    item.LaborExtension = (item.Hours + item.SetupMinCharge) * laborRate;
+                    item.LaborExtension = item.Hours==0?0:(item.Hours + item.SetupMinCharge) * laborRate;
                     item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
 
                 }

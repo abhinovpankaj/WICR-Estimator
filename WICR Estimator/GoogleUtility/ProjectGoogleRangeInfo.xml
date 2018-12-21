@@ -12,7 +12,7 @@
     <MetalRange>F3:M43</MetalRange>
     <LaborRange>E246:E265</LaborRange>
     <SlopeRange>P85:Q93</SlopeRange>
-    <MaterialRange>H94:N120</MaterialRange>
+    <MaterialRange>H124:N150</MaterialRange>
   </WeatherWearRehab>
   <DexotexBarrier>
     <RateRange>E2</RateRange>
@@ -31,8 +31,8 @@
 <WeatherWearReseal>
     <RateRange>E2</RateRange>
     <MetalRange>F3:M43</MetalRange>
-    <LaborRange>E412:E428</LaborRange>
+    <LaborRange>E470:E489</LaborRange>
     <SlopeRange>P301:Q309</SlopeRange>
-    <MaterialRange>H380:N396</MaterialRange>
+    <MaterialRange>H440:N454</MaterialRange>
   </WeatherWearReseal>
 </Projects>
