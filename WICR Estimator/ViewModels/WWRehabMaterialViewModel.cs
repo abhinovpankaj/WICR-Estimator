@@ -873,7 +873,7 @@ namespace WICR_Estimator.ViewModels
             sqh = getSqFtAreaH("Weather Seal XL two Coats");
             sqStairs = getSqFtStairs("Weather Seal XL two Coats");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
-            labrExt = calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate;
+            labrExt = (calcHrs != 0) ? (setUpMin + calcHrs) * laborRate : 0;
             qty = getQuantity("Weather Seal XL two Coats", cov, lfArea);
             smP.Add(new SystemMaterial
             {

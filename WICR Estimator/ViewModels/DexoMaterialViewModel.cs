@@ -110,7 +110,8 @@ namespace WICR_Estimator.ViewModels
             {
                 SubContractLaborItems = GetLaborItems();
             }
-
+            //set  resititeLiquid QTY
+            resistiteQty();
             CalculateAllMaterial();
         }
 

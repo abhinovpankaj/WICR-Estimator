@@ -2302,18 +2302,10 @@ namespace WICR_Estimator.ViewModels
                     mat.IsMaterialChecked = false;
                 }
             }
-            if (weatherWearType == "Weather Wear Rehab")
-            {
+            
                 lipMat2.IsMaterialChecked = true;
                 ApplyCheckUnchecks(lipMat2.Name);
-            }
-
-
-            else
-            {
-                lipMat1.IsMaterialChecked = true;
-                ApplyCheckUnchecks(lipMat1.Name);
-            }
+            
 
         }
 
@@ -2789,8 +2781,8 @@ namespace WICR_Estimator.ViewModels
             {
                 Name = "Total Labor",
                 CalFactor = 0,
-                MetalCost = (MetalTotals.LaborExtTotal / calbackfactor),
-                SlopeCost = (SlopeTotals.LaborExtTotal / calbackfactor),
+                MetalCost = MetalTotals!=null?(MetalTotals.LaborExtTotal / calbackfactor):0,
+                SlopeCost = SlopeTotals!=null?(SlopeTotals.LaborExtTotal / calbackfactor):0,
                 SystemCost = (TotalLaborExtension / calbackfactor),
                 HideCalFactor = System.Windows.Visibility.Hidden
             });
@@ -2799,8 +2791,8 @@ namespace WICR_Estimator.ViewModels
             {
                 Name = "Prevailing Wage (Including Marina's Salary)",
                 CalFactor = fac1,
-                MetalCost = (MetalTotals.LaborExtTotal / calbackfactor) * fac1,
-                SlopeCost = (SlopeTotals.LaborExtTotal / calbackfactor) * fac1,
+                MetalCost = MetalTotals != null ? (MetalTotals.LaborExtTotal / calbackfactor) * fac1:0,
+                SlopeCost = SlopeTotals!=null?(SlopeTotals.LaborExtTotal / calbackfactor) * fac1:0,
                 SystemCost = (TotalLaborExtension / calbackfactor) * fac1
             });
 
@@ -2810,15 +2802,15 @@ namespace WICR_Estimator.ViewModels
             {
                 Name = "Deduct on Labor for large jobs",
                 CalFactor = fac2,
-                MetalCost = (MetalTotals.LaborExtTotal / calbackfactor) * fac2,
-                SlopeCost = (SlopeTotals.LaborExtTotal / calbackfactor) * fac2,
+                MetalCost = MetalTotals != null ? (MetalTotals.LaborExtTotal / calbackfactor) * fac2:0,
+                SlopeCost = SlopeTotals!=null?(SlopeTotals.LaborExtTotal / calbackfactor) * fac2:0,
                 SystemCost = (TotalLaborExtension / calbackfactor) * fac2
             });
             LCostBreakUp.Add(new CostBreakup
             {
                 Name = "Total Labor including prevailing wage",
                 CalFactor = 0,
-                MetalCost = MetalTotals.LaborExtTotal,
+                MetalCost = MetalTotals != null ? MetalTotals.LaborExtTotal:0,
                 SlopeCost = SlopeTotals.LaborExtTotal,
                 SystemCost = TotalLaborExtension,
                 HideCalFactor = System.Windows.Visibility.Hidden
