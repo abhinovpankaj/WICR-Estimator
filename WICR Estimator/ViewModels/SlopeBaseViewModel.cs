@@ -309,7 +309,7 @@ namespace WICR_Estimator.ViewModels
             TotalFrightCost = Math.Round(FreightCalculator(TotalWeight), 2);
             SumTotalLaborExt = Math.Round(TotalMixesMan * manualAvgMixPrice, 2);
             MinimumLaborCost = 6 * laborRate;
-            TotalLaborCost = MinimumLaborCost > SumTotalLaborExt ? MinimumLaborCost : SumTotalLaborExt;
+            TotalLaborCost = SumTotalLaborExt==0?0:MinimumLaborCost > SumTotalLaborExt ? MinimumLaborCost : SumTotalLaborExt;
 
             if (isPrevailingWage)
             {
@@ -449,7 +449,7 @@ namespace WICR_Estimator.ViewModels
 
                 MinimumLaborCost = 6 * laborRate;
 
-                double lCost = LaborCost > MinimumLaborCost ? LaborCost : MinimumLaborCost;
+                double lCost = SumTotalLaborExt == 0 ? 0 : LaborCost > MinimumLaborCost ? LaborCost : MinimumLaborCost;
                 if (isPrevailingWage)
                 {
                     if (hasDiscount)

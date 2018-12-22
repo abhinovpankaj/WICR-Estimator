@@ -81,7 +81,7 @@
                                 <StackPanel Orientation="Horizontal">
                                     <CheckBox x:Name="includeMe" Visibility="{Binding Name,
                                     Converter={StaticResource checkBoxConv}}"
-                                          IsChecked="{Binding IsStairMetal,UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+                                          IsChecked="{Binding IsStairMetalChecked,UpdateSourceTrigger=PropertyChanged}"></CheckBox>
                                     <TextBlock Text="{Binding Name}"/>
                                 </StackPanel>
                             </DataTemplate>

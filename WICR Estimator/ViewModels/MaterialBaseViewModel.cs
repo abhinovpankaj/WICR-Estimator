@@ -43,7 +43,7 @@ namespace WICR_Estimator.ViewModels
         private bool hasContingencyDisc;
 
         #endregion
-
+        private string projectname;
         public MaterialBaseViewModel(JobSetup Js)
         {
 
@@ -62,7 +62,7 @@ namespace WICR_Estimator.ViewModels
             isPrevailingWage = false;
             isApprovedforCement = true;
             deckCount = 1;
-
+            projectname = Js.ProjectName;
 
             Js.OnJobSetupChange += JobSetup_OnJobSetupChange;
             SystemMaterial.OnQTyChanged += (s, e) => { setExceptionValues(); };
@@ -781,7 +781,7 @@ namespace WICR_Estimator.ViewModels
             //update Add labor for minimum cost
             LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false && x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
 
-            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate);
+            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs)) * laborRate;
             LaborMinChargeLaborUnitPrice = LaborMinChargeLaborExtension / (riserCount + totalSqft);
             if (LaborMinChargeMinSetup + LaborMinChargeHrs < 20)
             {
@@ -2026,7 +2026,7 @@ namespace WICR_Estimator.ViewModels
             LaborMinChargeMinSetup = 6.75;
             IEnumerable<SystemMaterial> selected = smP.Where(x => x.IsMaterialChecked).ToList();
             LaborMinChargeHrs = smP.Where(x => x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
-            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate);
+            LaborMinChargeLaborExtension = (LaborMinChargeMinSetup + LaborMinChargeHrs) > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs)) * laborRate;
             LaborMinChargeLaborUnitPrice = LaborMinChargeLaborExtension / (riserCount + totalSqft);
 
             //int.TryParse(materialDetails[20][2].ToString(), out cov);
@@ -2302,9 +2302,18 @@ namespace WICR_Estimator.ViewModels
                     mat.IsMaterialChecked = false;
                 }
             }
-            
+
+            if (projectname.Contains("Rehab"))
+            {
                 lipMat2.IsMaterialChecked = true;
                 ApplyCheckUnchecks(lipMat2.Name);
+            }
+            else
+            {
+                lipMat1.IsMaterialChecked = true;
+                ApplyCheckUnchecks(lipMat1.Name);
+            }
+            
             
 
         }
@@ -2482,7 +2491,7 @@ namespace WICR_Estimator.ViewModels
         }
         private void calculateMaterialTotals()
         {
-            IEnumerable<SystemMaterial> selectedSystemMaterials = systemMaterials.Where(x => x.IsMaterialChecked == true && x.Qty > 0);
+            IEnumerable<SystemMaterial> selectedSystemMaterials = systemMaterials.Where(x => x.IsMaterialChecked == true);
             if (selectedSystemMaterials.Count() > 0)
             {
                 SumQty = selectedSystemMaterials.Select(x => x.Qty).Sum();
@@ -2554,7 +2563,7 @@ namespace WICR_Estimator.ViewModels
         private void CalculateCostBreakup()
         {
 
-            IEnumerable<SystemMaterial> systemCBMaterial = systemMaterials.Where(x => x.IsMaterialChecked == true && x.Qty > 0);
+            IEnumerable<SystemMaterial> systemCBMaterial = systemMaterials.Where(x => x.IsMaterialChecked == true);
             if (systemCBMaterial != null)
             {
                 TotalMaterialCostbrkp = (SumTotalMatExt + TotalOCExtension);
@@ -2980,7 +2989,7 @@ namespace WICR_Estimator.ViewModels
             });
             //double pm;
             //double.TryParse(laborDetails[10][0].ToString(), out pm);
-
+            
             double totalCostM = (totalJobCostM - MetalTotals.SubContractLabor) / profitMetal + (MetalTotals.SubContractLabor +
                 pm2 + pm3);  //+pm5+pm6);
             double totalCostS = (totalJobCostS - SlopeTotals.SubContractLabor) / profitSlope + (SlopeTotals.SubContractLabor +

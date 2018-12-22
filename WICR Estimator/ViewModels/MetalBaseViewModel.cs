@@ -333,11 +333,18 @@ namespace WICR_Estimator.ViewModels
             {
                 double units = Metals[i].Units;
                 double sp = Metals[i].SpecialMetalPricing;
+                bool isSelected= Metals[i].IsStairMetalChecked;
                 Metals[i] = met[i];
                 if (!Metals[i].Name.Contains("STAIR METAL"))
                 {
                     Metals[i].Units = units;
+                    
                 }
+                else
+                {
+                    Metals[i].IsStairMetalChecked = isSelected;
+                }
+               
                 Metals[i].SpecialMetalPricing = sp;
             }
             var addOnMet = GetAddOnMetals();
@@ -452,13 +459,18 @@ namespace WICR_Estimator.ViewModels
 
             double stairCost = 0;
             double addOnMetalCost = 0;
-            IEnumerable<Metal> stairMetals = Metals.Where(x => x.IsStairMetal == false && x.Name.Contains("STAIR"));
-            if (stairMetals != null)
+            double normCost = 0;
+            IEnumerable<Metal> stairMetals = Metals.Where(x => x.IsStairMetalChecked == true);
+            if (stairMetals.Count()>0)
             {
                 stairCost = stairMetals.Select(x => x.LaborExtension).Sum();
             }
-            ////Calculate Labor Cost
-            double misSum = MiscMetals.Select(x => x.LaborExtension).Sum();
+            
+            IEnumerable<Metal> normMetals = Metals.Where(x => x.Name.Contains("STAIR") == false);
+            if (normMetals.Count() > 0)
+            {
+                normCost = normMetals.Select(x => x.LaborExtension).Sum();
+            }
             //New Changes for Addon Metals
             IEnumerable<AddOnMetal> selectedAddOnMetals = addOnMetals.Where(x => x.IsMetalChecked);
             if (selectedAddOnMetals.Count()>0)
@@ -466,27 +478,26 @@ namespace WICR_Estimator.ViewModels
                 addOnMetalCost = selectedAddOnMetals.Select(x => x.LaborExtension).Sum();
             }
 
-            misSum = (Metals.Select(x => x.LaborExtension).Sum() + addOnMetalCost+
-            MiscMetals.Select(x => x.LaborExtension).Sum() - stairCost);
+            normCost = Math.Round(normCost + stairCost + addOnMetalCost+ MiscMetals.Select(x => x.LaborExtension).Sum(),2);
 
             if (isPrevailingWage)
             {
                 if (isDiscount)
                 {
-                    TotalLaborCost = Math.Round(misSum * (1 + prevailingWage + deductionOnLargeJob), 2);
+                    TotalLaborCost = Math.Round(normCost * (1 + prevailingWage + deductionOnLargeJob), 2);
                 }
                 else
-                    TotalLaborCost = Math.Round(misSum * (1 + prevailingWage), 2);
+                    TotalLaborCost = Math.Round(normCost * (1 + prevailingWage), 2);
 
             }
             else
             {
                 if (isDiscount)
                 {
-                    TotalLaborCost = Math.Round(misSum * (1 + deductionOnLargeJob), 2);
+                    TotalLaborCost = Math.Round(normCost * (1 + deductionOnLargeJob), 2);
                 }
                 else
-                    TotalLaborCost = Math.Round(misSum , 2);
+                    TotalLaborCost = Math.Round(normCost, 2);
             }
     }
 
@@ -505,23 +516,32 @@ namespace WICR_Estimator.ViewModels
         protected void updateMaterialCost()
         {
             double stairCost = 0;
+            double normCost = 0;
             double nl = Nails / 100;
             double addOnMetalCost = 0;
-            IEnumerable<Metal> stairMetals = Metals.Where(x => x.IsStairMetal == false && x.Name.Contains("STAIR"));
-            if (stairMetals != null)
-            {
-                stairCost = stairMetals.Select(x => x.MaterialExtension).Sum();
-            }
-            IEnumerable<AddOnMetal> selectedAddOnMetals = addOnMetals.Where(x => x.IsMetalChecked);
-            if (selectedAddOnMetals.Count() > 0)
-            {
-                addOnMetalCost = selectedAddOnMetals.Select(x => x.MaterialExtension).Sum();
-            }
             if (Metals.Count > 0 && MiscMetals.Count > 0)
             {
-                double misSum = Metals.Select(x => x.MaterialExtension).Sum() * nl;
-                TotalMaterialCost = Math.Round(((Metals.Select(x => x.MaterialExtension).Sum()) + addOnMetalCost+
-                MiscMetals.Select(x => x.MaterialExtension).Sum() - stairCost) + misSum, 2);
+                IEnumerable<Metal> stairMetals = Metals.Where(x => x.IsStairMetalChecked==true);
+                if (stairMetals.Count()>0)
+                {
+                    stairCost = stairMetals.Select(x => x.MaterialExtension).Sum();
+                }
+
+                IEnumerable<AddOnMetal> selectedAddOnMetals = addOnMetals.Where(x => x.IsMetalChecked);
+                if (selectedAddOnMetals.Count() > 0)
+                {
+                    addOnMetalCost = selectedAddOnMetals.Select(x => x.MaterialExtension).Sum();
+                }
+
+                IEnumerable<Metal> normMetals = Metals.Where(x => x.Name.Contains("STAIR")==false);
+                if (normMetals.Count() > 0)
+                {
+                    normCost = normMetals.Select(x => x.MaterialExtension).Sum();
+                }
+            
+                //double misSum = Metals.Select(x => x.MaterialExtension).Sum() * nl;
+
+                TotalMaterialCost = Math.Round((normCost+stairCost) *(1+nl)+ addOnMetalCost+ MiscMetals.Select(x => x.MaterialExtension).Sum() , 2);
             }
 
         }

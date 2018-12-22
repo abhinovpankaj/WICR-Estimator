@@ -16,19 +16,19 @@ namespace WICR_Estimator.Models
         public bool IsEditable { get; set; }
         //public string MetalDimensions { get; set; }
 
-        private bool isStairMetal;
-        public bool IsStairMetal
+        private bool isStairMetalChecked;
+        public bool IsStairMetalChecked
         {
             get
             {
-                return isStairMetal;
+                return isStairMetalChecked;
             }
             set
             {
-                if (value!=isStairMetal)
+                if (value!= isStairMetalChecked)
                 {
-                    isStairMetal = value;
-                    OnPropertyChanged("IsStairMetal");
+                    isStairMetalChecked = value;
+                    OnPropertyChanged("IsStairMetalChecked");
                 }
             }
         }
@@ -152,7 +152,7 @@ namespace WICR_Estimator.Models
             this.SpecialMetalPricing = specialPricing;
             this.MaterialPrice = materialPrice;
             this.Name = name;
-            this.IsStairMetal = isStairMetal;
+            this.isStairMetalChecked = isStairMetal;
             this.Size = size;
         }
         public Metal()
