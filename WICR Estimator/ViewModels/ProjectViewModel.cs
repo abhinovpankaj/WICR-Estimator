@@ -96,6 +96,12 @@ namespace WICR_Estimator.ViewModels
             {
                 foreach (Project prj in EnabledProjects)
                 {
+                    if (prj.ProjectJobSetUp == null)
+                    {
+                        prj.ProjectJobSetUp = new JobSetup(prj.Name);
+                        prj.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
+
+                    }
                     #region Google
                     var values = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, prj.Name);
                         if (values == null)
@@ -123,13 +129,10 @@ namespace WICR_Estimator.ViewModels
                         }
 
                     #endregion
-                    
-                    if (prj.ProjectJobSetUp == null)
-                    {
-                        prj.ProjectJobSetUp = new JobSetup(prj.Name);
-                        prj.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
-                                                                   
-                    }
+                    double laborRate = 0;
+                    var rate = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, prj.Name);
+                    double.TryParse(rate[0][0].ToString(),out laborRate);
+                    prj.ProjectJobSetUp.LaborRate = laborRate;
                     if (prj.Name=="Weather Wear Reseal")
                     {
                         if (prj.MaterialViewModel == null)

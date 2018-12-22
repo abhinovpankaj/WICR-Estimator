@@ -425,11 +425,11 @@ namespace WICR_Estimator.Models
         {
             get
             {
-                if (laborRate==0)
-                {
-                    var rate=DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate,projectname);
-                    double.TryParse(rate[0][0].ToString(),out laborRate);
-                }
+                //if (laborRate==0)
+                //{
+                //    var rate=DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate,projectname);
+                //    double.TryParse(rate[0][0].ToString(),out laborRate);
+                //}
                 return laborRate;
             }
             set
