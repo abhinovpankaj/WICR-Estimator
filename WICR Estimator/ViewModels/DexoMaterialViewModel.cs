@@ -35,6 +35,8 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)", "40 LB BAG");
             //materialNames.Add("CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)", "40 LB BAG");
             materialNames.Add("Aj-44A Dressing(Sealer)", "5 GAL PAIL");
+            materialNames.Add("Lip Color", "5 GAL PAIL");
+            materialNames.Add("Vista Paint Acripoxy", "5 GAL PAIL");
             materialNames.Add("Weather Seal XL Coat", "SQ FT");
             materialNames.Add("Glass mat #4 1200 SF ROLL FROM ACME", "ROLL");
             materialNames.Add("Resistite Liquid ", "5 GAL PAIL");
@@ -43,8 +45,7 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("Extra stair nosing lf", "LF");
             materialNames.Add("Plywood 3/4 & blocking (# of 4x8 sheets)", "4x8 Sheets");
             materialNames.Add("Stucco Material Remove and replace (LF)", "LF");
-            materialNames.Add("Lip Color", "5 GAL PAIL");
-            materialNames.Add("Vista Paint Acripoxy", "5 GAL PAIL");
+            
 
         }
         public override void FetchMaterialValuesAsync(bool hasSetupChanged)

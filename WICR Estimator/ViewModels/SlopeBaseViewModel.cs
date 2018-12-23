@@ -18,7 +18,7 @@ namespace WICR_Estimator.ViewModels
         public bool isPrevailingWage;
         public double laborRate;
         private ICommand calculateCostCommand;
-        private IList<IList<object>> perMixRates;
+        public IList<IList<object>> perMixRates;
         private IList<IList<object>> pWage;
         private double totalmixesman;
         private double averagemixesprice;
@@ -497,7 +497,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
 
-        public double getPricePerMix(string thickness, bool isApproved)
+        public virtual double getPricePerMix(string thickness, bool isApproved)
         {
             double result;
             if (isApproved)

@@ -10,7 +10,7 @@
       d:DesignHeight="600" d:DesignWidth="700"
       >
     <UserControl.Resources>
-        
+        <conv:NullToVisibilityConverter x:Key="nullToVisibilityConverter"/>
     </UserControl.Resources>
     <Grid>
         <TabControl ItemsSource="{Binding EnabledProjects}" SelectedIndex="0" >
@@ -33,7 +33,8 @@
                                     </Grid>
                                 </TabItem.Content>
                             </TabItem>
-                            <TabItem Header="Metal"
+                            <TabItem Header="Metal" Visibility="{Binding Converter={StaticResource nullToVisibilityConverter}, 
+                              Path=MetalViewModel}"
                                  VerticalAlignment="Bottom">
                                 <TabItem.Content>
                                     <Grid Margin="0,0,0,0" 
@@ -43,7 +44,8 @@
                                     </Grid>
                                 </TabItem.Content>
                             </TabItem>
-                            <TabItem Header="Slope"
+                            <TabItem Header="Slope" Visibility="{Binding Converter={StaticResource nullToVisibilityConverter}, 
+                              Path=SlopeViewModel}"
                                  VerticalAlignment="Bottom">
                                 <TabItem.Content>
                                     <Grid Margin="0,0,0,0" 

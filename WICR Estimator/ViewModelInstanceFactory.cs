@@ -33,8 +33,9 @@ namespace WICR_Estimator
             {
                 case "Dexotex Weather Wear":
                 case "Dexotex Weather Wear Rehab":
-                case "Enduro Kote Metal":
                     return new SlopeViewModel(Js);
+                case "Enduro Kote Metal":
+                    return new EnduroKoteSlopeViewModel(Js);
                 case "Dexotex Barrier Gaurd":
                     return new DexoSlopeViewModel(Js);
                 default:

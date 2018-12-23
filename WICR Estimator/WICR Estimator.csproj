@@ -96,6 +96,7 @@
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\CheckboxVisibilityConverter.cs" />
     <Compile Include="Converters\EnableTextboxConverter.cs" />
+    <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\QtyTextboxConv.cs" />
     <Compile Include="DataSerializer.cs" />
     <Compile Include="DelegateCommand.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="ViewModels\DexoMetalViewModel.cs" />
     <Compile Include="ViewModels\DexoSlopeViewModel.cs" />
     <Compile Include="ViewModels\EnduroKoteMaterialViewModel.cs" />
+    <Compile Include="ViewModels\EnduroKoteSlopeViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MaterialBaseViewModel.cs" />
     <Compile Include="ViewModels\MaterialViewModel.cs" />

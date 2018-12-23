@@ -25,7 +25,7 @@
     <RateRange>E2</RateRange>
     <MetalRange>F3:M43</MetalRange>
     <LaborRange>E412:E431</LaborRange>
-    <SlopeRange>P301:Q309</SlopeRange>
+    <SlopeRange>P398:Q406</SlopeRange>
     <MaterialRange>H380:N396</MaterialRange>
   </EnduroKote>
 <WeatherWearReseal>

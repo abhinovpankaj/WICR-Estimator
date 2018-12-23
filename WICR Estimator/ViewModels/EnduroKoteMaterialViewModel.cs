@@ -16,7 +16,7 @@ namespace WICR_Estimator.ViewModels
             materialNames = new Dictionary<string, string>();
             FillMaterialList();
             FetchMaterialValuesAsync(false);
-            getEKLQnty();
+            
         }
 
         private void FillMaterialList()
@@ -86,8 +86,8 @@ namespace WICR_Estimator.ViewModels
 
             foreach (SystemMaterial item in SystemMaterials)
             {
-                if (item.Name == "Stucco Material Remove And Replace (Lf)" || item.Name == "Plywood 3/4 & Blocking(# Of 4X8 Sheets)" ||
-                    item.Name == "Extra Stair Nosing Lf")
+                if (item.Name == "Stucco Material Remove and replace (LF)" || item.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
+                    item.Name == "Extra stair nosing lf")
                 {
                     qtyList.Add(item.Name, item.Qty);
                 }
@@ -110,8 +110,8 @@ namespace WICR_Estimator.ViewModels
                     SystemMaterials[i].SpecialMaterialPricing = sp;
                     SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
                     SystemMaterials[i].IsMaterialChecked = iscbChecked;
-                    if (SystemMaterials[i].Name == "Stucco Material Remove And Replace (Lf)" || SystemMaterials[i].Name == "Plywood 3/4 & Blocking(# Of 4X8 Sheets)" ||
-                    SystemMaterials[i].Name == "Extra Stair Nosing Lf")
+                    if (SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)" || SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
+                    SystemMaterials[i].Name == "Extra stair nosing lf")
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
@@ -137,7 +137,7 @@ namespace WICR_Estimator.ViewModels
             {
                 SubContractLaborItems = GetLaborItems();
             }
-
+            getEKLQnty();
             CalculateAllMaterial();
         }
 
@@ -296,18 +296,45 @@ namespace WICR_Estimator.ViewModels
                     item.LaborUnitPrice = item.LaborExtension / (item.SMSqftH + item.SMSqftV + item.StairSqft);
 
                 }
-                item = SystemMaterials.Where(x => x.Name == "Extra stair nosing lf").FirstOrDefault();
-                if (item != null)
-                {
+                //item = SystemMaterials.Where(x => x.Name == "Extra stair nosing lf").FirstOrDefault();
+                //if (item != null)
+                //{
 
-                    item.SMSqft = item.Qty;
-                    item.SMSqftH = item.Qty;
-                    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
-                    item.LaborExtension = item.Hours==0?0:(item.Hours + item.SetupMinCharge) * laborRate;
-                    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
+                //    item.SMSqft = item.Qty;
+                //    item.SMSqftH = item.Qty;
+                //    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
+                //    item.LaborExtension = item.Hours==0?0:(item.Hours + item.SetupMinCharge) * laborRate;
+                //    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
 
-                }
+                //}
             }
+        }
+
+        public override void ApplyCheckUnchecks(object obj)
+        {
+            //base.ApplyCheckUnchecks(obj);
+
+            if (obj.ToString()== "ENDURO ELA-98 BINDER (2 COATS)")
+            {
+                bool isChecked = SystemMaterials.Where(x => x.Name == "ENDURO ELA-98 BINDER (2 COATS)").FirstOrDefault().IsMaterialChecked;
+                SystemMaterials.Where(x => x.Name == "3/4 oz. Fiberglass (2000 sq ft rolls Purchased from Hill Brothers )").FirstOrDefault().IsMaterialChecked = isChecked;
+                //3/4 oz. Fiberglass (2000 sq ft rolls Purchased from Hill Brothers )
+            }
+            //update Add labor for minimum cost
+            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false && x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
+
+            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs)) * laborRate;
+            LaborMinChargeLaborUnitPrice = LaborMinChargeLaborExtension / (riserCount + totalSqft);
+            if (LaborMinChargeMinSetup + LaborMinChargeHrs < 20)
+            {
+                AddLaborMinCharge = true;
+            }
+            else
+                AddLaborMinCharge = false;
+            OnPropertyChanged("LaborMinChargeHrs");
+            OnPropertyChanged("LaborMinChargeLaborExtension");
+            OnPropertyChanged("LaborMinChargeLaborUnitPrice");
+
         }
     }
 }
