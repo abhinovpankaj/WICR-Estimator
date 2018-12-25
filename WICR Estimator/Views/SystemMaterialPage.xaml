@@ -38,7 +38,7 @@
         </Style>
         <Style x:Key="cbTB" TargetType="{x:Type CheckBox}">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding ElementName=qtyTb, Path=IsEnabled}" Value="True">
+                <DataTrigger Binding="{Binding ElementName=qtyTb, Path=IsEnabled,TargetNullValue=false}" Value="True">
                     <Setter Property="CheckBox.IsChecked" Value="True"/>
                 </DataTrigger>
             </Style.Triggers>

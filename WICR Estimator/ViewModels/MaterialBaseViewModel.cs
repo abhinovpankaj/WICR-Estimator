@@ -89,7 +89,7 @@ namespace WICR_Estimator.ViewModels
             
             //calculateLaborHrs();
         }
-        public virtual double CalculateLabrExtn(double calhrs,double setupMin)
+        public virtual double CalculateLabrExtn(double calhrs,double setupMin,string matName="")
         {
             return (calhrs != 0) ? (setupMin + calhrs) * laborRate : 0;
         }
@@ -126,7 +126,7 @@ namespace WICR_Estimator.ViewModels
             sqStairs = getSqFtStairs(matName);
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
             //labrExt = (calcHrs != 0) ? (setUpMin + calcHrs) * laborRate : 0;
-            labrExt = CalculateLabrExtn(calcHrs, setUpMin);
+            labrExt = CalculateLabrExtn(calcHrs, setUpMin,matName);
             qty = getQuantity(matName, cov, lfArea);
             if (lfArea == -1)
             {
@@ -143,8 +143,9 @@ namespace WICR_Estimator.ViewModels
             return (new SystemMaterial
             {
 
-                IsMaterialChecked = getCheckboxCheckStatus(matName),
+                
                 IsMaterialEnabled = getCheckboxEnabledStatus(matName),
+                IsMaterialChecked = getCheckboxCheckStatus(matName),
                 Name = matName,
                 SMUnits = unit,
                 SMSqft = lfArea,
@@ -491,7 +492,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
-        private void calculateLaborHrs()
+        public virtual void calculateLaborHrs()
         {
             TotalHrsDriveLabor = totalSqft < 1001 ? 10 : Math.Ceiling(totalSqft / 1000 * 10);
             TotalHrsFreightLabor = AllTabsFreightTotal / laborRate;
@@ -525,7 +526,7 @@ namespace WICR_Estimator.ViewModels
 
 
         #region commands
-        private bool canApply(object obj)
+        public virtual bool canApply(object obj)
         {
             if (obj != null)
             {
@@ -2687,12 +2688,21 @@ namespace WICR_Estimator.ViewModels
             TotalSystemPrice = getTotals(TotalLaborExtension, TotalMaterialCostbrkp, TotalFreightCostBrkp, TotalSubContractLaborCostBrkp);
             TotalSubcontractLabor = 0;
             TotalSale = TotalSlopingPrice + TotalMetalPrice + TotalSystemPrice + TotalSubcontractLabor;
+
             if (SlopeTotals != null && MetalTotals != null)
             {
                 AllTabsLaborTotal = SlopeTotals.LaborExtTotal + MetalTotals.LaborExtTotal + TotalLaborExtension;
                 AllTabsMaterialTotal = SlopeTotals.MaterialExtTotal + MetalTotals.MaterialExtTotal + TotalMaterialCostbrkp;
                 AllTabsFreightTotal = SlopeTotals.MaterialFreightTotal + MetalTotals.MaterialFreightTotal + TotalFreightCostBrkp;
                 AllTabsSubContractTotal = SlopeTotals.SubContractLabor + MetalTotals.SubContractLabor + TotalSubContractLaborCostBrkp;
+            }
+            else
+            {
+
+                AllTabsLaborTotal = TotalLaborExtension;
+                AllTabsMaterialTotal = TotalMaterialCostbrkp;
+                AllTabsFreightTotal =  TotalFreightCostBrkp;
+                AllTabsSubContractTotal = TotalSubContractLaborCostBrkp;
             }
             UpdateUILaborCost();
         }

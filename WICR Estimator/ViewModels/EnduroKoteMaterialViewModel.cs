@@ -57,7 +57,7 @@ namespace WICR_Estimator.ViewModels
 
         }
 
-        public override double CalculateLabrExtn(double calhrs, double setupMin)
+        public override double CalculateLabrExtn(double calhrs, double setupMin,string matName)
         {
             return base.CalculateLabrExtn(calhrs, setupMin);
 

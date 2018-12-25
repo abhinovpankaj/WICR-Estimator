@@ -25,6 +25,8 @@ namespace WICR_Estimator.Converters
                     case "Stucco Material Remove And Replace (Lf)":
                     case "Stucco Material Remove and replace (LF)":
                     case "R&R Sealant 1/2 to 3/4 inch control joints (Sonneborn NP-2)":
+                    case "LARGE CRACK REPAIR":
+                    case "BUBBLE REPAIR (MEASURE SQ FT)":
                         return true;
                     default:
                         return false;                       

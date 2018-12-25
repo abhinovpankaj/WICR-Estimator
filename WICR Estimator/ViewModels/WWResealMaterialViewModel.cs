@@ -15,14 +15,15 @@ namespace WICR_Estimator.ViewModels
         {
             materialNames = new Dictionary<string, string>();
             FillMaterialList();
+            laborRate = 19.36;
             FetchMaterialValuesAsync(false);
+            
         }
 
         private void FillMaterialList()
         {
             
-
-            materialNames.Add("SLURRY COAT (RESISTITE) OVER TEXTURE","SQ FT");
+            materialNames.Add("SLURRY COAT (RESISTITE) OVER TEXTURE", "SQ FT");
 
             materialNames.Add("LIGHT CRACK REPAIR", "SQ FT");
             materialNames.Add("LARGE CRACK REPAIR", "LF");
@@ -53,7 +54,20 @@ namespace WICR_Estimator.ViewModels
             return smCollection;
 
         }
-
+        public override double CalculateLabrExtn(double calhrs, double setupMin,string matName)
+        {
+            //return base.CalculateLabrExtn(calhrs, setupMin);
+            switch (matName)
+            {   
+                case "RESISTITE LIQUID":
+                case "RESISTITE REGULAR GRAY":
+                case "RESISTITE REGULAR OR SMOOTH GRAY (KNOCK DOWN OR SMOOTH)":
+                    return (calhrs+setupMin)*laborRate;
+                default:
+                    return setupMin > calhrs ? setupMin * laborRate : calhrs * laborRate; ;
+            }
+            
+        }
         public override void populateCalculation()
         {
             //base.populateCalculation();
@@ -427,7 +441,7 @@ namespace WICR_Estimator.ViewModels
 
             var sysMat = GetSystemMaterial();
 
-            #region  Update Special Material Pricing and QTY
+            #region  Update Special Material Pricing and QTY on JobSetup change
             if (hasSetupChanged)
             {
                 for (int i = 0; i < SystemMaterials.Count; i++)
@@ -457,7 +471,7 @@ namespace WICR_Estimator.ViewModels
             else
                 SystemMaterials = sysMat;
 
-            //setExceptionValues();
+            setExceptionValues();
             setCheckBoxes();
 
             if (OtherMaterials.Count == 0)
@@ -478,16 +492,25 @@ namespace WICR_Estimator.ViewModels
         {
             //base.calculateRLqty();
             double val1, val2, val3, val4 = 0;
+            double qty = 0;
             SystemMaterial sysmat = SystemMaterials.Where(x => x.Name == "RESISTITE REGULAR GRAY").FirstOrDefault();
 
             val1 =SystemMaterials.Where(x => x.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)").FirstOrDefault().Qty;
             val2=SystemMaterials.Where(x => x.Name == "SLURRY COAT (RESISTITE) OVER TEXTURE").FirstOrDefault().Qty;
             val3=sysmat.Qty;
             val4=SystemMaterials.Where(x => x.Name == "RESISTITE REGULAR OR SMOOTH GRAY (KNOCK DOWN OR SMOOTH)").FirstOrDefault().Qty;
+            qty= sysmat.IsMaterialChecked ? (val3 + val4 + val1) * 0.33 + val2 / 5 : val1 * 0.33 + val2 / 5;
+            SystemMaterial RL = SystemMaterials.Where(x => x.Name == "RESISTITE LIQUID").FirstOrDefault();
+            if (RL!=null)
+            {
+                RL.Qty = qty;
+            }
+            //bool ischecked = SystemMaterials.Where(x => x.Name == "RESISTITE REGULAR GRAY").FirstOrDefault().IsMaterialChecked;
+            //SystemMaterials.Where(x => x.Name == "RESISTITE LIQUID").FirstOrDefault().IsMaterialChecked = ischecked;
 
-            SystemMaterials.Where(x => x.Name == "RESISTITE LIQUID").FirstOrDefault().Qty=
-                sysmat.IsMaterialChecked? (val3 + val4 + val1) * 0.33 + val2 / 5: val1 * 0.33 + val2 / 5 ;
+
         }
+
         public override bool getCheckboxEnabledStatus(string materialName)
         {
             //return base.getCheckboxCheckStatus(materialName);
@@ -497,7 +520,6 @@ namespace WICR_Estimator.ViewModels
                 case "SLURRY COAT (RESISTITE) OVER TEXTURE":
                 case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)":
                 case "LIGHT CRACK REPAIR":
-                
                 case "VISTA PAINT ACRAPOXY SEALER":
                 case "RESISTITE REGULAR GRAY":
                 case "DEXOTEX AJ-44":
@@ -546,30 +568,54 @@ namespace WICR_Estimator.ViewModels
         }
         public override double getSqFtAreaH(string materialName)
         {
-            //return base.getSqFtAreaH(materialName);
-            /*   SLURRY COAT (RESISTITE) OVER TEXTURE 
-LIGHT CRACK REPAIR
-LARGE CRACK REPAIR 
-BUBBLE REPAIR (MEASURE SQ FT)
-RESISTITE LIQUID
-RESISTITE REGULAR GRAY
-RESISTITE REGULAR OR SMOOTH GRAY (KNOCK DOWN OR SMOOTH)
-CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)
-RESISTITE UNIVERSAL PRIMER (ADD 50% WATER)
-VISTA PAINT ACRAPOXY SEALER
-DEXOTEX AJ-44
-WESTCOAT SC-10
-UPI PERMASHIELD
-PLI DEK GS88 WITH COLOR JAR 1 PER PAIL
-OPTIONAL FOR WEATHER SEAL XL
-             * 
-             */
-            return 1000;
+
+            switch (materialName)
+            {
+                case "RESISTITE LIQUID":
+                    return 0.0000001;
+                default:
+                    return totalSqft;
+            }
         }
 
+        public override void calculateLaborHrs()
+        {
+            
+            TotalHrsDriveLabor = totalSqft < 1001 ? 2 : Math.Ceiling(totalSqft / 1000 * 10);
+            TotalHrsFreightLabor = Math.Round(AllTabsFreightTotal / laborRate,1);
+            OnPropertyChanged("TotalHrsFreightLabor");
+            TotalHrsSystemLabor = Math.Round(isPrevailingWage ? (TotalLaborExtension / laborRate) * .445 - TotalHrsDriveLabor :
+                                                  (TotalLaborExtension / laborRate) - TotalHrsDriveLabor,1);
+
+            OnPropertyChanged("TotalHrsSystemLabor");
+            if (SlopeTotals != null && MetalTotals != null)
+            {
+                TotalHrsMetalLabor = isPrevailingWage ? (MetalTotals.LaborExtTotal / laborRate) * .445 :
+                                                  (MetalTotals.LaborExtTotal / laborRate);
+                OnPropertyChanged("TotalHrsMetalLabor");
+                TotalHrsSlopeLabor = isPrevailingWage ? (SlopeTotals.LaborExtTotal / laborRate) * .445 :
+                                                      (SlopeTotals.LaborExtTotal / laborRate);
+                OnPropertyChanged("TotalHrsSlopeLabor");
+            }
+
+            TotalHrsLabor = TotalHrsSystemLabor + TotalHrsMetalLabor + TotalHrsSlopeLabor +
+                TotalHrsFreightLabor + TotalHrsDriveLabor;
+            OnPropertyChanged("TotalHrsLabor");
+        }
         public override double getSqFtStairs(string materialName)
         {
-            return base.getSqFtStairs(materialName);
+            //return base.getSqFtStairs(materialName);
+            switch (materialName)
+            {
+                case "RESISTITE LIQUID":
+                case "LIGHT CRACK REPAIR":
+                case "LARGE CRACK REPAIR":
+                case "BUBBLE REPAIR (MEASURE SQ FT)":
+                    return 0;
+                default:
+                    return riserCount*stairWidth*2;
+
+            }
         }
         public override double getQuantity(string materialName, double coverage, double lfArea)
         {
@@ -588,6 +634,15 @@ OPTIONAL FOR WEATHER SEAL XL
                     return lfArea/coverage;
             }
         }
+
+        
+        public override bool canApply(object obj)
+        {
+            //return base.canApply(obj);
+            
+                return true;
+            
+        }
         public override void ApplyCheckUnchecks(object obj)
         {
             //base.ApplyCheckUnchecks(obj);
@@ -598,87 +653,142 @@ OPTIONAL FOR WEATHER SEAL XL
                 SystemMaterials.Where(x => x.Name == "RESISTITE REGULAR OR SMOOTH GRAY (KNOCK DOWN OR SMOOTH)").FirstOrDefault().IsMaterialChecked = ischecked;
 
             }
-            setCheckBoxes();
-            calculateRLqty();
+            SystemMaterial mat;
+            if (obj.ToString()== "VISTA PAINT ACRAPOXY SEALER")
+            {
+                mat = SystemMaterials.Where(x => x.Name == "VISTA PAINT ACRAPOXY SEALER").First();
+                if (mat?.IsMaterialChecked == true)
+                {
+
+                    SystemMaterials.Where(x => x.Name == "DEXOTEX AJ-44").First().IsMaterialChecked = false;
+                    SystemMaterials.Where(x => x.Name == "WESTCOAT SC-10").First().IsMaterialChecked = false;
+                    SystemMaterials.Where(x => x.Name == "UPI PERMASHIELD").First().IsMaterialChecked = false;
+                    SystemMaterials.Where(x => x.Name == "PLI DEK GS88 WITH COLOR JAR 1 PER PAIL").First().IsMaterialChecked = false;
+                    return;
+                }
+            }
+            if (obj.ToString()== "DEXOTEX AJ-44")
+            {
+                mat = SystemMaterials.Where(x => x.Name == "DEXOTEX AJ-44").First();
+                if (mat?.IsMaterialChecked == true)
+                {
+
+                    SystemMaterials.Where(x => x.Name == "VISTA PAINT ACRAPOXY SEALER").First().IsMaterialChecked = false;
+                    SystemMaterials.Where(x => x.Name == "WESTCOAT SC-10").First().IsMaterialChecked = false;
+                    SystemMaterials.Where(x => x.Name == "UPI PERMASHIELD").First().IsMaterialChecked = false;
+                    SystemMaterials.Where(x => x.Name == "PLI DEK GS88 WITH COLOR JAR 1 PER PAIL").First().IsMaterialChecked = false;
+                    return;
+                }
+            }
+
+            if (obj.ToString()== "WESTCOAT SC-10")
+            {
+                mat = SystemMaterials.Where(x => x.Name == "WESTCOAT SC-10").First();
+                if (mat?.IsMaterialChecked == true)
+                {
+
+                    SystemMaterials.Where(x => x.Name == "VISTA PAINT ACRAPOXY SEALER").First().IsMaterialChecked = false;
+                    SystemMaterials.Where(x => x.Name == "DEXOTEX AJ-44").First().IsMaterialChecked = false;
+                    SystemMaterials.Where(x => x.Name == "UPI PERMASHIELD").First().IsMaterialChecked = false;
+                    SystemMaterials.Where(x => x.Name == "PLI DEK GS88 WITH COLOR JAR 1 PER PAIL").First().IsMaterialChecked = false;
+                    return;
+                }
+            }
+
+            if (obj.ToString()== "UPI PERMASHIELD")
+            {
+                mat = SystemMaterials.Where(x => x.Name == "UPI PERMASHIELD").First();
+                if (mat?.IsMaterialChecked == true)
+                {
+
+                    SystemMaterials.Where(x => x.Name == "VISTA PAINT ACRAPOXY SEALER").First().IsMaterialChecked = false;
+                    SystemMaterials.Where(x => x.Name == "DEXOTEX AJ-44").First().IsMaterialChecked = false;
+                    SystemMaterials.Where(x => x.Name == "WESTCOAT SC-10").First().IsMaterialChecked = false;
+                    SystemMaterials.Where(x => x.Name == "PLI DEK GS88 WITH COLOR JAR 1 PER PAIL").First().IsMaterialChecked = false;
+                    return;
+                }
+            }
+            if (obj.ToString()== "PLI DEK GS88 WITH COLOR JAR 1 PER PAIL")
+            {
+                mat = SystemMaterials.Where(x => x.Name == "PLI DEK GS88 WITH COLOR JAR 1 PER PAIL").First();
+                if (mat?.IsMaterialChecked == true)
+                {
+
+                    SystemMaterials.Where(x => x.Name == "VISTA PAINT ACRAPOXY SEALER").First().IsMaterialChecked = false;
+                    SystemMaterials.Where(x => x.Name == "DEXOTEX AJ-44").First().IsMaterialChecked = false;
+                    SystemMaterials.Where(x => x.Name == "WESTCOAT SC-10").First().IsMaterialChecked = false;
+                    SystemMaterials.Where(x => x.Name == "UPI PERMASHIELD").First().IsMaterialChecked = false;
+                    return;
+                }
+            }
+            if (obj.ToString()== "SLURRY COAT (RESISTITE) OVER TEXTURE"|| obj.ToString()== "RESISTITE REGULAR GRAY")
+            {
+                calculateRLqty();
+                
+            }
+            
         }
 
+        public override double getLaborUnitPrice(double laborExtension, double riserCount, double totalSqft, double sqftVert = 0, double sqftHor = 0, double sqftStairs = 0, string matName = "")
+        {
+            //return base.getLaborUnitPrice(laborExtension, riserCount, totalSqft, sqftVert, sqftHor, sqftStairs, matName);
+            return laborExtension / (riserCount + totalSqft);
+        }
         public override void setExceptionValues()
         {
+
+
             //base.setExceptionValues();
             if (SystemMaterials.Count != 0)
             {
                 SystemMaterial item = SystemMaterials.Where(x => x.Name == "LARGE CRACK REPAIR").FirstOrDefault();
                 if (item != null)
                 {
-                    item.StairSqft = item.Qty;
+                    item.SMSqftH = item.Qty;
                     item.SMSqft = item.Qty;
-                    item.Hours = CalculateHrs(0, 0, item.StairSqft, item.StairsProductionRate);
-                    item.LaborExtension = (item.Hours + item.SetupMinCharge) * laborRate;
+                    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
+                    item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate; 
                     item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
                 }
 
                 item = SystemMaterials.Where(x => x.Name == "BUBBLE REPAIR (MEASURE SQ FT)").FirstOrDefault();
                 if (item != null)
                 {
-                    item.SMSqftH = item.Qty * 32;
+                    item.SMSqftH = item.Qty;
                     item.SMSqft = item.Qty;
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
                     item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
-                    item.LaborUnitPrice = item.LaborExtension / item.Qty;
+                    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
                 }
             }
 
         }
         public override void setCheckBoxes()
         {
-            SystemMaterial mat;
-            mat = SystemMaterials.Where(x => x.Name == "VISTA PAINT ACRAPOXY SEALER").First();
-            if (mat?.IsMaterialChecked==true)
-            {
-                SystemMaterials.Where(x => x.Name == "DEXOTEX AJ-44").First().IsMaterialChecked = false;
-                SystemMaterials.Where(x => x.Name == "WESTCOAT SC-10").First().IsMaterialChecked = false;
-                SystemMaterials.Where(x => x.Name == "UPI PERMASHIELD").First().IsMaterialChecked = false;
-                SystemMaterials.Where(x => x.Name == "PLI DEK GS88 WITH COLOR JAR 1 PER PAIL").First().IsMaterialChecked = false;
-                return;
-            }
-            mat = SystemMaterials.Where(x => x.Name == "DEXOTEX AJ-44").First();
-            if (mat?.IsMaterialChecked == true)
-            {
-                SystemMaterials.Where(x => x.Name == "VISTA PAINT ACRAPOXY SEALER").First().IsMaterialChecked = false;
-                SystemMaterials.Where(x => x.Name == "WESTCOAT SC-10").First().IsMaterialChecked = false;
-                SystemMaterials.Where(x => x.Name == "UPI PERMASHIELD").First().IsMaterialChecked = false;
-                SystemMaterials.Where(x => x.Name == "PLI DEK GS88 WITH COLOR JAR 1 PER PAIL").First().IsMaterialChecked = false;
-                return;
-            }
+            //SystemMaterial sysMat=SystemMaterials.Where(x => x.Name == "SLURRY COAT (RESISTITE) OVER TEXTURE").FirstOrDefault();
+            //if (sysMat!=null)
+            //{
+            //    sysMat.IsMaterialChecked = false;
+            //    sysMat.IsMaterialEnabled = true;
+            //}
 
-            mat = SystemMaterials.Where(x => x.Name == "WESTCOAT SC-10").First();
-            if (mat?.IsMaterialChecked == true)
-            {
-                SystemMaterials.Where(x => x.Name == "VISTA PAINT ACRAPOXY SEALER").First().IsMaterialChecked = false;
-                SystemMaterials.Where(x => x.Name == "DEXOTEX AJ-44").First().IsMaterialChecked = false;
-                SystemMaterials.Where(x => x.Name == "UPI PERMASHIELD").First().IsMaterialChecked = false;
-                SystemMaterials.Where(x => x.Name == "PLI DEK GS88 WITH COLOR JAR 1 PER PAIL").First().IsMaterialChecked = false;
-                return;
-            }
+            //sysMat = SystemMaterials.Where(x => x.Name == "RESISTITE REGULAR GRAY").FirstOrDefault();
+            //if (sysMat != null)
+            //{
+            //    sysMat.IsMaterialChecked = false;
+            //    sysMat.IsMaterialEnabled = true;
+            //}
 
-            mat = SystemMaterials.Where(x => x.Name == "UPI PERMASHIELD").First();
-            if (mat?.IsMaterialChecked == true)
-            {
-                SystemMaterials.Where(x => x.Name == "VISTA PAINT ACRAPOXY SEALER").First().IsMaterialChecked = false;
-                SystemMaterials.Where(x => x.Name == "DEXOTEX AJ-44").First().IsMaterialChecked = false;
-                SystemMaterials.Where(x => x.Name == "WESTCOAT SC-10").First().IsMaterialChecked = false;
-                SystemMaterials.Where(x => x.Name == "PLI DEK GS88 WITH COLOR JAR 1 PER PAIL").First().IsMaterialChecked = false;
-                return;
-            }
-            mat = SystemMaterials.Where(x => x.Name == "PLI DEK GS88 WITH COLOR JAR 1 PER PAIL").First();
-            if (mat?.IsMaterialChecked == true)
-            {
-                SystemMaterials.Where(x => x.Name == "VISTA PAINT ACRAPOXY SEALER").First().IsMaterialChecked = false;
-                SystemMaterials.Where(x => x.Name == "DEXOTEX AJ-44").First().IsMaterialChecked = false;
-                SystemMaterials.Where(x => x.Name == "WESTCOAT SC-10").First().IsMaterialChecked = false;
-                SystemMaterials.Where(x => x.Name == "UPI PERMASHIELD").First().IsMaterialChecked = false;
-                return;
-            }
+            SystemMaterials.Where(x => x.Name == "SLURRY COAT (RESISTITE) OVER TEXTURE").First().IsMaterialChecked = false;
+            SystemMaterials.Where(x => x.Name == "RESISTITE LIQUID").First().IsMaterialEnabled = true;
+            SystemMaterials.Where(x => x.Name == "RESISTITE LIQUID").First().IsMaterialChecked = false;
+            SystemMaterials.Where(x => x.Name == "RESISTITE LIQUID").First().IsMaterialEnabled = false;
+            SystemMaterials.Where(x => x.Name == "RESISTITE REGULAR OR SMOOTH GRAY (KNOCK DOWN OR SMOOTH)").First().IsMaterialChecked = false;
+            SystemMaterials.Where(x => x.Name == "RESISTITE REGULAR GRAY").First().IsMaterialChecked = false;
+            SystemMaterials.Where(x => x.Name == "DEXOTEX AJ-44").First().IsMaterialChecked = false;
+            SystemMaterials.Where(x => x.Name == "WESTCOAT SC-10").First().IsMaterialChecked = false;
+            SystemMaterials.Where(x => x.Name == "UPI PERMASHIELD").First().IsMaterialChecked = false;
+            SystemMaterials.Where(x => x.Name == "PLI DEK GS88 WITH COLOR JAR 1 PER PAIL").First().IsMaterialChecked = false;
         }
     }
 }
