@@ -14,12 +14,13 @@
         <DataTemplate x:Key="ProjectTemplate">
             <StackPanel Orientation="Horizontal" Background="#00C0E0FF">
                 <Image x:Name="tickImage" Source="..\Images\tick.png"
-                       Height="25"
+                       Height="25" HorizontalAlignment="Right"
                       Visibility="{Binding IsSelectedProject,
                     Converter={StaticResource VisibilityConv}}"/>
                 <TextBlock Text="{Binding Path=Name}"
                            FontWeight="SemiBold"
-                           FontSize="15"/>
+                           FontSize="15" />
+                
             </StackPanel>
             <!--<DataTemplate.Triggers>
                 <DataTrigger
@@ -41,12 +42,26 @@
             <Setter Property="Height" Value="35"/>
             <Setter Property="Width" Value="170"/>
         </Style>
-        <Style TargetType="{x:Type ListViewItem}">
-            <Style.Triggers>
-                <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Foreground" Value="Black"/>
-                </Trigger>
-            </Style.Triggers>
+                
+        <Style x:Key="ContainerStyle" TargetType="{x:Type GroupItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Expander IsExpanded="True" Margin="10,5,0,0">
+                            <Expander.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Name}" 
+                                               FontWeight="Bold" Foreground="Gray" 
+                                               FontSize="20" 
+                                               VerticalAlignment="Bottom" />
+                                    
+                                </StackPanel>
+                            </Expander.Header>
+                            <ItemsPresenter />
+                        </Expander>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </UserControl.Resources>
     <Grid>
@@ -73,7 +88,7 @@
                  Background="AliceBlue"
                  x:Name="ProjectList"
                  SelectionMode="Multiple"
-                 ItemsSource="{Binding Projects}"
+                 ItemsSource="{Binding ProjectView}"
                     
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ItemTemplate="{StaticResource ProjectTemplate}">
@@ -86,14 +101,23 @@
                             ElementName=ProjectList}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>-->
+            <ListView.GroupStyle>
+                <GroupStyle ContainerStyle="{StaticResource ContainerStyle}"/>
+            </ListView.GroupStyle>
+            
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Foreground" Value="Blue"/>
+                        </Trigger>
+                    </Style.Triggers>
                     <Setter Property="IsSelected" Value="{Binding IsSelectedProject}" />
                 </Style>
             </ListView.ItemContainerStyle>
             
         </ListView>
-
+        
         <DataGrid ItemsSource="{Binding SelectedProjects,UpdateSourceTrigger=PropertyChanged}"
                   FontSize="14"
                   HorizontalAlignment="Stretch"

@@ -43,20 +43,7 @@ namespace WICR_Estimator.ViewModels
 
         }
 
-        public override ObservableCollection<SystemMaterial> GetSystemMaterial()
-        {
-            ObservableCollection<SystemMaterial> smCollection = new ObservableCollection<SystemMaterial>();
-            int k = 0;
-            foreach (string key in materialNames.Keys)
-            {
-
-                smCollection.Add(getSMObject(k, key, materialNames[key]));
-                k++;
-            }
-            return smCollection;
-
-        }
-
+        
         public override double CalculateLabrExtn(double calhrs, double setupMin,string matName)
         {
             return base.CalculateLabrExtn(calhrs, setupMin);
@@ -94,7 +81,7 @@ namespace WICR_Estimator.ViewModels
 
             }
 
-            var sysMat = GetSystemMaterial();
+            var sysMat = GetSystemMaterial(materialNames);
 
             #region  Update Special Material Pricing and QTY
             if (hasSetupChanged)
@@ -221,7 +208,8 @@ namespace WICR_Estimator.ViewModels
             //return base.getQuantity(materialName, coverage, lfArea);
             switch (materialName)
             {
-                
+                case "EKS Acrylic Top Coat":
+                    return lfArea / coverage < 0.5 ? 0.5 : lfArea / coverage;
                 default:
                     return lfArea/ coverage;
             }
@@ -324,7 +312,7 @@ namespace WICR_Estimator.ViewModels
             LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false && x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
 
             LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs)) * laborRate;
-            LaborMinChargeLaborUnitPrice = LaborMinChargeLaborExtension / (riserCount + totalSqft);
+            LaborMinChargeLaborUnitPrice = (riserCount + totalSqft)==0?0: LaborMinChargeLaborExtension / (riserCount + totalSqft);
             if (LaborMinChargeMinSetup + LaborMinChargeHrs < 20)
             {
                 AddLaborMinCharge = true;

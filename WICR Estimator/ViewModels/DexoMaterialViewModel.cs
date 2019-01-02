@@ -20,6 +20,10 @@ namespace WICR_Estimator.ViewModels
             resistiteQty();
         }
 
+        public override bool canApply(object obj)
+        {
+            return true;
+        }
         private void FillMaterialList()
         {
 
@@ -54,8 +58,8 @@ namespace WICR_Estimator.ViewModels
 
             foreach (SystemMaterial item in SystemMaterials)
             {
-                if (item.Name == "Stucco Material Remove And Replace (Lf)" || item.Name == "Plywood 3/4 & Blocking(# Of 4X8 Sheets)" ||
-                    item.Name == "Extra Stair Nosing Lf"||item.Name== "R&R Sealant 1/2 to 3/4 inch control joints (Sonneborn NP-2)")
+                if (item.Name == "Stucco Material Remove and replace (LF)" || item.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
+                    item.Name == "Extra stair nosing lf" || item.Name== "R&R Sealant 1/2 to 3/4 inch control joints (Sonneborn NP-2)")
                 {
                     qtyList.Add(item.Name, item.Qty);
                 }
@@ -78,14 +82,14 @@ namespace WICR_Estimator.ViewModels
                     SystemMaterials[i].SpecialMaterialPricing = sp;
                     SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
                     SystemMaterials[i].IsMaterialChecked = iscbChecked;
-                    if (SystemMaterials[i].Name == "Stucco Material Remove And Replace (Lf)" || SystemMaterials[i].Name == "Plywood 3/4 & Blocking(# Of 4X8 Sheets)" ||
-                    SystemMaterials[i].Name == "Extra Stair Nosing Lf" 
+                    if (SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)" || 
+                        SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
+                    SystemMaterials[i].Name == "Extra stair nosing lf"
                             || SystemMaterials[i].Name == "R&R Sealant 1/2 to 3/4 inch control joints (Sonneborn NP-2)")
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
                             SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
-
                         }
                     }
 
@@ -97,7 +101,7 @@ namespace WICR_Estimator.ViewModels
             else
                 SystemMaterials = sysMat;
 
-            //setExceptionValues();
+            setExceptionValues();
             setCheckBoxes();
 
             if (OtherMaterials.Count == 0)
@@ -159,8 +163,12 @@ namespace WICR_Estimator.ViewModels
             return smCollection;
 
         }
-        
-       
+
+        public override void calculateLaborHrs()
+        {
+            calLaborHrs(6);
+
+        }
         public override double getSqFtAreaH(string materialName)
         {
             //return base.getSqFtAreaH(materialName);
@@ -179,7 +187,7 @@ namespace WICR_Estimator.ViewModels
                 case "Aj-44A Dressing(Sealer)":
                 case "Vista Paint Acripoxy":
                 case "Lip Color":
-                case "Weather Seal XL Coat":
+                //case "Weather Seal XL Coat":
                 case "Glass mat #4 1200 SF ROLL FROM ACME":
                     return totalSqft;
                 case "R&R Sealant 1/2 to 3/4 inch control joints (Sonneborn NP-2)":
@@ -206,14 +214,16 @@ namespace WICR_Estimator.ViewModels
                 case "Resistite textured knockdown finish (smooth or regular per customer)White":
                 case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)":
                 case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)":
-                case "Aj-44A Dressing(Sealer)":
-                case "Vista Paint Acripoxy":
+                
                 case "RP FABRIC 10 INCH WIDE X (300 LF)":
-                case "Lip Color":
+                
                 case "Weather Seal XL Coat":
                 case "Glass mat #4 1200 SF ROLL FROM ACME":
                     return lfArea/coverage;
-                
+                case "Aj-44A Dressing(Sealer)":
+                case "Vista Paint Acripoxy":
+                case "Lip Color":
+                    return lfArea / coverage < 0.5 ? 0.5 : lfArea / coverage;
                 case "Stair Nosing From Dexotex":
                     return lfArea * 4;
                 default:
@@ -243,6 +253,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
             SystemMaterials.Where(x=>x.Name== "Resistite Liquid ").FirstOrDefault().Qty= (qty / 5);
+            SystemMaterials.Where(x => x.Name == "Weather Seal XL Coat").FirstOrDefault().IsMaterialEnabled = true;
         }
 
         public override double getSqFtStairs(string materialName)
@@ -329,7 +340,7 @@ namespace WICR_Estimator.ViewModels
                 case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)":
                 case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)":
                 case "Aj-44A Dressing(Sealer)":
-                case "Weather Seal XL Coat":
+               
                 case "RP FABRIC 10 INCH WIDE X (300 LF)":
                 case "Glass mat #4 1200 SF ROLL FROM ACME":
                 case "Stair Nosing From Dexotex":
@@ -341,6 +352,7 @@ namespace WICR_Estimator.ViewModels
                 case "Extra stair nosing lf":
                 case "Vista Paint Acripoxy":
                 case "Lip Color":
+                case "Weather Seal XL Coat":
                     return false;
                 default:
                     return true;
@@ -364,6 +376,7 @@ namespace WICR_Estimator.ViewModels
                 case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)":
                 case "Stair Nosing From Dexotex":
                 case "Lip Color":
+                case "Weather Seal XL Coat":
                 case "Vista Paint Acripoxy":
                     return true;
                 case "R&R Sealant 1/2 to 3/4 inch control joints (Sonneborn NP-2)":
@@ -577,13 +590,14 @@ namespace WICR_Estimator.ViewModels
                 LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false && x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
 
             LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate);
-            LaborMinChargeLaborUnitPrice = LaborMinChargeLaborExtension / (riserCount + totalSqft);
+            LaborMinChargeLaborUnitPrice = (riserCount + totalSqft)==0?0: LaborMinChargeLaborExtension / (riserCount + totalSqft);
             if (LaborMinChargeMinSetup + LaborMinChargeHrs < 20)
             {
                 AddLaborMinCharge = true;
             }
             else
                 AddLaborMinCharge = false;
+            OnPropertyChanged("AddLaborMinCharge");
             OnPropertyChanged("LaborMinChargeHrs");
             OnPropertyChanged("LaborMinChargeLaborExtension");
             OnPropertyChanged("LaborMinChargeLaborUnitPrice");
@@ -610,7 +624,17 @@ namespace WICR_Estimator.ViewModels
                 {                   
                     mat.IsMaterialChecked = false;
                 }
+                if (mat.Name == "Sand or pressure wash to prepare area")
+                {
+                    mat.IsMaterialChecked =true;
+                }
+                if (mat.Name == "Weather Seal XL Coat")
+                {
+                    mat.IsMaterialChecked = false;
+                    mat.IsMaterialEnabled = true;
+                }
             }
+
         }
 
         public override void setExceptionValues()

@@ -92,6 +92,15 @@ namespace WICR_Estimator.GoogleUtility
                 case "Weather Wear Reseal":
                     prjName = "WeatherWearReseal";
                     break;
+                case "Westcoat Color Wash":
+                    prjName = "WestcoatColor";
+                    break;
+                case "Desert Brand":
+                    prjName = "DesertBrand";
+                    break;
+                case "Pedestrian System":
+                    prjName = "Pedestrian";
+                    break;
                 default:
                     break;
             }

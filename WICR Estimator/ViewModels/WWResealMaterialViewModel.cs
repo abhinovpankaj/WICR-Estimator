@@ -15,7 +15,7 @@ namespace WICR_Estimator.ViewModels
         {
             materialNames = new Dictionary<string, string>();
             FillMaterialList();
-            laborRate = 19.36;
+            //laborRate = 19.36;
             FetchMaterialValuesAsync(false);
             
         }
@@ -41,19 +41,7 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("OPTIONAL FOR WEATHER SEAL XL", "5 GAL PAIL");
         }
 
-        public override ObservableCollection<SystemMaterial> GetSystemMaterial()
-        {
-            ObservableCollection<SystemMaterial> smCollection = new ObservableCollection<SystemMaterial>();
-            int k = 0;
-            foreach (string key in materialNames.Keys)
-            {
-
-                smCollection.Add(getSMObject(k, key, materialNames[key]));
-                k++;
-            }
-            return smCollection;
-
-        }
+        
         public override double CalculateLabrExtn(double calhrs, double setupMin,string matName)
         {
             //return base.CalculateLabrExtn(calhrs, setupMin);
@@ -439,7 +427,7 @@ namespace WICR_Estimator.ViewModels
 
             }
 
-            var sysMat = GetSystemMaterial();
+            var sysMat = GetSystemMaterial(materialNames);
 
             #region  Update Special Material Pricing and QTY on JobSetup change
             if (hasSetupChanged)
@@ -580,12 +568,12 @@ namespace WICR_Estimator.ViewModels
 
         public override void calculateLaborHrs()
         {
-            
+
             TotalHrsDriveLabor = totalSqft < 1001 ? 2 : Math.Ceiling(totalSqft / 1000 * 10);
-            TotalHrsFreightLabor = Math.Round(AllTabsFreightTotal / laborRate,1);
+            TotalHrsFreightLabor = Math.Round(AllTabsFreightTotal / laborRate, 1);
             OnPropertyChanged("TotalHrsFreightLabor");
             TotalHrsSystemLabor = Math.Round(isPrevailingWage ? (TotalLaborExtension / laborRate) * .445 - TotalHrsDriveLabor :
-                                                  (TotalLaborExtension / laborRate) - TotalHrsDriveLabor,1);
+                                                  (TotalLaborExtension / laborRate) - TotalHrsDriveLabor, 1);
 
             OnPropertyChanged("TotalHrsSystemLabor");
             if (SlopeTotals != null && MetalTotals != null)
@@ -746,6 +734,8 @@ namespace WICR_Estimator.ViewModels
                 {
                     item.SMSqftH = item.Qty;
                     item.SMSqft = item.Qty;
+
+                    //item.IsMaterialChecked = item.Qty>0?true:false;
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
                     item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate; 
                     item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
@@ -754,6 +744,7 @@ namespace WICR_Estimator.ViewModels
                 item = SystemMaterials.Where(x => x.Name == "BUBBLE REPAIR (MEASURE SQ FT)").FirstOrDefault();
                 if (item != null)
                 {
+                    //item.IsMaterialChecked = item.Qty > 0 ? true : false;
                     item.SMSqftH = item.Qty;
                     item.SMSqft = item.Qty;
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
@@ -765,20 +756,6 @@ namespace WICR_Estimator.ViewModels
         }
         public override void setCheckBoxes()
         {
-            //SystemMaterial sysMat=SystemMaterials.Where(x => x.Name == "SLURRY COAT (RESISTITE) OVER TEXTURE").FirstOrDefault();
-            //if (sysMat!=null)
-            //{
-            //    sysMat.IsMaterialChecked = false;
-            //    sysMat.IsMaterialEnabled = true;
-            //}
-
-            //sysMat = SystemMaterials.Where(x => x.Name == "RESISTITE REGULAR GRAY").FirstOrDefault();
-            //if (sysMat != null)
-            //{
-            //    sysMat.IsMaterialChecked = false;
-            //    sysMat.IsMaterialEnabled = true;
-            //}
-
             SystemMaterials.Where(x => x.Name == "SLURRY COAT (RESISTITE) OVER TEXTURE").First().IsMaterialChecked = false;
             SystemMaterials.Where(x => x.Name == "RESISTITE LIQUID").First().IsMaterialEnabled = true;
             SystemMaterials.Where(x => x.Name == "RESISTITE LIQUID").First().IsMaterialChecked = false;

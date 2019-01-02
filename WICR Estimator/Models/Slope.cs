@@ -21,9 +21,10 @@ namespace WICR_Estimator.Models
             this.DeckCount = deckCount;
             this.PricePerMix = pricePermix;
             this.LaborRate = laborRate;
-            this.GSLaborRate = LaborRateGS;
+            this.GSLaborRate = LaborRateGS;           
 
         }
+        public string SlopeType { get; set; }
         public string Thickness { get; set; }
         public double LaborRate { get; set; }
         public double GSLaborRate { get; set; }
@@ -71,26 +72,56 @@ namespace WICR_Estimator.Models
                 return deckCount*sqft;
             }
         }
-
+        //private double totalMixes;
         public  double TotalMixes
         {
+            //set
+            //{
+            //    if (value!=totalMixes)
+            //    {
+            //        totalMixes = value;
+            //        OnPropertyChanged("TotalMixes");
+            //    }
+            //}
             get
             {
-                switch (Thickness)
+                if (SlopeType=="")
                 {
-                    case "1/4 inch Average":
-                        return Math.Round(Total / 22,2);
-                    case "1/2 inch Average":
-                        return Math.Round((Total / 22)*2,2);
-                    case "3/4 inch Average":
-                        return Math.Round((Total / 22)*3,2);
-                    case "1 1/4 inch Average":
-                        return Math.Round((Total / 22) * 5,2);
-                    case "1 inch Average":
-                        return Math.Round((Total / 22) * 4,2);
-                    default:
-                        return 0;
+                    switch (Thickness)
+                    {
+                        case "1/4 inch Average":
+                            return Math.Round(Total / 22, 2);
+                        case "1/2 inch Average":
+                            return Math.Round((Total / 22) * 2, 2);
+                        case "3/4 inch Average":
+                            return Math.Round((Total / 22) * 3, 2);
+                        case "1 1/4 inch Average":
+                            return Math.Round((Total / 22) * 5, 2);
+                        case "1 inch Average":
+                            return Math.Round((Total / 22) * 4, 2);
+                        default:
+                            return 0;
+                    }
                 }
+                else
+                {
+                    switch (Thickness)
+                    {
+                        case "1/4 inch Average":
+                            return Math.Round(Total / 32, 2);
+                        case "1/2 inch Average":
+                            return Math.Round((Total / 32) * 2, 2);
+                        case "3/4 inch Average":
+                            return Math.Round((Total / 32) * 3, 2);
+                        case "1 1/4 inch Average":
+                            return Math.Round((Total / 32) * 5, 2);
+                        case "1 inch Average":
+                            return Math.Round((Total / 32) * 4, 2);
+                        default:
+                            return 0;
+                    }
+                }
+                
             }
         }
         private double priceperMix;

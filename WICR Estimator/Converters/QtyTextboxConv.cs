@@ -27,6 +27,9 @@ namespace WICR_Estimator.Converters
                     case "R&R Sealant 1/2 to 3/4 inch control joints (Sonneborn NP-2)":
                     case "LARGE CRACK REPAIR":
                     case "BUBBLE REPAIR (MEASURE SQ FT)":
+                    case "System Large cracks Repair":
+                    case "System bubbled and failed texture repair":
+                    case "Concrete cracks greater than 1/32 inch (route 1/4 x 1/4) epoxy gel fill, ilica sand, and fiber tape":
                         return true;
                     default:
                         return false;                       

@@ -169,11 +169,7 @@ namespace WICR_Estimator.ViewModels
             {
                 item.Name = item.ProjectJobSetUp.ProjectName;
             }
-            //JobSetup js = sender as JobSetup;
-            //if (js != null)
-            //{
-
-            //}
+           
         }
 
         private void ProjectJobSetUp_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

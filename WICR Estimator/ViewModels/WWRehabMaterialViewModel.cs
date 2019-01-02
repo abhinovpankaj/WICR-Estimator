@@ -16,6 +16,10 @@ namespace WICR_Estimator.ViewModels
 
         }
 
+        public override void calculateLaborHrs()
+        {
+            calLaborHrs(6);
+        }
         public override void FetchMaterialValuesAsync(bool hasSetupChanged)
         {
             Dictionary<string, double> qtyList = new Dictionary<string, double>();
@@ -70,7 +74,7 @@ namespace WICR_Estimator.ViewModels
             if (OtherMaterials.Count == 0)
             {
                 OtherMaterials = GetOtherMaterials();
-                OtherLaborMaterials = GetOtherMaterials();
+                OtherLaborMaterials = OtherMaterials;
             }
 
 
@@ -147,7 +151,7 @@ namespace WICR_Estimator.ViewModels
                 lfArea = getlfArea("Light Crack Repair");
                 sqStairs = getSqFtStairs("Light Crack Repair");
 
-            labrExt = calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate;
+            labrExt = calcHrs > 0 ? calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate : 0; ;
             qty = getQuantity("Light Crack Repair", cov, lfArea);
                 smP.Add(new SystemMaterial
                 {
@@ -187,7 +191,7 @@ namespace WICR_Estimator.ViewModels
                 sqh = getSqFtAreaH("Large Crack Repair");
                 sqStairs = getSqFtStairs("Large Crack Repair");
 
-            labrExt = calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate;
+            labrExt = calcHrs > 0 ? calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate : 0;
             qty = getQuantity("Large Crack Repair", cov, lfArea);
                 smP.Add(new SystemMaterial
                 {
@@ -225,7 +229,7 @@ namespace WICR_Estimator.ViewModels
                 sqh = getSqFtAreaH("Bubble Repair(Measure Sq Ft)");
                 sqStairs = getSqFtStairs("Bubble Repair(Measure Sq Ft)");
                 calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
-                labrExt = calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate;
+                labrExt = calcHrs > 0 ? calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate : 0;
             qty = getQuantity("Bubble Repair(Measure Sq Ft)", cov, lfArea);
                 smP.Add(new SystemMaterial
                 {
@@ -263,7 +267,7 @@ namespace WICR_Estimator.ViewModels
             sqh = getSqFtAreaH("30# Divorcing Felt (200 Sq Ft) From Ford Wholesale");
             sqStairs = getSqFtStairs("30# Divorcing Felt (200 Sq Ft) From Ford Wholesale");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
-            labrExt = calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate;
+            labrExt = calcHrs > 0 ? calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate : 0;
             qty = getQuantity("30# Divorcing Felt (200 Sq Ft) From Ford Wholesale", cov, lfArea);
             smP.Add(new SystemMaterial
             {
@@ -299,7 +303,7 @@ namespace WICR_Estimator.ViewModels
             sqh = getSqFtAreaH("Rp Fabric 10 Inch Wide X (300 Lf) From Acme");
             sqStairs = getSqFtStairs("Rp Fabric 10 Inch Wide X (300 Lf) From Acme");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
-            labrExt = calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate;
+            labrExt = calcHrs > 0 ? calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate : 0;
             qty = getQuantity("Rp Fabric 10 Inch Wide X (300 Lf) From Acme", cov, lfArea);
             smP.Add(new SystemMaterial
             {
@@ -335,7 +339,7 @@ namespace WICR_Estimator.ViewModels
             sqh = getSqFtAreaH("Glasmat #4 (1200 Sq Ft) From Acme");
             sqStairs = getSqFtStairs("Glasmat #4 (1200 Sq Ft) From Acme");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
-            labrExt = calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate;
+            labrExt = calcHrs>0?calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate:0;
             qty = getQuantity("Glasmat #4 (1200 Sq Ft) From Acme", cov, lfArea);
             smP.Add(new SystemMaterial
             {
@@ -371,7 +375,7 @@ namespace WICR_Estimator.ViewModels
             lfArea = getlfArea("Cpc Membrane");
             sqStairs = getSqFtStairs("Cpc Membrane");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
-            labrExt = calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate;
+            labrExt = calcHrs > 0 ? calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate : 0;
             qty = getQuantity("Cpc Membrane", cov, lfArea);
             smP.Add(new SystemMaterial
             {
@@ -442,7 +446,7 @@ namespace WICR_Estimator.ViewModels
             sqh = getSqFtAreaH("Neotex Standard Powder(Body Coat)");
             sqStairs = getSqFtStairs("Neotex Standard Powder(Body Coat)");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
-            labrExt = calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate;
+            labrExt = calcHrs > 0 ? calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate : 0;
             qty = getQuantity("Neotex Standard Powder(Body Coat)", cov, lfArea);
             smP.Add(new SystemMaterial
             {
@@ -478,7 +482,7 @@ namespace WICR_Estimator.ViewModels
             sqh = getSqFtAreaH("Neotex Standard Powder(Body Coat) 1");
             sqStairs = getSqFtStairs("Neotex Standard Powder(Body Coat) 1");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
-            labrExt = calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate;
+            labrExt = calcHrs > 0 ? calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate : 0;
             qty = getQuantity("Neotex Standard Powder(Body Coat) 1", cov, lfArea);
             smP.Add(new SystemMaterial
             {
@@ -660,7 +664,7 @@ namespace WICR_Estimator.ViewModels
             sqh = getSqFtAreaH("Aj-44A Dressing(Sealer)");
             sqStairs = getSqFtStairs("Aj-44A Dressing(Sealer)");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
-            labrExt = calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate;
+            labrExt = calcHrs > 0 ? calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate : 0;
             qty = getQuantity("Aj-44A Dressing(Sealer)", cov, lfArea);
             smP.Add(new SystemMaterial
             {
@@ -696,7 +700,7 @@ namespace WICR_Estimator.ViewModels
             sqh = getSqFtAreaH("Vista Paint Acripoxy");
             sqStairs = getSqFtStairs("Vista Paint Acripoxy");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
-            labrExt = calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate;
+            labrExt = calcHrs > 0 ? calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate : 0;
             qty = getQuantity("Vista Paint Acripoxy", cov, lfArea);
             smP.Add(new SystemMaterial
             {
@@ -732,7 +736,7 @@ namespace WICR_Estimator.ViewModels
             sqh = getSqFtAreaH("Lip Color");
             sqStairs = getSqFtStairs("Lip Color");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
-            labrExt = calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate;
+            labrExt = calcHrs > 0 ? calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate : 0;
             qty = getQuantity("Lip Color", cov, lfArea);
             smP.Add(new SystemMaterial
             {
@@ -769,7 +773,7 @@ namespace WICR_Estimator.ViewModels
             sqh = getSqFtAreaH("Resistite Universal Primer(Add 50% Water)");
             sqStairs = getSqFtStairs("Resistite Universal Primer(Add 50% Water)");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
-            labrExt = calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate;
+            labrExt = calcHrs > 0 ? calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate : 0;
             qty = getQuantity("Resistite Universal Primer(Add 50% Water)", cov, lfArea);
             smP.Add(new SystemMaterial
             {
@@ -832,7 +836,7 @@ namespace WICR_Estimator.ViewModels
             sqh = getSqFtAreaH("Custom Texture Skip Trowel(Resistite Smooth White)");
             sqStairs = getSqFtStairs("Custom Texture Skip Trowel(Resistite Smooth White)");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
-            labrExt = calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate;
+            labrExt = calcHrs > 0 ? calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate : 0;
             qty = getQuantity("Custom Texture Skip Trowel(Resistite Smooth White)", cov, lfArea);
             bool isch = getCheckboxCheckStatus("Custom Texture Skip Trowel(Resistite Smooth White)");
 
@@ -909,7 +913,7 @@ namespace WICR_Estimator.ViewModels
             lfArea = getlfArea("Stair Nosing From Dexotex");
             sqStairs = getSqFtStairs("Stair Nosing From Dexotex");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
-            labrExt = calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate;
+            labrExt = calcHrs > 0 ? calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate : 0;
             qty = getQuantity("Stair Nosing From Dexotex", cov, lfArea);
             smP.Add(new SystemMaterial
             {
@@ -946,7 +950,7 @@ namespace WICR_Estimator.ViewModels
             sqh = getSqFtAreaH("Extra Stair Nosing Lf");
             sqStairs = getSqFtStairs("Extra Stair Nosing Lf"); //getvalue from systemMaterial
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
-            labrExt = calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate;
+            labrExt = calcHrs > 0 ? calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate : 0;
             qty = 1;
             smP.Add(new SystemMaterial
             {
@@ -983,7 +987,7 @@ namespace WICR_Estimator.ViewModels
             sqh = getSqFtAreaH("Plywood 3/4 & Blocking(# Of 4X8 Sheets)");
             sqStairs = getSqFtStairs("Plywood 3/4 & Blocking(# Of 4X8 Sheets)");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
-            labrExt = setUpMin > calcHrs ? setUpMin * laborRate : calcHrs * laborRate;
+            labrExt = calcHrs > 0 ? calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate : 0;
             smP.Add(new SystemMaterial
             {
                 IsMaterialChecked = getCheckboxCheckStatus("Plywood 3/4 & Blocking(# Of 4X8 Sheets)"),
@@ -1019,7 +1023,7 @@ namespace WICR_Estimator.ViewModels
             sqh = getSqFtAreaH("Stucco Material Remove And Replace (Lf)");
             sqStairs = getSqFtStairs("Stucco Material Remove And Replace (Lf)");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
-            labrExt = setUpMin > calcHrs ? setUpMin * laborRate : calcHrs * laborRate;
+            labrExt = calcHrs > 0 ? calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate : 0;
             smP.Add(new SystemMaterial
             {
                 IsMaterialChecked = getCheckboxCheckStatus("Stucco Material Remove And Replace (Lf)"),
@@ -1176,6 +1180,36 @@ namespace WICR_Estimator.ViewModels
             {
                 skipMat.Qty = qty;
             }
+            //Neotex 38paste
+            skipMat = SystemMaterials.Where(x => x.Name == "Neotex Standard Powder(Body Coat)").FirstOrDefault();
+            if (skipMat != null)
+            {
+                if (skipMat.IsMaterialChecked)
+                {
+                    val1 = skipMat.Qty;
+                }
+                else
+                    val1 = 0;
+            }
+            skipMat = SystemMaterials.Where(x => x.Name == "Neotex Standard Powder(Body Coat) 1").FirstOrDefault();
+            if (skipMat != null)
+            {
+                if (skipMat.IsMaterialChecked)
+                {
+                    val2 = skipMat.Qty;
+                }
+                else
+                    val2 = 0;
+            }
+            qty=(val1*1.25+val2*1.5)/ 5;
+
+            skipMat = SystemMaterials.Where(x => x.Name == "Neotex-38 Paste").FirstOrDefault();
+            if (skipMat != null)
+            {
+                skipMat.Qty = qty;
+            }
+
+            
         }
 
         public override void setExceptionValues()

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using WICR_Estimator.Models;
@@ -72,6 +74,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         public System.Windows.Visibility HidePasswordSection { get; set; }
+        public ICollectionView ProjectView { get; set; }
         private ObservableCollection<Project> projects;
         public ObservableCollection<Project> Projects
         {
@@ -175,11 +178,27 @@ namespace WICR_Estimator.ViewModels
         {
             Projects = new ObservableCollection<Project>();
             //SelectedProjects = new List<Project>();
-            Projects.Add(new Project { Name = "Dexotex Weather Wear", Rank = 1 });
-            Projects.Add(new Project { Name = "Dexotex Weather Wear Rehab", Rank = 2 });
-            Projects.Add(new Project { Name = "Dexotex Barrier Gaurd", Rank = 3 });
-            Projects.Add(new Project { Name = "Enduro Kote Metal", Rank = 4 });
-            Projects.Add(new Project { Name = "Weather Wear Reseal", Rank = 5 });
+            Projects.Add(new Project { Name = "Dexotex Weather Wear", Rank = 1,GrpName= "Deck Coatings" });
+            Projects.Add(new Project { Name = "Dexotex Weather Wear Rehab", Rank = 2, GrpName = "Deck Coatings" });
+            Projects.Add(new Project { Name = "Dexotex Barrier Gaurd", Rank = 3, GrpName = "Deck Coatings" });
+            Projects.Add(new Project { Name = "Enduro Kote Metal", Rank = 4,GrpName= "EnduroKote" });
+            //Projects.Add(new Project { Name = "Desert Crete", Rank = 5, GrpName = "Hill Brothers" });
+            //Projects.Add(new Project { Name = "Dexcellent II", Rank = 6, GrpName = "Nevada Coatings" });
+            //Projects.Add(new Project { Name = "Pli-Dek", Rank = 7, GrpName = "Pli-Dek" });
+            Projects.Add(new Project { Name = "Pedestrian System", Rank = 8,GrpName= "UPI" });
+            //Projects.Add(new Project { Name = "Vehicular System", Rank = 9, GrpName = "UPI" });
+            //Projects.Add(new Project { Name = "Tufflex", Rank = 10, GrpName = "UPI" });
+            Projects.Add(new Project { Name = "Westcoat Color Wash", Rank = 11, GrpName = "Westcoat" });
+            //Projects.Add(new Project { Name = "ALX", Rank = 12, GrpName = "Westcoat" });
+            //Projects.Add(new Project { Name = "MACoat", Rank = 13, GrpName = "Westcoat" });
+            //Projects.Add(new Project { Name = "Reseal all systems", Rank = 14, GrpName = "Reseal" });
+            Projects.Add(new Project { Name = "Desert Brand", Rank = 6 ,GrpName="Unknown"});
+            Projects.Add(new Project { Name = "Weather Wear Reseal", Rank = 5, GrpName = "Unknown" });
+
+            ProjectView = CollectionViewSource.GetDefaultView(Projects);
+            ProjectView.GroupDescriptions.Add(new PropertyGroupDescription("GrpName"));
+            ProjectView.SortDescriptions.Add(new SortDescription("Country", ListSortDirection.Ascending));          
+
         }
 
         #endregion

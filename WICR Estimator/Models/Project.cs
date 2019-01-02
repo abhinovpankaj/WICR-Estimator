@@ -119,6 +119,7 @@ namespace WICR_Estimator.Models
             }
         }
         public int Rank { get; set; }
+        public string GrpName { get; set; }
         public JobSetup ProjectJobSetUp { get; set; }
         private MetalBaseViewModel metalViewModel;
         public MetalBaseViewModel MetalViewModel

@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>appicon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Google.Apis, Version=1.35.2.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Apis.1.35.2\lib\net45\Google.Apis.dll</HintPath>
@@ -109,6 +112,7 @@
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Models\AddOnMetal.cs" />
     <Compile Include="Models\CostBreakup.cs" />
+    <Compile Include="Models\JobsetupUPI.cs" />
     <Compile Include="Models\Labor.cs" />
     <Compile Include="Models\SystemMaterial.cs" />
     <Compile Include="Models\Metal.cs" />
@@ -117,6 +121,7 @@
     <Compile Include="Models\Totals.cs" />
     <Compile Include="ViewModelInstanceFactory.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\DesertbrandMaterialViewModel.cs" />
     <Compile Include="ViewModels\DexoMaterialViewModel.cs" />
     <Compile Include="ViewModels\DexoMetalViewModel.cs" />
     <Compile Include="ViewModels\DexoSlopeViewModel.cs" />
@@ -127,10 +132,13 @@
     <Compile Include="ViewModels\MaterialViewModel.cs" />
     <Compile Include="ViewModels\MetalBaseViewModel.cs" />
     <Compile Include="ViewModels\MetalViewModel.cs" />
+    <Compile Include="ViewModels\PedestrianMaterialViewModel.cs" />
+    <Compile Include="ViewModels\PedestrianSlopeViewModel.cs" />
     <Compile Include="ViewModels\ProjectViewModel.cs" />
     <Compile Include="ViewModels\SlopeBaseViewModel.cs" />
     <Compile Include="ViewModels\SlopeViewModel.cs" />
     <Compile Include="ViewModels\WeatherWearViewModel.cs" />
+    <Compile Include="ViewModels\WestcoatColorMaterialViewModel.cs" />
     <Compile Include="ViewModels\WWRehabMaterialViewModel.cs" />
     <Compile Include="ViewModels\WWResealMaterialViewModel.cs" />
     <Compile Include="Views\CalculationDetailsPage.xaml.cs">
@@ -150,6 +158,9 @@
     </Compile>
     <Compile Include="Views\SelectedProjectsPage.xaml.cs">
       <DependentUpon>SelectedProjectsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\URISlopePage.xaml.cs">
+      <DependentUpon>URISlopePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SlopePage.xaml.cs">
       <DependentUpon>SlopePage.xaml</DependentUpon>
@@ -200,6 +211,10 @@
     <Page Include="Views\SelectedProjectsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\URISlopePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SlopePage.xaml">
       <SubType>Designer</SubType>
@@ -274,6 +289,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\appicon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="appicon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

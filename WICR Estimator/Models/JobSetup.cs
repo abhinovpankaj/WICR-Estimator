@@ -10,7 +10,10 @@ namespace WICR_Estimator.Models
 {
     public class JobSetup:BaseViewModel
     {
-        private string projectname;
+        
+            
+        private  string projectname;
+        public string FirstCheckBoxLabel { get; set; }
         public string ProjectName
         {
             get { return projectname; }
@@ -121,6 +124,10 @@ namespace WICR_Estimator.Models
         public JobSetup(string name)            
         {
             ProjectName = name;
+            if (name=="Pedestrian System")
+            {
+                IsNewPlywood = false;
+            }
             HidePasswordSection = System.Windows.Visibility.Collapsed;
             IsApprovedForSandCement = true;
             IsPrevalingWage = false;
@@ -137,8 +144,19 @@ namespace WICR_Estimator.Models
             EnableMoreMarkupCommand = new DelegateCommand(CanAddMoreMarkup, canAdd);
             MinMarkUp = -10;
             AllowMoreMarkUp = false;
+            if (name=="Desert Brand")
+            {
+                FirstCheckBoxLabel = "Is This Job Specified By Architect";
+            }
+            else if (name=="Pedestrian System")
+            {
+                FirstCheckBoxLabel = "Reseal ?";
+            }
+            else
+            {
+                FirstCheckBoxLabel = "Approved for Sand & Cement ?";               
+            }
             
-            //HidePasswordSection = System.Windows.Visibility.Hidden;
         }
 
         public double MinMarkUp { get; set; }
@@ -175,30 +193,7 @@ namespace WICR_Estimator.Models
                 }
             }
         }
-        //private string weatherWearType;
-        //public string WeatherWearType
-        //{
-        //    get { return weatherWearType; }
-        //    set
-        //    {
-        //        if (value!=weatherWearType)
-        //        {
-        //            weatherWearType = value;
-        //            OnPropertyChanged("WeatherWearType");
-        //            if (value.Contains("Rehab"))
-        //            {
-        //                ProjectName = ProjectName + " Rehab";
-        //            }
-        //            else
-        //                ProjectName = ProjectName.Replace(" Rehab", "");
-
-        //            if (OnJobSetupChange != null)
-        //            {
-        //                OnJobSetupChange(this, EventArgs.Empty);
-        //            }
-        //        }
-        //    }
-        //}
+        
         
         public string DeckLabel
         {
@@ -210,17 +205,7 @@ namespace WICR_Estimator.Models
                     return "Lf Perimeter for Burlap and Membrane";
             }
         }
-        //public System.Windows.Visibility ShowWeatherWearDD
-        //{
-        //    get
-        //    {
-        //        if (ProjectName == "Dexotex Weather Wear" || ProjectName == "Dexotex Weather Wear Rehab")
-        //            return System.Windows.Visibility.Visible;
-        //        else
-        //            return System.Windows.Visibility.Collapsed;
-        //    }
-        //}
-
+        
         private string jobName;
         public string JobName
         {
@@ -392,6 +377,7 @@ namespace WICR_Estimator.Models
                 if (value != isApprovedForSandCement)
                 {
                     isApprovedForSandCement = value;
+                    isReseal = value;
                     OnPropertyChanged("IsApprovedForSandCement");
                     if (OnJobSetupChange != null)
                     {
@@ -587,5 +573,55 @@ namespace WICR_Estimator.Models
                 }
             }
         }
+
+        #region UPI 
+        private bool? isNewPlywood;
+        public bool? IsNewPlywood
+        {
+            get { return isNewPlywood; }
+            set
+            {
+                if (value != isNewPlywood)
+                {
+                    isNewPlywood = value;
+                    OnPropertyChanged("IsNewPlywood");
+                    if (OnJobSetupChange != null)
+                    {
+                        OnJobSetupChange(this, EventArgs.Empty);
+                    }
+                }
+            }
+        }
+        public System.Windows.Visibility IsNewPlywoodVisible
+        {
+            get
+            {
+                if (isNewPlywood != null)
+                {
+                    return System.Windows.Visibility.Visible;
+                }
+                else
+                    return System.Windows.Visibility.Collapsed;
+            }
+        }
+        private bool isReseal;
+        public bool IsReseal
+        {
+            get { return isReseal; }
+            set
+            {
+                if (value != isReseal)
+                {
+                    isReseal = value;
+                    OnPropertyChanged("IsReseal");
+                    if (OnJobSetupChange != null)
+                    {
+                        OnJobSetupChange(this, EventArgs.Empty);
+                    }
+                }
+            }
+        }
+
+        #endregion
     }
 }

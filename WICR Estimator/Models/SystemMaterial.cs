@@ -260,10 +260,10 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (qtysm != value)
-                {
+                //if (qtysm != value)
+                //{
                     qtysm = value;
-                    if (qtysm!= 0)
+                    if (qtysm != 0)
                     {
                         IsMaterialChecked = true;
                     }
@@ -279,19 +279,29 @@ namespace WICR_Estimator.Models
                     {
                         OnQTyChanged(this.Name, EventArgs.Empty);
                     }
-                }
+                //}
             }
         }
         private double laborUnitPrice;
         public double LaborUnitPrice
         {
-            get { return laborUnitPrice; }
+            get
+            {
+                  return laborUnitPrice;
+                
+            }
 
             set
             {
                 if (value != laborUnitPrice)
                 {
-                    laborUnitPrice = value;
+                    if (double.IsNaN(value)||double.IsInfinity(value))
+                    {
+                        laborUnitPrice = 0;
+                        
+                    }
+                    else
+                        laborUnitPrice = value;
                     OnPropertyChanged("LaborUnitPrice");
                 }
             }
@@ -353,12 +363,12 @@ namespace WICR_Estimator.Models
             }
             get
             {
-                if (SpecialMaterialPricing != 0)
-                {
-                    matExt = SpecialMaterialPricing * Qty;
-                }
-                else
-                    matExt = MaterialPrice * Qty;
+                //if (SpecialMaterialPricing != 0)
+                //{
+                //    matExt = SpecialMaterialPricing * Qty;
+                //}
+                //else
+                //    matExt = MaterialPrice * Qty;
                 return matExt;
             }
         }
@@ -376,6 +386,17 @@ namespace WICR_Estimator.Models
                 if (specialMaterialPricing != value)
                 {
                     specialMaterialPricing = value;
+                    if (specialMaterialPricing != 0)
+                    {
+                        matExt = SpecialMaterialPricing * Qty;
+                    }
+                    else
+                    {
+                        matExt = MaterialPrice * Qty;
+                        OnQTyChanged(this.Name,null);
+                    }
+                        
+                    
                     OnPropertyChanged("SpecialMaterialPricing");
                     OnPropertyChanged("MaterialExtension");
                 }
@@ -386,7 +407,13 @@ namespace WICR_Estimator.Models
         {
             get
             {
-                return laborextn;                
+                if (laborextn != double.NaN)
+                {
+                    return laborextn;
+                }
+                else
+                    return 0;
+                               
             }       
             set
             {

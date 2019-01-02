@@ -210,7 +210,7 @@
                     
                     <DataGrid.Columns>
                         
-                        <DataGridTemplateColumn Header="Items" IsReadOnly="True">
+                        <!--<DataGridTemplateColumn Header="Items">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox Text="{Binding Name,UpdateSourceTrigger=LostFocus}"
@@ -219,13 +219,16 @@
                                     </TextBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                        </DataGridTemplateColumn>-->
+                        <DataGridTextColumn Header="Items"
+                                            Binding="{Binding Name,
+                        Mode=TwoWay,UpdateSourceTrigger=LostFocus}"/>
                         <DataGridTextColumn Header="Quantity"
                                     Binding="{Binding Quantity,
-                        Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                        Mode=TwoWay,UpdateSourceTrigger=LostFocus}"/>
                         <DataGridTextColumn Header="Material Price ($)"
                                     Binding="{Binding MaterialPrice,
-                        Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                        Mode=TwoWay,UpdateSourceTrigger=LostFocus}"/>
                         <DataGridTextColumn Header="Extension($)" 
                                         IsReadOnly="True"
                                         Binding="{Binding Extension,Mode=OneWay,
@@ -471,13 +474,20 @@
             </Grid>
         </GroupBox>
         <!--Row 4 ELement End -->
-        
 
+        <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button Content="Fill Grid" Command="{Binding FillValues}"
+                    Height="30" 
+                    Margin="10,5,25,5"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="Right"
+                    Width="100" Background="LightGreen"/>
             <Button Command="{Binding CalculateCostCommand}"                   
                     Height="35" Margin="0,5,22,5"
                     Background="White"
                     HorizontalAlignment="Right"
-                    Grid.Row="4" Grid.Column="1">
+                    >
 
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
@@ -489,6 +499,8 @@
                     </StackPanel>
                 </Button.Content>
             </Button>
+        </StackPanel>
+            
         
         <!--Column 1 Element-->
     </Grid>

@@ -35,4 +35,28 @@
     <SlopeRange>P301:Q309</SlopeRange>
     <MaterialRange>H440:N454</MaterialRange>
   </WeatherWearReseal>
+  <WestcoatColor>
+    <RateRange>E2</RateRange>
+    <MetalRange>F3:M43</MetalRange>
+    <LaborRange>E540:E559</LaborRange>
+    <SlopeRange>P501:Q509</SlopeRange>
+    <MaterialRange>H520:N528</MaterialRange>
+  </WestcoatColor>
+  
+  <DesertBrand>
+    <RateRange>E2</RateRange>
+    <MetalRange>F3:M43</MetalRange>
+    <LaborRange>E615:E634</LaborRange>
+    <SlopeRange>P570:Q578</SlopeRange>
+    <MaterialRange>H585:N600</MaterialRange>
+  </DesertBrand>
+
+  <Pedestrian>
+    <RateRange>E2</RateRange>
+    <MetalRange>F3:M43</MetalRange>
+    <LaborRange>E704:E723</LaborRange>
+    <SlopeRange>P645:Q662</SlopeRange>
+    <MaterialRange>H674:N692</MaterialRange>
+  </Pedestrian>
+
 </Projects>

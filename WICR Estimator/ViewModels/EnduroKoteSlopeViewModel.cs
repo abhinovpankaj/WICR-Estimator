@@ -17,7 +17,7 @@ namespace WICR_Estimator.ViewModels
             Js.OnJobSetupChange += JobSetup_OnJobSetupChange;
         }
 
-        public override double getPricePerMix(string thickness, bool isApproved)
+        public override double getPricePerMix(string thickness, bool isApproved,int addRow=0)
         {
             //return base.getPricePerMix(thickness, isApproved);
             double result;

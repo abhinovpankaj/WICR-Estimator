@@ -64,6 +64,16 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        private System.Windows.Visibility isUrethaneVisible= System.Windows.Visibility.Collapsed;
+        public System.Windows.Visibility IsUrethaneVisible
+        {
+            get { return isUrethaneVisible; }
+            set
+            {
+                isUrethaneVisible = value;
+                OnPropertyChanged("IsUrethaneVisible");
+            }
+        }
         public bool OverrideManually
         {
             get
@@ -302,13 +312,15 @@ namespace WICR_Estimator.ViewModels
         #region Methods
         private void CalculateManual()
         {
+            double minLabVal = 0;
             SumTotalMixes = TotalMixesMan;
             SumTotalMatExt = AverageMixesPrice * TotalMixesMan;
             TotalMaterialCost = SumTotalMatExt;
             TotalWeight = Math.Round(50 * TotalMixesMan, 2);
             TotalFrightCost = Math.Round(FreightCalculator(TotalWeight), 2);
             SumTotalLaborExt = Math.Round(TotalMixesMan * manualAvgMixPrice, 2);
-            MinimumLaborCost = 6 * laborRate;
+            double.TryParse(perMixRates[8][0].ToString(), out minLabVal);
+            MinimumLaborCost = minLabVal * laborRate;
             TotalLaborCost = SumTotalLaborExt==0?0:MinimumLaborCost > SumTotalLaborExt ? MinimumLaborCost : SumTotalLaborExt;
 
             if (isPrevailingWage)
@@ -367,7 +379,7 @@ namespace WICR_Estimator.ViewModels
             CalculateAll();
 
         }
-        public virtual ObservableCollection<Slope> CreateSlopes()
+        public virtual ObservableCollection<Slope> CreateSlopes(int RowN=0)
         {
             ObservableCollection<Slope> slopes = new ObservableCollection<Slope>();
             slopes.Add(new Slope
@@ -375,18 +387,20 @@ namespace WICR_Estimator.ViewModels
                 Thickness = "1/4 inch Average",
                 DeckCount = 0,
                 Sqft = 0,
-                GSLaborRate = getGSLaborRate("1/4 inch Average"),
+                GSLaborRate = getGSLaborRate("1/4 inch Average", RowN),
                 LaborRate = laborRate,
-                PricePerMix = getPricePerMix("1/4 inch Average", isApprovedForCement)
+                PricePerMix = getPricePerMix("1/4 inch Average", isApprovedForCement, RowN),
+                SlopeType = RowN == 0 ? "" : "URI"
             });
             slopes.Add(new Slope
             {
                 Thickness = "1/2 inch Average",
                 DeckCount = 0,
                 Sqft = 0,
-                GSLaborRate = getGSLaborRate("1/2 inch Average"),
+                GSLaborRate = getGSLaborRate("1/2 inch Average", RowN),
                 LaborRate = laborRate,
-                PricePerMix = getPricePerMix("1/2 inch Average", isApprovedForCement)
+                PricePerMix = getPricePerMix("1/2 inch Average", isApprovedForCement, RowN),
+                SlopeType = RowN == 0 ? "" : "URI"
             });
 
             slopes.Add(new Slope
@@ -394,27 +408,30 @@ namespace WICR_Estimator.ViewModels
                 Thickness = "3/4 inch Average",
                 DeckCount = 0,
                 Sqft = 0,
-                GSLaborRate = getGSLaborRate("3/4 inch Average"),
+                GSLaborRate = getGSLaborRate("3/4 inch Average", RowN),
                 LaborRate = laborRate,
-                PricePerMix = getPricePerMix("3/4 inch Average", isApprovedForCement)
+                PricePerMix = getPricePerMix("3/4 inch Average", isApprovedForCement, RowN),
+                SlopeType = RowN == 0 ? "" : "URI"
             });
             slopes.Add(new Slope
             {
                 Thickness = "1 inch Average",
                 DeckCount = 0,
                 Sqft = 0,
-                GSLaborRate = getGSLaborRate("1 inch Average"),
+                GSLaborRate = getGSLaborRate("1 inch Average", RowN),
                 LaborRate = laborRate,
-                PricePerMix = getPricePerMix("1 inch Average", isApprovedForCement)
+                PricePerMix = getPricePerMix("1 inch Average", isApprovedForCement, RowN),
+                SlopeType = RowN == 0 ? "" : "URI"
             });
             slopes.Add(new Slope
             {
                 Thickness = "1 1/4 inch Average",
                 DeckCount = 0,
                 Sqft = 0,
-                GSLaborRate = getGSLaborRate("1 1/4 inch Average"),
+                GSLaborRate = getGSLaborRate("1 1/4 inch Average", RowN),
                 LaborRate = laborRate,
-                PricePerMix = getPricePerMix("1 1/4 inch Average", isApprovedForCement)
+                PricePerMix = getPricePerMix("1 1/4 inch Average", isApprovedForCement, RowN),
+                SlopeType = RowN == 0 ? "" : "URI"
             });
 
             return slopes;
@@ -441,13 +458,16 @@ namespace WICR_Estimator.ViewModels
             SlopeTotals.MaterialExtTotal = TotalMaterialCost;
             SlopeTotals.MaterialFreightTotal = TotalFrightCost;
         }
-        private void CalculateTotalMixes()
+
+        public virtual void CalculateTotalMixes()
         {
+            double minLabVal = 0;
             if (Slopes.Count > 0)
             {
                 LaborCost = Math.Round(SumTotalLaborExt, 2);
-
-                MinimumLaborCost = 6 * laborRate;
+               double.TryParse(perMixRates[8][0].ToString(), out minLabVal);
+                
+                MinimumLaborCost = minLabVal * laborRate;
 
                 double lCost = SumTotalLaborExt == 0 ? 0 : LaborCost > MinimumLaborCost ? LaborCost : MinimumLaborCost;
                 if (isPrevailingWage)
@@ -465,39 +485,38 @@ namespace WICR_Estimator.ViewModels
                     else
                         TotalLaborCost = lCost;
                 }
-
-
                 TotalMaterialCost = Math.Round(SumTotalMatExt, 2);
                 TotalWeight = Math.Round(50 * SumTotalMixes, 2);
                 TotalFrightCost = Math.Round(FreightCalculator(TotalWeight), 2);
             }
         }
-        public double getGSLaborRate(string thickness)
+
+        public virtual double getGSLaborRate(string thickness,int addRow=0)
         {
             double result;
             switch (thickness)
             {
                 case "1/4 inch Average":
-                    double.TryParse(perMixRates[1][0].ToString(), out result);
+                    double.TryParse(perMixRates[1+addRow][0].ToString(), out result);
                     return result;
                 case "1/2 inch Average":
-                    double.TryParse(perMixRates[2][0].ToString(), out result);
+                    double.TryParse(perMixRates[2 + addRow][0].ToString(), out result);
                     return result;
                 case "3/4 inch Average":
-                    double.TryParse(perMixRates[3][0].ToString(), out result);
+                    double.TryParse(perMixRates[3 + addRow][0].ToString(), out result);
                     return result;
                 case "1 1/4 inch Average":
-                    double.TryParse(perMixRates[4][0].ToString(), out result);
+                    double.TryParse(perMixRates[4 + addRow][0].ToString(), out result);
                     return result;
                 case "1 inch Average":
-                    double.TryParse(perMixRates[5][0].ToString(), out result);
+                    double.TryParse(perMixRates[5 + addRow][0].ToString(), out result);
                     return result;
                 default:
                     return 0;
             }
         }
 
-        public virtual double getPricePerMix(string thickness, bool isApproved)
+        public virtual double getPricePerMix(string thickness, bool isApproved,int addRow=0)
         {
             double result;
             if (isApproved)
@@ -506,19 +525,19 @@ namespace WICR_Estimator.ViewModels
                 switch (thickness)
                 {
                     case "1/4 inch Average":
-                        double.TryParse(perMixRates[1][1].ToString(), out result);
+                        double.TryParse(perMixRates[1 + addRow][1].ToString(), out result);
                         return result;
                     case "1/2 inch Average":
-                        double.TryParse(perMixRates[2][1].ToString(), out result);
+                        double.TryParse(perMixRates[2 + addRow][1].ToString(), out result);
                         return result;
                     case "3/4 inch Average":
-                        double.TryParse(perMixRates[3][1].ToString(), out result);
+                        double.TryParse(perMixRates[3 + addRow][1].ToString(), out result);
                         return result;
                     case "1 1/4 inch Average":
-                        double.TryParse(perMixRates[5][1].ToString(), out result);
+                        double.TryParse(perMixRates[5 + addRow][1].ToString(), out result);
                         return result;
                     case "1 inch Average":
-                        double.TryParse(perMixRates[4][1].ToString(), out result);
+                        double.TryParse(perMixRates[4 + addRow][1].ToString(), out result);
                         return result;
                     default:
                         return 0;
@@ -531,7 +550,8 @@ namespace WICR_Estimator.ViewModels
 
             }
         }
-        private double FreightCalculator(double weight)
+        
+        public double FreightCalculator(double weight)
         {
             double result;
             double frCalc = 0;
@@ -588,7 +608,7 @@ namespace WICR_Estimator.ViewModels
             return result;
         }
 
-        private void CalculateGridTotal()
+        public virtual void CalculateGridTotal()
         {
 
             if (Slopes.Count > 0)
@@ -635,6 +655,39 @@ namespace WICR_Estimator.ViewModels
         private void CalculateCost(object obj)
         {
             CalculateAll();
+        }
+        #endregion
+
+        #region  Temporary
+        private ICommand fillValues;
+        public ICommand FillValues
+        {
+            get
+            {
+                if (fillValues == null)
+                {
+                    fillValues = new DelegateCommand(AutoFill, CanAutoFill);
+                }
+
+                return fillValues;
+            }
+        }
+
+        private bool CanAutoFill(object obj)
+        {
+            return true;
+        }
+
+        private void AutoFill(object obj)
+        {
+            int i = 0;
+            foreach (Slope item in Slopes)
+            {
+                item.Sqft = i + 1;
+                item.DeckCount = i + 6;
+                i++;
+            }
+           
         }
         #endregion
     }

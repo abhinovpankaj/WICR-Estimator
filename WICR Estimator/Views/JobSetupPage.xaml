@@ -104,8 +104,13 @@
             <StackPanel>
             <StackPanel>
                 <CheckBox Style="{StaticResource CheckBoxStyle}"
+                          Visibility="{Binding IsNewPlywoodVisible}"
+                          IsChecked="{Binding IsNewPlywood,
+                    UpdateSourceTrigger=PropertyChanged}"
+                          Content="New Plywood?"/>
+                <CheckBox Style="{StaticResource CheckBoxStyle}"
                           IsChecked="{Binding IsApprovedForSandCement,UpdateSourceTrigger=PropertyChanged}"
-                          Content="Approved for Sand &amp; Cement?"/>
+                          Content="{Binding FirstCheckBoxLabel}"/>
                 <CheckBox  Style="{StaticResource CheckBoxStyle}"
                            Content="Prevailing Wages"
                            IsChecked="{Binding IsPrevalingWage,UpdateSourceTrigger=PropertyChanged}"/>

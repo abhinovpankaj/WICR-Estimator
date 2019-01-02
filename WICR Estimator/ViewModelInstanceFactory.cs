@@ -16,7 +16,10 @@ namespace WICR_Estimator
             {
                 case "Dexotex Weather Wear":
                 case "Dexotex Weather Wear Rehab":
+                case "Westcoat Color Wash":
                 case "Enduro Kote Metal":
+                case "Desert Brand":
+                case "Pedestrian System":
                     return new MetalViewModel(Js);
                 case "Dexotex Barrier Gaurd":
                     return new DexoMetalViewModel(Js);
@@ -33,11 +36,15 @@ namespace WICR_Estimator
             {
                 case "Dexotex Weather Wear":
                 case "Dexotex Weather Wear Rehab":
+                case "Westcoat Color Wash":
+                case "Desert Brand":
                     return new SlopeViewModel(Js);
                 case "Enduro Kote Metal":
                     return new EnduroKoteSlopeViewModel(Js);
                 case "Dexotex Barrier Gaurd":
                     return new DexoSlopeViewModel(Js);
+                case "Pedestrian System":
+                    return new PedestrianSlopeViewModel(Js);
                 default:
                     return null;
 
@@ -58,6 +65,12 @@ namespace WICR_Estimator
                     return new EnduroKoteMaterialViewModel(metalT, slopeT, Js);
                 case "Weather Wear Reseal":
                     return new WWResealMaterialViewModel(metalT, slopeT, Js);
+                case "Westcoat Color Wash":
+                    return new WestcoatColorMaterialViewModel(metalT, slopeT, Js);
+                case "Desert Brand":
+                    return new DesertbrandMaterialViewModel(metalT, slopeT, Js);
+                case "Pedestrian System":
+                    return new PedestrianMaterialViewModel(metalT, slopeT, Js);
                 default:
                     return null;
 

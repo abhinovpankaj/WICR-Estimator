@@ -15,6 +15,7 @@ namespace WICR_Estimator.ViewModels
         private ObservableCollection<Metal> metals;
         private ObservableCollection<MiscMetal> miscMetals;
         private ObservableCollection<AddOnMetal> addOnMetals;
+
         private ICommand _addRowCommand;
         
         private ICommand _removeCommand;
@@ -311,58 +312,60 @@ namespace WICR_Estimator.ViewModels
 
         public void OnJobSetupChange(JobSetup Js)
         {
-            if (Js != null)
-            {
-                MetalName = Js.MaterialName;
-                isPrevailingWage = Js.IsPrevalingWage;
-                isDiscount = Js.HasDiscount;
-                vendorName = Js.VendorName;
-                stairWidth = Js.StairWidth;
-                isFlash = Js.IsFlashingRequired;
-                riserCount = Js.RiserCount;
-                if (Js.HasSpecialPricing)
-                {
-                    ShowSpecialPriceColumn = System.Windows.Visibility.Visible;
-                }
-                else
-                    ShowSpecialPriceColumn = System.Windows.Visibility.Hidden;
-            }
+              if (Js != null)
+               {
+                   MetalName = Js.MaterialName;
+                   isPrevailingWage = Js.IsPrevalingWage;
+                   isDiscount = Js.HasDiscount;
+                   vendorName = Js.VendorName;
+                   stairWidth = Js.StairWidth;
+                   isFlash = Js.IsFlashingRequired;
+                   riserCount = Js.RiserCount;
+                   if (Js.HasSpecialPricing)
+                   {
+                       ShowSpecialPriceColumn = System.Windows.Visibility.Visible;
+                   }
+                   else
+                       ShowSpecialPriceColumn = System.Windows.Visibility.Hidden;
+               }
 
-            var met = GetMetals();
-            for (int i = 0; i < Metals.Count; i++)
-            {
-                double units = Metals[i].Units;
-                double sp = Metals[i].SpecialMetalPricing;
-                bool isSelected= Metals[i].IsStairMetalChecked;
-                Metals[i] = met[i];
-                if (!Metals[i].Name.Contains("STAIR METAL"))
-                {
-                    Metals[i].Units = units;
-                    
-                }
-                else
-                {
-                    Metals[i].IsStairMetalChecked = isSelected;
-                }
-               
-                Metals[i].SpecialMetalPricing = sp;
-            }
-            var addOnMet = GetAddOnMetals();
-            for (int i = 0; i < AddOnMetals.Count; i++)
-            {
-                double units = AddOnMetals[i].Units;
-                double sp = AddOnMetals[i].SpecialMetalPricing;
-                bool ischecked = AddOnMetals[i].IsMetalChecked;
-                AddOnMetals[i] = addOnMet[i];
-                if (!AddOnMetals[i].Name.Contains("STAIR METAL"))
-                {
-                    AddOnMetals[i].Units = units;
-                }
-                AddOnMetals[i].IsMetalChecked = ischecked;
-                AddOnMetals[i].SpecialMetalPricing = sp;
-            }
+               var met = GetMetals();
+               for (int i = 0; i < Metals.Count; i++)
+               {
+                   double units = Metals[i].Units;
+                   double sp = Metals[i].SpecialMetalPricing;
+                   bool isSelected = Metals[i].IsStairMetalChecked;
+                   Metals[i] = met[i];
+                   if (!Metals[i].Name.Contains("STAIR METAL"))
+                   {
+                       Metals[i].Units = units;
 
-            CalculateCost(null);
+                   }
+                   else
+                   {
+                       Metals[i].IsStairMetalChecked = isSelected;
+                   }
+
+                   Metals[i].SpecialMetalPricing = sp;
+               }
+               var addOnMet = GetAddOnMetals();
+               for (int i = 0; i < AddOnMetals.Count; i++)
+               {
+                   double units = AddOnMetals[i].Units;
+                   double sp = AddOnMetals[i].SpecialMetalPricing;
+                   bool ischecked = AddOnMetals[i].IsMetalChecked;
+                   AddOnMetals[i] = addOnMet[i];
+                   if (!AddOnMetals[i].Name.Contains("STAIR METAL"))
+                   {
+                       AddOnMetals[i].Units = units;
+                   }
+                   AddOnMetals[i].IsMetalChecked = ischecked;
+                   AddOnMetals[i].SpecialMetalPricing = sp;
+               }
+
+               CalculateCost(null);
+           
+            
         }
 
         public virtual ObservableCollection<Metal> GetMetals()
@@ -545,5 +548,48 @@ namespace WICR_Estimator.ViewModels
             }
 
         }
+        #region  Temporary
+        private ICommand fillValues;
+        public ICommand FillValues
+        {
+            get
+            {
+                if (fillValues == null)
+                {
+                    fillValues = new DelegateCommand(AutoFill, CanAutoFill);
+                }
+
+                return fillValues;
+            }
+        }
+
+        private bool CanAutoFill(object obj)
+        {
+            return true;
+        }
+
+        private void AutoFill(object obj)
+        {
+            int i = 0;
+            foreach (Metal item in Metals)
+            {
+                if (item.Name.Contains("STAIR"))
+                {
+
+                }
+                
+                else
+                {
+                    item.Units = i + 1;
+                    i++;
+                }
+                
+
+            }
+            MiscMetals[2].Units = 1;
+            MiscMetals[2].UnitPrice = 8;
+            MiscMetals[2].MaterialPrice = 15;
+        }
+        #endregion
     }
 }
