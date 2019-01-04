@@ -22,6 +22,7 @@ namespace WICR_Estimator.Models
         public double VerticalProductionRate { get; set; }
 
         public static event EventHandler OnQTyChanged;
+        public static event EventHandler OnUnitChanged;
         public SystemMaterial()
         {
             
@@ -143,8 +144,19 @@ namespace WICR_Estimator.Models
                 }
             }
         }
-
-        public double SetupMinCharge { get; set; }
+        private double setupMinCharge;
+        public double SetupMinCharge
+        {
+            get { return setupMinCharge; }
+            set
+            {
+                if (value!=setupMinCharge)
+                {
+                    setupMinCharge = value;
+                    OnPropertyChanged("SetupMinCharge");
+                }
+            }
+        }
         private int coverage;
         public int Coverage
         {
@@ -175,7 +187,22 @@ namespace WICR_Estimator.Models
                 {
                     smunits = value;
                     OnPropertyChanged("SMUnits");
+                    if (Name== "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)")
+                    {
+                        int unit = 0;
+                        Int32.TryParse(value, out unit);
+                        if (unit != 0)
+                        {
+                            IsMaterialChecked = true;
+                           
+                        }
+                        else
+                            IsMaterialChecked = false;
 
+                        OnUnitChanged?.Invoke(this.name, EventArgs.Empty);
+
+                    }
+                    
                 }
             }
         }
@@ -347,6 +374,7 @@ namespace WICR_Estimator.Models
                 {
                     isMaterialEnabled = value;
                     OnPropertyChanged("IsMaterialEnabled");
+
                 }
             }
         }

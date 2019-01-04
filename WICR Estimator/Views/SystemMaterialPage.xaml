@@ -11,6 +11,7 @@
         <conv:CheckBoxVisibilityConverter x:Key="checkBoxConv"/>
         <conv:EnableTextboxConverter x:Key="textboxConv"/>
         <conv:QtyTextboxConverter x:Key="qtyTextboxConv"/>
+        <conv:UnitTextboxConverter x:Key="unitTextboxConv"/>
         <Style TargetType="Label" x:Key="LabelStyle1">
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="FontFamily" Value="Arial"/>
@@ -39,6 +40,9 @@
         <Style x:Key="cbTB" TargetType="{x:Type CheckBox}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding ElementName=qtyTb, Path=IsEnabled,TargetNullValue=false}" Value="True">
+                    <Setter Property="CheckBox.IsChecked" Value="True"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ElementName=unitTb, Path=IsEnabled,TargetNullValue=false}" Value="True">
                     <Setter Property="CheckBox.IsChecked" Value="True"/>
                 </DataTrigger>
             </Style.Triggers>
@@ -129,9 +133,23 @@
                     
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Units" IsReadOnly="True"
+                <!--<DataGridTextColumn Header="Units" IsReadOnly="True"
                                     Binding="{Binding SMUnits}" KeyboardNavigation.IsTabStop="False">
-                </DataGridTextColumn>
+                </DataGridTextColumn>-->
+                <DataGridTemplateColumn Header="Units">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding SMUnits,UpdateSourceTrigger=PropertyChanged}"
+                                     Name="unitTb"
+                                     Style="{StaticResource editableTextbox}"
+                                    IsEnabled="{Binding Path=Name,
+                                Converter={StaticResource unitTextboxConv}}"
+                                     />
+
+                        </DataTemplate>
+
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Sq ft or Lf Area" IsReadOnly="True"
                                     Binding="{Binding SMSqft}"
                                      KeyboardNavigation.IsTabStop="False">

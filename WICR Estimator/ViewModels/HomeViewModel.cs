@@ -197,7 +197,7 @@ namespace WICR_Estimator.ViewModels
 
             ProjectView = CollectionViewSource.GetDefaultView(Projects);
             ProjectView.GroupDescriptions.Add(new PropertyGroupDescription("GrpName"));
-            ProjectView.SortDescriptions.Add(new SortDescription("Country", ListSortDirection.Ascending));          
+            ProjectView.SortDescriptions.Add(new SortDescription("GrpName", ListSortDirection.Ascending));          
 
         }
 

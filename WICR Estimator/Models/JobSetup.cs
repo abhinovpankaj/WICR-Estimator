@@ -377,7 +377,8 @@ namespace WICR_Estimator.Models
                 if (value != isApprovedForSandCement)
                 {
                     isApprovedForSandCement = value;
-                    isReseal = value;
+                    IsReseal = value;
+                    
                     OnPropertyChanged("IsApprovedForSandCement");
                     if (OnJobSetupChange != null)
                     {
@@ -614,6 +615,23 @@ namespace WICR_Estimator.Models
                 {
                     isReseal = value;
                     OnPropertyChanged("IsReseal");
+                    //if (OnJobSetupChange != null)
+                    //{
+                    //    OnJobSetupChange(this, EventArgs.Empty);
+                    //}
+                }
+            }
+        }
+        private double totalSqftPlywood;
+        public double TotalSqftPlywood
+        {
+            get { return totalSqftPlywood; }
+            set
+            {
+                if (value != totalSqftPlywood)
+                {
+                    totalSqftPlywood = value;
+                    OnPropertyChanged("TotalSqftPlywood");
                     if (OnJobSetupChange != null)
                     {
                         OnJobSetupChange(this, EventArgs.Empty);

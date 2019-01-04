@@ -54,9 +54,9 @@
   <Pedestrian>
     <RateRange>E2</RateRange>
     <MetalRange>F3:M43</MetalRange>
-    <LaborRange>E704:E723</LaborRange>
+    <LaborRange>E703:E722</LaborRange>
     <SlopeRange>P645:Q662</SlopeRange>
-    <MaterialRange>H674:N692</MaterialRange>
+    <MaterialRange>H674:N691</MaterialRange>
   </Pedestrian>
 
 </Projects>

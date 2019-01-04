@@ -159,6 +159,12 @@
                 Padding="0,0,0,15">
             <StackPanel>
                 <TextBlock Style="{StaticResource FieldHeader}"
+                       Text="Total Sq Ft Plywood"
+                           Visibility="{Binding IsNewPlywoodVisible}"/>
+                <TextBox Style="{StaticResource TextBoxStyle}"
+                          Visibility="{Binding IsNewPlywoodVisible}"
+                         Text="{Binding TotalSqftPlywood,UpdateSourceTrigger=LostFocus}"/>
+                <TextBlock Style="{StaticResource FieldHeader}"
                        Text="Total Sq Ft"/>
                 <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding TotalSqft,UpdateSourceTrigger=LostFocus}"/>

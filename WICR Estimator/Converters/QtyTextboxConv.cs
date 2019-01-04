@@ -28,6 +28,7 @@ namespace WICR_Estimator.Converters
                     case "LARGE CRACK REPAIR":
                     case "BUBBLE REPAIR (MEASURE SQ FT)":
                     case "System Large cracks Repair":
+                    case "EXTRA STAIR NOSING":
                     case "System bubbled and failed texture repair":
                     case "Concrete cracks greater than 1/32 inch (route 1/4 x 1/4) epoxy gel fill, ilica sand, and fiber tape":
                         return true;

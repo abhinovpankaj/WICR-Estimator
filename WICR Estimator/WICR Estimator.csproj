@@ -101,6 +101,7 @@
     <Compile Include="Converters\EnableTextboxConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\QtyTextboxConv.cs" />
+    <Compile Include="Converters\UnitTextboxConverter.cs" />
     <Compile Include="DataSerializer.cs" />
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="GoogleUtility\SpreadSheetConnect.cs" />

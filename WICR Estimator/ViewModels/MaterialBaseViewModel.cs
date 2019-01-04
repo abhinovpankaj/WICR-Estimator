@@ -142,10 +142,6 @@ namespace WICR_Estimator.ViewModels
             }
             return (new SystemMaterial
             {
-
-                IsMaterialChecked = getCheckboxCheckStatus(matName),
-                IsMaterialEnabled = getCheckboxEnabledStatus(matName),
-                
                 Name = matName,
                 SMUnits = unit,
                 SMSqft = lfArea,
@@ -163,8 +159,9 @@ namespace WICR_Estimator.ViewModels
                 LaborExtension = labrExt,
                 LaborUnitPrice = getLaborUnitPrice(labrExt, riserCount, totalSqft,0,sqh,sqStairs, matName),//labrExt / (riserCount + totalSqft),
                 FreightExtension = w * qty,
-                MaterialExtension = mp * qty
-
+                MaterialExtension = mp * qty,
+                IsMaterialChecked = getCheckboxCheckStatus(matName),
+                IsMaterialEnabled = getCheckboxEnabledStatus(matName)
             });
         }
 
@@ -1166,7 +1163,7 @@ namespace WICR_Estimator.ViewModels
                 hasSpecialPricing = js.HasSpecialPricing;
                 isDiscounted = js.HasDiscount;
                 isApprovedforCement = js.IsApprovedForSandCement;
-                hasContingencyDisc = js.HasContingencyDisc;
+                hasContingencyDisc = hasContingencyDisc && js.HasContingencyDisc;
                 MarkUpPerc = js.MarkupPercentage;
                 deckCount = js.DeckCount;
             }

@@ -284,17 +284,7 @@ namespace WICR_Estimator.ViewModels
                     item.LaborUnitPrice = item.LaborExtension / (item.SMSqftH + item.SMSqftV + item.StairSqft);
 
                 }
-                //item = SystemMaterials.Where(x => x.Name == "Extra stair nosing lf").FirstOrDefault();
-                //if (item != null)
-                //{
-
-                //    item.SMSqft = item.Qty;
-                //    item.SMSqftH = item.Qty;
-                //    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
-                //    item.LaborExtension = item.Hours==0?0:(item.Hours + item.SetupMinCharge) * laborRate;
-                //    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
-
-                //}
+                
             }
         }
 
