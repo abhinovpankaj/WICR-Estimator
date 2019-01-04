@@ -2623,6 +2623,7 @@ namespace WICR_Estimator.ViewModels
                 case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
                 case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
                 case "AJ-44A DRESSING(SEALER)":
+                case "WEATHER SEAL XL TWO COATS":
                     return totalSqft;
                 
                 case "BUBBLE REPAIR MAJOR SQFT":
@@ -2655,6 +2656,7 @@ namespace WICR_Estimator.ViewModels
                 case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
                 case "RP FABRIC 10 INCH WIDE X (300 LF) FROM ACME":
                 case "AJ-44A DRESSING(SEALER)":
+                case "WEATHER SEAL XL TWO COATS":
                     return stairWidth * riserCount * 2;
                 case "LARGE CRACK REPAIR":
                 case "LIGHT CRACK REPAIR":

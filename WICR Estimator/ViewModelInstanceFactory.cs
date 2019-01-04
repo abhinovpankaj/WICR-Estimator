@@ -20,9 +20,10 @@ namespace WICR_Estimator
                 case "Enduro Kote Metal":
                 case "Desert Brand":
                 case "Pedestrian System":
-                    return new MetalViewModel(Js);
                 case "Dexotex Barrier Gaurd":
-                    return new DexoMetalViewModel(Js);
+                    return new MetalViewModel(Js);
+                //case "Dexotex Barrier Gaurd":
+                //    return new DexoMetalViewModel(Js);
                 
                 default:
                     return null;
