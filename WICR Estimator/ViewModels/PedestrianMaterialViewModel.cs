@@ -44,7 +44,34 @@ namespace WICR_Estimator.ViewModels
 
             }
         }
+        public override void CalculateLaborMinCharge()
+        {
+            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+                                        x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
 
+            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 :
+                                                (20 - LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate;
+            base.CalculateLaborMinCharge();
+        }
+
+        public override bool IncludedInLaborMin(string matName)
+        {
+            switch (matName)
+            {
+                case "INTEGRAL STAIR NOSING (EXCEL STYLE)":
+                case "EXTRA STAIR NOSING":
+                case "Plywood 3/4 & blocking (# of 4x8 sheets)":
+                case "Stucco Material Remove and replace (LF)":
+                    return false;
+                default:
+                    return true;
+            }
+        }
+        public override void calculateLaborHrs()
+        {
+            calLaborHrs(6);
+
+        }
         public override void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {
             JobSetup Js = sender as JobSetup;
@@ -145,6 +172,7 @@ namespace WICR_Estimator.ViewModels
                 SubContractLaborItems = GetLaborItems();
             }
             calculateRLqty();
+            CalculateLaborMinCharge();
             CalculateAllMaterial();
         }
         private void FillMaterialList()

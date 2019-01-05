@@ -3,12 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using WICR_Estimator.ViewModels;
 
 namespace WICR_Estimator.Models
 {
     public class Project: BaseViewModel
     {
+        public Project()
+        {
+            if (updatedJobSetup == null)
+            {
+                updatedJobSetup = new DelegateCommand(UpdateJobSetUp, canUpdate);
+            }
+        }
+        
         public string Name { get; set; }
         public double MetalCost
         {
@@ -171,23 +180,31 @@ namespace WICR_Estimator.Models
                 }
             }
         }
-        //private LaborViewModel laborViewModel;
-        //public LaborViewModel LaborViewModel
-        //{
-        //    get
-        //    {
-        //        return laborViewModel;
-        //    }
-        //    set
-        //    {
-        //        if (laborViewModel != value)
-        //        {
-        //            laborViewModel = value;
-        //            OnPropertyChanged("LaborViewModel");
 
-        //        }
-        //    }
-        //}
         public static event EventHandler OnSelectedProjectChange;
+        private ICommand updatedJobSetup;
+        public ICommand UpdatedJobSetup
+        {
+            set { updatedJobSetup = value; }
+            get
+            {                
+                return updatedJobSetup;
+            }
+        }
+
+        private bool canUpdate(object obj)
+        {
+            return true;
+        }
+
+        private void UpdateJobSetUp(object obj)
+        {
+            this.MetalViewModel.CalculateCost(null);
+        }
+
+        //private void ProjectJobSetUp_OnJobSetupChange(object sender, EventArgs e)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

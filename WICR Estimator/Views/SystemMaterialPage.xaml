@@ -57,6 +57,7 @@
                 </DataTrigger>
                 <Trigger Property="IsEnabled" Value="True">
                     <Setter Property="Background" Value="LightYellow" />
+                    <Setter Property="ToolTip" Value="Please enter a numeric value."/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -139,13 +140,11 @@
                 <DataGridTemplateColumn Header="Units">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding SMUnits,UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox Text="{Binding SMUnits,UpdateSourceTrigger=LostFocus}"
                                      Name="unitTb"
                                      Style="{StaticResource editableTextbox}"
                                     IsEnabled="{Binding Path=Name,
-                                Converter={StaticResource unitTextboxConv}}"
-                                     />
-
+                                Converter={StaticResource unitTextboxConv}}"/>
                         </DataTemplate>
 
                     </DataGridTemplateColumn.CellTemplate>

@@ -49,6 +49,19 @@ namespace WICR_Estimator.ViewModels
             return base.CalculateLabrExtn(calhrs, setupMin);
 
         }
+        public override void calculateLaborHrs()
+        {
+            calLaborHrs(6); ;
+        }
+        public override void CalculateLaborMinCharge()
+        {
+           LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+                                        x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
+
+            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 15 ? 0 :
+                                                (15 - LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate;
+            base.CalculateLaborMinCharge();
+        }
         public override double getLaborUnitPrice(double laborExtension, double riserCount, double totalSqft,double sqftVert=0,double sqftHor=0,
             double sqftStairs=0,string materialName="")
         {
@@ -125,9 +138,21 @@ namespace WICR_Estimator.ViewModels
                 SubContractLaborItems = GetLaborItems();
             }
             getEKLQnty();
+            CalculateLaborMinCharge();
             CalculateAllMaterial();
         }
-
+        public override bool IncludedInLaborMin(string matName)
+        {
+            switch (matName)
+            {
+                case "Stair Nosing":
+                case "Extra stair nosing lf":
+                case "Plywood 3/4 & blocking (# of 4x8 sheets)":
+                case "Stucco Material Remove and replace (LF)":
+                default:
+                    return true;
+            }
+        }
         public override double getSqFtAreaH(string materialName)
         {
             //return base.getlfArea(materialName);
@@ -223,7 +248,11 @@ namespace WICR_Estimator.ViewModels
                 if (item.Name == "Base Coat EKC Cementitious Mix"||
                     item.Name== "Second Coat Skim Coat EKC Cementitious Mix" ||item.Name== "Texture Coat EKC Cementitious Mix")
                 {
-                    qty = qty + item.Qty;
+                    if (item.IsMaterialChecked)
+                    {
+                        qty = qty + item.Qty;
+                    }
+                    
                 }
             }
             SystemMaterials.Where(x=>x.Name== "EKL Acrylic Emulsion").FirstOrDefault().Qty= qty / 5;
@@ -252,6 +281,9 @@ namespace WICR_Estimator.ViewModels
             {
                 case "ENDURO ELA-98 BINDER (2 COATS)":
                 case "Select Y for protection coat over membrane below tile (GU80-1 TOP COAT)":
+                case "2.5 Galvanized Lathe (18 s.f.) no less than 12 per sq ft.":
+                case "Staples (3/4 Inch Crown, Box of 13,500)":
+                case "Base Coat EKC Cementitious Mix":
                     return true;
                 default:
                     return false;
@@ -298,20 +330,9 @@ namespace WICR_Estimator.ViewModels
                 SystemMaterials.Where(x => x.Name == "3/4 oz. Fiberglass (2000 sq ft rolls Purchased from Hill Brothers )").FirstOrDefault().IsMaterialChecked = isChecked;
                 //3/4 oz. Fiberglass (2000 sq ft rolls Purchased from Hill Brothers )
             }
+            getEKLQnty();
             //update Add labor for minimum cost
-            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false && x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
-
-            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs)) * laborRate;
-            LaborMinChargeLaborUnitPrice = (riserCount + totalSqft)==0?0: LaborMinChargeLaborExtension / (riserCount + totalSqft);
-            if (LaborMinChargeMinSetup + LaborMinChargeHrs < 20)
-            {
-                AddLaborMinCharge = true;
-            }
-            else
-                AddLaborMinCharge = false;
-            OnPropertyChanged("LaborMinChargeHrs");
-            OnPropertyChanged("LaborMinChargeLaborExtension");
-            OnPropertyChanged("LaborMinChargeLaborUnitPrice");
+            CalculateLaborMinCharge();
 
         }
     }

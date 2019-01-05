@@ -18,8 +18,9 @@ namespace WICR_Estimator.ViewModels
 
             GetMetalDetailsFromGoogle(js.ProjectName);
             Metals =GetMetals();
-            MiscMetals=GetMiscMetals();
             AddOnMetals = GetAddOnMetals();
+            MiscMetals =GetMiscMetals();
+            
             CalculateCost(null);
             js.OnJobSetupChange += JobSetup_OnJobSetupChange;
         }

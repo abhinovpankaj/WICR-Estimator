@@ -41,9 +41,10 @@ namespace WICR_Estimator.ViewModels
             vendorName = "Chivon";
             riserCount = 30;
             stairWidth = 4.5;
-
+            CheckboxCommand = new DelegateCommand(ApplyCheckUnchecks, canApply);
         }
 
+        
 
         #region Properties
         private System.Windows.Visibility showSpecialPriceColumn = System.Windows.Visibility.Hidden;
@@ -195,8 +196,21 @@ namespace WICR_Estimator.ViewModels
                 return _removeCommand;
             }
         }
+        private DelegateCommand checkboxCommand;
+        public DelegateCommand CheckboxCommand { get { return checkboxCommand; } private set { checkboxCommand = value; } }
+
         #endregion
         #region commands
+        private void ApplyCheckUnchecks(object obj)
+        {
+            MiscMetals[0].Units = getUnits(2);
+        }
+
+        private bool canApply(object obj)
+        {
+            return true;
+        }
+
         private bool CanRemoveRow(object obj)
         {
             return true;
@@ -293,7 +307,17 @@ namespace WICR_Estimator.ViewModels
                 unit = riserCount * stairWidth * 2;
             else if (unitNo == 2)
             {
-                unit = isFlash ? (Metals[0].Units+ Metals[1].Units + Metals[2].Units + Metals[3].Units)*stairWidth : 0; 
+                double addOnMetalUnits = 0;
+                for (int z = 0; z < 6; z++)
+                {
+                    if (AddOnMetals[z].IsMetalChecked==true)
+                    {
+                        addOnMetalUnits = addOnMetalUnits + AddOnMetals[z].Units;
+                    }
+                }
+                
+                unit = isFlash ? (Metals[0].Units+ Metals[1].Units + Metals[2].Units + Metals[3].Units
+                    + addOnMetalUnits) *stairWidth : 0; 
                 //double.TryParse(metalDetails[37][0].ToString(), out unit);
             }
             else if (unitNo == 3)
@@ -409,22 +433,22 @@ namespace WICR_Estimator.ViewModels
             ObservableCollection<AddOnMetal> met = new ObservableCollection<AddOnMetal>();
             met.Add(new AddOnMetal("L - METAL / FLASHING", "4X10", getMetalPR(0), laborRate, 0, getMetalMP(0), false));
             met.Add(new AddOnMetal("L - METAL / FLASHING", "4X8", getMetalPR(1), laborRate, 0, getMetalMP(1), false));
-            met.Add(new AddOnMetal("DRIP EDGE METAL", "4X4", getMetalPR(3), laborRate, 1, getMetalMP(3), false));
-            met.Add(new AddOnMetal("DRIP EDGE METAL", "3X4", getMetalPR(4), laborRate, 1, getMetalMP(4), false));
+            met.Add(new AddOnMetal("DRIP EDGE METAL", "4X4", getMetalPR(3), laborRate, 0, getMetalMP(3), false));
+            met.Add(new AddOnMetal("DRIP EDGE METAL", "3X4", getMetalPR(4), laborRate, 0, getMetalMP(4), false));
             met.Add(new AddOnMetal("STAIR METAL", "4X10", getMetalPR(6), laborRate, getUnits(1), getMetalMP(6), true));
             met.Add(new AddOnMetal("STAIR METAL", "4X8", getMetalPR(7), laborRate, getUnits(1), getMetalMP(7), true));
-            met.Add(new AddOnMetal("Door Pan", "10' - 12'", getMetalPR(11), laborRate, 1, getMetalMP(11), false));
-            met.Add(new AddOnMetal("Door Pan", "8'", getMetalPR(12), laborRate, 2, getMetalMP(12), false));
-            met.Add(new AddOnMetal("Door Pan", "6'", getMetalPR(13), laborRate, 3, getMetalMP(13), false));
-            met.Add(new AddOnMetal("Door Pan", "4'", getMetalPR(14), laborRate, 6, getMetalMP(14), false));
-            met.Add(new AddOnMetal("Door Pan", "3'", getMetalPR(15), laborRate, 6, getMetalMP(15), false));
-            met.Add(new AddOnMetal("CORNER DRIP TERMINATION", "", getMetalPR(26), laborRate, 1, getMetalMP(26), false));
-            met.Add(new AddOnMetal("OFFSET DRIP TERMINATION", "", getMetalPR(27), laborRate, 1, getMetalMP(27), false));
-            met.Add(new AddOnMetal("SRAIGHT DRIP TERMINATION", "", getMetalPR(28), laborRate, 1, getMetalMP(28), false));
-            met.Add(new AddOnMetal("STANDARD SCUPPER", "2x4x9", getMetalPR(30), laborRate, 1, getMetalMP(30), false));
-            met.Add(new AddOnMetal("STANDARD SCUPPER", "3x4x9", getMetalPR(31), laborRate, 1, getMetalMP(31), false));
-            met.Add(new AddOnMetal("OVERFLOW SCUPPER", "", getMetalPR(34), laborRate, 1, getMetalMP(34), false));
-            met.Add(new AddOnMetal("TWO STAGE SCUPPER", "", getMetalPR(35), laborRate, 1, getMetalMP(35), false));
+            met.Add(new AddOnMetal("Door Pan", "10' - 12'", getMetalPR(11), laborRate, 0, getMetalMP(11), false));
+            met.Add(new AddOnMetal("Door Pan", "8'", getMetalPR(12), laborRate, 0, getMetalMP(12), false));
+            met.Add(new AddOnMetal("Door Pan", "6'", getMetalPR(13), laborRate, 0, getMetalMP(13), false));
+            met.Add(new AddOnMetal("Door Pan", "4'", getMetalPR(14), laborRate, 0, getMetalMP(14), false));
+            met.Add(new AddOnMetal("Door Pan", "3'", getMetalPR(15), laborRate, 0, getMetalMP(15), false));
+            met.Add(new AddOnMetal("CORNER DRIP TERMINATION", "", getMetalPR(26), laborRate, 0, getMetalMP(26), false));
+            met.Add(new AddOnMetal("OFFSET DRIP TERMINATION", "", getMetalPR(27), laborRate, 0, getMetalMP(27), false));
+            met.Add(new AddOnMetal("SRAIGHT DRIP TERMINATION", "", getMetalPR(28), laborRate, 0, getMetalMP(28), false));
+            met.Add(new AddOnMetal("STANDARD SCUPPER", "2x4x9", getMetalPR(30), laborRate, 0, getMetalMP(30), false));
+            met.Add(new AddOnMetal("STANDARD SCUPPER", "3x4x9", getMetalPR(31), laborRate, 0, getMetalMP(31), false));
+            met.Add(new AddOnMetal("OVERFLOW SCUPPER", "", getMetalPR(34), laborRate, 0, getMetalMP(34), false));
+            met.Add(new AddOnMetal("TWO STAGE SCUPPER", "", getMetalPR(35), laborRate, 0, getMetalMP(35), false));
             return met;
         }
 
@@ -563,6 +587,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
 
+        
         private bool CanAutoFill(object obj)
         {
             return true;

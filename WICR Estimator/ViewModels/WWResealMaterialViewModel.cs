@@ -474,7 +474,17 @@ namespace WICR_Estimator.ViewModels
                 SubContractLaborItems = GetLaborItems();
             }
             calculateRLqty();
+            CalculateLaborMinCharge();
             CalculateAllMaterial();
+        }
+        public override void CalculateLaborMinCharge()
+        {
+            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+                                        x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
+
+            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 17 ? 0 :
+                                                (17 - LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate;
+            base.CalculateLaborMinCharge();
         }
         public override void calculateRLqty()
         {
@@ -714,9 +724,12 @@ namespace WICR_Estimator.ViewModels
                 calculateRLqty();
                 
             }
-            
+            CalculateLaborMinCharge();
         }
-
+        public override bool IncludedInLaborMin(string matName)
+        {
+            return true;
+        }
         public override double getLaborUnitPrice(double laborExtension, double riserCount, double totalSqft, double sqftVert = 0, double sqftHor = 0, double sqftStairs = 0, string matName = "")
         {
             //return base.getLaborUnitPrice(laborExtension, riserCount, totalSqft, sqftVert, sqftHor, sqftStairs, matName);

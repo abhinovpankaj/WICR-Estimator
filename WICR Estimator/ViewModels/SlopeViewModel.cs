@@ -16,8 +16,11 @@ namespace WICR_Estimator.ViewModels
         {
             GetSlopeDetailsFromGoogle(js.ProjectName);
             Slopes = CreateSlopes();
+            js.SlopeMaterialName = "Dexotex A-81 Underlayment";
+            SlopeMaterialName = js.IsApprovedForSandCement?"Sand and Cement":"Dexotex A-81 Underlayment";
+            isApprovedForCement = js.IsApprovedForSandCement;
             CalculateAll();        
-            js.OnJobSetupChange += JobSetup_OnJobSetupChange;           
+            js.OnJobSetupChange += JobSetup_OnJobSetupChange;                   
         }
 
     }

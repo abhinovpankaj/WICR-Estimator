@@ -119,7 +119,7 @@
                            Content="Metal Flashing Over Concrete?"/>
                 <CheckBox  Style="{StaticResource CheckBoxStyle}"
                            IsChecked="{Binding HasSpecialPricing,UpdateSourceTrigger=PropertyChanged}"
-                       Content="Special Material Pricing"/>
+                       Content="Special Metal Pricing"/>
                 <CheckBox  Style="{StaticResource CheckBoxStyle}"
                            IsChecked="{Binding HasDiscount,UpdateSourceTrigger=PropertyChanged}"
                        Content="Labor Discount Large Project (over 1,000 sq. ft.)"/>

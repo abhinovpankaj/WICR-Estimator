@@ -44,8 +44,8 @@ namespace WICR_Estimator.ViewModels
         {
             Slopes = new ObservableCollection<Slope>();
             SlopeTotals = new Totals { TabName = "Slope" };
-            isApprovedForCement = true;
-            SlopeMaterialName = "Dexotex A-81 Underlayment";
+            //isApprovedForCement = true;
+            //SlopeMaterialName = "Dexotex A-81 Underlayment";
         }
 
         #region public properties
@@ -368,7 +368,7 @@ namespace WICR_Estimator.ViewModels
                 if (isApprovedForCement != js.IsApprovedForSandCement)
                 {
                     isApprovedForCement = js.IsApprovedForSandCement;
-                    SlopeMaterialName = isApprovedForCement ? "Sand and Cement" : "Dexotex A-81 Underlayment1";
+                    SlopeMaterialName = isApprovedForCement ? "Sand and Cement" : js.SlopeMaterialName;
                     reCalculate();
                 }
 

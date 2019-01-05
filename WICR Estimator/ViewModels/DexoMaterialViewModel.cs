@@ -117,6 +117,7 @@ namespace WICR_Estimator.ViewModels
             }
             //set  resititeLiquid QTY
             resistiteQty();
+            CalculateLaborMinCharge();
             CalculateAllMaterial();
         }
 
@@ -160,10 +161,36 @@ namespace WICR_Estimator.ViewModels
                     sm.LaborUnitPrice = sm.LaborExtension / (riserCount+totalSqft);
                 }
             }
+            double minLCharge = 0;
+            double.TryParse(materialDetails[k][6].ToString(), out minLCharge);
+            LaborMinChargeMinSetup = minLCharge;
+
             return smCollection;
 
         }
 
+        public override bool IncludedInLaborMin(string matName)
+        {
+            switch (matName)
+            {
+                case "Stair Nosing From Dexotex":
+                case "Extra stair nosing lf":
+                case "Plywood 3/4 & blocking (# of 4x8 sheets)":
+                case "Stucco Material Remove and replace (LF)":
+                    return false;
+                default:
+                    return true;
+            }
+        }
+        public override void CalculateLaborMinCharge()
+        {
+            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true && 
+                                        x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
+
+            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 14 ? 0 : 
+                                                (14 - LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate;
+            base.CalculateLaborMinCharge();
+        }
         public override void calculateLaborHrs()
         {
             calLaborHrs(6);
@@ -239,20 +266,23 @@ namespace WICR_Estimator.ViewModels
         {
             double qty = 0;
             foreach (var item in SystemMaterials)
-            {           
-                if (item.Name== "Underlay over membrane (Resistite regular 150 sq ft per mix )"||
-                    item.Name== "Resistite textured knockdown finish (smooth or regular per customer)Gray" ||
-                    item.Name== "Underlay over rough surface (Resistite regular 150 sq ft per mix)"||
+            {
+                if (item.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)" ||
+                    item.Name== "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)"||
+                    item.Name == "Resistite textured knockdown finish (smooth or regular per customer)Gray" ||
+                    item.Name == "Underlay over rough surface (Resistite regular 150 sq ft per mix)" ||
                     item.Name == "Resistite textured knockdown finish (smooth or regular per customer)White")
                 {
                     if (item.IsMaterialChecked)
                     {
                         qty = qty + item.Qty;
                     }
-                    
+
                 }
             }
-            SystemMaterials.Where(x=>x.Name== "Resistite Liquid ").FirstOrDefault().Qty= (qty / 5);
+            double val1 = SystemMaterials.Where(x => x.Name == "Underlay over membrane (Resistite regular 150 sq ft per mix )").FirstOrDefault().Qty;
+            SystemMaterials.Where(x=>x.Name== "Resistite Liquid ").FirstOrDefault().Qty= (qty *0.33)+val1/5;
+
             SystemMaterials.Where(x => x.Name == "Weather Seal XL Coat").FirstOrDefault().IsMaterialEnabled = true;
         }
 
@@ -400,7 +430,9 @@ namespace WICR_Estimator.ViewModels
             if (obj.ToString() == "Underlay over membrane (Resistite regular 150 sq ft per mix )" ||
                 obj.ToString() == "Underlay over rough surface (Resistite regular 150 sq ft per mix)" ||
                 obj.ToString() == "Resistite textured knockdown finish (smooth or regular per customer)Gray"||
-                obj.ToString() == "Resistite textured knockdown finish (smooth or regular per customer)White")
+                obj.ToString() == "Resistite textured knockdown finish (smooth or regular per customer)White"||
+                obj.ToString()== "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)"||
+                obj.ToString() == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)")
             {
                 resistiteQty();
             }
@@ -586,24 +618,9 @@ namespace WICR_Estimator.ViewModels
                     SystemMaterials.Where(x => x.Name == "Barrier Guard membrane over smooth surface").First().IsMaterialChecked;
 
             }
-                //update Add labor for minimum cost
-                LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false && x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
-
-            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate);
-            LaborMinChargeLaborUnitPrice = (riserCount + totalSqft)==0?0: LaborMinChargeLaborExtension / (riserCount + totalSqft);
-            if (LaborMinChargeMinSetup + LaborMinChargeHrs < 20)
-            {
-                AddLaborMinCharge = true;
-            }
-            else
-                AddLaborMinCharge = false;
-            OnPropertyChanged("AddLaborMinCharge");
-            OnPropertyChanged("LaborMinChargeHrs");
-            OnPropertyChanged("LaborMinChargeLaborExtension");
-            OnPropertyChanged("LaborMinChargeLaborUnitPrice");
-
-            
+            CalculateLaborMinCharge();
         }
+
 
         //for lipcolor vista,AJ44
         public override void setCheckBoxes()

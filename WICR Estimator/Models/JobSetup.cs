@@ -8,18 +8,18 @@ using WICR_Estimator.ViewModels;
 
 namespace WICR_Estimator.Models
 {
-    public class JobSetup:BaseViewModel
+    public class JobSetup : BaseViewModel
     {
-        
-            
-        private  string projectname;
+
+
+        private string projectname;
         public string FirstCheckBoxLabel { get; set; }
         public string ProjectName
         {
             get { return projectname; }
             set
             {
-                if (value!=projectname)
+                if (value != projectname)
                 {
                     projectname = value;
                     OnPropertyChanged("ProjectName");
@@ -32,6 +32,7 @@ namespace WICR_Estimator.Models
         }
         public event EventHandler OnJobSetupChange;
         public event EventHandler OnProjectNameChange;
+        public string SlopeMaterialName{get;set;}
         public JobSetup()
         { 
             

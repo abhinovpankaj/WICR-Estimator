@@ -19,7 +19,7 @@
     <MetalRange>F3:M43</MetalRange>
     <LaborRange>E350:E369</LaborRange>
     <SlopeRange>P301:Q309</SlopeRange>
-    <MaterialRange>H320:N340</MaterialRange>
+    <MaterialRange>H320:N341</MaterialRange>
   </DexotexBarrier>
 <EnduroKote>
     <RateRange>E2</RateRange>
@@ -33,14 +33,14 @@
     <MetalRange>F3:M43</MetalRange>
     <LaborRange>E470:E489</LaborRange>
     <SlopeRange>P301:Q309</SlopeRange>
-    <MaterialRange>H440:N454</MaterialRange>
+    <MaterialRange>H440:N455</MaterialRange>
   </WeatherWearReseal>
   <WestcoatColor>
     <RateRange>E2</RateRange>
     <MetalRange>F3:M43</MetalRange>
     <LaborRange>E540:E559</LaborRange>
     <SlopeRange>P501:Q509</SlopeRange>
-    <MaterialRange>H520:N528</MaterialRange>
+    <MaterialRange>H520:N529</MaterialRange>
   </WestcoatColor>
   
   <DesertBrand>
@@ -56,7 +56,7 @@
     <MetalRange>F3:M43</MetalRange>
     <LaborRange>E703:E722</LaborRange>
     <SlopeRange>P645:Q662</SlopeRange>
-    <MaterialRange>H674:N691</MaterialRange>
+    <MaterialRange>H674:N692</MaterialRange>
   </Pedestrian>
 
 </Projects>

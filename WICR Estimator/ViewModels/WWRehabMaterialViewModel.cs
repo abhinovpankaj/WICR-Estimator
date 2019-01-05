@@ -544,24 +544,7 @@ namespace WICR_Estimator.ViewModels
                 FreightExtension = w * qty,
                 MaterialExtension = mp * qty
             });
-            //int.TryParse(materialDetails[12][2].ToString(), out cov);
-            //double.TryParse(materialDetails[12][0].ToString(), out mp);
-            //double.TryParse(materialDetails[12][3].ToString(), out w);
-            //lfArea = getlfArea("Resistite Regular Gray");
-            //smP.Add(new SystemMaterial
-            //{
-            //    IsCheckboxDependent = true,
-            //    IsMaterialChecked = getCheckboxCheckStatus("Resistite Regular Gray"),
-            //    IsMaterialEnabled = getCheckboxEnabledStatus("Resistite Regular Gray"),
-            //    Name = "Resistite Regular Gray",
-            //    SMUnits = "55 LB BAG",
-            //    SMSqft = lfArea,
-            //    Coverage = cov,
-            //    MaterialPrice = mp,
-            //    Weight = w,
-            //    Qty = getQuantity("Resistite Regular Gray", cov, lfArea),
-
-            //});
+            
             int.TryParse(materialDetails[13][2].ToString(), out cov);
             double.TryParse(materialDetails[13][0].ToString(), out mp);
             double.TryParse(materialDetails[13][3].ToString(), out w);
@@ -600,24 +583,6 @@ namespace WICR_Estimator.ViewModels
             });
 
 
-            //int.TryParse(materialDetails[14][2].ToString(), out cov);
-            //double.TryParse(materialDetails[14][0].ToString(), out mp);
-            //double.TryParse(materialDetails[14][3].ToString(), out w);
-            //lfArea=getlfArea("Resistite Regular Or Smooth Gray(Knock Down Or Smooth)");
-            //smP.Add(new SystemMaterial
-            //{
-            //    IsCheckboxDependent=true,
-            //    IsMaterialChecked = getCheckboxCheckStatus("Resistite Regular Or Smooth Gray(Knock Down Or Smooth)"),
-            //    IsMaterialEnabled = getCheckboxEnabledStatus("Resistite Regular Or Smooth Gray(Knock Down Or Smooth)"),
-            //    Name = "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)",
-            //    SMUnits = "40 LB BAG",
-            //    SMSqft = lfArea,
-            //    Coverage =cov,
-            //    MaterialPrice = mp,
-            //    Weight = w,
-            //    Qty = getQuantity("Resistite Regular Or Smooth Gray(Knock Down Or Smooth)", cov, lfArea),
-
-            //});
             int.TryParse(materialDetails[15][2].ToString(), out cov);
             double.TryParse(materialDetails[15][0].ToString(), out mp);
             double.TryParse(materialDetails[15][3].ToString(), out w);
@@ -808,24 +773,7 @@ namespace WICR_Estimator.ViewModels
             LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate);
             LaborMinChargeLaborUnitPrice = LaborMinChargeLaborExtension / (riserCount + totalSqft);
 
-            //int.TryParse(materialDetails[20][2].ToString(), out cov);
-            //double.TryParse(materialDetails[20][0].ToString(), out mp);
-            //double.TryParse(materialDetails[20][3].ToString(), out w);
-            //lfArea = getlfArea("Custom Texture Skip Trowel(Resistite Smooth Gray)");
-            //smP.Add(new SystemMaterial
-            //{
-            //    IsCheckboxDependent=true,
-            //    IsMaterialChecked = getCheckboxCheckStatus("Custom Texture Skip Trowel(Resistite Smooth Gray)"),
-            //    IsMaterialEnabled = getCheckboxEnabledStatus("Custom Texture Skip Trowel(Resistite Smooth Gray)"),
-            //    Name = "Custom Texture Skip Trowel(Resistite Smooth Gray)",
-            //    SMUnits = "Sq Ft",
-            //    SMSqft = lfArea,
-            //    Coverage = cov,
-            //    MaterialPrice = mp,
-            //    Weight = w,
-            //    Qty = getQuantity("Custom Texture Skip Trowel(Resistite Smooth Gray)", cov, lfArea),
-
-            //});
+           
             int.TryParse(materialDetails[21][2].ToString(), out cov);
             double.TryParse(materialDetails[21][0].ToString(), out mp);
             double.TryParse(materialDetails[21][3].ToString(), out w);

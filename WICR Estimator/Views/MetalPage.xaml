@@ -264,7 +264,10 @@
                     <DataGridTemplateColumn Header="">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox x:Name="mChbox" IsChecked="{Binding IsMetalChecked,
+                                <CheckBox x:Name="mChbox"
+                                          Command="{Binding DataContext.CheckboxCommand,
+                                ElementName=AddOnMetalGrid}"
+                                          IsChecked="{Binding IsMetalChecked,
                                 UpdateSourceTrigger=PropertyChanged}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

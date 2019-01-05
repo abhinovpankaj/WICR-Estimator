@@ -125,7 +125,7 @@ namespace WICR_Estimator.ViewModels
             sqh = getSqFtAreaH(matName);
             sqStairs = getSqFtStairs(matName);
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
-            //labrExt = (calcHrs != 0) ? (setUpMin + calcHrs) * laborRate : 0;
+            
             labrExt = CalculateLabrExtn(calcHrs, setUpMin,matName);
             qty = getQuantity(matName, cov, lfArea);
             if (lfArea == -1)
@@ -161,8 +161,14 @@ namespace WICR_Estimator.ViewModels
                 FreightExtension = w * qty,
                 MaterialExtension = mp * qty,
                 IsMaterialChecked = getCheckboxCheckStatus(matName),
-                IsMaterialEnabled = getCheckboxEnabledStatus(matName)
+                IsMaterialEnabled = getCheckboxEnabledStatus(matName),
+                IncludeInLaborMinCharge=IncludedInLaborMin(matName)
             });
+        }
+
+        public virtual bool IncludedInLaborMin(string matName)
+        {
+            return true;
         }
 
         private void MetalTotals_OnTotalsChange(object sender, EventArgs e)
@@ -404,6 +410,51 @@ namespace WICR_Estimator.ViewModels
                     subContractMarkup = value;
                     populateCalculation();
                     OnPropertyChanged("SubContractMarkup");
+
+                }
+            }
+        }
+        private double metalMarkup;
+        public double MetalMarkup
+        {
+            get { return metalMarkup; }
+            set
+            {
+                if (value != metalMarkup)
+                {
+                    metalMarkup = value;
+                    populateCalculation();
+                    OnPropertyChanged("MetalMarkup");
+
+                }
+            }
+        }
+        private double slopeMarkup;
+        public double SlopeMarkup
+        {
+            get { return slopeMarkup; }
+            set
+            {
+                if (value != slopeMarkup)
+                {
+                    slopeMarkup = value;
+                    populateCalculation();
+                    OnPropertyChanged("SlopeMarkup");
+
+                }
+            }
+        }
+        private double materialMarkup;
+        public double MaterialMarkup
+        {
+            get { return materialMarkup; }
+            set
+            {
+                if (value != materialMarkup)
+                {
+                    materialMarkup = value;
+                    populateCalculation();
+                    OnPropertyChanged("MaterialMarkup");
 
                 }
             }
@@ -786,22 +837,6 @@ namespace WICR_Estimator.ViewModels
 
                 }
             }
-            //update Add labor for minimum cost
-            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false && x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
-
-            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs)) * laborRate;
-            LaborMinChargeLaborUnitPrice = (riserCount + totalSqft)==0?0: LaborMinChargeLaborExtension / (riserCount + totalSqft);
-            if (LaborMinChargeMinSetup + LaborMinChargeHrs < 20)
-            {
-                AddLaborMinCharge = true;
-            }
-            else
-                AddLaborMinCharge = false;
-            OnPropertyChanged("AddLaborMinCharge");
-            OnPropertyChanged("LaborMinChargeHrs");
-            OnPropertyChanged("LaborMinChargeLaborExtension");
-            OnPropertyChanged("LaborMinChargeLaborUnitPrice");
-
 
             if (obj.ToString() == "Neotex Standard Powder(Body Coat)" || obj.ToString() == "Neotex Standard Powder(Body Coat) 1")
             {
@@ -838,8 +873,11 @@ namespace WICR_Estimator.ViewModels
                         neomat.IsMaterialChecked = true;
                     }
                 }
-
             }
+
+            SystemMaterials.Where(x=>x.Name== "Neotex-38 Paste").FirstOrDefault().Qty=neotaxQty();
+            //SystemMaterials.Where(x => x.Name == "Neotex-38 Paste").FirstOrDefault().IsMaterialChecked = true;
+        
             if (obj.ToString() == "Resistite Regular Gray")
             {
                 var materials = SystemMaterials.Where(x => x.IsCheckboxDependent == true).ToList();
@@ -871,7 +909,22 @@ namespace WICR_Estimator.ViewModels
             {
                 calculateRLqty();
             }
-            
+            //update Add labor for minimum cost
+            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false && x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
+
+            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs)) * laborRate;
+            LaborMinChargeLaborUnitPrice = (riserCount + totalSqft) == 0 ? 0 : LaborMinChargeLaborExtension / (riserCount + totalSqft);
+            if (LaborMinChargeMinSetup + LaborMinChargeHrs < 20)
+            {
+                AddLaborMinCharge = true;
+            }
+            else
+                AddLaborMinCharge = false;
+            OnPropertyChanged("AddLaborMinCharge");
+            OnPropertyChanged("LaborMinChargeHrs");
+            OnPropertyChanged("LaborMinChargeLaborExtension");
+            OnPropertyChanged("LaborMinChargeLaborUnitPrice");
+
         }
 
         #endregion
@@ -889,6 +942,13 @@ namespace WICR_Estimator.ViewModels
                 double facVal = 0;
                 double.TryParse(laborDetails[7][0].ToString(), out facVal);
                 SubContractMarkup = facVal;
+                double.TryParse(laborDetails[17][0].ToString(), out facVal);
+                MetalMarkup = facVal;
+                double.TryParse(laborDetails[19][0].ToString(), out facVal);
+                SlopeMarkup = facVal;
+                double.TryParse(laborDetails[18][0].ToString(), out facVal);
+                MaterialMarkup = facVal;
+
             }
         }
         public virtual void FetchMaterialValuesAsync(bool hasSetupChanged)
@@ -1170,7 +1230,7 @@ namespace WICR_Estimator.ViewModels
             FetchMaterialValuesAsync(true);
             
         }
-        //notused
+        #region notused
         private void reCalculate()
         {
 
@@ -1198,9 +1258,26 @@ namespace WICR_Estimator.ViewModels
             calculateLaborHrs();
             populateCalculation();
         }
-        //notused
+        #endregion 
 
-        
+        public virtual void CalculateLaborMinCharge()
+        {
+            //update Add labor for minimum cost
+            
+            LaborMinChargeLaborUnitPrice = (riserCount + totalSqft) == 0 ? 0 : LaborMinChargeLaborExtension / (riserCount + totalSqft);
+            if (LaborMinChargeMinSetup + LaborMinChargeHrs < 20)
+            {
+                AddLaborMinCharge = true;
+            }
+            else
+                AddLaborMinCharge = false;
+            OnPropertyChanged("AddLaborMinCharge");
+            OnPropertyChanged("LaborMinChargeHrs");
+            OnPropertyChanged("LaborMinChargeLaborExtension");
+            OnPropertyChanged("LaborMinChargeLaborUnitPrice");
+
+
+        }
         public virtual bool getCheckboxCheckStatus(string materialName)
         {
             if (weatherWearType == "Weather Wear")
@@ -1323,6 +1400,10 @@ namespace WICR_Estimator.ViewModels
                 smCollection.Add(getSMObject(k, key, materialNames[key]));
                 k++;
             }
+            double minLCharge = 0;
+            double.TryParse(materialDetails[k][6].ToString(), out minLCharge);
+            LaborMinChargeMinSetup = minLCharge;
+
             return smCollection;
 
         }
@@ -2052,24 +2133,7 @@ namespace WICR_Estimator.ViewModels
             LaborMinChargeLaborExtension = (LaborMinChargeMinSetup + LaborMinChargeHrs) > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs)) * laborRate;
             LaborMinChargeLaborUnitPrice = (riserCount + totalSqft) == 0 ? 0: LaborMinChargeLaborExtension / (riserCount + totalSqft);
 
-            //int.TryParse(materialDetails[20][2].ToString(), out cov);
-            //double.TryParse(materialDetails[20][0].ToString(), out mp);
-            //double.TryParse(materialDetails[20][3].ToString(), out w);
-            //lfArea = getlfArea("Custom Texture Skip Trowel(Resistite Smooth Gray)");
-            //smP.Add(new SystemMaterial
-            //{
-            //    IsCheckboxDependent=true,
-            //    IsMaterialChecked = getCheckboxCheckStatus("Custom Texture Skip Trowel(Resistite Smooth Gray)"),
-            //    IsMaterialEnabled = getCheckboxEnabledStatus("Custom Texture Skip Trowel(Resistite Smooth Gray)"),
-            //    Name = "Custom Texture Skip Trowel(Resistite Smooth Gray)",
-            //    SMUnits = "Sq Ft",
-            //    SMSqft = lfArea,
-            //    Coverage = cov,
-            //    MaterialPrice = mp,
-            //    Weight = w,
-            //    Qty = getQuantity("Custom Texture Skip Trowel(Resistite Smooth Gray)", cov, lfArea),
-
-            //});
+            
             int.TryParse(materialDetails[21][2].ToString(), out cov);
             double.TryParse(materialDetails[21][0].ToString(), out mp);
             double.TryParse(materialDetails[21][3].ToString(), out w);
@@ -2335,7 +2399,8 @@ namespace WICR_Estimator.ViewModels
             {
                 lipMat1.IsMaterialChecked = true;
                 ApplyCheckUnchecks(lipMat1.Name);
-            }     
+            }
+            SystemMaterials.Where(x => x.Name == "Neotex-38 Paste").FirstOrDefault().IsMaterialChecked = true;
  
         }
 
@@ -2436,10 +2501,16 @@ namespace WICR_Estimator.ViewModels
         private double neotaxQty()
         {
             double val1, val2;
+            if (SystemMaterials.Count==0)
+            {
+                return 0;
+            }
             double.TryParse(materialDetails[9][2].ToString(), out val1);
             double.TryParse(materialDetails[10][2].ToString(), out val2);
             val1 = getQuantity("NEOTEX STANDARD POWDER(BODY COAT)", val1, getlfArea("NEOTEX STANDARD POWDER(BODY COAT)"));
             val2 = getQuantity("NEOTEX STANDARD POWDER(BODY COAT) 1", val2, getlfArea("NEOTEX STANDARD POWDER(BODY COAT) 1"));
+            val1=SystemMaterials.Where(x => x.Name == "Neotex Standard Powder(Body Coat)").FirstOrDefault().IsMaterialChecked ? val1 : 0;
+            val2 = SystemMaterials.Where(x => x.Name == "Neotex Standard Powder(Body Coat) 1").FirstOrDefault().IsMaterialChecked ? val2 : 0;
             return (val2 * 1.5 + val1 * 1.25) / 5;
         }
 
@@ -2970,21 +3041,13 @@ namespace WICR_Estimator.ViewModels
                 HideCalFactor = System.Windows.Visibility.Hidden
             });
 
-            double.TryParse(laborDetails[17][0].ToString(), out facValue);
-            double profitMetal = facValue;
-            double.TryParse(laborDetails[19][0].ToString(), out facValue);
-            double profitSlope = facValue;
-            double.TryParse(laborDetails[18][0].ToString(), out facValue);
-            double profitMaterial = facValue;
-
-
             LCostBreakUp.Add(new CostBreakup
             {
                 Name = "Individual Profit Margin",
                 CalFactor = 0,
-                MetalCost = profitMetal,
-                SlopeCost = profitSlope,
-                SystemCost = profitMaterial,
+                MetalCost = MetalMarkup,
+                SlopeCost = SlopeMarkup,
+                SystemCost = MaterialMarkup,
                 HideCalFactor = System.Windows.Visibility.Hidden
             });
 
@@ -3028,11 +3091,11 @@ namespace WICR_Estimator.ViewModels
             //double pm;
             //double.TryParse(laborDetails[10][0].ToString(), out pm);
             
-            double totalCostM = (totalJobCostM - MetalTotals.SubContractLabor) / profitMetal + (MetalTotals.SubContractLabor +
+            double totalCostM = (totalJobCostM - MetalTotals.SubContractLabor) / MetalMarkup + (MetalTotals.SubContractLabor +
                 pm2 + pm3);  //+pm5+pm6);
-            double totalCostS = (totalJobCostS - SlopeTotals.SubContractLabor) / profitSlope + (SlopeTotals.SubContractLabor +
+            double totalCostS = (totalJobCostS - SlopeTotals.SubContractLabor) / SlopeMarkup + (SlopeTotals.SubContractLabor +
                 ps2); //ps4 + ps5 +
-            double totalCostSy = (totalJobCostSy) / profitMaterial + (psy2); //psy4+ psy6
+            double totalCostSy = (totalJobCostSy) / MaterialMarkup + (psy2); //psy4+ psy6
             double totalCostSbLabor = TotalSubContractLaborCostBrkp + psy1;
             LCostBreakUp.Add(new CostBreakup
             {
@@ -3052,15 +3115,15 @@ namespace WICR_Estimator.ViewModels
             {
                 Name = "General Liability",
                 CalFactor = facValue,
-                MetalCost = totalCostM * facValue / profitMetal,
-                SlopeCost = totalCostS * facValue / profitSlope,
-                SystemCost = totalCostSy * facValue / profitMaterial,
+                MetalCost = totalCostM * facValue / MetalMarkup,
+                SlopeCost = totalCostS * facValue / SlopeMarkup,
+                SystemCost = totalCostSy * facValue / MaterialMarkup,
                 SubContractLaborCost = (totalCostSbLabor * facValue / SubContractMarkup)
 
             });
-            double finalMCost = totalCostM + (totalCostM * facValue / profitMetal);
-            double finalSCost = totalCostS + (totalCostS * facValue / profitSlope);
-            double finalSyCost = totalCostSy + (totalCostSy * facValue / profitMaterial);
+            double finalMCost = totalCostM + (totalCostM * facValue / MetalMarkup);
+            double finalSCost = totalCostS + (totalCostS * facValue / SlopeMarkup);
+            double finalSyCost = totalCostSy + (totalCostSy * facValue / MaterialMarkup);
             double finalSubLabCost = totalCostSbLabor + (totalCostSbLabor * facValue / SubContractMarkup);
             double.TryParse(laborDetails[12][0].ToString(), out facValue);
 
@@ -3068,15 +3131,15 @@ namespace WICR_Estimator.ViewModels
             {
                 Name = "Direct Expense (Gas, Small Tools, Etc,)",
                 CalFactor = facValue,
-                MetalCost = totalCostM * facValue / profitMetal,
-                SlopeCost = totalCostS * facValue / profitSlope,
-                SystemCost = totalCostSy * facValue / profitMaterial,
+                MetalCost = totalCostM * facValue / MetalMarkup,
+                SlopeCost = totalCostS * facValue / SlopeMarkup,
+                SystemCost = totalCostSy * facValue / MaterialMarkup,
                 SubContractLaborCost = (totalCostSbLabor * facValue / SubContractMarkup)
 
             });
-            finalMCost = finalMCost + (totalCostM * facValue / profitMetal);
-            finalSCost = finalSCost + (totalCostS * facValue / profitSlope);
-            finalSyCost = finalSyCost + (totalCostSy * facValue / profitMaterial);
+            finalMCost = finalMCost + (totalCostM * facValue / MetalMarkup);
+            finalSCost = finalSCost + (totalCostS * facValue / SlopeMarkup);
+            finalSyCost = finalSyCost + (totalCostSy * facValue / MaterialMarkup);
             finalSubLabCost = finalSubLabCost + (totalCostSbLabor * facValue / SubContractMarkup);
             if (!hasContingencyDisc)
                 double.TryParse(laborDetails[13][0].ToString(), out facValue);
@@ -3088,14 +3151,14 @@ namespace WICR_Estimator.ViewModels
             {
                 Name = "Contingency",
                 CalFactor = facValue,
-                MetalCost = totalCostM * facValue / profitMetal,
-                SlopeCost = totalCostS * facValue / profitSlope,
-                SystemCost = totalCostSy * facValue / profitMaterial,
+                MetalCost = totalCostM * facValue / MetalMarkup,
+                SlopeCost = totalCostS * facValue / SlopeMarkup,
+                SystemCost = totalCostSy * facValue / MaterialMarkup,
                 SubContractLaborCost = totalCostSbLabor * facValue / SubContractMarkup
             });
-            finalMCost = finalMCost + (totalCostM * facValue / profitMetal);
-            finalSCost = finalSCost + (totalCostS * facValue / profitSlope);
-            finalSyCost = finalSyCost + (totalCostSy * facValue / profitMaterial);
+            finalMCost = finalMCost + (totalCostM * facValue / MetalMarkup);
+            finalSCost = finalSCost + (totalCostS * facValue / SlopeMarkup);
+            finalSyCost = finalSyCost + (totalCostSy * facValue / MaterialMarkup);
             finalSubLabCost = finalSubLabCost + (totalCostSbLabor * facValue / SubContractMarkup);
             double.TryParse(laborDetails[14][0].ToString(), out facValue);
 
