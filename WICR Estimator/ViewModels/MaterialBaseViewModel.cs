@@ -462,6 +462,7 @@ namespace WICR_Estimator.ViewModels
         #endregion
 
         #region Labor Properties
+        
 
         private bool addLaborMinCharge;
         public bool AddLaborMinCharge
@@ -501,6 +502,11 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        public double CostperSqftSlope { get; set; }
+        public double CostperSqftMetal { get; set; }
+        public double CostperSqftMaterial { get; set; }
+        public double CostperSqftSubContract { get; set; }
+        public double TotalCostperSqft { get; set; }
 
         public double TotalHrsLabor { get; set; }
         public double TotalHrsSystemLabor { get; set; }
@@ -1869,24 +1875,7 @@ namespace WICR_Estimator.ViewModels
                 FreightExtension = w * qty,
                 MaterialExtension = mp * qty
             });
-            //int.TryParse(materialDetails[12][2].ToString(), out cov);
-            //double.TryParse(materialDetails[12][0].ToString(), out mp);
-            //double.TryParse(materialDetails[12][3].ToString(), out w);
-            //lfArea = getlfArea("Resistite Regular Gray");
-            //smP.Add(new SystemMaterial
-            //{
-            //    IsCheckboxDependent = true,
-            //    IsMaterialChecked = getCheckboxCheckStatus("Resistite Regular Gray"),
-            //    IsMaterialEnabled = getCheckboxEnabledStatus("Resistite Regular Gray"),
-            //    Name = "Resistite Regular Gray",
-            //    SMUnits = "55 LB BAG",
-            //    SMSqft = lfArea,
-            //    Coverage = cov,
-            //    MaterialPrice = mp,
-            //    Weight = w,
-            //    Qty = getQuantity("Resistite Regular Gray", cov, lfArea),
-
-            //});
+            
             int.TryParse(materialDetails[13][2].ToString(), out cov);
             double.TryParse(materialDetails[13][0].ToString(), out mp);
             double.TryParse(materialDetails[13][3].ToString(), out w);
@@ -1924,25 +1913,7 @@ namespace WICR_Estimator.ViewModels
                 MaterialExtension = mp * qty
             });
 
-
-            //int.TryParse(materialDetails[14][2].ToString(), out cov);
-            //double.TryParse(materialDetails[14][0].ToString(), out mp);
-            //double.TryParse(materialDetails[14][3].ToString(), out w);
-            //lfArea=getlfArea("Resistite Regular Or Smooth Gray(Knock Down Or Smooth)");
-            //smP.Add(new SystemMaterial
-            //{
-            //    IsCheckboxDependent=true,
-            //    IsMaterialChecked = getCheckboxCheckStatus("Resistite Regular Or Smooth Gray(Knock Down Or Smooth)"),
-            //    IsMaterialEnabled = getCheckboxEnabledStatus("Resistite Regular Or Smooth Gray(Knock Down Or Smooth)"),
-            //    Name = "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)",
-            //    SMUnits = "40 LB BAG",
-            //    SMSqft = lfArea,
-            //    Coverage =cov,
-            //    MaterialPrice = mp,
-            //    Weight = w,
-            //    Qty = getQuantity("Resistite Regular Or Smooth Gray(Knock Down Or Smooth)", cov, lfArea),
-
-            //});
+            
             int.TryParse(materialDetails[15][2].ToString(), out cov);
             double.TryParse(materialDetails[15][0].ToString(), out mp);
             double.TryParse(materialDetails[15][3].ToString(), out w);
@@ -2781,7 +2752,8 @@ namespace WICR_Estimator.ViewModels
             }
             //,
             TotalSystemPrice = getTotals(TotalLaborExtension, TotalMaterialCostbrkp, TotalFreightCostBrkp, TotalSubContractLaborCostBrkp);
-            TotalSubcontractLabor = 0;
+            TotalSubcontractLabor = SlopeTotals.SubContractLabor+MetalTotals.SubContractLabor+ TotalSubContractLaborCostBrkp;
+
             TotalSale = TotalSlopingPrice + TotalMetalPrice + TotalSystemPrice + TotalSubcontractLabor;
 
             if (SlopeTotals != null && MetalTotals != null)
@@ -3222,6 +3194,11 @@ namespace WICR_Estimator.ViewModels
             TotalSlopingPrice = finalSCost; //* (1 + markUpPerc / 100);
             TotalSystemPrice = finalSyCost; //* (1 + markUpPerc / 100);
             TotalSubcontractLabor = finalSubLabCost; // * (1 + markUpPerc / 100);
+            CostperSqftSlope = finalSCost / (totalSqft + deckPerimeter);
+            CostperSqftMetal=finalMCost/(totalSqft + deckPerimeter);
+            CostperSqftMaterial= finalSyCost / (totalSqft + deckPerimeter);
+            CostperSqftSubContract= finalSubLabCost / (totalSqft + deckPerimeter);
+            TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
             TotalSale = TotalMetalPrice + TotalSlopingPrice + TotalSystemPrice + TotalSubcontractLabor;
             OnPropertyChanged("TotalMetalPrice");
             OnPropertyChanged("TotalSlopingPrice");

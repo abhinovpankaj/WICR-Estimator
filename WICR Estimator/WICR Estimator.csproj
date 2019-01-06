@@ -133,6 +133,7 @@
     <Compile Include="ViewModels\MaterialViewModel.cs" />
     <Compile Include="ViewModels\MetalBaseViewModel.cs" />
     <Compile Include="ViewModels\MetalViewModel.cs" />
+    <Compile Include="ViewModels\ParkingMaterialViewModel.cs" />
     <Compile Include="ViewModels\PedestrianMaterialViewModel.cs" />
     <Compile Include="ViewModels\PedestrianSlopeViewModel.cs" />
     <Compile Include="ViewModels\ProjectViewModel.cs" />

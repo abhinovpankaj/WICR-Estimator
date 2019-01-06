@@ -125,7 +125,7 @@ namespace WICR_Estimator.Models
         public JobSetup(string name)            
         {
             ProjectName = name;
-            if (name=="Pedestrian System")
+            if (name=="Pedestrian System" ||name=="Parking Garage")
             {
                 IsNewPlywood = false;
             }
@@ -149,7 +149,7 @@ namespace WICR_Estimator.Models
             {
                 FirstCheckBoxLabel = "Is This Job Specified By Architect";
             }
-            else if (name=="Pedestrian System")
+            else if (name=="Pedestrian System"  || name == "Parking Garage")
             {
                 FirstCheckBoxLabel = "Reseal ?";
             }

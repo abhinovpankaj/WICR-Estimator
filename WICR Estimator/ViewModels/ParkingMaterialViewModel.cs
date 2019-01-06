@@ -7,14 +7,9 @@ using WICR_Estimator.Models;
 
 namespace WICR_Estimator.ViewModels
 {
-    public class PedestrianMaterialViewModel:MaterialBaseViewModel
+    class ParkingMaterialViewModel:PedestrianMaterialViewModel
     {
-        public Dictionary<string, string> MaterialNames;
-        public double TotalSqftPlywood=0;
-        public bool IsReseal;
-        public bool? IsNewPlaywood;
-        public bool RequireFlashing;
-        public PedestrianMaterialViewModel(Totals metalTotals, Totals slopeTotals, JobSetup Js) : base(metalTotals, slopeTotals, Js)
+        public ParkingMaterialViewModel(Totals metalTotals, Totals slopeTotals, JobSetup Js) : base(metalTotals, slopeTotals, Js)
         {
             MaterialNames = new Dictionary<string, string>();
             TotalSqftPlywood = Js.TotalSqftPlywood;
@@ -26,74 +21,33 @@ namespace WICR_Estimator.ViewModels
             FetchMaterialValuesAsync(false);
 
         }
+        private void FillMaterialList()
+        {
+            MaterialNames.Add("SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)", "0");
+            MaterialNames.Add("REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH) UPI 7013 SC BASE COAT", "0");
+            MaterialNames.Add("Striping for small cracKs (less than 1/8\")","0");
+            MaterialNames.Add("Route and caulk moving cracks (greater than 1/8\")","0");
+            MaterialNames.Add("7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL", "2 GAL KIT");
+            MaterialNames.Add("INTERLAMINATE PRIMER (XYLENE) FROM LOWRYS", "0");
+            MaterialNames.Add("7013 SC BASE COAT/ 5 GAL PAILS 30 MILS", "5 GAL PAIL");
+            MaterialNames.Add("7016 - AR - INTERMEDIATE COAT / 5 GAL PAILS 20 MILS", "5 GAL PAIL");
+            MaterialNames.Add("SECOND INTERMEDIATE COAT FOR HIGH TRAFFIC", "0");
+            MaterialNames.Add("7016 SC TOP COAT/ 5 GAL PAILS 16 MILS", "5 GAL PAIL");
 
-        private void setUnitChangeValues()
-        {
-            SystemMaterial item = SystemMaterials.Where(x => x.Name == "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)").FirstOrDefault();
-            if (item != null)
-            {
-                
-                double unit = 0;
-                
-                Double.TryParse(item.SMUnits,out unit);
-                item.SMSqftH = unit;
-                item.Qty = unit / item.Coverage;
-                item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, 0, 0);
-                item.LaborExtension = item.Hours==0?0:item.Hours> item.SetupMinCharge? item.Hours * laborRate: item.SetupMinCharge*laborRate;
-                item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft+TotalSqftPlywood);
+            MaterialNames.Add("2/16 MESH SAND/ #100 LB", "100 LB BAG");
+            MaterialNames.Add("3 IN. WHITE GLASS TAPE (PERIMETER)", "150' ROLL");
+            MaterialNames.Add("SIKA 1-A CAULKING (PERIMETER)", "TUBE");
+            MaterialNames.Add("DETAIL TAPE (NEW PLYWOOD)", "150' ROLL");
+            MaterialNames.Add("SIKA 1-A CAULKING (NEW PLYWOOD)", "TUBE");
 
-            }
-        }
-        public override void CalculateLaborMinCharge()
-        {
-            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
-                                        x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
+            MaterialNames.Add("UI 7118 CONCRETE PRIMER 2 gal kit", "2 GAL KIT");
+            MaterialNames.Add("9801 ACCELERATOR", "GALLON");
+            //materialNames.Add("STAIR NOSING OVER CONCRETE", " ");
+            MaterialNames.Add("INTEGRAL STAIR NOSING (EXCEL STYLE)", "LF");
+            MaterialNames.Add("EXTRA STAIR NOSING", "LF");
+            MaterialNames.Add("Plywood 3/4 & blocking (# of 4x8 sheets)", "4X8 Sheets");
+            MaterialNames.Add("Stucco Material Remove and replace (LF)", "LF");
 
-            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 :
-                                                (20 - LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate;
-            base.CalculateLaborMinCharge();
-        }
-
-        public override bool IncludedInLaborMin(string matName)
-        {
-            switch (matName)
-            {
-                case "INTEGRAL STAIR NOSING (EXCEL STYLE)":
-                case "EXTRA STAIR NOSING":
-                case "Plywood 3/4 & blocking (# of 4x8 sheets)":
-                case "Stucco Material Remove and replace (LF)":
-                    return false;
-                default:
-                    return true;
-            }
-        }
-        public override void calculateLaborHrs()
-        {
-            calLaborHrs(6);
-
-        }
-        public override void JobSetup_OnJobSetupChange(object sender, EventArgs e)
-        {
-            JobSetup Js = sender as JobSetup;
-            if (Js!=null)
-            {
-                TotalSqftPlywood = Js.TotalSqftPlywood;
-                IsReseal = Js.IsApprovedForSandCement;
-                IsNewPlaywood = Js.IsNewPlywood;
-                RequireFlashing = Js.IsFlashingRequired;
-                hasContingencyDisc = Js.TotalSqft + Js.TotalSqftPlywood > 1000 ? true : false;
-                
-            }
-            
-            base.JobSetup_OnJobSetupChange(sender, e);
-        }
-        public override void ApplyCheckUnchecks(object obj)
-        {
-            //base.ApplyCheckUnchecks(obj);
-        }
-        public override bool canApply(object obj)
-        {
-            return true;
         }
 
         public override void FetchMaterialValuesAsync(bool hasSetupChanged)
@@ -107,11 +61,14 @@ namespace WICR_Estimator.ViewModels
                 {
                     qtyList.Add(item.Name, item.Qty);
                 }
-                if (item.Name == "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)")
+                if (item.Name == "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH) UPI 7013 SC BASE COAT"
+                    ||item.Name== "Striping for small cracKs (less than 1/8\")"
+                    ||item.Name== "Route and caulk moving cracks (greater than 1/8\")"
+                    ||item.Name== "SECOND INTERMEDIATE COAT FOR HIGH TRAFFIC")
                 {
                     double unit = 0;
                     double.TryParse(item.SMUnits, out unit);
-                    qtyList.Add(item.Name,unit);
+                    qtyList.Add(item.Name, unit);
                 }
 
             }
@@ -140,7 +97,10 @@ namespace WICR_Estimator.ViewModels
 
                         }
                     }
-                    if (SystemMaterials[i].Name == "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)")
+                    if (SystemMaterials[i].Name == "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH) UPI 7013 SC BASE COAT"
+                    || SystemMaterials[i].Name == "Striping for small cracKs (less than 1/8\")"
+                    || SystemMaterials[i].Name == "Route and caulk moving cracks (greater than 1/8\")"
+                    || SystemMaterials[i].Name == "SECOND INTERMEDIATE COAT FOR HIGH TRAFFIC")
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
@@ -175,63 +135,97 @@ namespace WICR_Estimator.ViewModels
             CalculateLaborMinCharge();
             CalculateAllMaterial();
         }
-        private void FillMaterialList()
+        private void setUnitChangeValues()
         {
-            MaterialNames.Add("SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)","0");
-            MaterialNames.Add("REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)", "0");
-            MaterialNames.Add("7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL", "2 GAL KIT");
-            MaterialNames.Add("INTERLAMINATE PRIMER (XYLENE) FROM LOWRYS", "0");
-            MaterialNames.Add("7013 SC BASE COAT/ 5 GAL PAILS 40 MILS", "5 GAL PAIL");
-            MaterialNames.Add("7016 - AR - INTERMEDIATE COAT / 5 GAL PAILS 20 MILS", "5 GAL PAIL");
-            MaterialNames.Add("7016 - AL - SC TOP COAT / 5 GAL PAILS 16 MILS", "5 GAL PAIL");
-            MaterialNames.Add("1/20 SAND/ #100 LB", "100 LB BAG");
-            MaterialNames.Add("3 IN. WHITE GLASS TAPE (PERIMETER)", "150' ROLL");
-            MaterialNames.Add("SIKA 1-A CAULKING (PERIMETER)", "TUBE");
-            MaterialNames.Add("DETAIL TAPE (NEW PLYWOOD)", "150' ROLL");
-            MaterialNames.Add("SIKA 1-A CAULKING (NEW PLYWOOD)", "TUBE");
-           
-            MaterialNames.Add("UI 7118 CONCRETE PRIMER 1-1/2 GAL KIT", "1 1/2 GAL KIT");
-            MaterialNames.Add("9801 ACCELERATOR", "GALLON");
-            //materialNames.Add("STAIR NOSING OVER CONCRETE", " ");
-            MaterialNames.Add("INTEGRAL STAIR NOSING (EXCEL STYLE)", "LF");
-            MaterialNames.Add("EXTRA STAIR NOSING", "LF");
-            MaterialNames.Add("Plywood 3/4 & blocking (# of 4x8 sheets)", "4X8 Sheets");
-            MaterialNames.Add("Stucco Material Remove and replace (LF)", "LF");
+            SystemMaterial item = SystemMaterials.Where(x => x.Name == "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH) UPI 7013 SC BASE COAT").FirstOrDefault();
+            if (item != null)
+            {
 
+                double unit = 0;
+
+                Double.TryParse(item.SMUnits, out unit);
+                item.SMSqftH = unit;
+                item.Qty = unit / item.Coverage;
+                item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, 0, 0);
+                item.LaborExtension = item.Hours == 0 ? 0 : item.Hours > item.SetupMinCharge ? item.Hours * laborRate : item.SetupMinCharge * laborRate;
+                item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft + TotalSqftPlywood);
+
+            }
+            item = SystemMaterials.Where(x => x.Name == "Striping for small cracKs (less than 1/8\")").FirstOrDefault();
+            if (item != null)
+            {
+
+                double unit = 0;
+
+                Double.TryParse(item.SMUnits, out unit);
+                item.SMSqftH = unit;
+                item.Qty = unit / item.Coverage;
+                item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, 0, 0);
+                item.LaborExtension = item.Hours == 0 ? 0 : item.Hours > item.SetupMinCharge ? item.Hours * laborRate : item.SetupMinCharge * laborRate;
+                item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft + TotalSqftPlywood);
+
+            }
+            item = SystemMaterials.Where(x => x.Name == "Route and caulk moving cracks (greater than 1/8\")").FirstOrDefault();
+            if (item != null)
+            {
+
+                double unit = 0;
+
+                Double.TryParse(item.SMUnits, out unit);
+                item.SMSqftH = unit;
+                item.Qty = unit / item.Coverage;
+                item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, 0, 0);
+                item.LaborExtension = item.Hours == 0 ? 0 : item.Hours > item.SetupMinCharge ? item.Hours * laborRate : item.SetupMinCharge * laborRate;
+                item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft + TotalSqftPlywood);
+
+            }
+
+            item = SystemMaterials.Where(x => x.Name == "RSECOND INTERMEDIATE COAT FOR HIGH TRAFFIC").FirstOrDefault();
+            if (item != null)
+            {
+                double unit = 0;
+                Double.TryParse(item.SMUnits, out unit);
+                item.SMSqftH = unit;
+                item.Qty = unit / item.Coverage;
+                item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, 0, 0);
+                item.LaborExtension = item.Hours == 0 ? 0 : item.Hours > item.SetupMinCharge ? item.Hours * laborRate : item.SetupMinCharge * laborRate;
+                item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft + TotalSqftPlywood);
+
+            }
         }
-
+        
         public override double getLaborUnitPrice(double laborExtension, double riserCount, double totalSqft, double sqftVert = 0, double sqftHor = 0, double sqftStairs = 0, string matName = "")
         {
-            //return base.getLaborUnitPrice(laborExtension, riserCount, totalSqft, sqftVert, sqftHor, sqftStairs, matName);
+            
             return laborExtension / (TotalSqftPlywood + totalSqft + riserCount);
         }
 
         public override double CalculateLabrExtn(double calhrs, double setupMin, string matName = "")
         {
-            
-            return calhrs == 0 ? 0 : calhrs > setupMin ?calhrs * laborRate : setupMin * laborRate;
+
+            return calhrs == 0 ? 0 : calhrs > setupMin ? calhrs * laborRate : setupMin * laborRate;
         }
         public override bool getCheckboxCheckStatus(string materialName)
         {
             switch (materialName)
             {
-                case "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)":
-                
+                case "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH) UPI 7013 SC BASE COAT":
                 case "EXTRA STAIR NOSING":
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
+                case "INTERLAMINATE PRIMER (XYLENE) FROM LOWRYS":
                 case "Stucco Material Remove and replace (LF)":
                     return false;
                 case "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL":
                     return IsReseal;
-                case "INTERLAMINATE PRIMER (XYLENE) FROM LOWRYS":
-                case "7013 SC BASE COAT/ 5 GAL PAILS 40 MILS":
+                
+                case "7013 SC BASE COAT/ 5 GAL PAILS 30 MILS":
                 case "INTEGRAL STAIR NOSING (EXCEL STYLE)":
                     return !IsReseal;
                 case "DETAIL TAPE (NEW PLYWOOD)":
                 case "SIKA 1-A CAULKING (NEW PLYWOOD)":
                     return IsNewPlaywood.Value;
-                case "UI 7118 CONCRETE PRIMER 1-1/2 GAL KIT":
-                    return totalSqft < 1 ? false : !IsReseal;
+                case "UI 7118 CONCRETE PRIMER 2 gal k":
+                    return totalSqft >0  ? true : false;
                 case "STAIR NOSING OVER CONCRETE":
                     return totalSqft > 0 || RequireFlashing == true ? true : false;
                 default:
@@ -241,13 +235,14 @@ namespace WICR_Estimator.ViewModels
 
         public override bool getCheckboxEnabledStatus(string materialName)
         {
-            switch (materialName)
-            {
-                case "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)":
-                    return true;
-                default:
-                    return false;
-            }
+            return false;
+            //switch (materialName)
+            //{
+            //    case "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)":
+            //        return true;
+            //    default:
+            //        return false;
+            //}
         }
 
         public override void setCheckBoxes()
@@ -264,7 +259,7 @@ namespace WICR_Estimator.ViewModels
             switch (materialName)
             {
                 case "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)":
-                case "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)":
+                case "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH) UPI 7013 SC BASE COAT":
                 case "9801 ACCELERATOR":
                 case "EXTRA STAIR NOSING":
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
@@ -281,7 +276,7 @@ namespace WICR_Estimator.ViewModels
                 case "INTEGRAL STAIR NOSING (EXCEL STYLE)":
                     return riserCount;
                 default:
-                    return TotalSqftPlywood+totalSqft+riserCount*stairWidth*2;
+                    return TotalSqftPlywood + totalSqft + riserCount * stairWidth * 2;
             }
         }
 
@@ -290,26 +285,29 @@ namespace WICR_Estimator.ViewModels
             switch (materialName)
             {
                 case "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)":
-                    return 1;
-                case "7016 - AR - INTERMEDIATE COAT / 5 GAL PAILS 20 MILS":
-                case "7016 - AL - SC TOP COAT / 5 GAL PAILS 16 MILS":
+                    return 0;
+                case "7016 - AR - SC INTERMEDIATE/ 5 GAL PAILS 20 MILS":
+                case "7016 SC TOP COAT/ 5 GAL PAILS 16 MILS":
                     return lfArea / coverage < 0.5 ? 0.5 : lfArea / coverage;
                 case "INTEGRAL STAIR NOSING (EXCEL STYLE)":
                     double locVal = 0;
                     locVal = 4 * lfArea;
                     return locVal;
+                
                 default:
-                    return lfArea/coverage;
+                    return lfArea / coverage;
             }
         }
         //calculateQTY for 9801 ACCELERATOR
         public override void calculateRLqty()
-        {            
+        {
             double qty = 0;
             foreach (var item in SystemMaterials)
             {
-                if (item.Name == "7013 SC BASE COAT/ 5 GAL PAILS 40 MILS" ||
-                    item.Name == "7016 - AR - INTERMEDIATE COAT / 5 GAL PAILS 20 MILS" || item.Name == "7016 - AL - SC TOP COAT / 5 GAL PAILS 16 MILS")
+                if (item.Name == "7013 SC BASE COAT/ 5 GAL PAILS 30 MILS" ||
+                    item.Name == "7016 - AR - SC INTERMEDIATE/ 5 GAL PAILS 20 MILS" ||
+                    item.Name == "7016 SC TOP COAT/ 5 GAL PAILS 16 MILS" ||
+                    item.Name== "SECOND INTERMEDIATE COAT FOR HIGH TRAFFIC")
                 {
                     if (item.IsMaterialChecked)
                     {
@@ -319,7 +317,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
             SystemMaterial sysmat = SystemMaterials.Where(x => x.Name == "9801 ACCELERATOR").FirstOrDefault();
-            
+
             sysmat.Qty = qty / sysmat.Coverage;
         }
 
@@ -330,20 +328,20 @@ namespace WICR_Estimator.ViewModels
             if (item != null)
             {
                 item.SMSqftH = item.Qty * 32;
-                
-                item.Hours = CalculateHrs(item.SMSqftH,item.HorizontalProductionRate, 0, 0);
-                
-                item.LaborExtension=item.Hours==0?0:item.Hours > item.SetupMinCharge ? item.Hours * laborRate : item.SetupMinCharge * laborRate;
+
+                item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, 0, 0);
+
+                item.LaborExtension = item.Hours == 0 ? 0 : item.Hours > item.SetupMinCharge ? item.Hours * laborRate : item.SetupMinCharge * laborRate;
                 item.LaborUnitPrice = item.LaborExtension / item.Qty;
 
             }
             item = SystemMaterials.Where(x => x.Name == "Stucco Material Remove and replace (LF)").FirstOrDefault();
             if (item != null)
             {
-                item.SMSqftH = item.Qty ;
+                item.SMSqftH = item.Qty;
 
                 item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, 0, 0);
-                
+
                 item.LaborExtension = item.Hours == 0 ? 0 : item.Hours > item.SetupMinCharge ? item.Hours * laborRate : item.SetupMinCharge * laborRate;
                 item.LaborUnitPrice = item.LaborExtension / item.Qty;
 
@@ -352,14 +350,20 @@ namespace WICR_Estimator.ViewModels
             item = SystemMaterials.Where(x => x.Name == "EXTRA STAIR NOSING").FirstOrDefault();
             if (item != null)
             {
-                item.StairSqft = item.Qty ;
+                item.StairSqft = item.Qty;
 
                 item.Hours = CalculateHrs(0, 0, item.StairSqft, item.StairsProductionRate);
-                
+
                 item.LaborExtension = item.Hours == 0 ? 0 : item.Hours > item.SetupMinCharge ? item.Hours * laborRate : item.SetupMinCharge * laborRate;
-                item.LaborUnitPrice = item.LaborExtension / (TotalSqftPlywood+totalSqft+riserCount);
+                item.LaborUnitPrice = item.LaborExtension / (TotalSqftPlywood + totalSqft + riserCount);
 
             }
+            item = SystemMaterials.Where(x => x.Name == "Striping for small cracKs (less than 1/8\")").FirstOrDefault();
+            if (item!=null)
+            {
+                item.SMUnits = totalSqft.ToString();
+            }
+           
         }
         public override double getSqFtAreaH(string materialName)
         {
@@ -386,7 +390,7 @@ namespace WICR_Estimator.ViewModels
             switch (materialName)
             {
                 case "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)":
-                    return riserCount*stairWidth;
+                    return riserCount * stairWidth;
                 case "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL":
                 case "INTERLAMINATE PRIMER (XYLENE) FROM LOWRYS":
                 case "DETAIL TAPE (NEW PLYWOOD)":
@@ -404,8 +408,5 @@ namespace WICR_Estimator.ViewModels
                     return 0.0000001;
             }
         }
-
     }
-        
-    
 }

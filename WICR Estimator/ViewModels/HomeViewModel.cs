@@ -91,34 +91,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
-        //public System.Collections.IList SelectedItems
-        //{
-        //    get
-        //    {
-        //        return SelectedProjects;
-        //    }
-        //    set
-        //    {
-
-        //        foreach (Project item in Projects)
-        //        {
-        //            item.IsSelectedProject = false;
-        //        }
-        //        foreach (Project prj in value)
-        //        {
-                    
-        //            prj.IsSelectedProject = true;
-        //            if (!SelectedProjects.Contains(prj))
-        //            {
-        //                SelectedProjects.Add(prj);
-        //            }
-        //        }
-        //        OnPropertyChanged("SelectedProjects");
-
-        //        MyselectedProjects = SelectedProjects;
-
-        //    }
-        //}
+        
         public static ObservableCollection<Project> MyselectedProjects;
         private ObservableCollection<Project> selectedProjects;
 
@@ -174,6 +147,7 @@ namespace WICR_Estimator.ViewModels
             }
             OnPropertyChanged("LoginMessage");
         }
+
         void FillProjects()
         {
             Projects = new ObservableCollection<Project>();
@@ -186,7 +160,7 @@ namespace WICR_Estimator.ViewModels
             //Projects.Add(new Project { Name = "Dexcellent II", Rank = 6, GrpName = "Nevada Coatings" });
             //Projects.Add(new Project { Name = "Pli-Dek", Rank = 7, GrpName = "Pli-Dek" });
             Projects.Add(new Project { Name = "Pedestrian System", Rank = 8,GrpName= "UPI" });
-            //Projects.Add(new Project { Name = "Vehicular System", Rank = 9, GrpName = "UPI" });
+            Projects.Add(new Project { Name = "Parking Garage", Rank = 9, GrpName = "UPI" });
             //Projects.Add(new Project { Name = "Tufflex", Rank = 10, GrpName = "UPI" });
             Projects.Add(new Project { Name = "Westcoat Color Wash", Rank = 11, GrpName = "Westcoat" });
             //Projects.Add(new Project { Name = "ALX", Rank = 12, GrpName = "Westcoat" });

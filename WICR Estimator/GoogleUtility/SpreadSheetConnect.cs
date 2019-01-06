@@ -101,6 +101,9 @@ namespace WICR_Estimator.GoogleUtility
                 case "Pedestrian System":
                     prjName = "Pedestrian";
                     break;
+                case "Parking Garage":
+                    prjName = "Parking";
+                    break;
                 default:
                     break;
             }

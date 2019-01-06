@@ -20,6 +20,7 @@ namespace WICR_Estimator
                 case "Enduro Kote Metal":
                 case "Desert Brand":
                 case "Pedestrian System":
+                case "Parking Garage":
                 case "Dexotex Barrier Gaurd":
                     return new MetalViewModel(Js);
                 //case "Dexotex Barrier Gaurd":
@@ -45,6 +46,7 @@ namespace WICR_Estimator
                 case "Dexotex Barrier Gaurd":
                     return new DexoSlopeViewModel(Js);
                 case "Pedestrian System":
+                case "Parking Garage":
                     return new PedestrianSlopeViewModel(Js);
                 default:
                     return null;
@@ -72,6 +74,8 @@ namespace WICR_Estimator
                     return new DesertbrandMaterialViewModel(metalT, slopeT, Js);
                 case "Pedestrian System":
                     return new PedestrianMaterialViewModel(metalT, slopeT, Js);
+                case "Parking Garage":
+                    return new ParkingMaterialViewModel(metalT, slopeT, Js);
                 default:
                     return null;
 

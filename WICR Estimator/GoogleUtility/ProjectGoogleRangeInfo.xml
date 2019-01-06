@@ -58,5 +58,11 @@
     <SlopeRange>P645:Q662</SlopeRange>
     <MaterialRange>H674:N692</MaterialRange>
   </Pedestrian>
-
+  <Parking>
+    <RateRange>E2</RateRange>
+    <MetalRange>F3:M43</MetalRange>
+    <LaborRange>E805:E824</LaborRange>
+    <SlopeRange>P740:Q757</SlopeRange>
+    <MaterialRange>H770:N791</MaterialRange>
+  </Parking>
 </Projects>

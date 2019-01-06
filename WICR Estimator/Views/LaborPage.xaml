@@ -394,7 +394,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-                
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Border Grid.ColumnSpan="2" Background="Black">
                 <TextBlock Text="TOTAL COST FOR CUSTOMER"
@@ -402,7 +402,7 @@
                            Foreground="White"
                            FontSize="14" FontWeight="Bold"/>
             </Border>
-            <Border Grid.Column="2" Grid.ColumnSpan="4" Background="Black"
+            <Border Grid.Column="2" Grid.ColumnSpan="5" Background="Black"
                     BorderBrush="Blue" BorderThickness="2,0,0,0">
                 <TextBlock Text="TOTAL WICR JOB COST" 
                            Foreground="White"
@@ -714,7 +714,55 @@
                     </Border>
                 </ListBoxItem>
             </ListBox>
-            
+            <ListBox Grid.Row="1"  Background="AliceBlue"
+                     Grid.Column="6">
+                <ListBoxItem HorizontalAlignment="Center">
+                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,1">
+                        <TextBlock Text="Total Cost Per Sqft"
+                           HorizontalAlignment="Stretch"
+                               Width="100" FontWeight="Bold"/>
+                    </Border>
+
+                </ListBoxItem>
+                <ListBoxItem HorizontalAlignment="Center">
+                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,1">
+                        <TextBlock Width="100"
+                            Text="{Binding CostperSqftSlope,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
+                    </Border>
+                </ListBoxItem>
+                <ListBoxItem HorizontalAlignment="Center">
+                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,1">
+                        <TextBlock Width="100" Text="{Binding CostperSqftMetal ,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
+                    </Border>
+                </ListBoxItem>
+                <ListBoxItem HorizontalAlignment="Center">
+                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,1">
+                        <TextBlock Width="100"
+                                   Text="{Binding CostperSqftMaterial,StringFormat=N2}"/>
+                    </Border>
+                </ListBoxItem>
+                <ListBoxItem HorizontalAlignment="Center">
+                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,2">
+                        <TextBlock Width="100"
+                            Text="{Binding CostperSqftSubContract,
+                            StringFormat=N2}"/>
+                    </Border>
+
+                </ListBoxItem>
+                <ListBoxItem HorizontalAlignment="Center"  Margin="0,5,0,0">
+                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,0">
+                        <TextBlock HorizontalAlignment="Stretch" Width="100"
+                                   FontWeight="Bold"
+                        Text="{Binding TotalCostperSqft,StringFormat='c'}"/>
+                    </Border>
+                </ListBoxItem>
+            </ListBox>
         </Grid>
         <StackPanel Orientation="Horizontal" Background="Aquamarine"
                     Margin="0,5,0,5"
