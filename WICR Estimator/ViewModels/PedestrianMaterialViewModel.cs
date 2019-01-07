@@ -81,8 +81,7 @@ namespace WICR_Estimator.ViewModels
                 IsReseal = Js.IsApprovedForSandCement;
                 IsNewPlaywood = Js.IsNewPlywood;
                 RequireFlashing = Js.IsFlashingRequired;
-                hasContingencyDisc = Js.TotalSqft + Js.TotalSqftPlywood > 1000 ? true : false;
-                
+                //hasContingencyDisc = Js.TotalSqft + Js.TotalSqftPlywood > 1000 ? true : false;                
             }
             
             base.JobSetup_OnJobSetupChange(sender, e);

@@ -1229,7 +1229,8 @@ namespace WICR_Estimator.ViewModels
                 hasSpecialPricing = js.HasSpecialPricing;
                 isDiscounted = js.HasDiscount;
                 isApprovedforCement = js.IsApprovedForSandCement;
-                hasContingencyDisc = hasContingencyDisc && js.HasContingencyDisc;
+                
+                hasContingencyDisc = js.HasContingencyDisc;
                 MarkUpPerc = js.MarkupPercentage;
                 deckCount = js.DeckCount;
             }
