@@ -84,16 +84,16 @@ namespace WICR_Estimator.Models
         }
         
 
-        public double LaborPercentage
+        public string LaborPercentage
         {
             get
             {
                 if (MaterialViewModel != null)
                 {
-                    return Math.Round(MaterialViewModel.AllTabsLaborTotal/ MaterialViewModel.TotalSale *100,2);
+                    return Math.Round(MaterialViewModel.AllTabsLaborTotal/ MaterialViewModel.TotalSale *100,2).ToString()+"%";
                 }
                 else
-                    return 0;
+                    return "";
             }
         }
         public double TotalCost {
@@ -199,7 +199,8 @@ namespace WICR_Estimator.Models
 
         private void UpdateJobSetUp(object obj)
         {
-            this.MetalViewModel.CalculateCost(null);
+            if(this.MetalViewModel!=null)
+             this.MetalViewModel.CalculateCost(null);
         }
 
         //private void ProjectJobSetUp_OnJobSetupChange(object sender, EventArgs e)

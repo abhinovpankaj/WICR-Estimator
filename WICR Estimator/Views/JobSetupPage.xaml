@@ -108,7 +108,12 @@
                           IsChecked="{Binding IsNewPlywood,
                     UpdateSourceTrigger=PropertyChanged}"
                           Content="New Plywood?"/>
-                <CheckBox Style="{StaticResource CheckBoxStyle}"
+                    <CheckBox Style="{StaticResource CheckBoxStyle}"
+                          Visibility="{Binding IsJobByArchitectVisible}"
+                          IsChecked="{Binding IsJobSpecifiedByArchitect,
+                    UpdateSourceTrigger=PropertyChanged}"
+                          Content="Is This Job Specified By Architect"/>
+                    <CheckBox Style="{StaticResource CheckBoxStyle}"
                           IsChecked="{Binding IsApprovedForSandCement,UpdateSourceTrigger=PropertyChanged}"
                           Content="{Binding FirstCheckBoxLabel}"/>
                 <CheckBox  Style="{StaticResource CheckBoxStyle}"

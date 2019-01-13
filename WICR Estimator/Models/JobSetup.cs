@@ -129,6 +129,10 @@ namespace WICR_Estimator.Models
             {
                 IsNewPlywood = false;
             }
+            if (name=="Desert Crete")
+            {
+                IsJobSpecifiedByArchitect = true; 
+            }
             HidePasswordSection = System.Windows.Visibility.Collapsed;
             IsApprovedForSandCement = true;
             IsPrevalingWage = false;
@@ -145,17 +149,13 @@ namespace WICR_Estimator.Models
             EnableMoreMarkupCommand = new DelegateCommand(CanAddMoreMarkup, canAdd);
             MinMarkUp = -10;
             AllowMoreMarkUp = false;
-            if (name=="Desert Brand")
-            {
-                FirstCheckBoxLabel = "Is This Job Specified By Architect";
-            }
-            else if (name=="Pedestrian System"  || name == "Parking Garage")
+            if (name=="Pedestrian System"  || name == "Parking Garage")
             {
                 FirstCheckBoxLabel = "Reseal ?";
             }
             else
             {
-                FirstCheckBoxLabel = "Approved for Sand & Cement ?";               
+                FirstCheckBoxLabel = "Approved for Sand & Cement ?";              
             }
             
         }
@@ -200,7 +200,7 @@ namespace WICR_Estimator.Models
         {
             get
             {
-                if (ProjectName == "Dexotex Weather Wear" || ProjectName == "Dexotex Weather Wear Rehab")
+                if (ProjectName == "Weather Wear" || ProjectName == "Weather Wear Rehab")
                     return "Linear Footage of Deck Perimeter";
                 else
                     return "Lf Perimeter for Burlap and Membrane";
@@ -576,6 +576,37 @@ namespace WICR_Estimator.Models
             }
         }
 
+        #region DesertCrete
+        private bool? isJobSpecifiedByArchitect;
+        public bool? IsJobSpecifiedByArchitect
+        {
+            get { return isJobSpecifiedByArchitect; }
+            set
+            {
+                if (value!=isJobSpecifiedByArchitect)
+                {
+                    isJobSpecifiedByArchitect = value;
+                    OnPropertyChanged("IsJobSpecifiedByArchitect");
+                    if (OnJobSetupChange != null)
+                    {
+                        OnJobSetupChange(this, EventArgs.Empty);
+                    }
+                }
+            }
+        }
+        public System.Windows.Visibility IsJobByArchitectVisible
+        {
+            get
+            {
+                if (IsJobSpecifiedByArchitect != null)
+                {
+                    return System.Windows.Visibility.Visible;
+                }
+                else
+                    return System.Windows.Visibility.Collapsed;
+            }
+        }
+        #endregion
         #region UPI 
         private bool? isNewPlywood;
         public bool? IsNewPlywood

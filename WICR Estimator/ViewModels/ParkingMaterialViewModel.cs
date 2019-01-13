@@ -30,7 +30,7 @@ namespace WICR_Estimator.ViewModels
             MaterialNames.Add("7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL", "2 GAL KIT");
             MaterialNames.Add("INTERLAMINATE PRIMER (XYLENE) FROM LOWRYS", "0");
             MaterialNames.Add("7013 SC BASE COAT/ 5 GAL PAILS 30 MILS", "5 GAL PAIL");
-            MaterialNames.Add("7016 - AR - INTERMEDIATE COAT / 5 GAL PAILS 20 MILS", "5 GAL PAIL");
+            MaterialNames.Add("7016 - AR - SC INTERMEDIATE/ 5 GAL PAILS 20 MILS", "5 GAL PAIL");
             MaterialNames.Add("SECOND INTERMEDIATE COAT FOR HIGH TRAFFIC", "0");
             MaterialNames.Add("7016 SC TOP COAT/ 5 GAL PAILS 16 MILS", "5 GAL PAIL");
 
@@ -144,6 +144,7 @@ namespace WICR_Estimator.ViewModels
                 double unit = 0;
 
                 Double.TryParse(item.SMUnits, out unit);
+                item.SMSqft = unit;
                 item.SMSqftH = unit;
                 item.Qty = unit / item.Coverage;
                 item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, 0, 0);
@@ -159,6 +160,7 @@ namespace WICR_Estimator.ViewModels
 
                 Double.TryParse(item.SMUnits, out unit);
                 item.SMSqftH = unit;
+                item.SMSqft = unit;
                 item.Qty = unit / item.Coverage;
                 item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, 0, 0);
                 item.LaborExtension = item.Hours == 0 ? 0 : item.Hours > item.SetupMinCharge ? item.Hours * laborRate : item.SetupMinCharge * laborRate;
@@ -173,6 +175,7 @@ namespace WICR_Estimator.ViewModels
 
                 Double.TryParse(item.SMUnits, out unit);
                 item.SMSqftH = unit;
+                item.SMSqft = unit;
                 item.Qty = unit / item.Coverage;
                 item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, 0, 0);
                 item.LaborExtension = item.Hours == 0 ? 0 : item.Hours > item.SetupMinCharge ? item.Hours * laborRate : item.SetupMinCharge * laborRate;
@@ -180,18 +183,20 @@ namespace WICR_Estimator.ViewModels
 
             }
 
-            item = SystemMaterials.Where(x => x.Name == "RSECOND INTERMEDIATE COAT FOR HIGH TRAFFIC").FirstOrDefault();
+            item = SystemMaterials.Where(x => x.Name == "SECOND INTERMEDIATE COAT FOR HIGH TRAFFIC").FirstOrDefault();
             if (item != null)
             {
                 double unit = 0;
                 Double.TryParse(item.SMUnits, out unit);
                 item.SMSqftH = unit;
+                item.SMSqft = unit;
                 item.Qty = unit / item.Coverage;
                 item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, 0, 0);
                 item.LaborExtension = item.Hours == 0 ? 0 : item.Hours > item.SetupMinCharge ? item.Hours * laborRate : item.SetupMinCharge * laborRate;
                 item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft + TotalSqftPlywood);
 
             }
+            calculateRLqty();
         }
         
         public override double getLaborUnitPrice(double laborExtension, double riserCount, double totalSqft, double sqftVert = 0, double sqftHor = 0, double sqftStairs = 0, string matName = "")
@@ -250,8 +255,16 @@ namespace WICR_Estimator.ViewModels
             //base.setCheckBoxes();
             foreach (SystemMaterial item in SystemMaterials)
             {
-                item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
+                if (item.Name== "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL"||
+                    item.Name== "INTERLAMINATE PRIMER (XYLENE) FROM LOWRYS"||
+                    item.Name== "7013 SC BASE COAT/ 5 GAL PAILS 30 MILS"||
+                    item.Name== "INTEGRAL STAIR NOSING (EXCEL STYLE)")
+                {
+                    item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
+                }
+                
             }
+
 
         }
         public override double getlfArea(string materialName)
@@ -372,10 +385,13 @@ namespace WICR_Estimator.ViewModels
             {
                 case "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL":
                 case "INTERLAMINATE PRIMER (XYLENE) FROM LOWRYS":
-                case "7013 SC BASE COAT/ 5 GAL PAILS 40 MILS":
-                case "7016 - AR - INTERMEDIATE COAT / 5 GAL PAILS 20 MILS":
-                case "7016 - AL - SC TOP COAT / 5 GAL PAILS 16 MILS":
+                case "7013 SC BASE COAT/ 5 GAL PAILS 30 MILS":
+                case "7016 - AR - SC INTERMEDIATE/ 5 GAL PAILS 20 MILS":
+                case "7016 SC TOP COAT/ 5 GAL PAILS 16 MILS":
+                
                     return totalSqft + TotalSqftPlywood;
+                case "UI 7118 CONCRETE PRIMER 2 gal kit":
+                    return totalSqft;
                 case "3 IN. WHITE GLASS TAPE (PERIMETER)":
                     return deckPerimeter;
                 case "DETAIL TAPE (NEW PLYWOOD)":
@@ -396,9 +412,9 @@ namespace WICR_Estimator.ViewModels
                 case "DETAIL TAPE (NEW PLYWOOD)":
                 case "UI 7118 CONCRETE PRIMER 1-1/2 GAL KIT":
                     return riserCount * 4.5 * 2;
-                case "7013 SC BASE COAT/ 5 GAL PAILS 40 MILS":
-                case "7016 - AR - INTERMEDIATE COAT / 5 GAL PAILS 20 MILS":
-                case "7016 - AL - SC TOP COAT / 5 GAL PAILS 16 MILS":
+                case "7013 SC BASE COAT/ 5 GAL PAILS 30 MILS":
+                case "7016 - AR - SC INTERMEDIATE/ 5 GAL PAILS 20 MILS":
+                case "7016 SC TOP COAT/ 5 GAL PAILS 16 MILS":
                     return riserCount;
                 case "3 IN. WHITE GLASS TAPE (PERIMETER)":
                     return riserCount * 2 * 2;

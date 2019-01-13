@@ -187,7 +187,11 @@ namespace WICR_Estimator.Models
                 {
                     smunits = value;
                     OnPropertyChanged("SMUnits");
-                    if (Name== "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)")
+                    if (Name== "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)"||
+                        Name== "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH) UPI 7013 SC BASE COAT"
+                        ||Name== "Striping for small cracKs (less than 1/8\")"
+                        ||Name== "Route and caulk moving cracks (greater than 1/8\")"
+                        ||Name== "SECOND INTERMEDIATE COAT FOR HIGH TRAFFIC")
                     {
                         int unit = 0;
                         Int32.TryParse(value, out unit);

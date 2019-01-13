@@ -165,20 +165,7 @@ namespace WICR_Estimator.Models
         }
 
         public double SetupMinCharge { get; set; }
-        //private double setupMinCharge;
-        //public double SetupMinCharge
-        //{
-        //    get { return setupMinCharge; }
-
-        //    set
-        //    {
-        //        if (value != setupMinCharge)
-        //        {
-        //            setupMinCharge = value;
-        //            OnPropertyChanged("SetupMinCharge");
-        //        }
-        //    }
-        //}
+        
         private double laborUnitPrice;
         public double LaborUnitPrice
         {

@@ -77,25 +77,25 @@ namespace WICR_Estimator.GoogleUtility
             }
             switch (projectName)
             {
-                case "Dexotex Weather Wear":
+                case "Weather Wear":
                     prjName = "WeatherWear";
                     break;
-                case "Dexotex Weather Wear Rehab":
+                case "Weather Wear Rehab":
                     prjName = "WeatherWearRehab";
                     break;
-                case "Dexotex Barrier Gaurd":
+                case "Barrier Gaurd":
                     prjName = "DexotexBarrier";
                     break;
-                case "Enduro Kote Metal":
+                case "Endurokote":
                     prjName = "EnduroKote";
                     break;
-                case "Weather Wear Reseal":
+                case "Reseal all systems":
                     prjName = "WeatherWearReseal";
                     break;
-                case "Westcoat Color Wash":
+                case "Color Wash Reseal":
                     prjName = "WestcoatColor";
                     break;
-                case "Desert Brand":
+                case "Desert Crete":
                     prjName = "DesertBrand";
                     break;
                 case "Pedestrian System":

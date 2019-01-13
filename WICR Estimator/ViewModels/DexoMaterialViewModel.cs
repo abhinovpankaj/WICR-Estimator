@@ -214,7 +214,7 @@ namespace WICR_Estimator.ViewModels
                 case "Aj-44A Dressing(Sealer)":
                 case "Vista Paint Acripoxy":
                 case "Lip Color":
-                //case "Weather Seal XL Coat":
+                case "Weather Seal XL Coat":
                 case "Glass mat #4 1200 SF ROLL FROM ACME":
                     return totalSqft;
                 case "R&R Sealant 1/2 to 3/4 inch control joints (Sonneborn NP-2)":
@@ -375,6 +375,7 @@ namespace WICR_Estimator.ViewModels
                 case "Glass mat #4 1200 SF ROLL FROM ACME":
                 case "Stair Nosing From Dexotex":
                 case "Resistite Liquid":
+                case "Weather Seal XL Coat":
                     return true;
                 case "R&R Sealant 1/2 to 3/4 inch control joints (Sonneborn NP-2)":
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
@@ -382,7 +383,7 @@ namespace WICR_Estimator.ViewModels
                 case "Extra stair nosing lf":
                 case "Vista Paint Acripoxy":
                 case "Lip Color":
-                case "Weather Seal XL Coat":
+                
                     return false;
                 default:
                     return true;
@@ -645,11 +646,11 @@ namespace WICR_Estimator.ViewModels
                 {
                     mat.IsMaterialChecked =true;
                 }
-                if (mat.Name == "Weather Seal XL Coat")
-                {
-                    mat.IsMaterialChecked = false;
-                    mat.IsMaterialEnabled = true;
-                }
+                //if (mat.Name == "Weather Seal XL Coat")
+                //{
+                //    mat.IsMaterialChecked = false;
+                //    mat.IsMaterialEnabled = true;
+                //}
             }
 
         }

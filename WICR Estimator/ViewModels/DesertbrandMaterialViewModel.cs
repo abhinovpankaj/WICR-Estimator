@@ -10,16 +10,26 @@ namespace WICR_Estimator.ViewModels
     public class DesertbrandMaterialViewModel:MaterialBaseViewModel
     {
         private Dictionary<string, string> materialNames;
-
+        private bool? IsJobSpecifiedByArchitect;
         public DesertbrandMaterialViewModel(Totals metalTotals, Totals slopeTotals, JobSetup Js) : base(metalTotals, slopeTotals, Js)
         {
             materialNames = new Dictionary<string, string>();
+            IsJobSpecifiedByArchitect = Js.IsJobSpecifiedByArchitect;
             FillMaterialList();
             
             FetchMaterialValuesAsync(false);
 
         }
-
+        public override void JobSetup_OnJobSetupChange(object sender, EventArgs e)
+        {
+            JobSetup Js = sender as JobSetup;
+            if (Js!=null)
+            {
+                IsJobSpecifiedByArchitect = Js.IsJobSpecifiedByArchitect;
+            }
+            
+            base.JobSetup_OnJobSetupChange(sender, e);
+        }
         private void FillMaterialList()
         {
             materialNames.Add("2.5 Galvanized Lathe (18 s.f.)", "EA");
@@ -124,9 +134,9 @@ namespace WICR_Estimator.ViewModels
                 case "Stucco Material Remove and replace (LF)":
                     return false;
                 case "BASE COAT 50 lb Desert Crete Level Max 20/30":
-                    return isApprovedforCement;
+                    return (bool)IsJobSpecifiedByArchitect;
                 case "BASE COAT Desert Crete poly base mixed with water":
-                    return !isApprovedforCement;
+                    return (bool)!IsJobSpecifiedByArchitect;
                 default:
                     return true;
             }
@@ -134,7 +144,17 @@ namespace WICR_Estimator.ViewModels
 
         public override bool getCheckboxEnabledStatus(string materialName)
         {
-            return false;
+            switch (materialName)
+            {
+                case "Staples":
+                case "BASE COAT 50 lb Desert Crete Level Max 20/30":
+                case "BASE COAT Desert Crete poly base mixed with water":
+                case "2.5 Galvanized Lathe (18 s.f.)":
+                     return true;
+                default:
+                    return false;
+            }
+            
         }
 
         public override double getlfArea(string materialName)
@@ -294,8 +314,8 @@ namespace WICR_Estimator.ViewModels
         public override void setCheckBoxes()
         {
             //base.setCheckBoxes();
-            SystemMaterials.Where(x => x.Name == "BASE COAT 50 lb Desert Crete Level Max 20/30").FirstOrDefault().IsMaterialChecked = !isApprovedforCement;
-            SystemMaterials.Where(x => x.Name == "BASE COAT Desert Crete poly base mixed with water").FirstOrDefault().IsMaterialChecked = isApprovedforCement;
+            SystemMaterials.Where(x => x.Name == "BASE COAT 50 lb Desert Crete Level Max 20/30").FirstOrDefault().IsMaterialChecked = !(bool)IsJobSpecifiedByArchitect;
+            SystemMaterials.Where(x => x.Name == "BASE COAT Desert Crete poly base mixed with water").FirstOrDefault().IsMaterialChecked = (bool)IsJobSpecifiedByArchitect;
         }
     }
 }

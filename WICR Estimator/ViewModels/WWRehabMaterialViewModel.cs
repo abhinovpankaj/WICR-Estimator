@@ -1036,7 +1036,22 @@ namespace WICR_Estimator.ViewModels
                     return false;
             }
         }
-
+        public override bool canApply(object obj)
+        {
+            if (obj != null)
+            {
+                if (obj.ToString() == "Custom Texture Skip Trowel(Resistite Smooth Gray)")
+                {
+                    return true;
+                }
+                else
+                    return base.canApply(obj);
+            }
+            else
+                return base.canApply(obj);
+            
+            
+        }
         public override bool getCheckboxEnabledStatus(string materialName)
         {
             //return base.getCheckboxEnabledStatus(materialName);
@@ -1056,7 +1071,8 @@ namespace WICR_Estimator.ViewModels
                 case "AJ-44A DRESSING(SEALER)":
                 case "VISTA PAINT ACRIPOXY":
                 case "STAIR NOSING FROM DEXOTEX":
-                //case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
+                case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
+                case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
                 case "WEATHER SEAL XL TWO COATS":
                     return true;
                 default:
@@ -1068,7 +1084,7 @@ namespace WICR_Estimator.ViewModels
         {
             //base.calculateRLqty();
             //Logic to get LR qty
-            double val1 = 0, val2 = 0, val3 = 0;
+            double val1 = 0, val2 = 0, val3 = 0,val4=0;
             double qty = 0;
             SystemMaterial skipMat;
             skipMat = SystemMaterials.Where(x => x.Name.ToUpper() == "RESISTITE REGULAR OVER TEXTURE(#55 BAG)").FirstOrDefault();
@@ -1121,7 +1137,27 @@ namespace WICR_Estimator.ViewModels
                 else
                     val3 = 0;
             }
-            qty = val3 == 0 ? 0 : (val2 + val3) * 0.3 + val1 / 5;
+            skipMat = SystemMaterials.Where(x => x.Name == "Custom Texture Skip Trowel(Resistite Smooth White)").FirstOrDefault();
+            if (skipMat != null)
+            {
+                if (skipMat.IsMaterialChecked)
+                {
+                    val4 = skipMat.Qty;
+                }
+                else
+                    val4 = 0;
+            }
+            skipMat = SystemMaterials.Where(x => x.Name == "Custom Texture Skip Trowel(Resistite Smooth Gray)").FirstOrDefault();
+            if (skipMat != null)
+            {
+                if (skipMat.IsMaterialChecked)
+                {
+                    val4 = skipMat.Qty;
+                }
+                else
+                    val4 = 0;
+            }
+            qty = val3 == 0 ? 0 : (val2 + val3 + val4) * 0.3 + val1 / 5;
 
             skipMat = SystemMaterials.Where(x => x.Name == "Resistite Liquid").FirstOrDefault();
             if (skipMat != null)

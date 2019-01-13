@@ -219,12 +219,12 @@ namespace WICR_Estimator.ViewModels
                 case "Caulk, dymonic 100":
                     return deckPerimeter + riserCount * 2 * 2;
                 case "Stair Nosing":
-                    return riserCount * 4;
+                    return riserCount * stairWidth;
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
                 case "Stucco Material Remove and replace (LF)":
                     return 0;
                 default:
-                    return totalSqft + riserCount * 4 * 2;
+                    return totalSqft + riserCount * stairWidth * 2;
             }
         }
 
@@ -258,7 +258,10 @@ namespace WICR_Estimator.ViewModels
             SystemMaterials.Where(x=>x.Name== "EKL Acrylic Emulsion").FirstOrDefault().Qty= qty / 5;
            
         }
-
+        public override bool canApply(object obj)
+        {
+            return true;
+        }
         public override bool getCheckboxCheckStatus(string materialName)
         {
             switch (materialName)
@@ -268,6 +271,7 @@ namespace WICR_Estimator.ViewModels
                 case "Extra stair nosing lf":
                 case "Plywood 3 / 4 & blocking(# of 4x8 sheets)":
                 case "Stucco Material Remove and replace(LF)":
+                case "Caulk, dymonic 100":
                     return false;
                 default:
                     return  true;
@@ -284,6 +288,8 @@ namespace WICR_Estimator.ViewModels
                 case "2.5 Galvanized Lathe (18 s.f.) no less than 12 per sq ft.":
                 case "Staples (3/4 Inch Crown, Box of 13,500)":
                 case "Base Coat EKC Cementitious Mix":
+                case "Stair Nosing":
+                case "Caulk, dymonic 100":
                     return true;
                 default:
                     return false;
@@ -328,7 +334,10 @@ namespace WICR_Estimator.ViewModels
             {
                 bool isChecked = SystemMaterials.Where(x => x.Name == "ENDURO ELA-98 BINDER (2 COATS)").FirstOrDefault().IsMaterialChecked;
                 SystemMaterials.Where(x => x.Name == "3/4 oz. Fiberglass (2000 sq ft rolls Purchased from Hill Brothers )").FirstOrDefault().IsMaterialChecked = isChecked;
-                //3/4 oz. Fiberglass (2000 sq ft rolls Purchased from Hill Brothers )
+                if (!isChecked)
+                {
+                    SystemMaterials.Where(x => x.Name == "Caulk, dymonic 100").FirstOrDefault().IsMaterialChecked = true;
+                }
             }
             getEKLQnty();
             //update Add labor for minimum cost

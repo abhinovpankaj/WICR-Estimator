@@ -10,9 +10,6 @@ namespace WICR_Estimator.ViewModels
 {
     class ProjectViewModel : BaseViewModel, IPageViewModel
     {
-        //private static bool IsgoogleApiCalled;
-        
-        //private bool loginWindowShown;
         private ObservableCollection<Project> enabledProjects;
         public ProjectViewModel(ObservableCollection<Project> enabledProjects)
             :this()
@@ -20,37 +17,7 @@ namespace WICR_Estimator.ViewModels
             EnabledProjects = enabledProjects;
             
         }
-        //private System.Windows.Visibility isAdminloggedIn=System.Windows.Visibility.Hidden;
-
-        //public System.Windows.Visibility IsAdminloggedIn
-        //{
-        //    get { return isAdminloggedIn; }
-
-        //    set
-        //    {
-        //        if (value != isAdminloggedIn)
-        //        {
-        //            isAdminloggedIn = value;
-        //            OnPropertyChanged(nameof(IsAdminloggedIn));
-        //        }
-        //    }
-        //}
-
-        private static bool isAdminloggedIn ;
-
-        public  static bool IsAdminloggedIn
-        {
-            get { return isAdminloggedIn; }
-
-            set
-            {
-                if (value != isAdminloggedIn)
-                {
-                    isAdminloggedIn = value;
-                    //OnPropertyChanged("IsAdminloggedIn");
-                }
-            }
-        }
+  
         private void HomeViewModel_OnLoggedAsAdmin(object sender, EventArgs e)
         {
             //IsAdminloggedIn = (bool)sender ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden; 
@@ -65,7 +32,21 @@ namespace WICR_Estimator.ViewModels
 
 
         #region Properties
-       
+        private static bool isAdminloggedIn;
+
+        public static bool IsAdminloggedIn
+        {
+            get { return isAdminloggedIn; }
+
+            set
+            {
+                if (value != isAdminloggedIn)
+                {
+                    isAdminloggedIn = value;
+                    //OnPropertyChanged("IsAdminloggedIn");
+                }
+            }
+        }
         public ObservableCollection<Project> EnabledProjects
         {
             get
@@ -79,6 +60,13 @@ namespace WICR_Estimator.ViewModels
                     enabledProjects = value;
                     OnPropertyChanged("EnabledProjects");
                 }
+            }
+        }
+        public string Name
+        {
+            get
+            {
+                return "Project Page";
             }
         }
         #endregion
@@ -133,7 +121,7 @@ namespace WICR_Estimator.ViewModels
                     var rate = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, prj.Name);
                     double.TryParse(rate[0][0].ToString(),out laborRate);
                     prj.ProjectJobSetUp.LaborRate = laborRate;
-                    if (prj.Name=="Weather Wear Reseal")
+                    if (prj.Name== "Reseal all systems")
                     {
                         if (prj.MaterialViewModel == null)
                         {
@@ -179,12 +167,6 @@ namespace WICR_Estimator.ViewModels
 
         #endregion
 
-        public string Name
-        {
-            get
-            {
-                return "Project Page";
-            }
-        }
+       
     }
 }

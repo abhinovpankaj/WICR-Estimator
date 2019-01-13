@@ -21,10 +21,10 @@ namespace WICR_Estimator.ViewModels
 
         public override double getPricePerMix(string thickness, bool isApproved,int addRow=0)
         {
-            //return base.getPricePerMix(thickness, isApproved);
-            double result;
-            double.TryParse(perMixRates[0][1].ToString(), out result);
-            return result;
+            return base.getPricePerMix(thickness, isApproved);
+            //double result;
+            //double.TryParse(perMixRates[0][1].ToString(), out result);
+            //return result;
         }
     }
 }

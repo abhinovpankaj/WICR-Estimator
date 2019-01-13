@@ -71,31 +71,8 @@
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <StackPanel VerticalAlignment="Center"
                                 HorizontalAlignment="Left"
-                                Grid.Column="1"
                                 Margin="5">
-                <TextBlock Text="Metal Markup%" 
-                                   HorizontalAlignment="Center"/>
-                <TextBox Text="{Binding ElementName=slMetal,
-                                 Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                 TextAlignment="Right"
-                                 Width="40" 
-                                 HorizontalAlignment="Center"
-                                 Margin="5"/>
-                <Slider Maximum="1" Value="{Binding MetalMarkup}"
-                                Width="200"
-                                LargeChange=".2"
-                                Minimum="0"
-                                TickPlacement="Both"
-                                TickFrequency=".05" 
-                                IsSnapToTickEnabled="True"
-                                Name="slMetal"
-                    />
-            </StackPanel>
-            <StackPanel VerticalAlignment="Center"
-                                HorizontalAlignment="Left"
-                                Grid.Column="1"
-                                Margin="5">
-                <TextBlock Text="Slope Markup%" 
+                <TextBlock Text="Slope Profit Margin" 
                                    HorizontalAlignment="Center"/>
                 <TextBox Text="{Binding ElementName=slSlope,
                                  Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -115,9 +92,31 @@
             </StackPanel>
             <StackPanel VerticalAlignment="Center"
                                 HorizontalAlignment="Left"
+                                Margin="5">
+                <TextBlock Text="Metal Profit Margin" 
+                                   HorizontalAlignment="Center"/>
+                <TextBox Text="{Binding ElementName=slMetal,
+                                 Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                 TextAlignment="Right"
+                                 Width="40" 
+                                 HorizontalAlignment="Center"
+                                 Margin="5"/>
+                <Slider Maximum="1" Value="{Binding MetalMarkup}"
+                                Width="200"
+                                LargeChange=".2"
+                                Minimum="0"
+                                TickPlacement="Both"
+                                TickFrequency=".05" 
+                                IsSnapToTickEnabled="True"
+                                Name="slMetal"
+                    />
+            </StackPanel>
+            
+            <StackPanel VerticalAlignment="Center"
+                                HorizontalAlignment="Left"
                                 Grid.Column="1"
                                 Margin="5">
-                <TextBlock Text="Material Markup%" 
+                <TextBlock Text="Material Profit Margin" 
                                    HorizontalAlignment="Center"/>
                 <TextBox Text="{Binding ElementName=slMat,
                                  Path=Value, UpdateSourceTrigger=PropertyChanged}"

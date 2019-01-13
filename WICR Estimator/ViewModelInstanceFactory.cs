@@ -14,14 +14,14 @@ namespace WICR_Estimator
         {
             switch (projectName)
             {
-                case "Dexotex Weather Wear":
-                case "Dexotex Weather Wear Rehab":
-                case "Westcoat Color Wash":
-                case "Enduro Kote Metal":
-                case "Desert Brand":
+                case "Weather Wear":
+                case "Weather Wear Rehab":
+                case "Color Wash Reseal":
+                case "Endurokote":
+                case "Desert Crete":
                 case "Pedestrian System":
                 case "Parking Garage":
-                case "Dexotex Barrier Gaurd":
+                case "Barrier Gaurd":
                     return new MetalViewModel(Js);
                 //case "Dexotex Barrier Gaurd":
                 //    return new DexoMetalViewModel(Js);
@@ -36,14 +36,14 @@ namespace WICR_Estimator
         {
             switch (projectName)
             {
-                case "Dexotex Weather Wear":
-                case "Dexotex Weather Wear Rehab":
-                case "Westcoat Color Wash":
-                case "Desert Brand":
+                case "Weather Wear":
+                case "Weather Wear Rehab":
+                case "Color Wash Reseal":
+                case "Desert Crete":
                     return new SlopeViewModel(Js);
-                case "Enduro Kote Metal":
+                case "Endurokote":
                     return new EnduroKoteSlopeViewModel(Js);
-                case "Dexotex Barrier Gaurd":
+                case "Barrier Gaurd":
                     return new DexoSlopeViewModel(Js);
                 case "Pedestrian System":
                 case "Parking Garage":
@@ -58,19 +58,19 @@ namespace WICR_Estimator
         {
             switch (projectName)
             {
-                case "Dexotex Weather Wear":
+                case "Weather Wear":
                     return new MaterialViewModel(metalT,slopeT,Js);
-                case "Dexotex Weather Wear Rehab":
+                case "Weather Wear Rehab":
                     return new WWRehabMaterialViewModel(metalT, slopeT, Js);
-                case "Dexotex Barrier Gaurd":
+                case "Barrier Gaurd":
                     return new DexoMaterialViewModel(metalT,slopeT,Js);
-                case "Enduro Kote Metal":
+                case "Endurokote":
                     return new EnduroKoteMaterialViewModel(metalT, slopeT, Js);
-                case "Weather Wear Reseal":
+                case "Reseal all systems":
                     return new WWResealMaterialViewModel(metalT, slopeT, Js);
-                case "Westcoat Color Wash":
+                case "Color Wash Reseal":
                     return new WestcoatColorMaterialViewModel(metalT, slopeT, Js);
-                case "Desert Brand":
+                case "Desert Crete":
                     return new DesertbrandMaterialViewModel(metalT, slopeT, Js);
                 case "Pedestrian System":
                     return new PedestrianMaterialViewModel(metalT, slopeT, Js);

@@ -123,11 +123,12 @@
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Top"
                   Grid.RowSpan="2"
+                  IsReadOnly="True"
                   CanUserAddRows="False"
                   AutoGenerateColumns="False"
                   Margin="10,2,10,0"
                   Grid.Column="1">
-            <DataGrid.Columns>
+            <DataGrid.Columns >
                 <DataGridTextColumn Header="Name" IsReadOnly="True"
                                     Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Metal Cost" 

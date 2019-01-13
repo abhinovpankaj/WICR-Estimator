@@ -911,7 +911,8 @@ namespace WICR_Estimator.ViewModels
             }
             if (obj.ToString()== "Custom Texture Skip Trowel(Resistite Smooth Gray)"||
                 obj.ToString()== "Custom Texture Skip Trowel(Resistite Smooth White)"||
-                obj.ToString()== "Resistite Regular Over Texture(#55 Bag)")
+                obj.ToString()== "Resistite Regular Over Texture(#55 Bag)" ||
+                obj.ToString()== "Resistite Regular Gray")
             {
                 calculateRLqty();
             }
@@ -949,11 +950,11 @@ namespace WICR_Estimator.ViewModels
                 double.TryParse(laborDetails[7][0].ToString(), out facVal);
                 SubContractMarkup = facVal;
                 double.TryParse(laborDetails[17][0].ToString(), out facVal);
-                MetalMarkup = facVal;
+                MetalMarkup = 1-facVal;
                 double.TryParse(laborDetails[19][0].ToString(), out facVal);
-                SlopeMarkup = facVal;
+                SlopeMarkup = 1-facVal;
                 double.TryParse(laborDetails[18][0].ToString(), out facVal);
-                MaterialMarkup = facVal;
+                MaterialMarkup = 1-facVal;
 
             }
         }
@@ -2366,6 +2367,8 @@ namespace WICR_Estimator.ViewModels
             {
                 lipMat2.IsMaterialChecked = true;
                 ApplyCheckUnchecks(lipMat2.Name);
+                SystemMaterials.Where(x => x.Name == "Custom Texture Skip Trowel(Resistite Smooth Gray)").FirstOrDefault().IsMaterialEnabled = true;
+                
             }
             else
             {
@@ -2750,11 +2753,12 @@ namespace WICR_Estimator.ViewModels
             {
                 TotalSlopingPrice = getTotals(SlopeTotals.LaborExtTotal, SlopeTotals.MaterialExtTotal, SlopeTotals.MaterialFreightTotal, 0);
                 TotalMetalPrice = getTotals(MetalTotals.LaborExtTotal, MetalTotals.MaterialExtTotal, MetalTotals.MaterialFreightTotal, 0);
+                TotalSubcontractLabor = SlopeTotals.SubContractLabor + MetalTotals.SubContractLabor + TotalSubContractLaborCostBrkp;
+
             }
             //,
             TotalSystemPrice = getTotals(TotalLaborExtension, TotalMaterialCostbrkp, TotalFreightCostBrkp, TotalSubContractLaborCostBrkp);
-            TotalSubcontractLabor = SlopeTotals.SubContractLabor+MetalTotals.SubContractLabor+ TotalSubContractLaborCostBrkp;
-
+            
             TotalSale = TotalSlopingPrice + TotalMetalPrice + TotalSystemPrice + TotalSubcontractLabor;
 
             if (SlopeTotals != null && MetalTotals != null)
@@ -3014,6 +3018,15 @@ namespace WICR_Estimator.ViewModels
                 HideCalFactor = System.Windows.Visibility.Hidden
             });
 
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "Individual Cost",
+                CalFactor = 0,
+                MetalCost = 1-MetalMarkup,
+                SlopeCost = 1-SlopeMarkup,
+                SystemCost = 1-MaterialMarkup,
+                HideCalFactor = System.Windows.Visibility.Hidden
+            });
             LCostBreakUp.Add(new CostBreakup
             {
                 Name = "Individual Profit Margin",
