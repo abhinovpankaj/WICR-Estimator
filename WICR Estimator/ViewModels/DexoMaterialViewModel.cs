@@ -193,7 +193,7 @@ namespace WICR_Estimator.ViewModels
         }
         public override void calculateLaborHrs()
         {
-            calLaborHrs(6);
+            calLaborHrs(6,totalSqft);
 
         }
         public override double getSqFtAreaH(string materialName)

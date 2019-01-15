@@ -10,6 +10,7 @@ namespace WICR_Estimator.ViewModels
 {
     class PedestrianSlopeViewModel:SlopeBaseViewModel
     {
+        private double urethaneManualAvgMixPrice;
         private ObservableCollection<Slope> urethaneSlopes;
         public ObservableCollection<Slope> UrethaneSlopes
         {
@@ -107,17 +108,112 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+
+        private bool urethaneOverrideManually;
+        public bool UrethaneOverrideManually
+        {
+            get { return urethaneOverrideManually; }
+            set
+            {
+                if (value!=urethaneOverrideManually)
+                {
+                    urethaneOverrideManually = value;
+                    OnPropertyChanged("UrethaneOverrideManually");
+                }
+            }
+        }
+
+        private double urethaneTotalMixesMan;
+        public double UrethaneTotalMixesMan
+        {
+            get { return urethaneTotalMixesMan; }
+            set
+            {
+                if (value!=urethaneTotalMixesMan)
+                {
+                    urethaneTotalMixesMan = value;
+                    OnPropertyChanged("UrethaneTotalMixesMan");
+                }
+            }
+        }
+        private double urethaneAverageMixesPrice;
+        public double UrethaneAverageMixesPrice
+        {
+            get { return urethaneAverageMixesPrice; }
+            set
+            {
+                if (value != urethaneAverageMixesPrice)
+                {
+                    urethaneAverageMixesPrice = value;
+                    OnPropertyChanged("UrethaneAverageMixesPrice");
+                }
+            }
+        }
+        public override void reCalculate()
+        {
+            foreach (Slope slp in UrethaneSlopes)
+            {
+                slp.PricePerMix = getPricePerMix(slp.Thickness, isApprovedForCement,9);
+            }
+            base.reCalculate();
+        }
         public PedestrianSlopeViewModel(JobSetup Js)
         {
             IsUrethaneVisible = System.Windows.Visibility.Visible;
             GetSlopeDetailsFromGoogle(Js.ProjectName);
+            double.TryParse(perMixRates[15][1].ToString(), out urethaneManualAvgMixPrice);
+            isApprovedForCement = Js.IsApprovedForSandCement;
+            
             Slopes = CreateSlopes(0);
             UrethaneSlopes = CreateSlopes(9);
             CalculateAll();
             Js.OnJobSetupChange += JobSetup_OnJobSetupChange;
         }
 
+        public override void CalculateAll()
+        {
+            base.CalculateAll();
+            if (UrethaneOverrideManually)
+            {
+                CalculateManualUrethane();
+            }
+            SlopeTotals.LaborExtTotal = TotalLaborCost;
+            SlopeTotals.MaterialExtTotal = TotalMaterialCost;
+            SlopeTotals.MaterialFreightTotal = TotalFrightCost;
+        }
+        public void CalculateManualUrethane()
+        {
+            //base.CalculateManual();
 
+            double minLabVal = 0;
+            UrethaneSumTotalMixes = UrethaneTotalMixesMan;
+            UrethaneSumTotalMatExt = UrethaneAverageMixesPrice * UrethaneTotalMixesMan;
+            TotalMaterialCost = UrethaneSumTotalMatExt+ SumTotalMatExt;
+            TotalWeight = Math.Round(50 * UrethaneTotalMixesMan, 2)+ TotalWeight;
+            TotalFrightCost = Math.Round(FreightCalculator(TotalWeight), 2);
+            UrethaneSumTotalLaborExt = Math.Round(UrethaneTotalMixesMan * urethaneManualAvgMixPrice, 2);
+            double.TryParse(perMixRates[17][0].ToString(), out minLabVal);
+            UrethaneMinimumLaborCost = minLabVal * laborRate;
+            TotalLaborCost = (UrethaneSumTotalLaborExt == 0 ? 0 : UrethaneMinimumLaborCost > UrethaneSumTotalLaborExt ? UrethaneMinimumLaborCost : UrethaneSumTotalLaborExt)+ TotalLaborCost ;
+
+            if (isPrevailingWage)
+            {
+                if (hasDiscount)
+                    TotalLaborCost = TotalLaborCost * (1 + prevailingWage + deductionOnLargeJob);
+                else
+                    TotalLaborCost = TotalLaborCost * (1 + prevailingWage);
+
+            }
+            else
+            {
+                if (hasDiscount)
+                    TotalLaborCost = TotalLaborCost * (1 + deductionOnLargeJob);
+                else
+                    TotalLaborCost = TotalLaborCost;
+            }
+
+            
+        }
         public override void CalculateGridTotal()
         {
             base.CalculateGridTotal();
@@ -150,7 +246,7 @@ namespace WICR_Estimator.ViewModels
             double lCost = 0;
             if (UrethaneSlopes.Count > 0)
             {
-                if (OverrideManually == false)
+                if (UrethaneOverrideManually == false)
                 {
                     lCost = Math.Round(UrethaneSumTotalLaborExt, 2);
                     double.TryParse(perMixRates[17][0].ToString(), out minLabVal);

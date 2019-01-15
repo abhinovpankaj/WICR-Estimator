@@ -31,6 +31,13 @@ namespace WICR_Estimator.Converters
                     case "EXTRA STAIR NOSING":
                     case "System bubbled and failed texture repair":
                     case "Concrete cracks greater than 1/32 inch (route 1/4 x 1/4) epoxy gel fill, ilica sand, and fiber tape":
+                    case "Caulk 1/2 to 3/4 inch control joints (SIKA 2C)":
+                    case "Remove and Replace Expansion joints- backer rod and sealant (SIKA 2C)":
+                    case "Large cracks with reseal (route, fill with speed bond/sand and spot texture)":
+                    case "Large cracks with new system (route, fill with speed bond)":
+                    case "Bubbled and failed textured areas (prep, patch,spot textured with resistite)":
+                    case "Add for saw cut joints":
+                    case "Add for removing and replacing concrete (no more than 100 sq ft)":
                         return true;
                     default:
                         return false;                       

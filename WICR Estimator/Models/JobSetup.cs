@@ -145,18 +145,11 @@ namespace WICR_Estimator.Models
             //WeatherWearType = "Weather Wear";
             DeckCount = 1;
             VendorName = "Chivon";
-            MaterialName = "Copper";
+            MaterialName = "16oz Copper";
             EnableMoreMarkupCommand = new DelegateCommand(CanAddMoreMarkup, canAdd);
             MinMarkUp = -10;
             AllowMoreMarkUp = false;
-            if (name=="Pedestrian System"  || name == "Parking Garage")
-            {
-                FirstCheckBoxLabel = "Reseal ?";
-            }
-            else
-            {
-                FirstCheckBoxLabel = "Approved for Sand & Cement ?";              
-            }
+            FirstCheckBoxLabel = "Approved for Sand & Cement ?";          
             
         }
 
@@ -202,6 +195,8 @@ namespace WICR_Estimator.Models
             {
                 if (ProjectName == "Weather Wear" || ProjectName == "Weather Wear Rehab")
                     return "Linear Footage of Deck Perimeter";
+                else if (ProjectName == "Resistite")
+                    return "LINEAR FOOTAGE OF DECK TO WALL DETAIL";
                 else
                     return "Lf Perimeter for Burlap and Membrane";
             }
@@ -378,7 +373,7 @@ namespace WICR_Estimator.Models
                 if (value != isApprovedForSandCement)
                 {
                     isApprovedForSandCement = value;
-                    IsReseal = value;
+                    //IsReseal = value;
                     
                     OnPropertyChanged("IsApprovedForSandCement");
                     if (OnJobSetupChange != null)
@@ -607,6 +602,7 @@ namespace WICR_Estimator.Models
             }
         }
         #endregion
+
         #region UPI 
         private bool? isNewPlywood;
         public bool? IsNewPlywood
@@ -647,10 +643,10 @@ namespace WICR_Estimator.Models
                 {
                     isReseal = value;
                     OnPropertyChanged("IsReseal");
-                    //if (OnJobSetupChange != null)
-                    //{
-                    //    OnJobSetupChange(this, EventArgs.Empty);
-                    //}
+                    if (OnJobSetupChange != null)
+                    {
+                        OnJobSetupChange(this, EventArgs.Empty);
+                    }
                 }
             }
         }
@@ -672,6 +668,38 @@ namespace WICR_Estimator.Models
             }
         }
 
+        #endregion
+
+        #region Resistite
+        private double linearCopingFootage;
+        public double LinearCopingFootage
+        {
+            get { return linearCopingFootage; }
+            set
+            {
+                if (value != linearCopingFootage)
+                {
+                    linearCopingFootage = value;
+                    OnPropertyChanged("LinearCopingFootage");
+                    if (OnJobSetupChange != null)
+                    {
+                        OnJobSetupChange(this, EventArgs.Empty);
+                    }
+                }
+            }
+        }
+        public System.Windows.Visibility IslinearCopingFootageVisible
+        {
+            get
+            {
+                if (ProjectName=="Resistite")
+                {
+                    return System.Windows.Visibility.Visible;
+                }
+                else
+                    return System.Windows.Visibility.Collapsed;
+            }
+        }
         #endregion
     }
 }

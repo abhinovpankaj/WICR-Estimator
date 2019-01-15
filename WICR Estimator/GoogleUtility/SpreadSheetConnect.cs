@@ -104,6 +104,9 @@ namespace WICR_Estimator.GoogleUtility
                 case "Parking Garage":
                     prjName = "Parking";
                     break;
+                case "Resistite":
+                    prjName = "DRConcrete";
+                    break;
                 default:
                     break;
             }

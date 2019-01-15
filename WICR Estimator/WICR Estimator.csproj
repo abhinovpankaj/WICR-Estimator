@@ -137,6 +137,7 @@
     <Compile Include="ViewModels\PedestrianMaterialViewModel.cs" />
     <Compile Include="ViewModels\PedestrianSlopeViewModel.cs" />
     <Compile Include="ViewModels\ProjectViewModel.cs" />
+    <Compile Include="ViewModels\ResistiteConcreteMaterialViewModel.cs" />
     <Compile Include="ViewModels\SlopeBaseViewModel.cs" />
     <Compile Include="ViewModels\SlopeViewModel.cs" />
     <Compile Include="ViewModels\WeatherWearViewModel.cs" />

@@ -217,21 +217,39 @@ namespace WICR_Estimator.ViewModels
                 HideCalFactor = System.Windows.Visibility.Hidden
             });
 
-            double.TryParse(laborDetails[17][0].ToString(), out facValue);
-            double profitMetal = facValue;
-            double.TryParse(laborDetails[19][0].ToString(), out facValue);
-            double profitSlope = facValue;
-            double.TryParse(laborDetails[18][0].ToString(), out facValue);
-            double profitMaterial = facValue;
+            //double.TryParse(laborDetails[17][0].ToString(), out facValue);
+            //double profitMetal = facValue;
+            //double.TryParse(laborDetails[19][0].ToString(), out facValue);
+            //double profitSlope = facValue;
+            //double.TryParse(laborDetails[18][0].ToString(), out facValue);
+            //double profitMaterial = facValue;
 
 
+            //LCostBreakUp.Add(new CostBreakup
+            //{
+            //    Name = "Individual Profit Margin",
+            //    CalFactor = 0,
+            //    MetalCost = profitMetal,
+            //    SlopeCost = profitSlope,
+            //    SystemCost = profitMaterial,
+            //    HideCalFactor = System.Windows.Visibility.Hidden
+            //});
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "Individual Cost",
+                CalFactor = 0,
+                MetalCost = 1 - MetalMarkup,
+                SlopeCost = 1 - SlopeMarkup,
+                SystemCost = 1 - MaterialMarkup,
+                HideCalFactor = System.Windows.Visibility.Hidden
+            });
             LCostBreakUp.Add(new CostBreakup
             {
                 Name = "Individual Profit Margin",
                 CalFactor = 0,
-                MetalCost = profitMetal,
-                SlopeCost = profitSlope,
-                SystemCost = profitMaterial,
+                MetalCost = MetalMarkup,
+                SlopeCost = SlopeMarkup,
+                SystemCost = MaterialMarkup,
                 HideCalFactor = System.Windows.Visibility.Hidden
             });
 
@@ -277,7 +295,7 @@ namespace WICR_Estimator.ViewModels
 
             double totalCostM = 0;
             double totalCostS = 0;
-            double totalCostSy = (totalJobCostSy) / profitMaterial + (psy2); //psy4+ psy6
+            double totalCostSy = (totalJobCostSy) / MaterialMarkup + (psy2); //psy4+ psy6
             double totalCostSbLabor = TotalSubContractLaborCostBrkp + psy1;
             LCostBreakUp.Add(new CostBreakup
             {
@@ -297,15 +315,15 @@ namespace WICR_Estimator.ViewModels
             {
                 Name = "General Liability",
                 CalFactor = facValue,
-                MetalCost = totalCostM * facValue / profitMetal,
-                SlopeCost = totalCostS * facValue / profitSlope,
-                SystemCost = totalCostSy * facValue / profitMaterial,
+                MetalCost = totalCostM * facValue / MetalMarkup,
+                SlopeCost = totalCostS * facValue / SlopeMarkup,
+                SystemCost = totalCostSy * facValue / MaterialMarkup,
                 SubContractLaborCost = (totalCostSbLabor * facValue / SubContractMarkup)
 
             });
-            double finalMCost = totalCostM + (totalCostM * facValue / profitMetal);
-            double finalSCost = totalCostS + (totalCostS * facValue / profitSlope);
-            double finalSyCost = totalCostSy + (totalCostSy * facValue / profitMaterial);
+            double finalMCost = totalCostM + (totalCostM * facValue / MetalMarkup);
+            double finalSCost = totalCostS + (totalCostS * facValue / SlopeMarkup);
+            double finalSyCost = totalCostSy + (totalCostSy * facValue / MaterialMarkup);
             double finalSubLabCost = totalCostSbLabor + (totalCostSbLabor * facValue / SubContractMarkup);
             double.TryParse(laborDetails[12][0].ToString(), out facValue);
 
@@ -313,15 +331,15 @@ namespace WICR_Estimator.ViewModels
             {
                 Name = "Direct Expense (Gas, Small Tools, Etc,)",
                 CalFactor = facValue,
-                MetalCost = totalCostM * facValue / profitMetal,
-                SlopeCost = totalCostS * facValue / profitSlope,
-                SystemCost = totalCostSy * facValue / profitMaterial,
+                MetalCost = totalCostM * facValue / MetalMarkup,
+                SlopeCost = totalCostS * facValue / SlopeMarkup,
+                SystemCost = totalCostSy * facValue / MaterialMarkup,
                 SubContractLaborCost = (totalCostSbLabor * facValue / SubContractMarkup)
 
             });
-            finalMCost = finalMCost + (totalCostM * facValue / profitMetal);
-            finalSCost = finalSCost + (totalCostS * facValue / profitSlope);
-            finalSyCost = finalSyCost + (totalCostSy * facValue / profitMaterial);
+            finalMCost = finalMCost + (totalCostM * facValue / MetalMarkup);
+            finalSCost = finalSCost + (totalCostS * facValue / SlopeMarkup);
+            finalSyCost = finalSyCost + (totalCostSy * facValue / MaterialMarkup);
             finalSubLabCost = finalSubLabCost + (totalCostSbLabor * facValue / SubContractMarkup);
             if (!hasContingencyDisc)
                 double.TryParse(laborDetails[13][0].ToString(), out facValue);
@@ -333,14 +351,14 @@ namespace WICR_Estimator.ViewModels
             {
                 Name = "Contingency",
                 CalFactor = facValue,
-                MetalCost = totalCostM * facValue / profitMetal,
-                SlopeCost = totalCostS * facValue / profitSlope,
-                SystemCost = totalCostSy * facValue / profitMaterial,
+                MetalCost = totalCostM * facValue / MetalMarkup,
+                SlopeCost = totalCostS * facValue / SlopeMarkup,
+                SystemCost = totalCostSy * facValue / MaterialMarkup,
                 SubContractLaborCost = totalCostSbLabor * facValue / SubContractMarkup
             });
-            finalMCost = finalMCost + (totalCostM * facValue / profitMetal);
-            finalSCost = finalSCost + (totalCostS * facValue / profitSlope);
-            finalSyCost = finalSyCost + (totalCostSy * facValue / profitMaterial);
+            finalMCost = finalMCost + (totalCostM * facValue / MetalMarkup);
+            finalSCost = finalSCost + (totalCostS * facValue / SlopeMarkup);
+            finalSyCost = finalSyCost + (totalCostSy * facValue / MaterialMarkup);
             finalSubLabCost = finalSubLabCost + (totalCostSbLabor * facValue / SubContractMarkup);
             double.TryParse(laborDetails[14][0].ToString(), out facValue);
 
@@ -457,11 +475,13 @@ namespace WICR_Estimator.ViewModels
             #endregion
 
             else
+            {
                 SystemMaterials = sysMat;
+                setCheckBoxes();
+            }
+                
 
             setExceptionValues();
-            setCheckBoxes();
-
             if (OtherMaterials.Count == 0)
             {
                 OtherMaterials = GetOtherMaterials();

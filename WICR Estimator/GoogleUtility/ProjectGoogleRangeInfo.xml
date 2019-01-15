@@ -65,4 +65,11 @@
     <SlopeRange>P740:Q757</SlopeRange>
     <MaterialRange>H770:N791</MaterialRange>
   </Parking>
+<DRConcrete>
+    <RateRange>E2</RateRange>
+    <MetalRange>F3:M43</MetalRange>
+    <LaborRange>E895:E914</LaborRange>
+    <SlopeRange>P845:Q853</SlopeRange>
+    <MaterialRange>H865:N881</MaterialRange>
+  </DRConcrete>
 </Projects>

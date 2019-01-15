@@ -214,7 +214,7 @@ namespace WICR_Estimator.ViewModels
 
         public override void calculateLaborHrs()
         {
-            calLaborHrs(4);
+            calLaborHrs(4,totalSqft);
             
         }
         //Calculate for "Add for Safe Grip Additive"

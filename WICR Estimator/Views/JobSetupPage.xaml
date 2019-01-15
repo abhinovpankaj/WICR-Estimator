@@ -116,7 +116,11 @@
                     <CheckBox Style="{StaticResource CheckBoxStyle}"
                           IsChecked="{Binding IsApprovedForSandCement,UpdateSourceTrigger=PropertyChanged}"
                           Content="{Binding FirstCheckBoxLabel}"/>
-                <CheckBox  Style="{StaticResource CheckBoxStyle}"
+                    <CheckBox Style="{StaticResource CheckBoxStyle}"
+                              Visibility="{Binding IsNewPlywoodVisible}"
+                          IsChecked="{Binding IsReseal,UpdateSourceTrigger=PropertyChanged}"
+                          Content="Reseal?"/>
+                    <CheckBox  Style="{StaticResource CheckBoxStyle}"
                            Content="Prevailing Wages"
                            IsChecked="{Binding IsPrevalingWage,UpdateSourceTrigger=PropertyChanged}"/>
                 <CheckBox  Style="{StaticResource CheckBoxStyle}"
@@ -173,6 +177,12 @@
                        Text="Total Sq Ft"/>
                 <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding TotalSqft,UpdateSourceTrigger=LostFocus}"/>
+                <TextBlock Style="{StaticResource FieldHeader}"
+                           Visibility="{Binding IslinearCopingFootageVisible}"
+                       Text="LINEAR FOOTAGE OF COPING"/>
+                <TextBox Style="{StaticResource TextBoxStyle}"
+                         Visibility="{Binding IslinearCopingFootageVisible}"
+                         Text="{Binding LinearCopingFootage,UpdateSourceTrigger=LostFocus}"/>
                 <TextBlock Style="{StaticResource FieldHeader}"
                        Text="{Binding DeckLabel}"
                            />

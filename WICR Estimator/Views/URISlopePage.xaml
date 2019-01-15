@@ -44,9 +44,9 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <!--07-10-18-->
-            <RowDefinition Height="*"/>
-            <!--07-10-18-->
+            
+            <RowDefinition Height="Auto"/>
+            
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -54,84 +54,90 @@
             <RowDefinition Height="Auto"/>
 
         </Grid.RowDefinitions>
-
-        <DataGrid AutoGenerateColumns="False" 
+        <StackPanel>
+            <Label Content="Slope Sand Cement Scrim"
+                   FontSize="14"
+                   FontWeight="Bold"
+                   Margin="10,0,0,0"/>
+            <DataGrid AutoGenerateColumns="False" 
                   HorizontalAlignment="Left"
                   CanUserSortColumns="False"
                   Name="SlopeGrid" 
-                  Margin="10"
+                  Margin="10,0,0,0"
                   VerticalAlignment="Top" 
                   CanUserAddRows="False"
                   ItemsSource="{Binding Slopes,UpdateSourceTrigger=PropertyChanged}">
-            <DataGrid.Columns>
+                <DataGrid.Columns>
 
-                <DataGridTemplateColumn Header="Thickness"
+                    <DataGridTemplateColumn Header="Thickness"
                                         FocusManager.IsFocusScope="False">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Thickness}" Width="Auto"
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Thickness}" Width="Auto"
                                            IsEnabled="False"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="Sq ft">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBox Text="{Binding Sqft,UpdateSourceTrigger=PropertyChanged}"
+                    <DataGridTemplateColumn Header="Sq ft">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Sqft,UpdateSourceTrigger=PropertyChanged}"
                                      Style="{StaticResource editableTextbox}"
                             >
-                            </TextBox>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="#Decks or areas">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBox Text="{Binding DeckCount,UpdateSourceTrigger=PropertyChanged}"
+                                </TextBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="#Decks or areas">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding DeckCount,UpdateSourceTrigger=PropertyChanged}"
                                      Style="{StaticResource editableTextbox}">
 
-                            </TextBox>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                                </TextBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                <DataGridTextColumn Binding="{Binding Total}"
+                    <DataGridTextColumn Binding="{Binding Total}"
                                     IsReadOnly="True">
-                    <DataGridTextColumn.Header>
-                        <TextBlock Text="Total" 
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Total" 
                                    TextWrapping="Wrap"  Width="Auto"/>
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding TotalMixes}"
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding TotalMixes}"
                                     IsReadOnly="True">
-                    <DataGridTextColumn.Header>
-                        <TextBlock Text="Total Mixes" 
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Total Mixes" 
                                    TextWrapping="Wrap"  Width="Auto"/>
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
-                <!--07-10-18-->
-                <DataGridTextColumn Binding="{Binding MaterialExtensionSlope ,StringFormat={}{0:C}}"
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <!--07-10-18-->
+                    <DataGridTextColumn Binding="{Binding MaterialExtensionSlope ,StringFormat={}{0:C}}"
                                     IsReadOnly="True">
 
-                    <DataGridTextColumn.Header>
-                        <TextBlock Text="Material Extension $" 
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Material Extension $" 
                                    TextWrapping="Wrap" Width="Auto"/>
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
-                <!--07-10-18-->
-                <DataGridTextColumn Binding="{Binding LaborExtensionSlope ,StringFormat={}{0:C}}"
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <!--07-10-18-->
+                    <DataGridTextColumn Binding="{Binding LaborExtensionSlope ,StringFormat={}{0:C}}"
                                     IsReadOnly="true">
-                    <DataGridTextColumn.Header>
-                        <TextBlock Text="Labour Extension $"  
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Labour Extension $"  
                                    TextWrapping="Wrap"  Width="Auto"/>
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
-            </DataGrid.Columns>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
 
-        </DataGrid>
+            </DataGrid>
+        </StackPanel>
+        
         <GroupBox x:Name="grp1" 
                   Grid.Row="1" 
                   Margin="10"
@@ -199,87 +205,92 @@
                 </StackPanel>
             </Grid>
         </GroupBox>
-        
-        <DataGrid AutoGenerateColumns="False" 
+        <StackPanel Grid.Column="1"
+                    Visibility="{Binding IsUrethaneVisible}">
+            <Label Content="Slope Sand and Urethane Fill"
+                   FontSize="14"
+                   FontWeight="Bold"
+                   Margin="10,0,0,0"/>
+            <DataGrid AutoGenerateColumns="False" 
                   HorizontalAlignment="Left"
                   CanUserSortColumns="False"
                   Name="SlopeGrid1" 
-                  Margin="10"
-                  Grid.Column="1"
-                  Visibility="{Binding IsUrethaneVisible}"
+                  Margin="10,0,0,0"
                   VerticalAlignment="Top" 
                   CanUserAddRows="False"
                   ItemsSource="{Binding UrethaneSlopes,
             UpdateSourceTrigger=PropertyChanged}">
-            <DataGrid.Columns>
+                <DataGrid.Columns>
 
-                <DataGridTemplateColumn Header="Thickness"
+                    <DataGridTemplateColumn Header="Thickness"
                                         FocusManager.IsFocusScope="False">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Thickness}" Width="Auto"
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Thickness}" Width="Auto"
                                            IsEnabled="False"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="Sq ft">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBox Text="{Binding Sqft,UpdateSourceTrigger=PropertyChanged}"
+                    <DataGridTemplateColumn Header="Sq ft">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Sqft,UpdateSourceTrigger=PropertyChanged}"
                                      Style="{StaticResource editableTextbox}"
                             >
-                            </TextBox>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="#Decks or areas">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBox Text="{Binding DeckCount,UpdateSourceTrigger=PropertyChanged}"
+                                </TextBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="#Decks or areas">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding DeckCount,UpdateSourceTrigger=PropertyChanged}"
                                      Style="{StaticResource editableTextbox}">
 
-                            </TextBox>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                                </TextBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                <DataGridTextColumn Binding="{Binding Total}"
+                    <DataGridTextColumn Binding="{Binding Total}"
                                     IsReadOnly="True">
-                    <DataGridTextColumn.Header>
-                        <TextBlock Text="Total" 
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Total" 
                                    TextWrapping="Wrap"  Width="Auto"/>
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding TotalMixes}"
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding TotalMixes}"
                                     IsReadOnly="True">
-                    <DataGridTextColumn.Header>
-                        <TextBlock Text="Total Mixes" 
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Total Mixes" 
                                    TextWrapping="Wrap"  Width="Auto"/>
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
-                <!--07-10-18-->
-                <DataGridTextColumn Binding="{Binding MaterialExtensionSlope ,StringFormat={}{0:C}}"
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <!--07-10-18-->
+                    <DataGridTextColumn Binding="{Binding MaterialExtensionSlope ,StringFormat={}{0:C}}"
                                     IsReadOnly="True">
 
-                    <DataGridTextColumn.Header>
-                        <TextBlock Text="Material Extension $" 
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Material Extension $" 
                                    TextWrapping="Wrap" Width="Auto"/>
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
-                <!--07-10-18-->
-                <DataGridTextColumn Binding="{Binding LaborExtensionSlope ,StringFormat={}{0:C}}"
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <!--07-10-18-->
+                    <DataGridTextColumn Binding="{Binding LaborExtensionSlope ,StringFormat={}{0:C}}"
                                     IsReadOnly="true">
-                    <DataGridTextColumn.Header>
-                        <TextBlock Text="Labour Extension $"  
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Labour Extension $"  
                                    TextWrapping="Wrap"  Width="Auto"/>
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
-            </DataGrid.Columns>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
 
-        </DataGrid>
+            </DataGrid>
+        </StackPanel>
+        
         <GroupBox x:Name="grp2" 
                   Visibility="{Binding IsUrethaneVisible}"
                   Grid.Row="1" 
@@ -364,15 +375,12 @@
                       FontWeight="Bold"
                       IsChecked="{Binding OverrideManually}"/>
         </StackPanel>
-        <StackPanel Grid.Column="0" Background="LightGray"
-                    Margin="10,5,10,5"
-                    Grid.Row="5" Orientation="Horizontal">
-            <TextBlock Text="Slope Material" FontSize="15"
-                       VerticalAlignment="Center"
-                       Margin="10"/>
-            <TextBlock Text="{ Binding SlopeMaterialName}" FontSize="14"
-                       VerticalAlignment="Center"
-                       Margin="10" Width="220"/>
+        <StackPanel Grid.Row="2" Margin="10" Grid.Column="1"
+                    Visibility="{Binding IsUrethaneVisible}">
+            <CheckBox x:Name="OverrideCheckboxUrethan"
+                      Content="Manually Overwrite Total Mixes"
+                      FontWeight="Bold"
+                      IsChecked="{Binding UrethaneOverrideManually}"/>
         </StackPanel>
         <GroupBox x:Name="groupBox2"
                   IsEnabled="{Binding ElementName=OverrideCheckbox,
@@ -423,10 +431,67 @@
 
             </Grid>
         </GroupBox>
+        <GroupBox x:Name="groupBox3" Grid.Column="1"
+                  Visibility="{Binding IsUrethaneVisible}"
+                  IsEnabled="{Binding ElementName=OverrideCheckboxUrethan,
+            Path=IsChecked}"
+                  Grid.Row="3" 
+                  BorderBrush="Blue"
+                  BorderThickness="0,0.5,0,0"  >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
+                <Label Content="Total Mixes : "
+                       Style="{StaticResource LabelStyle1}"
+                       HorizontalAlignment="Right"/>
+
+                <Label Content="Average Mixes Price ($) : " 
+                       Grid.Column="0" Grid.Row="1"
+                       Style="{StaticResource LabelStyle1}" 
+                       HorizontalAlignment="Right"/>
+
+                <TextBox x:Name="TotalMixesMan1"
+                         Grid.Column="2"
+                         Margin="5"
+                         Style="{StaticResource editableTextbox}"
+                         VerticalContentAlignment="Center"
+                         Height="25" Width="150"  
+                         Text="{Binding UrethaneTotalMixesMan}">
+
+                </TextBox>
+                <!--07-10-18-->
+                <TextBox x:Name="AverageMixesPrice1"
+                         Grid.Row="1" 
+                         Grid.Column="2"
+                          Style="{StaticResource editableTextbox}"
+                         VerticalContentAlignment="Center"
+                         Height="25"
+                         Margin="5,0,5,5"
+                         Width="150"
+                         Text="{Binding UrethaneAverageMixesPrice }">
+                </TextBox>
+
+            </Grid>
+        </GroupBox>
+        <StackPanel Grid.Column="0" Background="LightGray"
+                    Margin="10,0,0,0"
+                    Grid.Row="5" Orientation="Horizontal">
+            <TextBlock Text="Slope Material" FontSize="14"
+                       VerticalAlignment="Center"
+                       Margin="10"/>
+            <TextBlock Text="{ Binding SlopeMaterialName}" FontSize="14"
+                       VerticalAlignment="Center"
+                       Margin="10" Width="220"/>
+        </StackPanel>
         <GroupBox x:Name="groupBoxMisc" 
-                  Margin="10"
-                  HorizontalAlignment="Right"
+                  HorizontalAlignment="Center"
                   Grid.ColumnSpan="2"
                   Grid.Column="0"
                   Grid.Row="4"

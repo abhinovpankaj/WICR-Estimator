@@ -23,7 +23,7 @@ namespace WICR_Estimator.ViewModels
         }
         private void FillMaterialList()
         {
-            MaterialNames.Add("SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)", "0");
+            MaterialNames.Add("SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)", riserCount.ToString());
             MaterialNames.Add("REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH) UPI 7013 SC BASE COAT", "0");
             MaterialNames.Add("Striping for small cracKs (less than 1/8\")","0");
             MaterialNames.Add("Route and caulk moving cracks (greater than 1/8\")","0");
@@ -147,7 +147,7 @@ namespace WICR_Estimator.ViewModels
                 item.SMSqft = unit;
                 item.SMSqftH = unit;
                 item.Qty = unit / item.Coverage;
-                item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, 0, 0);
+                item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
                 item.LaborExtension = item.Hours == 0 ? 0 : item.Hours > item.SetupMinCharge ? item.Hours * laborRate : item.SetupMinCharge * laborRate;
                 item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft + TotalSqftPlywood);
 
@@ -162,7 +162,7 @@ namespace WICR_Estimator.ViewModels
                 item.SMSqftH = unit;
                 item.SMSqft = unit;
                 item.Qty = unit / item.Coverage;
-                item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, 0, 0);
+                item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
                 item.LaborExtension = item.Hours == 0 ? 0 : item.Hours > item.SetupMinCharge ? item.Hours * laborRate : item.SetupMinCharge * laborRate;
                 item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft + TotalSqftPlywood);
 
@@ -177,7 +177,7 @@ namespace WICR_Estimator.ViewModels
                 item.SMSqftH = unit;
                 item.SMSqft = unit;
                 item.Qty = unit / item.Coverage;
-                item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, 0, 0);
+                item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
                 item.LaborExtension = item.Hours == 0 ? 0 : item.Hours > item.SetupMinCharge ? item.Hours * laborRate : item.SetupMinCharge * laborRate;
                 item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft + TotalSqftPlywood);
 
@@ -191,7 +191,7 @@ namespace WICR_Estimator.ViewModels
                 item.SMSqftH = unit;
                 item.SMSqft = unit;
                 item.Qty = unit / item.Coverage;
-                item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, 0, 0);
+                item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
                 item.LaborExtension = item.Hours == 0 ? 0 : item.Hours > item.SetupMinCharge ? item.Hours * laborRate : item.SetupMinCharge * laborRate;
                 item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft + TotalSqftPlywood);
 
@@ -272,6 +272,7 @@ namespace WICR_Estimator.ViewModels
             switch (materialName)
             {
                 case "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)":
+                    
                 case "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH) UPI 7013 SC BASE COAT":
                 case "9801 ACCELERATOR":
                 case "EXTRA STAIR NOSING":
@@ -284,7 +285,7 @@ namespace WICR_Estimator.ViewModels
                 case "DETAIL TAPE (NEW PLYWOOD)":
                 case "SIKA 1-A CAULKING (NEW PLYWOOD)":
                     return TotalSqftPlywood / 32 * 12 + riserCount * stairWidth * 2;
-                case "UI 7118 CONCRETE PRIMER 1-1/2 GAL KIT":
+                case "UI 7118 CONCRETE PRIMER 2 gal kit":
                     return totalSqft + riserCount * stairWidth * 2;
                 case "INTEGRAL STAIR NOSING (EXCEL STYLE)":
                     return riserCount;
@@ -332,6 +333,13 @@ namespace WICR_Estimator.ViewModels
             SystemMaterial sysmat = SystemMaterials.Where(x => x.Name == "9801 ACCELERATOR").FirstOrDefault();
 
             sysmat.Qty = qty / sysmat.Coverage;
+            sysmat = SystemMaterials.Where(x => x.Name == "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)").FirstOrDefault();
+            if (sysmat!=null)
+            {
+                double myVal = 0;
+                double.TryParse(sysmat.SMUnits,out myVal);
+                sysmat.Qty = myVal / sysmat.Coverage;
+            }
         }
 
         public override void setExceptionValues()

@@ -167,7 +167,7 @@ namespace WICR_Estimator.ViewModels
             //Projects.Add(new Project { Name = "MACoat", Rank = 13, GrpName = "Westcoat" });
             Projects.Add(new Project { Name = "Reseal all systems", Rank = 14, GrpName = "Reseal" });
 
-            //Projects.Add(new Project { Name = "Weather Wear Reseal", Rank = 5, GrpName = "Unknown" });
+            Projects.Add(new Project { Name = "Resistite", Rank = 15, GrpName = "Concrete On Grade" });
 
             ProjectView = CollectionViewSource.GetDefaultView(Projects);
             ProjectView.GroupDescriptions.Add(new PropertyGroupDescription("GrpName"));

@@ -549,12 +549,12 @@ namespace WICR_Estimator.ViewModels
 
         public virtual void calculateLaborHrs()
         {
-            calLaborHrs(10);
+            calLaborHrs(10,totalSqft);
         }
-        public void calLaborHrs(int hrs)
+        public void calLaborHrs(int hrs,double tSqft)
         {
-            TotalHrsDriveLabor = totalSqft < 1001 ? hrs : Math.Ceiling(totalSqft / 1000 * hrs);
-            TotalHrsFreightLabor = AllTabsFreightTotal / laborRate;
+            TotalHrsDriveLabor = tSqft < 1001 ? hrs : Math.Ceiling(tSqft / 1000 * hrs);
+            TotalHrsFreightLabor = Math.Round(AllTabsFreightTotal / laborRate,1);
             OnPropertyChanged("TotalHrsFreightLabor");
             TotalHrsSystemLabor = isPrevailingWage ? (TotalLaborExtension / laborRate) * .445 - TotalHrsDriveLabor :
                                                   (TotalLaborExtension / laborRate) - TotalHrsDriveLabor;
@@ -2638,8 +2638,12 @@ namespace WICR_Estimator.ViewModels
                 TotalWeightbrkp = SumWeight;
                 TotalFreightCostBrkp = FreightCalculator(TotalWeightbrkp);
                 TotalSubContractLaborCostBrkp = TotalSCExtension;
-                CostPerSquareFeet =(totalSqft + deckCount)==0?0: Math.Round(TotalMaterialCostbrkp / (totalSqft + deckCount), 2);
+                CalculateCostPerSqFT();
             }
+        }
+        public virtual void CalculateCostPerSqFT()
+        {
+            CostPerSquareFeet = (totalSqft + deckCount) == 0 ? 0 : Math.Round(TotalMaterialCostbrkp / (totalSqft + deckCount), 2);
         }
         #endregion
 
@@ -3208,11 +3212,7 @@ namespace WICR_Estimator.ViewModels
             TotalSlopingPrice = finalSCost; //* (1 + markUpPerc / 100);
             TotalSystemPrice = finalSyCost; //* (1 + markUpPerc / 100);
             TotalSubcontractLabor = finalSubLabCost; // * (1 + markUpPerc / 100);
-            CostperSqftSlope = finalSCost / (totalSqft + deckPerimeter);
-            CostperSqftMetal=finalMCost/(totalSqft + deckPerimeter);
-            CostperSqftMaterial= finalSyCost / (totalSqft + deckPerimeter);
-            CostperSqftSubContract= finalSubLabCost / (totalSqft + deckPerimeter);
-            TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
+            CalculateTotalSqFt();
             TotalSale = TotalMetalPrice + TotalSlopingPrice + TotalSystemPrice + TotalSubcontractLabor;
             OnPropertyChanged("TotalMetalPrice");
             OnPropertyChanged("TotalSlopingPrice");
@@ -3221,6 +3221,19 @@ namespace WICR_Estimator.ViewModels
             OnPropertyChanged("TotalSale");
         }
 
+        public virtual void CalculateTotalSqFt()
+        {
+            CostperSqftSlope = TotalSlopingPrice / (totalSqft + deckPerimeter);
+            CostperSqftMetal = TotalMetalPrice / (totalSqft + deckPerimeter);
+            CostperSqftMaterial = TotalSystemPrice / (totalSqft + deckPerimeter);
+            CostperSqftSubContract = TotalSubcontractLabor / (totalSqft + deckPerimeter);
+            TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
+            OnPropertyChanged("CostperSqftSlope");
+            OnPropertyChanged("CostperSqftMetal");
+            OnPropertyChanged("CostperSqftMaterial");
+            OnPropertyChanged("CostperSqftSubContract");
+            OnPropertyChanged("TotalCostperSqft");
+        }
         #region  Temporary
         private ICommand fillValues;
         public ICommand FillValues

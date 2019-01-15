@@ -69,7 +69,7 @@ namespace WICR_Estimator.ViewModels
         }
         public override void calculateLaborHrs()
         {
-            calLaborHrs(6);
+            calLaborHrs(6,totalSqft+TotalSqftPlywood);
 
         }
         public override void JobSetup_OnJobSetupChange(object sender, EventArgs e)
@@ -78,7 +78,7 @@ namespace WICR_Estimator.ViewModels
             if (Js!=null)
             {
                 TotalSqftPlywood = Js.TotalSqftPlywood;
-                IsReseal = Js.IsApprovedForSandCement;
+                IsReseal = Js.IsReseal;
                 IsNewPlaywood = Js.IsNewPlywood;
                 RequireFlashing = Js.IsFlashingRequired;
                 //hasContingencyDisc = Js.TotalSqft + Js.TotalSqftPlywood > 1000 ? true : false;                
@@ -154,10 +154,12 @@ namespace WICR_Estimator.ViewModels
             #endregion
 
             else
+            {
                 SystemMaterials = sysMat;
-
-            setExceptionValues();
+                
+            }
             setCheckBoxes();
+            setExceptionValues();
 
             if (OtherMaterials.Count == 0)
             {
@@ -176,7 +178,7 @@ namespace WICR_Estimator.ViewModels
         }
         private void FillMaterialList()
         {
-            MaterialNames.Add("SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)","0");
+            MaterialNames.Add("SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)",riserCount.ToString());
             MaterialNames.Add("REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)", "0");
             MaterialNames.Add("7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL", "2 GAL KIT");
             MaterialNames.Add("INTERLAMINATE PRIMER (XYLENE) FROM LOWRYS", "0");
@@ -210,6 +212,27 @@ namespace WICR_Estimator.ViewModels
             
             return calhrs == 0 ? 0 : calhrs > setupMin ?calhrs * laborRate : setupMin * laborRate;
         }
+
+        public override void CalculateCostPerSqFT()
+        {           
+            CostPerSquareFeet = (totalSqft + TotalSqftPlywood+riserCount) == 0 ? 0 : Math.Round(TotalMaterialCostbrkp / (totalSqft + TotalSqftPlywood+riserCount), 2);
+        }
+
+        public override void CalculateTotalSqFt()
+        {
+            CostperSqftSlope = TotalSlopingPrice / (totalSqft + riserCount+TotalSqftPlywood);
+            CostperSqftMetal = TotalMetalPrice / (totalSqft + riserCount + TotalSqftPlywood);
+            CostperSqftMaterial = TotalSystemPrice / (totalSqft + riserCount + TotalSqftPlywood);
+            CostperSqftSubContract = TotalSubcontractLabor / (totalSqft + riserCount + TotalSqftPlywood);
+            TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
+            OnPropertyChanged("CostperSqftSlope");
+            OnPropertyChanged("CostperSqftMetal");
+            OnPropertyChanged("CostperSqftMaterial");
+            OnPropertyChanged("CostperSqftSubContract");
+            OnPropertyChanged("TotalCostperSqft");
+        }
+
+        
         public override bool getCheckboxCheckStatus(string materialName)
         {
             switch (materialName)
@@ -254,7 +277,18 @@ namespace WICR_Estimator.ViewModels
             //base.setCheckBoxes();
             foreach (SystemMaterial item in SystemMaterials)
             {
-                item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
+                if (item.Name == "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)"
+                    || item.Name == "EXTRA STAIR NOSING"
+                    || item.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)"
+                    || item.Name == "Stucco Material Remove and replace (LF)")
+                {
+
+                }   
+                else 
+                {
+                    item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
+                }
+                
             }
 
         }
@@ -324,7 +358,6 @@ namespace WICR_Estimator.ViewModels
 
         public override void setExceptionValues()
         {
-            //base.setExceptionValues();
             SystemMaterial item = SystemMaterials.Where(x => x.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)").FirstOrDefault();
             if (item != null)
             {
@@ -359,6 +392,7 @@ namespace WICR_Estimator.ViewModels
                 item.LaborUnitPrice = item.LaborExtension / (TotalSqftPlywood+totalSqft+riserCount);
 
             }
+
         }
         public override double getSqFtAreaH(string materialName)
         {

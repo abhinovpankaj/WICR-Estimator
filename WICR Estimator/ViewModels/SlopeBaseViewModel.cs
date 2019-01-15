@@ -125,10 +125,15 @@ namespace WICR_Estimator.ViewModels
             }
             set
             {
-                if (overrideManually && value != totalmixesman)
+                //if (overrideManually && value != totalmixesman)
+                //{
+                //    totalmixesman = value;
+                //    CalculateManual();
+                //    OnPropertyChanged("TotalMixesMan");
+                //}
+                if(value != totalmixesman)
                 {
                     totalmixesman = value;
-                    CalculateManual();
                     OnPropertyChanged("TotalMixesMan");
                 }
             }
@@ -141,15 +146,19 @@ namespace WICR_Estimator.ViewModels
             }
             set
             {
-                if (overrideManually && averagemixesprice != value)
+                //if (overrideManually && averagemixesprice != value)
+                //{
+                //    averagemixesprice = value;
+                //    //CalculateManual();
+                //    OnPropertyChanged("AverageMixesPrice");
+                //}
+                //else
+                //    averagemixesprice = 0;
+                if (averagemixesprice != value)
                 {
                     averagemixesprice = value;
-                    CalculateManual();
                     OnPropertyChanged("AverageMixesPrice");
                 }
-                else
-                    averagemixesprice = 0;
-
 
             }
         }
@@ -310,7 +319,7 @@ namespace WICR_Estimator.ViewModels
         #endregion
 
         #region Methods
-        private void CalculateManual()
+        public virtual void CalculateManual()
         {
             double minLabVal = 0;
             SumTotalMixes = TotalMixesMan;
@@ -436,8 +445,12 @@ namespace WICR_Estimator.ViewModels
 
             return slopes;
         }
-        public void CalculateAll()
+        public virtual void CalculateAll()
         {
+            if (OverrideManually)
+            {
+                CalculateManual();
+            }
             CalculateGridTotal();
             CalculateTotalMixes();
 
@@ -445,12 +458,13 @@ namespace WICR_Estimator.ViewModels
             SlopeTotals.MaterialExtTotal = TotalMaterialCost;
             SlopeTotals.MaterialFreightTotal = TotalFrightCost;
         }
-        public void reCalculate()
+        public virtual void reCalculate()
         {
             foreach (Slope slp in Slopes)
             {
                 slp.PricePerMix = getPricePerMix(slp.Thickness, isApprovedForCement);
             }
+            
             CalculateGridTotal();
             CalculateTotalMixes();
 
@@ -545,7 +559,7 @@ namespace WICR_Estimator.ViewModels
             }
             else
             {
-                double.TryParse(perMixRates[0][1].ToString(), out result);
+                double.TryParse(perMixRates[0+addRow][1].ToString(), out result);
                 return result;
 
             }

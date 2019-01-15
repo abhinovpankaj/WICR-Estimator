@@ -157,8 +157,8 @@ namespace WICR_Estimator.Models
                 }
             }
         }
-        private int coverage;
-        public int Coverage
+        private double coverage;
+        public double Coverage
         {
             get
             {
@@ -223,7 +223,9 @@ namespace WICR_Estimator.Models
                 {
                     sqft = value;
                     OnPropertyChanged("SMSqft");
-                    OnPropertyChanged("Qty");
+                    //Resistite Change
+                    //Qty = sqft / Coverage;
+                    //OnPropertyChanged("Qty");
                 }
             }
         }
