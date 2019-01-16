@@ -551,9 +551,13 @@ namespace WICR_Estimator.ViewModels
         {
             calLaborHrs(10,totalSqft);
         }
-        public void calLaborHrs(int hrs,double tSqft)
+        public virtual void driveHrs(int hrs,double tSqft)
         {
             TotalHrsDriveLabor = tSqft < 1001 ? hrs : Math.Ceiling(tSqft / 1000 * hrs);
+        }
+        public void calLaborHrs(int hrs,double tSqft)
+        {
+            driveHrs(hrs,tSqft);
             TotalHrsFreightLabor = Math.Round(AllTabsFreightTotal / laborRate,1);
             OnPropertyChanged("TotalHrsFreightLabor");
             TotalHrsSystemLabor = isPrevailingWage ? (TotalLaborExtension / laborRate) * .445 - TotalHrsDriveLabor :

@@ -72,6 +72,7 @@ namespace WICR_Estimator.ViewModels
             calLaborHrs(6,totalSqft+TotalSqftPlywood);
 
         }
+        
         public override void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {
             JobSetup Js = sender as JobSetup;

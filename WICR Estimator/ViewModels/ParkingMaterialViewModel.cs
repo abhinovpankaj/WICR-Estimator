@@ -414,20 +414,23 @@ namespace WICR_Estimator.ViewModels
             switch (materialName)
             {
                 case "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)":
+                case "INTEGRAL STAIR NOSING (EXCEL STYLE)":
                     return riserCount * stairWidth;
                 case "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL":
                 case "INTERLAMINATE PRIMER (XYLENE) FROM LOWRYS":
                 case "DETAIL TAPE (NEW PLYWOOD)":
-                case "UI 7118 CONCRETE PRIMER 1-1/2 GAL KIT":
+                case "Striping for small cracKs (less than 1/8\")":
+                case "Route and caulk moving cracks (greater than 1/8\")":
+                case "UI 7118 CONCRETE PRIMER 2 gal kit":
                     return riserCount * 4.5 * 2;
                 case "7013 SC BASE COAT/ 5 GAL PAILS 30 MILS":
                 case "7016 - AR - SC INTERMEDIATE/ 5 GAL PAILS 20 MILS":
                 case "7016 SC TOP COAT/ 5 GAL PAILS 16 MILS":
+                case "SECOND INTERMEDIATE COAT FOR HIGH TRAFFIC":
                     return riserCount;
                 case "3 IN. WHITE GLASS TAPE (PERIMETER)":
-                    return riserCount * 2 * 2;
-                case "INTEGRAL STAIR NOSING (EXCEL STYLE)":
-                    return riserCount * 3.5;
+                    return riserCount * 2 * 2;              
+                
                 default:
                     return 0.0000001;
             }
