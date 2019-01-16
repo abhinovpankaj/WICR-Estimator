@@ -149,6 +149,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+
         public override void reCalculate()
         {
             foreach (Slope slp in UrethaneSlopes)
@@ -270,8 +271,10 @@ namespace WICR_Estimator.ViewModels
                     }
                     TotalLaborCost = TotalLaborCost + lCost;
                     TotalMaterialCost = TotalMaterialCost + Math.Round(UrethaneSumTotalMatExt, 2);
-                    TotalWeight = TotalWeight + Math.Round(50 * UrethaneSumTotalMixes, 2);
-                    TotalFrightCost = Math.Round(FreightCalculator(TotalWeight), 2);
+                    double urethaneTotalWeight = Math.Round(50 * UrethaneSumTotalMixes, 2);
+                    TotalFrightCost = Math.Round(FreightCalculator(TotalWeight), 2)+ Math.Round(FreightCalculator(urethaneTotalWeight), 2);
+                    TotalWeight = TotalWeight + urethaneTotalWeight ;
+                    
                 }
             }
         }

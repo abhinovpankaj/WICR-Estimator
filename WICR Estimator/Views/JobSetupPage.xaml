@@ -45,16 +45,7 @@
                             Text="{Binding JobDate,UpdateSourceTrigger=LostFocus}"
                             VerticalContentAlignment="Center"
                             HorizontalContentAlignment="Left"/>
-                <!--<TextBlock Style="{StaticResource FieldHeader}"
-                       Text="Weather Wear Type" Visibility="{Binding ShowWeatherWearDD}"
-                           />
-                <ComboBox Text="{Binding WeatherWearType,UpdateSourceTrigger=LostFocus}" 
-                          Width="180" Visibility="{Binding ShowWeatherWearDD}"
-                          HorizontalAlignment="Left"
-                          Margin="5,0,0,0">
-                    <ComboBoxItem Content="Weather Wear"/>
-                    <ComboBoxItem Content="Weather Wear Rehab"/>
-                </ComboBox>-->
+                
                 <TextBlock Style="{StaticResource FieldHeader}"
                        Text="Metal Material Type"/>
                 <ComboBox Text="{Binding MaterialName,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left"
@@ -71,6 +62,16 @@
                           Text="{Binding VendorName,UpdateSourceTrigger=PropertyChanged}">
                     <ComboBoxItem Content="Chivon"/>
                     <ComboBoxItem Content="Thunder Bird"/>
+                </ComboBox>
+                <TextBlock Style="{StaticResource FieldHeader}"
+                       Text="Project Start Date"/>
+                <ComboBox Text="{Binding ProjectDelayFactor,UpdateSourceTrigger=LostFocus}" 
+                          Width="180" HorizontalAlignment="Left"
+                          Margin="5,0,0,0">
+                    <ComboBoxItem Content="0-3 Months" IsSelected="True"/>
+                    <ComboBoxItem Content="3-6 Months"/>
+                    <ComboBoxItem Content="6-12 Months"/>
+                    <ComboBoxItem Content=">12 Months"/>
                 </ComboBox>
                 <TextBlock Style="{StaticResource FieldHeader}"
                            Margin="5,30,10,0"

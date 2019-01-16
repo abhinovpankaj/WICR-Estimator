@@ -23,6 +23,7 @@ namespace WICR_Estimator
                 case "Parking Garage":
                 case "Barrier Gaurd":
                 case "Resistite":
+                case "MACoat":
                     return new MetalViewModel(Js);
                 //case "Dexotex Barrier Gaurd":
                 //    return new DexoMetalViewModel(Js);
@@ -42,6 +43,7 @@ namespace WICR_Estimator
                 case "Color Wash Reseal":
                 case "Desert Crete":
                 case "Resistite":
+                case "MACoat":
                     return new SlopeViewModel(Js);
                 case "Endurokote":
                     return new EnduroKoteSlopeViewModel(Js);
@@ -55,7 +57,6 @@ namespace WICR_Estimator
 
             }
         }
-
         public static MaterialBaseViewModel GetMaterialViewModelInstance(string projectName,Totals metalT,Totals slopeT, Models.JobSetup Js)
         {
             switch (projectName)
@@ -80,9 +81,10 @@ namespace WICR_Estimator
                     return new ParkingMaterialViewModel(metalT, slopeT, Js);
                 case "Resistite":
                     return new ResistiteConcreteMaterialViewModel(metalT, slopeT, Js);
+                case "MACoat":
+                    return new MACoatMaterialViewModel(metalT, slopeT, Js);
                 default:
                     return null;
-
             }
         }
     }

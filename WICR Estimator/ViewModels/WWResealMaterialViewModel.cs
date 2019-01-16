@@ -509,15 +509,32 @@ namespace WICR_Estimator.ViewModels
         public override void calculateRLqty()
         {
             //base.calculateRLqty();
-            double val1, val2, val3, val4 = 0;
+            double val1=0, val2=0, val3=0, val4 = 0;
             double qty = 0;
             SystemMaterial sysmat = SystemMaterials.Where(x => x.Name == "RESISTITE REGULAR GRAY").FirstOrDefault();
+            if (sysmat!=null)
+            {
+                val3 = sysmat.IsMaterialChecked?sysmat.Qty:0;
+            }
+            sysmat = SystemMaterials.Where(x => x.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)").FirstOrDefault();
+            if (sysmat!=null)
+            {
+                val1 =sysmat.IsMaterialChecked?sysmat.Qty:0;
+            }
+            sysmat = SystemMaterials.Where(x => x.Name == "SLURRY COAT (RESISTITE) OVER TEXTURE").FirstOrDefault();
+            if (sysmat != null)
+            {
+                val2 = sysmat.IsMaterialChecked ? sysmat.Qty : 0;
+            }
+            sysmat = SystemMaterials.Where(x => x.Name == "RESISTITE REGULAR OR SMOOTH GRAY (KNOCK DOWN OR SMOOTH)").FirstOrDefault();
+            if (sysmat != null)
+            {
+                val4 = sysmat.IsMaterialChecked ? sysmat.Qty : 0;
+            }
 
-            val1 =SystemMaterials.Where(x => x.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)").FirstOrDefault().Qty;
-            val2=SystemMaterials.Where(x => x.Name == "SLURRY COAT (RESISTITE) OVER TEXTURE").FirstOrDefault().Qty;
-            val3=sysmat.Qty;
-            val4=SystemMaterials.Where(x => x.Name == "RESISTITE REGULAR OR SMOOTH GRAY (KNOCK DOWN OR SMOOTH)").FirstOrDefault().Qty;
+            
             qty= sysmat.IsMaterialChecked ? (val3 + val4 + val1) * 0.33 + val2 / 5 : val1 * 0.33 + val2 / 5;
+
             SystemMaterial RL = SystemMaterials.Where(x => x.Name == "RESISTITE LIQUID").FirstOrDefault();
             if (RL!=null)
             {

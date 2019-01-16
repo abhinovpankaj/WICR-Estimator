@@ -72,4 +72,11 @@
     <SlopeRange>P845:Q853</SlopeRange>
     <MaterialRange>H865:N881</MaterialRange>
   </DRConcrete>
+<MACoat>
+    <RateRange>E2</RateRange>
+    <MetalRange>F3:M43</MetalRange>
+    <LaborRange>E985:E1004</LaborRange>
+    <SlopeRange>P930:Q938</SlopeRange>
+    <MaterialRange>H950:N972</MaterialRange>
+  </MACoat>
 </Projects>

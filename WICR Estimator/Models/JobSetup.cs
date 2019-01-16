@@ -79,6 +79,23 @@ namespace WICR_Estimator.Models
             OnPropertyChanged("LoginMessage");
         }
 
+        private string projectDelayFactor;
+        public string ProjectDelayFactor
+        {
+            get { return projectDelayFactor; }
+            set
+            {
+                if (value!= projectDelayFactor)
+                {
+                    projectDelayFactor = value;
+                    OnPropertyChanged("ProjectDelayFactor");
+                    if (OnJobSetupChange != null)
+                    {
+                        OnJobSetupChange(this, EventArgs.Empty);
+                    }
+                }
+            }
+        }
         private string specialProductName;
         public string SpecialProductName
         {

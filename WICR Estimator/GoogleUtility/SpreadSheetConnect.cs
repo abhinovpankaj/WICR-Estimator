@@ -107,6 +107,9 @@ namespace WICR_Estimator.GoogleUtility
                 case "Resistite":
                     prjName = "DRConcrete";
                     break;
+                case "MACoat":
+                    prjName = "MACoat";
+                    break;
                 default:
                     break;
             }
