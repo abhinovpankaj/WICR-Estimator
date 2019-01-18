@@ -115,6 +115,7 @@
                     UpdateSourceTrigger=PropertyChanged}"
                           Content="Is This Job Specified By Architect"/>
                     <CheckBox Style="{StaticResource CheckBoxStyle}"
+                              Visibility="{Binding IsSandCementVisible}"
                           IsChecked="{Binding IsApprovedForSandCement,UpdateSourceTrigger=PropertyChanged}"
                           Content="{Binding FirstCheckBoxLabel}"/>
                     <CheckBox Style="{StaticResource CheckBoxStyle}"
@@ -175,7 +176,7 @@
                           Visibility="{Binding IsNewPlywoodVisible}"
                          Text="{Binding TotalSqftPlywood,UpdateSourceTrigger=LostFocus}"/>
                 <TextBlock Style="{StaticResource FieldHeader}"
-                       Text="Total Sq Ft"/>
+                       Text="{Binding SqftLabel}"/>
                 <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding TotalSqft,UpdateSourceTrigger=LostFocus}"/>
                 <TextBlock Style="{StaticResource FieldHeader}"

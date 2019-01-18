@@ -46,6 +46,83 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("Stucco Material Remove and replace (LF)", "LF");           
         }
 
+        public override void FetchMaterialValuesAsync(bool hasSetupChanged)
+        {
+            Dictionary<string, double> qtyList = new Dictionary<string, double>();
+
+            foreach (SystemMaterial item in SystemMaterials)
+            {
+                if (item.Name == "Stucco Material Remove and replace (LF)" || item.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
+                    item.Name == "Extra stair nosing lf")
+                {
+                    qtyList.Add(item.Name, item.Qty);
+                }
+
+            }
+            var sysMat = GetSystemMaterial(materialNames);
+
+            #region  Update Special Material Pricing and QTY
+            if (hasSetupChanged)
+            {
+                for (int i = 0; i < SystemMaterials.Count; i++)
+                {
+
+                    double sp = SystemMaterials[i].SpecialMaterialPricing;
+                    bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
+                    bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
+                    SystemMaterials[i] = sysMat[i];
+
+                    SystemMaterials[i].SpecialMaterialPricing = sp;
+                    SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                    SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                    if (SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)" || SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
+                    SystemMaterials[i].Name == "Extra stair nosing lf")
+                    {
+                        if (qtyList.ContainsKey(SystemMaterials[i].Name))
+                        {
+                            SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                        }
+                    }
+
+                }
+
+            }
+            #endregion
+            else
+                SystemMaterials = sysMat;
+
+            setExceptionValues();
+            //setCheckBoxes();
+            if (OtherMaterials.Count == 0)
+            {
+                OtherMaterials = GetOtherMaterials();
+                OtherLaborMaterials = GetOtherMaterials();
+            }
+            if (SubContractLaborItems.Count == 0)
+            {
+                SubContractLaborItems = GetLaborItems();
+            }
+            calculateRLqty();
+            CalculateLaborMinCharge();
+            CalculateAllMaterial();
+        }
+        public override bool IncludedInLaborMin(string matName)
+        {
+            switch (matName)
+            {
+                case "Stair Nosing":
+                case "Extra stair nosing lf":
+                case "Plywood 3/4 & blocking (# of 4x8 sheets)":
+                case "Stucco Material Remove and replace (LF)":
+                case "SC-10 Topcoat":
+                case "WP-81 Liquid":
+                case "WP-90 Liquid":
+                
+                    return false;
+                default:
+                    return true;
+            }
+        }
         public override bool canApply(object obj)
         {
             return true;
@@ -81,9 +158,9 @@ namespace WICR_Estimator.ViewModels
                 case "Membrane Grey TC-1 Cement":
                 case "Slurry Coat / Standard Semi-Smooth Texture: Grey TC-1 Cement":
                 case "Knock Down Texture: Grey TC-3 Cement":
-                case "SC-35 Water based stain":
                 case "WP-81 Liquid":
                 case "WP-90 Liquid":
+                case "SC-10 Topcoat":
                 case "Stair Nosing":
                     return true;
                     
@@ -131,7 +208,7 @@ namespace WICR_Estimator.ViewModels
                 case "Membrane Grey TC-1 Cement":
                     return totalSqft +deckPerimeter/2+ riserCount * stairWidth * 2;
                 case "1/4 inch grout tape, Standard 12 x 12 tile pattern, tape and labor":
-                    return   totalSqft + riserCount * stairWidth * 2;
+                    return   (totalSqft + riserCount * stairWidth *2)* 2;
                 case "Stair Nosing":
                     return riserCount * stairWidth;
                 case "Extra stair nosing lf":
@@ -139,7 +216,7 @@ namespace WICR_Estimator.ViewModels
                 case "Stucco Material Remove and replace (LF)":
                     return 0;
                 default:
-                    return (totalSqft + riserCount * stairWidth * 2)*2;
+                    return (totalSqft + riserCount * stairWidth * 2);
             }
         }
         //TC-40 Liquid Colorant
@@ -162,8 +239,17 @@ namespace WICR_Estimator.ViewModels
                 val3 = sysMat.Qty;
             }
             //set qty
-            SystemMaterials.Where(x => x.Name == "TC-40 Liquid Colorant").FirstOrDefault().Qty = val1 + val2 + val3;
-            SystemMaterials.Where(x => x.Name == "WP-81 Liquid").FirstOrDefault().Qty =( val1 + val3)/5;
+            sysMat = SystemMaterials.Where(x => x.Name == "TC-40 Liquid Colorant").FirstOrDefault();
+            bool ischecked=sysMat.IsMaterialChecked;
+            sysMat.Qty = val1 + val2 + val3;
+            sysMat.IsMaterialChecked=ischecked;
+
+
+            sysMat = SystemMaterials.Where(x => x.Name == "WP-81 Liquid").FirstOrDefault();
+            ischecked = sysMat.IsMaterialChecked;
+            sysMat.Qty =( val1 + val3)/5;
+            sysMat.IsMaterialChecked = ischecked;
+
 
             sysMat = SystemMaterials.Where(x => x.Name == "Membrane Grey TC-1 Cement").FirstOrDefault();
             if (sysMat.IsMaterialChecked)
@@ -181,19 +267,93 @@ namespace WICR_Estimator.ViewModels
                 val4 = sysMat.Qty;
             }
 
-            SystemMaterials.Where(x => x.Name == "WP-90 Liquid").FirstOrDefault().Qty = val1+val2+val3+val4/5;
+
+            sysMat = SystemMaterials.Where(x => x.Name == "WP-90 Liquid").FirstOrDefault();
+            ischecked = sysMat.IsMaterialChecked;
+            sysMat.Qty = val1+val2+val3+val4/5;
+            sysMat.IsMaterialChecked = ischecked;
 
         }
 
         public override void setCheckBoxes()
         {
-            foreach (SystemMaterial item in SystemMaterials)
+            //foreach (SystemMaterial item in SystemMaterials)
+            //{
+            //    if (item.Name== "TC-40 Liquid Colorant"||item.Name== "WP-81 Liquid"||item.Name== "WP-90 Liquid")
+            //    {
+            //        item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
+            //    }
+            //}
+        }
+
+        public override double getSqFtStairs(string materialName)
+        {
+            switch (materialName)
             {
-                if (item.Name== "TC-40 Liquid Colorant"||item.Name== "WP-81 Liquid"||item.Name== "WP-90 Liquid")
-                {
-                    item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
-                }
+                case "Stair Nosing":
+                    return riserCount * stairWidth;
+                case "Extra stair nosing lf":
+                case "Stucco Material Remove and replace (LF)":
+                case "1/4 inch grout tape, Standard 12 x 12 tile pattern, tape and labor":
+                    return 0.0000001;
+                
+                default:
+                    return riserCount*stairWidth*2;
             }
+        }
+        public override double getSqFtAreaH(string materialName)
+        {
+            switch (materialName)
+            {
+                case "Stair Nosing":
+                case "Extra stair nosing lf":
+                    return 0.0000001;
+
+                default:
+                    return totalSqft;
+            }
+        }
+
+        public override void setExceptionValues()
+        {
+            base.setExceptionValues();
+
+            //if (SystemMaterials.Count != 0)
+            //{
+            //    SystemMaterial item = SystemMaterials.Where(x => x.Name == "Extra stair nosing lf").FirstOrDefault();
+            //    if (item != null)
+            //    {
+            //        item.StairSqft = item.Qty;
+            //        item.SMSqftH = 0;
+            //        item.Hours = CalculateHrs(0, 0, item.StairSqft, item.StairsProductionRate);
+            //        item.LaborExtension = (item.Hours + item.SetupMinCharge) * laborRate;
+            //        item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
+
+            //    }
+
+            //    item = SystemMaterials.Where(x => x.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)").FirstOrDefault();
+            //    if (item != null)
+            //    {
+            //        item.SMSqftH = item.Qty * 32;
+            //        item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, 0, item.StairsProductionRate);
+            //        item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
+            //        item.LaborUnitPrice = item.LaborExtension / item.Qty;
+            //    }
+
+            //    item = SystemMaterials.Where(x => x.Name == "Stucco Material Remove and replace (LF)").FirstOrDefault();
+            //    if (item != null)
+            //    {
+            //        item.SMSqftH = item.Qty;
+            //        item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, 0, 0);
+            //        item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
+            //        item.LaborUnitPrice = item.LaborExtension / item.Qty;
+            //    }
+            //}
+        }
+
+        public override void calculateLaborHrs()
+        {
+            calLaborHrs(6, totalSqft);
         }
     }
 }

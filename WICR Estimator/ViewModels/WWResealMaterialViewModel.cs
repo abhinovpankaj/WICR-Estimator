@@ -756,7 +756,9 @@ namespace WICR_Estimator.ViewModels
                     return;
                 }
             }
-            if (obj.ToString()== "SLURRY COAT (RESISTITE) OVER TEXTURE"|| obj.ToString()== "RESISTITE REGULAR GRAY")
+            if (obj.ToString()== "SLURRY COAT (RESISTITE) OVER TEXTURE"|| obj.ToString()== "RESISTITE REGULAR GRAY"
+                ||obj.ToString()== "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)"
+                ||obj.ToString()== "RESISTITE REGULAR OR SMOOTH GRAY (KNOCK DOWN OR SMOOTH)")
             {
                 calculateRLqty();
                 

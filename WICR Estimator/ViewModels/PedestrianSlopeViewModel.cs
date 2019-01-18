@@ -178,6 +178,7 @@ namespace WICR_Estimator.ViewModels
             {
                 CalculateManualUrethane();
             }
+
             SlopeTotals.LaborExtTotal = TotalLaborCost;
             SlopeTotals.MaterialExtTotal = TotalMaterialCost;
             SlopeTotals.MaterialFreightTotal = TotalFrightCost;
@@ -190,8 +191,11 @@ namespace WICR_Estimator.ViewModels
             UrethaneSumTotalMixes = UrethaneTotalMixesMan;
             UrethaneSumTotalMatExt = UrethaneAverageMixesPrice * UrethaneTotalMixesMan;
             TotalMaterialCost = UrethaneSumTotalMatExt+ SumTotalMatExt;
-            TotalWeight = Math.Round(50 * UrethaneTotalMixesMan, 2)+ TotalWeight;
-            TotalFrightCost = Math.Round(FreightCalculator(TotalWeight), 2);
+            double urethaneTotalWeight = Math.Round(50 * UrethaneTotalMixesMan, 2);
+            TotalFrightCost = Math.Round(FreightCalculator(TotalWeight), 2) + Math.Round(FreightCalculator(urethaneTotalWeight), 2);
+            TotalWeight = urethaneTotalWeight + TotalWeight;
+
+            
             UrethaneSumTotalLaborExt = Math.Round(UrethaneTotalMixesMan * urethaneManualAvgMixPrice, 2);
             double.TryParse(perMixRates[17][0].ToString(), out minLabVal);
             UrethaneMinimumLaborCost = minLabVal * laborRate;

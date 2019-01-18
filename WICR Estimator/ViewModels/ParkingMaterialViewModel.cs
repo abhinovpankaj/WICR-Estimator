@@ -21,11 +21,15 @@ namespace WICR_Estimator.ViewModels
             FetchMaterialValuesAsync(false);
 
         }
+        public override void ApplyCheckUnchecks(object obj)
+        {
+            
+        }
         private void FillMaterialList()
         {
             MaterialNames.Add("SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)", riserCount.ToString());
             MaterialNames.Add("REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH) UPI 7013 SC BASE COAT", "0");
-            MaterialNames.Add("Striping for small cracKs (less than 1/8\")","0");
+            MaterialNames.Add("Striping for small cracKs (less than 1/8\")",totalSqft.ToString());
             MaterialNames.Add("Route and caulk moving cracks (greater than 1/8\")","0");
             MaterialNames.Add("7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL", "2 GAL KIT");
             MaterialNames.Add("INTERLAMINATE PRIMER (XYLENE) FROM LOWRYS", "0");
@@ -302,7 +306,7 @@ namespace WICR_Estimator.ViewModels
                     return 0;
                 case "7016 - AR - SC INTERMEDIATE/ 5 GAL PAILS 20 MILS":
                 case "7016 SC TOP COAT/ 5 GAL PAILS 16 MILS":
-                    return lfArea / coverage < 0.5 ? 0.5 : lfArea / coverage;
+                    return lfArea / coverage;
                 case "INTEGRAL STAIR NOSING (EXCEL STYLE)":
                     double locVal = 0;
                     locVal = 4 * lfArea;
@@ -336,9 +340,10 @@ namespace WICR_Estimator.ViewModels
             sysmat = SystemMaterials.Where(x => x.Name == "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)").FirstOrDefault();
             if (sysmat!=null)
             {
-                double myVal = 0;
-                double.TryParse(sysmat.SMUnits,out myVal);
-                sysmat.Qty = myVal / sysmat.Coverage;
+                //double myVal = 0;
+                sysmat.SMUnits = riserCount.ToString();
+                //double.TryParse(sysmat.SMUnits,out myVal);
+                sysmat.Qty = riserCount / sysmat.Coverage;
             }
         }
 
@@ -379,11 +384,7 @@ namespace WICR_Estimator.ViewModels
                 item.LaborUnitPrice = item.LaborExtension / (TotalSqftPlywood + totalSqft + riserCount);
 
             }
-            item = SystemMaterials.Where(x => x.Name == "Striping for small cracKs (less than 1/8\")").FirstOrDefault();
-            if (item!=null)
-            {
-                item.SMUnits = totalSqft.ToString();
-            }
+            
            
         }
         public override double getSqFtAreaH(string materialName)

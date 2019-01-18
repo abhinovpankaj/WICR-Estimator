@@ -147,7 +147,7 @@ namespace WICR_Estimator.ViewModels
             switch (materialName)
             {
                 case "Staples":
-                case "BASE COAT 50 lb Desert Crete Level Max 20/30":
+                //case "BASE COAT 50 lb Desert Crete Level Max 20/30":
                 case "BASE COAT Desert Crete poly base mixed with water":
                 case "2.5 Galvanized Lathe (18 s.f.)":
                      return true;
@@ -244,7 +244,8 @@ namespace WICR_Estimator.ViewModels
             sysmat = SystemMaterials.Where(x => x.Name == "Desert Crete Liquid Polymer #550 mixed 50/50 with water").FirstOrDefault();
             if (sysmat != null)
             {
-                sysmat.Qty = isApprovedforCement?0.31*val2:(0.31*val2)+val1/2.5/2;
+                double calVal = ((0.31 * val2) + val1 / 2.5 / 2);
+                sysmat.Qty =(bool) IsJobSpecifiedByArchitect?0.31*val2:calVal;
             }
 
         }
@@ -308,12 +309,13 @@ namespace WICR_Estimator.ViewModels
 
         public override void ApplyCheckUnchecks(object obj)
         {
-            
+            calculateRLqty();
         }
 
         public override void setCheckBoxes()
         {
             //base.setCheckBoxes();
+            
             SystemMaterials.Where(x => x.Name == "BASE COAT 50 lb Desert Crete Level Max 20/30").FirstOrDefault().IsMaterialChecked = !(bool)IsJobSpecifiedByArchitect;
             SystemMaterials.Where(x => x.Name == "BASE COAT Desert Crete poly base mixed with water").FirstOrDefault().IsMaterialChecked = (bool)IsJobSpecifiedByArchitect;
         }

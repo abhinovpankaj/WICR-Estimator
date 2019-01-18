@@ -139,16 +139,20 @@ namespace WICR_Estimator.Models
                 }
             }
         }
+        public string SqftLabel { get; set; }
         public JobSetup(string name)            
         {
             ProjectName = name;
+            SqftLabel = "Total Sqft";
             if (name=="Pedestrian System" ||name=="Parking Garage")
             {
                 IsNewPlywood = false;
+                SqftLabel = "Total Sqft Concrete";
             }
             if (name=="Desert Crete")
             {
-                IsJobSpecifiedByArchitect = true; 
+                IsJobSpecifiedByArchitect = true;
+                
             }
             HidePasswordSection = System.Windows.Visibility.Collapsed;
             IsApprovedForSandCement = true;
@@ -638,10 +642,25 @@ namespace WICR_Estimator.Models
                 }
             }
         }
+
+        public System.Windows.Visibility IsSandCementVisible
+        {
+            get
+            {
+                if (ProjectName == "Pedestrian System" || ProjectName == "Parking Garage")
+                {
+                    return System.Windows.Visibility.Collapsed;
+                }
+                else
+                    return System.Windows.Visibility.Visible;
+
+            }
+        }
         public System.Windows.Visibility IsNewPlywoodVisible
         {
             get
             {
+                
                 if (isNewPlywood != null)
                 {
                     return System.Windows.Visibility.Visible;

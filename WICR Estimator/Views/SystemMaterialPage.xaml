@@ -140,7 +140,7 @@
                 <DataGridTemplateColumn Header="Units">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding SMUnits,UpdateSourceTrigger=LostFocus}"
+                            <TextBox Text="{Binding SMUnits,UpdateSourceTrigger=LostFocus,Mode=TwoWay}"
                                      Name="unitTb"
                                      Style="{StaticResource editableTextbox}"
                                     IsEnabled="{Binding Path=Name,

@@ -262,6 +262,10 @@ namespace WICR_Estimator.ViewModels
         {
             switch (materialName)
             {
+                case "UI 7118 CONCRETE PRIMER 1-1/2 GAL KIT":
+                case "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL":
+                case "1/20 SAND/ #100 LB":
+                case "7016 - AR - INTERMEDIATE COAT / 5 GAL PAILS 20 MILS":
                 case "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)":
                     return true;
                 default:
@@ -324,7 +328,7 @@ namespace WICR_Estimator.ViewModels
                     return 1;
                 case "7016 - AR - INTERMEDIATE COAT / 5 GAL PAILS 20 MILS":
                 case "7016 - AL - SC TOP COAT / 5 GAL PAILS 16 MILS":
-                    return lfArea / coverage < 0.5 ? 0.5 : lfArea / coverage;
+                    return  lfArea / coverage;
                 case "INTEGRAL STAIR NOSING (EXCEL STYLE)":
                     double locVal = 0;
                     locVal = 4 * lfArea;
@@ -356,9 +360,9 @@ namespace WICR_Estimator.ViewModels
             if (sysmat != null)
             {
                 bool ischecked = sysmat.IsMaterialChecked;
-                double myVal = 0;
-                double.TryParse(sysmat.SMUnits, out myVal);
-                sysmat.Qty = myVal / sysmat.Coverage;
+                sysmat.SMUnits = riserCount.ToString();
+                //double.TryParse(sysmat.SMUnits, out myVal);
+                sysmat.Qty = riserCount / sysmat.Coverage;
                 sysmat.IsMaterialChecked = ischecked;
             }
         }
