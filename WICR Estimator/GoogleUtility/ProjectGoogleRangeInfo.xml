@@ -79,4 +79,18 @@
     <SlopeRange>P930:Q938</SlopeRange>
     <MaterialRange>H950:N972</MaterialRange>
   </MACoat>
+<ALX>
+    <RateRange>E2</RateRange>
+    <MetalRange>F3:M43</MetalRange>
+    <LaborRange>E1070:E1089</LaborRange>
+    <SlopeRange>P1015:Q1023</SlopeRange>
+    <MaterialRange>H1035:N1056</MaterialRange>
+  </ALX>
+<Multicoat>
+    <RateRange>E2</RateRange>
+    <MetalRange>F3:M43</MetalRange>
+    <LaborRange>E1143:E1162</LaborRange>
+    <SlopeRange>P1100:Q1108</SlopeRange>
+    <MaterialRange>H1118:N1133</MaterialRange>
+  </Multicoat>
 </Projects>

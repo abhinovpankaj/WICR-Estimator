@@ -110,6 +110,12 @@ namespace WICR_Estimator.GoogleUtility
                 case "MACoat":
                     prjName = "MACoat";
                     break;
+                case "ALX":
+                    prjName = "ALX";
+                    break;
+                case "Multicoat":
+                    prjName = "Multicoat";
+                    break;
                 default:
                     break;
             }

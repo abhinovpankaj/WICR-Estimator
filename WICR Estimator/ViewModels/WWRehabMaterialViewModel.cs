@@ -67,7 +67,7 @@ namespace WICR_Estimator.ViewModels
             else
                 SystemMaterials = sysMat;
 
-            setExceptionValues();
+            setExceptionValues(null);
             setCheckBoxes();
             calculateRLqty();
 
@@ -1196,7 +1196,7 @@ namespace WICR_Estimator.ViewModels
             
         }
 
-        public override void setExceptionValues()
+        public override void setExceptionValues(object s)
         {
             if (SystemMaterials.Count==0)
             {

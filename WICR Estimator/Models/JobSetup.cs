@@ -216,7 +216,7 @@ namespace WICR_Estimator.Models
             {
                 if (ProjectName == "Weather Wear" || ProjectName == "Weather Wear Rehab")
                     return "Linear Footage of Deck Perimeter";
-                else if (ProjectName == "Resistite")
+                else if (ProjectName == "Resistite"||ProjectName=="Multicoat")
                     return "LINEAR FOOTAGE OF DECK TO WALL DETAIL";
                 else
                     return "Lf Perimeter for Burlap and Membrane";
@@ -728,7 +728,7 @@ namespace WICR_Estimator.Models
         {
             get
             {
-                if (ProjectName=="Resistite")
+                if (ProjectName=="Resistite" ||ProjectName=="Multicoat")
                 {
                     return System.Windows.Visibility.Visible;
                 }

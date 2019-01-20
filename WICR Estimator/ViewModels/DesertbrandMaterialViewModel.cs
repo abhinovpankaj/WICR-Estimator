@@ -98,7 +98,7 @@ namespace WICR_Estimator.ViewModels
             else
                 SystemMaterials = sysMat;
 
-            setExceptionValues();
+            setExceptionValues(null);
             setCheckBoxes();
 
             if (OtherMaterials.Count == 0)
@@ -254,7 +254,7 @@ namespace WICR_Estimator.ViewModels
         {
             return true;
         }
-        public override void setExceptionValues()
+        public override void setExceptionValues(object s)
         {
             if (SystemMaterials.Count != 0)
             {

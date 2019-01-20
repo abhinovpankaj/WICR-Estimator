@@ -24,6 +24,8 @@ namespace WICR_Estimator
                 case "Barrier Gaurd":
                 case "Resistite":
                 case "MACoat":
+                case "ALX":
+                case "Multicoat":
                     return new MetalViewModel(Js);
                 //case "Dexotex Barrier Gaurd":
                 //    return new DexoMetalViewModel(Js);
@@ -44,6 +46,8 @@ namespace WICR_Estimator
                 case "Desert Crete":
                 case "Resistite":
                 case "MACoat":
+                case "ALX":
+                case "Multicoat":
                     return new SlopeViewModel(Js);
                 case "Endurokote":
                     return new EnduroKoteSlopeViewModel(Js);
@@ -83,6 +87,10 @@ namespace WICR_Estimator
                     return new ResistiteConcreteMaterialViewModel(metalT, slopeT, Js);
                 case "MACoat":
                     return new MACoatMaterialViewModel(metalT, slopeT, Js);
+                case "ALX":
+                    return new ALXMaterialViewModel(metalT, slopeT, Js);
+                case "Multicoat":
+                    return new MulticoatMaterialViewModel(metalT, slopeT, Js);
                 default:
                     return null;
             }

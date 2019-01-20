@@ -65,7 +65,7 @@ namespace WICR_Estimator.ViewModels
             projectname = Js.ProjectName;
 
             Js.OnJobSetupChange += JobSetup_OnJobSetupChange;
-            SystemMaterial.OnQTyChanged += (s, e) => { setExceptionValues(); };
+            SystemMaterial.OnQTyChanged += (s, e) => { setExceptionValues(s); };
             CheckboxCommand = new DelegateCommand(ApplyCheckUnchecks, canApply);
         }
 
@@ -1009,7 +1009,7 @@ namespace WICR_Estimator.ViewModels
             else
                 SystemMaterials = sysMat;
 
-            setExceptionValues();
+            setExceptionValues(null);
             setCheckBoxes();
             calculateRLqty();
 
@@ -1040,7 +1040,7 @@ namespace WICR_Estimator.ViewModels
         }
        
 
-        public virtual void setExceptionValues()
+        public virtual void setExceptionValues(object s)
         {
             if (SystemMaterials.Count != 0)
             {
@@ -1260,7 +1260,7 @@ namespace WICR_Estimator.ViewModels
                 material.MaterialExtension = material.MaterialPrice * material.Qty;
             }
 
-            setExceptionValues();
+            setExceptionValues(null);
             setCheckBoxes();
 
             calculateMaterialTotals();

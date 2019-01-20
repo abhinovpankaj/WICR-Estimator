@@ -163,12 +163,11 @@ namespace WICR_Estimator.ViewModels
             Projects.Add(new Project { Name = "Parking Garage", Rank = 9, GrpName = "UPI" });
             //Projects.Add(new Project { Name = "Tufflex", Rank = 10, GrpName = "UPI" });
             Projects.Add(new Project { Name = "Color Wash Reseal", Rank = 11, GrpName = "Westcoat" });
-            //Projects.Add(new Project { Name = "ALX", Rank = 12, GrpName = "Westcoat" });
+            Projects.Add(new Project { Name = "ALX", Rank = 12, GrpName = "Westcoat" });
             Projects.Add(new Project { Name = "MACoat", Rank = 13, GrpName = "Westcoat" });
             Projects.Add(new Project { Name = "Reseal all systems", Rank = 14, GrpName = "Reseal" });
-
             Projects.Add(new Project { Name = "Resistite", Rank = 15, GrpName = "Concrete On Grade" });
-
+            Projects.Add(new Project { Name = "Multicoat", Rank = 16, GrpName = "Concrete On Grade" });
             ProjectView = CollectionViewSource.GetDefaultView(Projects);
             ProjectView.GroupDescriptions.Add(new PropertyGroupDescription("GrpName"));
             ProjectView.SortDescriptions.Add(new SortDescription("GrpName", ListSortDirection.Ascending));          

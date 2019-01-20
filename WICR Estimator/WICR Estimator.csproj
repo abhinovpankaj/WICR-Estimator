@@ -121,6 +121,7 @@
     <Compile Include="Models\Slope.cs" />
     <Compile Include="Models\Totals.cs" />
     <Compile Include="ViewModelInstanceFactory.cs" />
+    <Compile Include="ViewModels\ALXMaterialViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\DesertbrandMaterialViewModel.cs" />
     <Compile Include="ViewModels\DexoMaterialViewModel.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="ViewModels\MaterialViewModel.cs" />
     <Compile Include="ViewModels\MetalBaseViewModel.cs" />
     <Compile Include="ViewModels\MetalViewModel.cs" />
+    <Compile Include="ViewModels\MulticoatMaterialViewModel.cs" />
     <Compile Include="ViewModels\ParkingMaterialViewModel.cs" />
     <Compile Include="ViewModels\PedestrianMaterialViewModel.cs" />
     <Compile Include="ViewModels\PedestrianSlopeViewModel.cs" />

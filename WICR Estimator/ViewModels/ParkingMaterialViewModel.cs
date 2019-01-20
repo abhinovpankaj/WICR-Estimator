@@ -25,7 +25,7 @@ namespace WICR_Estimator.ViewModels
         {
             
         }
-        private void FillMaterialList()
+        public override void FillMaterialList()
         {
             MaterialNames.Add("SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)", riserCount.ToString());
             MaterialNames.Add("REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH) UPI 7013 SC BASE COAT", "0");
@@ -121,7 +121,7 @@ namespace WICR_Estimator.ViewModels
             else
                 SystemMaterials = sysMat;
 
-            setExceptionValues();
+            setExceptionValues(null);
             setCheckBoxes();
 
             if (OtherMaterials.Count == 0)
@@ -347,7 +347,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
 
-        public override void setExceptionValues()
+        public override void setExceptionValues(object s)
         {
             //base.setExceptionValues();
             SystemMaterial item = SystemMaterials.Where(x => x.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)").FirstOrDefault();

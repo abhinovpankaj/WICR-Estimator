@@ -9,16 +9,15 @@ namespace WICR_Estimator.ViewModels
 {
     class MACoatMaterialViewModel:MaterialBaseViewModel
     {
-        private Dictionary<string, string> materialNames;
+        public Dictionary<string, string> materialNames;
         public MACoatMaterialViewModel(Totals metalTotals, Totals slopeTotals, JobSetup Js) : base(metalTotals, slopeTotals, Js)
         {
             materialNames = new Dictionary<string, string>();
             FillMaterialList();
-            FetchMaterialValuesAsync(false);
-            
+            FetchMaterialValuesAsync(false);      
         }
 
-        private void FillMaterialList()
+        public virtual void FillMaterialList()
         {
             materialNames.Add("Sand,hand wash, or pressure wash to prepare area", "SQ FT");
             materialNames.Add("Primer if needed:  EC-11 primer", "1.5 GAL KIT");
@@ -91,7 +90,7 @@ namespace WICR_Estimator.ViewModels
             else
                 SystemMaterials = sysMat;
 
-            setExceptionValues();
+            setExceptionValues(null);
             //setCheckBoxes();
             if (OtherMaterials.Count == 0)
             {
@@ -105,6 +104,15 @@ namespace WICR_Estimator.ViewModels
             calculateRLqty();
             CalculateLaborMinCharge();
             CalculateAllMaterial();
+        }
+        public override void CalculateLaborMinCharge()
+        {
+            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+                                        x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
+
+            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 :
+                                                (20 - LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate;
+            base.CalculateLaborMinCharge();
         }
         public override bool IncludedInLaborMin(string matName)
         {
@@ -277,13 +285,7 @@ namespace WICR_Estimator.ViewModels
 
         public override void setCheckBoxes()
         {
-            //foreach (SystemMaterial item in SystemMaterials)
-            //{
-            //    if (item.Name== "TC-40 Liquid Colorant"||item.Name== "WP-81 Liquid"||item.Name== "WP-90 Liquid")
-            //    {
-            //        item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
-            //    }
-            //}
+            
         }
 
         public override double getSqFtStairs(string materialName)
@@ -314,9 +316,9 @@ namespace WICR_Estimator.ViewModels
             }
         }
 
-        public override void setExceptionValues()
+        public override void setExceptionValues(object s)
         {
-            base.setExceptionValues();
+            base.setExceptionValues(s);
 
             //if (SystemMaterials.Count != 0)
             //{

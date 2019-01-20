@@ -158,7 +158,7 @@ namespace WICR_Estimator.ViewModels
                 
             }
             
-            setExceptionValues();
+            setExceptionValues(null);
             setCheckBoxes();
             if (OtherMaterials.Count == 0)
             {
@@ -173,7 +173,7 @@ namespace WICR_Estimator.ViewModels
             CalculateLaborMinCharge();
             CalculateAllMaterial();
         }
-        private void FillMaterialList()
+        public virtual void FillMaterialList()
         {
             MaterialNames.Add("SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)",riserCount.ToString());
             MaterialNames.Add("REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)", "0");
@@ -367,7 +367,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
 
-        public override void setExceptionValues()
+        public override void setExceptionValues(object s)
         {
             SystemMaterial item = SystemMaterials.Where(x => x.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)").FirstOrDefault();
             if (item != null)

@@ -481,7 +481,7 @@ namespace WICR_Estimator.ViewModels
             }
                 
 
-            setExceptionValues();
+            setExceptionValues(null);
             if (OtherMaterials.Count == 0)
             {
                 OtherMaterials = GetOtherMaterials();
@@ -774,7 +774,7 @@ namespace WICR_Estimator.ViewModels
             //return base.getLaborUnitPrice(laborExtension, riserCount, totalSqft, sqftVert, sqftHor, sqftStairs, matName);
             return laborExtension / (riserCount + totalSqft);
         }
-        public override void setExceptionValues()
+        public override void setExceptionValues(object s)
         {
 
 
