@@ -100,7 +100,7 @@ namespace WICR_Estimator.ViewModels
         }
         public SystemMaterial getSMObject(int seq, string matName, string unit)
         {
-            int cov;
+            double cov;
             double mp;
             double w;
             double lfArea;
@@ -115,7 +115,7 @@ namespace WICR_Estimator.ViewModels
             double qty = 0;
 
 
-            int.TryParse(materialDetails[seq][2].ToString(), out cov);
+            double.TryParse(materialDetails[seq][2].ToString(), out cov);
             double.TryParse(materialDetails[seq][0].ToString(), out mp);
             double.TryParse(materialDetails[seq][3].ToString(), out w);
             lfArea = getlfArea(matName);

@@ -9,11 +9,11 @@ namespace WICR_Estimator.ViewModels
 {
     public class PedestrianMaterialViewModel:MaterialBaseViewModel
     {
-        public Dictionary<string, string> MaterialNames;
-        public double TotalSqftPlywood=0;
-        public bool IsReseal;
-        public bool? IsNewPlaywood;
-        public bool RequireFlashing;
+        private Dictionary<string, string> MaterialNames;
+        private double TotalSqftPlywood=0;
+        private bool IsReseal;
+        private bool? IsNewPlaywood;
+        private bool RequireFlashing;
         public PedestrianMaterialViewModel(Totals metalTotals, Totals slopeTotals, JobSetup Js) : base(metalTotals, slopeTotals, Js)
         {
             MaterialNames = new Dictionary<string, string>();
@@ -26,7 +26,7 @@ namespace WICR_Estimator.ViewModels
             FetchMaterialValuesAsync(false);
 
         }
-
+        
         private void setUnitChangeValues()
         {
             SystemMaterial item = SystemMaterials.Where(x => x.Name == "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)").FirstOrDefault();
@@ -46,9 +46,11 @@ namespace WICR_Estimator.ViewModels
         }
         public override void CalculateLaborMinCharge()
         {
+            //base.CalculateLaborMinCharge();
             LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
                                         x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
-
+            LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+                                         x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
             LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 :
                                                 (20 - LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate;
             base.CalculateLaborMinCharge();

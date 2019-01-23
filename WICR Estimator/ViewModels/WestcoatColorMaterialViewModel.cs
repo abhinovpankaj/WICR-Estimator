@@ -293,8 +293,9 @@ namespace WICR_Estimator.ViewModels
                 if (sysmat != null)
                 {
                     sysmat.IsMaterialChecked = !SystemMaterials.Where(x => x.Name == "SC-10 solid color sealer IN LIEU of SC-70").FirstOrDefault().IsMaterialChecked;
+                    calculateRLqty();
                 }
-                //calculateRLqty();
+
             }
             CalculateLaborMinCharge();
         }

@@ -29,7 +29,7 @@ namespace WICR_Estimator.Models
         }
 
 
-        public SystemMaterial(bool ismChecked, string prjestimate, string smunits, double sqft, int coverage,
+        public SystemMaterial(bool ismChecked, string prjestimate, string smunits, double sqft, double coverage,
             int qty, double materialPrice, double materialextension, int weight, double specialPricing = 0)
             : this()
         {

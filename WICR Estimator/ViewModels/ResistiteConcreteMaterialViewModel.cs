@@ -137,7 +137,28 @@ namespace WICR_Estimator.ViewModels
         }
         public override void calculateRLqty()
         {
-           // base.calculateRLqty();
+            SystemMaterial sysMat1, sysMat2;
+            if (SystemMaterials.Count > 0)
+            {
+                sysMat1 = SystemMaterials.Where(x => x.Name == "Slurry Coat for repairs").FirstOrDefault();
+                if (sysMat1 == null)
+                {
+                    sysMat1 = SystemMaterials.Where(x => x.Name == "Slurry coat over texture (Resistite smooth 120 sq ft per mix with 1 gal liquid)").FirstOrDefault();
+                }
+                sysMat2 = SystemMaterials.Where(x => x.Name == "Texture for repairs").FirstOrDefault();
+                if (sysMat2 == null)
+                {
+                    sysMat2 = SystemMaterials.Where(x => x.Name == "Resistite textured knockdown finish (regular or smooth)").FirstOrDefault();
+                }
+                bool isChecked = sysMat1.IsMaterialChecked;
+                sysMat1.Qty = sysMat1.Coverage == 0 ? 0 : sysMat1.SMSqft / sysMat1.Coverage;
+                sysMat1.IsMaterialChecked = isChecked;
+
+                isChecked = sysMat2.IsMaterialChecked;
+                sysMat2.Qty = sysMat2.Coverage == 0 ? 0 : sysMat2.SMSqft / sysMat2.Coverage;
+                sysMat2.IsMaterialChecked = isChecked;
+
+            }
         }
         public override bool canApply(object obj)
         {
@@ -205,6 +226,7 @@ namespace WICR_Estimator.ViewModels
                 }
                 SystemMaterials.Where(x => x.Name == "Light crack and repairs- resistite smooth (no more than 5% of area) with 1 gal liquid").FirstOrDefault().IsMaterialChecked = !sysMat1.IsMaterialChecked;
             }
+            calculateRLqty();
         }
 
         public override double getSqFtStairs(string materialName)
@@ -224,6 +246,8 @@ namespace WICR_Estimator.ViewModels
         {
             switch (materialName)
             {
+                case "Add for masking and spraying coping from the water":
+                    return linearFootageCoping;
                 case "DETAIL PERIMETER - RP FABRIC 10\" x 300' (FROM ACME BAG)":
                     return deckPerimeter;
                 case "DETAIL PERIMETER - CPC MEMBRANE":
@@ -234,6 +258,15 @@ namespace WICR_Estimator.ViewModels
         }
         public override void setExceptionValues(object s)
         {
+            if (s == null)
+            {
+                return;
+            }
+            if (s.ToString() == "Slurry Coat for repairs" || s.ToString() == "Slurry coat over texture (Resistite smooth 120 sq ft per mix with 1 gal liquid)"
+                || s.ToString() == "Texture for repairs" || s.ToString() == "Resistite textured knockdown finish (regular or smooth)")
+            {
+                return;
+            }
             double val1=0, val2=0;
             if (SystemMaterials.Count>0)
             {
@@ -253,8 +286,8 @@ namespace WICR_Estimator.ViewModels
                 {
 
                     item.SMSqft = item.Qty;
-                    item.StairSqft = item.Qty;
-                    item.Coverage = Math.Round(item.Qty / 115.5,2);
+                    item.SMSqftH = item.Qty;
+                    item.Coverage = item.Qty / 115.5;
                     item.MaterialExtension = item.MaterialPrice * item.Coverage;
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
 
@@ -267,8 +300,9 @@ namespace WICR_Estimator.ViewModels
                 {
 
                     item.SMSqft = item.Qty;
-                    item.StairSqft = item.Qty;
-                    item.Coverage = Math.Round(item.Qty /60);
+                    //item.StairSqft = item.Qty;
+                    item.SMSqftH = item.Qty;
+                    item.Coverage = item.Qty /60;
                     item.MaterialExtension = item.MaterialPrice * item.Coverage;
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
 
@@ -299,9 +333,10 @@ namespace WICR_Estimator.ViewModels
                     }
                 
                     item.SMSqft = item.Qty;
-                    item.StairSqft = item.Qty;
+                    //item.StairSqft = item.Qty;
+                    item.SMSqftH = item.Qty;
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
-                    item.Coverage = Math.Round(item.Qty / 15);
+                    item.Coverage = item.Qty / 15;
                     item.MaterialExtension = item.MaterialPrice * item.Coverage;
                     item.LaborExtension = (item.Hours != 0) ? (item.SetupMinCharge + item.Hours) * laborRate : 0;
                     item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
@@ -312,8 +347,9 @@ namespace WICR_Estimator.ViewModels
                 {
 
                     item.SMSqft = item.Qty;
-                    item.StairSqft = item.Qty;
-                    item.Coverage = Math.Round(item.Qty / 15);
+                    //item.StairSqft = item.Qty;
+                    item.SMSqftH = item.Qty;
+                    item.Coverage = item.Qty / 15;
                     item.MaterialExtension = item.MaterialPrice * item.Coverage;
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
 
@@ -339,8 +375,8 @@ namespace WICR_Estimator.ViewModels
                         sysMat2.SMSqft = totalSqft + (riserCount * stairWidth * 2);
                     }
                     item.SMSqft = item.Qty;
-                    item.StairSqft = item.Qty;
-                    
+                    //item.StairSqft = item.Qty;
+                    item.SMSqftH = item.Qty;
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
 
                     item.LaborExtension = (item.Hours != 0) ? (item.SetupMinCharge + item.Hours) * laborRate : 0;
@@ -352,9 +388,10 @@ namespace WICR_Estimator.ViewModels
                 {
 
                     item.SMSqft = item.Qty;
-                    item.StairSqft = item.Qty;
+                    //item.StairSqft = item.Qty;
+                    
+                    item.SMSqftH = item.Qty;
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
-
                     item.LaborExtension = (item.Hours != 0) ? (item.SetupMinCharge + item.Hours) * laborRate : 0;
                     item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
 
@@ -364,9 +401,10 @@ namespace WICR_Estimator.ViewModels
                 {
 
                     item.SMSqft = item.Qty;
-                    item.StairSqft = item.Qty;
+                    //item.StairSqft = item.Qty;
+                    
+                    item.SMSqftH = item.Qty;
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
-
                     item.LaborExtension = (item.Hours != 0) ? (item.SetupMinCharge + item.Hours) * laborRate : 0;
                     item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
 
@@ -383,12 +421,36 @@ namespace WICR_Estimator.ViewModels
                 }
 
             }
+            calculateRLqty();
 
-            
         }
         public override double getQuantity(string materialName, double coverage, double lfArea)
         {
-            return coverage == 0 ? 0 : lfArea / coverage;
+            if (materialName== "Add for saw cut joints"|| materialName== "Add for removing and replacing concrete (no more than 100 sq ft)")
+            {
+                return 0;
+            }
+            else
+                return coverage == 0 ? 0 : lfArea / coverage;
+        }
+        public override bool IncludedInLaborMin(string matName)
+        {
+            return true;
+        }
+
+        public override void CalculateLaborMinCharge()
+        {
+            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+                                        x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
+            LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+                                         x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
+            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 :
+                                                (20 - LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate;
+            base.CalculateLaborMinCharge();
+        }
+        public override void calculateLaborHrs()
+        {
+            calLaborHrs(4, totalSqft);
         }
     }
 }

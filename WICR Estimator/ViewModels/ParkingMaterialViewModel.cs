@@ -7,8 +7,13 @@ using WICR_Estimator.Models;
 
 namespace WICR_Estimator.ViewModels
 {
-    class ParkingMaterialViewModel:PedestrianMaterialViewModel
+    class ParkingMaterialViewModel:MaterialBaseViewModel
     {
+        private Dictionary<string, string> MaterialNames;
+        private double TotalSqftPlywood = 0;
+        private bool IsReseal;
+        private bool? IsNewPlaywood;
+        private bool RequireFlashing;
         public ParkingMaterialViewModel(Totals metalTotals, Totals slopeTotals, JobSetup Js) : base(metalTotals, slopeTotals, Js)
         {
             MaterialNames = new Dictionary<string, string>();
@@ -25,7 +30,7 @@ namespace WICR_Estimator.ViewModels
         {
             
         }
-        public override void FillMaterialList()
+        public void FillMaterialList()
         {
             MaterialNames.Add("SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)", riserCount.ToString());
             MaterialNames.Add("REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH) UPI 7013 SC BASE COAT", "0");
@@ -54,6 +59,19 @@ namespace WICR_Estimator.ViewModels
 
         }
 
+        public override void JobSetup_OnJobSetupChange(object sender, EventArgs e)
+        {
+            JobSetup Js = sender as JobSetup;
+            if (Js != null)
+            {
+                TotalSqftPlywood = Js.TotalSqftPlywood;
+                IsReseal = Js.IsReseal;
+                IsNewPlaywood = Js.IsNewPlywood;
+                RequireFlashing = Js.IsFlashingRequired;
+                //hasContingencyDisc = Js.TotalSqft + Js.TotalSqftPlywood > 1000 ? true : false;                
+            }
+            base.JobSetup_OnJobSetupChange(sender, e);
+        }
         public override void FetchMaterialValuesAsync(bool hasSetupChanged)
         {
             Dictionary<string, double> qtyList = new Dictionary<string, double>();
@@ -208,7 +226,11 @@ namespace WICR_Estimator.ViewModels
             
             return laborExtension / (TotalSqftPlywood + totalSqft + riserCount);
         }
-
+        
+        public override bool canApply(object obj)
+        {
+            return true;
+        }
         public override double CalculateLabrExtn(double calhrs, double setupMin, string matName = "")
         {
 
@@ -262,7 +284,8 @@ namespace WICR_Estimator.ViewModels
                 if (item.Name== "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL"||
                     item.Name== "INTERLAMINATE PRIMER (XYLENE) FROM LOWRYS"||
                     item.Name== "7013 SC BASE COAT/ 5 GAL PAILS 30 MILS"||
-                    item.Name== "INTEGRAL STAIR NOSING (EXCEL STYLE)")
+                    item.Name== "INTEGRAL STAIR NOSING (EXCEL STYLE)"||item.Name== "DETAIL TAPE (NEW PLYWOOD)"
+                    ||item.Name== "SIKA 1-A CAULKING (NEW PLYWOOD)")
                 {
                     item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
                 }
@@ -319,6 +342,10 @@ namespace WICR_Estimator.ViewModels
         //calculateQTY for 9801 ACCELERATOR
         public override void calculateRLqty()
         {
+            if (SystemMaterials.Count==0)
+            {
+                return;
+            }
             double qty = 0;
             foreach (var item in SystemMaterials)
             {

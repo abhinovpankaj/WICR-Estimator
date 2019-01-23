@@ -150,11 +150,11 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Sq ft or Lf Area" IsReadOnly="True"
-                                    Binding="{Binding SMSqft}"
+                                    Binding="{Binding SMSqft,StringFormat={}{0:n2}}"
                                      KeyboardNavigation.IsTabStop="False">
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Binding="{Binding Coverage}" Header="Coverage"
+                <DataGridTextColumn Binding="{Binding Coverage,StringFormat={}{0:n2}}" Header="Coverage"
                                     IsReadOnly="True" KeyboardNavigation.IsTabStop="False">
                     
                 </DataGridTextColumn>

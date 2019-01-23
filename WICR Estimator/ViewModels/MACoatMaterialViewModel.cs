@@ -207,6 +207,7 @@ namespace WICR_Estimator.ViewModels
                 else
                     SystemMaterials.Where(x => x.Name == "SC-10 Topcoat").FirstOrDefault().IsMaterialChecked = false;
             }
+            calculateRLqty();
         }
 
         public override double getlfArea(string materialName)
@@ -356,6 +357,11 @@ namespace WICR_Estimator.ViewModels
         public override void calculateLaborHrs()
         {
             calLaborHrs(6, totalSqft);
+        }
+        public override double getQuantity(string materialName, double coverage, double lfArea)
+        {
+            return coverage == 0 ? 0 : lfArea / coverage;
+
         }
     }
 }
