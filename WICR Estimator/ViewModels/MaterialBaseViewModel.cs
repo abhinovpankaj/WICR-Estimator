@@ -922,7 +922,9 @@ namespace WICR_Estimator.ViewModels
             }
             //update Add labor for minimum cost
             LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false && x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
-
+            //New Change Min Labor
+            LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false && x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
+            //
             LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs)) * laborRate;
             LaborMinChargeLaborUnitPrice = (riserCount + totalSqft) == 0 ? 0 : LaborMinChargeLaborExtension / (riserCount + totalSqft);
             if (LaborMinChargeMinSetup + LaborMinChargeHrs < 20)
@@ -1238,6 +1240,7 @@ namespace WICR_Estimator.ViewModels
                 hasContingencyDisc = js.HasContingencyDisc;
                 MarkUpPerc = js.MarkupPercentage;
                 deckCount = js.DeckCount;
+                MaterialPerc = getMaterialDiscount(js.ProjectDelayFactor);
             }
             FetchMaterialValuesAsync(true);
             
@@ -1271,7 +1274,22 @@ namespace WICR_Estimator.ViewModels
             populateCalculation();
         }
         #endregion 
-
+        public double getMaterialDiscount(string delay)
+        {
+            switch (delay)
+            {
+                case "0-3 Months":
+                    return 0;
+                case "3-6 Months":
+                    return 0.02;
+                case "6-12 Months":
+                    return 0.04;
+                case ">12 Months":
+                    return 0.06;
+                default:
+                    return 0;
+            }
+        }
         public virtual void CalculateLaborMinCharge()
         {
             //update Add labor for minimum cost
@@ -2639,6 +2657,7 @@ namespace WICR_Estimator.ViewModels
             if (systemCBMaterial != null)
             {
                 TotalMaterialCostbrkp = (SumTotalMatExt + TotalOCExtension);
+                TotalMaterialCostbrkp = TotalMaterialCostbrkp*(1 + MaterialPerc);
                 TotalWeightbrkp = SumWeight;
                 TotalFreightCostBrkp = FreightCalculator(TotalWeightbrkp);
                 TotalSubContractLaborCostBrkp = TotalSCExtension;
@@ -2652,6 +2671,8 @@ namespace WICR_Estimator.ViewModels
         #endregion
 
         #region LaborSheet
+        public double MaterialPerc { get; set; }
+        public double LaborPerc { get; set; }
         public double TotalOCLaborExtension { get; set; }
 
         #region LaborSheet TotalProperties
@@ -3218,6 +3239,9 @@ namespace WICR_Estimator.ViewModels
             TotalSubcontractLabor = finalSubLabCost; // * (1 + markUpPerc / 100);
             CalculateTotalSqFt();
             TotalSale = TotalMetalPrice + TotalSlopingPrice + TotalSystemPrice + TotalSubcontractLabor;
+            LaborPerc= Math.Round(AllTabsLaborTotal / TotalSale,2);
+            OnPropertyChanged("MaterialPerc");
+            OnPropertyChanged("LaborPerc");
             OnPropertyChanged("TotalMetalPrice");
             OnPropertyChanged("TotalSlopingPrice");
             OnPropertyChanged("TotalSystemPrice");

@@ -79,10 +79,14 @@ namespace WICR_Estimator.ViewModels
             #endregion
 
             else
+            {
                 SystemMaterials = sysMat;
+                setCheckBoxes();
+            }
+                
 
             setExceptionValues(null);
-            setCheckBoxes();
+            
 
             if (OtherMaterials.Count == 0)
             {
@@ -103,7 +107,8 @@ namespace WICR_Estimator.ViewModels
         {
             LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
                                         x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
-
+            LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+                                         x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
             LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 17 ? 0 :
                                                 (17 - LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate;
             base.CalculateLaborMinCharge();
@@ -236,7 +241,9 @@ namespace WICR_Estimator.ViewModels
             sysmat = SystemMaterials.Where(x => x.Name == "Add for Safe Grip Additive").FirstOrDefault();
             if (sysmat!=null)
             {
+                bool ischecked = sysmat.IsMaterialChecked;
                 sysmat.Qty = val1 + val2;
+                sysmat.IsMaterialChecked = ischecked;
             }
 
         }

@@ -410,10 +410,10 @@
                            FontSize="14" FontWeight="Bold"
                            />
             </Border>
-            
+
             <ListBox Background="AliceBlue"
                      Grid.Row="1">
-                
+
                 <ListBoxItem HorizontalAlignment="Center"
                              FontWeight="Bold">
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
@@ -449,7 +449,7 @@
                     </Border>
                 </ListBoxItem>
                 <ListBoxItem HorizontalAlignment="Center" >
-                    
+
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,2">
                         <TextBlock Text="Sub Contract Labor"
@@ -625,7 +625,7 @@
                            HorizontalAlignment="Stretch"
                                Width="100" FontWeight="Bold"/>
                     </Border>
-                    
+
                 </ListBoxItem>
                 <ListBoxItem HorizontalAlignment="Center">
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
@@ -654,7 +654,7 @@
                         <TextBlock Width="100"
                             Text="0"/>
                     </Border>
-                    
+
                 </ListBoxItem>
                 <ListBoxItem HorizontalAlignment="Center"  Margin="0,5,0,0">
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
@@ -764,11 +764,33 @@
                 </ListBoxItem>
             </ListBox>
         </Grid>
-        <StackPanel Orientation="Horizontal" Background="Aquamarine"
-                    Margin="0,5,0,5"
-                    Grid.Row="2">
-            <TextBlock  Text="Markup %" Margin="10,5,5,5" FontWeight="SemiBold"/>
-            <TextBlock Margin="20,5,5,5" Text="{Binding MarkUpPerc}"/>
-        </StackPanel>
+        <Grid Grid.Row="2" Background="Aquamarine">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
+                    >
+                <TextBlock  Text="Markup %" Margin="10,5,5,5" FontWeight="SemiBold"/>
+                <TextBlock Margin="20,5,5,5" Text="{Binding MarkUpPerc}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Column="1"
+                        VerticalAlignment="Center"
+                    Margin="0,5,0,5">
+                <TextBlock  Text="Material %" Margin="10,0,0,0"
+                            
+                            FontWeight="SemiBold"/>
+                <TextBlock Margin="20,0,0,0" Text="{Binding MaterialPerc}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Column="2"
+                        VerticalAlignment="Center"
+                    >
+                <TextBlock  Text="Labor %" Margin="10,0,0,0"
+                            FontWeight="SemiBold"/>
+                <TextBlock Margin="20,0,0,0" Text="{Binding LaborPerc}"/>
+            </StackPanel>
+        </Grid>
+        
     </Grid>
 </UserControl>

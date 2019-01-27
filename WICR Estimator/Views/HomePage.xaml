@@ -49,13 +49,28 @@
                     <ControlTemplate>
                         <Expander IsExpanded="True" Margin="10,5,0,0">
                             <Expander.Header>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Name}" 
-                                               FontWeight="Bold" Foreground="Gray" 
-                                               FontSize="20" 
-                                               VerticalAlignment="Bottom" />
-                                    
-                                </StackPanel>
+                                <TextBlock Text="{Binding Name}"
+                                           VerticalAlignment="Bottom">
+                                    <TextBlock.Style>
+                                        <Style>
+                                            <Setter Property="TextBlock.FontWeight" Value="Bold"/>
+                                            <Setter Property="TextBlock.FontSize" Value="16"/>
+                                            <Setter Property="TextBlock.Foreground" Value="Gray"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Name}" Value="Deck Coatings">
+                                                    <Setter Property="TextBlock.FontWeight" Value="Bold"/>
+                                                    <Setter Property="TextBlock.FontSize" Value="18"/>
+                                                    <Setter Property="TextBlock.Foreground" Value="Blue"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Name}" Value="Concrete On Grade">
+                                                    <Setter Property="TextBlock.FontWeight" Value="Bold"/>
+                                                    <Setter Property="TextBlock.FontSize" Value="18"/>
+                                                    <Setter Property="TextBlock.Foreground" Value="Blue"/>
+                                                </DataTrigger>
+                                            </Style.Triggers> 
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
                             </Expander.Header>
                             <ItemsPresenter />
                         </Expander>
@@ -89,7 +104,7 @@
                  x:Name="ProjectList"
                  SelectionMode="Multiple"
                  ItemsSource="{Binding ProjectView}"
-                    
+                 
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ItemTemplate="{StaticResource ProjectTemplate}">
                  <!--<i:Interaction.Triggers>
