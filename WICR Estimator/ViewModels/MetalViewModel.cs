@@ -12,10 +12,12 @@ namespace WICR_Estimator.ViewModels
 {
     public class MetalViewModel:MetalBaseViewModel
     {
-        
+
+        public MetalViewModel()
+        { }
         public MetalViewModel(JobSetup js)
         {
-
+            prevailingWage = js.ActualPrevailingWage==0?0:(js.ActualPrevailingWage - laborRate) / laborRate;
             GetMetalDetailsFromGoogle(js.ProjectName);
             Metals =GetMetals();
             AddOnMetals = GetAddOnMetals();
@@ -23,8 +25,7 @@ namespace WICR_Estimator.ViewModels
             
             CalculateCost(null);
             js.OnJobSetupChange += JobSetup_OnJobSetupChange;
-        }
-   
+        }        
         
     }
 }

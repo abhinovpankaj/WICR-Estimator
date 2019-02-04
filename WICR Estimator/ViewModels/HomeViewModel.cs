@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Windows.Forms;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -7,13 +8,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Data;
+
 using System.Windows.Input;
 using System.Windows.Navigation;
 using WICR_Estimator.Models;
 using WICR_Estimator.Views;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace WICR_Estimator.ViewModels
 {
+    
     class HomeViewModel:BaseViewModel,IPageViewModel
     {
         public static event EventHandler OnLoggedAsAdmin;
@@ -23,7 +28,11 @@ namespace WICR_Estimator.ViewModels
             Project.OnSelectedProjectChange += Project_OnSelectedProjectChange;
             HidePasswordSection = System.Windows.Visibility.Hidden;
             ShowCalculationDetails = new DelegateCommand(CanShowCalculationDetails, canShow);
+            SaveEstimate = new DelegateCommand(SaveProjectEstimate, canSaveEstimate);
+            LoadEstimate = new DelegateCommand(LoadProjectEstimate, canLoadEstimate);
         }
+
+        
 
         private void Project_OnSelectedProjectChange(object sender, EventArgs e)
         {
@@ -60,6 +69,76 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+
+        private void LoadProjectEstimate(object obj)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog
+            {
+                InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                Title = "Browse Estimate File",
+                CheckFileExists = true,
+                CheckPathExists = true,
+
+                DefaultExt = "est",
+                Filter = "Estimator files (*.est)|*.est",
+                FilterIndex = 2,
+                RestoreDirectory = true,
+                ReadOnlyChecked = true,
+                ShowReadOnly = true
+            };
+            string filePath;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                filePath = openFileDialog1.FileName;
+                XmlSerializer deserializer = new XmlSerializer(typeof(List<Project>));
+                TextReader reader = new StreamReader(filePath);
+                object est = deserializer.Deserialize(reader);
+                SelectedProjects = (ObservableCollection<Project>)est;
+                reader.Close();
+            }
+            
+        }
+
+        private bool canLoadEstimate(object obj)
+        {
+            return true;
+        }
+        private bool canSaveEstimate(object obj)
+        {
+            if (SelectedProjects.Count > 0)
+            {
+                return true;
+            }
+            else
+                return false;
+        }
+
+        private void SaveProjectEstimate(object obj)
+        {
+            ////serialize Enabled Project Data and Save
+
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments); 
+            saveFileDialog1.Title = "Save Project Estimate";
+            saveFileDialog1.CheckFileExists = false;
+            saveFileDialog1.CheckPathExists = false;
+            //saveFileDialog1.DefaultExt = "txt";
+            saveFileDialog1.Filter = "Project files (*.est)|*.est|All files (*.*)|*.*";
+            //saveFileDialog1.FilterIndex = 2;
+            saveFileDialog1.RestoreDirectory = true;
+            saveFileDialog1.ShowDialog();
+
+            if (saveFileDialog1.FileName != "")
+            {
+                // Insert code to set properties and fields of the object.  
+                XmlSerializer mySerializer = new XmlSerializer(typeof(ObservableCollection<Project>));
+                // To write to a file, create a StreamWriter object.  
+                StreamWriter myWriter = new StreamWriter(saveFileDialog1.FileName);
+                mySerializer.Serialize(myWriter, SelectedProjects);
+                myWriter.Close();
+            }
+
+        }
         private DelegateCommand showCalculationDetails;
         public DelegateCommand ShowCalculationDetails
         {
@@ -73,6 +152,33 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        private DelegateCommand loadEstimate;
+        public DelegateCommand LoadEstimate
+        {
+            get { return loadEstimate; }
+            set
+            {
+                if (value != loadEstimate)
+                {
+                    loadEstimate = value;
+                    OnPropertyChanged("LoadEstimate");
+                }
+            }
+        }
+        private DelegateCommand saveEstimate;
+        public DelegateCommand SaveEstimate
+        {
+            get { return saveEstimate; }
+            set
+            {
+                if (value != saveEstimate)
+                {
+                    saveEstimate = value;
+                    OnPropertyChanged("SaveEstimate");
+                }
+            }
+        }
+        #endregion
         public System.Windows.Visibility HidePasswordSection { get; set; }
         public ICollectionView ProjectView { get; set; }
         private ObservableCollection<Project> projects;
@@ -113,7 +219,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
 
-        #endregion
+        
         #region Methods
         private bool canShow(object obj)
         {

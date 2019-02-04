@@ -7,6 +7,7 @@ using WICR_Estimator.ViewModels;
 
 namespace WICR_Estimator.Models
 {
+    
     public class Slope:BaseViewModel
     {
         public Slope()
@@ -73,6 +74,7 @@ namespace WICR_Estimator.Models
             }
         }
         //private double totalMixes;
+
         public  double TotalMixes
         {
             //set

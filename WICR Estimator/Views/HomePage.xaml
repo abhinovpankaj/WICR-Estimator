@@ -196,8 +196,10 @@
                         VerticalContentAlignment="Center"
                         HorizontalContentAlignment="Left"/>
             <Button Content="Load Estimate" Margin="5" 
+                    Command="{Binding LoadEstimate}"
                     Style="{StaticResource ButtonTemplate}"/>
             <Button Content="Save Estimate" 
+                    Command="{Binding SaveEstimate}"
                     Style="{StaticResource ButtonTemplate}"/>
             <Button Content="Create Estimate"
                     Style="{StaticResource ButtonTemplate}"/>

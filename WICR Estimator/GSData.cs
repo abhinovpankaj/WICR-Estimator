@@ -11,14 +11,18 @@ namespace WICR_Estimator
         public IList<IList<object>> MaterialData { get; set; }
         public IList<IList<object>> LaborRate { get; set; }
         public IList<IList<object>> LaborData { get; set; }
+        public IList<IList<object>> FreightData { get; set; }
+        public GSData()
+        { }
     }
-
+    
     public enum DataType
     {
         Slope,
         Metal,
         Material,
         Labor,
-        Rate
+        Rate,
+        Freight
     }
 }

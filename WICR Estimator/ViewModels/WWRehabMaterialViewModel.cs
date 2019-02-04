@@ -1207,6 +1207,7 @@ namespace WICR_Estimator.ViewModels
             if (item != null)
             {
                 item.SMSqftH = item.Qty;
+                item.SMSqft = item.Qty;
                 item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
                 item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
                 item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
@@ -1215,6 +1216,7 @@ namespace WICR_Estimator.ViewModels
             item = SystemMaterials.Where(x => x.Name == "Bubble Repair(Measure Sq Ft)").FirstOrDefault();
             if (item != null)
             {
+                item.SMSqft = item.Qty;
                 item.SMSqftH = item.Qty;
                 item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
                 item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;

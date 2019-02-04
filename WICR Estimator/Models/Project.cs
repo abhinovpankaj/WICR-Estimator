@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Xml.Serialization;
 using WICR_Estimator.ViewModels;
 
 namespace WICR_Estimator.Models
 {
+           
     public class Project: BaseViewModel
     {
         public Project()
@@ -130,8 +132,11 @@ namespace WICR_Estimator.Models
         public int Rank { get; set; }
         public string GrpName { get; set; }
         public string MainGroup { get; set; }
+
         public JobSetup ProjectJobSetUp { get; set; }
+
         private MetalBaseViewModel metalViewModel;
+
         public MetalBaseViewModel MetalViewModel
         {
             get
@@ -182,8 +187,11 @@ namespace WICR_Estimator.Models
             }
         }
 
+        
         public static event EventHandler OnSelectedProjectChange;
+        
         private ICommand updatedJobSetup;
+        [XmlIgnore]
         public ICommand UpdatedJobSetup
         {
             set { updatedJobSetup = value; }

@@ -18,7 +18,8 @@ namespace WICR_Estimator.ViewModels
             CalculateAll();
             Js.OnJobSetupChange += JobSetup_OnJobSetupChange;
         }
-
+        public EnduroKoteSlopeViewModel()
+        { }
         public override double getPricePerMix(string thickness, bool isApproved,int addRow=0)
         {
             return base.getPricePerMix(thickness, isApproved);

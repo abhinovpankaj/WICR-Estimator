@@ -54,6 +54,9 @@ namespace WICR_Estimator
                 case DataType.Rate:
                     googleData.LaborRate = gData;
                     break;
+                case DataType.Freight:
+                    googleData.FreightData = gData;
+                    break;
                 default:
                     break;
             }
@@ -124,7 +127,8 @@ namespace WICR_Estimator
 
                     case DataType.Rate:
                         return objnew.LaborRate;
-
+                    case DataType.Freight:
+                        return objnew.FreightData;
                     default:
                         return null;
                 }

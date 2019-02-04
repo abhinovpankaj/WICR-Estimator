@@ -617,7 +617,7 @@ namespace WICR_Estimator.ViewModels
         {
 
             TotalHrsDriveLabor = totalSqft < 1001 ? 2 : Math.Ceiling(totalSqft / 1000 * 10);
-            TotalHrsFreightLabor = Math.Round(AllTabsFreightTotal / laborRate, 1);
+            //TotalHrsFreightLabor = Math.Round(AllTabsFreightTotal / laborRate, 1);
             OnPropertyChanged("TotalHrsFreightLabor");
             TotalHrsSystemLabor = Math.Round(isPrevailingWage ? (TotalLaborExtension / laborRate) * .445 - TotalHrsDriveLabor :
                                                   (TotalLaborExtension / laborRate) - TotalHrsDriveLabor, 1);
@@ -634,7 +634,7 @@ namespace WICR_Estimator.ViewModels
             }
 
             TotalHrsLabor = TotalHrsSystemLabor + TotalHrsMetalLabor + TotalHrsSlopeLabor +
-                TotalHrsFreightLabor + TotalHrsDriveLabor;
+                 TotalHrsDriveLabor;
             OnPropertyChanged("TotalHrsLabor");
         }
         public override double getSqFtStairs(string materialName)

@@ -4,14 +4,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Xml.Serialization;
 using WICR_Estimator.ViewModels;
 
 namespace WICR_Estimator.Models
 {
+    
+    
     public class JobSetup : BaseViewModel
     {
 
-
+        private double actualPrevailingWage;
+        public double ActualPrevailingWage
+        {
+            get
+            {
+                return actualPrevailingWage;
+            }
+            set
+            {
+                if (value != actualPrevailingWage)
+                {
+                    actualPrevailingWage = value;
+                    OnPropertyChanged("ActualPrevailingWage");
+                    if (OnJobSetupChange != null)
+                    {
+                        OnJobSetupChange(this, EventArgs.Empty);
+                    }
+                }
+            }
+        }
         private string projectname;
         public string FirstCheckBoxLabel { get; set; }
         public string ProjectName
@@ -31,6 +53,7 @@ namespace WICR_Estimator.Models
             }
         }
         public event EventHandler OnJobSetupChange;
+        
         public event EventHandler OnProjectNameChange;
         public string SlopeMaterialName{get;set;}
         public JobSetup()
@@ -140,6 +163,7 @@ namespace WICR_Estimator.Models
             }
         }
         public string SqftLabel { get; set; }
+        
         public JobSetup(string name)            
         {
             ProjectName = name;
@@ -175,8 +199,9 @@ namespace WICR_Estimator.Models
         }
 
         public double MinMarkUp { get; set; }
-
+        
         private DelegateCommand enableMMCommand;
+        [XmlIgnore]
         public DelegateCommand EnableMoreMarkupCommand
         {
             get { return enableMMCommand; }

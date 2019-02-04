@@ -25,5 +25,7 @@ namespace WICR_Estimator.Models
             :base(name,size,  productionRate,  laborRate,  units,  materialPrice,  isStairMetal,  specialPricing = 0)
         {
         }
+        public AddOnMetal()
+        { }
     }
 }

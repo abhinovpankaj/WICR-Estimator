@@ -18,5 +18,8 @@ namespace WICR_Estimator.ViewModels
         {
             FetchMaterialValuesAsync(false);
         }
+
+        public MaterialViewModel()
+        { }
     }
 }

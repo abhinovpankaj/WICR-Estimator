@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WICR_Estimator.ViewModels;
 namespace WICR_Estimator.Models
 {
+    
     public class Labor : BaseViewModel
     {
         public Labor()

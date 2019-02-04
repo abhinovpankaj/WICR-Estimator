@@ -267,9 +267,10 @@
                        Style="{StaticResource LabelStyle1}"/>
                 <Label Content="Sloping hours" Grid.Row="3"
                        Style="{StaticResource LabelStyle1}"/>
-                <Label Content="Freight hours" Grid.Row="4"
-                       Style="{StaticResource LabelStyle1}"/>
+                <!--<Label Content="Freight hours" Grid.Row="4"
+                       Style="{StaticResource LabelStyle1}"/>-->
                 <Label Content="Drive hours" Grid.Row="5"
+                       
                        Style="{StaticResource LabelStyle1}"/>
                 <Border BorderThickness="0,2,0,0" Margin="2,10,2,10"
                         BorderBrush="Black" Grid.Row="6"
@@ -316,17 +317,18 @@
                          Text="{Binding TotalHrsSlopeLabor, UpdateSourceTrigger=PropertyChanged,
                         StringFormat={}{0:n2}}"/>
                 </Border>
-                <Border Grid.Column="1"  Grid.Row="4" BorderBrush="Black"
+                <!--<Border Grid.Column="1"  Grid.Row="4" BorderBrush="Black"
                         BorderThickness="0,0,0,1">
                     <TextBlock IsEnabled="False"                      
                          Width="100" 
                          FontSize="14"                
                          Text="{Binding TotalHrsFreightLabor, 
                         UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
-                </Border>
+                </Border>-->
                 <Border Grid.Column="1"  Grid.Row="5" BorderBrush="Black"
                         BorderThickness="0,0,0,1">
-                    <TextBlock IsEnabled="False"                        
+                    <TextBlock IsEnabled="False" 
+                               Background="Yellow"
                          Margin="5" Grid.Column="1"                      
                          Width="100"
                          FontSize="14"                
@@ -556,9 +558,10 @@
                 </ListBoxItem>
                 <ListBoxItem HorizontalAlignment="Center">
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            Background="Yellow"
                             BorderThickness="0,0,0,2">
                         <TextBlock HorizontalAlignment="Stretch" Width="100"
-                        Text="0"/>
+                        Text="{Binding DriveLaborValue}"/>
                     </Border>
                 </ListBoxItem>
                 <ListBoxItem HorizontalAlignment="Center"  Margin="0,5,0,0">
@@ -769,6 +772,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
                     >
@@ -790,6 +794,10 @@
                             FontWeight="SemiBold"/>
                 <TextBlock Margin="20,0,0,0" Text="{Binding LaborPerc}"/>
             </StackPanel>
+            <TextBlock Background="Yellow" Grid.Column="3"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Text="Drive Labor"/>
         </Grid>
         
     </Grid>

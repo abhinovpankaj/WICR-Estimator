@@ -9,11 +9,14 @@ using WICR_Estimator.Models;
 
 namespace WICR_Estimator.ViewModels
 {
+    
     public class SlopeViewModel : SlopeBaseViewModel
     {
-
+        public SlopeViewModel()
+        { }
         public SlopeViewModel(JobSetup js)
         {
+            prevailingWage = js.ActualPrevailingWage == 0 ? 0 : (js.ActualPrevailingWage - laborRate) / laborRate; 
             GetSlopeDetailsFromGoogle(js.ProjectName);
             SlopeMaterialName = js.IsApprovedForSandCement ? "Sand and Cement" : "Dexotex A-81 Underlayment";
             isApprovedForCement = js.IsApprovedForSandCement;
@@ -23,6 +26,6 @@ namespace WICR_Estimator.ViewModels
             CalculateAll();        
             js.OnJobSetupChange += JobSetup_OnJobSetupChange;                   
         }
-
+        
     }
 }

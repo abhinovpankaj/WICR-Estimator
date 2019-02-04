@@ -296,7 +296,7 @@
                          Grid.Column="2" 
                          VerticalContentAlignment="Center"
                          Height="25" Width="150" 
-                         Text="{Binding TotalWeight,UpdateSourceTrigger=PropertyChanged }"/>
+                         Text="{Binding TotalWeight}"/>
                 <TextBox x:Name="TotalFrightCostDefault" 
                          IsEnabled="False"
                          Grid.Row="1"

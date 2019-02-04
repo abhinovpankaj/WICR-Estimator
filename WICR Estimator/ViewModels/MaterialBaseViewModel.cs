@@ -5,10 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Xml.Serialization;
 using WICR_Estimator.Models;
 
 namespace WICR_Estimator.ViewModels
 {
+    
+    [XmlInclude(typeof(MaterialViewModel))]
     public class MaterialBaseViewModel:BaseViewModel
     {
         public Totals MetalTotals { set; get; }
@@ -32,8 +35,9 @@ namespace WICR_Estimator.ViewModels
         private bool isSpecialMetal;
         private bool hasSpecialPricing;
         public bool isDiscounted;
-        public IList<IList<Object>> laborDetails;
-        public IList<IList<object>> materialDetails;
+        protected IList<IList<Object>> laborDetails;
+        protected IList<IList<object>> materialDetails;
+        protected IList<IList<object>> freightData;
         private double costPerSquareFeet;
         private ICommand _addRowCommand;
         private ICommand _calculateCostCommand;
@@ -44,6 +48,10 @@ namespace WICR_Estimator.ViewModels
 
         #endregion
         private string projectname;
+        public MaterialBaseViewModel()
+        { }
+        double preWage = 0;
+        double actualPreWage = 0;
         public MaterialBaseViewModel(JobSetup Js)
         {
 
@@ -63,7 +71,7 @@ namespace WICR_Estimator.ViewModels
             isApprovedforCement = true;
             deckCount = 1;
             projectname = Js.ProjectName;
-
+            actualPreWage = Js.ActualPrevailingWage;
             Js.OnJobSetupChange += JobSetup_OnJobSetupChange;
             SystemMaterial.OnQTyChanged += (s, e) => { setExceptionValues(s); };
             CheckboxCommand = new DelegateCommand(ApplyCheckUnchecks, canApply);
@@ -113,7 +121,8 @@ namespace WICR_Estimator.ViewModels
             double calcHrs = 0;
             double sqStairs = 0;
             double qty = 0;
-
+            double prPerc = 0;
+            double.TryParse(freightData[5][0].ToString(), out prPerc);
 
             double.TryParse(materialDetails[seq][2].ToString(), out cov);
             double.TryParse(materialDetails[seq][0].ToString(), out mp);
@@ -140,6 +149,7 @@ namespace WICR_Estimator.ViewModels
             {
                 sqStairs = qty;
             }
+
             return (new SystemMaterial
             {
                 Name = matName,
@@ -151,8 +161,8 @@ namespace WICR_Estimator.ViewModels
                 Qty = qty,
                 SMSqftH = sqh,
                 Operation = matName,
-                HorizontalProductionRate = hprRate,
-                StairsProductionRate = pRateStairs,
+                HorizontalProductionRate = hprRate*(1+ prPerc),
+                StairsProductionRate = pRateStairs * (1 + prPerc),
                 StairSqft = sqStairs,
                 SetupMinCharge = setUpMin,
                 Hours = calcHrs,
@@ -195,6 +205,7 @@ namespace WICR_Estimator.ViewModels
         #region public properties
 
         #region Material Properties
+        [XmlIgnore]
         public DelegateCommand CheckboxCommand { get; set; }
         public ObservableCollection<LaborContract> SubContractLaborItems
         {
@@ -512,7 +523,7 @@ namespace WICR_Estimator.ViewModels
         public double TotalHrsSystemLabor { get; set; }
         public double TotalHrsMetalLabor { get; set; }
         public double TotalHrsSlopeLabor { get; set; }
-        public double TotalHrsFreightLabor { get; set; }
+        //public double TotalHrsFreightLabor { get; set; }
         public double TotalHrsDriveLabor { get; set; }
 
         public double TotalLaborUnitPrice { get; set; }
@@ -554,14 +565,17 @@ namespace WICR_Estimator.ViewModels
         public virtual void driveHrs(int hrs,double tSqft)
         {
             TotalHrsDriveLabor = tSqft < 1001 ? hrs : Math.Ceiling(tSqft / 1000 * hrs);
+            DriveLaborValue = Math.Round(TotalHrsDriveLabor * laborRate,2);
+            OnPropertyChanged("DriveLaborValue");
         }
         public void calLaborHrs(int hrs,double tSqft)
         {
             driveHrs(hrs,tSqft);
-            TotalHrsFreightLabor = Math.Round(AllTabsFreightTotal / laborRate,1);
-            OnPropertyChanged("TotalHrsFreightLabor");
-            TotalHrsSystemLabor = isPrevailingWage ? (TotalLaborExtension / laborRate) * .445 - TotalHrsDriveLabor :
-                                                  (TotalLaborExtension / laborRate) - TotalHrsDriveLabor;
+            //TotalHrsFreightLabor = Math.Round(AllTabsFreightTotal / laborRate,1);
+            //OnPropertyChanged("TotalHrsFreightLabor");
+
+            TotalHrsSystemLabor = isPrevailingWage ? (TotalLaborExtension / actualPreWage) :
+                                                  (TotalLaborExtension / laborRate) ;
             if (TotalHrsSystemLabor < 0)
             {
                 TotalHrsSystemLabor = 0;
@@ -569,16 +583,15 @@ namespace WICR_Estimator.ViewModels
             OnPropertyChanged("TotalHrsSystemLabor");
             if (SlopeTotals != null && MetalTotals != null)
             {
-                TotalHrsMetalLabor = isPrevailingWage ? (MetalTotals.LaborExtTotal / laborRate) * .445 :
+                TotalHrsMetalLabor = isPrevailingWage ? (MetalTotals.LaborExtTotal / actualPreWage) :
                                                   (MetalTotals.LaborExtTotal / laborRate);
                 OnPropertyChanged("TotalHrsMetalLabor");
-                TotalHrsSlopeLabor = isPrevailingWage ? (SlopeTotals.LaborExtTotal / laborRate) * .445 :
+                TotalHrsSlopeLabor = isPrevailingWage ? (SlopeTotals.LaborExtTotal / actualPreWage) :
                                                       (SlopeTotals.LaborExtTotal / laborRate);
                 OnPropertyChanged("TotalHrsSlopeLabor");
             }
 
-            TotalHrsLabor = TotalHrsSystemLabor + TotalHrsMetalLabor + TotalHrsSlopeLabor +
-                TotalHrsFreightLabor + TotalHrsDriveLabor;
+            TotalHrsLabor = TotalHrsSystemLabor + TotalHrsMetalLabor + TotalHrsSlopeLabor + TotalHrsDriveLabor;
             OnPropertyChanged("TotalHrsLabor");
         }
         private void calculateLaborforMinCharge()
@@ -951,6 +964,7 @@ namespace WICR_Estimator.ViewModels
                 GSData gData = DataSerializer.DSInstance.deserializeGoogleData(prjName);
                 laborDetails = gData.LaborData;
                 materialDetails = gData.MaterialData;
+                freightData = gData.FreightData;
                 double.TryParse(gData.LaborRate[0][0].ToString(), out laborRate);
                 double facVal = 0;
                 double.TryParse(laborDetails[7][0].ToString(), out facVal);
@@ -1131,6 +1145,7 @@ namespace WICR_Estimator.ViewModels
         }
 
         #region IcommandSection
+        [XmlIgnore]
         public ICommand AddRowCommand
         {
             get
@@ -1154,7 +1169,7 @@ namespace WICR_Estimator.ViewModels
             OtherMaterials.Add(newItem);
             OtherLaborMaterials.Add(newItem);
         }
-
+        [XmlIgnore]
         public ICommand RemoveCommand
         {
             get
@@ -1183,7 +1198,7 @@ namespace WICR_Estimator.ViewModels
                 AddInt = AddInt - 1;
             }
         }
-
+        [XmlIgnore]
         public ICommand CalculateCostCommand
         {
             get
@@ -1236,10 +1251,11 @@ namespace WICR_Estimator.ViewModels
                 hasSpecialPricing = js.HasSpecialPricing;
                 isDiscounted = js.HasDiscount;
                 isApprovedforCement = js.IsApprovedForSandCement;
-                
+                preWage = js.ActualPrevailingWage == 0 ? 0 : (js.ActualPrevailingWage - laborRate) / laborRate; 
                 hasContingencyDisc = js.HasContingencyDisc;
                 MarkUpPerc = js.MarkupPercentage;
                 deckCount = js.DeckCount;
+                actualPreWage = js.ActualPrevailingWage;
                 MaterialPerc = getMaterialDiscount(js.ProjectDelayFactor);
             }
             FetchMaterialValuesAsync(true);
@@ -1454,6 +1470,9 @@ namespace WICR_Estimator.ViewModels
             double calcHrs = 0;
             double sqStairs = 0;
             double qty = 0;
+            double prPerc = 0;
+            double.TryParse(freightData[5][0].ToString(), out prPerc);
+            
             #region rehab
             if (weatherWearType == "Weather Wear Rehab")
             {
@@ -2352,7 +2371,12 @@ namespace WICR_Estimator.ViewModels
                 MaterialExtension = mp * qty
             });
 
-
+            foreach (SystemMaterial item in smP)
+            {
+                item.HorizontalProductionRate = item.HorizontalProductionRate*(1 + prPerc);
+                item.StairsProductionRate = item.StairsProductionRate * (1 + prPerc);
+                item.VerticalProductionRate = item.VerticalProductionRate * (1 + prPerc);
+            }
 
             return smP;
         }
@@ -2596,10 +2620,11 @@ namespace WICR_Estimator.ViewModels
 
         private double FreightCalculator(double weight)
         {
-            double result;
             double frCalc = 0;
+            double factor = 0;
             if (weight != 0)
             {
+
                 if (weight == 0)
                 {
                     frCalc = 0;
@@ -2609,32 +2634,37 @@ namespace WICR_Estimator.ViewModels
                 {
                     if (weight > 10000)
                     {
-                        frCalc = 0.03 * weight;
+                        double.TryParse(freightData[0][1].ToString(), out factor);
+                        frCalc = factor * weight; /*0.03*/
                     }
 
                     else
                     {
                         if (weight > 5000)
                         {
-                            frCalc = 0.04 * weight;
+                            double.TryParse(freightData[1][1].ToString(), out factor);
+                            frCalc = factor * weight; /*0.04*/
                         }
                         else
                         {
                             if (weight > 2000)
                             {
-                                frCalc = 0.09 * weight;
+                                double.TryParse(freightData[2][1].ToString(), out factor);
+                                frCalc = factor * weight; /*0.09*/
                             }
                             else
                             {
                                 if (weight > 1000)
                                 {
-                                    frCalc = 0.12 * weight;
+                                    double.TryParse(freightData[3][1].ToString(), out factor);
+                                    frCalc = factor * weight; /*0.12*/
                                 }
                                 else
                                 {
                                     if (weight > 400)
                                     {
-                                        frCalc = 75;
+                                        double.TryParse(freightData[4][1].ToString(), out factor);
+                                        frCalc = factor;/*75*/
                                     }
                                     else
                                     {
@@ -2646,8 +2676,8 @@ namespace WICR_Estimator.ViewModels
                     }
                 }
             }
-            result = frCalc;
-            return result;
+
+            return frCalc;
         }
         //this is Material total
         private void CalculateCostBreakup()
@@ -2674,7 +2704,7 @@ namespace WICR_Estimator.ViewModels
         public double MaterialPerc { get; set; }
         public double LaborPerc { get; set; }
         public double TotalOCLaborExtension { get; set; }
-
+        public double DriveLaborValue { get; set; }
         #region LaborSheet TotalProperties
 
         #endregion
@@ -2757,10 +2787,11 @@ namespace WICR_Estimator.ViewModels
 
         private void calculateLaborTotals()
         {
-            double preWage = 0, laborDeduction = 0;
+            double  laborDeduction = 0;
             if (isPrevailingWage)
             {
-                double.TryParse(laborDetails[0][0].ToString(), out preWage);
+                //double.TryParse(laborDetails[0][0].ToString(), out preWage);
+
             }
             if (isDiscounted)
             {
@@ -2792,7 +2823,7 @@ namespace WICR_Estimator.ViewModels
 
             if (SlopeTotals != null && MetalTotals != null)
             {
-                AllTabsLaborTotal = SlopeTotals.LaborExtTotal + MetalTotals.LaborExtTotal + TotalLaborExtension;
+                AllTabsLaborTotal = SlopeTotals.LaborExtTotal + MetalTotals.LaborExtTotal + TotalLaborExtension+DriveLaborValue;
                 AllTabsMaterialTotal = SlopeTotals.MaterialExtTotal + MetalTotals.MaterialExtTotal + TotalMaterialCostbrkp;
                 AllTabsFreightTotal = SlopeTotals.MaterialFreightTotal + MetalTotals.MaterialFreightTotal + TotalFreightCostBrkp;
                 AllTabsSubContractTotal = SlopeTotals.SubContractLabor + MetalTotals.SubContractLabor + TotalSubContractLaborCostBrkp;
@@ -2800,7 +2831,7 @@ namespace WICR_Estimator.ViewModels
             else
             {
 
-                AllTabsLaborTotal = TotalLaborExtension;
+                AllTabsLaborTotal = TotalLaborExtension+DriveLaborValue;
                 AllTabsMaterialTotal = TotalMaterialCostbrkp;
                 AllTabsFreightTotal =  TotalFreightCostBrkp;
                 AllTabsSubContractTotal = TotalSubContractLaborCostBrkp;
@@ -2895,7 +2926,8 @@ namespace WICR_Estimator.ViewModels
             double totalJobCostS = 0;
             double totalJobCostSy = 0;
 
-            double.TryParse(laborDetails[0][0].ToString(), out facValue);
+            //double.TryParse(laborDetails[0][0].ToString(), out facValue);
+            facValue= Math.Round(preWage,4);
             double fac1 = isPrevailingWage ? facValue : 0;
             double.TryParse(laborDetails[1][0].ToString(), out facValue);
             double fac2 = isDiscounted ? facValue : 0;
@@ -3251,10 +3283,10 @@ namespace WICR_Estimator.ViewModels
 
         public virtual void CalculateTotalSqFt()
         {
-            CostperSqftSlope = TotalSlopingPrice / (totalSqft + deckPerimeter);
-            CostperSqftMetal = TotalMetalPrice / (totalSqft + deckPerimeter);
-            CostperSqftMaterial = TotalSystemPrice / (totalSqft + deckPerimeter);
-            CostperSqftSubContract = TotalSubcontractLabor / (totalSqft + deckPerimeter);
+            CostperSqftSlope = TotalSlopingPrice / (totalSqft + riserCount);
+            CostperSqftMetal = TotalMetalPrice / (totalSqft + riserCount);
+            CostperSqftMaterial = TotalSystemPrice / (totalSqft + riserCount);
+            CostperSqftSubContract = TotalSubcontractLabor / (totalSqft + riserCount);
             TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
             OnPropertyChanged("CostperSqftSlope");
             OnPropertyChanged("CostperSqftMetal");
@@ -3264,6 +3296,7 @@ namespace WICR_Estimator.ViewModels
         }
         #region  Temporary
         private ICommand fillValues;
+        [XmlIgnore]
         public ICommand FillValues
         {
             get

@@ -170,7 +170,9 @@ namespace WICR_Estimator.ViewModels
             CalculateAll();
             Js.OnJobSetupChange += JobSetup_OnJobSetupChange;
         }
-
+        public PedestrianSlopeViewModel()
+        {
+        }
         public override void CalculateAll()
         {
             base.CalculateAll();

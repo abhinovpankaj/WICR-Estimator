@@ -6,6 +6,7 @@
     <LaborRange>E246:E265</LaborRange>
     <SlopeRange>P85:Q93</SlopeRange>
     <MaterialRange>H94:N120</MaterialRange>
+    <FreightRange>E48:F53</FreightRange>
   </WeatherWear>
   <WeatherWearRehab>
     <RateRange>E2</RateRange>
@@ -13,6 +14,7 @@
     <LaborRange>E246:E265</LaborRange>
     <SlopeRange>P85:Q93</SlopeRange>
     <MaterialRange>H124:N150</MaterialRange>
+    <FreightRange>E48:F53</FreightRange>
   </WeatherWearRehab>
   <DexotexBarrier>
     <RateRange>E2</RateRange>
@@ -20,6 +22,7 @@
     <LaborRange>E350:E369</LaborRange>
     <SlopeRange>P301:Q309</SlopeRange>
     <MaterialRange>H320:N341</MaterialRange>
+    <FreightRange>E48:F53</FreightRange>
   </DexotexBarrier>
 <EnduroKote>
     <RateRange>E2</RateRange>
@@ -27,6 +30,7 @@
     <LaborRange>E412:E431</LaborRange>
     <SlopeRange>P398:Q406</SlopeRange>
     <MaterialRange>H380:N396</MaterialRange>
+    <FreightRange>E48:F53</FreightRange>
   </EnduroKote>
 <WeatherWearReseal>
     <RateRange>E2</RateRange>
@@ -34,6 +38,7 @@
     <LaborRange>E470:E489</LaborRange>
     <SlopeRange>P301:Q309</SlopeRange>
     <MaterialRange>H440:N455</MaterialRange>
+    <FreightRange>E48:F53</FreightRange>
   </WeatherWearReseal>
   <WestcoatColor>
     <RateRange>E2</RateRange>
@@ -49,6 +54,7 @@
     <LaborRange>E615:E634</LaborRange>
     <SlopeRange>P570:Q578</SlopeRange>
     <MaterialRange>H585:N600</MaterialRange>
+    <FreightRange>E48:F53</FreightRange>
   </DesertBrand>
 
   <Pedestrian>
@@ -57,6 +63,7 @@
     <LaborRange>E703:E722</LaborRange>
     <SlopeRange>P645:Q662</SlopeRange>
     <MaterialRange>H674:N692</MaterialRange>
+    <FreightRange>E48:F53</FreightRange>
   </Pedestrian>
   <Parking>
     <RateRange>E2</RateRange>
@@ -64,6 +71,7 @@
     <LaborRange>E805:E824</LaborRange>
     <SlopeRange>P740:Q757</SlopeRange>
     <MaterialRange>H770:N791</MaterialRange>
+    <FreightRange>E48:F53</FreightRange>
   </Parking>
 <DRConcrete>
     <RateRange>E2</RateRange>
@@ -71,6 +79,7 @@
     <LaborRange>E895:E914</LaborRange>
     <SlopeRange>P845:Q853</SlopeRange>
     <MaterialRange>H865:N881</MaterialRange>
+    <FreightRange>E48:F53</FreightRange>
   </DRConcrete>
 <MACoat>
     <RateRange>E2</RateRange>
@@ -78,6 +87,7 @@
     <LaborRange>E985:E1004</LaborRange>
     <SlopeRange>P930:Q938</SlopeRange>
     <MaterialRange>H950:N972</MaterialRange>
+    <FreightRange>E48:F53</FreightRange>
   </MACoat>
 <ALX>
     <RateRange>E2</RateRange>
@@ -85,6 +95,7 @@
     <LaborRange>E1070:E1089</LaborRange>
     <SlopeRange>P1015:Q1023</SlopeRange>
     <MaterialRange>H1035:N1056</MaterialRange>
+    <FreightRange>E48:F53</FreightRange>
   </ALX>
 <Multicoat>
     <RateRange>E2</RateRange>
@@ -92,5 +103,6 @@
     <LaborRange>E1143:E1162</LaborRange>
     <SlopeRange>P1100:Q1108</SlopeRange>
     <MaterialRange>H1118:N1133</MaterialRange>
+    <FreightRange>E48:F53</FreightRange>
   </Multicoat>
 </Projects>

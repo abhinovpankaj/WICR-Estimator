@@ -5,10 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Xml.Serialization;
 using WICR_Estimator.Models;
 
 namespace WICR_Estimator.ViewModels
 {
+    [XmlInclude(typeof(MetalViewModel))]
     public class MetalBaseViewModel:BaseViewModel
     {
         public Totals MetalTotals;
@@ -20,19 +22,25 @@ namespace WICR_Estimator.ViewModels
         
         private ICommand _removeCommand;
         private int AddInt = 2;
-        protected IList<IList<object>> pWage;
+
+
+        //public object[] pWage;
+        public IList<IList<object>> pWage;
         protected double prevailingWage;
         protected double deductionOnLargeJob;
         protected bool isPrevailingWage;
         protected bool isDiscount;
         protected string vendorName;
+        protected IList<IList<object>> freightDetails;
         protected IList<IList<object>> metalDetails;
         protected double laborRate;
         protected double riserCount;
         protected double stairWidth;
         protected bool isFlash;
+
         public MetalBaseViewModel()
         {
+            
             Metals = new ObservableCollection<Metal>();
             MiscMetals = new ObservableCollection<MiscMetal>();
             MetalTotals = new Totals { TabName = "Metal" };
@@ -171,7 +179,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
-
+        [XmlIgnore]
         public ICommand AddRowCommand
         {
             get
@@ -184,6 +192,7 @@ namespace WICR_Estimator.ViewModels
                 return _addRowCommand;
             }
         }
+        [XmlIgnore]
         public ICommand RemoveCommand
         {
             get
@@ -197,6 +206,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         private DelegateCommand checkboxCommand;
+        [XmlIgnore]
         public DelegateCommand CheckboxCommand { get { return checkboxCommand; } private set { checkboxCommand = value; } }
 
         #endregion
@@ -236,6 +246,7 @@ namespace WICR_Estimator.ViewModels
             //   MiscMetals.Remove(MiscMetals.Last(x => x.CanRemove == true));
         }
         private ICommand _calculateCostCommand;
+        [XmlIgnore]
         public ICommand CalculateCostCommand
         {
             get
@@ -252,12 +263,14 @@ namespace WICR_Estimator.ViewModels
             return true;
         }
         #endregion
+
         protected double getMetalPR(int rowN)
         {
             double val = 0;          
-                double.TryParse(metalDetails[rowN][1].ToString(), out val);
-
-            return val;
+            double.TryParse(metalDetails[rowN][1].ToString(), out val);
+            double prPerc = 0;
+            double.TryParse(freightDetails[5][0].ToString(), out prPerc);
+            return val*(1+prPerc);
         }
         protected double getMetalMP(int rowN)
         {
@@ -328,6 +341,7 @@ namespace WICR_Estimator.ViewModels
             return unit;
         }
 
+        
         public virtual void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {
             JobSetup js = sender as JobSetup;
@@ -345,6 +359,8 @@ namespace WICR_Estimator.ViewModels
                    stairWidth = Js.StairWidth;
                    isFlash = Js.IsFlashingRequired;
                    riserCount = Js.RiserCount;
+
+                   prevailingWage = Js.ActualPrevailingWage==0?0:(Js.ActualPrevailingWage - laborRate) / laborRate;
                    if (Js.HasSpecialPricing)
                    {
                        ShowSpecialPriceColumn = System.Windows.Visibility.Visible;
@@ -455,18 +471,25 @@ namespace WICR_Estimator.ViewModels
         public void GetMetalDetailsFromGoogle(string projectName)
         {
             if (pWage == null)
-            {
-                
+            {             
                 GSData gsData = DataSerializer.DSInstance.deserializeGoogleData(projectName);
                 pWage = gsData.LaborData;
+                //pWage = gsData.LaborData.ToArray<object>();
                 double.TryParse(gsData.LaborRate[0][0].ToString(), out laborRate);
                 double nails;
                 double.TryParse(gsData.MetalData[39][1].ToString(), out nails);
                 Nails = nails;
                 metalDetails = gsData.MetalData;
+                freightDetails = gsData.FreightData;
             }
+            //IList <object> data = pWage[0] as IList<object>;
 
-            double.TryParse(pWage[0][0].ToString(), out prevailingWage);
+            //double.TryParse(data.ToArray<object>()[0].ToString(), out prevailingWage);
+            //data = pWage[1] as IList<object>;
+            //double.TryParse(data.ToArray<object>()[0].ToString(), out deductionOnLargeJob);
+
+            //double.TryParse(pWage[0][0].ToString(), out prevailingWage);
+            
             double.TryParse(pWage[1][0].ToString(), out deductionOnLargeJob);
 
         }
@@ -574,6 +597,7 @@ namespace WICR_Estimator.ViewModels
         }
         #region  Temporary
         private ICommand fillValues;
+        [XmlIgnore]
         public ICommand FillValues
         {
             get

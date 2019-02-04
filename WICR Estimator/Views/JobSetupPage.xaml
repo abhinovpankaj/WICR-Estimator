@@ -170,6 +170,13 @@
                 Padding="0,0,0,15">
             <StackPanel>
                 <TextBlock Style="{StaticResource FieldHeader}"
+                       Text="Actual Prevailing Wage"/>
+                <TextBox Style="{StaticResource TextBoxStyle}"
+                          IsEnabled="{Binding IsPrevalingWage}"
+                         Text="{Binding ActualPrevailingWage,
+                    UpdateSourceTrigger=LostFocus}"/>
+
+                <TextBlock Style="{StaticResource FieldHeader}"
                        Text="Total Sq Ft Plywood"
                            Visibility="{Binding IsNewPlywoodVisible}"/>
                 <TextBox Style="{StaticResource TextBoxStyle}"

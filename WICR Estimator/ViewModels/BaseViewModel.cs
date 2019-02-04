@@ -4,11 +4,17 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace WICR_Estimator.ViewModels
 {
+    [Serializable]
     public class BaseViewModel : INotifyPropertyChanged
     {
+        public BaseViewModel()
+        { }
         public event PropertyChangedEventHandler PropertyChanged;
 
         //public event EventHandler JobPropertyChanged;
@@ -43,5 +49,34 @@ namespace WICR_Estimator.ViewModels
                 //}
             }
         }
+
+        //XmlSchema IXmlSerializable.GetSchema()
+        //{
+        //    return null;
+        //}
+        //private IList<IList<object>> m_Child;
+        //public IList<IList<object>> Child
+        //{
+        //    get { return m_Child; }
+        //    set { m_Child = value; }
+        //}
+        //void IXmlSerializable.ReadXml(XmlReader reader)
+        //{
+        //    reader.ReadStartElement("Child");
+        //    string strType = reader.GetAttribute("type");
+        //    XmlSerializer serial = new XmlSerializer(Type.GetType(strType));
+        //    m_Child = (IList<IList<object>>)serial.Deserialize(reader);
+        //    reader.ReadEndElement();
+        //}
+
+        //void IXmlSerializable.WriteXml(XmlWriter writer)
+        //{
+        //    writer.WriteStartElement("Child");
+        //    string strType = m_Child.GetType().FullName;
+        //    writer.WriteAttributeString("type", strType);
+        //    XmlSerializer serial = new XmlSerializer(Type.GetType(strType));
+        //    serial.Serialize(writer, m_Child);
+        //    writer.WriteEndElement();
+        //}
     }
 }

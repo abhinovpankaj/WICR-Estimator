@@ -5,20 +5,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Xml.Serialization;
 using WICR_Estimator.Models;
 
 namespace WICR_Estimator.ViewModels
 {
+    [XmlInclude(typeof(SlopeViewModel))]
+    [XmlInclude(typeof(DexoSlopeViewModel))]
+    //[XmlInclude(typeof(PedestrianSlopeViewModel))]
+    //[XmlInclude(typeof(EnduroKoteSlopeViewModel))]
+    
     public class SlopeBaseViewModel:BaseViewModel
     {
+        
         #region Private Properties
-        public Totals SlopeTotals;
+
         private ObservableCollection<Slope> slopes;
-        public bool isApprovedForCement;
-        public bool isPrevailingWage;
-        public double laborRate;
+        
         private ICommand calculateCostCommand;
-        public IList<IList<object>> perMixRates;
+        
         private IList<IList<object>> pWage;
         private double totalmixesman;
         private double averagemixesprice;
@@ -32,10 +37,7 @@ namespace WICR_Estimator.ViewModels
         private double sumtotalmixes;
         private double sumtotalmatext;
         private double sumtotallaborext;
-        public double prevailingWage;
-        public double deductionOnLargeJob;
-        public bool overrideManually;
-        public bool hasDiscount;
+        
         private string slopeMaterialName;
         private double manualAvgMixPrice;
         #endregion
@@ -44,11 +46,21 @@ namespace WICR_Estimator.ViewModels
         {
             Slopes = new ObservableCollection<Slope>();
             SlopeTotals = new Totals { TabName = "Slope" };
-            //isApprovedForCement = true;
-            //SlopeMaterialName = "Dexotex A-81 Underlayment";
+            
         }
 
         #region public properties
+        public Totals SlopeTotals;
+        public bool isApprovedForCement;
+        public bool isPrevailingWage;
+        public double laborRate;
+        protected IList<IList<object>> perMixRates;
+        protected IList<IList<object>> freightData;
+        public double prevailingWage;
+        public double deductionOnLargeJob;
+        public bool overrideManually;
+        public bool hasDiscount;
+
         public string SlopeMaterialName
         {
             get
@@ -319,6 +331,7 @@ namespace WICR_Estimator.ViewModels
         #endregion
 
         #region Methods
+
         public virtual void CalculateManual()
         {
             double minLabVal = 0;
@@ -362,11 +375,15 @@ namespace WICR_Estimator.ViewModels
             {
                 //pWage = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "E60:E61");
                 pWage = DataSerializer.DSInstance.deserializeGoogleData(DataType.Labor, projectName);
-                
+                GSData gsData = DataSerializer.DSInstance.deserializeGoogleData(projectName);
+                freightData = gsData.FreightData;
+
             }
             double.TryParse(perMixRates[6][1].ToString(), out manualAvgMixPrice);
-            double.TryParse(pWage[0][0].ToString(), out prevailingWage);
+            //double.TryParse(pWage[0][0].ToString(), out prevailingWage);
             double.TryParse(pWage[1][0].ToString(), out deductionOnLargeJob);
+
+            
 
         }
         public void JobSetup_OnJobSetupChange(object sender, EventArgs e)
@@ -384,6 +401,7 @@ namespace WICR_Estimator.ViewModels
                 isPrevailingWage = js.IsPrevalingWage;
                 laborRate = js.LaborRate;
                 hasDiscount = js.HasDiscount;
+                prevailingWage= js.ActualPrevailingWage == 0 ? 0 : (js.ActualPrevailingWage - laborRate) / laborRate;
             }
             CalculateAll();
 
@@ -567,8 +585,9 @@ namespace WICR_Estimator.ViewModels
         
         public double FreightCalculator(double weight)
         {
-            double result;
+            //double result;
             double frCalc = 0;
+            double factor = 0;
             if (weight != 0)
             {
 
@@ -581,32 +600,37 @@ namespace WICR_Estimator.ViewModels
                 {
                     if (weight > 10000)
                     {
-                        frCalc = 0.03 * weight;
+                        double.TryParse(freightData[0][1].ToString(), out factor);
+                        frCalc =  factor* weight; /*0.03*/
                     }
 
                     else
                     {
                         if (weight > 5000)
                         {
-                            frCalc = 0.04 * weight;
+                            double.TryParse(freightData[1][1].ToString(), out factor);
+                            frCalc = factor * weight; /*0.04*/
                         }
                         else
                         {
                             if (weight > 2000)
                             {
-                                frCalc = 0.09 * weight;
+                                double.TryParse(freightData[2][1].ToString(), out factor);
+                                frCalc = factor * weight; /*0.09*/
                             }
                             else
                             {
                                 if (weight > 1000)
                                 {
-                                    frCalc = 0.12 * weight;
+                                    double.TryParse(freightData[3][1].ToString(), out factor);
+                                    frCalc = factor * weight; /*0.12*/
                                 }
                                 else
                                 {
                                     if (weight > 400)
                                     {
-                                        frCalc = 75;
+                                        double.TryParse(freightData[4][1].ToString(), out factor);
+                                        frCalc = factor;/*75*/
                                     }
                                     else
                                     {
@@ -618,8 +642,8 @@ namespace WICR_Estimator.ViewModels
                     }
                 }
             }
-            result = frCalc;
-            return result;
+
+            return frCalc;
         }
 
         public virtual void CalculateGridTotal()
@@ -649,6 +673,7 @@ namespace WICR_Estimator.ViewModels
         #endregion
 
         #region commands
+        [XmlIgnore]
         public ICommand CalculateCostCommand
         {
             get
@@ -674,6 +699,7 @@ namespace WICR_Estimator.ViewModels
 
         #region  Temporary
         private ICommand fillValues;
+        [XmlIgnore]
         public ICommand FillValues
         {
             get

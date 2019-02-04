@@ -7,8 +7,10 @@ using WICR_Estimator.ViewModels;
 
 namespace WICR_Estimator.Models
 {
+    [Serializable]
     public class Metal: BaseViewModel
     {
+        
         private double LaborRate;
         public MetalType Type { get; set; }
         public string Name { get; set; }
@@ -162,6 +164,8 @@ namespace WICR_Estimator.Models
 
     public class MiscMetal:Metal
     {
+        public MiscMetal()
+        { }
         private double unitPrice;
         public double UnitPrice
         {

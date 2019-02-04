@@ -9,6 +9,7 @@ namespace WICR_Estimator.Models
 {
     public class CostBreakup: BaseViewModel
     {
+        public CostBreakup() { }
         public string Name { get; set; }
         private double calFactor;
         public double CalFactor

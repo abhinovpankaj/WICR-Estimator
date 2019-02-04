@@ -4,6 +4,7 @@ using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 using Google.Apis.Util.Store;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -57,12 +58,11 @@ namespace WICR_Estimator.GoogleUtility
             String range =  "Pricing!" + GetRangeFromXML(projectName, datatype);
             SpreadsheetsResource.ValuesResource.GetRequest request =
                     service.Spreadsheets.Values.Get(spreadsheetId, range);
-
-            
+                       
             ValueRange response = await request.ExecuteAsync();
-            IList<IList<Object>> values = response.Values;
             
-            return values;
+            
+            return response.Values;
             
         }
         private static XmlDocument doc;
@@ -158,7 +158,7 @@ namespace WICR_Estimator.GoogleUtility
             ValueRange response = request.Execute();
             
             IList<IList<Object>> values = response.Values;
-
+            object [] myarray=values.ToArray<object>();
             return values;
 
         }
