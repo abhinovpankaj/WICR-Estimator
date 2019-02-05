@@ -652,19 +652,19 @@ namespace WICR_Estimator.ViewModels
             if (Slopes.Count > 0)
             {
                 ///sumtotal              
-                SumTotal = Math.Round(Slopes.Select(x => x.Total).Sum(), 2);
+                SumTotal = Slopes.Select(x => x.Total).Sum();
 
                 if (OverrideManually == false)
                 {
                     ///sumtotalmixes
-                    SumTotalMixes = Math.Round(Slopes.Select(x => x.TotalMixes).Sum(), 2);
+                    SumTotalMixes = Slopes.Select(x => x.TotalMixes).Sum();
 
                     ///sumtotalmatext
 
-                    SumTotalMatExt = Math.Round(Slopes.Select(x => x.MaterialExtensionSlope).Sum(), 2);
+                    SumTotalMatExt = Slopes.Select(x => x.MaterialExtensionSlope).Sum();
                     //sumtotallaborext
 
-                    SumTotalLaborExt = Math.Round(Slopes.Select(x => x.LaborExtensionSlope).Sum(), 2);
+                    SumTotalLaborExt = Slopes.Select(x => x.LaborExtensionSlope).Sum();
                 }
                 
             }

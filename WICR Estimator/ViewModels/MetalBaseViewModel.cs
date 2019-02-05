@@ -591,7 +591,7 @@ namespace WICR_Estimator.ViewModels
             
                 //double misSum = Metals.Select(x => x.MaterialExtension).Sum() * nl;
 
-                TotalMaterialCost = Math.Round((normCost+stairCost) *(1+nl)+ addOnMetalCost+ MiscMetals.Select(x => x.MaterialExtension).Sum() , 2);
+                TotalMaterialCost = Math.Round((normCost+stairCost) *(1+nl)+ addOnMetalCost*(1+nl)+ MiscMetals.Select(x => x.MaterialExtension).Sum() , 2);
             }
 
         }

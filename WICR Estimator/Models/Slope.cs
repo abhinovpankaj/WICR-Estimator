@@ -92,15 +92,16 @@ namespace WICR_Estimator.Models
                     switch (Thickness)
                     {
                         case "1/4 inch Average":
-                            return Math.Round(Total / 22, 2);
+                            //return Math.Round(Total / 22, 2);
+                            return Total / 22;
                         case "1/2 inch Average":
-                            return Math.Round((Total / 22) * 2, 2);
+                            return (Total / 22) * 2;
                         case "3/4 inch Average":
-                            return Math.Round((Total / 22) * 3, 2);
+                            return (Total / 22) * 3;
                         case "1 1/4 inch Average":
-                            return Math.Round((Total / 22) * 5, 2);
+                            return (Total / 22) * 5;
                         case "1 inch Average":
-                            return Math.Round((Total / 22) * 4, 2);
+                            return (Total / 22) * 4;
                         default:
                             return 0;
                     }

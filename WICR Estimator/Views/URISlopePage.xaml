@@ -109,7 +109,7 @@
                                    TextWrapping="Wrap"  Width="Auto"/>
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding TotalMixes}"
+                    <DataGridTextColumn Binding="{Binding TotalMixes,StringFormat=N2}"
                                     IsReadOnly="True">
                         <DataGridTextColumn.Header>
                             <TextBlock Text="Total Mixes" 
@@ -170,7 +170,7 @@
                     <TextBlock Text="Mixes" 
                                HorizontalAlignment="Center"/>
                     <!--07-10-18-->
-                    <TextBox Text="{Binding SumTotalMixes,
+                    <TextBox Text="{Binding SumTotalMixes,StringFormat=N2,
                         UpdateSourceTrigger=PropertyChanged }" 
                              IsReadOnly="True"
                              FontWeight="Bold" 
@@ -262,7 +262,7 @@
                                    TextWrapping="Wrap"  Width="Auto"/>
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding TotalMixes}"
+                    <DataGridTextColumn Binding="{Binding TotalMixes,StringFormat=N2}"
                                     IsReadOnly="True">
                         <DataGridTextColumn.Header>
                             <TextBlock Text="Total Mixes" 
@@ -334,7 +334,7 @@
                     <TextBlock Text="Mixes" 
                                HorizontalAlignment="Center"/>
                     <!--07-10-18-->
-                    <TextBox Text="{Binding UrethaneSumTotalMixes,
+                    <TextBox Text="{Binding UrethaneSumTotalMixes,StringFormat=N2,
                         UpdateSourceTrigger=PropertyChanged }" 
                              IsReadOnly="True"
                              FontWeight="Bold" 

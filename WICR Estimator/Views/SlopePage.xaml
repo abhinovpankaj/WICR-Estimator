@@ -12,7 +12,7 @@
 
         <conv:CheckBoxVisibilityConverter x:Key="checkBoxConv"/>
         <conv:EnableTextboxConverter x:Key="textboxConv"/>
-
+        <conv:RoundUpConverter x:Key="roundConv"></conv:RoundUpConverter>
         <Style TargetType="Label" x:Key="LabelStyle1">
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="FontFamily" Value="Arial"/>
@@ -103,7 +103,7 @@
                                    TextWrapping="Wrap"  Width="Auto"/>
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding TotalMixes}"
+                <DataGridTextColumn Binding="{Binding TotalMixes,StringFormat=N2}"
                                     IsReadOnly="True">
                     <DataGridTextColumn.Header>
                         <TextBlock Text="Total Mixes" 
@@ -162,8 +162,8 @@
                     <TextBlock Text="Mixes" 
                                HorizontalAlignment="Center"/>
                     <!--07-10-18-->
-                    <TextBox Text="{Binding SumTotalMixes,
-                        UpdateSourceTrigger=PropertyChanged }" 
+                    <TextBox Text="{Binding SumTotalMixes,UpdateSourceTrigger=PropertyChanged,
+                        Converter={StaticResource roundConv}}" 
                              IsReadOnly="True"
                              FontWeight="Bold" 
                              HorizontalContentAlignment="Center"
@@ -187,7 +187,8 @@
                     <TextBlock Text="Labor Extn($)" 
                                HorizontalAlignment="Center"/>
                     <!--07-10-18-->
-                    <TextBox Text="{Binding SumTotalLaborExt,UpdateSourceTrigger=PropertyChanged  ,StringFormat={}{0:C}}"
+                    <TextBox Text="{Binding SumTotalLaborExt,
+                        UpdateSourceTrigger=PropertyChanged  ,StringFormat={}{0:C}}"
                              IsReadOnly="True"
                              FontWeight="Bold"
                              HorizontalContentAlignment="Center"
