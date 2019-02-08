@@ -19,6 +19,7 @@ namespace WICR_Estimator.ViewModels
         private ObservableCollection<CostBreakup> lCostBreakUp;
 
         #region privatefields
+        double prPerc = 0;
         private ObservableCollection<SystemMaterial> systemMaterials;
         private ObservableCollection<OtherItem> otherMaterials;
         private ObservableCollection<OtherItem> otherLaborMaterials;
@@ -106,6 +107,7 @@ namespace WICR_Estimator.ViewModels
         {
             return laborExtension / (riserCount + totalSqft);
         }
+        
         public SystemMaterial getSMObject(int seq, string matName, string unit)
         {
             double cov;
@@ -121,8 +123,12 @@ namespace WICR_Estimator.ViewModels
             double calcHrs = 0;
             double sqStairs = 0;
             double qty = 0;
-            double prPerc = 0;
-            double.TryParse(freightData[5][0].ToString(), out prPerc);
+            
+            if (isPrevailingWage)
+            {
+                double.TryParse(freightData[5][0].ToString(), out prPerc);
+            }
+            
 
             double.TryParse(materialDetails[seq][2].ToString(), out cov);
             double.TryParse(materialDetails[seq][0].ToString(), out mp);
@@ -131,6 +137,8 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(materialDetails[seq][6].ToString(), out setUpMin);
             double.TryParse(materialDetails[seq][5].ToString(), out pRateStairs);
             double.TryParse(materialDetails[seq][4].ToString(), out hprRate);
+            pRateStairs = pRateStairs * (1 + prPerc);
+            hprRate = hprRate * (1 + prPerc);
             sqh = getSqFtAreaH(matName);
             sqStairs = getSqFtStairs(matName);
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
@@ -161,8 +169,8 @@ namespace WICR_Estimator.ViewModels
                 Qty = qty,
                 SMSqftH = sqh,
                 Operation = matName,
-                HorizontalProductionRate = hprRate*(1+ prPerc),
-                StairsProductionRate = pRateStairs * (1 + prPerc),
+                HorizontalProductionRate = hprRate,
+                StairsProductionRate = pRateStairs ,
                 StairSqft = sqStairs,
                 SetupMinCharge = setUpMin,
                 Hours = calcHrs,
@@ -654,9 +662,9 @@ namespace WICR_Estimator.ViewModels
                         double.TryParse(materialDetails[13][3].ToString(), out matVal);
                         mat.Weight = matVal;
                         double.TryParse(materialDetails[13][4].ToString(), out matVal);
-                        mat.HorizontalProductionRate = matVal;
+                        mat.HorizontalProductionRate = matVal*(1+prPerc);
                         double.TryParse(materialDetails[13][5].ToString(), out matVal);
-                        mat.StairsProductionRate = matVal;
+                        mat.StairsProductionRate = matVal * (1 + prPerc);
                         double.TryParse(materialDetails[13][6].ToString(), out matVal);
                         mat.SetupMinCharge = matVal;
                         OnPropertyChanged("SetupMinCharge");
@@ -674,9 +682,9 @@ namespace WICR_Estimator.ViewModels
                         double.TryParse(materialDetails[15][3].ToString(), out matVal);
                         mat.Weight = matVal;
                         double.TryParse(materialDetails[15][4].ToString(), out matVal);
-                        mat.HorizontalProductionRate = matVal;
+                        mat.HorizontalProductionRate = matVal * (1 + prPerc);
                         double.TryParse(materialDetails[15][5].ToString(), out matVal);
-                        mat.StairsProductionRate = matVal;
+                        mat.StairsProductionRate = matVal * (1 + prPerc);
                         double.TryParse(materialDetails[15][6].ToString(), out matVal);
                         mat.SetupMinCharge = matVal;
                         OnPropertyChanged("SetupMinCharge");
@@ -693,9 +701,9 @@ namespace WICR_Estimator.ViewModels
                         double.TryParse(materialDetails[21][3].ToString(), out matVal);
                         mat.Weight = matVal;
                         double.TryParse(materialDetails[21][4].ToString(), out matVal);
-                        mat.HorizontalProductionRate = matVal;
+                        mat.HorizontalProductionRate = matVal * (1 + prPerc);
                         double.TryParse(materialDetails[21][5].ToString(), out matVal);
-                        mat.StairsProductionRate = matVal;
+                        mat.StairsProductionRate = matVal * (1 + prPerc);
                         double.TryParse(materialDetails[21][6].ToString(), out matVal);
                         mat.SetupMinCharge = matVal;
                         OnPropertyChanged("SetupMinCharge");
@@ -731,9 +739,9 @@ namespace WICR_Estimator.ViewModels
                         double.TryParse(materialDetails[12][3].ToString(), out matVal);
                         mat.Weight = matVal;
                         double.TryParse(materialDetails[12][4].ToString(), out matVal);
-                        mat.HorizontalProductionRate = matVal;
+                        mat.HorizontalProductionRate = matVal * (1 + prPerc);
                         double.TryParse(materialDetails[12][5].ToString(), out matVal);
-                        mat.StairsProductionRate = matVal;
+                        mat.StairsProductionRate = matVal * (1 + prPerc);
                         double.TryParse(materialDetails[12][6].ToString(), out matVal);
                         mat.SetupMinCharge = matVal;
                         OnPropertyChanged("SetupMinCharge");
@@ -750,9 +758,9 @@ namespace WICR_Estimator.ViewModels
                         double.TryParse(materialDetails[14][3].ToString(), out matVal);
                         mat.Weight = matVal;
                         double.TryParse(materialDetails[14][4].ToString(), out matVal);
-                        mat.HorizontalProductionRate = matVal;
+                        mat.HorizontalProductionRate = matVal * (1 + prPerc);
                         double.TryParse(materialDetails[14][5].ToString(), out matVal);
-                        mat.StairsProductionRate = matVal;
+                        mat.StairsProductionRate = matVal * (1 + prPerc);
                         double.TryParse(materialDetails[14][6].ToString(), out matVal);
                         mat.SetupMinCharge = matVal;
                         OnPropertyChanged("SetupMinCharge");
@@ -769,9 +777,9 @@ namespace WICR_Estimator.ViewModels
                         double.TryParse(materialDetails[20][3].ToString(), out matVal);
                         mat.Weight = matVal;
                         double.TryParse(materialDetails[20][4].ToString(), out matVal);
-                        mat.HorizontalProductionRate = matVal;
+                        mat.HorizontalProductionRate = matVal * (1 + prPerc);
                         double.TryParse(materialDetails[20][5].ToString(), out matVal);
-                        mat.StairsProductionRate = matVal;
+                        mat.StairsProductionRate = matVal * (1 + prPerc);
                         double.TryParse(materialDetails[20][6].ToString(), out matVal);
                         mat.SetupMinCharge = matVal;
                         OnPropertyChanged("SetupMinCharge");
@@ -808,9 +816,9 @@ namespace WICR_Estimator.ViewModels
                         double.TryParse(materialDetails[12][3].ToString(), out matVal);
                         mat.Weight = matVal;
                         double.TryParse(materialDetails[12][4].ToString(), out matVal);
-                        mat.HorizontalProductionRate = matVal;
+                        mat.HorizontalProductionRate = matVal * (1 + prPerc);
                         double.TryParse(materialDetails[12][5].ToString(), out matVal);
-                        mat.StairsProductionRate = matVal;
+                        mat.StairsProductionRate = matVal * (1 + prPerc);
                         double.TryParse(materialDetails[12][6].ToString(), out matVal);
                         mat.SetupMinCharge = matVal;
                         OnPropertyChanged("SetupMinCharge");
@@ -827,9 +835,9 @@ namespace WICR_Estimator.ViewModels
                         double.TryParse(materialDetails[14][3].ToString(), out matVal);
                         mat.Weight = matVal;
                         double.TryParse(materialDetails[14][4].ToString(), out matVal);
-                        mat.HorizontalProductionRate = matVal;
+                        mat.HorizontalProductionRate = matVal * (1 + prPerc);
                         double.TryParse(materialDetails[14][5].ToString(), out matVal);
-                        mat.StairsProductionRate = matVal;
+                        mat.StairsProductionRate = matVal * (1 + prPerc);
                         double.TryParse(materialDetails[14][6].ToString(), out matVal);
                         mat.SetupMinCharge = matVal;
                         OnPropertyChanged("SetupMinCharge");
@@ -846,9 +854,9 @@ namespace WICR_Estimator.ViewModels
                         double.TryParse(materialDetails[20][3].ToString(), out matVal);
                         mat.Weight = matVal;
                         double.TryParse(materialDetails[20][4].ToString(), out matVal);
-                        mat.HorizontalProductionRate = matVal;
+                        mat.HorizontalProductionRate = matVal * (1 + prPerc);
                         double.TryParse(materialDetails[20][5].ToString(), out matVal);
-                        mat.StairsProductionRate = matVal;
+                        mat.StairsProductionRate = matVal * (1 + prPerc);
                         double.TryParse(materialDetails[20][6].ToString(), out matVal);
                         mat.SetupMinCharge = matVal;
                         OnPropertyChanged("SetupMinCharge");
@@ -1470,9 +1478,8 @@ namespace WICR_Estimator.ViewModels
             double calcHrs = 0;
             double sqStairs = 0;
             double qty = 0;
-            double prPerc = 0;
-            double.TryParse(freightData[5][0].ToString(), out prPerc);
-            
+                       
+            if (isPrevailingWage) { double.TryParse(freightData[5][0].ToString(), out prPerc); }
             #region rehab
             if (weatherWearType == "Weather Wear Rehab")
             {
@@ -1482,6 +1489,8 @@ namespace WICR_Estimator.ViewModels
                 double.TryParse(materialDetails[0][6].ToString(), out setUpMin);
                 double.TryParse(materialDetails[0][5].ToString(), out pRateStairs);
                 double.TryParse(materialDetails[0][4].ToString(), out hprRate);
+                hprRate = hprRate * (1 + prPerc);
+                pRateStairs = pRateStairs * (1 + prPerc);
                 sqh = getSqFtAreaH("Light Crack Repair");
                 calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
                 lfArea = getlfArea("Light Crack Repair");
@@ -1523,6 +1532,8 @@ namespace WICR_Estimator.ViewModels
                 double.TryParse(materialDetails[1][6].ToString(), out setUpMin);
                 double.TryParse(materialDetails[1][5].ToString(), out pRateStairs);
                 double.TryParse(materialDetails[1][4].ToString(), out hprRate);
+                hprRate = hprRate * (1 + prPerc);
+                pRateStairs = pRateStairs * (1 + prPerc);
                 calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
                 sqh = getSqFtAreaH("Large Crack Repair");
                 sqStairs = getSqFtStairs("Large Crack Repair");
@@ -1562,6 +1573,8 @@ namespace WICR_Estimator.ViewModels
                 double.TryParse(materialDetails[2][6].ToString(), out setUpMin);
                 double.TryParse(materialDetails[2][5].ToString(), out pRateStairs);
                 double.TryParse(materialDetails[2][4].ToString(), out hprRate);
+                hprRate = hprRate * (1 + prPerc);
+                pRateStairs = pRateStairs * (1 + prPerc);
                 sqh = getSqFtAreaH("Bubble Repair(Measure Sq Ft)");
                 sqStairs = getSqFtStairs("Bubble Repair(Measure Sq Ft)");
                 calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
@@ -1601,6 +1614,8 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(materialDetails[3][6].ToString(), out setUpMin);
             double.TryParse(materialDetails[3][5].ToString(), out pRateStairs);
             double.TryParse(materialDetails[3][4].ToString(), out hprRate);
+            hprRate = hprRate * (1 + prPerc);
+            pRateStairs = pRateStairs * (1 + prPerc);
             sqh = getSqFtAreaH("Resistite Regular Over Texture(#55 Bag)");
             sqStairs = getSqFtStairs("Resistite Regular Over Texture(#55 Bag)");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
@@ -1639,6 +1654,8 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(materialDetails[4][5].ToString(), out pRateStairs);
             double.TryParse(materialDetails[4][4].ToString(), out hprRate);
             sqh = getSqFtAreaH("30# Divorcing Felt (200 Sq Ft) From Ford Wholesale");
+            hprRate = hprRate * (1 + prPerc);
+            pRateStairs = pRateStairs * (1 + prPerc);
             sqStairs = getSqFtStairs("30# Divorcing Felt (200 Sq Ft) From Ford Wholesale");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
             labrExt = (calcHrs != 0) ? (setUpMin + calcHrs) * laborRate : 0;
@@ -1674,6 +1691,8 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(materialDetails[5][6].ToString(), out setUpMin);
             double.TryParse(materialDetails[5][5].ToString(), out pRateStairs);
             double.TryParse(materialDetails[5][4].ToString(), out hprRate);
+            hprRate = hprRate * (1 + prPerc);
+            pRateStairs = pRateStairs * (1 + prPerc);
             sqh = getSqFtAreaH("Rp Fabric 10 Inch Wide X (300 Lf) From Acme");
             sqStairs = getSqFtStairs("Rp Fabric 10 Inch Wide X (300 Lf) From Acme");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
@@ -1710,6 +1729,8 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(materialDetails[6][6].ToString(), out setUpMin);
             double.TryParse(materialDetails[6][5].ToString(), out pRateStairs);
             double.TryParse(materialDetails[6][4].ToString(), out hprRate);
+            hprRate = hprRate * (1 + prPerc);
+            pRateStairs = pRateStairs * (1 + prPerc);
             sqh = getSqFtAreaH("Glasmat #4 (1200 Sq Ft) From Acme");
             sqStairs = getSqFtStairs("Glasmat #4 (1200 Sq Ft) From Acme");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
@@ -1745,6 +1766,8 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(materialDetails[7][6].ToString(), out setUpMin);
             double.TryParse(materialDetails[7][5].ToString(), out pRateStairs);
             double.TryParse(materialDetails[7][4].ToString(), out hprRate);
+            hprRate = hprRate * (1 + prPerc);
+            pRateStairs = pRateStairs * (1 + prPerc);
             sqh = getSqFtAreaH("Cpc Membrane");
             lfArea = getlfArea("Cpc Membrane");
             sqStairs = getSqFtStairs("Cpc Membrane");
@@ -1781,6 +1804,8 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(materialDetails[8][6].ToString(), out setUpMin);
             double.TryParse(materialDetails[8][5].ToString(), out pRateStairs);
             double.TryParse(materialDetails[8][4].ToString(), out hprRate);
+            hprRate = hprRate * (1 + prPerc);
+            pRateStairs = pRateStairs * (1 + prPerc);
             sqh = getSqFtAreaH("Neotex-38 Paste");
             sqStairs = getSqFtStairs("Neotex-38 Paste");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
@@ -1817,6 +1842,8 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(materialDetails[9][6].ToString(), out setUpMin);
             double.TryParse(materialDetails[9][5].ToString(), out pRateStairs);
             double.TryParse(materialDetails[9][4].ToString(), out hprRate);
+            hprRate = hprRate * (1 + prPerc);
+            pRateStairs = pRateStairs * (1 + prPerc);
             sqh = getSqFtAreaH("Neotex Standard Powder(Body Coat)");
             sqStairs = getSqFtStairs("Neotex Standard Powder(Body Coat)");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
@@ -1853,6 +1880,8 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(materialDetails[10][6].ToString(), out setUpMin);
             double.TryParse(materialDetails[10][5].ToString(), out pRateStairs);
             double.TryParse(materialDetails[10][4].ToString(), out hprRate);
+            hprRate = hprRate * (1 + prPerc);
+            pRateStairs = pRateStairs * (1 + prPerc);
             sqh = getSqFtAreaH("Neotex Standard Powder(Body Coat) 1");
             sqStairs = getSqFtStairs("Neotex Standard Powder(Body Coat) 1");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
@@ -1889,6 +1918,8 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(materialDetails[11][6].ToString(), out setUpMin);
             double.TryParse(materialDetails[11][5].ToString(), out pRateStairs);
             double.TryParse(materialDetails[11][4].ToString(), out hprRate);
+            hprRate = hprRate * (1 + prPerc);
+            pRateStairs = pRateStairs * (1 + prPerc);
             sqh = getSqFtAreaH("Resistite Liquid");
             sqStairs = getSqFtStairs("Resistite Liquid");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
@@ -1926,6 +1957,8 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(materialDetails[13][6].ToString(), out setUpMin);
             double.TryParse(materialDetails[13][5].ToString(), out pRateStairs);
             double.TryParse(materialDetails[13][4].ToString(), out hprRate);
+            hprRate = hprRate * (1 + prPerc);
+            pRateStairs = pRateStairs * (1 + prPerc);
             sqh = getSqFtAreaH("Resistite Regular White");
             sqStairs = getSqFtStairs("Resistite Regular White");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
@@ -1964,6 +1997,8 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(materialDetails[15][6].ToString(), out setUpMin);
             double.TryParse(materialDetails[15][5].ToString(), out pRateStairs);
             double.TryParse(materialDetails[15][4].ToString(), out hprRate);
+            hprRate = hprRate * (1 + prPerc);
+            pRateStairs = pRateStairs * (1 + prPerc);
             sqh = getSqFtAreaH("Resistite Regular Or Smooth White(Knock Down Or Smooth)");
             sqStairs = getSqFtStairs("Resistite Regular Or Smooth White(Knock Down Or Smooth)");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
@@ -2000,6 +2035,8 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(materialDetails[16][6].ToString(), out setUpMin);
             double.TryParse(materialDetails[16][5].ToString(), out pRateStairs);
             double.TryParse(materialDetails[16][4].ToString(), out hprRate);
+            hprRate = hprRate * (1 + prPerc);
+            pRateStairs = pRateStairs * (1 + prPerc);
             sqh = getSqFtAreaH("Aj-44A Dressing(Sealer)");
             sqStairs = getSqFtStairs("Aj-44A Dressing(Sealer)");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
@@ -2036,6 +2073,8 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(materialDetails[17][6].ToString(), out setUpMin);
             double.TryParse(materialDetails[17][5].ToString(), out pRateStairs);
             double.TryParse(materialDetails[17][4].ToString(), out hprRate);
+            hprRate = hprRate * (1 + prPerc);
+            pRateStairs = pRateStairs * (1 + prPerc);
             sqh = getSqFtAreaH("Vista Paint Acripoxy");
             sqStairs = getSqFtStairs("Vista Paint Acripoxy");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
@@ -2072,6 +2111,8 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(materialDetails[18][6].ToString(), out setUpMin);
             double.TryParse(materialDetails[18][5].ToString(), out pRateStairs);
             double.TryParse(materialDetails[18][4].ToString(), out hprRate);
+            hprRate = hprRate * (1 + prPerc);
+            pRateStairs = pRateStairs * (1 + prPerc);
             sqh = getSqFtAreaH("Lip Color");
             sqStairs = getSqFtStairs("Lip Color");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
@@ -2109,6 +2150,8 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(materialDetails[19][6].ToString(), out setUpMin);
             double.TryParse(materialDetails[19][5].ToString(), out pRateStairs);
             double.TryParse(materialDetails[19][4].ToString(), out hprRate);
+            hprRate = hprRate * (1 + prPerc);
+            pRateStairs = pRateStairs * (1 + prPerc);
             sqh = getSqFtAreaH("Resistite Universal Primer(Add 50% Water)");
             sqStairs = getSqFtStairs("Resistite Universal Primer(Add 50% Water)");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
@@ -2155,6 +2198,8 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(materialDetails[21][6].ToString(), out setUpMin);
             double.TryParse(materialDetails[21][5].ToString(), out pRateStairs);
             double.TryParse(materialDetails[21][4].ToString(), out hprRate);
+            hprRate = hprRate * (1 + prPerc);
+            pRateStairs = pRateStairs * (1 + prPerc);
             sqh = getSqFtAreaH("Custom Texture Skip Trowel(Resistite Smooth White)");
             sqStairs = getSqFtStairs("Custom Texture Skip Trowel(Resistite Smooth White)");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
@@ -2165,8 +2210,7 @@ namespace WICR_Estimator.ViewModels
             smP.Add(new SystemMaterial
             {
                 IsCheckboxDependent = true,
-                IncludeInLaborMinCharge = true,
-
+                
                 IsMaterialEnabled = getCheckboxEnabledStatus("Custom Texture Skip Trowel(Resistite Smooth White)"),
                 Name = "Custom Texture Skip Trowel(Resistite Smooth White)",
                 SMUnits = "Sq Ft",
@@ -2196,6 +2240,8 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(materialDetails[22][6].ToString(), out setUpMin);
             double.TryParse(materialDetails[22][5].ToString(), out pRateStairs);
             double.TryParse(materialDetails[22][4].ToString(), out hprRate);
+            hprRate = hprRate * (1 + prPerc);
+            pRateStairs = pRateStairs * (1 + prPerc);
             sqh = getSqFtAreaH("Weather Seal XL two Coats");
             sqStairs = getSqFtStairs("Weather Seal XL two Coats");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
@@ -2206,7 +2252,7 @@ namespace WICR_Estimator.ViewModels
                 IsMaterialChecked = getCheckboxCheckStatus("Weather Seal XL two Coats"),
                 IsMaterialEnabled = getCheckboxEnabledStatus("Weather Seal XL two Coats"),
                 Name = "Weather Seal XL two Coats",
-                IncludeInLaborMinCharge = true,
+                IncludeInLaborMinCharge = false,
                 SMUnits = "Sq Ft",
                 SMSqft = lfArea,
                 Coverage = cov,
@@ -2231,6 +2277,8 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(materialDetails[23][6].ToString(), out setUpMin);
             double.TryParse(materialDetails[23][5].ToString(), out pRateStairs);
             double.TryParse(materialDetails[23][4].ToString(), out hprRate);
+            hprRate = hprRate * (1 + prPerc);
+            pRateStairs = pRateStairs * (1 + prPerc);
             sqh = getSqFtAreaH("Stair Nosing From Dexotex");
             lfArea = getlfArea("Stair Nosing From Dexotex");
             sqStairs = getSqFtStairs("Stair Nosing From Dexotex");
@@ -2246,7 +2294,7 @@ namespace WICR_Estimator.ViewModels
                 SMSqft = lfArea,
                 Coverage = cov,
                 MaterialPrice = mp,
-                IncludeInLaborMinCharge = true,
+                IncludeInLaborMinCharge = false,
                 Weight = w,
                 Qty = qty,
                 SMSqftH = sqh,
@@ -2269,6 +2317,8 @@ namespace WICR_Estimator.ViewModels
             setUpMin = 0;
             double.TryParse(materialDetails[24][5].ToString(), out pRateStairs);
             double.TryParse(materialDetails[24][4].ToString(), out hprRate);
+            hprRate = hprRate * (1 + prPerc);
+            pRateStairs = pRateStairs * (1 + prPerc);
             sqh = getSqFtAreaH("Extra Stair Nosing Lf");
             sqStairs = getSqFtStairs("Extra Stair Nosing Lf"); //getvalue from systemMaterial
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
@@ -2279,7 +2329,7 @@ namespace WICR_Estimator.ViewModels
                 IsMaterialChecked = getCheckboxCheckStatus("Extra Stair Nosing Lf"),
                 IsMaterialEnabled = getCheckboxEnabledStatus("Extra Stair Nosing Lf"),
                 Name = "Extra Stair Nosing Lf",
-                IncludeInLaborMinCharge = true,
+                IncludeInLaborMinCharge = false,
                 SMUnits = "Sq Ft",
                 SMSqft = lfArea,
                 Coverage = cov,
@@ -2306,6 +2356,8 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(materialDetails[25][6].ToString(), out setUpMin);
             double.TryParse(materialDetails[25][5].ToString(), out pRateStairs);
             double.TryParse(materialDetails[25][4].ToString(), out hprRate);
+            hprRate = hprRate * (1 + prPerc);
+            pRateStairs = pRateStairs * (1 + prPerc);
             sqh = getSqFtAreaH("Plywood 3/4 & Blocking(# Of 4X8 Sheets)");
             sqStairs = getSqFtStairs("Plywood 3/4 & Blocking(# Of 4X8 Sheets)");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
@@ -2342,6 +2394,8 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(materialDetails[26][6].ToString(), out setUpMin);
             double.TryParse(materialDetails[26][5].ToString(), out pRateStairs);
             double.TryParse(materialDetails[26][4].ToString(), out hprRate);
+            hprRate = hprRate * (1 + prPerc);
+            pRateStairs = pRateStairs * (1 + prPerc);
             sqh = getSqFtAreaH("Stucco Material Remove And Replace (Lf)");
             sqStairs = getSqFtStairs("Stucco Material Remove And Replace (Lf)");
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
@@ -2371,12 +2425,12 @@ namespace WICR_Estimator.ViewModels
                 MaterialExtension = mp * qty
             });
 
-            foreach (SystemMaterial item in smP)
-            {
-                item.HorizontalProductionRate = item.HorizontalProductionRate*(1 + prPerc);
-                item.StairsProductionRate = item.StairsProductionRate * (1 + prPerc);
-                item.VerticalProductionRate = item.VerticalProductionRate * (1 + prPerc);
-            }
+            //foreach (SystemMaterial item in smP)
+            //{
+            //    item.HorizontalProductionRate = item.HorizontalProductionRate*(1 + prPerc);
+            //    item.StairsProductionRate = item.StairsProductionRate * (1 + prPerc);
+            //    item.VerticalProductionRate = item.VerticalProductionRate * (1 + prPerc);
+            //}
 
             return smP;
         }
@@ -2617,7 +2671,7 @@ namespace WICR_Estimator.ViewModels
                 SumFreight = FreightCalculator(SumWeight);
             }
         }
-
+        public double TotalMaterialCost { get; set; }
         private double FreightCalculator(double weight)
         {
             double frCalc = 0;
@@ -2687,7 +2741,10 @@ namespace WICR_Estimator.ViewModels
             if (systemCBMaterial != null)
             {
                 TotalMaterialCostbrkp = (SumTotalMatExt + TotalOCExtension);
-                TotalMaterialCostbrkp = TotalMaterialCostbrkp*(1 + MaterialPerc);
+                
+                TotalMaterialCost = TotalMaterialCostbrkp;
+                OnPropertyChanged("TotalMaterialCost");
+                TotalMaterialCostbrkp = TotalMaterialCostbrkp*(1+MaterialPerc);
                 TotalWeightbrkp = SumWeight;
                 TotalFreightCostBrkp = FreightCalculator(TotalWeightbrkp);
                 TotalSubContractLaborCostBrkp = TotalSCExtension;
@@ -2696,7 +2753,7 @@ namespace WICR_Estimator.ViewModels
         }
         public virtual void CalculateCostPerSqFT()
         {
-            CostPerSquareFeet = (totalSqft + deckCount) == 0 ? 0 : Math.Round(TotalMaterialCostbrkp / (totalSqft + deckCount), 2);
+            CostPerSquareFeet = (totalSqft + deckCount) == 0 ? 0 : Math.Round(TotalMaterialCost / (totalSqft + deckCount), 2);
         }
         #endregion
 

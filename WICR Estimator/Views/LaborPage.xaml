@@ -352,13 +352,41 @@
                                FontSize="14"             
                                Text="{Binding TotalLaborExtension, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
                 </Border>
-                
-                
-                    <CheckBox Content="ADD LABOR FOR MINIMUM CHARGE" Grid.Row="9"
-                              Grid.ColumnSpan="2" Margin="20,35,20,0"
+
+                <StackPanel Grid.ColumnSpan="2" Grid.Row="9"
+                            Margin="0,15,0,0">
+                    <CheckBox Content="ADD LABOR FOR MINIMUM CHARGE" 
+                              Margin="20,5,0,5"
                               IsChecked="{Binding AddLaborMinCharge}"
-                          FontSize="15"
-                          />
+                              FontSize="15"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="#Hours"/>
+                        <TextBlock Text="{Binding LaborMinChargeHrs,StringFormat=N2}"
+                               Grid.Row="1"/>
+                        <TextBlock Text="SetupMinCharge" Grid.Column="1"/>
+                        <TextBlock Text="{Binding LaborMinChargeMinSetup,StringFormat=N2}" 
+                                   Grid.Column="1"
+                                   Grid.Row="1"/>
+                        <TextBlock Text="Labor UnitPrice" Grid.Column="2"/>
+                        <TextBlock Text="{Binding LaborMinChargeLaborUnitPrice,StringFormat=N2}" 
+                               Grid.Row="1" Grid.Column="2"/>
+                        <TextBlock Text="Labor Extension" Grid.Column="3"/>
+                        <TextBlock Text="{Binding LaborMinChargeLaborExtension,StringFormat=N2}" Grid.Column="3"
+                               Grid.Row="1"/>
+                    </Grid>
+                    
+                </StackPanel>
+                    
                 
                
             </Grid>

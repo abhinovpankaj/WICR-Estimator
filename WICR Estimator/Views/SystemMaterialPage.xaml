@@ -454,7 +454,7 @@
                          Margin="5,16,5,6"
                          Grid.Column="2"
                          Height="25" Width="150"
-                         Text="{Binding TotalMaterialCostbrkp,
+                         Text="{Binding TotalMaterialCost,
                     UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
                 <TextBox x:Name="TotalWeightbrkp"
                          IsEnabled="False" Grid.Row="1" 

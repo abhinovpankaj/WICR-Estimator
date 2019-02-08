@@ -37,7 +37,7 @@ namespace WICR_Estimator.ViewModels
         protected double riserCount;
         protected double stairWidth;
         protected bool isFlash;
-
+        protected double MaterialPerc;
         public MetalBaseViewModel()
         {
             
@@ -270,7 +270,7 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(metalDetails[rowN][1].ToString(), out val);
             double prPerc = 0;
             double.TryParse(freightDetails[5][0].ToString(), out prPerc);
-            return val*(1+prPerc);
+            return isPrevailingWage? val*(1+prPerc):val;
         }
         protected double getMetalMP(int rowN)
         {
@@ -341,7 +341,22 @@ namespace WICR_Estimator.ViewModels
             return unit;
         }
 
-        
+        public double getMaterialDiscount(string delay)
+        {
+            switch (delay)
+            {
+                case "0-3 Months":
+                    return 0;
+                case "3-6 Months":
+                    return 0.02;
+                case "6-12 Months":
+                    return 0.04;
+                case ">12 Months":
+                    return 0.06;
+                default:
+                    return 0;
+            }
+        }
         public virtual void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {
             JobSetup js = sender as JobSetup;
@@ -359,7 +374,7 @@ namespace WICR_Estimator.ViewModels
                    stairWidth = Js.StairWidth;
                    isFlash = Js.IsFlashingRequired;
                    riserCount = Js.RiserCount;
-
+                   MaterialPerc = getMaterialDiscount(Js.ProjectDelayFactor);
                    prevailingWage = Js.ActualPrevailingWage==0?0:(Js.ActualPrevailingWage - laborRate) / laborRate;
                    if (Js.HasSpecialPricing)
                    {
@@ -500,7 +515,7 @@ namespace WICR_Estimator.ViewModels
             MiscMetals[1].Units = getUnits(3);
             updateLaborCost();
             updateMaterialCost();
-            MetalTotals.MaterialExtTotal = TotalMaterialCost;
+            MetalTotals.MaterialExtTotal = TotalMaterialCost*(1+MaterialPerc);
             MetalTotals.LaborExtTotal = TotalLaborCost;
         }
 

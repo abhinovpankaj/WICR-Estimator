@@ -23,7 +23,7 @@ namespace WICR_Estimator.ViewModels
         private ObservableCollection<Slope> slopes;
         
         private ICommand calculateCostCommand;
-        
+        double productionRate = 0;
         private IList<IList<object>> pWage;
         private double totalmixesman;
         private double averagemixesprice;
@@ -60,7 +60,7 @@ namespace WICR_Estimator.ViewModels
         public double deductionOnLargeJob;
         public bool overrideManually;
         public bool hasDiscount;
-
+        private double materialPerc;
         public string SlopeMaterialName
         {
             get
@@ -395,19 +395,45 @@ namespace WICR_Estimator.ViewModels
                 {
                     isApprovedForCement = js.IsApprovedForSandCement;
                     SlopeMaterialName = isApprovedForCement ? "Sand and Cement" : js.SlopeMaterialName;
-                    reCalculate();
+                    
                 }
 
                 isPrevailingWage = js.IsPrevalingWage;
+                if (isPrevailingWage)
+                {
+                    double.TryParse(freightData[5][0].ToString(), out productionRate);
+
+                }
+                else
+                    productionRate = 0;
                 laborRate = js.LaborRate;
                 hasDiscount = js.HasDiscount;
+                materialPerc = getMaterialDiscount(js.ProjectDelayFactor);
                 prevailingWage= js.ActualPrevailingWage == 0 ? 0 : (js.ActualPrevailingWage - laborRate) / laborRate;
+                reCalculate();
             }
+            
             CalculateAll();
 
         }
-        public virtual ObservableCollection<Slope> CreateSlopes(int RowN=0)
+        public double getMaterialDiscount(string delay)
         {
+            switch (delay)
+            {
+                case "0-3 Months":
+                    return 0;
+                case "3-6 Months":
+                    return 0.02;
+                case "6-12 Months":
+                    return 0.04;
+                case ">12 Months":
+                    return 0.06;
+                default:
+                    return 0;
+            }
+        }
+        public virtual ObservableCollection<Slope> CreateSlopes(int RowN=0)
+        {       
             ObservableCollection<Slope> slopes = new ObservableCollection<Slope>();
             slopes.Add(new Slope
             {
@@ -473,7 +499,7 @@ namespace WICR_Estimator.ViewModels
             CalculateTotalMixes();
 
             SlopeTotals.LaborExtTotal = TotalLaborCost;
-            SlopeTotals.MaterialExtTotal = TotalMaterialCost;
+            SlopeTotals.MaterialExtTotal = TotalMaterialCost*(1+ materialPerc);
             SlopeTotals.MaterialFreightTotal = TotalFrightCost;
         }
         public virtual void reCalculate()
@@ -481,13 +507,14 @@ namespace WICR_Estimator.ViewModels
             foreach (Slope slp in Slopes)
             {
                 slp.PricePerMix = getPricePerMix(slp.Thickness, isApprovedForCement);
+                slp.GSLaborRate = getGSLaborRate(slp.Thickness, 0);
             }
             
             CalculateGridTotal();
             CalculateTotalMixes();
 
             SlopeTotals.LaborExtTotal = TotalLaborCost;
-            SlopeTotals.MaterialExtTotal = TotalMaterialCost;
+            SlopeTotals.MaterialExtTotal = TotalMaterialCost * (1 + materialPerc);
             SlopeTotals.MaterialFreightTotal = TotalFrightCost;
         }
 
@@ -526,23 +553,24 @@ namespace WICR_Estimator.ViewModels
         public virtual double getGSLaborRate(string thickness,int addRow=0)
         {
             double result;
+            
             switch (thickness)
             {
                 case "1/4 inch Average":
                     double.TryParse(perMixRates[1+addRow][0].ToString(), out result);
-                    return result;
+                    return result*(1-productionRate);
                 case "1/2 inch Average":
                     double.TryParse(perMixRates[2 + addRow][0].ToString(), out result);
-                    return result;
+                    return result * (1 - productionRate);
                 case "3/4 inch Average":
                     double.TryParse(perMixRates[3 + addRow][0].ToString(), out result);
-                    return result;
+                    return result * (1 - productionRate);
                 case "1 1/4 inch Average":
                     double.TryParse(perMixRates[4 + addRow][0].ToString(), out result);
-                    return result;
+                    return result * (1 - productionRate);
                 case "1 inch Average":
                     double.TryParse(perMixRates[5 + addRow][0].ToString(), out result);
-                    return result;
+                    return result * (1 - productionRate);
                 default:
                     return 0;
             }
