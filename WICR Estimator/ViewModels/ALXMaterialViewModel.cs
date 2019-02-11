@@ -201,7 +201,10 @@ namespace WICR_Estimator.ViewModels
             }
             calculateRLqty();
         }
-
+        public override void calculateLaborHrs()
+        {
+            calLaborHrs(6, totalSqft);
+        }
         public override bool canApply(object obj)
         {
             return true;

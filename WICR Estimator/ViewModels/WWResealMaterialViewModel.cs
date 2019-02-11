@@ -65,7 +65,8 @@ namespace WICR_Estimator.ViewModels
             double totalJobCostS = 0;
             double totalJobCostSy = 0;
 
-            double.TryParse(laborDetails[0][0].ToString(), out facValue);
+            //double.TryParse(laborDetails[0][0].ToString(), out facValue);
+            facValue = Math.Round(preWage, 4);
             double fac1 = isPrevailingWage ? facValue : 0;
             double.TryParse(laborDetails[1][0].ToString(), out facValue);
             double fac2 = isDiscounted ? facValue : 0;
@@ -423,6 +424,10 @@ namespace WICR_Estimator.ViewModels
             TotalSystemPrice = finalSyCost; //* (1 + markUpPerc / 100);
             TotalSubcontractLabor = finalSubLabCost; // * (1 + markUpPerc / 100);
             TotalSale = TotalMetalPrice + TotalSlopingPrice + TotalSystemPrice + TotalSubcontractLabor;
+            CalculateTotalSqFt();
+            LaborPerc = Math.Round(AllTabsLaborTotal / TotalSale, 2);
+            OnPropertyChanged("MaterialPerc");
+            OnPropertyChanged("LaborPerc");
             OnPropertyChanged("TotalMetalPrice");
             OnPropertyChanged("TotalSlopingPrice");
             OnPropertyChanged("TotalSystemPrice");
@@ -511,12 +516,12 @@ namespace WICR_Estimator.ViewModels
             //base.calculateRLqty();
             double val1=0, val2=0, val3=0, val4 = 0;
             double qty = 0;
-            SystemMaterial sysmat = SystemMaterials.Where(x => x.Name == "RESISTITE REGULAR GRAY").FirstOrDefault();
-            if (sysmat!=null)
+            SystemMaterial sysmat1 = SystemMaterials.Where(x => x.Name == "RESISTITE REGULAR GRAY").FirstOrDefault();
+            if (sysmat1!=null)
             {
-                val3 = sysmat.IsMaterialChecked?sysmat.Qty:0;
+                val3 = sysmat1.IsMaterialChecked?sysmat1.Qty:0;
             }
-            sysmat = SystemMaterials.Where(x => x.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)").FirstOrDefault();
+            SystemMaterial sysmat = SystemMaterials.Where(x => x.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)").FirstOrDefault();
             if (sysmat!=null)
             {
                 val1 =sysmat.IsMaterialChecked?sysmat.Qty:0;
@@ -533,12 +538,13 @@ namespace WICR_Estimator.ViewModels
             }
 
             
-            qty= sysmat.IsMaterialChecked ? (val3 + val4 + val1) * 0.33 + val2 / 5 : val1 * 0.33 + val2 / 5;
-
+            qty= sysmat1.IsMaterialChecked ? (val3 + val4 + val1) * 0.33 + val2 / 5 : val1 * 0.33 + val2 / 5;
+            bool ischecked = SystemMaterials.Where(x => x.Name == "RESISTITE LIQUID").FirstOrDefault().IsMaterialChecked;
             SystemMaterial RL = SystemMaterials.Where(x => x.Name == "RESISTITE LIQUID").FirstOrDefault();
             if (RL!=null)
             {
                 RL.Qty = qty;
+                //RL.IsMaterialChecked = ischecked;
             }
             //bool ischecked = SystemMaterials.Where(x => x.Name == "RESISTITE REGULAR GRAY").FirstOrDefault().IsMaterialChecked;
             //SystemMaterials.Where(x => x.Name == "RESISTITE LIQUID").FirstOrDefault().IsMaterialChecked = ischecked;
@@ -617,24 +623,25 @@ namespace WICR_Estimator.ViewModels
         {
 
             TotalHrsDriveLabor = totalSqft < 1001 ? 2 : Math.Ceiling(totalSqft / 1000 * 10);
+            DriveLaborValue = Math.Round(TotalHrsDriveLabor * laborRate, 2);
+            OnPropertyChanged("DriveLaborValue");
             //TotalHrsFreightLabor = Math.Round(AllTabsFreightTotal / laborRate, 1);
             OnPropertyChanged("TotalHrsFreightLabor");
-            TotalHrsSystemLabor = Math.Round(isPrevailingWage ? (TotalLaborExtension / laborRate) * .445 - TotalHrsDriveLabor :
-                                                  (TotalLaborExtension / laborRate) - TotalHrsDriveLabor, 1);
+            TotalHrsSystemLabor = Math.Round(isPrevailingWage ? (TotalLaborExtension / actualPreWage)  :
+                                                  (TotalLaborExtension / laborRate), 1);
 
             OnPropertyChanged("TotalHrsSystemLabor");
             if (SlopeTotals != null && MetalTotals != null)
             {
-                TotalHrsMetalLabor = isPrevailingWage ? (MetalTotals.LaborExtTotal / laborRate) * .445 :
+                TotalHrsMetalLabor = isPrevailingWage ? (MetalTotals.LaborExtTotal / actualPreWage) :
                                                   (MetalTotals.LaborExtTotal / laborRate);
                 OnPropertyChanged("TotalHrsMetalLabor");
-                TotalHrsSlopeLabor = isPrevailingWage ? (SlopeTotals.LaborExtTotal / laborRate) * .445 :
+                TotalHrsSlopeLabor = isPrevailingWage ? (SlopeTotals.LaborExtTotal / actualPreWage) :
                                                       (SlopeTotals.LaborExtTotal / laborRate);
                 OnPropertyChanged("TotalHrsSlopeLabor");
             }
 
-            TotalHrsLabor = TotalHrsSystemLabor + TotalHrsMetalLabor + TotalHrsSlopeLabor +
-                 TotalHrsDriveLabor;
+            TotalHrsLabor = TotalHrsSystemLabor + TotalHrsMetalLabor + TotalHrsSlopeLabor + TotalHrsDriveLabor;
             OnPropertyChanged("TotalHrsLabor");
         }
         public override double getSqFtStairs(string materialName)
@@ -654,17 +661,17 @@ namespace WICR_Estimator.ViewModels
         }
         public override double getQuantity(string materialName, double coverage, double lfArea)
         {
-            
+            double minVal = 0.4;
             switch (materialName)
             {
                 case "VISTA PAINT ACRAPOXY SEALER":
-                case "RESISTITE REGULAR GRAY":
+                
                 case "DEXOTEX AJ-44":
                 case "WESTCOAT SC-10":
                 case "UPI PERMASHIELD":
                 case "PLI DEK GS88 WITH COLOR JAR 1 PER PAIL":
                 case "OPTIONAL FOR WEATHER SEAL XL":
-                    return lfArea / coverage < 1 ? 2 / 5 : lfArea / coverage;
+                    return lfArea / coverage < 1 ? minVal : lfArea / coverage;
                 default:
                     return lfArea/coverage;
             }

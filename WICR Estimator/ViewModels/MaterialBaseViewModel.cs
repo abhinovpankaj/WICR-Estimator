@@ -51,8 +51,8 @@ namespace WICR_Estimator.ViewModels
         private string projectname;
         public MaterialBaseViewModel()
         { }
-        double preWage = 0;
-        double actualPreWage = 0;
+        public double preWage = 0;
+        public double actualPreWage = 0;
         public MaterialBaseViewModel(JobSetup Js)
         {
 
@@ -123,11 +123,13 @@ namespace WICR_Estimator.ViewModels
             double calcHrs = 0;
             double sqStairs = 0;
             double qty = 0;
-            
+
             if (isPrevailingWage)
             {
                 double.TryParse(freightData[5][0].ToString(), out prPerc);
             }
+            else
+                prPerc = 0;
             
 
             double.TryParse(materialDetails[seq][2].ToString(), out cov);
@@ -1259,7 +1261,12 @@ namespace WICR_Estimator.ViewModels
                 hasSpecialPricing = js.HasSpecialPricing;
                 isDiscounted = js.HasDiscount;
                 isApprovedforCement = js.IsApprovedForSandCement;
-                preWage = js.ActualPrevailingWage == 0 ? 0 : (js.ActualPrevailingWage - laborRate) / laborRate; 
+                if (isPrevailingWage)
+                {
+                    preWage = js.ActualPrevailingWage == 0 ? 0 : (js.ActualPrevailingWage - laborRate) / laborRate;
+                }
+                else
+                    preWage = 0;
                 hasContingencyDisc = js.HasContingencyDisc;
                 MarkUpPerc = js.MarkupPercentage;
                 deckCount = js.DeckCount;
@@ -1267,7 +1274,7 @@ namespace WICR_Estimator.ViewModels
                 MaterialPerc = getMaterialDiscount(js.ProjectDelayFactor);
             }
             FetchMaterialValuesAsync(true);
-            
+            CalculateCost(null);
         }
         #region notused
         private void reCalculate()
@@ -1325,6 +1332,7 @@ namespace WICR_Estimator.ViewModels
             }
             else
                 AddLaborMinCharge = false;
+            OnPropertyChanged("LaborMinChargeMinSetup");
             OnPropertyChanged("AddLaborMinCharge");
             OnPropertyChanged("LaborMinChargeHrs");
             OnPropertyChanged("LaborMinChargeLaborExtension");
@@ -1478,8 +1486,10 @@ namespace WICR_Estimator.ViewModels
             double calcHrs = 0;
             double sqStairs = 0;
             double qty = 0;
-                       
+
             if (isPrevailingWage) { double.TryParse(freightData[5][0].ToString(), out prPerc); }
+            else
+                prPerc = 0;
             #region rehab
             if (weatherWearType == "Weather Wear Rehab")
             {
