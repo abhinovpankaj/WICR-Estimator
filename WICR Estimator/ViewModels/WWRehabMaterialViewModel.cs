@@ -82,10 +82,10 @@ namespace WICR_Estimator.ViewModels
             {
                 SubContractLaborItems = GetLaborItems();
             }
-
+            CalculateLaborMinCharge();
             CalculateAllMaterial();
         }
-        double prPerc;
+        
         public override ObservableCollection<SystemMaterial> GetSystemMaterial()
         {
 
@@ -103,7 +103,12 @@ namespace WICR_Estimator.ViewModels
             double calcHrs = 0;
             double sqStairs = 0;
             double qty = 0;
-            if (isPrevailingWage) { double.TryParse(freightData[5][0].ToString(), out prPerc); }
+            if (isPrevailingWage)
+            {
+                double.TryParse(freightData[5][0].ToString(), out prPerc);
+            }
+            else
+                prPerc = 0;
             int.TryParse(materialDetails[3][2].ToString(), out cov);
             double.TryParse(materialDetails[3][0].ToString(), out mp);
             double.TryParse(materialDetails[3][3].ToString(), out w);
@@ -801,16 +806,7 @@ namespace WICR_Estimator.ViewModels
                 MaterialExtension = mp * qty
             });
 
-            //Add labor for Minimum Charge
-
-            //double.TryParse(materialDetails[26][6].ToString(), out setUpMin);
-            LaborMinChargeMinSetup = 6.75;
-            IEnumerable<SystemMaterial> selected = smP.Where(x => x.IsMaterialChecked).ToList();
-            LaborMinChargeHrs = smP.Where(x => x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
-            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate);
-            LaborMinChargeLaborUnitPrice = LaborMinChargeLaborExtension / (riserCount + totalSqft);
-
-           
+                      
             int.TryParse(materialDetails[21][2].ToString(), out cov);
             double.TryParse(materialDetails[21][0].ToString(), out mp);
             double.TryParse(materialDetails[21][3].ToString(), out w);
@@ -830,7 +826,7 @@ namespace WICR_Estimator.ViewModels
             smP.Add(new SystemMaterial
             {
                 IsCheckboxDependent = true,
-                IncludeInLaborMinCharge = true,
+                IncludeInLaborMinCharge = false,
 
                 IsMaterialEnabled = getCheckboxEnabledStatus("Custom Texture Skip Trowel(Resistite Smooth White)"),
                 Name = "Custom Texture Skip Trowel(Resistite Smooth White)",
@@ -873,7 +869,7 @@ namespace WICR_Estimator.ViewModels
                 IsMaterialChecked = getCheckboxCheckStatus("Weather Seal XL two Coats"),
                 IsMaterialEnabled = getCheckboxEnabledStatus("Weather Seal XL two Coats"),
                 Name = "Weather Seal XL two Coats",
-                IncludeInLaborMinCharge = true,
+                IncludeInLaborMinCharge = false,
                 SMUnits = "Sq Ft",
                 SMSqft = lfArea,
                 Coverage = cov,
@@ -915,7 +911,7 @@ namespace WICR_Estimator.ViewModels
                 SMSqft = lfArea,
                 Coverage = cov,
                 MaterialPrice = mp,
-                IncludeInLaborMinCharge = true,
+                IncludeInLaborMinCharge = false,
                 Weight = w,
                 Qty = qty,
                 SMSqftH = sqh,
@@ -950,7 +946,7 @@ namespace WICR_Estimator.ViewModels
                 IsMaterialChecked = getCheckboxCheckStatus("Extra Stair Nosing Lf"),
                 IsMaterialEnabled = getCheckboxEnabledStatus("Extra Stair Nosing Lf"),
                 Name = "Extra Stair Nosing Lf",
-                IncludeInLaborMinCharge = true,
+                IncludeInLaborMinCharge = false,
                 SMUnits = "Sq Ft",
                 SMSqft = lfArea,
                 Coverage = cov,
@@ -1046,11 +1042,30 @@ namespace WICR_Estimator.ViewModels
                 MaterialExtension = mp * qty
             });
 
-
+            LaborMinChargeMinSetup = smP.Where(x => x.IsMaterialChecked && x.IncludeInLaborMinCharge == false).Select(x => x.SetupMinCharge).Sum();
+            
+            LaborMinChargeHrs = smP.Where(x => x.IsMaterialChecked && x.IncludeInLaborMinCharge == false).ToList().Select(x => x.Hours).Sum();
+            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate);
+            LaborMinChargeLaborUnitPrice = LaborMinChargeLaborExtension / (riserCount + totalSqft);
 
             return smP;
         }
+        public override void ApplyCheckUnchecks(object obj)
+        {
+            base.ApplyCheckUnchecks(obj);
+            CalculateLaborMinCharge();
 
+        }
+        public override void CalculateLaborMinCharge()
+        {
+            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false &&
+                                        x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
+            LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false &&
+                                         x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
+            LaborMinChargeLaborExtension = (LaborMinChargeMinSetup + LaborMinChargeHrs) > 20 ? 0 :
+                                                (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
+            base.CalculateLaborMinCharge();
+        }
         public override bool getCheckboxCheckStatus(string materialName)
         {
             //return base.getCheckboxCheckStatus(materialName);
@@ -1075,10 +1090,10 @@ namespace WICR_Estimator.ViewModels
                 case "LIP COLOR":
                 //case "AJ-44A DRESSING (SEALER)":
                 case "RESISTITE UNIVERSAL PRIMER(ADD 50% WATER)":
-                //case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
+                case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
                 //case "VISTA PAINT ACRIPOXY":
                 case "STAIR NOSING FROM DEXOTEX":
-                //case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
+                case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
                 case "WEATHER SEAL XL TWO COATS":
                     return true;
                 default:
@@ -1087,17 +1102,18 @@ namespace WICR_Estimator.ViewModels
         }
         public override bool canApply(object obj)
         {
-            if (obj != null)
-            {
-                if (obj.ToString() == "Custom Texture Skip Trowel(Resistite Smooth Gray)")
-                {
-                    return true;
-                }
-                else
-                    return base.canApply(obj);
-            }
-            else
-                return base.canApply(obj);
+            return true;
+            //if (obj != null)
+            //{
+            //    if (obj.ToString() == "Custom Texture Skip Trowel(Resistite Smooth Gray)")
+            //    {
+            //        return true;
+            //    }
+            //    else
+            //        return base.canApply(obj);
+            //}
+            //else
+            //    return base.canApply(obj);
             
             
         }

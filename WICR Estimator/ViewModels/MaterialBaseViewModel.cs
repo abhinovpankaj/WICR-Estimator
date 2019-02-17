@@ -19,7 +19,7 @@ namespace WICR_Estimator.ViewModels
         private ObservableCollection<CostBreakup> lCostBreakUp;
 
         #region privatefields
-        double prPerc = 0;
+        public double prPerc = 0;
         private ObservableCollection<SystemMaterial> systemMaterials;
         private ObservableCollection<OtherItem> otherMaterials;
         private ObservableCollection<OtherItem> otherLaborMaterials;
@@ -117,7 +117,7 @@ namespace WICR_Estimator.ViewModels
             double setUpMin = 0; // Setup minimum charges from google sheet, col 6
             double pRateStairs = 0; ///Production rate stairs from google sheet, col 5
             double hprRate = 0;///Horizontal Production rate  from google sheet, col 4
-            //double vprRate = 0;///Vertical Production rate  from google sheet, col 1
+            double vprRate = 0;///Vertical Production rate  from google sheet, col 1
             double sqh = 0;
             double labrExt = 0;
             double calcHrs = 0;
@@ -130,8 +130,8 @@ namespace WICR_Estimator.ViewModels
             }
             else
                 prPerc = 0;
-            
 
+            double.TryParse(materialDetails[seq][1].ToString(), out vprRate);
             double.TryParse(materialDetails[seq][2].ToString(), out cov);
             double.TryParse(materialDetails[seq][0].ToString(), out mp);
             double.TryParse(materialDetails[seq][3].ToString(), out w);
@@ -172,11 +172,12 @@ namespace WICR_Estimator.ViewModels
                 SMSqftH = sqh,
                 Operation = matName,
                 HorizontalProductionRate = hprRate,
-                StairsProductionRate = pRateStairs ,
+                StairsProductionRate = pRateStairs,
                 StairSqft = sqStairs,
                 SetupMinCharge = setUpMin,
                 Hours = calcHrs,
                 LaborExtension = labrExt,
+                VerticalProductionRate = vprRate,
                 LaborUnitPrice = getLaborUnitPrice(labrExt, riserCount, totalSqft,0,sqh,sqStairs, matName),//labrExt / (riserCount + totalSqft),
                 FreightExtension = w * qty,
                 MaterialExtension = mp * qty,
@@ -574,7 +575,7 @@ namespace WICR_Estimator.ViewModels
         }
         public virtual void driveHrs(int hrs,double tSqft)
         {
-            TotalHrsDriveLabor = tSqft < 1001 ? hrs : Math.Ceiling(tSqft / 1000 * hrs);
+            TotalHrsDriveLabor = tSqft < 1001 ? hrs : Math.Ceiling(tSqft / 1000 ) * hrs;
             DriveLaborValue = Math.Round(TotalHrsDriveLabor * laborRate,2);
             OnPropertyChanged("DriveLaborValue");
         }
@@ -911,7 +912,7 @@ namespace WICR_Estimator.ViewModels
             SystemMaterials.Where(x=>x.Name== "Neotex-38 Paste").FirstOrDefault().Qty=neotaxQty();
             //SystemMaterials.Where(x => x.Name == "Neotex-38 Paste").FirstOrDefault().IsMaterialChecked = true;
         
-            if (obj.ToString() == "Resistite Regular Gray")
+            if (obj.ToString() == "Resistite Regular Gray"|| obj.ToString() == "Resistite Regular White")
             {
                 var materials = SystemMaterials.Where(x => x.IsCheckboxDependent == true).ToList();
                 bool checkStatus = false;
@@ -1445,12 +1446,13 @@ namespace WICR_Estimator.ViewModels
             }
             return false;
         }
-
-        public double CalculateHrs(double horzSft, double prodHor, double stairSqft, double prodStair)
+        
+        public double CalculateHrs(double horzSft, double prodHor, double stairSqft, double prodStair, double vertSqft=0, double prodVert=0)
         {
             double val1 = prodHor != 0 ? horzSft / prodHor : 0;
             double val2 = prodStair != 0 ? stairSqft / prodStair : 0;
-            return val1 + val2;
+            double val3=prodVert!=0 ? vertSqft / prodVert : 0;
+            return (val1 + val2+val3);
         }
         public virtual ObservableCollection<SystemMaterial> GetSystemMaterial(Dictionary<string, string> materialNames)
         {

@@ -217,7 +217,7 @@ namespace WICR_Estimator.ViewModels
                                          x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
 
             LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 :
-                                                (20 - LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate;
+                                                (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
             base.CalculateLaborMinCharge();
         }
         public override void calculateRLqty()
@@ -286,6 +286,7 @@ namespace WICR_Estimator.ViewModels
                 sysMat.Qty=((val1*1.25) +val2+val3+val4+val5+val6)/ 5;
             }
             #endregion
+            CalculateLaborMinCharge();
 
         }
 
@@ -356,12 +357,9 @@ namespace WICR_Estimator.ViewModels
         {
             switch (matName)
             {
-                case "Stair Nosing":
-                case "Extra stair nosing lf":
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
                 case "Stucco Material Remove and replace (LF)":
-                
-                    return false;
+                     return false;
                 default:
                     return true;
             }

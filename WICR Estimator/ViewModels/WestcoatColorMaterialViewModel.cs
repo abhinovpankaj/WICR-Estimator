@@ -110,7 +110,7 @@ namespace WICR_Estimator.ViewModels
             LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
                                          x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
             LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 17 ? 0 :
-                                                (17 - LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate;
+                                                (17 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
             base.CalculateLaborMinCharge();
         }
         public override bool IncludedInLaborMin(string matName)
@@ -124,7 +124,7 @@ namespace WICR_Estimator.ViewModels
                 case "Sand or pressure wash to prepare area":
                 case "Add for hand wash, hard, stains, other prep.  CLR or xylene":
                 case "Add for hand masking of smaller patios, (other than large pool decks) tape and masking":
-                case "SC-70 clear acrylic lacquer 200-300 sq ft per gallon":
+                case "SC-10 solid color sealer IN LIEU of SC-70":
                 case "Add for Safe Grip Additive":
 
                     return true;
@@ -236,6 +236,7 @@ namespace WICR_Estimator.ViewModels
             if (sysmat != null)
             {
                 val2 = sysmat.IsMaterialChecked ? sysmat.Qty : 0;
+
             }
 
             sysmat = SystemMaterials.Where(x => x.Name == "Add for Safe Grip Additive").FirstOrDefault();
@@ -300,6 +301,7 @@ namespace WICR_Estimator.ViewModels
                 if (sysmat != null)
                 {
                     sysmat.IsMaterialChecked = !SystemMaterials.Where(x => x.Name == "SC-10 solid color sealer IN LIEU of SC-70").FirstOrDefault().IsMaterialChecked;
+                    
                     calculateRLqty();
                 }
 
@@ -309,11 +311,9 @@ namespace WICR_Estimator.ViewModels
 
         public override void setCheckBoxes()
         {
-            //base.setCheckBoxes();
-            SystemMaterials.Where(x => x.Name == "SC-10 solid color sealer IN LIEU of SC-70").First().IsMaterialChecked = false;
             SystemMaterials.Where(x => x.Name == "SC-10 solid color sealer IN LIEU of SC-70").First().IsMaterialEnabled = true;
             SystemMaterials.Where(x => x.Name == "Sand or pressure wash to prepare area").First().IsMaterialChecked = true;
-            ApplyCheckUnchecks("SC-10 solid color sealer IN LIEU of SC-70");
+            //ApplyCheckUnchecks("SC-10 solid color sealer IN LIEU of SC-70");
         }
     }
 }

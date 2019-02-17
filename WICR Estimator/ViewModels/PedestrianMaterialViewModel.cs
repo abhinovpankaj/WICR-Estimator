@@ -52,7 +52,7 @@ namespace WICR_Estimator.ViewModels
             LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
                                          x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
             LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 :
-                                                (20 - LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate;
+                                                (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
             base.CalculateLaborMinCharge();
         }
 
@@ -60,8 +60,7 @@ namespace WICR_Estimator.ViewModels
         {
             switch (matName)
             {
-                case "INTEGRAL STAIR NOSING (EXCEL STYLE)":
-                case "EXTRA STAIR NOSING":
+                
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
                 case "Stucco Material Remove and replace (LF)":
                     return false;
@@ -92,6 +91,7 @@ namespace WICR_Estimator.ViewModels
         public override void ApplyCheckUnchecks(object obj)
         {
             //base.ApplyCheckUnchecks(obj);
+            CalculateLaborMinCharge();
         }
         public override bool canApply(object obj)
         {
@@ -214,7 +214,7 @@ namespace WICR_Estimator.ViewModels
 
         public override void CalculateCostPerSqFT()
         {           
-            CostPerSquareFeet = (totalSqft + TotalSqftPlywood+riserCount) == 0 ? 0 : Math.Round(TotalMaterialCostbrkp / (totalSqft + TotalSqftPlywood+riserCount), 2);
+            CostPerSquareFeet = (totalSqft + TotalSqftPlywood+riserCount) == 0 ? 0 : Math.Round(TotalMaterialCost / (totalSqft + TotalSqftPlywood+riserCount), 2);
         }
 
         public override void CalculateTotalSqFt()
@@ -308,7 +308,7 @@ namespace WICR_Estimator.ViewModels
                 case "Stucco Material Remove and replace (LF)":
                     return 0;
                 case "3 IN. WHITE GLASS TAPE (PERIMETER)":
-                case "SIKA 1-A CAULKING (PERIMETER)":
+                                case "SIKA 1-A CAULKING (PERIMETER)":
                     return deckPerimeter + riserCount * 2 * 2;
                 case "DETAIL TAPE (NEW PLYWOOD)":
                 case "SIKA 1-A CAULKING (NEW PLYWOOD)":
@@ -418,13 +418,13 @@ namespace WICR_Estimator.ViewModels
                 case "7013 SC BASE COAT/ 5 GAL PAILS 40 MILS":
                 case "7016 - AR - INTERMEDIATE COAT / 5 GAL PAILS 20 MILS":
                 case "7016 - AL - SC TOP COAT / 5 GAL PAILS 16 MILS":
-                    return totalSqft + TotalSqftPlywood;
+                    return (totalSqft + TotalSqftPlywood);
                 case "3 IN. WHITE GLASS TAPE (PERIMETER)":
                     return deckPerimeter;
                 case "DETAIL TAPE (NEW PLYWOOD)":
                     return TotalSqftPlywood / 32 * 12;
                 default:
-                    return 0.0000001;
+                    return 0;
             }
         }
 
@@ -438,7 +438,7 @@ namespace WICR_Estimator.ViewModels
                 case "INTERLAMINATE PRIMER (XYLENE) FROM LOWRYS":
                 case "DETAIL TAPE (NEW PLYWOOD)":
                 case "UI 7118 CONCRETE PRIMER 1-1/2 GAL KIT":
-                    return riserCount * 4.5 * 2;
+                    return riserCount * stairWidth * 2;
                 case "7013 SC BASE COAT/ 5 GAL PAILS 40 MILS":
                 case "7016 - AR - INTERMEDIATE COAT / 5 GAL PAILS 20 MILS":
                 case "7016 - AL - SC TOP COAT / 5 GAL PAILS 16 MILS":

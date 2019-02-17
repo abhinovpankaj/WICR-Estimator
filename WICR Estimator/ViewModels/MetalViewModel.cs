@@ -22,7 +22,10 @@ namespace WICR_Estimator.ViewModels
             Metals =GetMetals();
             AddOnMetals = GetAddOnMetals();
             MiscMetals =GetMiscMetals();
-            
+            if (js.ProjectName=="Multicoat")
+            {
+                MiscMetals.Where(x => x.Name == "Nosing for Concrete risers").FirstOrDefault().Units = 0;
+            }
             CalculateCost(null);
             js.OnJobSetupChange += JobSetup_OnJobSetupChange;
         }        

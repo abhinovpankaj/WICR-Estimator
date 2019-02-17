@@ -120,9 +120,10 @@ namespace WICR_Estimator.ViewModels
         {
             LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
                                         x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
-
-            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 17 ? 0 :
-                                                (17 - LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate;
+            LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+                                         x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
+            LaborMinChargeLaborExtension = (LaborMinChargeMinSetup + LaborMinChargeHrs) > 20 ? 0 :
+                                                (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
             base.CalculateLaborMinCharge();
         }
         public override bool getCheckboxCheckStatus(string materialName)
@@ -258,6 +259,7 @@ namespace WICR_Estimator.ViewModels
         {
             if (SystemMaterials.Count != 0)
             {
+                
                 SystemMaterial item = SystemMaterials.Where(x => x.Name == "Extra stair nosing lf").FirstOrDefault();
                 if (item != null)
                 {
@@ -270,7 +272,7 @@ namespace WICR_Estimator.ViewModels
                     item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
 
                 }
-
+               
                 item = SystemMaterials.Where(x => x.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)").FirstOrDefault();
                 if (item != null)
                 {
@@ -297,8 +299,8 @@ namespace WICR_Estimator.ViewModels
                 {
                     
                     item.VerticalSqft = deckPerimeter;
-                    item.VerticalProductionRate = 100;
-                    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate)+item.VerticalSqft/100;
+                    item.VerticalProductionRate = 100*(1+prPerc);
+                    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate)+item.VerticalSqft/item.VerticalProductionRate;
 
                     item.LaborExtension = (item.Hours != 0) ? (item.SetupMinCharge + item.Hours) * laborRate : 0;
                     item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
@@ -306,10 +308,21 @@ namespace WICR_Estimator.ViewModels
             }
             
         }
-
+        public override bool IncludedInLaborMin(string matName)
+        {
+            switch (matName)
+            {
+                case "Plywood 3/4 & blocking (# of 4x8 sheets)":
+                case "Stucco Material Remove and replace (LF)":
+                    return false;
+                default:
+                    return true;
+            }
+        }
         public override void ApplyCheckUnchecks(object obj)
         {
             calculateRLqty();
+            CalculateLaborMinCharge();
         }
 
         public override void setCheckBoxes()

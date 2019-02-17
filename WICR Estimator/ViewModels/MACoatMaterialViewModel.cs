@@ -120,15 +120,10 @@ namespace WICR_Estimator.ViewModels
         {
             switch (matName)
             {
-                case "Stair Nosing":
-                case "Extra stair nosing lf":
+                
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
                 case "Stucco Material Remove and replace (LF)":
-                case "SC-10 Topcoat":
-                case "WP-81 Liquid":
-                case "WP-90 Liquid":
-                
-                    return false;
+                     return false;
                 default:
                     return true;
             }

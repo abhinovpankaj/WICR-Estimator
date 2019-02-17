@@ -46,6 +46,7 @@
     <LaborRange>E540:E559</LaborRange>
     <SlopeRange>P501:Q509</SlopeRange>
     <MaterialRange>H520:N529</MaterialRange>
+    <FreightRange>E48:F53</FreightRange>
   </WestcoatColor>
   
   <DesertBrand>

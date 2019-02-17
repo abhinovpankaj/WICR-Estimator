@@ -155,6 +155,7 @@ namespace WICR_Estimator.ViewModels
             foreach (Slope slp in UrethaneSlopes)
             {
                 slp.PricePerMix = getPricePerMix(slp.Thickness, isApprovedForCement,9);
+                slp.GSLaborRate = getGSLaborRate(slp.Thickness, 9);
             }
             base.reCalculate();
         }
@@ -173,6 +174,7 @@ namespace WICR_Estimator.ViewModels
         public PedestrianSlopeViewModel()
         {
         }
+        
         public override void CalculateAll()
         {
             base.CalculateAll();
@@ -182,7 +184,7 @@ namespace WICR_Estimator.ViewModels
             }
 
             SlopeTotals.LaborExtTotal = TotalLaborCost;
-            SlopeTotals.MaterialExtTotal = TotalMaterialCost;
+            SlopeTotals.MaterialExtTotal = TotalMaterialCost* (1 + materialPerc);
             SlopeTotals.MaterialFreightTotal = TotalFrightCost;
         }
         public void CalculateManualUrethane()

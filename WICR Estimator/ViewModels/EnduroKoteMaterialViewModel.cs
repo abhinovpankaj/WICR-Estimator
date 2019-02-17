@@ -57,9 +57,11 @@ namespace WICR_Estimator.ViewModels
         {
            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
                                         x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
+            LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+                                         x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
 
-            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 15 ? 0 :
-                                                (15 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
+            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 :
+                                                (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
             base.CalculateLaborMinCharge();
         }
         public override double getLaborUnitPrice(double laborExtension, double riserCount, double totalSqft,double sqftVert=0,double sqftHor=0,
@@ -145,8 +147,6 @@ namespace WICR_Estimator.ViewModels
         {
             switch (matName)
             {
-                case "Stair Nosing":
-                case "Extra stair nosing lf":
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
                 case "Stucco Material Remove and replace (LF)":
                     return false;
@@ -190,17 +190,17 @@ namespace WICR_Estimator.ViewModels
                 case "Second Coat Skim Coat EKC Cementitious Mix":
                 
                 case "Select Y for protection coat over membrane below tile (GU80-1 TOP COAT)":
-                    return riserCount * 4 * 2;
+                    return riserCount * stairWidth * 2;
                 case "Staples (3/4 Inch Crown, Box of 13, 500)":
                 case "EKL Acrylic Emulsion":
                 case "Caulk, dymonic 100":
                 case "Preparation after construction and 50/50 primer":
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
                 case "Stucco Material Remove and replace(LF)":
-                    return 0.00000001;
+                    return 0;
                 case "EKS Acrylic Top Coat":
                 case "Texture Coat EKC Cementitious Mix":
-                    return riserCount * 4.5 * 2;
+                    return riserCount * stairWidth * 2;
                 case "Stair Nosing":
                     return riserCount * 3.5;
                 case "Extra stair nosing lf":

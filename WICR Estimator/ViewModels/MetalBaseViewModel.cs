@@ -307,7 +307,7 @@ namespace WICR_Estimator.ViewModels
             
             return val;
         }
-        protected double getUnits(int unitNo)
+        public virtual double getUnits(int unitNo)
         {
             double unit = 0;
             if (unitNo == 0)
@@ -361,6 +361,7 @@ namespace WICR_Estimator.ViewModels
         {
             JobSetup js = sender as JobSetup;
             OnJobSetupChange(js);
+            
         }
 
         public void OnJobSetupChange(JobSetup Js)
@@ -418,7 +419,17 @@ namespace WICR_Estimator.ViewModels
                    AddOnMetals[i].SpecialMetalPricing = sp;
                }
 
-               CalculateCost(null);
+            if (Js!=null)
+            {
+                if (Js.ProjectName == "Multicoat")
+                {
+                    MiscMetals.Where(x => x.Name == "Nosing for Concrete risers").FirstOrDefault().Units = 0;
+                }
+                else
+                    MiscMetals[1].Units = getUnits(3);
+            }
+            
+            CalculateCost(null);
            
             
         }
@@ -512,7 +523,7 @@ namespace WICR_Estimator.ViewModels
         public void CalculateCost(object obj)
         {
             MiscMetals[0].Units = getUnits(2);
-            MiscMetals[1].Units = getUnits(3);
+            
             updateLaborCost();
             updateMaterialCost();
             MetalTotals.MaterialExtTotal = TotalMaterialCost*(1+MaterialPerc);
@@ -650,9 +661,27 @@ namespace WICR_Estimator.ViewModels
                 
 
             }
+            i = 0;
+            foreach (AddOnMetal item in AddOnMetals)
+            {
+                item.IsMetalChecked = true;
+                if (item.Name.Contains("STAIR"))
+                {
+
+                }
+
+                else
+                {
+                    item.Units = i + 1;
+                    i++;
+                }
+
+
+            }
             MiscMetals[2].Units = 1;
             MiscMetals[2].UnitPrice = 8;
             MiscMetals[2].MaterialPrice = 15;
+            CalculateCost(null);
         }
         #endregion
     }

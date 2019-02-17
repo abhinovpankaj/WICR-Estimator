@@ -60,7 +60,7 @@ namespace WICR_Estimator.ViewModels
         public double deductionOnLargeJob;
         public bool overrideManually;
         public bool hasDiscount;
-        private double materialPerc;
+        public double materialPerc;
         public string SlopeMaterialName
         {
             get
