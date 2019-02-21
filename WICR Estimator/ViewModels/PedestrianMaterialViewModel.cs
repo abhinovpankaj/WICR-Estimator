@@ -83,7 +83,9 @@ namespace WICR_Estimator.ViewModels
                 IsReseal = Js.IsReseal;
                 IsNewPlaywood = Js.IsNewPlywood;
                 RequireFlashing = Js.IsFlashingRequired;
-                //hasContingencyDisc = Js.TotalSqft + Js.TotalSqftPlywood > 1000 ? true : false;                
+                
+                SystemMaterials.Where(x => x.Name == "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)").
+                    FirstOrDefault().SMUnits = Js.RiserCount.ToString();
             }
             
             base.JobSetup_OnJobSetupChange(sender, e);
@@ -91,6 +93,7 @@ namespace WICR_Estimator.ViewModels
         public override void ApplyCheckUnchecks(object obj)
         {
             //base.ApplyCheckUnchecks(obj);
+            calculateRLqty();
             CalculateLaborMinCharge();
         }
         public override bool canApply(object obj)
@@ -118,7 +121,7 @@ namespace WICR_Estimator.ViewModels
 
             }
             var sysMat = GetSystemMaterial(MaterialNames);
-
+                
             #region  Update Special Material Pricing and QTY on JobSetup change
             if (hasSetupChanged)
             {
@@ -278,22 +281,22 @@ namespace WICR_Estimator.ViewModels
         public override void setCheckBoxes()
         {
             //base.setCheckBoxes();
-            foreach (SystemMaterial item in SystemMaterials)
-            {
-                if (item.Name == "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)"
-                    ||item.Name== "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)"
-                    || item.Name == "EXTRA STAIR NOSING"
-                    || item.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)"
-                    || item.Name == "Stucco Material Remove and replace (LF)")
-                {
+            //foreach (SystemMaterial item in SystemMaterials)
+            //{
+            //    if (item.Name == "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)"
+            //        ||item.Name== "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)"
+            //        || item.Name == "EXTRA STAIR NOSING"
+            //        || item.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)"
+            //        || item.Name == "Stucco Material Remove and replace (LF)")
+            //    {
 
-                }   
-                else 
-                {
-                    item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
-                }
+            //    }   
+            //    else 
+            //    {
+            //        item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
+            //    }
                 
-            }
+            //}
 
         }
         public override double getlfArea(string materialName)
@@ -356,12 +359,14 @@ namespace WICR_Estimator.ViewModels
                 }
             }
             SystemMaterial sysmat = SystemMaterials.Where(x => x.Name == "9801 ACCELERATOR").FirstOrDefault();
-            
+            bool ischecked = sysmat.IsMaterialChecked;
             sysmat.Qty = qty / sysmat.Coverage;
+            sysmat.IsMaterialChecked = ischecked;
+
             sysmat = SystemMaterials.Where(x => x.Name == "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)").FirstOrDefault();
             if (sysmat != null)
             {
-                bool ischecked = sysmat.IsMaterialChecked;
+                ischecked = sysmat.IsMaterialChecked;
                 sysmat.SMUnits = riserCount.ToString();
                 //double.TryParse(sysmat.SMUnits, out myVal);
                 sysmat.Qty = riserCount / sysmat.Coverage;

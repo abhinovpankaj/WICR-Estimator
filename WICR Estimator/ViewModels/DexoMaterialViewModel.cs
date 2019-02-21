@@ -154,9 +154,9 @@ namespace WICR_Estimator.ViewModels
                     k++;
                 if (key== "RP FABRIC 10 INCH WIDE X (300 LF)")
                 {
-                    sm.VerticalProductionRate = 100;
+                    sm.VerticalProductionRate = 100*(1+prPerc);
                     sm.VerticalSqft = deckPerimeter;
-                    sm.Hours = deckPerimeter / 100;
+                    sm.Hours = deckPerimeter / sm.VerticalProductionRate;
                     sm.LaborExtension = (sm.SetupMinCharge + sm.Hours) * laborRate;
                     sm.LaborUnitPrice = sm.LaborExtension / (riserCount+totalSqft);
                 }
@@ -173,8 +173,8 @@ namespace WICR_Estimator.ViewModels
         {
             switch (matName)
             {
-                case "Stair Nosing From Dexotex":
-                case "Extra stair nosing lf":
+                //case "Stair Nosing From Dexotex":
+                //case "Extra stair nosing lf":
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
                 case "Stucco Material Remove and replace (LF)":
                     return false;
@@ -186,9 +186,12 @@ namespace WICR_Estimator.ViewModels
         {
             LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true && 
                                         x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
-
-            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 14 ? 0 : 
-                                                (14 - LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate;
+            LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+                                        x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
+            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 : 
+                                                (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
+            OnPropertyChanged("LaborMinChargeHrs");
+            OnPropertyChanged("LaborMinChargeMinSetup");
             base.CalculateLaborMinCharge();
         }
         public override void calculateLaborHrs()
@@ -465,9 +468,9 @@ namespace WICR_Estimator.ViewModels
                         mat.Name = matWhite.Name;
                         mat.Weight = matWhite.Weight;
                         
-                        mat.HorizontalProductionRate = matWhite.HorizontalProductionRate;
+                        mat.HorizontalProductionRate = matWhite.HorizontalProductionRate*(1+prPerc);
                         
-                        mat.StairsProductionRate = matWhite.StairsProductionRate;
+                        mat.StairsProductionRate = matWhite.StairsProductionRate * (1 + prPerc);
                         
                         mat.SetupMinCharge = mat.SetupMinCharge;
                         OnPropertyChanged("SetupMinCharge");
@@ -484,9 +487,9 @@ namespace WICR_Estimator.ViewModels
                         mat.Name = matWhite.Name;
                         mat.Weight = matWhite.Weight;
 
-                        mat.HorizontalProductionRate = matWhite.HorizontalProductionRate;
+                        mat.HorizontalProductionRate = matWhite.HorizontalProductionRate * (1 + prPerc);
 
-                        mat.StairsProductionRate = matWhite.StairsProductionRate;
+                        mat.StairsProductionRate = matWhite.StairsProductionRate * (1 + prPerc);
 
                         mat.SetupMinCharge = mat.SetupMinCharge;
                         OnPropertyChanged("SetupMinCharge");
@@ -522,9 +525,9 @@ namespace WICR_Estimator.ViewModels
                         mat.Name = matWhite.Name;
                         mat.Weight = matWhite.Weight;
 
-                        mat.HorizontalProductionRate = matWhite.HorizontalProductionRate;
+                        mat.HorizontalProductionRate = matWhite.HorizontalProductionRate * (1 + prPerc);
 
-                        mat.StairsProductionRate = matWhite.StairsProductionRate;
+                        mat.StairsProductionRate = matWhite.StairsProductionRate * (1 + prPerc);
 
                         mat.SetupMinCharge = mat.SetupMinCharge;
                         OnPropertyChanged("SetupMinCharge");
@@ -540,9 +543,9 @@ namespace WICR_Estimator.ViewModels
 
                         mat.Weight = matWhite.Weight;
                         mat.Name = matWhite.Name;
-                        mat.HorizontalProductionRate = matWhite.HorizontalProductionRate;
+                        mat.HorizontalProductionRate = matWhite.HorizontalProductionRate * (1 + prPerc);
 
-                        mat.StairsProductionRate = matWhite.StairsProductionRate;
+                        mat.StairsProductionRate = matWhite.StairsProductionRate * (1 + prPerc);
 
                         mat.SetupMinCharge = mat.SetupMinCharge;
                         OnPropertyChanged("SetupMinCharge");
@@ -579,9 +582,9 @@ namespace WICR_Estimator.ViewModels
 
                         mat.Weight = matWhite.Weight;
                         mat.Name = matWhite.Name;
-                        mat.HorizontalProductionRate = matWhite.HorizontalProductionRate;
+                        mat.HorizontalProductionRate = matWhite.HorizontalProductionRate * (1 + prPerc);
 
-                        mat.StairsProductionRate = matWhite.StairsProductionRate;
+                        mat.StairsProductionRate = matWhite.StairsProductionRate * (1 + prPerc);
 
                         mat.SetupMinCharge = mat.SetupMinCharge;
                         OnPropertyChanged("SetupMinCharge");
@@ -597,9 +600,9 @@ namespace WICR_Estimator.ViewModels
                         mat.Name = matWhite.Name;
                         mat.Weight = matWhite.Weight;
 
-                        mat.HorizontalProductionRate = matWhite.HorizontalProductionRate;
+                        mat.HorizontalProductionRate = matWhite.HorizontalProductionRate * (1 + prPerc);
 
-                        mat.StairsProductionRate = matWhite.StairsProductionRate;
+                        mat.StairsProductionRate = matWhite.StairsProductionRate * (1 + prPerc);
 
                         mat.SetupMinCharge = mat.SetupMinCharge;
                         OnPropertyChanged("SetupMinCharge");

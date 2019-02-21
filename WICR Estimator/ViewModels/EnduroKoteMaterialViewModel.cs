@@ -187,8 +187,7 @@ namespace WICR_Estimator.ViewModels
                 case "ENDURO ELA-98 BINDER (2 COATS)":
                 case "3/4 oz. Fiberglass (2000 sq ft rolls Purchased from Hill Brothers )":
                 case "Base Coat EKC Cementitious Mix":
-                case "Second Coat Skim Coat EKC Cementitious Mix":
-                
+                case "Second Coat Skim Coat EKC Cementitious Mix":                
                 case "Select Y for protection coat over membrane below tile (GU80-1 TOP COAT)":
                     return riserCount * stairWidth * 2;
                 case "Staples (3/4 Inch Crown, Box of 13, 500)":

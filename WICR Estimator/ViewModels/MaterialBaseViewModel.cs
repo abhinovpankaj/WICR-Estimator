@@ -578,13 +578,10 @@ namespace WICR_Estimator.ViewModels
             TotalHrsDriveLabor = tSqft < 1001 ? hrs : Math.Ceiling(tSqft / 1000 ) * hrs;
             DriveLaborValue = Math.Round(TotalHrsDriveLabor * laborRate,2);
             OnPropertyChanged("DriveLaborValue");
+            OnPropertyChanged("TotalHrsDriveLabor");
         }
         public void calLaborHrs(int hrs,double tSqft)
         {
-            driveHrs(hrs,tSqft);
-            //TotalHrsFreightLabor = Math.Round(AllTabsFreightTotal / laborRate,1);
-            //OnPropertyChanged("TotalHrsFreightLabor");
-
             TotalHrsSystemLabor = isPrevailingWage ? (TotalLaborExtension / actualPreWage) :
                                                   (TotalLaborExtension / laborRate) ;
             if (TotalHrsSystemLabor < 0)
@@ -602,8 +599,19 @@ namespace WICR_Estimator.ViewModels
                 OnPropertyChanged("TotalHrsSlopeLabor");
             }
 
-            TotalHrsLabor = TotalHrsSystemLabor + TotalHrsMetalLabor + TotalHrsSlopeLabor + TotalHrsDriveLabor;
+            TotalHrsDriveLabor = Math.Ceiling((TotalHrsSystemLabor + TotalHrsMetalLabor + TotalHrsSlopeLabor) / 10 * 2);
+            if (TotalHrsDriveLabor<4)
+            {
+                TotalHrsDriveLabor = 4;
+            }
+            double DHLR = 0;
+            double.TryParse(freightData[6][0].ToString(), out DHLR);
+            DriveLaborValue = TotalHrsDriveLabor * DHLR;
+            TotalHrsLabor = TotalHrsSystemLabor + TotalHrsMetalLabor + TotalHrsSlopeLabor;
+            OnPropertyChanged("DriveLaborValue");
+            OnPropertyChanged("TotalHrsDriveLabor");
             OnPropertyChanged("TotalHrsLabor");
+
         }
         private void calculateLaborforMinCharge()
         {

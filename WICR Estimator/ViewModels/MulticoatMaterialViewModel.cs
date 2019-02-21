@@ -318,28 +318,36 @@ namespace WICR_Estimator.ViewModels
                     item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
 
                 }
+                item = SystemMaterials.Where(x => x.Name == "Add for saw cut joints").FirstOrDefault();
+                if (item != null)
+                {
 
+                    item.SMSqft = item.Qty;
+                    //item.StairSqft = item.Qty;
+                    item.SMSqftH = item.Qty;
+                    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
+
+                    item.LaborExtension = (item.Hours != 0) ? (item.SetupMinCharge + item.Hours) * laborRate : 0;
+                    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
+
+                }
+                item = SystemMaterials.Where(x => x.Name == "Add for removing and replacing concrete (no more than 100 sq ft)").FirstOrDefault();
+                if (item != null)
+                {
+                    item.SMSqftH = item.Qty;
+                    item.SMSqft = item.Qty;
+                    //item.StairSqft = item.Qty;
+                    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
+
+                    item.LaborExtension = (item.Hours != 0) ? (item.SetupMinCharge + item.Hours) * laborRate : 0;
+                    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
+
+                }
                 item = SystemMaterials.Where(x => x.Name == "Large cracks with reseal (route, fill with speed bond/sand and spot texture)").FirstOrDefault();
                 if (item != null)
                 {
                     val1 = item.Qty;
-                    if (val1 > 0)
-                    {
-
-                        sysMat1.IsMaterialChecked = true;
-                        sysMat1.IsMaterialEnabled = false;
-                        SystemMaterials.Where(x => x.Name == "Light crack and repairs- speed bond (no more than 1% of area)").FirstOrDefault().IsMaterialChecked
-                            = false;
-                        sysMat1.SMSqft = item.Qty;
-                    }
-                    else
-                    {
-                        sysMat1.IsMaterialChecked = false;
-                        sysMat1.IsMaterialEnabled = true;
-                        SystemMaterials.Where(x => x.Name == "Light crack and repairs- speed bond (no more than 1% of area)").FirstOrDefault().IsMaterialChecked
-                            = true;
-                        sysMat1.SMSqft = totalSqft + (stairWidth * riserCount * 2);
-                    }
+                    
                     item.SMSqftH = item.Qty;
                     item.SMSqft = item.Qty;
                     //item.StairSqft = item.Qty;
@@ -368,54 +376,47 @@ namespace WICR_Estimator.ViewModels
                 if (item != null)
                 {
                     val2 = item.Qty;
-                    if (val2 > 0)
-                    {
+           
+                    item.SMSqft = item.Qty;
+                    //item.StairSqft = item.Qty;
+                    item.SMSqftH = item.Qty;
+                    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
+                    
+                    item.LaborExtension = (item.Hours != 0) ? (item.SetupMinCharge + item.Hours) * laborRate : 0;
+                    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
 
-                        sysMat2.IsMaterialChecked = true;
-                        sysMat2.IsMaterialEnabled = false;
-                        sysMat2.SMSqft = item.Qty;
+                }
+                if (val1+val2 > 0)
+                {
+
+                    sysMat1.IsMaterialChecked = true;
+                    sysMat1.IsMaterialEnabled = false;
+                    SystemMaterials.Where(x => x.Name == "Light crack and repairs- speed bond (no more than 1% of area)").FirstOrDefault().IsMaterialChecked
+                        = false;
+                    sysMat1.SMSqft = val2+val1;
+                    sysMat2.IsMaterialChecked = true;
+                    sysMat2.IsMaterialEnabled = false;
+                    sysMat2.SMSqft = val2 + val1;
+                }
+                else
+                {
+                    if (!sysMat1.IsMaterialEnabled)
+                    {
+                        sysMat1.IsMaterialChecked = false;
+                        sysMat1.IsMaterialEnabled = true;
+                        SystemMaterials.Where(x => x.Name == "Light crack and repairs- speed bond (no more than 1% of area)").FirstOrDefault().IsMaterialChecked
+                            = true;
+                        sysMat1.SMSqft = totalSqft + (stairWidth * riserCount * 2);
                     }
-                    else
+                    if (!sysMat2.IsMaterialEnabled)
                     {
                         sysMat2.IsMaterialChecked = false;
                         sysMat2.IsMaterialEnabled = true;
                         sysMat2.SMSqft = totalSqft + (riserCount * stairWidth * 2);
                     }
-                    
-                    item.SMSqft = item.Qty;
-                    //item.StairSqft = item.Qty;
-                    item.SMSqftH = item.Qty;
-                    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
-                    
-                    item.LaborExtension = (item.Hours != 0) ? (item.SetupMinCharge + item.Hours) * laborRate : 0;
-                    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
-
+                   
                 }
-                item = SystemMaterials.Where(x => x.Name == "Add for saw cut joints").FirstOrDefault();
-                if (item != null)
-                {
 
-                    item.SMSqft = item.Qty;
-                    //item.StairSqft = item.Qty;
-                    item.SMSqftH = item.Qty;
-                    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
-
-                    item.LaborExtension = (item.Hours != 0) ? (item.SetupMinCharge + item.Hours) * laborRate : 0;
-                    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
-
-                }
-                item = SystemMaterials.Where(x => x.Name == "Add for removing and replacing concrete (no more than 100 sq ft)").FirstOrDefault();
-                if (item != null)
-                {
-                    item.SMSqftH = item.Qty;
-                    item.SMSqft = item.Qty;
-                    //item.StairSqft = item.Qty;
-                    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
-
-                    item.LaborExtension = (item.Hours != 0) ? (item.SetupMinCharge + item.Hours) * laborRate : 0;
-                    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
-
-                }
                 if (val2 > 0 || val1 > 0)
                 {
                     sysMat2.Name = "Texture for repairs";

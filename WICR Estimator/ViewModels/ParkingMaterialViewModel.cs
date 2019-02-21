@@ -26,6 +26,7 @@ namespace WICR_Estimator.ViewModels
             FetchMaterialValuesAsync(false);
 
         }
+        
         public override void ApplyCheckUnchecks(object obj)
         {
             
@@ -68,9 +69,18 @@ namespace WICR_Estimator.ViewModels
                 IsReseal = Js.IsReseal;
                 IsNewPlaywood = Js.IsNewPlywood;
                 RequireFlashing = Js.IsFlashingRequired;
-                //hasContingencyDisc = Js.TotalSqft + Js.TotalSqftPlywood > 1000 ? true : false;                
+                //hasContingencyDisc = Js.TotalSqft + Js.TotalSqftPlywood > 1000 ? true : false; 
+                SystemMaterials.Where(x => x.Name == "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)").
+                    FirstOrDefault().SMUnits = Js.RiserCount.ToString();
+                SystemMaterials.Where(x => x.Name == "Striping for small cracKs (less than 1/8\")").
+                    FirstOrDefault().SMUnits = Js.TotalSqft.ToString();
+
             }
             base.JobSetup_OnJobSetupChange(sender, e);
+        }
+        public override void CalculateCostPerSqFT()
+        {
+            CostPerSquareFeet = (totalSqft + TotalSqftPlywood + riserCount) == 0 ? 0 : Math.Round(TotalMaterialCost / (totalSqft + TotalSqftPlywood + riserCount), 2);
         }
         public override void FetchMaterialValuesAsync(bool hasSetupChanged)
         {
@@ -156,6 +166,7 @@ namespace WICR_Estimator.ViewModels
             calculateRLqty();
             CalculateLaborMinCharge();
             CalculateAllMaterial();
+            
         }
         private void setUnitChangeValues()
         {
@@ -219,6 +230,7 @@ namespace WICR_Estimator.ViewModels
 
             }
             calculateRLqty();
+            CalculateLaborMinCharge();
         }
         
         public override double getLaborUnitPrice(double laborExtension, double riserCount, double totalSqft, double sqftVert = 0, double sqftHor = 0, double sqftStairs = 0, string matName = "")
@@ -267,13 +279,7 @@ namespace WICR_Estimator.ViewModels
         public override bool getCheckboxEnabledStatus(string materialName)
         {
             return false;
-            //switch (materialName)
-            //{
-            //    case "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)":
-            //        return true;
-            //    default:
-            //        return false;
-            //}
+            
         }
 
         public override void setCheckBoxes()
@@ -337,6 +343,28 @@ namespace WICR_Estimator.ViewModels
                 
                 default:
                     return lfArea / coverage;
+            }
+        }
+        public override void CalculateLaborMinCharge()
+        {
+            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+                                        x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
+            LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+                                         x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
+            LaborMinChargeLaborExtension = (LaborMinChargeMinSetup + LaborMinChargeHrs) > 20 ? 0 :
+                                                (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
+            base.CalculateLaborMinCharge();
+        }
+        public override bool IncludedInLaborMin(string matName)
+        {
+            switch (matName)
+            {
+
+                case "Plywood 3/4 & blocking (# of 4x8 sheets)":
+                case "Stucco Material Remove and replace (LF)":
+                    return false;
+                default:
+                    return true;
             }
         }
         //calculateQTY for 9801 ACCELERATOR
@@ -414,6 +442,11 @@ namespace WICR_Estimator.ViewModels
             
            
         }
+        public override void calculateLaborHrs()
+        {
+            calLaborHrs(6, totalSqft + TotalSqftPlywood);
+
+        }
         public override double getSqFtAreaH(string materialName)
         {
             //return base.getSqFtAreaH(materialName);
@@ -450,7 +483,7 @@ namespace WICR_Estimator.ViewModels
                 case "Striping for small cracKs (less than 1/8\")":
                 case "Route and caulk moving cracks (greater than 1/8\")":
                 case "UI 7118 CONCRETE PRIMER 2 gal kit":
-                    return riserCount * 4.5 * 2;
+                    return riserCount * stairWidth * 2;
                 case "7013 SC BASE COAT/ 5 GAL PAILS 30 MILS":
                 case "7016 - AR - SC INTERMEDIATE/ 5 GAL PAILS 20 MILS":
                 case "7016 SC TOP COAT/ 5 GAL PAILS 16 MILS":
@@ -460,7 +493,7 @@ namespace WICR_Estimator.ViewModels
                     return riserCount * 2 * 2;              
                 
                 default:
-                    return 0.0000001;
+                    return 0;
             }
         }
     }
