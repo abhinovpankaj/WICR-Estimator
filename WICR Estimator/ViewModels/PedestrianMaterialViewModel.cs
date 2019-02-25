@@ -162,9 +162,9 @@ namespace WICR_Estimator.ViewModels
                 SystemMaterials = sysMat;
                 
             }
-            
-            setExceptionValues(null);
             setCheckBoxes();
+            setExceptionValues(null);
+            
             if (OtherMaterials.Count == 0)
             {
                 OtherMaterials = GetOtherMaterials();
@@ -281,22 +281,29 @@ namespace WICR_Estimator.ViewModels
         public override void setCheckBoxes()
         {
             //base.setCheckBoxes();
-            //foreach (SystemMaterial item in SystemMaterials)
-            //{
-            //    if (item.Name == "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)"
-            //        ||item.Name== "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)"
-            //        || item.Name == "EXTRA STAIR NOSING"
-            //        || item.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)"
-            //        || item.Name == "Stucco Material Remove and replace (LF)")
-            //    {
+            foreach (SystemMaterial item in SystemMaterials)
+            {
+                if (item.Name == "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)"
+                    || item.Name == "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)"
+                    || item.Name == "EXTRA STAIR NOSING"
+                    || item.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)"
+                    || item.Name == "1/20 SAND/ #100 LB"
+                    ||item.Name== "UI 7118 CONCRETE PRIMER 1-1/2 GAL KIT"
+                    || item.Name== "7016 - AR - INTERMEDIATE COAT / 5 GAL PAILS 20 MILS"
+                    || item.Name == "Stucco Material Remove and replace (LF)")
+                {
 
-            //    }   
-            //    else 
-            //    {
-            //        item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
-            //    }
-                
-            //}
+                }
+                else
+                {
+                    //if (!item.IsMaterialEnabled)
+                    //{
+                        item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
+                    //}
+                    
+                }
+
+            }
 
         }
         public override double getlfArea(string materialName)
@@ -418,6 +425,8 @@ namespace WICR_Estimator.ViewModels
             //return base.getSqFtAreaH(materialName);
             switch (materialName)
             {
+                case "UI 7118 CONCRETE PRIMER 1-1/2 GAL KIT":
+                    return totalSqft;
                 case "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL":
                 case "INTERLAMINATE PRIMER (XYLENE) FROM LOWRYS":
                 case "7013 SC BASE COAT/ 5 GAL PAILS 40 MILS":

@@ -112,8 +112,8 @@ namespace WICR_Estimator.ViewModels
             LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
                                          x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
 
-            LaborMinChargeLaborExtension =( LaborMinChargeMinSetup + LaborMinChargeHrs) > 17 ? 0 :
-                                                (17 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
+            LaborMinChargeLaborExtension =( LaborMinChargeMinSetup + LaborMinChargeHrs) > 20? 0 :
+                                                (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
             base.CalculateLaborMinCharge();
         }
         public override bool IncludedInLaborMin(string matName)
@@ -197,7 +197,7 @@ namespace WICR_Estimator.ViewModels
                 bool sc35 = SystemMaterials.Where(x => x.Name == "SC-35 Water based stain").FirstOrDefault().IsMaterialChecked;
                 bool tc40 = SystemMaterials.Where(x => x.Name == "TC-40 Liquid Colorant").FirstOrDefault().IsMaterialChecked;
                 bool sc70 = SystemMaterials.Where(x => x.Name == "SC-70 clear acrylic lacquer").FirstOrDefault().IsMaterialChecked;
-                if (!sc35 && !tc40 &&!sc35)
+                if (!sc35 && !tc40 && !sc70)
                 {
                     SystemMaterials.Where(x => x.Name == "SC-10 Topcoat").FirstOrDefault().IsMaterialChecked = true;
                 }
@@ -350,6 +350,7 @@ namespace WICR_Estimator.ViewModels
             //        item.LaborUnitPrice = item.LaborExtension / item.Qty;
             //    }
             //}
+            CalculateLaborMinCharge();
         }
 
         public override void calculateLaborHrs()

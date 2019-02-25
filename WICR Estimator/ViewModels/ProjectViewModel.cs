@@ -146,6 +146,7 @@ namespace WICR_Estimator.ViewModels
                                 prj.SlopeViewModel.SlopeTotals, prj.ProjectJobSetUp);
                         }
                     }
+                    prj.ProjectJobSetUp.TotalSalesCostTemp = prj.MaterialViewModel.TotalSale;
                     
                 }
             }          

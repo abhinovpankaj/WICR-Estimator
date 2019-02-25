@@ -145,7 +145,7 @@ namespace WICR_Estimator.ViewModels
                 case "KD Texture Coat: Grey TC-3 Texture Coat Cement (Semi-Smooth or Knock Down) 1":
                 case "Water Base Stain in Lieu of Liquid Colorant:  SC-35X":
                 case "Top Coat:  SC-70 clear acrylic lacquer":
-                case "Extra stair nosing lf":
+                //case "Extra stair nosing lf":
                     return true;
                 default:
                     return false;

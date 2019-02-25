@@ -267,7 +267,7 @@ namespace WICR_Estimator.ViewModels
         }
         private void resistiteQty()
         {
-            double qty = 0;
+            double qty = 0,qty1=0;
             foreach (var item in SystemMaterials)
             {
                 if (item.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)" ||
@@ -282,11 +282,30 @@ namespace WICR_Estimator.ViewModels
                     }
 
                 }
+                if (item.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)" ||
+                    item.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)" ||
+                    item.Name == "Resistite textured knockdown finish (smooth or regular per customer)Gray" ||
+                    item.Name == "Resistite textured knockdown finish (smooth or regular per customer)White")
+                {
+                    if (item.IsMaterialChecked)
+                    {
+                        qty1 = qty1 + item.Qty;
+                    }
+
+                }
             }
             double val1 = SystemMaterials.Where(x => x.Name == "Underlay over membrane (Resistite regular 150 sq ft per mix )").FirstOrDefault().Qty;
             SystemMaterials.Where(x=>x.Name== "Resistite Liquid ").FirstOrDefault().Qty= (qty *0.33)+val1/5;
 
             SystemMaterials.Where(x => x.Name == "Weather Seal XL Coat").FirstOrDefault().IsMaterialEnabled = true;
+
+            SystemMaterial skipMat = SystemMaterials.Where(x => x.Name == "Lip Color").FirstOrDefault();
+            if (skipMat != null)
+            {
+                bool isChecked = skipMat.IsMaterialChecked;
+                skipMat.Qty = qty1;
+                skipMat.IsMaterialChecked = isChecked;
+            }
         }
 
         public override double getSqFtStairs(string materialName)
@@ -675,6 +694,7 @@ namespace WICR_Estimator.ViewModels
 
                 }
             }
+            CalculateLaborMinCharge();
         }
 
     }

@@ -33,7 +33,6 @@ namespace WICR_Estimator.ViewModels
         private void FillMaterialList()
         {
             materialNames.Add("2.5 Galvanized Lathe (18 s.f.)", "EA");
-
             materialNames.Add("Staples", "BOX");
             materialNames.Add("Bonder 480", "5 GAL PAIL");
             materialNames.Add("3/4 oz.Fiberglass Matt", "2000 SQFT ROLL");
@@ -147,7 +146,7 @@ namespace WICR_Estimator.ViewModels
         {
             switch (materialName)
             {
-                case "Staples":
+                //case "Staples":
                 //case "BASE COAT 50 lb Desert Crete Level Max 20/30":
                 case "BASE COAT Desert Crete poly base mixed with water":
                 case "2.5 Galvanized Lathe (18 s.f.)":
@@ -289,7 +288,7 @@ namespace WICR_Estimator.ViewModels
                     item.SMSqftH = item.Qty;
                     item.SMSqft = item.Qty;
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
-                    item.MaterialExtension = item.SpecialMaterialPricing == 0 ? item.Qty * item.MaterialPrice + 27.98 : item.Qty * item.SpecialMaterialPricing;
+                    item.MaterialExtension = item.SpecialMaterialPricing == 0 ? item.Qty * item.MaterialPrice : item.Qty * item.SpecialMaterialPricing;
                     item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
                     item.LaborUnitPrice = item.LaborExtension / item.Qty;
                 }
@@ -306,7 +305,7 @@ namespace WICR_Estimator.ViewModels
                     item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
                 }
             }
-            
+            CalculateLaborMinCharge();
         }
         public override bool IncludedInLaborMin(string matName)
         {
@@ -321,6 +320,11 @@ namespace WICR_Estimator.ViewModels
         }
         public override void ApplyCheckUnchecks(object obj)
         {
+            if (obj.ToString() == "2.5 Galvanized Lathe (18 s.f.)")
+            {
+                bool isChecked = SystemMaterials.Where(x => x.Name == "2.5 Galvanized Lathe (18 s.f.)").FirstOrDefault().IsMaterialChecked;
+                SystemMaterials.Where(x => x.Name == "Staples").FirstOrDefault().IsMaterialChecked = isChecked;
+            }
             calculateRLqty();
             CalculateLaborMinCharge();
         }
@@ -328,9 +332,16 @@ namespace WICR_Estimator.ViewModels
         public override void setCheckBoxes()
         {
             //base.setCheckBoxes();
+            bool isSpecified = (bool)IsJobSpecifiedByArchitect;
             
-            SystemMaterials.Where(x => x.Name == "BASE COAT 50 lb Desert Crete Level Max 20/30").FirstOrDefault().IsMaterialChecked = !(bool)IsJobSpecifiedByArchitect;
-            SystemMaterials.Where(x => x.Name == "BASE COAT Desert Crete poly base mixed with water").FirstOrDefault().IsMaterialChecked = (bool)IsJobSpecifiedByArchitect;
+            SystemMaterial sysmat = SystemMaterials.Where(x => x.Name == "BASE COAT Desert Crete poly base mixed with water").FirstOrDefault();
+            sysmat.IsMaterialChecked = isSpecified;
+            sysmat.IsMaterialEnabled = isSpecified;
+
+            sysmat = SystemMaterials.Where(x => x.Name == "BASE COAT 50 lb Desert Crete Level Max 20/30").FirstOrDefault();
+            sysmat.IsMaterialChecked = !isSpecified;
+            sysmat.IsMaterialEnabled = !isSpecified;
+            
         }
     }
 }

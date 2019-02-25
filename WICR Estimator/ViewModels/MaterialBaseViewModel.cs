@@ -664,7 +664,7 @@ namespace WICR_Estimator.ViewModels
                         mat.IsMaterialEnabled = true;
                     }
 
-                    if (mat.Name == "Resistite Regular Gray")
+                    if (mat.Name == "Resistite Regular Gray" ||mat.Name== "Resistite Regular White")
                     {
                         mat.Name = "Resistite Regular White";
                         double matVal = 0;
@@ -684,7 +684,7 @@ namespace WICR_Estimator.ViewModels
                         mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
 
                     }
-                    if (mat.Name == "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)")
+                    if (mat.Name == "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)"|| mat.Name == "Resistite Regular Or Smooth White(Knock Down Or Smooth)")
                     {
                         mat.Name = "Resistite Regular Or Smooth White(Knock Down Or Smooth)";
                         double matVal = 0;
@@ -703,7 +703,7 @@ namespace WICR_Estimator.ViewModels
                         mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                         mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
                     }
-                    if (mat.Name == "Custom Texture Skip Trowel(Resistite Smooth Gray)")
+                    if (mat.Name == "Custom Texture Skip Trowel(Resistite Smooth Gray)"|| mat.Name == "Custom Texture Skip Trowel(Resistite Smooth White)")
                     {
                         mat.Name = "Custom Texture Skip Trowel(Resistite Smooth White)";
                         double matVal = 0;
@@ -1042,10 +1042,24 @@ namespace WICR_Estimator.ViewModels
 
             }
             else
+            {
                 SystemMaterials = sysMat;
-
+                setCheckBoxes();
+            }
+            foreach (var mat in SystemMaterials)
+            {
+                if (mat.Name== "Lip Color"|| mat.Name == "Aj-44A Dressing(Sealer)"|| mat.Name == "Vista Paint Acripoxy")
+                {
+                    if (mat.IsMaterialChecked)
+                    {
+                        ApplyCheckUnchecks(mat.Name);
+                        break;
+                    }
+                }
+            }
+   
             setExceptionValues(null);
-            setCheckBoxes();
+            
             calculateRLqty();
 
             if (OtherMaterials.Count == 0)
@@ -1244,6 +1258,7 @@ namespace WICR_Estimator.ViewModels
             calculateLaborTotals();
             calculateLaborHrs();
             populateCalculation();
+
         }
 
         private bool CanAddRows(object obj)
@@ -1284,6 +1299,7 @@ namespace WICR_Estimator.ViewModels
             }
             FetchMaterialValuesAsync(true);
             CalculateCost(null);
+            js.TotalSalesCostTemp = TotalSale;        
         }
         #region notused
         private void reCalculate()
@@ -2457,7 +2473,7 @@ namespace WICR_Estimator.ViewModels
 
         public virtual void setCheckBoxes()
         {
-
+            
             var materials = SystemMaterials.Where(x => x.IsCheckboxDependent == true).ToList();
             SystemMaterial lipMat1 = null;
             SystemMaterial lipMat2 = null;
@@ -2465,6 +2481,7 @@ namespace WICR_Estimator.ViewModels
             {
                 return;
             }
+            
             foreach (SystemMaterial mat in materials)
             {
                 if (mat.Name == "Lip Color")
@@ -2590,6 +2607,14 @@ namespace WICR_Estimator.ViewModels
             if (skipMat != null)
             {
                 skipMat.Qty = qty;
+            }
+
+            skipMat=SystemMaterials.Where(x => x.Name == "Lip Color").FirstOrDefault();
+            if (skipMat!=null)
+            {
+                bool isChecked = skipMat.IsMaterialChecked;
+                skipMat.Qty = val3 + val2;
+                skipMat.IsMaterialChecked = isChecked;
             }
         }
 
@@ -3045,7 +3070,7 @@ namespace WICR_Estimator.ViewModels
                 CalFactor = 0,
                 MetalCost = MetalTotals != null ? MetalTotals.LaborExtTotal:0,
                 SlopeCost = SlopeTotals.LaborExtTotal,
-                SystemCost = TotalLaborExtension,
+                SystemCost = (TotalLaborExtension+DriveLaborValue),
                 HideCalFactor = System.Windows.Visibility.Hidden
             });
 

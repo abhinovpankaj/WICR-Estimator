@@ -282,11 +282,12 @@ namespace WICR_Estimator.ViewModels
         {
             //return base.getCheckboxEnabledStatus(materialName);
             switch (materialName)
+                
             {
                 case "ENDURO ELA-98 BINDER (2 COATS)":
                 case "Select Y for protection coat over membrane below tile (GU80-1 TOP COAT)":
                 case "2.5 Galvanized Lathe (18 s.f.) no less than 12 per sq ft.":
-                case "Staples (3/4 Inch Crown, Box of 13,500)":
+                //case "Staples (3/4 Inch Crown, Box of 13,500)":
                 case "Base Coat EKC Cementitious Mix":
                 case "Stair Nosing":
                 case "Caulk, dymonic 100":
@@ -322,7 +323,20 @@ namespace WICR_Estimator.ViewModels
                     item.LaborUnitPrice = item.LaborExtension / (item.SMSqftH + item.SMSqftV + item.StairSqft);
 
                 }
-                
+                item = SystemMaterials.Where(x => x.Name == "Extra stair nosing lf").FirstOrDefault();
+                if (item != null)
+                {
+
+                    item.SMSqft = item.Qty;
+                    item.SMSqftH = item.Qty;
+                    item.StairSqft = item.Qty;
+                    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
+                    item.LaborExtension = (item.Hours + item.SetupMinCharge) * laborRate;
+                    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
+
+
+                }
+                CalculateLaborMinCharge();
             }
         }
 
@@ -338,6 +352,11 @@ namespace WICR_Estimator.ViewModels
                 {
                     SystemMaterials.Where(x => x.Name == "Caulk, dymonic 100").FirstOrDefault().IsMaterialChecked = true;
                 }
+            }
+            if (obj.ToString() == "2.5 Galvanized Lathe (18 s.f.) no less than 12 per sq ft.")
+            {
+                bool isChecked = SystemMaterials.Where(x => x.Name == "2.5 Galvanized Lathe (18 s.f.) no less than 12 per sq ft.").FirstOrDefault().IsMaterialChecked;
+                SystemMaterials.Where(x => x.Name == "Staples (3/4 Inch Crown, Box of 13,500)").FirstOrDefault().IsMaterialChecked = isChecked;                
             }
             getEKLQnty();
             //update Add labor for minimum cost

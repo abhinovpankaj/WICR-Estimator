@@ -411,7 +411,8 @@
           
             
         </Grid>
-        <Grid Grid.Row="1" Margin="10,2,2,2"
+        <ScrollViewer Grid.Row="1">
+        <Grid Margin="10,2,2,2"
              Background="AliceBlue" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -426,6 +427,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+            
             <Border Grid.ColumnSpan="2" Background="Black">
                 <TextBlock Text="TOTAL COST FOR CUSTOMER"
                            HorizontalAlignment="Center"
@@ -795,6 +797,7 @@
                 </ListBoxItem>
             </ListBox>
         </Grid>
+        </ScrollViewer>
         <Grid Grid.Row="2" Background="Aquamarine">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>

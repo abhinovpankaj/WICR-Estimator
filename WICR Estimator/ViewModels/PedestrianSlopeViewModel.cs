@@ -198,12 +198,13 @@ namespace WICR_Estimator.ViewModels
             double urethaneTotalWeight = Math.Round(50 * UrethaneTotalMixesMan, 2);
             TotalFrightCost = Math.Round(FreightCalculator(TotalWeight), 2) + Math.Round(FreightCalculator(urethaneTotalWeight), 2);
             TotalWeight = urethaneTotalWeight + TotalWeight;
+            double lbrCostTable1 = TotalLaborCost;
 
-            
+
             UrethaneSumTotalLaborExt = Math.Round(UrethaneTotalMixesMan * urethaneManualAvgMixPrice, 2);
             double.TryParse(perMixRates[17][0].ToString(), out minLabVal);
             UrethaneMinimumLaborCost = minLabVal * laborRate;
-            TotalLaborCost = (UrethaneSumTotalLaborExt == 0 ? 0 : UrethaneMinimumLaborCost > UrethaneSumTotalLaborExt ? UrethaneMinimumLaborCost : UrethaneSumTotalLaborExt)+ TotalLaborCost ;
+            TotalLaborCost = (UrethaneSumTotalLaborExt == 0 ? 0 : UrethaneMinimumLaborCost > UrethaneSumTotalLaborExt ? UrethaneMinimumLaborCost : UrethaneSumTotalLaborExt);
 
             if (isPrevailingWage)
             {
@@ -221,7 +222,7 @@ namespace WICR_Estimator.ViewModels
                     TotalLaborCost = TotalLaborCost;
             }
 
-            
+            TotalLaborCost = TotalLaborCost + lbrCostTable1;
         }
         public override void CalculateGridTotal()
         {

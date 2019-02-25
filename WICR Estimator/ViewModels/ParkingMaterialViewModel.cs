@@ -72,8 +72,8 @@ namespace WICR_Estimator.ViewModels
                 //hasContingencyDisc = Js.TotalSqft + Js.TotalSqftPlywood > 1000 ? true : false; 
                 SystemMaterials.Where(x => x.Name == "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)").
                     FirstOrDefault().SMUnits = Js.RiserCount.ToString();
-                SystemMaterials.Where(x => x.Name == "Striping for small cracKs (less than 1/8\")").
-                    FirstOrDefault().SMUnits = Js.TotalSqft.ToString();
+                //SystemMaterials.Where(x => x.Name == "Striping for small cracKs (less than 1/8\")").
+                    //FirstOrDefault().SMUnits = Js.TotalSqft.ToString();
 
             }
             base.JobSetup_OnJobSetupChange(sender, e);

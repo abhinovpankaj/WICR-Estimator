@@ -532,7 +532,6 @@ namespace WICR_Estimator.ViewModels
 
         public void updateLaborCost()
         {
-
             double stairCost = 0;
             double addOnMetalCost = 0;
             double normCost = 0;
@@ -602,7 +601,6 @@ namespace WICR_Estimator.ViewModels
                 {
                     stairCost = stairMetals.Select(x => x.MaterialExtension).Sum();
                 }
-
                 IEnumerable<AddOnMetal> selectedAddOnMetals = addOnMetals.Where(x => x.IsMetalChecked);
                 if (selectedAddOnMetals.Count() > 0)
                 {

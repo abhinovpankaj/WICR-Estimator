@@ -163,7 +163,19 @@ namespace WICR_Estimator.Models
             }
         }
         public string SqftLabel { get; set; }
-        
+        private double totalsalesTemp;
+        public double TotalSalesCostTemp
+        {
+            get
+            {
+                return totalsalesTemp;
+            }
+            set
+            {
+                totalsalesTemp = value;
+                OnPropertyChanged("TotalSalesCostTemp");
+            }
+        }
         public JobSetup(string name)            
         {
             ProjectName = name;
@@ -190,7 +202,7 @@ namespace WICR_Estimator.Models
             //WeatherWearType = "Weather Wear";
             DeckCount = 1;
             VendorName = "Chivon";
-            MaterialName = "16oz Copper";
+            MaterialName = "24ga. Galvanized Primed Steel";
             EnableMoreMarkupCommand = new DelegateCommand(CanAddMoreMarkup, canAdd);
             MinMarkUp = -10;
             AllowMoreMarkUp = false;

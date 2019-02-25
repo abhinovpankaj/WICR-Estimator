@@ -134,6 +134,16 @@ namespace WICR_Estimator.ViewModels
                 sysMat.IsMaterialChecked = linearFootageCoping > 0 ? true : false;
             }
             ApplyCheckUnchecks("Slurry coat over texture (Krete Kote 120 sq ft per mix)");
+            sysMat = SystemMaterials.Where(x => x.Name == "DETAIL PERIMETER - RP FABRIC 10\" x 300' (FROM ACME BAG)").FirstOrDefault();
+            if (sysMat != null)
+            {
+                sysMat.IsMaterialChecked = deckPerimeter > 0 ? true : false;
+            }
+            sysMat = SystemMaterials.Where(x => x.Name == "DETAIL PERIMETER - CPC MEMBRANE").FirstOrDefault();
+            if (sysMat != null)
+            {
+                sysMat.IsMaterialChecked = deckPerimeter > 0 ? true : false;
+            }
 
         }
         public override void calculateRLqty()
@@ -159,6 +169,7 @@ namespace WICR_Estimator.ViewModels
                 sysMat2.Qty = sysMat2.Coverage == 0 ? 0 : sysMat2.SMSqft / sysMat2.Coverage;
                 sysMat2.IsMaterialChecked = ischecked;
             }
+            CalculateLaborMinCharge();
 
         }
         public override bool canApply(object obj)
@@ -431,7 +442,7 @@ namespace WICR_Estimator.ViewModels
                 }
                 calculateRLqty();
             }
-           
+            CalculateLaborMinCharge();
         }
         public override bool IncludedInLaborMin(string matName)
         {
@@ -444,7 +455,7 @@ namespace WICR_Estimator.ViewModels
             LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
                                          x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
             LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 :
-                                                (20 - LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate;
+                                                (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
             base.CalculateLaborMinCharge();
         }
         public override void calculateLaborHrs()
@@ -454,7 +465,12 @@ namespace WICR_Estimator.ViewModels
         }
         public override double getQuantity(string materialName, double coverage, double lfArea)
         {
-            return coverage == 0 ? 0 : lfArea / coverage;
+            if (materialName== "Large cracks with reseal (route, fill with speed bond/sand and spot texture)")
+            {
+                return 0;
+            }
+            else
+                return coverage == 0 ? 0 : lfArea / coverage;
             
         }
     }

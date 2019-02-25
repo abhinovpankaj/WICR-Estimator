@@ -65,10 +65,25 @@ namespace WICR_Estimator.ViewModels
 
             }
             else
+            {
                 SystemMaterials = sysMat;
+                setCheckBoxes();
+            }
+                
 
             setExceptionValues(null);
-            setCheckBoxes();
+            foreach (var mat in SystemMaterials)
+            {
+                if (mat.Name == "Lip Color" || mat.Name == "Aj-44A Dressing(Sealer)" || mat.Name == "Vista Paint Acripoxy")
+                {
+                    if (mat.IsMaterialChecked)
+                    {
+                        ApplyCheckUnchecks(mat.Name);
+                        break;
+                    }
+                }
+            }
+            
             calculateRLqty();
 
             if (OtherMaterials.Count == 0)
@@ -1240,6 +1255,15 @@ namespace WICR_Estimator.ViewModels
                 else
                     val1 = 0;
             }
+            
+
+            skipMat = SystemMaterials.Where(x => x.Name == "Lip Color").FirstOrDefault();
+            if (skipMat != null)
+            {
+                bool isChecked = skipMat.IsMaterialChecked;
+                skipMat.Qty = val4 + val2;
+                skipMat.IsMaterialChecked = isChecked;
+            }
             skipMat = SystemMaterials.Where(x => x.Name == "Neotex Standard Powder(Body Coat) 1").FirstOrDefault();
             if (skipMat != null)
             {
@@ -1250,7 +1274,7 @@ namespace WICR_Estimator.ViewModels
                 else
                     val2 = 0;
             }
-            qty=(val1*1.25+val2*1.5)/ 5;
+            qty = (val1 * 1.25 + val2 * 1.5) / 5;
 
             skipMat = SystemMaterials.Where(x => x.Name == "Neotex-38 Paste").FirstOrDefault();
             if (skipMat != null)
@@ -1258,7 +1282,6 @@ namespace WICR_Estimator.ViewModels
                 skipMat.Qty = qty;
             }
 
-            
         }
 
         public override void setExceptionValues(object s)

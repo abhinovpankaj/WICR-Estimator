@@ -109,8 +109,8 @@ namespace WICR_Estimator.ViewModels
                                         x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
             LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
                                          x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
-            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 17 ? 0 :
-                                                (17 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
+            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 :
+                                                (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
             base.CalculateLaborMinCharge();
         }
         public override bool IncludedInLaborMin(string matName)
@@ -290,7 +290,7 @@ namespace WICR_Estimator.ViewModels
                     item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
                 }
             }
-
+            CalculateLaborMinCharge();
         }
 
         public override void ApplyCheckUnchecks(object obj)

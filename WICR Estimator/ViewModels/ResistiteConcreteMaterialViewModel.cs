@@ -134,6 +134,16 @@ namespace WICR_Estimator.ViewModels
             {
                 sysMat.IsMaterialChecked = linearFootageCoping > 0 ? true:false ;
             }
+            sysMat = SystemMaterials.Where(x => x.Name == "DETAIL PERIMETER - RP FABRIC 10\" x 300' (FROM ACME BAG)").FirstOrDefault();
+            if (sysMat != null)
+            {
+                sysMat.IsMaterialChecked = deckPerimeter > 0 ? true : false;
+            }
+            sysMat = SystemMaterials.Where(x => x.Name == "DETAIL PERIMETER - CPC MEMBRANE").FirstOrDefault();
+            if (sysMat != null)
+            {
+                sysMat.IsMaterialChecked = deckPerimeter > 0 ? true : false;
+            }
         }
         public override void calculateRLqty()
         {
@@ -428,12 +438,14 @@ namespace WICR_Estimator.ViewModels
                 }
 
             }
-            calculateRLqty();
+            
 
         }
         public override double getQuantity(string materialName, double coverage, double lfArea)
         {
-            if (materialName== "Add for saw cut joints"|| materialName== "Add for removing and replacing concrete (no more than 100 sq ft)")
+            if (materialName== "Add for saw cut joints"|| materialName== "Add for removing and replacing concrete (no more than 100 sq ft)"
+                ||materialName== "Caulk 1/2 to 3/4 inch control joints (SIKA 2C)"
+                ||materialName== "Large cracks with reseal (route, fill with speed bond/sand and spot texture)")
             {
                 return 0;
             }
@@ -447,7 +459,8 @@ namespace WICR_Estimator.ViewModels
 
         public override void CalculateLaborMinCharge()
         {
-          LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+            calculateRLqty();
+            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
                                         x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
             LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
                                          x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
