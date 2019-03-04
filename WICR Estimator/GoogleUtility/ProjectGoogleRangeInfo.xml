@@ -106,4 +106,28 @@
     <MaterialRange>H1118:N1133</MaterialRange>
     <FreightRange>E48:F54</FreightRange>
   </Multicoat>
+<Plidek>
+    <RateRange>E2</RateRange>
+    <MetalRange>F3:M43</MetalRange>
+    <LaborRange>E1270:E1289</LaborRange>
+    <SlopeRange>P1230:Q1238</SlopeRange>
+    <MaterialRange>H1245:N1262</MaterialRange>
+    <FreightRange>E48:F54</FreightRange>
+  </Plidek>
+<Tufflex>
+    <RateRange>E2</RateRange>
+    <MetalRange>F3:M43</MetalRange>
+    <LaborRange>E1344:E1363</LaborRange>
+    <SlopeRange>P1300:Q1317</SlopeRange>
+    <MaterialRange>H1324:N1336</MaterialRange>
+    <FreightRange>E48:F54</FreightRange>
+  </Tufflex>
+<Paraseal>
+    <RateRange>E2</RateRange>
+    <MetalRange>F3:M43</MetalRange>
+    <LaborRange>E1200:E1219</LaborRange>
+    <SlopeRange>P1300:Q1317</SlopeRange>
+    <MaterialRange>H1170:N1189</MaterialRange>
+    <FreightRange>E48:F54</FreightRange>
+  </Paraseal>
 </Projects>

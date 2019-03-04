@@ -26,6 +26,9 @@ namespace WICR_Estimator
                 case "MACoat":
                 case "ALX":
                 case "Multicoat":
+                case "Pli-Dek":
+                case "Tufflex":
+                case "Paraseal":
                     return new MetalViewModel(Js);
                 //case "Dexotex Barrier Gaurd":
                 //    return new DexoMetalViewModel(Js);
@@ -48,6 +51,7 @@ namespace WICR_Estimator
                 case "MACoat":
                 case "ALX":
                 case "Multicoat":
+                case "Pli-Dek":
                     return new SlopeViewModel(Js);
                 case "Endurokote":
                     return new EnduroKoteSlopeViewModel(Js);
@@ -55,6 +59,7 @@ namespace WICR_Estimator
                     return new DexoSlopeViewModel(Js);
                 case "Pedestrian System":
                 case "Parking Garage":
+                case "Tufflex":
                     return new PedestrianSlopeViewModel(Js);
                 default:
                     return null;
@@ -91,6 +96,12 @@ namespace WICR_Estimator
                     return new ALXMaterialViewModel(metalT, slopeT, Js);
                 case "Multicoat":
                     return new MulticoatMaterialViewModel(metalT, slopeT, Js);
+                case "Pli-Dek":
+                    return new PlideckMaterialViewModel(metalT, slopeT, Js);
+                case "Tufflex":
+                    return new TufflexMaterialViewModel(metalT, slopeT, Js);
+                case "Paraseal":
+                    return new ParasealMaterialViewModel(metalT, slopeT, Js);
                 default:
                     return null;
             }

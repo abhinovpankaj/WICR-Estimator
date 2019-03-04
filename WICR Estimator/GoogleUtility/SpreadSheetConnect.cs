@@ -116,6 +116,15 @@ namespace WICR_Estimator.GoogleUtility
                 case "Multicoat":
                     prjName = "Multicoat";
                     break;
+                case "Pli-Dek":
+                    prjName = "Plidek";
+                    break;
+                case "Paraseal":
+                    prjName = "Paraseal";
+                    break;
+                case "Tufflex":
+                    prjName = "Tufflex";
+                    break;
                 default:
                     break;
             }

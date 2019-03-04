@@ -15,9 +15,7 @@ namespace WICR_Estimator.ViewModels
         {
             materialNames = new Dictionary<string, string>();
             FillMaterialList();
-            //laborRate = 19.36;
             FetchMaterialValuesAsync(false);
-            
         }
 
         private void FillMaterialList()

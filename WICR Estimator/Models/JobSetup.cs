@@ -35,6 +35,7 @@ namespace WICR_Estimator.Models
             }
         }
         private string projectname;
+
         public string FirstCheckBoxLabel { get; set; }
         public string ProjectName
         {
@@ -162,6 +163,7 @@ namespace WICR_Estimator.Models
                 }
             }
         }
+
         public string SqftLabel { get; set; }
         private double totalsalesTemp;
         public double TotalSalesCostTemp
@@ -179,8 +181,14 @@ namespace WICR_Estimator.Models
         public JobSetup(string name)            
         {
             ProjectName = name;
-            SqftLabel = "Total Sqft";
-            if (name=="Pedestrian System" ||name=="Parking Garage")
+            if (name=="Paraseal")
+            {
+                SqftLabel = "SQ FT OF VERTICAL CONCRETE WALLS";
+            }
+            else
+                SqftLabel = "Total Sqft";
+
+            if (name=="Pedestrian System" ||name=="Parking Garage"||name=="Tufflex")
             {
                 IsNewPlywood = false;
                 SqftLabel = "Total Sqft Concrete";
@@ -255,6 +263,8 @@ namespace WICR_Estimator.Models
                     return "Linear Footage of Deck Perimeter";
                 else if (ProjectName == "Resistite"||ProjectName=="Multicoat")
                     return "LINEAR FOOTAGE OF DECK TO WALL DETAIL";
+                else if (ProjectName=="Paraseal")
+                    return "LF OF PERIMETER FOOTING (STANDARD PARAGRANULAR DETAIL AND TERM BAR)";
                 else
                     return "Lf Perimeter for Burlap and Membrane";
             }
@@ -679,12 +689,35 @@ namespace WICR_Estimator.Models
                 }
             }
         }
-
+        public string StairRiserText
+        {
+            get
+            {
+                if (ProjectName == "Paraseal")
+                {
+                    return "# PENETRATIONS or DRAINS";
+                }
+                else
+                    return "Stair Risers - Confirm stair width";
+            }
+        }
+        public string DeckCountText
+        {
+            get
+            {
+                if (ProjectName == "Paraseal")
+                {
+                    return "SQ FT OF BETWEEN SLAB MEMBRANE (CONCRETE)";
+                }
+                else
+                    return "# Decks";
+            }
+        }
         public System.Windows.Visibility IsSandCementVisible
         {
             get
             {
-                if (ProjectName == "Pedestrian System" || ProjectName == "Parking Garage")
+                if (ProjectName == "Pedestrian System" || ProjectName == "Parking Garage"||ProjectName=="Tufflex")
                 {
                     return System.Windows.Visibility.Collapsed;
                 }
@@ -744,6 +777,18 @@ namespace WICR_Estimator.Models
         #endregion
 
         #region Resistite
+        public string LinearFootageText
+        {
+            get
+            {
+                if (ProjectName == "Paraseal")
+                {
+                    return "LINEAR FOOTAGE OF UV PROTECTION AT WALL (801)";
+                }
+                else
+                    return "LINEAR FOOTAGE OF COPING";
+            }
+        }
         private double linearCopingFootage;
         public double LinearCopingFootage
         {
@@ -765,7 +810,76 @@ namespace WICR_Estimator.Models
         {
             get
             {
-                if (ProjectName=="Resistite" ||ProjectName=="Multicoat")
+                if (ProjectName=="Resistite" ||ProjectName=="Multicoat" || ProjectName=="Paraseal")
+                {
+                    return System.Windows.Visibility.Visible;
+                }
+                else
+                    return System.Windows.Visibility.Collapsed;
+            }
+        }
+        #endregion
+
+        #region Paraseal
+
+        private double additonalTermbarLF;
+        public double AdditionalTermBarLF
+        {
+            get { return additonalTermbarLF; }
+            set
+            {
+                if (value != additonalTermbarLF)
+                {
+                    additonalTermbarLF = value;
+                    OnPropertyChanged("AdditionalTermBarLF");
+                    if (OnJobSetupChange != null)
+                    {
+                        OnJobSetupChange(this, EventArgs.Empty);
+                    }
+                }
+            }
+        }
+        private bool superStopAtFooting;
+        public bool SuperStopAtFooting
+        {
+            get { return superStopAtFooting; }
+            set
+            {
+                if (value != superStopAtFooting)
+                {
+                    superStopAtFooting = value;
+                    OnPropertyChanged("SuperStopAtFooting");
+                    if (OnJobSetupChange != null)
+                    {
+                        OnJobSetupChange(this, EventArgs.Empty);
+                    }
+                }
+            }
+        }
+        private double insideOutsideCornerDetails;
+        public double InsideOutsideCornerDetails
+        {
+            get { return insideOutsideCornerDetails; }
+            set
+            {
+                if (value != insideOutsideCornerDetails)
+                {
+                    insideOutsideCornerDetails = value;
+                    OnPropertyChanged("InsideOutsideCornerDetails");
+                    if (OnJobSetupChange != null)
+                    {
+                        OnJobSetupChange(this, EventArgs.Empty);
+                    }
+                }
+            }
+        }
+        
+        public System.Windows.Visibility IsParasealSectionVisible
+        {
+            get
+            {
+
+                if (ProjectName=="Paraseal")
                 {
                     return System.Windows.Visibility.Visible;
                 }

@@ -130,6 +130,18 @@ namespace WICR_Estimator.ViewModels
                                 null, prj.ProjectJobSetUp);
                         }
                     }
+                    else if (prj.Name=="Paraseal")
+                    {
+                        if (prj.MetalViewModel == null)
+                        {
+                            prj.MetalViewModel = ViewModelInstanceFactory.GetMetalViewModelInstance(prj.Name, prj.ProjectJobSetUp);
+                        }
+                        if (prj.MaterialViewModel == null)
+                        {
+                            prj.MaterialViewModel = ViewModelInstanceFactory.GetMaterialViewModelInstance(prj.Name, prj.MetalViewModel.MetalTotals,
+                                null, prj.ProjectJobSetUp);
+                        }
+                    }
                     else
                     {
                         if (prj.MetalViewModel == null)

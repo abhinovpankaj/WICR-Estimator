@@ -34,6 +34,7 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
+            
         </Grid.ColumnDefinitions>
         <Border BorderThickness="1" BorderBrush="Black"
                 Background="AliceBlue"
@@ -118,42 +119,42 @@
                 Width="350"
                 Padding="0,0,0,15">
             <StackPanel>
-            <StackPanel>
-                <CheckBox Style="{StaticResource CheckBoxStyle}"
-                          Visibility="{Binding IsNewPlywoodVisible}"
-                          IsChecked="{Binding IsNewPlywood,
-                    UpdateSourceTrigger=PropertyChanged}"
-                          Content="New Plywood?"/>
-                    <CheckBox Style="{StaticResource CheckBoxStyle}"
-                          Visibility="{Binding IsJobByArchitectVisible}"
-                          IsChecked="{Binding IsJobSpecifiedByArchitect,
-                    UpdateSourceTrigger=PropertyChanged}"
-                          Content="Is This Job Specified By Architect"/>
-                    <CheckBox Style="{StaticResource CheckBoxStyle}"
-                              Visibility="{Binding IsSandCementVisible}"
-                          IsChecked="{Binding IsApprovedForSandCement,UpdateSourceTrigger=PropertyChanged}"
-                          Content="{Binding FirstCheckBoxLabel}"/>
+                <StackPanel>
                     <CheckBox Style="{StaticResource CheckBoxStyle}"
                               Visibility="{Binding IsNewPlywoodVisible}"
-                          IsChecked="{Binding IsReseal,UpdateSourceTrigger=PropertyChanged}"
-                          Content="Reseal?"/>
+                              IsChecked="{Binding IsNewPlywood,
+                        UpdateSourceTrigger=PropertyChanged}"
+                              Content="New Plywood?"/>
+                        <CheckBox Style="{StaticResource CheckBoxStyle}"
+                              Visibility="{Binding IsJobByArchitectVisible}"
+                              IsChecked="{Binding IsJobSpecifiedByArchitect,
+                        UpdateSourceTrigger=PropertyChanged}"
+                              Content="Is This Job Specified By Architect"/>
+                        <CheckBox Style="{StaticResource CheckBoxStyle}"
+                                  Visibility="{Binding IsSandCementVisible}"
+                              IsChecked="{Binding IsApprovedForSandCement,UpdateSourceTrigger=PropertyChanged}"
+                              Content="{Binding FirstCheckBoxLabel}"/>
+                        <CheckBox Style="{StaticResource CheckBoxStyle}"
+                                  Visibility="{Binding IsNewPlywoodVisible}"
+                              IsChecked="{Binding IsReseal,UpdateSourceTrigger=PropertyChanged}"
+                              Content="Reseal?"/>
+                        <CheckBox  Style="{StaticResource CheckBoxStyle}"
+                               Content="Prevailing Wages"
+                               IsChecked="{Binding IsPrevalingWage,UpdateSourceTrigger=PropertyChanged}"/>
                     <CheckBox  Style="{StaticResource CheckBoxStyle}"
-                           Content="Prevailing Wages"
-                           IsChecked="{Binding IsPrevalingWage,UpdateSourceTrigger=PropertyChanged}"/>
-                <CheckBox  Style="{StaticResource CheckBoxStyle}"
-                           IsChecked="{Binding IsFlashingRequired,UpdateSourceTrigger=PropertyChanged}"
-                           Content="Metal Flashing Over Concrete?"/>
-                <CheckBox  Style="{StaticResource CheckBoxStyle}"
-                           IsChecked="{Binding HasSpecialPricing,UpdateSourceTrigger=PropertyChanged}"
-                       Content="Special Metal Pricing"/>
-                <CheckBox  Style="{StaticResource CheckBoxStyle}"
-                           IsChecked="{Binding HasDiscount,UpdateSourceTrigger=PropertyChanged}"
-                       Content="Labor Discount Large Project (over 1,000 sq. ft.)"/>
-                <CheckBox  Style="{StaticResource CheckBoxStyle}"
-                           IsChecked="{Binding HasContingencyDisc,UpdateSourceTrigger=PropertyChanged}">
+                               IsChecked="{Binding IsFlashingRequired,UpdateSourceTrigger=PropertyChanged}"
+                               Content="Metal Flashing Over Concrete?"/>
+                    <CheckBox  Style="{StaticResource CheckBoxStyle}"
+                               IsChecked="{Binding HasSpecialPricing,UpdateSourceTrigger=PropertyChanged}"
+                           Content="Special Metal Pricing"/>
+                    <CheckBox  Style="{StaticResource CheckBoxStyle}"
+                               IsChecked="{Binding HasDiscount,UpdateSourceTrigger=PropertyChanged}"
+                           Content="Labor Discount Large Project (over 1,000 sq. ft.)"/>
+                    <CheckBox  Style="{StaticResource CheckBoxStyle}"
+                               IsChecked="{Binding HasContingencyDisc,UpdateSourceTrigger=PropertyChanged}">
                         <TextBlock Text="Contingency Discount for Large New Construction Project (over 1,000 sq. ft.)"
-                                       TextWrapping="Wrap"/>
-                </CheckBox>
+                                           TextWrapping="Wrap"/>
+                    </CheckBox>
                 </StackPanel>
                 <Border BorderBrush="Black"
                         BorderThickness="0,1,0,0">
@@ -175,7 +176,27 @@
                     />
                     </StackPanel>
                 </Border>
-                
+                <Border BorderThickness="1" BorderBrush="Black"
+                Background="AliceBlue"
+                Margin="10"
+                Padding="0,0,0,15"
+                Visibility="{Binding IsParasealSectionVisible}">
+                    <StackPanel>
+                        <TextBlock Text="ADDITIONAL TERM BAR (LF)"
+                           Style="{StaticResource FieldHeader}"/>
+                        <TextBox Style="{StaticResource TextBoxStyle}"
+                         Text="{Binding AdditionalTermBarLF ,UpdateSourceTrigger=LostFocus}"/>
+                        <TextBlock Text="INSIDE AND OUTSIDE CORNER DETAILS (LF)"
+                           Style="{StaticResource FieldHeader}"/>
+                        <TextBox Style="{StaticResource TextBoxStyle}"
+                         Text="{Binding InsideOutsideCornerDetails ,UpdateSourceTrigger=LostFocus}"/>
+                        <CheckBox Style="{StaticResource CheckBoxStyle}"
+                          IsChecked="{Binding SuperStopAtFooting,
+                    UpdateSourceTrigger=PropertyChanged}"
+                          Content="SUPER STOP AT FOOTING?"/>
+                    </StackPanel>
+                </Border>
+
             </StackPanel>
         </Border>
         <Border BorderThickness="1" BorderBrush="Black"
@@ -203,7 +224,7 @@
                          Text="{Binding TotalSqft,UpdateSourceTrigger=LostFocus}"/>
                 <TextBlock Style="{StaticResource FieldHeader}"
                            Visibility="{Binding IslinearCopingFootageVisible}"
-                       Text="LINEAR FOOTAGE OF COPING"/>
+                       Text="{Binding LinearFootageText}"/>
                 <TextBox Style="{StaticResource TextBoxStyle}"
                          Visibility="{Binding IslinearCopingFootageVisible}"
                          Text="{Binding LinearCopingFootage,UpdateSourceTrigger=LostFocus}"/>
@@ -213,11 +234,11 @@
                 <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding DeckPerimeter ,UpdateSourceTrigger=LostFocus}"/>
                 <TextBlock Style="{StaticResource FieldHeader}"
-                       Text="Stair Risers - Confirm stair width"/>
+                       Text="{Binding StairRiserText}"/>
                 <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding RiserCount,UpdateSourceTrigger=LostFocus}"/>
                 <TextBlock Style="{StaticResource FieldHeader}"
-                       Text="# Decks"/>
+                       Text="{Binding DeckCountText}"/>
                 <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding DeckCount,UpdateSourceTrigger=LostFocus}"/>
                 <!--<TextBlock Style="{StaticResource FieldHeader}"
@@ -237,6 +258,7 @@
                              Margin="5"/>
                     <Slider Value="{Binding MarkupPercentage}" Maximum="100"
                             Width="250" x:Name="markup"
+                            HorizontalAlignment="Left"
                             Minimum="{Binding MinMarkUp}"
                             LargeChange="5"
                             SmallChange="0.5"
@@ -274,18 +296,5 @@
                 </StackPanel>
             </StackPanel>   
         </Border>
-              
-        
-        <!--<StackPanel Orientation="Horizontal"
-                    Grid.Row="5" Grid.Column="2"
-                    HorizontalAlignment="Right">
-            <Button Style="{DynamicResource NavigateButton}"
-                    Margin="10,0,10,0"
-                    Height="40"
-                    Click="Button_Click">
-                <Image Source="/Images/rightArrow.png" />
-            </Button>
-        </StackPanel>-->
-        
     </Grid>
 </UserControl>
