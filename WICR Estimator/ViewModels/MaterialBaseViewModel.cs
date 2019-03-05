@@ -44,7 +44,7 @@ namespace WICR_Estimator.ViewModels
         private ICommand _calculateCostCommand;
         private ICommand _removeCommand;
         private int AddInt = 4;
-        private int deckCount;
+        public int deckCount;
         public bool hasContingencyDisc;
 
         #endregion
@@ -119,6 +119,7 @@ namespace WICR_Estimator.ViewModels
             double hprRate = 0;///Horizontal Production rate  from google sheet, col 4
             double vprRate = 0;///Vertical Production rate  from google sheet, col 1
             double sqh = 0;
+            double sqv = 0;
             double labrExt = 0;
             double calcHrs = 0;
             double sqStairs = 0;
@@ -141,9 +142,11 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(materialDetails[seq][4].ToString(), out hprRate);
             pRateStairs = pRateStairs * (1 + prPerc);
             hprRate = hprRate * (1 + prPerc);
+            vprRate = vprRate * (1 + prPerc);
+            sqv = getSqftAreaVertical(matName);
             sqh = getSqFtAreaH(matName);
             sqStairs = getSqFtStairs(matName);
-            calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
+            calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs,sqv,vprRate);
             
             labrExt = CalculateLabrExtn(calcHrs, setUpMin,matName);
             qty = getQuantity(matName, cov, lfArea);
@@ -167,7 +170,7 @@ namespace WICR_Estimator.ViewModels
                 SMSqft = lfArea,
                 Coverage = cov,
                 MaterialPrice = mp,
-                Weight = w,
+                Weight = w, 
                 Qty = qty,
                 SMSqftH = sqh,
                 Operation = matName,
@@ -2810,6 +2813,10 @@ namespace WICR_Estimator.ViewModels
         #region LaborSheet TotalProperties
 
         #endregion
+        public virtual double getSqftAreaVertical(string materialName)
+        {
+            return 0;
+        }
         public virtual double getSqFtAreaH(string materialName)
         {
             switch (materialName.ToUpper())
@@ -3107,7 +3114,7 @@ namespace WICR_Estimator.ViewModels
                 CalFactor = facValue,
                 MetalCost = isPrevailingWage && MetalTotals != null  ? facValue * MetalTotals.LaborExtTotal : 0,
                 SlopeCost = isPrevailingWage&& SlopeTotals != null ?  facValue * SlopeTotals.LaborExtTotal : 0,
-                SystemCost = isPrevailingWage ? facValue * TotalLaborExtension : 0
+                SystemCost = isPrevailingWage ? facValue * (TotalLaborExtension+DriveLaborValue) : 0
             });
             double.TryParse(laborDetails[5][0].ToString(), out facValue);
 

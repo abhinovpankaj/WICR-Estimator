@@ -26,11 +26,82 @@ namespace WICR_Estimator.ViewModels
 
         }
 
-        public override void FetchMaterialValuesAsync(bool v)
+        public override void FetchMaterialValuesAsync(bool hasSetupChanged)
         {
-            base.FetchMaterialValuesAsync(v);
-        }
+            Dictionary<string, double> qtyList = new Dictionary<string, double>();
 
+            foreach (SystemMaterial item in SystemMaterials)
+            {
+                if (item.Name == "Extra stair nosing lf" || item.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
+                    item.Name == "Stucco Material Remove and replace (LF)")
+                {
+                    qtyList.Add(item.Name, item.Qty);
+                }
+                
+
+            }
+            var sysMat = GetSystemMaterial(materialNames);
+
+            #region  Update Special Material Pricing and QTY on JobSetup change
+            if (hasSetupChanged)
+            {
+                for (int i = 0; i < SystemMaterials.Count; i++)
+                {
+
+                    double sp = SystemMaterials[i].SpecialMaterialPricing;
+                    bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
+                    bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
+                    SystemMaterials[i] = sysMat[i];
+
+                    SystemMaterials[i].SpecialMaterialPricing = sp;
+                    SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                    SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                    if (SystemMaterials[i].Name == "Extra stair nosing lf" || SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
+                        SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)")
+                    {
+                        if (qtyList.ContainsKey(SystemMaterials[i].Name))
+                        {
+                            SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+
+                        }
+                    }
+                    
+                }
+
+            }
+            #endregion
+
+            else
+                SystemMaterials = sysMat;
+
+            setExceptionValues(null);
+            setCheckBoxes();
+
+            if (OtherMaterials.Count == 0)
+            {
+                OtherMaterials = GetOtherMaterials();
+                OtherLaborMaterials = GetOtherMaterials();
+            }
+
+
+            if (SubContractLaborItems.Count == 0)
+            {
+                SubContractLaborItems = GetLaborItems();
+            }
+            calculateRLqty();
+            CalculateLaborMinCharge();
+            CalculateAllMaterial();
+        }
+        public override void CalculateLaborMinCharge()
+        {
+            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+                                        x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
+            LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+                                         x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
+            LaborMinChargeLaborExtension = (LaborMinChargeMinSetup + LaborMinChargeHrs) > 20 ? 0 :
+                                                (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
+            base.CalculateLaborMinCharge();
+        }
         private void FillMaterialList()
         {
             materialNames.Add("Prep to remove existing urethane", "");
@@ -55,12 +126,7 @@ namespace WICR_Estimator.ViewModels
             {
                 TotalSqftPlywood = Js.TotalSqftPlywood;                
                 IsNewPlaywood = Js.IsNewPlywood;
-                               
-                SystemMaterials.Where(x => x.Name == "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)").
-                    FirstOrDefault().SMUnits = Js.RiserCount.ToString();
-                //SystemMaterials.Where(x => x.Name == "Striping for small cracKs (less than 1/8\")").
-                //FirstOrDefault().SMUnits = Js.TotalSqft.ToString();
-
+                
             }
             base.JobSetup_OnJobSetupChange(sender, e);
         }
@@ -121,7 +187,7 @@ namespace WICR_Estimator.ViewModels
                 case "Stair Nosing":
                     return riserCount*stairWidth;
                 default:
-                    return lfArea / coverage;
+                    return coverage== 0 ? 0:lfArea / coverage;
             }
         }
 
@@ -131,7 +197,7 @@ namespace WICR_Estimator.ViewModels
             {
                 case "Stair Nosing":
                 case "Extra stair nosing lf":
-                case "Staples(3/4\" crown, Box of 13,500)":
+                case "Staples (3/4\" crown, Box of 13,500)":
                 case "1/20 Mesh Sand":
                 case "1/20 Mesh Sand Broadcast to Refusal":
                     return 0;
@@ -144,7 +210,7 @@ namespace WICR_Estimator.ViewModels
         {
             switch (materialName)
             {
-                case "Staples(3/4\" crown, Box of 13,500)":
+                case "Staples (3/4\" crown, Box of 13,500)":
                 case "1/20 Mesh Sand":
                 case "1/20 Mesh Sand Broadcast to Refusal":
                 case "Elasta-Tuff #6000-AL-SC Top Coat":
@@ -230,7 +296,24 @@ namespace WICR_Estimator.ViewModels
             calculateRLqty();
             CalculateLaborMinCharge();
         }
-
+        public override double CalculateLabrExtn(double calhrs, double setupMin, string matName = "")
+        {
+            if (calhrs==0)
+            {
+                return 0;
+            }
+            else
+            {
+                if (matName== "Stair Nosing")
+                {
+                    return (setupMin + calhrs) * laborRate;
+                }
+                else
+                    return setupMin > calhrs ? setupMin * laborRate : calhrs * laborRate;
+            }
+                
+             
+        }
         public override void setCheckBoxes()
         {
 

@@ -261,10 +261,12 @@ namespace WICR_Estimator.Models
             {
                 if (ProjectName == "Weather Wear" || ProjectName == "Weather Wear Rehab")
                     return "Linear Footage of Deck Perimeter";
-                else if (ProjectName == "Resistite"||ProjectName=="Multicoat")
+                else if (ProjectName == "Resistite" || ProjectName == "Multicoat")
                     return "LINEAR FOOTAGE OF DECK TO WALL DETAIL";
-                else if (ProjectName=="Paraseal")
+                else if (ProjectName == "Paraseal")
                     return "LF OF PERIMETER FOOTING (STANDARD PARAGRANULAR DETAIL AND TERM BAR)";
+                else if (ProjectName == "Tufflex")
+                    return "LINEAR FOOTAGE OF PERIMETER (DECKS)";
                 else
                     return "Lf Perimeter for Burlap and Membrane";
             }
@@ -717,7 +719,7 @@ namespace WICR_Estimator.Models
         {
             get
             {
-                if (ProjectName == "Pedestrian System" || ProjectName == "Parking Garage"||ProjectName=="Tufflex")
+                if (ProjectName == "Pedestrian System" || ProjectName == "Parking Garage")
                 {
                     return System.Windows.Visibility.Collapsed;
                 }

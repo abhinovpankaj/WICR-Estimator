@@ -33,6 +33,7 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("GU80-1 liquid", "5 GAL PAIL");
             materialNames.Add("GS88 Sealer", "5 GAL PAIL");
             materialNames.Add("Color Jar Pigment, 1 JAR per PAIL OF GS88", "JAR");
+            materialNames.Add("GS13 Clear Sealer", "5 GAL PAIL");
             materialNames.Add("Caulk, dymonic 100", "TUBE 11 OZ.");
             materialNames.Add("Preparation after construction and 50/50 primer", "5 GAL PAIL");
             materialNames.Add("Select Y for protection coat over membrane below tile (GU80-1 TOP COAT)", "50LB BAG");
@@ -47,8 +48,79 @@ namespace WICR_Estimator.ViewModels
 
         public override void FetchMaterialValuesAsync(bool hasSetupChanged)
         {
-            base.FetchMaterialValuesAsync(hasSetupChanged);
+            Dictionary<string, double> qtyList = new Dictionary<string, double>();
+
+            foreach (SystemMaterial item in SystemMaterials)
+            {
+                if (item.Name == "Extra stair nosing lf" || item.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
+                    item.Name == "Stucco Material Remove and replace (LF)")
+                {
+                    qtyList.Add(item.Name, item.Qty);
+                }
+                if (item.Name == "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH) UPI 7013 SC BASE COAT"
+                    || item.Name == "Striping for small cracKs (less than 1/8\")"
+                    || item.Name == "Route and caulk moving cracks (greater than 1/8\")"
+                    || item.Name == "SECOND INTERMEDIATE COAT FOR HIGH TRAFFIC")
+                {
+                    double unit = 0;
+                    double.TryParse(item.SMUnits, out unit);
+                    qtyList.Add(item.Name, unit);
+                }
+
+            }
+            var sysMat = GetSystemMaterial(materialNames);
+
+            #region  Update Special Material Pricing and QTY on JobSetup change
+            if (hasSetupChanged)
+            {
+                for (int i = 0; i < SystemMaterials.Count; i++)
+                {
+
+                    double sp = SystemMaterials[i].SpecialMaterialPricing;
+                    bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
+                    bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
+                    SystemMaterials[i] = sysMat[i];
+
+                    SystemMaterials[i].SpecialMaterialPricing = sp;
+                    SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                    SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                    if (SystemMaterials[i].Name == "Extra stair nosing lf" || SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
+                        SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)")
+                    {
+                        if (qtyList.ContainsKey(SystemMaterials[i].Name))
+                        {
+                            SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+
+                        }
+                    }                    
+
+                }
+
+            }
+            #endregion
+
+            else
+                SystemMaterials = sysMat;
+
+            setExceptionValues(null);
+            setCheckBoxes();
+
+            if (OtherMaterials.Count == 0)
+            {
+                OtherMaterials = GetOtherMaterials();
+                OtherLaborMaterials = GetOtherMaterials();
+            }
+
+
+            if (SubContractLaborItems.Count == 0)
+            {
+                SubContractLaborItems = GetLaborItems();
+            }
+            calculateRLqty();
+            CalculateLaborMinCharge();
+            CalculateAllMaterial();
         }
+
 
         public override bool getCheckboxCheckStatus(string materialName)
         {
@@ -65,7 +137,16 @@ namespace WICR_Estimator.ViewModels
                     return true;
             }
         }
-
+        public override void CalculateLaborMinCharge()
+        {
+            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+                                        x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
+            LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+                                         x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
+            LaborMinChargeLaborExtension = (LaborMinChargeMinSetup + LaborMinChargeHrs) > 20 ? 0 :
+                                                (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
+            base.CalculateLaborMinCharge();
+        }
         public override bool getCheckboxEnabledStatus(string materialName)
         {
             switch (materialName)
@@ -180,14 +261,16 @@ namespace WICR_Estimator.ViewModels
             sysmat = SystemMaterials.Where(x => x.Name == "Select Y for protection coat over membrane below tile (GU80-1 TOP COAT)").FirstOrDefault();
             if (sysmat != null)
             {
+                
                 val4 = sysmat.IsMaterialChecked ? sysmat.Qty  : 0;
             }
-            sysmat =SystemMaterials.Where(x => x.Name == "Select Y for protection coat over membrane below tile (GU80-1 TOP COAT)").FirstOrDefault();
+            sysmat =SystemMaterials.Where(x => x.Name == "GU80-1 liquid").FirstOrDefault();
             if (sysmat != null)
             {
                 bool ischecked;
                 ischecked = sysmat.IsMaterialChecked;
                 sysmat.Qty=(val1+val2+val3+val4) / 5;
+                sysmat.IsMaterialChecked = ischecked;
             }
 
 
@@ -267,6 +350,7 @@ namespace WICR_Estimator.ViewModels
                 isChecked = SystemMaterials.Where(x => x.Name == "Select Y for protection coat over membrane below tile (GU80-1 TOP COAT)").FirstOrDefault().IsMaterialChecked;
                 SystemMaterials.Where(x => x.Name == "GU80-1 top coat texture coat semi-smooth or knockdown").FirstOrDefault().IsMaterialChecked = !isChecked;
                 SystemMaterials.Where(x => x.Name == "GS88 Sealer").FirstOrDefault().IsMaterialChecked = !isChecked;
+                
             }
             calculateRLqty();
             CalculateLaborMinCharge();
