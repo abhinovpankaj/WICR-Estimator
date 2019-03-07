@@ -14,7 +14,7 @@ namespace WICR_Estimator.ViewModels
             GetSlopeDetailsFromGoogle(Js.ProjectName);
             Slopes = CreateSlopes();
             CalculateAll();
-            Js.OnJobSetupChange += JobSetup_OnJobSetupChange;
+            Js.JobSetupChange += JobSetup_OnJobSetupChange;
         }
         public DexoSlopeViewModel()
         { }

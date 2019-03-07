@@ -169,7 +169,7 @@ namespace WICR_Estimator.ViewModels
             Slopes = CreateSlopes(0);
             UrethaneSlopes = CreateSlopes(9);
             CalculateAll();
-            Js.OnJobSetupChange += JobSetup_OnJobSetupChange;
+            Js.JobSetupChange += JobSetup_OnJobSetupChange;
         }
         public PedestrianSlopeViewModel()
         {

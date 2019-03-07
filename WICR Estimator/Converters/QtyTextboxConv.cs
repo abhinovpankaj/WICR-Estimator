@@ -38,6 +38,11 @@ namespace WICR_Estimator.Converters
                     case "Bubbled and failed textured areas (prep, patch,spot textured with resistite)":
                     case "Add for saw cut joints":
                     case "Add for removing and replacing concrete (no more than 100 sq ft)":
+                    case "UNIVERSAL OUTLET":
+                    case "TOTAL DRAIN 2' x 50' ( In lieu of rock & pipe) \"LINEAR FEET\"":
+                    case "VISQUINE PROTECTION FOR INCLEMENT WEATHER":
+                    case "UNIVERSAL OUTLETS":
+                    
                         return true;
                     default:
                         return false;                       

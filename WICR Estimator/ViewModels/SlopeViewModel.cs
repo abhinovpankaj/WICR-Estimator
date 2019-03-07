@@ -24,7 +24,7 @@ namespace WICR_Estimator.ViewModels
             js.SlopeMaterialName = "Dexotex A-81 Underlayment";
             
             CalculateAll();        
-            js.OnJobSetupChange += JobSetup_OnJobSetupChange;                   
+            js.JobSetupChange += JobSetup_OnJobSetupChange;                   
         }
         
     }

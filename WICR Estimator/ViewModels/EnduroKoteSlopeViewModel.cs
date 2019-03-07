@@ -16,7 +16,7 @@ namespace WICR_Estimator.ViewModels
             SlopeMaterialName = Js.IsApprovedForSandCement ? "Sand and Cement" : "ECC Enduro-Crete";
             Slopes = CreateSlopes();
             CalculateAll();
-            Js.OnJobSetupChange += JobSetup_OnJobSetupChange;
+            Js.JobSetupChange += JobSetup_OnJobSetupChange;
         }
         public EnduroKoteSlopeViewModel()
         { }

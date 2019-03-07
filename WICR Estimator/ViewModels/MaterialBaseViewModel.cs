@@ -73,7 +73,7 @@ namespace WICR_Estimator.ViewModels
             deckCount = 1;
             projectname = Js.ProjectName;
             actualPreWage = Js.ActualPrevailingWage;
-            Js.OnJobSetupChange += JobSetup_OnJobSetupChange;
+            Js.JobSetupChange += JobSetup_OnJobSetupChange;
             SystemMaterial.OnQTyChanged += (s, e) => { setExceptionValues(s); };
             CheckboxCommand = new DelegateCommand(ApplyCheckUnchecks, canApply);
         }
@@ -592,16 +592,19 @@ namespace WICR_Estimator.ViewModels
                 TotalHrsSystemLabor = 0;
             }
             OnPropertyChanged("TotalHrsSystemLabor");
-            if (SlopeTotals != null && MetalTotals != null)
+            if (SlopeTotals != null )
             {
-                TotalHrsMetalLabor = isPrevailingWage ? (MetalTotals.LaborExtTotal / actualPreWage) :
-                                                  (MetalTotals.LaborExtTotal / laborRate);
-                OnPropertyChanged("TotalHrsMetalLabor");
+                
                 TotalHrsSlopeLabor = isPrevailingWage ? (SlopeTotals.LaborExtTotal / actualPreWage) :
                                                       (SlopeTotals.LaborExtTotal / laborRate);
                 OnPropertyChanged("TotalHrsSlopeLabor");
             }
-
+            if (MetalTotals!=null)
+            {
+                TotalHrsMetalLabor = isPrevailingWage ? (MetalTotals.LaborExtTotal / actualPreWage) :
+                                                  (MetalTotals.LaborExtTotal / laborRate);
+                OnPropertyChanged("TotalHrsMetalLabor");
+            }
             TotalHrsDriveLabor = Math.Ceiling((TotalHrsSystemLabor + TotalHrsMetalLabor + TotalHrsSlopeLabor) / 10 * 2);
             if (TotalHrsDriveLabor<4)
             {
@@ -2930,12 +2933,19 @@ namespace WICR_Estimator.ViewModels
             
             TotalSale = TotalSlopingPrice + TotalMetalPrice + TotalSystemPrice + TotalSubcontractLabor;
 
-            if (SlopeTotals != null && MetalTotals != null)
+            if (SlopeTotals != null)
             {
-                AllTabsLaborTotal = SlopeTotals.LaborExtTotal + MetalTotals.LaborExtTotal + TotalLaborExtension+DriveLaborValue;
-                AllTabsMaterialTotal = SlopeTotals.MaterialExtTotal + MetalTotals.MaterialExtTotal + TotalMaterialCostbrkp;
-                AllTabsFreightTotal = SlopeTotals.MaterialFreightTotal + MetalTotals.MaterialFreightTotal + TotalFreightCostBrkp;
-                AllTabsSubContractTotal = SlopeTotals.SubContractLabor + MetalTotals.SubContractLabor + TotalSubContractLaborCostBrkp;
+                AllTabsLaborTotal = SlopeTotals.LaborExtTotal+ TotalLaborExtension+DriveLaborValue;
+                AllTabsMaterialTotal = SlopeTotals.MaterialExtTotal +  TotalMaterialCostbrkp;
+                AllTabsFreightTotal = SlopeTotals.MaterialFreightTotal + TotalFreightCostBrkp;
+                AllTabsSubContractTotal = SlopeTotals.SubContractLabor +  TotalSubContractLaborCostBrkp;
+            }
+            else if (MetalTotals!=null)
+            {
+                AllTabsLaborTotal = AllTabsLaborTotal+ MetalTotals.LaborExtTotal ;
+                AllTabsMaterialTotal = AllTabsMaterialTotal+ MetalTotals.MaterialExtTotal ;
+                AllTabsFreightTotal = AllTabsFreightTotal+ MetalTotals.MaterialFreightTotal ;
+                AllTabsSubContractTotal = AllTabsSubContractTotal+ MetalTotals.SubContractLabor ;
             }
             else
             {

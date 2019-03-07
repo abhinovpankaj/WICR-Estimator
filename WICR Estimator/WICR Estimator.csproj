@@ -137,6 +137,7 @@
     <Compile Include="ViewModels\MetalBaseViewModel.cs" />
     <Compile Include="ViewModels\MetalViewModel.cs" />
     <Compile Include="ViewModels\MulticoatMaterialViewModel.cs" />
+    <Compile Include="ViewModels\ParasealLGMaterialViewModel.cs" />
     <Compile Include="ViewModels\ParasealMaterialViewModel.cs" />
     <Compile Include="ViewModels\ParkingMaterialViewModel.cs" />
     <Compile Include="ViewModels\PedestrianMaterialViewModel.cs" />

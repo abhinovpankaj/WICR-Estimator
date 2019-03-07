@@ -27,7 +27,7 @@ namespace WICR_Estimator.ViewModels
                 MiscMetals.Where(x => x.Name == "Nosing for Concrete risers").FirstOrDefault().Units = 0;
             }
             CalculateCost(null);
-            js.OnJobSetupChange += JobSetup_OnJobSetupChange;
+            js.JobSetupChange += JobSetup_OnJobSetupChange;
         }        
         
     }

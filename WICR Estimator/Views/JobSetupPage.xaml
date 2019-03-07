@@ -196,7 +196,46 @@
                           Content="SUPER STOP AT FOOTING?"/>
                     </StackPanel>
                 </Border>
-
+                <Border x:Name="ParasealLG" BorderThickness="1" BorderBrush="Black"
+                Background="AliceBlue"
+                Margin="10"
+                Padding="0,0,0,15"
+                Visibility="{Binding IsParasealLGSectionVisible}">
+                    <StackPanel>
+                        <TextBlock Text="ADDITIONAL TERM BAR (LF)"
+                           Style="{StaticResource FieldHeader}"/>
+                        <TextBox Style="{StaticResource TextBoxStyle}"
+                         Text="{Binding AdditionalTermBarLF ,UpdateSourceTrigger=LostFocus}"/>
+                        <TextBlock Text="RAKERS/CORNER BRACES EA"
+                           Style="{StaticResource FieldHeader}"/>
+                        <TextBox Style="{StaticResource TextBoxStyle}"
+                         Text="{Binding RakerCornerBases ,UpdateSourceTrigger=LostFocus}"/>
+                        <TextBlock Text="CEMENT BOARD DETAIL EA"
+                           Style="{StaticResource FieldHeader}"/>
+                        <TextBox Style="{StaticResource TextBoxStyle}"
+                         Text="{Binding CementBoardDetail ,UpdateSourceTrigger=LostFocus}"/>
+                        <TextBlock Text="INSIDE AND OUTSIDE CORNER DETAILS (LF)"
+                           Style="{StaticResource FieldHeader}"/>
+                        <TextBox Style="{StaticResource TextBoxStyle}"
+                         Text="{Binding InsideOutsideCornerDetails ,UpdateSourceTrigger=LostFocus}"/>
+                        <TextBlock Text="ROCK POCKETS EA."
+                           Style="{StaticResource FieldHeader}"/>
+                        <TextBox Style="{StaticResource TextBoxStyle}"
+                         Text="{Binding RockPockets ,UpdateSourceTrigger=LostFocus}"/>
+                        <TextBlock Text="LABOR FOR 3 FT STRIP OF PARASEAL AT FOUNDATION OR OTHER AREAS (LF)"
+                           Style="{StaticResource FieldHeader}"/>
+                        <TextBox Style="{StaticResource TextBoxStyle}"
+                         Text="{Binding ParasealFoundation ,UpdateSourceTrigger=LostFocus}"/>
+                        <TextBlock Text="REAR/MID LAGGING LF of beam"
+                           Style="{StaticResource FieldHeader}"/>
+                        <TextBox Style="{StaticResource TextBoxStyle}"
+                         Text="{Binding RearMidLagging ,UpdateSourceTrigger=LostFocus}"/>
+                        <CheckBox Style="{StaticResource CheckBoxStyle}"
+                          IsChecked="{Binding SuperStopAtFooting,
+                    UpdateSourceTrigger=PropertyChanged}"
+                          Content="SUPER STOP AT FOOTING?"/>
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </Border>
         <Border BorderThickness="1" BorderBrush="Black"

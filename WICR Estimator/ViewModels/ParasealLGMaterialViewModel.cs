@@ -8,46 +8,50 @@ using WICR_Estimator.Models;
 
 namespace WICR_Estimator.ViewModels
 {
-    class ParasealMaterialViewModel:MaterialBaseViewModel
+    class ParasealLGMaterialViewModel:MaterialBaseViewModel
     {
         private Dictionary<string, string> materialNames;
         private double additionalTermBarLF;
         private double insideOutsideCornerDetails;
         private bool superStopFooting;
-        private double pinsCoverage;
-        private double linearFootage;
-        public ParasealMaterialViewModel(Totals metalTotals, Totals slopeTotals, JobSetup Js) : base(metalTotals, slopeTotals, Js)
+        private double rakerCornerBases;
+        private double cementBoardDetail;
+        private double rockPockets;
+        private double parasealFoundation;
+        private double rearMidLagging;
+        public ParasealLGMaterialViewModel(Totals metalTotals, Totals slopeTotals, JobSetup Js) : base(metalTotals, slopeTotals, Js)
         {
             materialNames = new Dictionary<string, string>();
-            
+
             FillMaterialList();
 
             FetchMaterialValuesAsync(false);
-            pinsCoverage = SystemMaterials.Where(x => x.Name == "PINS & LOADS").FirstOrDefault().Coverage;
+            
         }
-
 
         private void FillMaterialList()
         {
-            materialNames.Add("PARATERM BAR LF (TOP ONLY- STANDARD INSTALL)", "LF");
-            materialNames.Add("EXTRA PARATERM BAR LF (BOTTOM OR SIDES)", "LF");
-            materialNames.Add("VULKEM 116 CAULK (FOR TERM BAR)", "TUBE");
+            materialNames.Add("PARATERM BAR LF", "LF");
+
+            materialNames.Add("PARA STICK AND DRY (REAR LAG, BLOCK OUTS, RAKERS)", "ROLLS");
+            materialNames.Add("DYMONIC 100 OR VULKEM 116 CAULK (FOR TERM BAR)", "10 oz.TUBE");
             materialNames.Add("PARAMASTIC (1000 LF PER PAIL FOR PREP & TERMINATIONS)", "5 GAL PAIL");
-            materialNames.Add("PARAGRANULAR (FOR CANT AT FOOTING)", "50 LB BAG");
-            materialNames.Add("PARASEAL \"STANDARD\" ROLLS (4X24)", "96 SQ FT/ROLL");
-            materialNames.Add("SEAM TAPE", "75 LF ROLL");
-            materialNames.Add("PARAMASTIC AND PARASTICK AND DRY (FOR PENETRATIONS)", "EACH");
-            materialNames.Add("INSIDE AND OUTSIDE CORNER DETAILS (PARASEAL)", "96 SQ FT/ROLL");
-            materialNames.Add("SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT", "ROLL");
+            materialNames.Add("PARAGRANULAR (FOR CANT AT FOOTING)", "LF");
+            materialNames.Add("PARASEAL LG ROLLS (4X24)", "96 SQ FT/ROLL");
+            materialNames.Add("PARASEAL LG CORNER DETAILS & LABOR FOR STARTER STRIP", "ROLLS");
+            materialNames.Add("LABOR FOR ALL PENETRATIONS, CEMENT BOARD, LAGGING PREP", "");
+            materialNames.Add("NON-POUROUS PRIMER", "1GAL");
+            materialNames.Add("SUPER STOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT\"", "ROLL");
             materialNames.Add("PINS & LOADS", "EACH");
-            materialNames.Add("PROTECTION MAT (HORIZONTAL ONLY)", "667 SF ROLL");
-            materialNames.Add("PB-4 (VERTICAL ONLY)", "200 SF ROLL");
-            materialNames.Add("TREMDRAIN 1000 (VERTICAL ONLY)", "200 SF ROLL");
-            materialNames.Add("TREMDRAIN 1000 (HORIZONTAL ONLY)", "200 SF ROLL");
-            materialNames.Add("UNIVERSAL OUTLET", "EACH");
+
+            materialNames.Add("**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER", "5 GAL PAIL");
+            materialNames.Add("DUROROCK 1/4\" x 3ft x5ft for LAGING BEAMS AND ROCK POCKETS", "EACH");
+            materialNames.Add("3/4\" GRAVEL FOR ROCK POCKETS", "EACH");
+            materialNames.Add("TREMDRAIN 1000 (VERTICAL ONLY)", "");
+            materialNames.Add("VISQUINE PROTECTION FOR INCLEMENT WEATHER", "SQFT");
+            materialNames.Add("UNIVERSAL OUTLETS", "EACH");
             materialNames.Add("TOTAL DRAIN 2' x 50' ( In lieu of rock & pipe) \"LINEAR FEET\"", "LINEAR FEET");
-            materialNames.Add("UV PROTECTION DETAIL (PRIME AND COAT WITH VULKEM 801)", "LINEAR FEET");
-            
+            materialNames.Add("4 INCH SCHEDULE 40 PIPE FOR ROCK POCKETS", "20 LF");          
         }
 
         public override void FetchMaterialValuesAsync(bool hasSetupChanged)
@@ -56,11 +60,12 @@ namespace WICR_Estimator.ViewModels
 
             foreach (SystemMaterial item in SystemMaterials)
             {
-                if (item.Name == "UNIVERSAL OUTLET" || item.Name == "TOTAL DRAIN 2' x 50' ( In lieu of rock & pipe) \"LINEAR FEET\"" )
+                if (item.Name == "UNIVERSAL OUTLETS" || item.Name == "TOTAL DRAIN 2' x 50' ( In lieu of rock & pipe) \"LINEAR FEET\""
+                    ||item.Name== "VISQUINE PROTECTION FOR INCLEMENT WEATHER")
                 {
                     qtyList.Add(item.Name, item.Qty);
                 }
-                
+
             }
             var sysMat = GetSystemMaterial(materialNames);
 
@@ -81,15 +86,17 @@ namespace WICR_Estimator.ViewModels
                         SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
                         SystemMaterials[i].IsMaterialChecked = iscbChecked;
                     }
-                    
-                    if (SystemMaterials[i].Name == "UNIVERSAL OUTLET" || SystemMaterials[i].Name == "TOTAL DRAIN 2' x 50' ( In lieu of rock & pipe) \"LINEAR FEET\"")
+
+                    if (SystemMaterials[i].Name == "UNIVERSAL OUTLETS" || 
+                        SystemMaterials[i].Name == "TOTAL DRAIN 2' x 50' ( In lieu of rock & pipe) \"LINEAR FEET\""||
+                        SystemMaterials[i].Name == "VISQUINE PROTECTION FOR INCLEMENT WEATHER")
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
                             SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
 
                         }
-                    }                  
+                    }
 
                 }
 
@@ -120,6 +127,10 @@ namespace WICR_Estimator.ViewModels
         public override ObservableCollection<OtherItem> GetOtherMaterials()
         {
             ObservableCollection<OtherItem> om = new ObservableCollection<OtherItem>();
+            om.Add(new OtherItem { Name = "Add for 2nd move on paraseal", IsReadOnly = false });
+            om.Add(new OtherItem { Name = "Add for 2nd move on superstop", IsReadOnly = false });
+            om.Add(new OtherItem { Name = "Add for additional move ons", IsReadOnly = false });
+
             om.Add(new OtherItem { Name = "Access issues?", IsReadOnly = false });
             om.Add(new OtherItem { Name = "Additional prep?", IsReadOnly = false });
             om.Add(new OtherItem { Name = "Additional labor?", IsReadOnly = false });
@@ -130,15 +141,18 @@ namespace WICR_Estimator.ViewModels
         }
         public override void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {
-            JobSetup Js = sender as JobSetup;
+            JobsetupTremco Js = sender as  JobsetupTremco;
             if (Js != null)
             {
                 additionalTermBarLF = Js.AdditionalTermBarLF;
                 insideOutsideCornerDetails = Js.InsideOutsideCornerDetails;
                 superStopFooting = Js.SuperStopAtFooting;
-                linearFootage = Js.LinearCopingFootage;
-                
-            }
+                rearMidLagging = Js.RearMidLagging;
+                rakerCornerBases = Js.RakerCornerBases;
+                cementBoardDetail = Js.CementBoardDetail;
+                rockPockets = Js.RockPockets;
+                parasealFoundation = Js.ParasealFoundation;
+    }
             base.JobSetup_OnJobSetupChange(sender, e);
         }
         public override bool getCheckboxCheckStatus(string materialName)
@@ -146,25 +160,29 @@ namespace WICR_Estimator.ViewModels
             switch (materialName)
             {
                 //case "PROTECTION MAT (HORIZONTAL ONLY)":
-                case "PB-4 (VERTICAL ONLY)":
-                case "TREMDRAIN 1000 (VERTICAL ONLY)":
-                case "TREMDRAIN 1000 (HORIZONTAL ONLY)":
-                case "TOTAL DRAIN 2' x 50' ( In lieu of rock & pipe) \"LINEAR FEET\"":
-                
-                    return false;
-                case "EXTRA PARATERM BAR LF (BOTTOM OR SIDES)":
-                    return additionalTermBarLF>0 ? true : false;
-                case "PARATERM BAR LF (TOP ONLY- STANDARD INSTALL)":
+                case "PARA STICK AND DRY (REAR LAG, BLOCK OUTS, RAKERS)":
+                case "DYMONIC 100 OR VULKEM 116 CAULK (FOR TERM BAR)":
+                case "PARASEAL LG ROLLS (4X24)":
+                case "PARASEAL LG CORNER DETAILS & LABOR FOR STARTER STRIP":
+                case "LABOR FOR ALL PENETRATIONS, CEMENT BOARD, LAGGING PREP":
+                    return true;
                 case "PARAGRANULAR (FOR CANT AT FOOTING)":
-                    return deckPerimeter > 0 ? true : false;
-                case "PARAMASTIC AND PARASTICK AND DRY (FOR PENETRATIONS)":
-                    return riserCount > 0 ? true : false;
-                case "INSIDE AND OUTSIDE CORNER DETAILS (PARASEAL)":
-                    return  insideOutsideCornerDetails> 0 ? true : false;
-                case "SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT":
+                case "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER":
+                    return false;
+                case "PARATERM BAR LF":
+                    return deckPerimeter>0? true:false;
+                case "NON-POUROUS PRIMER":
+                    return rakerCornerBases+ rearMidLagging > 0 ? true : false;
+                case "SUPER STOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT\"":
                     return superStopFooting;
                 case "PINS & LOADS":
+                case "TREMDRAIN 1000 (VERTICAL ONLY)":
                     return totalSqft > 0 ? true : false;
+                case "DUROROCK 1/4\" x 3ft x5ft for LAGING BEAMS AND ROCK POCKETS":
+                case "3/4\" GRAVEL FOR ROCK POCKETS":
+                    return cementBoardDetail+rockPockets> 0 ? true : false;
+                case "4 INCH SCHEDULE 40 PIPE FOR ROCK POCKETS":
+                    return  rockPockets > 0 ? true : false;
                 default:
                     return true;
             }
@@ -174,12 +192,8 @@ namespace WICR_Estimator.ViewModels
         {
             switch (materialName)
             {
-                case "PARATERM BAR LF (TOP ONLY- STANDARD INSTALL)":
-                case "PARAMASTIC AND PARASTICK AND DRY (FOR PENETRATIONS)":
-                case "PINS & LOADS":
-                case "PB-4 (VERTICAL ONLY)":
-                case "TREMDRAIN 1000 (VERTICAL ONLY)":
-                case "TREMDRAIN 1000 (HORIZONTAL ONLY)":
+                case "PARAGRANULAR (FOR CANT AT FOOTING)":
+                case "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER":
                     return true;
                 default:
                     return false;
@@ -191,29 +205,33 @@ namespace WICR_Estimator.ViewModels
         {
             switch (materialName)
             {
-                case "PARATERM BAR LF (TOP ONLY- STANDARD INSTALL)":
-                case "PARAGRANULAR (FOR CANT AT FOOTING)":
-                case "SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT":
-                    return deckPerimeter;
-                case "VULKEM 116 CAULK (FOR TERM BAR)":
-                    return deckPerimeter + additionalTermBarLF;
-                case "EXTRA PARATERM BAR LF (BOTTOM OR SIDES)":
-                    return additionalTermBarLF;
-                case "PARAMASTIC (1000 LF PER PAIL FOR PREP & TERMINATIONS)":
-                case "PARASEAL \"STANDARD\" ROLLS (4X24)":
+                case "PARA STICK AND DRY (REAR LAG, BLOCK OUTS, RAKERS)":
+                    return rearMidLagging + rakerCornerBases * 12;
+                
+                case "PARASEAL LG ROLLS (4X24)":
                 case "PINS & LOADS":
-                    return totalSqft + deckCount;
-                case "PARAMASTIC AND PARASTICK AND DRY (FOR PENETRATIONS)":
-                    return riserCount;
-                case "INSIDE AND OUTSIDE CORNER DETAILS (PARASEAL)":
-                    return insideOutsideCornerDetails /4;
-                case "PB-4 (VERTICAL ONLY)":
+                case "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER":
+                    return totalSqft + stairWidth;
+                case "PARASEAL LG CORNER DETAILS & LABOR FOR STARTER STRIP":
+                    return insideOutsideCornerDetails;
+                case "PARAGRANULAR (FOR CANT AT FOOTING)":
+                    return deckPerimeter;
+               
+                case "PARATERM BAR LF":
+                case "DYMONIC 100 OR VULKEM 116 CAULK (FOR TERM BAR)":
+                    return deckPerimeter+additionalTermBarLF;
+                case "NON-POUROUS PRIMER":
+                    return rearMidLagging + rakerCornerBases * 15; 
+                case "SUPER STOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT\"":
+                    return deckPerimeter+deckCount;
+                
                 case "TREMDRAIN 1000 (VERTICAL ONLY)":
                     return totalSqft;
-                case "UV PROTECTION DETAIL (PRIME AND COAT WITH VULKEM 801)":
-                   return 0;
+                
+                case "4 INCH SCHEDULE 40 PIPE FOR ROCK POCKETS":
+                    return rockPockets ;
                 default:
-                    return deckCount;
+                    return 0;
             }
         }
 
@@ -221,10 +239,12 @@ namespace WICR_Estimator.ViewModels
         {
             switch (materialName)
             {
-                case "EXTRA PARATERM BAR LF (BOTTOM OR SIDES)":
-                    return additionalTermBarLF;
-                case "UV PROTECTION DETAIL (PRIME AND COAT WITH VULKEM 801)":
-                    return linearFootage;
+                case "PARAMASTIC (1000 LF PER PAIL FOR PREP & TERMINATIONS)":
+                    return totalSqft / 2500 + riserCount * .1 + rearMidLagging / 100 + rakerCornerBases / 25;
+                case "DUROROCK 1/4\" x 3ft x5ft for LAGING BEAMS AND ROCK POCKETS":
+                    return cementBoardDetail / 2 + rockPockets / 8;
+                case "3/4\" GRAVEL FOR ROCK POCKETS":
+                    return rockPockets * 2;
                 default:
                     return lfArea / coverage;
             }
@@ -234,22 +254,10 @@ namespace WICR_Estimator.ViewModels
         {
             switch (materialName)
             {
-                case "PARATERM BAR LF (TOP ONLY- STANDARD INSTALL)":
-                case "SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT":
-                
+                case "PARATERM BAR LF":
                     return deckPerimeter;
-                case "EXTRA PARATERM BAR LF (BOTTOM OR SIDES)":
-                    return additionalTermBarLF;
-                case "PARAMASTIC (1000 LF PER PAIL FOR PREP & TERMINATIONS)":
-                case "PARASEAL \"STANDARD\" ROLLS (4X24)":
-                case "PROTECTION MAT (HORIZONTAL ONLY)":
-                case "TREMDRAIN 1000 (HORIZONTAL ONLY)":
-                case "SEAM TAPE":
-                    return deckCount;
-                case "PARAMASTIC AND PARASTICK AND DRY (FOR PENETRATIONS)":
-                    return riserCount;
-                case "UV PROTECTION DETAIL (PRIME AND COAT WITH VULKEM 801)":
-                    return linearFootage;
+                case "SUPER STOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT\"":
+                    return deckPerimeter + deckCount;
                 default:
                     return 0;
             }
@@ -259,16 +267,15 @@ namespace WICR_Estimator.ViewModels
         {
             switch (materialName)
             {
-                case "INSIDE AND OUTSIDE CORNER DETAILS (PARASEAL)":
-                    return insideOutsideCornerDetails;
-                case "PARAMASTIC(1000 LF PER PAIL FOR PREP & TERMINATIONS)":
-                case "PARASEAL \"STANDARD\" ROLLS (4X24)":
-                case "SEAM TAPE":
-                case "PB-4 (VERTICAL ONLY)":
+                case "PARAMASTIC (1000 LF PER PAIL FOR PREP & TERMINATIONS)":
+                case "PARASEAL LG ROLLS (4X24)":
                 case "TREMDRAIN 1000 (VERTICAL ONLY)":
                     return totalSqft;
+                    
                 case "PARAGRANULAR (FOR CANT AT FOOTING)":
                     return deckPerimeter;
+                case "PARASEAL LG CORNER DETAILS & LABOR FOR STARTER STRIP":
+                    return parasealFoundation;
                 default:
                     return 0;
             }
@@ -276,20 +283,7 @@ namespace WICR_Estimator.ViewModels
         public override double getSqFtStairs(string materialName)
         {
             return 0;
-            //switch (materialName)
-            //{
-            //    case "Staples(3/4\" crown, Box of 13,500)":
-            //    case "1/20 Mesh Sand":
-            //    case "1/20 Mesh Sand Broadcast to Refusal":
-            //    case "Elasta-Tuff #6000-AL-SC Top Coat":
-            //    case "Plywood 3/4 & blocking (# of 4x8 sheets)":
-            //    case "Stucco Material Remove and replace (LF)":
-            //        return 0;
-            //    case "Stair Nosing":
-            //        return riserCount * stairWidth;
-            //    default:
-            //        return riserCount * stairWidth * 2;
-            //}
+           
         }
 
         public override void calculateLaborHrs()
@@ -300,9 +294,9 @@ namespace WICR_Estimator.ViewModels
         //calculate for Desert Crete
         public override void calculateRLqty()
         {
-            double val1=0, val2=0;
+            double val1 = 0, val2 = 0;
             SystemMaterial sysMat = SystemMaterials.Where(x => x.Name == "PARATERM BAR LF (TOP ONLY- STANDARD INSTALL)").FirstOrDefault();
-            if (sysMat!=null)
+            if (sysMat != null)
             {
                 val1 = sysMat.IsMaterialChecked ? sysMat.Qty : 0;
             }
@@ -312,20 +306,20 @@ namespace WICR_Estimator.ViewModels
                 val2 = sysMat.IsMaterialChecked ? sysMat.Qty : 0;
             }
             sysMat = SystemMaterials.Where(x => x.Name == "PINS & LOADS").FirstOrDefault();
-            if (sysMat!=null)
+            if (sysMat != null)
             {
                 bool ischecked;
-                ischecked= sysMat.IsMaterialChecked;
+                ischecked = sysMat.IsMaterialChecked;
                 sysMat.Qty = sysMat.SMSqft / sysMat.Coverage + (val1 + val2) / 2;
                 sysMat.IsMaterialChecked = ischecked;
             }
             sysMat = SystemMaterials.Where(x => x.Name == "PARASEAL \"STANDARD\" ROLLS (4X24)").FirstOrDefault();
-            if (sysMat!=null)
+            if (sysMat != null)
             {
                 SystemMaterial myMat = SystemMaterials.Where(x => x.Name == "SEAM TAPE").FirstOrDefault();
                 myMat.SMSqft = sysMat.Qty * 28;
                 myMat.Qty = myMat.SMSqft / myMat.Coverage;
-                OtherMaterials.Where(x => x.Name == "Linear footage for seams if needed for submerged conditions").FirstOrDefault().Quantity= sysMat.Qty * 28;
+                OtherMaterials.Where(x => x.Name == "Linear footage for seams if needed for submerged conditions").FirstOrDefault().Quantity = sysMat.Qty * 28;
             }
         }
 
@@ -360,7 +354,7 @@ namespace WICR_Estimator.ViewModels
                     item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
                     item.LaborUnitPrice = item.LaborExtension / item.Qty;
                 }
-                
+
             }
             CalculateLaborMinCharge();
         }
@@ -380,8 +374,8 @@ namespace WICR_Estimator.ViewModels
         }
         public override void ApplyCheckUnchecks(object obj)
         {
-            SystemMaterial sysmat=null;
-            if (obj.ToString()== "PROTECTION MAT (HORIZONTAL ONLY)")
+            SystemMaterial sysmat = null;
+            if (obj.ToString() == "PROTECTION MAT (HORIZONTAL ONLY)")
             {
                 SystemMaterials.Where(x => x.Name == "PROTECTION MAT (HORIZONTAL ONLY)").FirstOrDefault().IsMaterialEnabled = false;
                 sysmat = SystemMaterials.Where(x => x.Name == "PB-4 (VERTICAL ONLY)").FirstOrDefault();
@@ -446,7 +440,7 @@ namespace WICR_Estimator.ViewModels
 
         public override double CalculateLabrExtn(double calhrs, double setupMin, string matName = "")
         {
-            return  setupMin > calhrs ? setupMin * laborRate : calhrs * laborRate;
+            return setupMin > calhrs ? setupMin * laborRate : calhrs * laborRate;
         }
         public override void setCheckBoxes()
         {

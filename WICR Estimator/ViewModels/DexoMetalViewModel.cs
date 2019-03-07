@@ -17,7 +17,7 @@ namespace WICR_Estimator.ViewModels
             MiscMetals = this.GetMiscMetals();
             AddOnMetals = this.GetAddOnMetals();
             CalculateCost(null);
-            js.OnJobSetupChange += Js_OnJobSetupChange;
+            js.JobSetupChange += Js_OnJobSetupChange;
         }
 
         private void Js_OnJobSetupChange(object sender, EventArgs e)
