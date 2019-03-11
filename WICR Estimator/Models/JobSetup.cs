@@ -190,6 +190,10 @@ namespace WICR_Estimator.Models
             {
                 SqftLabel = "SQ FT OF VERTICAL CONCRETE WALLS";
             }
+            else if (name=="Paraseal LG")
+            {
+                SqftLabel = "SQ FT OF VERTICAL LAGGING WALLS";
+            }
             else
                 SqftLabel = "Total Sqft";
 
@@ -741,6 +745,20 @@ namespace WICR_Estimator.Models
 
             }
         }
+        
+        public System.Windows.Visibility IsSqftConcreteVisible
+        {
+            get
+            {
+                if (ProjectName == "Tufflex")
+                {
+                    return System.Windows.Visibility.Collapsed;
+                }
+                else
+                    return System.Windows.Visibility.Visible;
+
+            }
+        }
         public System.Windows.Visibility IsNewPlywoodVisible
         {
             get
@@ -904,6 +922,90 @@ namespace WICR_Estimator.Models
         }
         #endregion
 
-        
+
+        #region Paraseal LG
+        public System.Windows.Visibility IsParasealLGSectionVisible
+        {
+            get
+            {
+
+                if (ProjectName == "Paraseal LG")
+                {
+                    return System.Windows.Visibility.Visible;
+                }
+                else
+                    return System.Windows.Visibility.Collapsed;
+            }
+        }
+        private double rakerCornerBases;
+        public double RakerCornerBases
+        {
+            get { return rakerCornerBases; }
+            set
+            {
+                if (value != rakerCornerBases)
+                {
+                    rakerCornerBases = value;
+                    OnPropertyChanged("RakerCornerBases");
+                    OnJobSetupChanged(null);
+                }
+            }
+        }
+        private double cementBoardDetail;
+        public double CementBoardDetail
+        {
+            get { return cementBoardDetail; }
+            set
+            {
+                if (value != cementBoardDetail)
+                {
+                    cementBoardDetail = value;
+                    OnJobSetupChanged(null);
+                }
+            }
+        }
+        private double rockPockets;
+        public double RockPockets
+        {
+            get { return rockPockets; }
+            set
+            {
+                if (value != rockPockets)
+                {
+                    rockPockets = value;
+                    OnPropertyChanged("RockPockets");
+                   OnJobSetupChanged(null);
+                }
+            }
+        }
+        private double parasealFoundation;
+        public double ParasealFoundation
+        {
+            get { return parasealFoundation; }
+            set
+            {
+                if (value != parasealFoundation)
+                {
+                    parasealFoundation = value;
+                    OnJobSetupChanged(null);
+                }
+            }
+        }
+        private double rearMidLagging;
+        public double RearMidLagging
+        {
+            get { return rearMidLagging; }
+            set
+            {
+                if (value != rearMidLagging)
+                {
+                    rearMidLagging = value;
+                    OnPropertyChanged("RearMidLagging");
+                    OnJobSetupChanged(null);
+                }
+            }
+        }
+        #endregion
+
     }
 }

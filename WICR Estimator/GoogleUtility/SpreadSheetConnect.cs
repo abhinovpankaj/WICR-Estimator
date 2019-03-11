@@ -125,6 +125,9 @@ namespace WICR_Estimator.GoogleUtility
                 case "Tufflex":
                     prjName = "Tufflex";
                     break;
+                case "Paraseal LG":
+                    prjName = "ParasealLG";
+                    break;
                 default:
                     break;
             }

@@ -257,10 +257,12 @@
                 <TextBox Style="{StaticResource TextBoxStyle}"
                           Visibility="{Binding IsNewPlywoodVisible}"
                          Text="{Binding TotalSqftPlywood,UpdateSourceTrigger=LostFocus}"/>
-                <TextBlock Style="{StaticResource FieldHeader}"
+                <StackPanel Visibility="{Binding IsSqftConcreteVisible}">
+                    <TextBlock Style="{StaticResource FieldHeader}"
                        Text="{Binding SqftLabel}"/>
-                <TextBox Style="{StaticResource TextBoxStyle}"
+                    <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding TotalSqft,UpdateSourceTrigger=LostFocus}"/>
+                </StackPanel>
                 <TextBlock Style="{StaticResource FieldHeader}"
                            Visibility="{Binding IslinearCopingFootageVisible}"
                        Text="{Binding LinearFootageText}"/>

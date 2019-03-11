@@ -314,6 +314,24 @@ namespace WICR_Estimator.ViewModels
                 
              
         }
+        public override void CalculateCostPerSqFT()
+        {
+            CostPerSquareFeet = (TotalSqftPlywood + deckCount) == 0 ? 0 : Math.Round(TotalMaterialCost / (TotalSqftPlywood + deckCount), 2);
+            //base.CalculateCostPerSqFT();
+        }
+        public override void CalculateTotalSqFt()
+        {
+            CostperSqftSlope = TotalSlopingPrice / (TotalSqftPlywood + riserCount);
+            CostperSqftMetal = TotalMetalPrice / (TotalSqftPlywood + riserCount);
+            CostperSqftMaterial = TotalSystemPrice / (TotalSqftPlywood + riserCount);
+            CostperSqftSubContract = TotalSubcontractLabor / (TotalSqftPlywood + riserCount);
+            TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
+            OnPropertyChanged("CostperSqftSlope");
+            OnPropertyChanged("CostperSqftMetal");
+            OnPropertyChanged("CostperSqftMaterial");
+            OnPropertyChanged("CostperSqftSubContract");
+            OnPropertyChanged("TotalCostperSqft");
+        }
         public override void setCheckBoxes()
         {
 

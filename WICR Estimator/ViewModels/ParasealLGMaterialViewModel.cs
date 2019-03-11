@@ -246,7 +246,7 @@ namespace WICR_Estimator.ViewModels
                 case "3/4\" GRAVEL FOR ROCK POCKETS":
                     return rockPockets * 2;
                 default:
-                    return lfArea / coverage;
+                    return coverage==0 ?0: lfArea / coverage;
             }
         }
 
@@ -313,13 +313,11 @@ namespace WICR_Estimator.ViewModels
                 sysMat.Qty = sysMat.SMSqft / sysMat.Coverage + (val1 + val2) / 2;
                 sysMat.IsMaterialChecked = ischecked;
             }
-            sysMat = SystemMaterials.Where(x => x.Name == "PARASEAL \"STANDARD\" ROLLS (4X24)").FirstOrDefault();
+            sysMat = SystemMaterials.Where(x => x.Name == "PARASEAL LG ROLLS (4X24)").FirstOrDefault();
             if (sysMat != null)
             {
-                SystemMaterial myMat = SystemMaterials.Where(x => x.Name == "SEAM TAPE").FirstOrDefault();
-                myMat.SMSqft = sysMat.Qty * 28;
-                myMat.Qty = myMat.SMSqft / myMat.Coverage;
-                OtherMaterials.Where(x => x.Name == "Linear footage for seams if needed for submerged conditions").FirstOrDefault().Quantity = sysMat.Qty * 28;
+                OtherMaterials.Where(x => x.Name == "Linear footage for seams if needed for submerged conditions")
+                    .FirstOrDefault().Quantity = Math.Round(sysMat.Qty * 28,2);
             }
         }
 
@@ -416,9 +414,7 @@ namespace WICR_Estimator.ViewModels
 
                 sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (HORIZONTAL ONLY)").FirstOrDefault();
                 sysmat.IsMaterialEnabled = true;
-                sysmat.IsMaterialChecked = false;
-
-                SystemMaterials.Where(x => x.Name == "PINS & LOADS").FirstOrDefault().Coverage = pinsCoverage + sysmat.Qty * 200 / 500;
+                sysmat.IsMaterialChecked = false;               
             }
             if (obj.ToString() == "TREMDRAIN 1000 (HORIZONTAL ONLY)")
             {

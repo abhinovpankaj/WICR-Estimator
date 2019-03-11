@@ -138,4 +138,12 @@
     <MaterialRange>H1370:N1388</MaterialRange>
     <FreightRange>E48:F54</FreightRange>
   </Paraseal>
+  <Tremco>
+    <RateRange>E2</RateRange>
+    <MetalRange>F3:M43</MetalRange>
+    <LaborRange>E1395:E1414</LaborRange>
+    <SlopeRange>P1300:Q1317</SlopeRange>
+    <MaterialRange>H1370:N1388</MaterialRange>
+    <FreightRange>E48:F54</FreightRange>
+  </Tremco>
 </Projects>

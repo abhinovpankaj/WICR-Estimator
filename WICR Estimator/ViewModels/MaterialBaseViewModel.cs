@@ -2900,6 +2900,10 @@ namespace WICR_Estimator.ViewModels
         private void calculateLaborTotals()
         {
             double  laborDeduction = 0;
+            AllTabsLaborTotal = 0;
+            AllTabsMaterialTotal =0;
+            AllTabsFreightTotal = 0;
+            AllTabsSubContractTotal = 0;
             if (isPrevailingWage)
             {
                 //double.TryParse(laborDetails[0][0].ToString(), out preWage);
@@ -2940,22 +2944,25 @@ namespace WICR_Estimator.ViewModels
                 AllTabsFreightTotal = SlopeTotals.MaterialFreightTotal + TotalFreightCostBrkp;
                 AllTabsSubContractTotal = SlopeTotals.SubContractLabor +  TotalSubContractLaborCostBrkp;
             }
-            else if (MetalTotals!=null)
+            if (MetalTotals!=null)
             {
                 AllTabsLaborTotal = AllTabsLaborTotal+ MetalTotals.LaborExtTotal ;
                 AllTabsMaterialTotal = AllTabsMaterialTotal+ MetalTotals.MaterialExtTotal ;
                 AllTabsFreightTotal = AllTabsFreightTotal+ MetalTotals.MaterialFreightTotal ;
                 AllTabsSubContractTotal = AllTabsSubContractTotal+ MetalTotals.SubContractLabor ;
             }
-            else
-            {
 
-                AllTabsLaborTotal = TotalLaborExtension+DriveLaborValue;
+            if (SlopeTotals==null && MetalTotals==null)
+            {
+                AllTabsLaborTotal = TotalLaborExtension + DriveLaborValue;
                 AllTabsMaterialTotal = TotalMaterialCostbrkp;
-                AllTabsFreightTotal =  TotalFreightCostBrkp;
+                AllTabsFreightTotal = TotalFreightCostBrkp;
                 AllTabsSubContractTotal = TotalSubContractLaborCostBrkp;
             }
+            
+            
             UpdateUILaborCost();
+
         }
 
 

@@ -599,7 +599,8 @@
                             BorderThickness="0,0,0,0">
                         <TextBlock HorizontalAlignment="Stretch" Width="100"
                                    FontWeight="Bold"
-                        Text="{Binding AllTabsLaborTotal,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
+                        Text="{Binding AllTabsLaborTotal,StringFormat='c',
+                            UpdateSourceTrigger=PropertyChanged}"/>
                     </Border>
                 </ListBoxItem>
             </ListBox>
@@ -645,7 +646,8 @@
                             BorderThickness="0,0,0,0">
                         <TextBlock HorizontalAlignment="Stretch" Width="100"
                                    FontWeight="Bold"
-                        Text="{Binding AllTabsMaterialTotal,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
+                        Text="{Binding AllTabsMaterialTotal,
+                            StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
                     </Border>
                 </ListBoxItem>
             </ListBox>

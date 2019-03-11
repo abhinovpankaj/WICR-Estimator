@@ -134,7 +134,7 @@ namespace WICR_Estimator.ViewModels
                                 null, prj.ProjectJobSetUp);
                         }
                     }
-                    else if (prj.Name=="Paraseal")
+                    else if (prj.Name=="Paraseal" || prj.Name=="Paraseal LG")
                     {
                         if (prj.MetalViewModel == null)
                         {

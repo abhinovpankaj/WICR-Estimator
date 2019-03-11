@@ -29,6 +29,7 @@ namespace WICR_Estimator
                 case "Pli-Dek":
                 case "Tufflex":
                 case "Paraseal":
+                case "Paraseal LG":
                     return new MetalViewModel(Js);
                 //case "Dexotex Barrier Gaurd":
                 //    return new DexoMetalViewModel(Js);
@@ -102,6 +103,8 @@ namespace WICR_Estimator
                     return new TufflexMaterialViewModel(metalT, slopeT, Js);
                 case "Paraseal":
                     return new ParasealMaterialViewModel(metalT, slopeT, Js);
+                case "Paraseal LG":
+                    return new ParasealLGMaterialViewModel(metalT, slopeT, Js);
                 default:
                     return null;
             }

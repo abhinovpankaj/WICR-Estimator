@@ -459,7 +459,7 @@ namespace WICR_Estimator.ViewModels
 
         public override void CalculateLaborMinCharge()
         {
-            calculateRLqty();
+            
             LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
                                         x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
             LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
