@@ -318,6 +318,7 @@ namespace WICR_Estimator.ViewModels
             {
                 OtherMaterials.Where(x => x.Name == "Linear footage for seams if needed for submerged conditions")
                     .FirstOrDefault().Quantity = Math.Round(sysMat.Qty * 28,2);
+                OtherLaborMaterials.Where(x => x.Name == "Linear footage for seams if needed for submerged conditions").FirstOrDefault().LQuantity = Math.Round(sysMat.Qty * 28,2);
             }
         }
 
@@ -436,7 +437,15 @@ namespace WICR_Estimator.ViewModels
 
         public override double CalculateLabrExtn(double calhrs, double setupMin, string matName = "")
         {
-            return setupMin > calhrs ? setupMin * laborRate : calhrs * laborRate;
+            if (calhrs==0)
+            {
+                return 0;
+            }
+            else
+            {
+                return setupMin > calhrs ? setupMin * laborRate : calhrs * laborRate;
+            }
+            
         }
         public override void setCheckBoxes()
         {

@@ -2936,13 +2936,17 @@ namespace WICR_Estimator.ViewModels
             TotalSystemPrice = getTotals(TotalLaborExtension, TotalMaterialCostbrkp, TotalFreightCostBrkp, TotalSubContractLaborCostBrkp);
             
             TotalSale = TotalSlopingPrice + TotalMetalPrice + TotalSystemPrice + TotalSubcontractLabor;
+            AllTabsLaborTotal = TotalLaborExtension + DriveLaborValue;
+            AllTabsMaterialTotal = TotalMaterialCostbrkp;
+            AllTabsFreightTotal = TotalFreightCostBrkp;
+            AllTabsSubContractTotal = TotalSubContractLaborCostBrkp;
 
             if (SlopeTotals != null)
             {
-                AllTabsLaborTotal = SlopeTotals.LaborExtTotal+ TotalLaborExtension+DriveLaborValue;
-                AllTabsMaterialTotal = SlopeTotals.MaterialExtTotal +  TotalMaterialCostbrkp;
-                AllTabsFreightTotal = SlopeTotals.MaterialFreightTotal + TotalFreightCostBrkp;
-                AllTabsSubContractTotal = SlopeTotals.SubContractLabor +  TotalSubContractLaborCostBrkp;
+                AllTabsLaborTotal = SlopeTotals.LaborExtTotal+AllTabsLaborTotal;
+                AllTabsMaterialTotal = SlopeTotals.MaterialExtTotal +  AllTabsMaterialTotal;
+                AllTabsFreightTotal = SlopeTotals.MaterialFreightTotal +AllTabsFreightTotal;
+                AllTabsSubContractTotal = SlopeTotals.SubContractLabor +  AllTabsSubContractTotal;
             }
             if (MetalTotals!=null)
             {
@@ -2952,14 +2956,6 @@ namespace WICR_Estimator.ViewModels
                 AllTabsSubContractTotal = AllTabsSubContractTotal+ MetalTotals.SubContractLabor ;
             }
 
-            if (SlopeTotals==null && MetalTotals==null)
-            {
-                AllTabsLaborTotal = TotalLaborExtension + DriveLaborValue;
-                AllTabsMaterialTotal = TotalMaterialCostbrkp;
-                AllTabsFreightTotal = TotalFreightCostBrkp;
-                AllTabsSubContractTotal = TotalSubContractLaborCostBrkp;
-            }
-            
             
             UpdateUILaborCost();
 

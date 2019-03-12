@@ -194,6 +194,10 @@ namespace WICR_Estimator.Models
             {
                 SqftLabel = "SQ FT OF VERTICAL LAGGING WALLS";
             }
+            else if (name == "201")
+            {
+                SqftLabel = "TOTAL SQ FT HORIZONTAL CONCRETE";
+            }
             else
                 SqftLabel = "Total Sqft";
 
@@ -276,7 +280,7 @@ namespace WICR_Estimator.Models
                     return "LF OF PERIMETER FOOTING (STANDARD PARAGRANULAR DETAIL AND TERM BAR)";
                 else if (ProjectName == "Paraseal LG")
                     return "LF OF PERIMETER FOOTING (adds term bar only )";
-                else if (ProjectName == "Tufflex")
+                else if (ProjectName == "Tufflex" ||ProjectName=="201")
                     return "LINEAR FOOTAGE OF PERIMETER (DECKS)";
                 else
                     return "Lf Perimeter for Burlap and Membrane";
@@ -710,6 +714,8 @@ namespace WICR_Estimator.Models
                 {
                     return "# PENETRATIONS or DRAINS";
                 }
+                else if (ProjectName == "201")
+                    return "# RISERS (3.5-4 FT WIDE)";
                 else if (ProjectName == "Paraseal LG")
                     return "TIE BACKS (block outs must be priced separately)";
                 else
@@ -1006,6 +1012,92 @@ namespace WICR_Estimator.Models
             }
         }
         #endregion
+        #region 201
+        public System.Windows.Visibility Is201SectionVisible
+        {
+            get
+            {
 
+                if (ProjectName == "201")
+                {
+                    return System.Windows.Visibility.Visible;
+                }
+                else
+                    return System.Windows.Visibility.Collapsed;
+            }
+        }
+
+        private double totalSqftVertical;
+        public double TotalSqftVertical
+        {
+            get { return totalSqftVertical; }
+            set
+            {
+                if (value != totalSqftVertical)
+                {
+                    totalSqftVertical = value;
+                    OnPropertyChanged("TotalSqftVertical");
+                    OnJobSetupChanged(null);
+                }
+            }
+        }
+
+        private double termBarLF;
+        public double TermBarLF
+        {
+            get { return termBarLF; }
+            set
+            {
+                if (value != termBarLF)
+                {
+                    termBarLF = value;
+                    OnPropertyChanged("TermBarLF");
+                    OnJobSetupChanged(null);
+                }
+            }
+        }
+        private double rebarPrepWallsLF;
+        public double RebarPrepWallsLF
+        {
+            get { return rebarPrepWallsLF; }
+            set
+            {
+                if (value != rebarPrepWallsLF)
+                {
+                    rebarPrepWallsLF = value;
+                    OnPropertyChanged("RebarPrepWallsLF");
+                    OnJobSetupChanged(null);
+                }
+            }
+        }
+        private double superStopLF;
+        public double SuperStopLF
+        {
+            get { return termBarLF; }
+            set
+            {
+                if (value != superStopLF)
+                {
+                    superStopLF = value;
+                    OnPropertyChanged("SuperStopLF");
+                    OnJobSetupChanged(null);
+                }
+            }
+        }
+        private double penetrations;
+        public double Penetrations
+        {
+            get { return penetrations; }
+            set
+            {
+                if (value != penetrations)
+                {
+                    penetrations = value;
+                    OnPropertyChanged("Penetrations");
+                    OnJobSetupChanged(null);
+                }
+            }
+        }
+        #endregion
     }
 }

@@ -112,15 +112,17 @@
             
 
         </Border>
+        
         <Border BorderThickness="1" BorderBrush="Black"
                 Grid.Column="1"
                 Background="AliceBlue"
-                Margin="10"
+                Margin="11,32,10,-12"
                 Width="350"
                 Padding="0,0,0,15">
-            <StackPanel>
+            <ScrollViewer>
                 <StackPanel>
-                    <CheckBox Style="{StaticResource CheckBoxStyle}"
+                    <StackPanel>
+                        <CheckBox Style="{StaticResource CheckBoxStyle}"
                               Visibility="{Binding IsNewPlywoodVisible}"
                               IsChecked="{Binding IsNewPlywood,
                         UpdateSourceTrigger=PropertyChanged}"
@@ -141,102 +143,133 @@
                         <CheckBox  Style="{StaticResource CheckBoxStyle}"
                                Content="Prevailing Wages"
                                IsChecked="{Binding IsPrevalingWage,UpdateSourceTrigger=PropertyChanged}"/>
-                    <CheckBox  Style="{StaticResource CheckBoxStyle}"
+                        <CheckBox  Style="{StaticResource CheckBoxStyle}"
                                IsChecked="{Binding IsFlashingRequired,UpdateSourceTrigger=PropertyChanged}"
                                Content="Metal Flashing Over Concrete?"/>
-                    <CheckBox  Style="{StaticResource CheckBoxStyle}"
+                        <CheckBox  Style="{StaticResource CheckBoxStyle}"
                                IsChecked="{Binding HasSpecialPricing,UpdateSourceTrigger=PropertyChanged}"
                            Content="Special Metal Pricing"/>
-                    <CheckBox  Style="{StaticResource CheckBoxStyle}"
+                        <CheckBox  Style="{StaticResource CheckBoxStyle}"
                                IsChecked="{Binding HasDiscount,UpdateSourceTrigger=PropertyChanged}"
                            Content="Labor Discount Large Project (over 1,000 sq. ft.)"/>
-                    <CheckBox  Style="{StaticResource CheckBoxStyle}"
+                        <CheckBox  Style="{StaticResource CheckBoxStyle}"
                                IsChecked="{Binding HasContingencyDisc,UpdateSourceTrigger=PropertyChanged}">
-                        <TextBlock Text="Contingency Discount for Large New Construction Project (over 1,000 sq. ft.)"
+                            <TextBlock Text="Contingency Discount for Large New Construction Project (over 1,000 sq. ft.)"
                                            TextWrapping="Wrap"/>
-                    </CheckBox>
-                </StackPanel>
-                <Border BorderBrush="Black"
+                        </CheckBox>
+                    </StackPanel>
+                    <Border BorderBrush="Black"
                         BorderThickness="0,1,0,0">
-                    <StackPanel VerticalAlignment="Center"
+                        <StackPanel VerticalAlignment="Center"
                    Grid.Row="4" Grid.Column="1"
                    Margin="5">
-                        <TextBlock Text="Stair Width" HorizontalAlignment="Center"
+                            <TextBlock Text="Stair Width" HorizontalAlignment="Center"
                            Style="{StaticResource FieldHeader}"/>
-                        <TextBox Text="{Binding ElementName=slWidth,
+                            <TextBox Text="{Binding ElementName=slWidth,
                 Path=Value, UpdateSourceTrigger=LostFocus}"
                      TextAlignment="Right"
                      Width="40" 
                          HorizontalAlignment="Center"
                      Margin="5"/>
-                        <Slider Maximum="10" Value="{Binding StairWidth}"
+                            <Slider Maximum="10" Value="{Binding StairWidth}"
                                 Width="250" 
                     TickPlacement="BottomRight"
                     TickFrequency=".5" IsSnapToTickEnabled="True" Name="slWidth"
                     />
-                    </StackPanel>
-                </Border>
-                <Border BorderThickness="1" BorderBrush="Black"
+                        </StackPanel>
+                    </Border>
+                    <Border x:Name="ParasealSection"
+                    BorderThickness="1" BorderBrush="Black"
+                        
                 Background="AliceBlue"
                 Margin="10"
                 Padding="0,0,0,15"
                 Visibility="{Binding IsParasealSectionVisible}">
-                    <StackPanel>
-                        <TextBlock Text="ADDITIONAL TERM BAR (LF)"
+                        <StackPanel>
+                            <TextBlock Text="ADDITIONAL TERM BAR (LF)"
                            Style="{StaticResource FieldHeader}"/>
-                        <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding AdditionalTermBarLF ,UpdateSourceTrigger=LostFocus}"/>
-                        <TextBlock Text="INSIDE AND OUTSIDE CORNER DETAILS (LF)"
+                            <TextBlock Text="INSIDE AND OUTSIDE CORNER DETAILS (LF)"
                            Style="{StaticResource FieldHeader}"/>
-                        <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding InsideOutsideCornerDetails ,UpdateSourceTrigger=LostFocus}"/>
-                        <CheckBox Style="{StaticResource CheckBoxStyle}"
+                            <CheckBox Style="{StaticResource CheckBoxStyle}"
                           IsChecked="{Binding SuperStopAtFooting,
                     UpdateSourceTrigger=PropertyChanged}"
                           Content="SUPER STOP AT FOOTING?"/>
-                    </StackPanel>
-                </Border>
-                <Border x:Name="ParasealLG" BorderThickness="1" BorderBrush="Black"
+                        </StackPanel>
+                    </Border>
+
+                    <Border x:Name="ParasealLGSection" BorderThickness="1" BorderBrush="Black"
                 Background="AliceBlue"
                 Margin="10"
                 Padding="0,0,0,15"
                 Visibility="{Binding IsParasealLGSectionVisible}">
-                    <StackPanel>
-                        <TextBlock Text="ADDITIONAL TERM BAR (LF)"
+
+                        <StackPanel>
+                            <TextBlock Text="ADDITIONAL TERM BAR (LF)"
                            Style="{StaticResource FieldHeader}"/>
-                        <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding AdditionalTermBarLF ,UpdateSourceTrigger=LostFocus}"/>
-                        <TextBlock Text="RAKERS/CORNER BRACES EA"
+                            <TextBlock Text="RAKERS/CORNER BRACES EA"
                            Style="{StaticResource FieldHeader}"/>
-                        <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding RakerCornerBases ,UpdateSourceTrigger=LostFocus}"/>
-                        <TextBlock Text="CEMENT BOARD DETAIL EA"
+                            <TextBlock Text="CEMENT BOARD DETAIL EA"
                            Style="{StaticResource FieldHeader}"/>
-                        <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding CementBoardDetail ,UpdateSourceTrigger=LostFocus}"/>
-                        <TextBlock Text="INSIDE AND OUTSIDE CORNER DETAILS (LF)"
+                            <TextBlock Text="INSIDE AND OUTSIDE CORNER DETAILS (LF)"
                            Style="{StaticResource FieldHeader}"/>
-                        <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding InsideOutsideCornerDetails ,UpdateSourceTrigger=LostFocus}"/>
-                        <TextBlock Text="ROCK POCKETS EA."
+                            <TextBlock Text="ROCK POCKETS EA."
                            Style="{StaticResource FieldHeader}"/>
-                        <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding RockPockets ,UpdateSourceTrigger=LostFocus}"/>
-                        <TextBlock Text="LABOR FOR 3 FT STRIP OF PARASEAL AT FOUNDATION OR OTHER AREAS (LF)"
+                            <TextBlock Text="LABOR FOR 3 FT STRIP OF PARASEAL AT FOUNDATION OR OTHER AREAS (LF)"
                            Style="{StaticResource FieldHeader}"/>
-                        <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding ParasealFoundation ,UpdateSourceTrigger=LostFocus}"/>
-                        <TextBlock Text="REAR/MID LAGGING LF of beam"
+                            <TextBlock Text="REAR/MID LAGGING LF of beam"
                            Style="{StaticResource FieldHeader}"/>
-                        <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding RearMidLagging ,UpdateSourceTrigger=LostFocus}"/>
-                        <CheckBox Style="{StaticResource CheckBoxStyle}"
+                            <CheckBox Style="{StaticResource CheckBoxStyle}"
                           IsChecked="{Binding SuperStopAtFooting,
                     UpdateSourceTrigger=PropertyChanged}"
                           Content="SUPER STOP AT FOOTING?"/>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
+                        </StackPanel>
+
+                    </Border>
+                    <Border x:Name="Section201" BorderThickness="1" BorderBrush="Black"
+                            Background="AliceBlue"
+                            Margin="10"
+                            Padding="0,0,0,15"
+                            Visibility="{Binding Is201SectionVisible}">
+                        <StackPanel>
+                            <TextBlock Text="TERM BAR (LF)"
+                                        Style="{StaticResource FieldHeader}"/>
+                            <TextBox Style="{StaticResource TextBoxStyle}"
+                                     Text="{Binding TermBarLF ,UpdateSourceTrigger=LostFocus}"/>
+                            <TextBlock Text="REBAR PREP @ WALLS (LF)"
+                                       Style="{StaticResource FieldHeader}"/>
+                            <TextBox Style="{StaticResource TextBoxStyle}"
+                                     Text="{Binding RebarPrepWallsLF ,UpdateSourceTrigger=LostFocus}"/>
+                            <TextBlock Text="SUPERSTOP (LF)"
+                                       Style="{StaticResource FieldHeader}"/>
+                            <TextBox Style="{StaticResource TextBoxStyle}"
+                                     Text="{Binding SuperStopLF ,UpdateSourceTrigger=LostFocus}"/>
+                            <TextBlock Text="PENETRATIONS"
+                                       Style="{StaticResource FieldHeader}"/>
+                            <TextBox Style="{StaticResource TextBoxStyle}"
+                                     Text="{Binding Penetrations ,UpdateSourceTrigger=LostFocus}"/>
+                            
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
         </Border>
         <Border BorderThickness="1" BorderBrush="Black"
                 Background="AliceBlue"
@@ -262,6 +295,12 @@
                        Text="{Binding SqftLabel}"/>
                     <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding TotalSqft,UpdateSourceTrigger=LostFocus}"/>
+                </StackPanel>
+                <StackPanel Visibility="{Binding Is201SectionVisible}">
+                    <TextBlock Style="{StaticResource FieldHeader}"
+                       Text="TOTAL SQ FT VERTICAL (BLOCK WALL)"/>
+                    <TextBox Style="{StaticResource TextBoxStyle}"
+                         Text="{Binding TotalSqftVertical,UpdateSourceTrigger=LostFocus}"/>
                 </StackPanel>
                 <TextBlock Style="{StaticResource FieldHeader}"
                            Visibility="{Binding IslinearCopingFootageVisible}"
