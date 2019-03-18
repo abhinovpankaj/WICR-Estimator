@@ -42,7 +42,8 @@ namespace WICR_Estimator.Converters
                     case "TOTAL DRAIN 2' x 50' ( In lieu of rock & pipe) \"LINEAR FEET\"":
                     case "VISQUINE PROTECTION FOR INCLEMENT WEATHER":
                     case "UNIVERSAL OUTLETS":
-                    
+                    case "TOTAL DRAIN MINUS BOTTOM TD 1000(IN LIEU OF ROCK & PIPE)":
+                    case "PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL (LF DECK TO WALL) WITH SAND BROADCAST":
                         return true;
                     default:
                         return false;                       

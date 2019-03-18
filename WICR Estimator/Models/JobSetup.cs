@@ -201,7 +201,7 @@ namespace WICR_Estimator.Models
             else
                 SqftLabel = "Total Sqft";
 
-            if (name=="Pedestrian System" ||name=="Parking Garage"||name=="Tufflex")
+            if (name=="Pedestrian System" ||name=="Parking Garage"||name=="Tufflex" ||name=="201")
             {
                 IsNewPlywood = false;
                 SqftLabel = "Total Sqft Concrete";
@@ -751,7 +751,19 @@ namespace WICR_Estimator.Models
 
             }
         }
-        
+        public System.Windows.Visibility IsResealVisible
+        {
+            get
+            {
+                if (ProjectName == "Pedestrian System" || ProjectName == "Parking Garage" || ProjectName == "Tufflex")
+                {
+                    return System.Windows.Visibility.Visible;
+                }
+                else
+                    return System.Windows.Visibility.Collapsed;
+
+            }
+        }
         public System.Windows.Visibility IsSqftConcreteVisible
         {
             get
@@ -1073,7 +1085,7 @@ namespace WICR_Estimator.Models
         private double superStopLF;
         public double SuperStopLF
         {
-            get { return termBarLF; }
+            get { return superStopLF; }
             set
             {
                 if (value != superStopLF)
