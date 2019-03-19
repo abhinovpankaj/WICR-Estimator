@@ -74,11 +74,12 @@
             <ColumnDefinition Width=".3*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <DataGrid AutoGenerateColumns="False" 
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <DataGrid AutoGenerateColumns="False" 
                   HorizontalAlignment="Left"
                   CanUserSortColumns="False"
                   Name="MaterialGrid" 
@@ -87,62 +88,62 @@
                   VerticalAlignment="Top" 
                   CanUserAddRows="False"
                   ItemsSource="{Binding SystemMaterials,UpdateSourceTrigger=PropertyChanged}"  >
-            <DataGrid.RowStyle>
-                <Style TargetType="DataGridRow">
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
 
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsMaterialChecked}" Value="False">
-                            <Setter Property="Background" Value="Gray"/>
-                            <Setter Property="Foreground" Value="Gray"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </DataGrid.RowStyle>
-            <DataGrid.Columns>
-                <DataGridTemplateColumn Header="">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <CheckBox Command="{Binding DataContext.CheckboxCommand,ElementName=MaterialGrid}"
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsMaterialChecked}" Value="False">
+                                <Setter Property="Background" Value="Gray"/>
+                                <Setter Property="Foreground" Value="Gray"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Command="{Binding DataContext.CheckboxCommand,ElementName=MaterialGrid}"
                                       CommandParameter="{Binding Name}"
                                       IsChecked="{Binding IsMaterialChecked,
                                 UpdateSourceTrigger=PropertyChanged}"
                                       IsEnabled="False">
 
-                            </CheckBox>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Header="System Material" KeyboardNavigation.IsTabStop="False"
+                                </CheckBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="System Material" KeyboardNavigation.IsTabStop="False"
                                         Binding="{Binding Name }"
                                     IsReadOnly="True">
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Operation" KeyboardNavigation.IsTabStop="False"
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Operation" KeyboardNavigation.IsTabStop="False"
                                     IsReadOnly="True"
                                     Binding="{Binding Operation}">
-                </DataGridTextColumn>
-                
-                <DataGridTextColumn Header="#Hours" KeyboardNavigation.IsTabStop="False"
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Header="#Hours" KeyboardNavigation.IsTabStop="False"
                                     Binding="{Binding Hours, StringFormat={}{0:n2}}">
-                    
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="SetUp Min Charges" Binding="{Binding SetupMinCharge,UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"
+
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="SetUp Min Charges" Binding="{Binding SetupMinCharge,UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"
                                     IsReadOnly="True"
                                     KeyboardNavigation.IsTabStop="False">
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Labor Unit Price"
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Labor Unit Price"
                                     Binding="{Binding LaborUnitPrice,                   
                     UpdateSourceTrigger=PropertyChanged,StringFormat='c' }"
                                     IsReadOnly="True"
                                     KeyboardNavigation.IsTabStop="False">
 
-                </DataGridTextColumn>
-                <DataGridTextColumn Header ="Labor Extension"
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header ="Labor Extension"
                                     Binding="{Binding LaborExtension,
                     UpdateSourceTrigger=PropertyChanged ,StringFormat='c'}"
                                     IsReadOnly="True"
                                     KeyboardNavigation.IsTabStop="False">
-                </DataGridTextColumn>
-                <!--<DataGridTextColumn Header="Sqft V" IsReadOnly="True" Binding="{Binding SMSqftV}"
+                    </DataGridTextColumn>
+                    <!--<DataGridTextColumn Header="Sqft V" IsReadOnly="True" Binding="{Binding SMSqftV}"
                                      KeyboardNavigation.IsTabStop="False">
                 </DataGridTextColumn>
 
@@ -167,9 +168,11 @@
                                     IsReadOnly="True" Header="P/R Stairs"
                                     KeyboardNavigation.IsTabStop="False">
                 </DataGridTextColumn>-->
-            </DataGrid.Columns>
+                </DataGrid.Columns>
 
-        </DataGrid>
+            </DataGrid>
+        </ScrollViewer>
+        
         <Grid Grid.Column="1" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>

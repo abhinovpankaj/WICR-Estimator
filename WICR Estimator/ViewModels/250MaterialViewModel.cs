@@ -8,7 +8,7 @@ using WICR_Estimator.Models;
 
 namespace WICR_Estimator.ViewModels
 {
-    class _201MaterialViewModel:MaterialBaseViewModel
+    class _250MaterialViewModel:MaterialBaseViewModel
     {
         private Dictionary<string, string> materialNames;
         private double totalSqftVertical;
@@ -19,7 +19,7 @@ namespace WICR_Estimator.ViewModels
         private double totalPlywoodSqft;
         private bool hasNewPlywood;
         //private double termBar;
-        public _201MaterialViewModel(Totals metalTotals, Totals slopeTotals, JobSetup js) : base(metalTotals, slopeTotals, js)
+        public _250MaterialViewModel(Totals metalTotals, Totals slopeTotals, JobSetup js) : base(metalTotals, slopeTotals, js)
         {
             materialNames = new Dictionary<string, string>();
 
@@ -84,7 +84,7 @@ namespace WICR_Estimator.ViewModels
             var sysMat = GetSystemMaterial(materialNames);
 
             //remove GC 250 System Material
-            List<SystemMaterial> mat250 = sysMat.Where(x => x.Name.Contains("250")).ToList();
+            List<SystemMaterial> mat250 = sysMat.Where(x => x.Name.Contains("201")).ToList();
             foreach (SystemMaterial item in mat250)
             {
                 sysMat.Remove(item);

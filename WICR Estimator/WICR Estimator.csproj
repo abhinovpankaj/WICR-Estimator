@@ -122,6 +122,7 @@
     <Compile Include="Models\Slope.cs" />
     <Compile Include="Models\Totals.cs" />
     <Compile Include="ViewModelInstanceFactory.cs" />
+    <Compile Include="ViewModels\250MaterialViewModel.cs" />
     <Compile Include="ViewModels\201MaterialViewModel.cs" />
     <Compile Include="ViewModels\ALXMaterialViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
