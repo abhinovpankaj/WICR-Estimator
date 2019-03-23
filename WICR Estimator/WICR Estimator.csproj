@@ -73,6 +73,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -96,6 +97,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CollectionExtensions.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\CheckboxVisibilityConverter.cs" />
     <Compile Include="Converters\EnableTextboxConverter.cs" />
@@ -114,7 +116,6 @@
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Models\AddOnMetal.cs" />
     <Compile Include="Models\CostBreakup.cs" />
-    <Compile Include="Models\JobsetupTremco.cs" />
     <Compile Include="Models\Labor.cs" />
     <Compile Include="Models\SystemMaterial.cs" />
     <Compile Include="Models\Metal.cs" />

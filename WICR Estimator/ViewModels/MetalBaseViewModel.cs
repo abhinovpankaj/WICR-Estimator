@@ -6,13 +6,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml.Serialization;
+using System.Runtime.Serialization;
 using WICR_Estimator.Models;
 
 namespace WICR_Estimator.ViewModels
 {
-    [XmlInclude(typeof(MetalViewModel))]
+    //[XmlInclude(typeof(MetalViewModel))]
+    [KnownType(typeof(MetalViewModel))]
     public class MetalBaseViewModel:BaseViewModel
     {
+
         public Totals MetalTotals;
         private ObservableCollection<Metal> metals;
         private ObservableCollection<MiscMetal> miscMetals;
@@ -25,14 +28,17 @@ namespace WICR_Estimator.ViewModels
 
 
         //public object[] pWage;
+
         public IList<IList<object>> pWage;
         protected double prevailingWage;
         protected double deductionOnLargeJob;
         protected bool isPrevailingWage;
         protected bool isDiscount;
         protected string vendorName;
-        protected IList<IList<object>> freightDetails;
-        protected IList<IList<object>> metalDetails;
+
+        public IList<IList<object>> freightDetails;
+        public IList<IList<object>> metalDetails;
+
         protected double laborRate;
         protected double riserCount;
         protected double stairWidth;
@@ -179,7 +185,8 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
-        [XmlIgnore]
+        //[XmlIgnore]
+        [IgnoreDataMember]
         public ICommand AddRowCommand
         {
             get
@@ -192,7 +199,8 @@ namespace WICR_Estimator.ViewModels
                 return _addRowCommand;
             }
         }
-        [XmlIgnore]
+        //[XmlIgnore]
+        [IgnoreDataMember]
         public ICommand RemoveCommand
         {
             get
@@ -206,7 +214,8 @@ namespace WICR_Estimator.ViewModels
             }
         }
         private DelegateCommand checkboxCommand;
-        [XmlIgnore]
+        //[XmlIgnore]
+        [IgnoreDataMember]
         public DelegateCommand CheckboxCommand { get { return checkboxCommand; } private set { checkboxCommand = value; } }
 
         #endregion
@@ -246,7 +255,8 @@ namespace WICR_Estimator.ViewModels
             //   MiscMetals.Remove(MiscMetals.Last(x => x.CanRemove == true));
         }
         private ICommand _calculateCostCommand;
-        [XmlIgnore]
+        //[XmlIgnore]
+        [IgnoreDataMember]
         public ICommand CalculateCostCommand
         {
             get
@@ -621,7 +631,8 @@ namespace WICR_Estimator.ViewModels
         }
         #region  Temporary
         private ICommand fillValues;
-        [XmlIgnore]
+        //[XmlIgnore]
+        [IgnoreDataMember]
         public ICommand FillValues
         {
             get

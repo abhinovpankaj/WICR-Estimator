@@ -275,21 +275,7 @@ namespace WICR_Estimator.ViewModels
         }
         public override double getSqFtStairs(string materialName)
         {
-            return 0;
-            //switch (materialName)
-            //{
-            //    case "Staples(3/4\" crown, Box of 13,500)":
-            //    case "1/20 Mesh Sand":
-            //    case "1/20 Mesh Sand Broadcast to Refusal":
-            //    case "Elasta-Tuff #6000-AL-SC Top Coat":
-            //    case "Plywood 3/4 & blocking (# of 4x8 sheets)":
-            //    case "Stucco Material Remove and replace (LF)":
-            //        return 0;
-            //    case "Stair Nosing":
-            //        return riserCount * stairWidth;
-            //    default:
-            //        return riserCount * stairWidth * 2;
-            //}
+            return 0;            
         }
 
         public override void calculateLaborHrs()
@@ -316,6 +302,11 @@ namespace WICR_Estimator.ViewModels
             {
                 bool ischecked;
                 ischecked= sysMat.IsMaterialChecked;
+                SystemMaterial sm=SystemMaterials.Where(x=>x.Name== "TREMDRAIN 1000 (VERTICAL ONLY)").FirstOrDefault();
+                if (sm!=null)
+                {
+                    sysMat.Coverage = sm.IsMaterialChecked?  6 + sm.Qty * 200 / 500:6;
+                }
                 sysMat.Qty = sysMat.SMSqft / sysMat.Coverage + (val1 + val2) / 2;
                 sysMat.IsMaterialChecked = ischecked;
             }
@@ -325,8 +316,8 @@ namespace WICR_Estimator.ViewModels
                 SystemMaterial myMat = SystemMaterials.Where(x => x.Name == "SEAM TAPE").FirstOrDefault();
                 myMat.SMSqft = sysMat.Qty * 28;
                 myMat.Qty = myMat.SMSqft / myMat.Coverage;
-                OtherMaterials.Where(x => x.Name == "Linear footage for seams if needed for submerged conditions").FirstOrDefault().Quantity= sysMat.Qty * 28;
-                OtherLaborMaterials.Where(x => x.Name == "Linear footage for seams if needed for submerged conditions").FirstOrDefault().LQuantity = sysMat.Qty * 28;
+                OtherMaterials.Where(x => x.Name == "Linear footage for seams if needed for submerged conditions").FirstOrDefault().Quantity= Math.Round(sysMat.Qty * 28,2);
+                OtherLaborMaterials.Where(x => x.Name == "Linear footage for seams if needed for submerged conditions").FirstOrDefault().LQuantity = Math.Round(sysMat.Qty * 28,2);
             }
         }
 
@@ -381,66 +372,66 @@ namespace WICR_Estimator.ViewModels
         }
         public override void ApplyCheckUnchecks(object obj)
         {
-            SystemMaterial sysmat=null;
-            if (obj.ToString()== "PROTECTION MAT (HORIZONTAL ONLY)")
-            {
-                SystemMaterials.Where(x => x.Name == "PROTECTION MAT (HORIZONTAL ONLY)").FirstOrDefault().IsMaterialEnabled = false;
-                sysmat = SystemMaterials.Where(x => x.Name == "PB-4 (VERTICAL ONLY)").FirstOrDefault();
-                sysmat.IsMaterialEnabled = true;
-                sysmat.IsMaterialChecked = false;
+            //SystemMaterial sysmat=null;
+            //if (obj.ToString()== "PROTECTION MAT (HORIZONTAL ONLY)")
+            //{
+            //    SystemMaterials.Where(x => x.Name == "PROTECTION MAT (HORIZONTAL ONLY)").FirstOrDefault().IsMaterialEnabled = false;
+            //    sysmat = SystemMaterials.Where(x => x.Name == "PB-4 (VERTICAL ONLY)").FirstOrDefault();
+            //    sysmat.IsMaterialEnabled = true;
+            //    sysmat.IsMaterialChecked = false;
 
-                sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (VERTICAL ONLY)").FirstOrDefault();
-                sysmat.IsMaterialEnabled = true;
-                sysmat.IsMaterialChecked = false;
+            //    sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (VERTICAL ONLY)").FirstOrDefault();
+            //    sysmat.IsMaterialEnabled = true;
+            //    sysmat.IsMaterialChecked = false;
 
-                sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (HORIZONTAL ONLY)").FirstOrDefault();
-                sysmat.IsMaterialEnabled = true;
-                sysmat.IsMaterialChecked = false;
-            }
-            if (obj.ToString() == "PB-4 (VERTICAL ONLY)")
-            {
-                sysmat = SystemMaterials.Where(x => x.Name == "PROTECTION MAT (HORIZONTAL ONLY)").FirstOrDefault();
-                sysmat.IsMaterialEnabled = true;
-                sysmat.IsMaterialChecked = false;
+            //    sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (HORIZONTAL ONLY)").FirstOrDefault();
+            //    sysmat.IsMaterialEnabled = true;
+            //    sysmat.IsMaterialChecked = false;
+            //}
+            //if (obj.ToString() == "PB-4 (VERTICAL ONLY)")
+            //{
+            //    sysmat = SystemMaterials.Where(x => x.Name == "PROTECTION MAT (HORIZONTAL ONLY)").FirstOrDefault();
+            //    sysmat.IsMaterialEnabled = true;
+            //    sysmat.IsMaterialChecked = false;
 
-                sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (VERTICAL ONLY)").FirstOrDefault();
-                sysmat.IsMaterialEnabled = true;
-                sysmat.IsMaterialChecked = false;
+            //    sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (VERTICAL ONLY)").FirstOrDefault();
+            //    sysmat.IsMaterialEnabled = true;
+            //    sysmat.IsMaterialChecked = false;
 
-                sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (HORIZONTAL ONLY)").FirstOrDefault();
-                sysmat.IsMaterialEnabled = true;
-                sysmat.IsMaterialChecked = false;
-            }
-            if (obj.ToString() == "TREMDRAIN 1000 (VERTICAL ONLY)")
-            {
-                sysmat = SystemMaterials.Where(x => x.Name == "PROTECTION MAT (HORIZONTAL ONLY)").FirstOrDefault();
-                sysmat.IsMaterialEnabled = true;
-                sysmat.IsMaterialChecked = false;
+            //    sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (HORIZONTAL ONLY)").FirstOrDefault();
+            //    sysmat.IsMaterialEnabled = true;
+            //    sysmat.IsMaterialChecked = false;
+            //}
+            //if (obj.ToString() == "TREMDRAIN 1000 (VERTICAL ONLY)")
+            //{
+            //    sysmat = SystemMaterials.Where(x => x.Name == "PROTECTION MAT (HORIZONTAL ONLY)").FirstOrDefault();
+            //    sysmat.IsMaterialEnabled = true;
+            //    sysmat.IsMaterialChecked = false;
 
-                sysmat = SystemMaterials.Where(x => x.Name == "PB-4 (VERTICAL ONLY)").FirstOrDefault();
-                sysmat.IsMaterialEnabled = true;
-                sysmat.IsMaterialChecked = false;
+            //    sysmat = SystemMaterials.Where(x => x.Name == "PB-4 (VERTICAL ONLY)").FirstOrDefault();
+            //    sysmat.IsMaterialEnabled = true;
+            //    sysmat.IsMaterialChecked = false;
 
-                sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (HORIZONTAL ONLY)").FirstOrDefault();
-                sysmat.IsMaterialEnabled = true;
-                sysmat.IsMaterialChecked = false;
+            //    sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (HORIZONTAL ONLY)").FirstOrDefault();
+            //    sysmat.IsMaterialEnabled = true;
+            //    sysmat.IsMaterialChecked = false;
 
-                SystemMaterials.Where(x => x.Name == "PINS & LOADS").FirstOrDefault().Coverage = pinsCoverage + sysmat.Qty * 200 / 500;
-            }
-            if (obj.ToString() == "TREMDRAIN 1000 (HORIZONTAL ONLY)")
-            {
-                sysmat = SystemMaterials.Where(x => x.Name == "PROTECTION MAT (HORIZONTAL ONLY)").FirstOrDefault();
-                sysmat.IsMaterialEnabled = true;
-                sysmat.IsMaterialChecked = false;
+            //    SystemMaterials.Where(x => x.Name == "PINS & LOADS").FirstOrDefault().Coverage = pinsCoverage + sysmat.Qty * 200 / 500;
+            //}
+            //if (obj.ToString() == "TREMDRAIN 1000 (HORIZONTAL ONLY)")
+            //{
+            //    sysmat = SystemMaterials.Where(x => x.Name == "PROTECTION MAT (HORIZONTAL ONLY)").FirstOrDefault();
+            //    sysmat.IsMaterialEnabled = true;
+            //    sysmat.IsMaterialChecked = false;
 
-                sysmat = SystemMaterials.Where(x => x.Name == "PB-4 (VERTICAL ONLY)").FirstOrDefault();
-                sysmat.IsMaterialEnabled = true;
-                sysmat.IsMaterialChecked = false;
+            //    sysmat = SystemMaterials.Where(x => x.Name == "PB-4 (VERTICAL ONLY)").FirstOrDefault();
+            //    sysmat.IsMaterialEnabled = true;
+            //    sysmat.IsMaterialChecked = false;
 
-                sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (VERTICAL ONLY)").FirstOrDefault();
-                sysmat.IsMaterialEnabled = true;
-                sysmat.IsMaterialChecked = false;
-            }
+            //    sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (VERTICAL ONLY)").FirstOrDefault();
+            //    sysmat.IsMaterialEnabled = true;
+            //    sysmat.IsMaterialChecked = false;
+            //}
             calculateRLqty();
             CalculateLaborMinCharge();
         }

@@ -7,6 +7,7 @@ using WICR_Estimator.Models;
 
 namespace WICR_Estimator.ViewModels
 {
+
     public class DexoSlopeViewModel:SlopeBaseViewModel
     {
         public DexoSlopeViewModel(JobSetup  Js)

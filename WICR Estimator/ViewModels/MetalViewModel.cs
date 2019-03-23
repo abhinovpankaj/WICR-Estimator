@@ -10,6 +10,7 @@ using WICR_Estimator.Views;
 
 namespace WICR_Estimator.ViewModels
 {
+    
     public class MetalViewModel:MetalBaseViewModel
     {
 

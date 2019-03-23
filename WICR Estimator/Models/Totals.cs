@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using WICR_Estimator.ViewModels;
 
 namespace WICR_Estimator.Models
 {
-    
+    //[DataContract]
     public class Totals:BaseViewModel
     {
         public Totals()

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -10,11 +11,11 @@ using WICR_Estimator.Models;
 
 namespace WICR_Estimator.ViewModels
 {
-    [XmlInclude(typeof(SlopeViewModel))]
-    [XmlInclude(typeof(DexoSlopeViewModel))]
-    //[XmlInclude(typeof(PedestrianSlopeViewModel))]
-    //[XmlInclude(typeof(EnduroKoteSlopeViewModel))]
-    
+    [KnownType(typeof(SlopeViewModel))]
+    [KnownType(typeof(DexoSlopeViewModel))]
+    [KnownType(typeof(PedestrianSlopeViewModel))]
+    [KnownType(typeof(EnduroKoteSlopeViewModel))]
+    [DataContract]
     public class SlopeBaseViewModel:BaseViewModel
     {
         
@@ -24,7 +25,7 @@ namespace WICR_Estimator.ViewModels
         
         private ICommand calculateCostCommand;
         double productionRate = 0;
-        private IList<IList<object>> pWage;
+        public IList<IList<object>> pWage;
         private double totalmixesman;
         private double averagemixesprice;
         private double laborcost;
@@ -50,17 +51,30 @@ namespace WICR_Estimator.ViewModels
         }
 
         #region public properties
+        [DataMember]
         public Totals SlopeTotals;
+
+        [DataMember]
         public bool isApprovedForCement;
+        [DataMember]
         public bool isPrevailingWage;
+        [DataMember]
         public double laborRate;
-        protected IList<IList<object>> perMixRates;
-        protected IList<IList<object>> freightData;
+        [DataMember]
+        public IList<IList<object>> perMixRates;
+        [DataMember]
+        public IList<IList<object>> freightData;
+        [DataMember]
         public double prevailingWage;
+        [DataMember]
         public double deductionOnLargeJob;
+        [DataMember]
         public bool overrideManually;
+        [DataMember]
         public bool hasDiscount;
+        [DataMember]
         public double materialPerc;
+        [DataMember]
         public string SlopeMaterialName
         {
             get
@@ -76,7 +90,9 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        [DataMember]
         private System.Windows.Visibility isUrethaneVisible= System.Windows.Visibility.Collapsed;
+        [DataMember]
         public System.Windows.Visibility IsUrethaneVisible
         {
             get { return isUrethaneVisible; }
@@ -86,6 +102,7 @@ namespace WICR_Estimator.ViewModels
                 OnPropertyChanged("IsUrethaneVisible");
             }
         }
+        [DataMember]
         public bool OverrideManually
         {
             get
@@ -113,7 +130,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
-        
+        [DataMember]
         public ObservableCollection<Slope> Slopes
         {
             get
@@ -129,6 +146,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        [DataMember]
         public double TotalMixesMan
         {
             get
@@ -150,6 +168,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        [DataMember]
         public double AverageMixesPrice
         {
             get
@@ -174,7 +193,7 @@ namespace WICR_Estimator.ViewModels
 
             }
         }
-
+        [DataMember]
         public double TotalWeight
         {
             get
@@ -190,6 +209,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        [DataMember]
         public double TotalFrightCost
         {
             get
@@ -205,6 +225,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        [DataMember]
         public double LaborCost
         {
             get
@@ -221,6 +242,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        [DataMember]
         public double MinimumLaborCost
         {
             get
@@ -236,6 +258,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        [DataMember]
         public double TotalLaborCost
         {
             get
@@ -251,6 +274,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        [DataMember]
         public double TotalMaterialCost
         {
             get
@@ -266,7 +290,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
-
+        [DataMember]
         public double SumTotal
         {
             get
@@ -282,6 +306,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        [DataMember]
         public double SumTotalMixes
         {
             get
@@ -298,6 +323,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        [DataMember]
         public double SumTotalMatExt
         {
             get
@@ -313,6 +339,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        [DataMember]
         public double SumTotalLaborExt
         {
             get
@@ -329,6 +356,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         #endregion
+
 
         #region Methods
 
@@ -701,7 +729,7 @@ namespace WICR_Estimator.ViewModels
         #endregion
 
         #region commands
-        [XmlIgnore]
+        [IgnoreDataMember]
         public ICommand CalculateCostCommand
         {
             get
@@ -727,7 +755,7 @@ namespace WICR_Estimator.ViewModels
 
         #region  Temporary
         private ICommand fillValues;
-        [XmlIgnore]
+        [IgnoreDataMember]
         public ICommand FillValues
         {
             get

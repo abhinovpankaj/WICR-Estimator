@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -10,7 +11,7 @@ using WICR_Estimator.ViewModels;
 namespace WICR_Estimator.Models
 {
     
-    
+    //[DataContract]
     public class JobSetup : BaseViewModel
     {
 
@@ -234,7 +235,8 @@ namespace WICR_Estimator.Models
         public double MinMarkUp { get; set; }
         
         private DelegateCommand enableMMCommand;
-        [XmlIgnore]
+
+        [IgnoreDataMember]
         public DelegateCommand EnableMoreMarkupCommand
         {
             get { return enableMMCommand; }
@@ -755,7 +757,7 @@ namespace WICR_Estimator.Models
         {
             get
             {
-                if (ProjectName == "Pedestrian System" || ProjectName == "Parking Garage" || ProjectName == "Tufflex")
+                if (ProjectName == "Pedestrian System" || ProjectName == "Parking Garage")
                 {
                     return System.Windows.Visibility.Visible;
                 }

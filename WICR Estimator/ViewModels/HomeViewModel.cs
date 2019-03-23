@@ -15,6 +15,8 @@ using WICR_Estimator.Models;
 using WICR_Estimator.Views;
 using System.IO;
 using System.Xml.Serialization;
+using System.Runtime.Serialization;
+using System.Xml;
 
 namespace WICR_Estimator.ViewModels
 {
@@ -90,10 +92,13 @@ namespace WICR_Estimator.ViewModels
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 filePath = openFileDialog1.FileName;
-                XmlSerializer deserializer = new XmlSerializer(typeof(List<Project>));
-                TextReader reader = new StreamReader(filePath);
-                object est = deserializer.Deserialize(reader);
-                SelectedProjects = (ObservableCollection<Project>)est;
+                DataContractSerializer deserializer = new DataContractSerializer(typeof(List<Project>));
+                
+                FileStream fs = new FileStream(filePath, FileMode.Open);
+                XmlDictionaryReader reader =
+                XmlDictionaryReader.CreateTextReader(fs, new XmlDictionaryReaderQuotas());
+                List<Project> est = (List<Project>)deserializer.ReadObject(reader );
+                MyselectedProjects = est.ToObservableCollection();
                 reader.Close();
             }
             
@@ -130,12 +135,25 @@ namespace WICR_Estimator.ViewModels
 
             if (saveFileDialog1.FileName != "")
             {
-                // Insert code to set properties and fields of the object.  
-                XmlSerializer mySerializer = new XmlSerializer(typeof(ObservableCollection<Project>));
-                // To write to a file, create a StreamWriter object.  
-                StreamWriter myWriter = new StreamWriter(saveFileDialog1.FileName);
-                mySerializer.Serialize(myWriter, SelectedProjects);
-                myWriter.Close();
+                //// Insert code to set properties and fields of the object.  
+                //XmlSerializer mySerializer = new XmlSerializer(typeof(ObservableCollection<Project>));
+                //// To write to a file, create a StreamWriter object.  
+                //StreamWriter myWriter = new StreamWriter(saveFileDialog1.FileName);
+                //mySerializer.Serialize(myWriter, SelectedProjects);
+                //myWriter.Close();
+                var serializer = new DataContractSerializer(typeof(ObservableCollection<Project>));
+                string xmlString;
+                using (var sw = new StringWriter())
+                {
+                    using (var writer = new XmlTextWriter(saveFileDialog1.FileName,null))
+                    {
+                        writer.Formatting = Formatting.Indented; // indent the Xml so it's human readable
+                        serializer.WriteObject(writer,SelectedProjects );
+                        writer.Flush();
+                        xmlString = sw.ToString();
+                    }
+                }
+
             }
 
         }
@@ -214,6 +232,7 @@ namespace WICR_Estimator.ViewModels
                 {
                     selectedProjects = value;
                     OnPropertyChanged("SelectedProjects");
+                    
                     MyselectedProjects = selectedProjects;
                 }
             }

@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using WICR_Estimator.Models;
 
 namespace WICR_Estimator.ViewModels
 {
+    [DataContract]
     class PedestrianSlopeViewModel:SlopeBaseViewModel
     {
         private double urethaneManualAvgMixPrice;
         private ObservableCollection<Slope> urethaneSlopes;
+
+        [DataMember]
         public ObservableCollection<Slope> UrethaneSlopes
         {
             get
@@ -28,6 +32,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         private double urethaneSumTotal;
+        [DataMember]
         public double UrethaneSumTotal
         {
             get
@@ -44,6 +49,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         private double urethaneSumTotalMixes;
+        [DataMember]
         public double UrethaneSumTotalMixes
         {
             get
@@ -61,6 +67,7 @@ namespace WICR_Estimator.ViewModels
         }
         //  UrethaneSumTotalLaborExt
         private double urethaneSumTotalMatExt;
+        [DataMember]
         public double UrethaneSumTotalMatExt
         {
             get
@@ -77,6 +84,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         private double urethaneSumTotalLaborExt;
+        [DataMember]
         public double UrethaneSumTotalLaborExt
         {
             get
@@ -93,6 +101,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         private double UrethaneMinimumlaborcost;
+        [DataMember]
         public double UrethaneMinimumLaborCost
         {
             get
@@ -110,6 +119,7 @@ namespace WICR_Estimator.ViewModels
         }
 
         private bool urethaneOverrideManually;
+        [DataMember]
         public bool UrethaneOverrideManually
         {
             get { return urethaneOverrideManually; }
@@ -124,6 +134,7 @@ namespace WICR_Estimator.ViewModels
         }
 
         private double urethaneTotalMixesMan;
+        [DataMember]
         public double UrethaneTotalMixesMan
         {
             get { return urethaneTotalMixesMan; }
@@ -137,6 +148,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         private double urethaneAverageMixesPrice;
+        [DataMember]
         public double UrethaneAverageMixesPrice
         {
             get { return urethaneAverageMixesPrice; }
@@ -150,6 +162,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
 
+        #region Public Methods
         public override void reCalculate()
         {
             foreach (Slope slp in UrethaneSlopes)
@@ -159,6 +172,7 @@ namespace WICR_Estimator.ViewModels
             }
             base.reCalculate();
         }
+
         public PedestrianSlopeViewModel(JobSetup Js)
         {
             IsUrethaneVisible = System.Windows.Visibility.Visible;
@@ -287,5 +301,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+
+        #endregion
     }
 }

@@ -141,7 +141,7 @@ namespace WICR_Estimator.ViewModels
         }
         public override void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {
-            JobsetupTremco Js = sender as  JobsetupTremco;
+            JobSetup Js = sender as  JobSetup;
             if (Js != null)
             {
                 additionalTermBarLF = Js.AdditionalTermBarLF;
@@ -254,6 +254,7 @@ namespace WICR_Estimator.ViewModels
         {
             switch (materialName)
             {
+                case "PARAMASTIC (1000 LF PER PAIL FOR PREP & TERMINATIONS)":
                 case "PARATERM BAR LF":
                     return deckPerimeter;
                 case "SUPER STOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT\"":
@@ -331,7 +332,7 @@ namespace WICR_Estimator.ViewModels
             if (SystemMaterials.Count != 0)
             {
 
-                SystemMaterial item = SystemMaterials.Where(x => x.Name == "UNIVERSAL OUTLET").FirstOrDefault();
+                SystemMaterial item = SystemMaterials.Where(x => x.Name == "UNIVERSAL OUTLETS").FirstOrDefault();
                 if (item != null)
                 {
 
@@ -351,6 +352,18 @@ namespace WICR_Estimator.ViewModels
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
 
                     item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
+                    item.LaborUnitPrice = item.LaborExtension / item.Qty;
+                }
+
+                item = SystemMaterials.Where(x => x.Name == "VISQUINE PROTECTION FOR INCLEMENT WEATHER").FirstOrDefault();
+                if (item != null)
+                {
+                    //item.SMSqftH = item.Qty;
+                    item.SMSqft = item.Qty;
+                    item.VerticalSqft = item.Qty;
+                    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate,item.VerticalSqft,item.VerticalProductionRate);
+
+                    item.LaborExtension = item.Hours==0 ? 0:item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
                     item.LaborUnitPrice = item.LaborExtension / item.Qty;
                 }
 
@@ -447,6 +460,7 @@ namespace WICR_Estimator.ViewModels
             }
             
         }
+         
         public override void setCheckBoxes()
         {
 

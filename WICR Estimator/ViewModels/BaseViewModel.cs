@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -10,15 +11,17 @@ using System.Xml.Serialization;
 
 namespace WICR_Estimator.ViewModels
 {
-    [Serializable]
+    //[Serializable]
+    [DataContract]
     public class BaseViewModel : INotifyPropertyChanged
     {
         public BaseViewModel()
         { }
+        
         public event PropertyChangedEventHandler PropertyChanged;
 
         //public event EventHandler JobPropertyChanged;
-
+        
         protected virtual void OnPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)

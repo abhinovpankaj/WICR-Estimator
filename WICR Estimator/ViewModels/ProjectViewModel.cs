@@ -86,10 +86,10 @@ namespace WICR_Estimator.ViewModels
                 {
                     if (prj.ProjectJobSetUp == null)
                     {
-                        if (prj.Name=="Paraseal LG")
-                            prj.ProjectJobSetUp = new JobsetupTremco(prj.Name);
-                        else
-                            prj.ProjectJobSetUp = new JobSetup(prj.Name);
+                        //if (prj.Name=="Paraseal LG")
+                        //    prj.ProjectJobSetUp = new JobSetup(prj.Name);
+                        //else
+                        prj.ProjectJobSetUp = new JobSetup(prj.Name);
 
                         prj.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
 

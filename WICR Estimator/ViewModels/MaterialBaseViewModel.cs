@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -10,45 +11,56 @@ using WICR_Estimator.Models;
 
 namespace WICR_Estimator.ViewModels
 {
-    
-    [XmlInclude(typeof(MaterialViewModel))]
+    [DataContract]
+    [KnownType(typeof(MaterialViewModel))]
     public class MaterialBaseViewModel:BaseViewModel
     {
+        [DataMember]
         public Totals MetalTotals { set; get; }
+        [DataMember]
         public Totals SlopeTotals { set; get; }
-        private ObservableCollection<CostBreakup> lCostBreakUp;
+
+        public double prPerc = 0;
+        public double totalSqft;
+        public double stairWidth;
+        public int riserCount;
+        public double deckPerimeter;
+        public bool isApprovedforCement;
+        public double laborRate;
+        public bool isPrevailingWage;
+        public bool isDiscounted;
+        public int deckCount;
+        public bool hasContingencyDisc;
+        [DataMember]
+        protected IList<IList<Object>> laborDetails;
+        [DataMember]
+        protected IList<IList<object>> materialDetails;
+        [DataMember]
+        protected IList<IList<object>> freightData;
 
         #region privatefields
-        public double prPerc = 0;
+        private ObservableCollection<CostBreakup> lCostBreakUp;
         private ObservableCollection<SystemMaterial> systemMaterials;
         private ObservableCollection<OtherItem> otherMaterials;
         private ObservableCollection<OtherItem> otherLaborMaterials;
         private ObservableCollection<LaborContract> subContractLaborItems;
         private string weatherWearType;
-        public double totalSqft;
-        public double stairWidth;
-        public int riserCount;
+       
         private double markUpPerc;
-        public double deckPerimeter;
-        public bool isApprovedforCement;
-        public double laborRate;
-        public bool isPrevailingWage;
+        
         private bool isSpecialMetal;
         private bool hasSpecialPricing;
-        public bool isDiscounted;
-        protected IList<IList<Object>> laborDetails;
-        protected IList<IList<object>> materialDetails;
-        protected IList<IList<object>> freightData;
+        
+        
         private double costPerSquareFeet;
         private ICommand _addRowCommand;
         private ICommand _calculateCostCommand;
         private ICommand _removeCommand;
         private int AddInt = 4;
-        public int deckCount;
-        public bool hasContingencyDisc;
+        private string projectname;
 
         #endregion
-        private string projectname;
+
         public MaterialBaseViewModel()
         { }
         public double preWage = 0;
@@ -219,8 +231,10 @@ namespace WICR_Estimator.ViewModels
         #region public properties
 
         #region Material Properties
-        [XmlIgnore]
+        [IgnoreDataMember]
         public DelegateCommand CheckboxCommand { get; set; }
+
+        [DataMember]
         public ObservableCollection<LaborContract> SubContractLaborItems
         {
             get { return subContractLaborItems; }
@@ -233,6 +247,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        [DataMember]
         public ObservableCollection<SystemMaterial> SystemMaterials
         {
             get
@@ -249,6 +264,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        [DataMember]
         public ObservableCollection<OtherItem> OtherMaterials
         {
             get { return otherMaterials; }
@@ -262,7 +278,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
-
+        [DataMember]
         public double CostPerSquareFeet
         {
             get { return costPerSquareFeet; }
@@ -276,6 +292,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         private double sumFreight;
+        [DataMember]
         public double SumFreight
         {
             get { return sumFreight; }
@@ -289,6 +306,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         private double sumWeight;
+        [DataMember]
         public double SumWeight
         {
             get { return sumWeight; }
@@ -302,6 +320,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         private double sumTotalMatExt;
+        [DataMember]
         public double SumTotalMatExt
         {
             get { return sumTotalMatExt; }
@@ -315,6 +334,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         private double sumMatPrice;
+        [DataMember]
         public double SumMatPrice
         {
             get { return sumMatPrice; }
@@ -328,6 +348,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         private double sumQty;
+        [DataMember]
         public double SumQty
         {
             get { return sumQty; }
@@ -341,6 +362,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         private double totalWeightbrkp;
+        [DataMember]
         public double TotalWeightbrkp
         {
             get { return totalWeightbrkp; }
@@ -354,6 +376,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         private double totalFreightCostBrkp;
+        [DataMember]
         public double TotalFreightCostBrkp
         {
             get { return totalFreightCostBrkp; }
@@ -367,6 +390,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         private double totalMaterialCostbrkp;
+        [DataMember]
         public double TotalMaterialCostbrkp
         {
             get { return totalMaterialCostbrkp; }
@@ -380,6 +404,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         private double totalSubContractLaborCostBrkp;
+        [DataMember]
         public double TotalSubContractLaborCostBrkp
         {
             get { return totalSubContractLaborCostBrkp; }
@@ -395,6 +420,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         private double totalOCExtension;
+        [DataMember]
         public double TotalOCExtension
         {
             get { return totalOCExtension; }
@@ -409,6 +435,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         private double totalSCExtension;
+        [DataMember]
         public double TotalSCExtension
         {
             get { return totalSCExtension; }
@@ -425,6 +452,7 @@ namespace WICR_Estimator.ViewModels
 
 
         private double subContractMarkup;
+        [DataMember]
         public double SubContractMarkup
         {
             get { return subContractMarkup; }
@@ -440,6 +468,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         private double metalMarkup;
+        [DataMember]
         public double MetalMarkup
         {
             get { return metalMarkup; }
@@ -455,6 +484,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         private double slopeMarkup;
+        [DataMember]
         public double SlopeMarkup
         {
             get { return slopeMarkup; }
@@ -470,6 +500,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         private double materialMarkup;
+        [DataMember]
         public double MaterialMarkup
         {
             get { return materialMarkup; }
@@ -490,6 +521,7 @@ namespace WICR_Estimator.ViewModels
         
 
         private bool addLaborMinCharge;
+        [DataMember]
         public bool AddLaborMinCharge
         {
             get { return addLaborMinCharge; }
@@ -503,6 +535,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        [DataMember]
         public ObservableCollection<OtherItem> OtherLaborMaterials
         {
             get { return otherLaborMaterials; }
@@ -515,6 +548,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        [DataMember]
         public ObservableCollection<CostBreakup> LCostBreakUp
         {
             get { return lCostBreakUp; }
@@ -527,38 +561,61 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        [DataMember]
         public double CostperSqftSlope { get; set; }
+        [DataMember]
         public double CostperSqftMetal { get; set; }
+        [DataMember]
         public double CostperSqftMaterial { get; set; }
+        [DataMember]
         public double CostperSqftSubContract { get; set; }
+        [DataMember]
         public double TotalCostperSqft { get; set; }
-
+        [DataMember]
         public double TotalHrsLabor { get; set; }
+        [DataMember]
         public double TotalHrsSystemLabor { get; set; }
+        [DataMember]
         public double TotalHrsMetalLabor { get; set; }
+        [DataMember]
         public double TotalHrsSlopeLabor { get; set; }
         //public double TotalHrsFreightLabor { get; set; }
+        [DataMember]
         public double TotalHrsDriveLabor { get; set; }
-
+        [DataMember]
         public double TotalLaborUnitPrice { get; set; }
+        [DataMember]
         public double TotalSetupTimeLabor { get; set; }
+        [DataMember]
         public double TotalLaborExtension { get; set; }
-
+        [DataMember]
         public double TotalSlopingPrice { get; set; }
+        [DataMember]
         public double TotalMetalPrice { get; set; }
+        [DataMember]
         public double TotalSystemPrice { get; set; }
+        [DataMember]
         public double TotalSubcontractLabor { get; set; }
+        [DataMember]
         public double TotalSale { get; set; }
+        [DataMember]
 
         public double AllTabsLaborTotal { get; set; }
+        [DataMember]
         public double AllTabsMaterialTotal { get; set; }
+        [DataMember]
         public double AllTabsFreightTotal { get; set; }
+        [DataMember]
         public double AllTabsSubContractTotal { get; set; }
-
+        [DataMember]
         public double LaborMinChargeHrs { get; set; }
+        [DataMember]
         public double LaborMinChargeMinSetup { get; set; }
+        [DataMember]
         public double LaborMinChargeLaborExtension { get; set; }
+        [DataMember]
         public double LaborMinChargeLaborUnitPrice { get; set; }
+        [DataMember]
         public double MarkUpPerc
         {
             get { return markUpPerc; }
@@ -571,6 +628,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+
 
         public virtual void calculateLaborHrs()
         {
@@ -1184,7 +1242,7 @@ namespace WICR_Estimator.ViewModels
         }
 
         #region IcommandSection
-        [XmlIgnore]
+        [IgnoreDataMember]
         public ICommand AddRowCommand
         {
             get
@@ -1208,7 +1266,7 @@ namespace WICR_Estimator.ViewModels
             OtherMaterials.Add(newItem);
             OtherLaborMaterials.Add(newItem);
         }
-        [XmlIgnore]
+        [IgnoreDataMember]
         public ICommand RemoveCommand
         {
             get
@@ -1237,7 +1295,7 @@ namespace WICR_Estimator.ViewModels
                 AddInt = AddInt - 1;
             }
         }
-        [XmlIgnore]
+        [IgnoreDataMember]
         public ICommand CalculateCostCommand
         {
             get
@@ -3042,6 +3100,8 @@ namespace WICR_Estimator.ViewModels
 
         public virtual void populateCalculation()
         {
+            if (laborDetails == null)
+                return;
             LCostBreakUp = new ObservableCollection<CostBreakup>();
             double facValue = 0;
             double totalJobCostM = 0;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -136,7 +137,7 @@ namespace WICR_Estimator.Models
         public JobSetup ProjectJobSetUp { get; set; }
 
         private MetalBaseViewModel metalViewModel;
-
+        
         public MetalBaseViewModel MetalViewModel
         {
             get
@@ -154,6 +155,7 @@ namespace WICR_Estimator.Models
             }
         }
         private SlopeBaseViewModel slopeViewModel;
+       
         public SlopeBaseViewModel SlopeViewModel
         {
             get
@@ -171,6 +173,7 @@ namespace WICR_Estimator.Models
             }
         }
         private MaterialBaseViewModel materialViewModel;
+        
         public MaterialBaseViewModel MaterialViewModel
         {
             get
@@ -191,7 +194,8 @@ namespace WICR_Estimator.Models
         public static event EventHandler OnSelectedProjectChange;
         
         private ICommand updatedJobSetup;
-        [XmlIgnore]
+        //[XmlIgnore]
+        [IgnoreDataMember]
         public ICommand UpdatedJobSetup
         {
             set { updatedJobSetup = value; }
