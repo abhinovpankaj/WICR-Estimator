@@ -228,8 +228,8 @@ namespace WICR_Estimator.Models
             EnableMoreMarkupCommand = new DelegateCommand(CanAddMoreMarkup, canAdd);
             MinMarkUp = -10;
             AllowMoreMarkUp = false;
-            FirstCheckBoxLabel = "Approved for Sand & Cement ?";          
-            
+            FirstCheckBoxLabel = "Approved for Sand & Cement ?";
+            ProjectDelayFactor = "0-3 Months";
         }
 
         public double MinMarkUp { get; set; }

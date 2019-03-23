@@ -457,7 +457,10 @@ namespace WICR_Estimator.ViewModels
          
         public override void setCheckBoxes()
         {
-
+            SystemMaterial sysmat = null;
+            sysmat = SystemMaterials.Where(x => x.Name == "PARAMASTIC (1000 LF PER PAIL FOR PREP & TERMINATIONS)").FirstOrDefault();
+            sysmat.IsMaterialChecked = !SystemMaterials.Where(x => x.Name == "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER").
+                    FirstOrDefault().IsMaterialChecked;            
         }
     }
 }
