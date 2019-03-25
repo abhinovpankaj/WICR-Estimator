@@ -11,7 +11,6 @@ using WICR_Estimator.ViewModels;
 namespace WICR_Estimator.Models
 {
     
-    //[DataContract]
     public class JobSetup : BaseViewModel
     {
 

@@ -2,20 +2,24 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using WICR_Estimator.Models;
 
 namespace WICR_Estimator.ViewModels
 {
+    [DataContract]
     public class WWRehabMaterialViewModel:MaterialBaseViewModel
     {
+
         public WWRehabMaterialViewModel(Totals metalTotals, Totals slopeTotals, JobSetup Js) : base(metalTotals, slopeTotals, Js)
         {
             FetchMaterialValuesAsync(false);
 
         }
 
+        #region Overridden Methods
         public override void calculateLaborHrs()
         {
             calLaborHrs(6,totalSqft);
@@ -1338,6 +1342,6 @@ namespace WICR_Estimator.ViewModels
             }
 
         }
-
+        #endregion
     }
 }

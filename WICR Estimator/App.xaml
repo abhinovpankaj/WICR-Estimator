@@ -4,32 +4,13 @@
              xmlns:local="clr-namespace:WICR_Estimator"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <Style x:Key="NavigateButton" TargetType="{x:Type Button}">
-            <Setter Property="Background" Value="#00000000"/>
-            <Setter Property="BorderBrush" Value="#00000000"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="1"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <ContentPresenter 
-                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                        Margin="{TemplateBinding Padding}" 
-                        RecognizesAccessKey="True" 
-                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
-                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <ResourceDictionary x:Key="PageStyle">
+        <!--<ResourceDictionary Source="/Twining;component/Themes/Generic.xaml" />-->
+        
+        <!--<ResourceDictionary x:Key="PageStyle">
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources\PageStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+        </ResourceDictionary>-->
         
 
     </Application.Resources>

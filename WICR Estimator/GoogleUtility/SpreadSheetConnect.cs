@@ -15,30 +15,38 @@ using System.Xml;
 
 namespace WICR_Estimator.GoogleUtility
 {
-    class SpreadSheetConnect
+
+    public static class SpreadSheetConnect
     {
-        private static readonly object lockobj=new object();
-        static string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
+        //private static readonly object lockobj=new object();
+        static string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly};
         static string ApplicationName = "WICR Estimator";
-        private static UserCredential credential;
-        private static SheetsService service ;
+        public static  GoogleCredential credential;
+        //public static UserCredential credential;
+        public static SheetsService service ;
         private static string spreadsheetId = "1pQG-Z9vaaWhCjCUiG1XqmEj1Pjavoz86RCfG6-ews2k";
 
         public async static Task<IList<IList<Object>>> GetDataFromGoogleSheetsAsync(string projectName, DataType datatype)
         {
             if (credential==null)
             {
-                using (var stream =
-                new FileStream(@"GoogleUtility\credentials.json", FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                //using (var stream =
+                //    new FileStream(@"GoogleUtility\credentials.json", FileMode.Open, FileAccess.Read))
+                //{
+                //    string credPath = "token.json";
+                //    credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                //        GoogleClientSecrets.Load(stream).Secrets,
+                //        new[] { SheetsService.Scope.SpreadsheetsReadonly },
+                //        "user",
+                //        CancellationToken.None,
+                //        new FileDataStore(credPath, true)).Result;
+
+                //}
+
+                using (var stream = new FileStream(@"GoogleUtility\client_secret.json", FileMode.Open, FileAccess.Read))
                 {
-                    string credPath = "token.json";
-                    credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                        GoogleClientSecrets.Load(stream).Secrets,
-                        Scopes,
-                        "user",
-                        CancellationToken.None,
-                        new FileDataStore(credPath, true)).Result;
-                    //Console.WriteLine("Credential file saved to: " + credPath);
+                    credential = GoogleCredential.FromStream(stream)
+                        .CreateScoped(Scopes);
                 }
             }
 
@@ -48,18 +56,16 @@ namespace WICR_Estimator.GoogleUtility
                 service = new SheetsService(new BaseClientService.Initializer()
                 {
                     HttpClientInitializer = credential,
-                    ApplicationName = ApplicationName,
+                    ApplicationName = ApplicationName,                   
                 });
-            }
-            
-
+            }            
             // Define request parameters.
             
             String range =  "Pricing!" + GetRangeFromXML(projectName, datatype);
             SpreadsheetsResource.ValuesResource.GetRequest request =
                     service.Spreadsheets.Values.Get(spreadsheetId, range);
                        
-            ValueRange response = await request.ExecuteAsync();
+            ValueRange response =await request.ExecuteAsync();
             
             
             return response.Values;
@@ -138,45 +144,46 @@ namespace WICR_Estimator.GoogleUtility
             XmlNode node = doc.DocumentElement.SelectSingleNode("/Projects/"+prjName+ "/"+datatype+"Range");
             return node.InnerText;
         }
-        public static IList<IList<Object>> GetDataFromGoogleSheets(string projectName, DataType datatype)
-        {
-            UserCredential credential;
-            //lock (lockobj)
-            //{
-            using (var stream =
-            new FileStream(@"GoogleUtility\credentials.json", FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            {
-                string credPath = "token.json";
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    GoogleClientSecrets.Load(stream).Secrets,
-                    Scopes,
-                    "user",
-                    CancellationToken.None,
-                    new FileDataStore(credPath, true)).Result;
-                //Console.WriteLine("Credential file saved to: " + credPath);
-            }
-            //}
+
+        //public static IList<IList<Object>> GetDataFromGoogleSheets(string projectName, DataType datatype)
+        //{
+        //    UserCredential credential;
+        //    //lock (lockobj)
+        //    //{
+        //    using (var stream =
+        //    new FileStream(@"GoogleUtility\credentials.json", FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+        //    {
+        //        string credPath = "token.json";
+        //        credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+        //            GoogleClientSecrets.Load(stream).Secrets,
+        //            Scopes,
+        //            "user",
+        //            CancellationToken.None,
+        //            new FileDataStore(credPath, true)).Result;
+        //        //Console.WriteLine("Credential file saved to: " + credPath);
+        //    }
+        //    //}
 
 
-            // Create Google Sheets API service.
-            var service = new SheetsService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = ApplicationName,
-            });
+        //    // Create Google Sheets API service.
+        //    var service = new SheetsService(new BaseClientService.Initializer()
+        //    {
+        //        HttpClientInitializer = credential,
+        //        ApplicationName = ApplicationName,
+        //    });
 
-            // Define request parameters.
-            String spreadsheetId = "1pQG-Z9vaaWhCjCUiG1XqmEj1Pjavoz86RCfG6-ews2k";
-            String range =  "Pricing!" + GetRangeFromXML(projectName,datatype);
-            SpreadsheetsResource.ValuesResource.GetRequest request =
-                    service.Spreadsheets.Values.Get(spreadsheetId, range);
+        //    // Define request parameters.
+        //    String spreadsheetId = "1pQG-Z9vaaWhCjCUiG1XqmEj1Pjavoz86RCfG6-ews2k";
+        //    String range =  "Pricing!" + GetRangeFromXML(projectName,datatype);
+        //    SpreadsheetsResource.ValuesResource.GetRequest request =
+        //            service.Spreadsheets.Values.Get(spreadsheetId, range);
 
-            ValueRange response = request.Execute();
+        //    ValueRange response = request.Execute();
             
-            IList<IList<Object>> values = response.Values;
-            object [] myarray=values.ToArray<object>();
-            return values;
+        //    IList<IList<Object>> values = response.Values;
+        //    object [] myarray=values.ToArray<object>();
+        //    return values;
 
-        }
+        //}
     }
 }

@@ -11,7 +11,7 @@ using System.Xml.Serialization;
 
 namespace WICR_Estimator.ViewModels
 {
-    //[Serializable]
+    
     [DataContract]
     public class BaseViewModel : INotifyPropertyChanged
     {

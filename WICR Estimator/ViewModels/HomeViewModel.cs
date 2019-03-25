@@ -74,6 +74,7 @@ namespace WICR_Estimator.ViewModels
 
         private void LoadProjectEstimate(object obj)
         {
+            Project savedProject = null;
             OpenFileDialog openFileDialog1 = new OpenFileDialog
             {
                 InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
@@ -92,13 +93,21 @@ namespace WICR_Estimator.ViewModels
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 filePath = openFileDialog1.FileName;
-                DataContractSerializer deserializer = new DataContractSerializer(typeof(List<Project>));
+                DataContractSerializer deserializer = new DataContractSerializer(typeof(ObservableCollection<Project>));
                 
                 FileStream fs = new FileStream(filePath, FileMode.Open);
                 XmlDictionaryReader reader =
                 XmlDictionaryReader.CreateTextReader(fs, new XmlDictionaryReaderQuotas());
-                List<Project> est = (List<Project>)deserializer.ReadObject(reader );
-                MyselectedProjects = est.ToObservableCollection();
+                ObservableCollection<Project> est = (ObservableCollection<Project>)deserializer.ReadObject(reader );
+                //SelectedProjects = (ObservableCollection<Project>)deserializer.ReadObject(reader);//est.ToObservableCollection();
+
+                foreach (Project item in est)
+                {
+                    savedProject = Projects.Where(x => x.Name == item.Name).FirstOrDefault();
+                    Projects.Remove(savedProject);
+                    Projects.Add(item);
+                }
+                Project_OnSelectedProjectChange(Projects[0], null);
                 reader.Close();
             }
             
@@ -223,8 +232,8 @@ namespace WICR_Estimator.ViewModels
         {
             get
             {
-                var selected=  Projects.Where(p => p.IsSelectedProject == true).ToList();    
-                return new ObservableCollection<Project>(selected); ;
+                var selected = Projects.Where(p => p.IsSelectedProject == true).ToList();
+                return new ObservableCollection<Project>(selected);                
             }
             set
             {
