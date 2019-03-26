@@ -610,7 +610,7 @@ namespace WICR_Estimator.ViewModels
                 {
                     stairCost = stairMetals.Select(x => x.MaterialExtension).Sum();
                 }
-                IEnumerable<AddOnMetal> selectedAddOnMetals = addOnMetals.Where(x => x.IsMetalChecked);
+                IEnumerable<AddOnMetal> selectedAddOnMetals = addOnMetals.Where(x => x.IsMetalChecked==true);
                 if (selectedAddOnMetals.Count() > 0)
                 {
                     addOnMetalCost = selectedAddOnMetals.Select(x => x.MaterialExtension).Sum();

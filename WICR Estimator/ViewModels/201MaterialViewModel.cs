@@ -194,6 +194,12 @@ namespace WICR_Estimator.ViewModels
                 case "PW POLYESTER FABRIC FROM UPI 4\"(PLYWOOD SEAMS)":
                 case "TREMCO DYMONIC 100 OR VULKEM 116 (PLYWOOD JOINTS)":
                     return hasNewPlywood;
+                case "Vulkem Tremproof 250 GC L 30 MILS":
+                case "Vulkem Tremproof 201 L 30 MILS":
+                    return totalSqft + totalPlywoodSqft > 0 ? true : false;
+                case "Vulkem Tremproof 250 GC R 30 MILS":
+                case "Vulkem Tremproof 201 R 30 MILS":
+                    return totalSqftVertical + riserCount > 0 ? true : false;
                 default:
                     return false;
             }
@@ -212,12 +218,7 @@ namespace WICR_Estimator.ViewModels
                 case "TREMDRAIN 1000 (VERTICAL ONLY)":
                 case "TREMDRAIN 1000 (HORIZONTAL ONLY)":
                     return true;
-                case "Vulkem Tremproof 250 GC L 30 MILS":
-                case "Vulkem Tremproof 201 L 30 MILS":
-                    return totalSqft + totalPlywoodSqft > 0 ? true : false;
-                case "Vulkem Tremproof 250 GC R 30 MILS":
-                case "Vulkem Tremproof 201 R 30 MILS":
-                    return totalSqftVertical + riserCount > 0 ? true : false;
+                
                 default:
                     return false;
             }
@@ -533,7 +534,9 @@ namespace WICR_Estimator.ViewModels
         }
         public override void setCheckBoxes()
         {
-
+            
+            SystemMaterials.Where(x => x.Name == "CALIFORNIA SEALER FROM LOWRYS (GLUING DRAIN MAT)").FirstOrDefault().IsMaterialChecked=
+               SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (VERTICAL ONLY)").FirstOrDefault().IsMaterialChecked;
         }
 
         private double Ceiling(double value, double significance)
