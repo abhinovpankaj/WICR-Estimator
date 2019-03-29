@@ -217,7 +217,7 @@ namespace WICR_Estimator.ViewModels
                 case "PB-4 (VERTICAL ONLY)":
                 case "TREMDRAIN 1000 (VERTICAL ONLY)":
                 case "TREMDRAIN 1000 (HORIZONTAL ONLY)":
-                    return true;
+                     return true;
                 
                 default:
                     return false;
@@ -249,15 +249,14 @@ namespace WICR_Estimator.ViewModels
                     return totalSqftVertical + riserCount * stairWidth * 2;
 
                 case "Vulkem Tremproof 250 GC T":
-                    return totalSqftVertical / 10 + rebarPrepWalls;
                 case "Vulkem Tremproof 201 T":
-                    return totalSqftVertical / 10 + penetrations;
-
+                    return totalSqftVertical / 10 + rebarPrepWalls;
+                
                 case "GLASSMAT #II (FROM MERKOTE / LOWRYS) WALLS":
                 case "PB-4 (VERTICAL ONLY)":
                 case "TREMDRAIN 1000 (VERTICAL ONLY)":
                 case "CALIFORNIA SEALER FROM LOWRYS (GLUING DRAIN MAT)":
-                    return totalSqftVertical;
+                    return totalSqftVertical + (totalSqft + totalPlywoodSqft) + riserCount * stairWidth; ;
 
                 case "PW POLYESTER FABRIC FROM UPI 4\"(PLYWOOD SEAMS)":
                 case "TREMCO DYMONIC 100 OR VULKEM 116 (PLYWOOD JOINTS)":
@@ -346,9 +345,9 @@ namespace WICR_Estimator.ViewModels
                 case "Vulkem Tremproof 250 GC R 30 MILS":
                     return totalSqftVertical;
                 case "Vulkem Tremproof 250 GC L":
-                    return rebarPrepWalls;
                 case "Vulkem Tremproof 201 T":
-                    return penetrations;
+                    return rebarPrepWalls;
+                
                 case "GLASSMAT #II (FROM MERKOTE / LOWRYS) FLOORS YES/NO":
                     return deckPerimeter;
                 case "TERM BAR, VULKEM 116, PINS AND LOADS":
