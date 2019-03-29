@@ -179,6 +179,7 @@ namespace WICR_Estimator.ViewModels
                 case "PINS & LOADS":
                 case "PB-4 (VERTICAL ONLY)":
                 case "TREMDRAIN 1000 (VERTICAL ONLY)":
+                case "PROTECTION MAT (HORIZONTAL ONLY)":
                 case "TREMDRAIN 1000 (HORIZONTAL ONLY)":
                     return true;
                 default:
