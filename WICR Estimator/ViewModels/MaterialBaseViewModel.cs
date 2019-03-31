@@ -12,7 +12,7 @@ using WICR_Estimator.Models;
 namespace WICR_Estimator.ViewModels
 {
     //[DataContract]
-    //[KnownType(typeof(MaterialViewModel))]
+    [KnownType(typeof(MaterialViewModel))]
     //[KnownType(typeof(WWRehabMaterialViewModel))]
     public class MaterialBaseViewModel:BaseViewModel
     {
@@ -33,11 +33,11 @@ namespace WICR_Estimator.ViewModels
         public int deckCount;
         public bool hasContingencyDisc;
         [DataMember]
-        protected IList<IList<Object>> laborDetails;
+        public IList<IList<Object>> laborDetails { get; set; }
         [DataMember]
-        protected IList<IList<object>> materialDetails;
+        public IList<IList<object>> materialDetails { get; set; }
         [DataMember]
-        protected IList<IList<object>> freightData;
+        public IList<IList<object>> freightData { get; set; }
 
         #region privatefields
         private ObservableCollection<CostBreakup> lCostBreakUp;
@@ -111,6 +111,8 @@ namespace WICR_Estimator.ViewModels
             
             //calculateLaborHrs();
         }
+
+        
         public virtual double CalculateLabrExtn(double calhrs,double setupMin,string matName="")
         {
             return (calhrs != 0) ? (setupMin + calhrs) * laborRate : 0;
@@ -208,7 +210,7 @@ namespace WICR_Estimator.ViewModels
             return true;
         }
 
-        private void MetalTotals_OnTotalsChange(object sender, EventArgs e)
+        public void  MetalTotals_OnTotalsChange(object sender, EventArgs e)
         {
             Totals tabTotals = sender as Totals;
             if (tabTotals != null)
@@ -1366,6 +1368,7 @@ namespace WICR_Estimator.ViewModels
             CalculateCost(null);
             js.TotalSalesCostTemp = TotalSale;        
         }
+
         #region notused
         private void reCalculate()
         {
@@ -1395,6 +1398,7 @@ namespace WICR_Estimator.ViewModels
             populateCalculation();
         }
         #endregion 
+
         public double getMaterialDiscount(string delay)
         {
             switch (delay)

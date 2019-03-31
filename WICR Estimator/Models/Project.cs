@@ -10,9 +10,21 @@ using WICR_Estimator.ViewModels;
 
 namespace WICR_Estimator.Models
 {
-           
+          
     public class Project: BaseViewModel
     {
+        public System.Windows.Visibility ISVisible
+        {
+            get
+            {
+                if (Name == "Weather Wear")
+                {
+                    return System.Windows.Visibility.Visible;
+                }
+                else
+                    return System.Windows.Visibility.Hidden;
+            }    
+        }
         public Project()
         {
             if (updatedJobSetup == null)
@@ -20,7 +32,8 @@ namespace WICR_Estimator.Models
                 updatedJobSetup = new DelegateCommand(UpdateJobSetUp, canUpdate);
             }
         }
-        
+        public int CopyCount { get; set; }
+
         public string Name { get; set; }
         public double MetalCost
         {
@@ -220,5 +233,9 @@ namespace WICR_Estimator.Models
         //{
         //    throw new NotImplementedException();
         //}
+        public override string ToString()
+        {
+            return "Selected Project:"+ Name;
+        }
     }
 }

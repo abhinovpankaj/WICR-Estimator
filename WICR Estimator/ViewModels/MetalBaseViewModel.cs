@@ -35,10 +35,10 @@ namespace WICR_Estimator.ViewModels
         protected bool isDiscount;
         protected string vendorName;
 
-        public IList<IList<object>> freightDetails;
-        public IList<IList<object>> metalDetails;
+        public IList<IList<object>> freightDetails { get; set; }
+        public IList<IList<object>> metalDetails { get; set; }
 
-        protected double laborRate;
+        public double laborRate { get; set; }
         protected double riserCount;
         protected double stairWidth;
         protected bool isFlash;
@@ -510,7 +510,9 @@ namespace WICR_Estimator.ViewModels
                 GSData gsData = DataSerializer.DSInstance.deserializeGoogleData(projectName);
                 pWage = gsData.LaborData;
                 //pWage = gsData.LaborData.ToArray<object>();
-                double.TryParse(gsData.LaborRate[0][0].ToString(), out laborRate);
+                double lb;
+                double.TryParse(gsData.LaborRate[0][0].ToString(), out lb);
+                laborRate = lb;
                 double nails;
                 double.TryParse(gsData.MetalData[39][1].ToString(), out nails);
                 Nails = nails;

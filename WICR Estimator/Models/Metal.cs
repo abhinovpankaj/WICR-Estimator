@@ -11,7 +11,7 @@ namespace WICR_Estimator.Models
     public class Metal: BaseViewModel
     {
         
-        private double LaborRate;
+        public double LaborRate { set; get; }
         public MetalType Type { get; set; }
         public string Name { get; set; }
         

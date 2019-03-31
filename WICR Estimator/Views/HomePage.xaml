@@ -12,16 +12,33 @@
     <UserControl.Resources>
         <conv:BoolToVisibilityConverter x:Key="VisibilityConv"/>
         <DataTemplate x:Key="ProjectTemplate">
-            <StackPanel Orientation="Horizontal" Background="#00C0E0FF">
+            <DockPanel 
+                        VerticalAlignment="Center"
+                        Background="#00C0E0FF">
                 <Image x:Name="tickImage" Source="..\Images\tick.png"
                        Height="25" HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
                       Visibility="{Binding IsSelectedProject,
                     Converter={StaticResource VisibilityConv}}"/>
                 <TextBlock Text="{Binding Path=Name}"
                            FontWeight="SemiBold"
+                           VerticalAlignment="Center"
                            FontSize="15" />
-                
-            </StackPanel>
+                <Button FontFamily="Segoe MDL2 Assets"
+                        
+                        FontSize="12"
+                        Background="AliceBlue"
+                        BorderThickness="0"
+                        Width="20"
+                        Height="20"
+                        Command="{Binding RelativeSource={RelativeSource FindAncestor, 
+AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
+                        CommandParameter="{Binding}"
+                        VerticalAlignment="Center"
+                        Margin="0,0,10,0"
+                        HorizontalAlignment="Right"
+                        Content="&#xE8C8;"/>
+            </DockPanel>
             <!--<DataTemplate.Triggers>
                 <DataTrigger
                 Binding="{Binding
@@ -46,8 +63,8 @@
         <Style x:Key="ContainerStyle" TargetType="{x:Type GroupItem}">
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate>
-                        <Expander IsExpanded="True" Margin="10,5,0,0">
+                     <ControlTemplate>
+                       <Expander IsExpanded="True" Margin="10,5,0,0">
                             <Expander.Header>
                                 <TextBlock Text="{Binding Name}"
                                            VerticalAlignment="Bottom">
@@ -63,6 +80,16 @@
                                                     <Setter Property="TextBlock.Foreground" Value="Blue"/>
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Name}" Value="Concrete On Grade">
+                                                    <Setter Property="TextBlock.FontWeight" Value="Bold"/>
+                                                    <Setter Property="TextBlock.FontSize" Value="18"/>
+                                                    <Setter Property="TextBlock.Foreground" Value="Blue"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Name}" Value="Below Grade">
+                                                    <Setter Property="TextBlock.FontWeight" Value="Bold"/>
+                                                    <Setter Property="TextBlock.FontSize" Value="18"/>
+                                                    <Setter Property="TextBlock.Foreground" Value="Blue"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Name}" Value="Replicated Projects">
                                                     <Setter Property="TextBlock.FontWeight" Value="Bold"/>
                                                     <Setter Property="TextBlock.FontSize" Value="18"/>
                                                     <Setter Property="TextBlock.Foreground" Value="Blue"/>
@@ -104,7 +131,6 @@
                  x:Name="ProjectList"
                  SelectionMode="Multiple"
                  ItemsSource="{Binding ProjectView}"
-                 
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ItemTemplate="{StaticResource ProjectTemplate}">
                  <!--<i:Interaction.Triggers>

@@ -32,6 +32,7 @@ namespace WICR_Estimator.ViewModels
             ShowCalculationDetails = new DelegateCommand(CanShowCalculationDetails, canShow);
             SaveEstimate = new DelegateCommand(SaveProjectEstimate, canSaveEstimate);
             LoadEstimate = new DelegateCommand(LoadProjectEstimate, canLoadEstimate);
+            ReplicateProject = new DelegateCommand(Replicate, canReplicate);
         }
 
         
@@ -68,6 +69,47 @@ namespace WICR_Estimator.ViewModels
                     OnPropertyChanged("HidePasswordSection");
                     OnPropertyChanged("LoginMessage");
                     OnPropertyChanged("ShowLogin");
+                }
+            }
+        }
+
+        private bool canReplicate(object obj)
+        {
+            bool isEnabled = false;
+            Project prj = obj as Project;
+            if (prj != null)
+            {
+                if (prj.MaterialViewModel != null && prj.MetalViewModel != null && prj.SlopeViewModel != null)
+                {
+                    isEnabled= true;
+                }
+            }
+            return isEnabled;
+        }
+        private void Replicate(object obj)
+        {
+            Project prj = obj as Project;
+            if (prj!=null)
+            {
+                if (prj.IsSelectedProject)
+                {
+                    Project replicatedProject = new Project();
+                    replicatedProject = ReplicateObject.DeepClone(prj);
+
+                    prj.CopyCount++;
+                    replicatedProject.Name = prj.Name + "." + prj.CopyCount;
+                    replicatedProject.GrpName = "Copied";
+                    replicatedProject.MainGroup = "Replicated Projects";
+                    //replicatedProject.ProjectJobSetUp.OnProjectNameChange += replicatedProject.ProjectJobSetUp_OnProjectNameChange;
+                    //SelectedProjects.Add(replicatedProject);
+                    Projects.Add(replicatedProject);
+                    replicatedProject.MetalViewModel.MetalTotals.OnTotalsChange += replicatedProject.MaterialViewModel.MetalTotals_OnTotalsChange;
+                    replicatedProject.SlopeViewModel.SlopeTotals.OnTotalsChange += replicatedProject.MaterialViewModel.MetalTotals_OnTotalsChange;
+                    replicatedProject.ProjectJobSetUp.JobSetupChange += replicatedProject.MaterialViewModel.JobSetup_OnJobSetupChange;
+                    replicatedProject.ProjectJobSetUp.JobSetupChange += replicatedProject.MetalViewModel.JobSetup_OnJobSetupChange;
+
+                    replicatedProject.ProjectJobSetUp.JobSetupChange += replicatedProject.SlopeViewModel.JobSetup_OnJobSetupChange;
+                    Project_OnSelectedProjectChange(Projects[0], null);
                 }
             }
         }
@@ -166,6 +208,7 @@ namespace WICR_Estimator.ViewModels
             }
 
         }
+        public DelegateCommand ReplicateProject { get; set; }
         private DelegateCommand showCalculationDetails;
         public DelegateCommand ShowCalculationDetails
         {

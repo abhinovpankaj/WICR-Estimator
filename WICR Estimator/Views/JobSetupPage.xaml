@@ -116,7 +116,7 @@
         <Border BorderThickness="1" BorderBrush="Black"
                 Grid.Column="1"
                 Background="AliceBlue"
-                Margin="11,32,10,-12"
+                Margin="10"
                 Width="350"
                 Padding="0,0,0,15">
             <ScrollViewer>
