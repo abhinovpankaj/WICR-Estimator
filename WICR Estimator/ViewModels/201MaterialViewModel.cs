@@ -2,21 +2,30 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using WICR_Estimator.Models;
 
 namespace WICR_Estimator.ViewModels
 {
+    [DataContract]
     class _201MaterialViewModel:MaterialBaseViewModel
     {
         private Dictionary<string, string> materialNames;
+        [DataMember]
         private double totalSqftVertical;
+        [DataMember]
         private double termBar;
+        [DataMember]
         private double rebarPrepWalls;
+        [DataMember]
         private double superStop;
+        [DataMember]
         private double penetrations;
+        [DataMember]
         private double totalPlywoodSqft;
+        [DataMember]
         private bool hasNewPlywood;
         //private double termBar;
         public _201MaterialViewModel(Totals metalTotals, Totals slopeTotals, JobSetup js) : base(metalTotals, slopeTotals, js)

@@ -14,6 +14,23 @@ namespace WICR_Estimator.ViewModels
     [DataContract]
     [KnownType(typeof(WWRehabMaterialViewModel))]
     [KnownType(typeof(MaterialViewModel))]
+    [KnownType(typeof(_201MaterialViewModel))]
+    [KnownType(typeof(_250MaterialViewModel))]
+    [KnownType(typeof(ALXMaterialViewModel))]
+    [KnownType(typeof(DesertbrandMaterialViewModel))]
+    [KnownType(typeof(DexoMaterialViewModel))]
+    [KnownType(typeof(EnduroKoteMaterialViewModel))]
+    [KnownType(typeof(MACoatMaterialViewModel))]
+    [KnownType(typeof(MulticoatMaterialViewModel))]
+    [KnownType(typeof(ParasealLGMaterialViewModel))]
+    [KnownType(typeof(ParasealMaterialViewModel))]
+    [KnownType(typeof(ParkingMaterialViewModel))]
+    [KnownType(typeof(PedestrianMaterialViewModel))]
+    [KnownType(typeof(PlideckMaterialViewModel))]
+    [KnownType(typeof(WWResealMaterialViewModel))]
+    [KnownType(typeof(ResistiteConcreteMaterialViewModel))]
+    [KnownType(typeof(TufflexMaterialViewModel))]
+    [KnownType(typeof(WestcoatColorMaterialViewModel))]
     
     public class MaterialBaseViewModel:BaseViewModel
     {
