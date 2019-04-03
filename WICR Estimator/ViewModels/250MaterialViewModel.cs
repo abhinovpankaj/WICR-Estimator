@@ -178,9 +178,9 @@ namespace WICR_Estimator.ViewModels
             switch (materialName)
             {
                 case "191 QD PRIMER AND PREPARATION FOR RE-SURFACE":
-                case "Vulkem Tremproof 201 L":
-                case "Vulkem Tremproof 201 R":
-                case "Vulkem Tremproof 201 T":
+                case "Vulkem Tremproof 250 GC L":
+                case "Vulkem Tremproof 250 GC R":
+                case "Vulkem Tremproof 250 GC T":
                 case "TREMDRAIN 1000 (VERTICAL ONLY)":
                 case "GLASSMAT #II (FROM MERKOTE / LOWRYS) FLOORS YES/NO":
                 case "CALIFORNIA SEALER FROM LOWRYS (GLUING DRAIN MAT)":
@@ -190,7 +190,7 @@ namespace WICR_Estimator.ViewModels
                     return totalSqftVertical> 0 ? true : false;
                 case "PW POLYESTER FABRIC FROM UPI 4\"(PERIMETER)":
                 case "TREMCO DYMONIC 100 OR VULKEM 116 (PERIMETER JOINTS)":
-                    return totalSqftVertical+totalSqft+totalPlywoodSqft > 0 ? true : false;
+                    return riserCount+totalSqft+totalPlywoodSqft > 0 ? true : false;
                 case "PW POLYESTER FABRIC FROM UPI 4\"(PLYWOOD SEAMS)":
                 case "TREMCO DYMONIC 100 OR VULKEM 116 (PLYWOOD JOINTS)":
                     return hasNewPlywood;
@@ -344,7 +344,8 @@ namespace WICR_Estimator.ViewModels
                 case "Vulkem Tremproof 201 R 30 MILS":
                 case "Vulkem Tremproof 250 GC R 30 MILS":
                     return totalSqftVertical;
-                case "Vulkem Tremproof 250 GC L":
+                
+                case "Vulkem Tremproof 250 GC T":
                     return rebarPrepWalls;
                 case "Vulkem Tremproof 201 T":
                     return penetrations;

@@ -190,7 +190,7 @@ namespace WICR_Estimator.ViewModels
                     return totalSqftVertical> 0 ? true : false;
                 case "PW POLYESTER FABRIC FROM UPI 4\"(PERIMETER)":
                 case "TREMCO DYMONIC 100 OR VULKEM 116 (PERIMETER JOINTS)":
-                    return totalSqftVertical+totalSqft+totalPlywoodSqft > 0 ? true : false;
+                    return riserCount+totalSqft+totalPlywoodSqft > 0 ? true : false;
                 case "PW POLYESTER FABRIC FROM UPI 4\"(PLYWOOD SEAMS)":
                 case "TREMCO DYMONIC 100 OR VULKEM 116 (PLYWOOD JOINTS)":
                     return hasNewPlywood;
@@ -217,6 +217,8 @@ namespace WICR_Estimator.ViewModels
                 case "PB-4 (VERTICAL ONLY)":
                 case "TREMDRAIN 1000 (VERTICAL ONLY)":
                 case "TREMDRAIN 1000 (HORIZONTAL ONLY)":
+                case "Vulkem Tremproof 201 L 30 MILS":
+                case "Vulkem Tremproof 201 R 30 MILS":
                      return true;
                 
                 default:
@@ -255,6 +257,7 @@ namespace WICR_Estimator.ViewModels
                 case "GLASSMAT #II (FROM MERKOTE / LOWRYS) WALLS":
                 case "PB-4 (VERTICAL ONLY)":
                 case "TREMDRAIN 1000 (VERTICAL ONLY)":
+                    return totalSqftVertical;
                 case "CALIFORNIA SEALER FROM LOWRYS (GLUING DRAIN MAT)":
                     return totalSqftVertical + (totalSqft + totalPlywoodSqft) + riserCount * stairWidth; ;
 
@@ -504,19 +507,17 @@ namespace WICR_Estimator.ViewModels
         public override void ApplyCheckUnchecks(object obj)
         {
             SystemMaterial sysmat = null;
-            if (obj.ToString() == "TREMDRAIN 1000 (VERTICAL ONLY)")
-            {
-
-                
+            bool ischecked=false,ischecked1=false;
+            if (obj.ToString() == "TREMDRAIN 1000 (VERTICAL ONLY)" || obj.ToString() == "TREMDRAIN 1000 (HORIZONTAL ONLY)")
+            {               
                 sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (VERTICAL ONLY)").FirstOrDefault();
-                SystemMaterials.Where(x => x.Name == "CALIFORNIA SEALER FROM LOWRYS (GLUING DRAIN MAT)").FirstOrDefault().IsMaterialChecked = sysmat.IsMaterialChecked;
-                
+                ischecked = sysmat.IsMaterialChecked;
+         
+                sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (HORIZONTAL ONLY)").FirstOrDefault();
+                ischecked1 = sysmat.IsMaterialChecked;
             }
-            //if (obj.ToString() == "Vulkem Tremproof 201 L 30 MILS" || obj.ToString() == "Vulkem Tremproof 201 R 30 MILS"
-            //    || obj.ToString() == "Vulkem Tremproof 250 GC L 30 MILS" || obj.ToString() == "Vulkem Tremproof 250 GC R 30 MILS")
-            //{
-                
-            //}
+            SystemMaterials.Where(x => x.Name == "CALIFORNIA SEALER FROM LOWRYS (GLUING DRAIN MAT)").FirstOrDefault().IsMaterialChecked = ischecked||ischecked1;
+
             calculateRLqty();
             CalculateLaborMinCharge();
         }

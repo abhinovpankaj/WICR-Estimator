@@ -11,9 +11,10 @@ using WICR_Estimator.Models;
 
 namespace WICR_Estimator.ViewModels
 {
-    //[DataContract]
+    [DataContract]
+    [KnownType(typeof(WWRehabMaterialViewModel))]
     [KnownType(typeof(MaterialViewModel))]
-    //[KnownType(typeof(WWRehabMaterialViewModel))]
+    
     public class MaterialBaseViewModel:BaseViewModel
     {
         [DataMember]
