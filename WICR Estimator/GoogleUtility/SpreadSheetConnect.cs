@@ -144,6 +144,9 @@ namespace WICR_Estimator.GoogleUtility
                 case "860":
                     prjName = "Carlisle860";
                     break;
+                case "Dual Membrane":
+                    prjName = "WestcoatDualMembrane";
+                    break;
                 default:
                     break;
             }

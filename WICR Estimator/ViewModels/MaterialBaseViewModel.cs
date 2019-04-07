@@ -12,6 +12,10 @@ using WICR_Estimator.Models;
 namespace WICR_Estimator.ViewModels
 {
     [DataContract]
+    [KnownType(typeof(Carlisle860MaterialViewModel))]
+    [KnownType(typeof(DexellentIIMaterialViewModel))]
+    [KnownType(typeof(WestcoatdualMaterialViewModel))]
+    
     [KnownType(typeof(WWRehabMaterialViewModel))]
     [KnownType(typeof(MaterialViewModel))]
     [KnownType(typeof(_201MaterialViewModel))]

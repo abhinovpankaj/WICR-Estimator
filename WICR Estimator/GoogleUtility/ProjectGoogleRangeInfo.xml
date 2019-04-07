@@ -162,4 +162,13 @@
     <MaterialRange>H1611:N1631</MaterialRange>
     <FreightRange>E48:F54</FreightRange>
   </Carlisle860>
+
+  <WestcoatDualMembrane>
+    <RateRange>E2</RateRange>
+    <MetalRange>F3:M43</MetalRange>
+    <LaborRange>E1709:E1728</LaborRange>
+    <SlopeRange>P1670:Q1678</SlopeRange>
+    <MaterialRange>H1687:N1700</MaterialRange>
+    <FreightRange>E48:F54</FreightRange>
+  </WestcoatDualMembrane>
 </Projects>

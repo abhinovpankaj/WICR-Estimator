@@ -34,6 +34,7 @@ namespace WICR_Estimator
                 case "250":
                 case "Dexcellent II":
                 case "860":
+                case "Dual Membrane":
                     return new MetalViewModel(Js);
                 //case "Dexotex Barrier Gaurd":
                 //    return new DexoMetalViewModel(Js);
@@ -58,6 +59,7 @@ namespace WICR_Estimator
                 case "Multicoat":
                 case "Pli-Dek":
                 case "Dexcellent II":
+                case "Dual Membrane":
                     return new SlopeViewModel(Js);
                 case "Endurokote":
                     return new EnduroKoteSlopeViewModel(Js);
@@ -121,6 +123,8 @@ namespace WICR_Estimator
                     return new DexellentIIMaterialViewModel(metalT, slopeT, Js);
                 case "860":
                     return new Carlisle860MaterialViewModel(metalT, slopeT, Js);
+                case "Dual Membrane":
+                    return new WestcoatdualMaterialViewModel(metalT, slopeT, Js);
                 default:
                     return null;
             }

@@ -175,6 +175,7 @@
     <Compile Include="ViewModels\SlopeViewModel.cs" />
     <Compile Include="ViewModels\TufflexMaterialViewModel.cs" />
     <Compile Include="ViewModels\WestcoatColorMaterialViewModel.cs" />
+    <Compile Include="ViewModels\WestcoatdualMaterialViewModel.cs" />
     <Compile Include="ViewModels\WWRehabMaterialViewModel.cs" />
     <Compile Include="ViewModels\WWResealMaterialViewModel.cs" />
     <Compile Include="Views\CalculationDetailsPage.xaml.cs">
