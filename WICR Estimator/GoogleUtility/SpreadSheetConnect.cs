@@ -138,6 +138,12 @@ namespace WICR_Estimator.GoogleUtility
                 case "250":
                     prjName = "Tremco201";
                     break;
+                case "Dexcellent II":
+                    prjName = "Dexcellent";
+                    break;
+                case "860":
+                    prjName = "Carlisle860";
+                    break;
                 default:
                     break;
             }

@@ -148,7 +148,9 @@
     <Compile Include="ViewModels\201MaterialViewModel.cs" />
     <Compile Include="ViewModels\ALXMaterialViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\Carlisle860MaterialViewModel.cs" />
     <Compile Include="ViewModels\DesertbrandMaterialViewModel.cs" />
+    <Compile Include="ViewModels\DexellentIIMaterialViewModel.cs" />
     <Compile Include="ViewModels\DexoMaterialViewModel.cs" />
     <Compile Include="ViewModels\DexoMetalViewModel.cs" />
     <Compile Include="ViewModels\DexoSlopeViewModel.cs" />

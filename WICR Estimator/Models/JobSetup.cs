@@ -186,26 +186,31 @@ namespace WICR_Estimator.Models
         public JobSetup(string name)            
         {
             ProjectName = name;
-            if (name=="Paraseal")
+            if (name == "Paraseal")
             {
                 SqftLabel = "SQ FT OF VERTICAL CONCRETE WALLS";
             }
-            else if (name=="Paraseal LG")
+            else if (name == "Paraseal LG")
             {
                 SqftLabel = "SQ FT OF VERTICAL LAGGING WALLS";
             }
-            else if (name == "201"||name=="250")
+            else if (name == "201" || name == "250")
             {
                 SqftLabel = "TOTAL SQ FT HORIZONTAL CONCRETE";
             }
+            else if (name == "860")
+                SqftLabel = "TOTAL SQ FT CONCRETE DECKS";
             else
                 SqftLabel = "Total Sqft";
 
-            if (name=="Pedestrian System" ||name=="Parking Garage"||name=="Tufflex" ||name=="201" || name == "250")
+            if (name=="Pedestrian System" ||name=="Parking Garage"||name=="Tufflex" ||name=="201" || name == "250"
+                )
             {
                 IsNewPlywood = false;
                 SqftLabel = "Total Sqft Concrete";
             }
+
+
             if (name=="Desert Crete")
             {
                 IsJobSpecifiedByArchitect = true;
@@ -277,12 +282,16 @@ namespace WICR_Estimator.Models
                     return "Linear Footage of Deck Perimeter";
                 else if (ProjectName == "Resistite" || ProjectName == "Multicoat")
                     return "LINEAR FOOTAGE OF DECK TO WALL DETAIL";
+                else if (ProjectName == "Dexcellent II")
+                    return "LINEAR FOOTAGE OF DECK TO WALL METAL";
                 else if (ProjectName == "Paraseal")
                     return "LF OF PERIMETER FOOTING (STANDARD PARAGRANULAR DETAIL AND TERM BAR)";
                 else if (ProjectName == "Paraseal LG")
                     return "LF OF PERIMETER FOOTING (adds term bar only )";
-                else if (ProjectName == "Tufflex" ||ProjectName=="201" || ProjectName == "250")
+                else if (ProjectName == "Tufflex" || ProjectName == "201" || ProjectName == "250")
                     return "LINEAR FOOTAGE OF PERIMETER (DECKS)";
+                else if (ProjectName == "860")
+                    return "LINEAR FOOTAGE OF DECK TO WALL METAL(fluid applied detail)";
                 else
                     return "Lf Perimeter for Burlap and Membrane";
             }
@@ -715,7 +724,8 @@ namespace WICR_Estimator.Models
                 {
                     return "# PENETRATIONS or DRAINS";
                 }
-                else if (ProjectName == "201" || ProjectName == "250")
+                else if (ProjectName == "201" || ProjectName == "250" || ProjectName == "Dexcellent II"||
+                    ProjectName=="860")
                     return "# RISERS (3.5-4 FT WIDE)";
                 else if (ProjectName == "Paraseal LG")
                     return "TIE BACKS (block outs must be priced separately)";
@@ -743,7 +753,8 @@ namespace WICR_Estimator.Models
         {
             get
             {
-                if (ProjectName == "Pedestrian System" || ProjectName == "Parking Garage"||ProjectName=="Paraseal" || ProjectName == "Paraseal LG")
+                if (ProjectName == "Pedestrian System" || ProjectName == "Parking Garage" || ProjectName == "Paraseal" ||
+                    ProjectName == "Paraseal LG" || ProjectName=="860")
                 {
                     return System.Windows.Visibility.Collapsed;
                 }
@@ -784,6 +795,21 @@ namespace WICR_Estimator.Models
             {
                 
                 if (isNewPlywood != null)
+                {
+                    return System.Windows.Visibility.Visible;
+                }
+                else
+                    return System.Windows.Visibility.Collapsed;
+            }
+        }
+        
+        public System.Windows.Visibility IsPlywoodSqftVisible
+        {
+            get
+            {
+                if (ProjectName == "Pedestrian System" || ProjectName == "Parking Garage" 
+                    || ProjectName == "Tufflex" || ProjectName == "201" || ProjectName == "250"
+                    ||ProjectName=="860")
                 {
                     return System.Windows.Visibility.Visible;
                 }
@@ -837,6 +863,8 @@ namespace WICR_Estimator.Models
                 {
                     return "LINEAR FOOTAGE OF UV PROTECTION AT WALL (801)";
                 }
+                else if (ProjectName == "860")
+                    return "LINEAR FOOTAGE OF FOOTING";
                 else
                     return "LINEAR FOOTAGE OF COPING";
             }
@@ -862,7 +890,21 @@ namespace WICR_Estimator.Models
         {
             get
             {
-                if (ProjectName=="Resistite" ||ProjectName=="Multicoat" || ProjectName=="Paraseal")
+                if (ProjectName=="Resistite" ||ProjectName=="Multicoat" || 
+                    ProjectName=="Paraseal"||ProjectName== "860")
+                {
+                    return System.Windows.Visibility.Visible;
+                }
+                else
+                    return System.Windows.Visibility.Collapsed;
+            }
+        }
+        
+        public System.Windows.Visibility Is860SectionVisible
+        {
+            get
+            {
+                if (ProjectName == "860")
                 {
                     return System.Windows.Visibility.Visible;
                 }
@@ -1039,7 +1081,20 @@ namespace WICR_Estimator.Models
                     return System.Windows.Visibility.Collapsed;
             }
         }
+        
+        public System.Windows.Visibility IsSqftVerticleVisible
+        {
+            get
+            {
 
+                if (ProjectName == "201" || ProjectName == "250"||ProjectName=="860")
+                {
+                    return System.Windows.Visibility.Visible;
+                }
+                else
+                    return System.Windows.Visibility.Collapsed;
+            }
+        }
         private double totalSqftVertical;
         public double TotalSqftVertical
         {

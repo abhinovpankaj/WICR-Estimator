@@ -267,6 +267,32 @@
                                      Text="{Binding Penetrations ,UpdateSourceTrigger=LostFocus}"/>
                             
                         </StackPanel>
+                        
+                    </Border>
+                    <Border x:Name="Section860" BorderThickness="1" BorderBrush="Black"
+                            Background="AliceBlue"
+                            Margin="10"
+                            Padding="0,0,0,15"
+                            Visibility="{Binding Is860SectionVisible}">
+                        <StackPanel>
+                            <TextBlock Text="ADDITIONAL TERM BAR (LF)"
+                                        Style="{StaticResource FieldHeader}"/>
+                            <TextBox Style="{StaticResource TextBoxStyle}"
+                                     Text="{Binding TermBarLF ,UpdateSourceTrigger=LostFocus}"/>
+                            <TextBlock Text="INSIDE AND OUTSIDE CORNER DETAILS (LF)"
+                                       Style="{StaticResource FieldHeader}"/>
+                            <TextBox Style="{StaticResource TextBoxStyle}"
+                                     Text="{Binding InsideOutsideCornerDetails ,UpdateSourceTrigger=LostFocus}"/>
+                            <TextBlock Text="PENETRATIONS"
+                                       Style="{StaticResource FieldHeader}"/>
+                            <TextBox Style="{StaticResource TextBoxStyle}"
+                                     Text="{Binding Penetrations ,UpdateSourceTrigger=LostFocus}"/>
+                            <CheckBox Style="{StaticResource CheckBoxStyle}"
+                                      IsChecked="{Binding SuperStopAtFooting,
+                                      UpdateSourceTrigger=PropertyChanged}"
+                                      Content="SUPER STOP AT FOOTING?"/>    
+                        </StackPanel>
+
                     </Border>
                 </StackPanel>
             </ScrollViewer>
@@ -286,9 +312,9 @@
 
                 <TextBlock Style="{StaticResource FieldHeader}"
                        Text="Total Sq Ft Plywood"
-                           Visibility="{Binding IsNewPlywoodVisible}"/>
+                           Visibility="{Binding IsPlywoodSqftVisible}"/>
                 <TextBox Style="{StaticResource TextBoxStyle}"
-                          Visibility="{Binding IsNewPlywoodVisible}"
+                          Visibility="{Binding IsPlywoodSqftVisible}"
                          Text="{Binding TotalSqftPlywood,UpdateSourceTrigger=LostFocus}"/>
                 <StackPanel Visibility="{Binding IsSqftConcreteVisible}">
                     <TextBlock Style="{StaticResource FieldHeader}"
@@ -296,7 +322,7 @@
                     <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding TotalSqft,UpdateSourceTrigger=LostFocus}"/>
                 </StackPanel>
-                <StackPanel Visibility="{Binding Is201SectionVisible}">
+                <StackPanel Visibility="{Binding IsSqftVerticleVisible}">
                     <TextBlock Style="{StaticResource FieldHeader}"
                        Text="TOTAL SQ FT VERTICAL (BLOCK WALL)"/>
                     <TextBox Style="{StaticResource TextBoxStyle}"

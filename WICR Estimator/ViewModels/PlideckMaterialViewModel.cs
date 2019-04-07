@@ -333,6 +333,10 @@ namespace WICR_Estimator.ViewModels
                     return true;
             }
         }
+        public override double getLaborUnitPrice(double laborExtension, double riserCount, double totalSqft, double sqftVert = 0, double sqftHor = 0, double sqftStairs = 0, string matName = "")
+        {
+            return laborExtension/(totalSqft+ sqftVert+sqftHor);
+        }
         public override void ApplyCheckUnchecks(object obj)
         {
             bool isChecked;

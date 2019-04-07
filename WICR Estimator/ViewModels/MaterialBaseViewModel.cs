@@ -214,7 +214,7 @@ namespace WICR_Estimator.ViewModels
                 Hours = calcHrs,
                 LaborExtension = labrExt,
                 VerticalProductionRate = vprRate,
-                LaborUnitPrice = getLaborUnitPrice(labrExt, riserCount, totalSqft,0,sqh,sqStairs, matName),//labrExt / (riserCount + totalSqft),
+                LaborUnitPrice = getLaborUnitPrice(labrExt, riserCount, totalSqft,sqv,sqh,sqStairs, matName),//labrExt / (riserCount + totalSqft),
                 FreightExtension = w * qty,
                 MaterialExtension = mp * qty,
                 IsMaterialChecked = getCheckboxCheckStatus(matName),

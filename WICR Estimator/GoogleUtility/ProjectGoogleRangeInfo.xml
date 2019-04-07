@@ -146,4 +146,20 @@
     <MaterialRange>H1450:N1482</MaterialRange>
     <FreightRange>E48:F54</FreightRange>
   </Tremco201>
+<Dexcellent>
+    <RateRange>E2</RateRange>
+    <MetalRange>F3:M43</MetalRange>
+    <LaborRange>E1560:E1579</LaborRange>
+    <SlopeRange>P1517:Q1525</SlopeRange>
+    <MaterialRange>H1533:N1552</MaterialRange>
+    <FreightRange>E48:F54</FreightRange>
+  </Dexcellent>
+<Carlisle860>
+    <RateRange>E2</RateRange>
+    <MetalRange>F3:M43</MetalRange>
+    <LaborRange>E1639:E1658</LaborRange>
+    <SlopeRange>P1590:Q1607</SlopeRange>
+    <MaterialRange>H1611:N1631</MaterialRange>
+    <FreightRange>E48:F54</FreightRange>
+  </Carlisle860>
 </Projects>

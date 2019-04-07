@@ -43,6 +43,8 @@ namespace WICR_Estimator.Converters
                     case "VISQUINE PROTECTION FOR INCLEMENT WEATHER":
                     case "UNIVERSAL OUTLETS":
                     case "TOTAL DRAIN MINUS BOTTOM TD 1000(IN LIEU OF ROCK & PIPE)":
+                    case "SIDE OUTLET 6\"":
+                    case "MIRADRAIN HC 1\" DRAIN - PUNCHED 12\" X 100'  (QUICK DRAIN)":
                     case "PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL (LF DECK TO WALL) WITH SAND BROADCAST":
                         return true;
                     default:

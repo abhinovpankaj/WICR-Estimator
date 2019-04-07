@@ -193,7 +193,7 @@ namespace WICR_Estimator.ViewModels
                 //mySerializer.Serialize(myWriter, SelectedProjects);
                 //myWriter.Close();
                 var serializer = new DataContractSerializer(typeof(ObservableCollection<Project>));
-                string xmlString;
+                
                 using (var sw = new StringWriter())
                 {
                     using (var writer = new XmlTextWriter(saveFileDialog1.FileName,null))
@@ -201,7 +201,7 @@ namespace WICR_Estimator.ViewModels
                         writer.Formatting = Formatting.Indented; // indent the Xml so it's human readable
                         serializer.WriteObject(writer,SelectedProjects );
                         writer.Flush();
-                        xmlString = sw.ToString();
+                        MessageBox.Show("Project Estimate Saved Succesfully","Success");
                     }
                 }
 
@@ -336,6 +336,7 @@ namespace WICR_Estimator.ViewModels
             Projects.Add(new Project { Name = "Desert Crete", Rank = 5, GrpName = "Hill Brothers", MainGroup = "Deck Coatings" });
             Projects.Add(new Project { Name = "Paraseal", Rank = 6, GrpName = "Tremco", MainGroup = "Below Grade" });
             Projects.Add(new Project { Name = "Paraseal LG", Rank = 17, GrpName = "Tremco", MainGroup = "Below Grade" });
+            Projects.Add(new Project { Name = "860", Rank = 18, GrpName = "Carlisle", MainGroup = "Below Grade" });
             Projects.Add(new Project { Name = "201", Rank = 18, GrpName = "Tremco", MainGroup = "Below Grade" });
             Projects.Add(new Project { Name = "250", Rank = 19, GrpName = "Tremco", MainGroup = "Below Grade" });
             Projects.Add(new Project { Name = "Pli-Dek", Rank = 7, GrpName = "Pli-Dek", MainGroup = "Deck Coatings" });
@@ -348,7 +349,7 @@ namespace WICR_Estimator.ViewModels
             Projects.Add(new Project { Name = "Reseal all systems", Rank = 14, GrpName = "Reseal", MainGroup = "Deck Coatings" });
             Projects.Add(new Project { Name = "Resistite", Rank = 15, GrpName = "Dexotex", MainGroup = "Concrete On Grade" });
             Projects.Add(new Project { Name = "Multicoat", Rank = 16, GrpName = "Multicoat", MainGroup = "Concrete On Grade" });
-
+            Projects.Add(new Project { Name = "Dexcellent II", Rank = 16, GrpName = "Nevada Coatings", MainGroup = "Deck Coatings" });
             ProjectView = CollectionViewSource.GetDefaultView(Projects);
             ProjectView.GroupDescriptions.Add(new PropertyGroupDescription("MainGroup"));
             ProjectView.SortDescriptions.Add(new SortDescription("MainGroup", ListSortDirection.Ascending));
