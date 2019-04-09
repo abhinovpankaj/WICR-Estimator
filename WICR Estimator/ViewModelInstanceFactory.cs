@@ -35,6 +35,7 @@ namespace WICR_Estimator
                 case "Dexcellent II":
                 case "860":
                 case "Dual Membrane":
+                case "UPI Below Tile":
                     return new MetalViewModel(Js);
                 //case "Dexotex Barrier Gaurd":
                 //    return new DexoMetalViewModel(Js);
@@ -71,6 +72,7 @@ namespace WICR_Estimator
                 case "201":
                 case "250":
                 case "860":
+                case "UPI Below Tile":
                     return new PedestrianSlopeViewModel(Js);
                 default:
                     return null;
@@ -125,6 +127,8 @@ namespace WICR_Estimator
                     return new Carlisle860MaterialViewModel(metalT, slopeT, Js);
                 case "Dual Membrane":
                     return new WestcoatdualMaterialViewModel(metalT, slopeT, Js);
+                case "UPI Below Tile":
+                    return new UPIBelowTileMaterialViewModel(metalT, slopeT, Js);
                 default:
                     return null;
             }

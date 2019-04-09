@@ -147,6 +147,9 @@ namespace WICR_Estimator.GoogleUtility
                 case "Dual Membrane":
                     prjName = "WestcoatDualMembrane";
                     break;
+                case "UPI Below Tile":
+                    prjName = "UPIBelowTile";
+                    break;
                 default:
                     break;
             }

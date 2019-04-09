@@ -171,4 +171,12 @@
     <MaterialRange>H1687:N1700</MaterialRange>
     <FreightRange>E48:F54</FreightRange>
   </WestcoatDualMembrane>
+  <UPIBelowTile>
+    <RateRange>E2</RateRange>
+    <MetalRange>F3:M43</MetalRange>
+    <LaborRange>E1790:E1809</LaborRange>
+    <SlopeRange>P1740:Q1757</SlopeRange>
+    <MaterialRange>H1765:N1783</MaterialRange>
+    <FreightRange>E48:F54</FreightRange>
+  </UPIBelowTile>
 </Projects>

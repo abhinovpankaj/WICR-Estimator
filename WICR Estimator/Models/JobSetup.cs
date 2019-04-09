@@ -204,7 +204,7 @@ namespace WICR_Estimator.Models
                 SqftLabel = "Total Sqft";
 
             if (name=="Pedestrian System" ||name=="Parking Garage"||name=="Tufflex" ||name=="201" || name == "250"
-                )
+                || name == "UPI Below Tile")
             {
                 IsNewPlywood = false;
                 SqftLabel = "Total Sqft Concrete";
@@ -288,7 +288,7 @@ namespace WICR_Estimator.Models
                     return "LF OF PERIMETER FOOTING (STANDARD PARAGRANULAR DETAIL AND TERM BAR)";
                 else if (ProjectName == "Paraseal LG")
                     return "LF OF PERIMETER FOOTING (adds term bar only )";
-                else if (ProjectName == "Tufflex" || ProjectName == "201" || ProjectName == "250")
+                else if (ProjectName == "Tufflex" || ProjectName == "201" || ProjectName == "250"|| ProjectName=="UPI Below Tile")
                     return "LINEAR FOOTAGE OF PERIMETER (DECKS)";
                 else if (ProjectName == "860")
                     return "LINEAR FOOTAGE OF DECK TO WALL METAL(fluid applied detail)";
@@ -725,7 +725,7 @@ namespace WICR_Estimator.Models
                     return "# PENETRATIONS or DRAINS";
                 }
                 else if (ProjectName == "201" || ProjectName == "250" || ProjectName == "Dexcellent II"||
-                    ProjectName=="860")
+                    ProjectName=="860"|| ProjectName == "UPI Below Tile")
                     return "# RISERS (3.5-4 FT WIDE)";
                 else if (ProjectName == "Paraseal LG")
                     return "TIE BACKS (block outs must be priced separately)";
@@ -754,7 +754,7 @@ namespace WICR_Estimator.Models
             get
             {
                 if (ProjectName == "Pedestrian System" || ProjectName == "Parking Garage" || ProjectName == "Paraseal" ||
-                    ProjectName == "Paraseal LG" || ProjectName=="860")
+                    ProjectName == "Paraseal LG" || ProjectName=="860"||ProjectName=="UPI Below Tile")
                 {
                     return System.Windows.Visibility.Collapsed;
                 }
@@ -780,7 +780,7 @@ namespace WICR_Estimator.Models
         {
             get
             {
-                if (ProjectName == "Tufflex")
+                if (ProjectName == "Tufflex"||ProjectName=="UPI Below Tile")
                 {
                     return System.Windows.Visibility.Collapsed;
                 }
@@ -809,7 +809,7 @@ namespace WICR_Estimator.Models
             {
                 if (ProjectName == "Pedestrian System" || ProjectName == "Parking Garage" 
                     || ProjectName == "Tufflex" || ProjectName == "201" || ProjectName == "250"
-                    ||ProjectName=="860")
+                    ||ProjectName=="860"||ProjectName == "UPI Below Tile")
                 {
                     return System.Windows.Visibility.Visible;
                 }

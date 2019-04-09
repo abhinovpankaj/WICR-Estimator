@@ -45,6 +45,9 @@ namespace WICR_Estimator.Converters
                     case "TOTAL DRAIN MINUS BOTTOM TD 1000(IN LIEU OF ROCK & PIPE)":
                     case "SIDE OUTLET 6\"":
                     case "MIRADRAIN HC 1\" DRAIN - PUNCHED 12\" X 100'  (QUICK DRAIN)":
+                    case "2 COATS VULKEM 350R/951  @ WALL (LF DECK TO WALL)":
+                    case "ENTER # OF DECKS TO WATER TEST \"NO DAM'S NEEDED\"":
+                    case "ADD LF FOR DAMMING @ DRIP EDGE":
                     case "PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL (LF DECK TO WALL) WITH SAND BROADCAST":
                         return true;
                     default:
