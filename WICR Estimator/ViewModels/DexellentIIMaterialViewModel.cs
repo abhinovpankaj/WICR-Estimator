@@ -107,7 +107,7 @@ namespace WICR_Estimator.ViewModels
                 setCheckBoxes();
             }
 
-
+            setCheckBoxes();
             setExceptionValues(null);
                         
             if (OtherMaterials.Count == 0)
@@ -380,6 +380,7 @@ namespace WICR_Estimator.ViewModels
         {
             bool ischecked = SystemMaterials.Where(x => x.Name == "Vista Paint Acripoxy (TOPCOAT)").FirstOrDefault().IsMaterialChecked;
             SystemMaterials.Where(x => x.Name == "Dexcelent II Final Coat (TOPCOAT)").FirstOrDefault().IsMaterialChecked = !ischecked;
+
         }
     }
 }

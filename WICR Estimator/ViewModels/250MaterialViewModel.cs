@@ -506,20 +506,20 @@ namespace WICR_Estimator.ViewModels
         }
         public override void ApplyCheckUnchecks(object obj)
         {
+            
             SystemMaterial sysmat = null;
-            if (obj.ToString() == "TREMDRAIN 1000 (VERTICAL ONLY)")
+            bool ischecked = false, ischecked1 = false;
+            if (obj.ToString() == "TREMDRAIN 1000 (VERTICAL ONLY)" || obj.ToString() == "TREMDRAIN 1000 (HORIZONTAL ONLY)")
             {
-
-                
                 sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (VERTICAL ONLY)").FirstOrDefault();
-                SystemMaterials.Where(x => x.Name == "CALIFORNIA SEALER FROM LOWRYS (GLUING DRAIN MAT)").FirstOrDefault().IsMaterialChecked = sysmat.IsMaterialChecked;
-                
+                ischecked = sysmat.IsMaterialChecked;
+                sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (HORIZONTAL ONLY)").FirstOrDefault();
+                ischecked1 = sysmat.IsMaterialChecked;
+                SystemMaterials.Where(x => x.Name == "CALIFORNIA SEALER FROM LOWRYS (GLUING DRAIN MAT)").FirstOrDefault().IsMaterialChecked = ischecked || ischecked1;
             }
-            //if (obj.ToString() == "Vulkem Tremproof 201 L 30 MILS" || obj.ToString() == "Vulkem Tremproof 201 R 30 MILS"
-            //    || obj.ToString() == "Vulkem Tremproof 250 GC L 30 MILS" || obj.ToString() == "Vulkem Tremproof 250 GC R 30 MILS")
-            //{
-                
-            //}
+            
+
+            
             calculateRLqty();
             CalculateLaborMinCharge();
         }
@@ -536,6 +536,8 @@ namespace WICR_Estimator.ViewModels
         }
         public override void setCheckBoxes()
         {
+            SystemMaterial sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (VERTICAL ONLY)").FirstOrDefault();
+            SystemMaterials.Where(x => x.Name == "CALIFORNIA SEALER FROM LOWRYS (GLUING DRAIN MAT)").FirstOrDefault().IsMaterialChecked = sysmat.IsMaterialChecked;
 
         }
 

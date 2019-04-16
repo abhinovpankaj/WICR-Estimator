@@ -352,7 +352,9 @@ namespace WICR_Estimator.ViewModels
             Projects.Add(new Project { Name = "Dexcellent II", Rank = 16, GrpName = "Nevada Coatings", MainGroup = "Deck Coatings" });
             Projects.Add(new Project { Name = "Dual Membrane", Rank = 19, GrpName = "Westcoat", MainGroup = "Below Tile" });
             Projects.Add(new Project { Name = "UPI Below Tile", Rank = 20, GrpName = "UPI", MainGroup = "Below Tile" });
+            Projects.Add(new Project { Name = "Dual Flex", Rank = 21, GrpName = "Dexotex", MainGroup = "Below Tile" });
             ProjectView = CollectionViewSource.GetDefaultView(Projects);
+            
             ProjectView.GroupDescriptions.Add(new PropertyGroupDescription("MainGroup"));
             ProjectView.SortDescriptions.Add(new SortDescription("MainGroup", ListSortDirection.Ascending));
             ProjectView.GroupDescriptions.Add(new PropertyGroupDescription("GrpName"));

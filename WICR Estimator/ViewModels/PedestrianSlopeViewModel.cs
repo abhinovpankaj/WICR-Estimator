@@ -238,6 +238,7 @@ namespace WICR_Estimator.ViewModels
 
             TotalLaborCost = TotalLaborCost + lbrCostTable1;
         }
+
         public override void CalculateGridTotal()
         {
             base.CalculateGridTotal();

@@ -150,6 +150,9 @@ namespace WICR_Estimator.GoogleUtility
                 case "UPI Below Tile":
                     prjName = "UPIBelowTile";
                     break;
+                case "Dual Flex":
+                    prjName = "DualFlex";
+                    break;
                 default:
                     break;
             }

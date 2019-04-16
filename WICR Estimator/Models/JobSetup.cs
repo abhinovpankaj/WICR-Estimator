@@ -198,6 +198,8 @@ namespace WICR_Estimator.Models
             {
                 SqftLabel = "TOTAL SQ FT HORIZONTAL CONCRETE";
             }
+            else if (name == "Dual Flex")
+                SqftLabel = "TOTAL SQ FT HORIZONTAL (NEOBOND ANTI-FRACTURE)";
             else if (name == "860")
                 SqftLabel = "TOTAL SQ FT CONCRETE DECKS";
             else
@@ -292,11 +294,25 @@ namespace WICR_Estimator.Models
                     return "LINEAR FOOTAGE OF PERIMETER (DECKS)";
                 else if (ProjectName == "860")
                     return "LINEAR FOOTAGE OF DECK TO WALL METAL(fluid applied detail)";
+                else if (ProjectName == "Dual Flex")
+                    return "PERIMETER";
                 else
                     return "Lf Perimeter for Burlap and Membrane";
             }
         }
         
+        public string VerticalSqftLabel
+        {
+            get
+            {
+                if (ProjectName == "Dual Flex")
+                {
+                    return "TOTAL SQ FT VERTICAL WALLS (MEMBRANE ONLY)";
+                }
+                else
+                    return "TOTAL SQ FT VERTICAL (BLOCK WALL)";
+            }
+        }
         private string jobName;
         public string JobName
         {
@@ -725,7 +741,7 @@ namespace WICR_Estimator.Models
                     return "# PENETRATIONS or DRAINS";
                 }
                 else if (ProjectName == "201" || ProjectName == "250" || ProjectName == "Dexcellent II"||
-                    ProjectName=="860"|| ProjectName == "UPI Below Tile")
+                    ProjectName=="860"|| ProjectName == "UPI Below Tile" || ProjectName=="Dual Flex")
                     return "# RISERS (3.5-4 FT WIDE)";
                 else if (ProjectName == "Paraseal LG")
                     return "TIE BACKS (block outs must be priced separately)";
@@ -865,6 +881,8 @@ namespace WICR_Estimator.Models
                 }
                 else if (ProjectName == "860")
                     return "LINEAR FOOTAGE OF FOOTING";
+                else if (ProjectName == "Dual Flex")
+                    return "LINEAR FOOTAGE OF DECK TO WALL";
                 else
                     return "LINEAR FOOTAGE OF COPING";
             }
@@ -899,6 +917,7 @@ namespace WICR_Estimator.Models
                     return System.Windows.Visibility.Collapsed;
             }
         }
+        
         
         public System.Windows.Visibility Is860SectionVisible
         {
@@ -1087,7 +1106,7 @@ namespace WICR_Estimator.Models
             get
             {
 
-                if (ProjectName == "201" || ProjectName == "250"||ProjectName=="860")
+                if (ProjectName == "201" || ProjectName == "250"||ProjectName=="860"||ProjectName=="Dual Flex")
                 {
                     return System.Windows.Visibility.Visible;
                 }
@@ -1163,6 +1182,90 @@ namespace WICR_Estimator.Models
                     penetrations = value;
                     OnPropertyChanged("Penetrations");
                     OnJobSetupChanged(null);
+                }
+            }
+        }
+        #endregion
+
+        #region DualFlex
+        public System.Windows.Visibility DualFlexVisible
+        {
+            get
+            {
+                if (ProjectName == "Dual Flex")
+                {
+                    return System.Windows.Visibility.Visible;
+                }
+                else
+                    return System.Windows.Visibility.Collapsed;
+            }
+        }
+
+        private bool hasQuarterMortarBed;
+        public bool HasQuarterMortarBed
+        {
+            get { return hasQuarterMortarBed; }
+            set
+            {
+                if (value != hasQuarterMortarBed)
+                {
+                    hasQuarterMortarBed = value;
+                    OnPropertyChanged("HasQuarterMortarBed");
+                    if (JobSetupChange != null)
+                    {
+                        JobSetupChange(this, EventArgs.Empty);
+                    }
+                }
+            }
+        }
+        private bool hasQuarterLessMortarBed;
+        public bool HasQuarterLessMortarBed
+        {
+            get { return hasQuarterLessMortarBed; }
+            set
+            {
+                if (value != hasQuarterLessMortarBed)
+                {
+                    hasQuarterLessMortarBed = value;
+                    OnPropertyChanged("HasQuarterLessMortarBed");
+                    if (JobSetupChange != null)
+                    {
+                        JobSetupChange(this, EventArgs.Empty);
+                    }
+                }
+            }
+        }
+        private bool hasElastex;
+        public bool HasElastex
+        {
+            get { return hasElastex; }
+            set
+            {
+                if (value != hasElastex)
+                {
+                    hasElastex = value;
+                    OnPropertyChanged("HasElastex");
+                    if (JobSetupChange != null)
+                    {
+                        JobSetupChange(this, EventArgs.Empty);
+                    }
+                }
+            }
+        }
+        private bool hasEasyAccess;
+        public bool HasEasyAccess
+        {
+            get { return hasEasyAccess; }
+            set
+            {
+                if (value != hasEasyAccess)
+                {
+                    hasEasyAccess = value;
+                    OnPropertyChanged("HasEasyAccess");
+                    if (JobSetupChange != null)
+                    {
+                        JobSetupChange(this, EventArgs.Empty);
+                    }
                 }
             }
         }

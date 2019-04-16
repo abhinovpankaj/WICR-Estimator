@@ -36,7 +36,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>appicon.ico</ApplicationIcon>
+    <ApplicationIcon>Images\WICR Logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Google.Apis, Version=1.38.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
@@ -154,6 +154,8 @@
     <Compile Include="ViewModels\DexoMaterialViewModel.cs" />
     <Compile Include="ViewModels\DexoMetalViewModel.cs" />
     <Compile Include="ViewModels\DexoSlopeViewModel.cs" />
+    <Compile Include="ViewModels\DualFlexMaterialViewModel.cs" />
+    <Compile Include="ViewModels\DualFlexSlopeViewModel.cs" />
     <Compile Include="ViewModels\EnduroKoteMaterialViewModel.cs" />
     <Compile Include="ViewModels\EnduroKoteSlopeViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
@@ -326,13 +328,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\appicon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="appicon.ico" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\WICR Logo.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -429,15 +429,18 @@ namespace WICR_Estimator.ViewModels
         
         public override void ApplyCheckUnchecks(object obj)
         {
-            if (obj.ToString()== "MIRADRAIN 6000 XL (VERTICAL ONLY)")
+
+            SystemMaterial sysmat = null;
+            bool ischecked = false, ischecked1 = false;
+            if (obj.ToString() == "MIRADRAIN 6000 XL (VERTICAL ONLY)" || obj.ToString() == "MIRADRAIN 6000 XL  (HORIZONTAL ONLY)")
             {
-                SystemMaterial sysmat = SystemMaterials.FirstOrDefault(x => x.Name == "MIRADRAIN 6000 XL (VERTICAL ONLY)");
-                if (sysmat!=null)
-                {
-                    SystemMaterials.FirstOrDefault(x => x.Name == "MIRASTICK ADHESIVE (GLUE DOWN DRAIN MAT)").IsMaterialChecked = sysmat.IsMaterialChecked;
-                }
+                sysmat = SystemMaterials.Where(x => x.Name == "MIRADRAIN 6000 XL (VERTICAL ONLY)").FirstOrDefault();
+                ischecked = sysmat.IsMaterialChecked;
+                sysmat = SystemMaterials.Where(x => x.Name == "MIRADRAIN 6000 XL  (HORIZONTAL ONLY)").FirstOrDefault();
+                ischecked1 = sysmat.IsMaterialChecked;
             }
-            
+            SystemMaterials.Where(x => x.Name == "MIRASTICK ADHESIVE (GLUE DOWN DRAIN MAT)").FirstOrDefault().IsMaterialChecked = ischecked || ischecked1;
+   
             calculateRLqty();
             CalculateLaborMinCharge();
         }
@@ -453,7 +456,11 @@ namespace WICR_Estimator.ViewModels
         }
         public override void setCheckBoxes()
         {
-
+            SystemMaterial sysmat = SystemMaterials.FirstOrDefault(x => x.Name == "MIRADRAIN 6000 XL (VERTICAL ONLY)");
+            if (sysmat != null)
+            {
+                SystemMaterials.FirstOrDefault(x => x.Name == "MIRASTICK ADHESIVE (GLUE DOWN DRAIN MAT)").IsMaterialChecked = sysmat.IsMaterialChecked;
+            }
         }
     }
 }

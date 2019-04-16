@@ -524,9 +524,9 @@ namespace WICR_Estimator.ViewModels
          
                 sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (HORIZONTAL ONLY)").FirstOrDefault();
                 ischecked1 = sysmat.IsMaterialChecked;
+                SystemMaterials.Where(x => x.Name == "CALIFORNIA SEALER FROM LOWRYS (GLUING DRAIN MAT)").FirstOrDefault().IsMaterialChecked = ischecked || ischecked1;
             }
-            SystemMaterials.Where(x => x.Name == "CALIFORNIA SEALER FROM LOWRYS (GLUING DRAIN MAT)").FirstOrDefault().IsMaterialChecked = ischecked||ischecked1;
-
+            
             calculateRLqty();
             CalculateLaborMinCharge();
         }

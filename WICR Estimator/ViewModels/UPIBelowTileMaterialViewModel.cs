@@ -393,7 +393,7 @@ namespace WICR_Estimator.ViewModels
         }
         public override void setCheckBoxes()
         {
-
+            ApplyCheckUnchecks("ADD METAL LATHE AND STAPLES");
         }
     
 }

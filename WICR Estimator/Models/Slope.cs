@@ -70,21 +70,27 @@ namespace WICR_Estimator.Models
         {
             get
             {
-                return deckCount*sqft;
+                //DualFlex Mortar slope 
+                if (Thickness== "Cement Board and screws for stair applications")
+                {
+                    return sqft;
+                }
+                else
+                    return deckCount*sqft;
             }
         }
-        //private double totalMixes;
+        private double totalMixes;
 
         public  double TotalMixes
         {
-            //set
-            //{
-            //    if (value!=totalMixes)
-            //    {
-            //        totalMixes = value;
-            //        OnPropertyChanged("TotalMixes");
-            //    }
-            //}
+            set
+            {
+                if (value != totalMixes)
+                {
+                    totalMixes = value;
+                    OnPropertyChanged("TotalMixes");
+                }
+            }
             get
             {
                 if (SlopeType=="")
@@ -120,6 +126,11 @@ namespace WICR_Estimator.Models
                             return Math.Round((Total / 32) * 5, 2);
                         case "1 inch Average":
                             return Math.Round((Total / 32) * 4, 2);
+                        case "Access":
+                        case "1/4 inch Expansion Joints":
+                            return Total;
+                        case "Cement Board and screws for stair applications":
+                            return 0;
                         default:
                             return 0;
                     }
@@ -149,16 +160,27 @@ namespace WICR_Estimator.Models
                 return TotalMixes * PricePerMix;
             }
         }
-
+        private double labrExtnSlope;
         public double LaborExtensionSlope
-        {
-            
+        {        
+            set
+            {
+                if (value!=labrExtnSlope)
+                {
+                    labrExtnSlope = value;
+                    OnPropertyChanged("LaborExtensionSlope");
+                }
+            }   
             get
             {
-                return (Total / GSLaborRate) * LaborRate;
+               return CalculateLaborextensionSlope();
             }
         }
 
+        public virtual double CalculateLaborextensionSlope()
+        {
+            return (Total / GSLaborRate) * LaborRate; ;
+        }
         private void changeProperty()
         {
             OnPropertyChanged("DeckCount");
@@ -168,5 +190,9 @@ namespace WICR_Estimator.Models
             OnPropertyChanged("TotalMixes");
             //OnPropertyChanged("AverageMixesPrice");
         }
+
+
     }
+
+    
 }

@@ -157,6 +157,29 @@
                             <TextBlock Text="Contingency Discount for Large New Construction Project (over 1,000 sq. ft.)"
                                            TextWrapping="Wrap"/>
                         </CheckBox>
+                        <StackPanel  Visibility="{Binding DualFlexVisible}">
+                            <CheckBox  Style="{StaticResource CheckBoxStyle}"
+                               IsChecked="{Binding HasQuarterMortarBed,UpdateSourceTrigger=PropertyChanged}">
+                                <TextBlock Text="1  1/4 inch MORTAR BED WITH 2X2 METAL"
+                                           TextWrapping="Wrap"/>
+                            </CheckBox>
+                            <CheckBox  Style="{StaticResource CheckBoxStyle}"
+                               IsChecked="{Binding HasQuarterLessMortarBed,UpdateSourceTrigger=PropertyChanged}">
+                                <TextBlock Text="3/4 INCH MORTAR BED WITH METAL LATHE"
+                                           TextWrapping="Wrap"/>
+                            </CheckBox>
+                            <CheckBox  Style="{StaticResource CheckBoxStyle}"
+                               IsChecked="{Binding HasElastex,UpdateSourceTrigger=PropertyChanged}">
+                                <TextBlock Text="ADD FOR ELASTATEX 2-MEMBRANE SYSTEM"
+                                           TextWrapping="Wrap"/>
+                            </CheckBox>
+                            <CheckBox  Style="{StaticResource CheckBoxStyle}"
+                               IsChecked="{Binding HasEasyAccess,UpdateSourceTrigger=PropertyChanged}">
+                                <TextBlock Text="EASY ACCESS WITH  NO LADDER?"
+                                           TextWrapping="Wrap"/>
+                            </CheckBox>
+                        </StackPanel>
+                        
                     </StackPanel>
                     <Border BorderBrush="Black"
                         BorderThickness="0,1,0,0">
@@ -324,7 +347,7 @@
                 </StackPanel>
                 <StackPanel Visibility="{Binding IsSqftVerticleVisible}">
                     <TextBlock Style="{StaticResource FieldHeader}"
-                       Text="TOTAL SQ FT VERTICAL (BLOCK WALL)"/>
+                       Text="{Binding VerticalSqftLabel}"/>
                     <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding TotalSqftVertical,UpdateSourceTrigger=LostFocus}"/>
                 </StackPanel>

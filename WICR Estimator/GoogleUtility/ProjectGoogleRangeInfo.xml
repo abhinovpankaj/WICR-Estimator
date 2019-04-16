@@ -179,4 +179,12 @@
     <MaterialRange>H1765:N1783</MaterialRange>
     <FreightRange>E48:F54</FreightRange>
   </UPIBelowTile>
+<DualFlex>
+    <RateRange>E2</RateRange>
+    <MetalRange>F3:M43</MetalRange>
+    <LaborRange>E1870:E1889</LaborRange>
+    <SlopeRange>P1820:Q1836</SlopeRange>
+    <MaterialRange>H1844:N1861</MaterialRange>
+    <FreightRange>E48:F54</FreightRange>
+  </DualFlex>
 </Projects>

@@ -8,7 +8,7 @@
         xmlns:myVM="clr-namespace:WICR_Estimator.ViewModels"
         xmlns:myViews="clr-namespace:WICR_Estimator.Views"
         mc:Ignorable="d"
-        Icon="Images\appicon.png"
+        Icon="Images\WICR Logo.ico"
         Title="WICR Estimator"
         WindowState="Maximized">
     <Window.Resources>

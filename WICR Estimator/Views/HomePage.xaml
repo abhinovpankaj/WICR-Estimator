@@ -64,7 +64,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
             <Setter Property="Template">
                 <Setter.Value>
                      <ControlTemplate>
-                       <Expander IsExpanded="True" Margin="10,5,0,0">
+                       <Expander IsExpanded="False" Margin="10,5,0,0">
                             <Expander.Header>
                                 <TextBlock Text="{Binding Name}"
                                            VerticalAlignment="Bottom">

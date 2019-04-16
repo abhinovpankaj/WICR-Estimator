@@ -414,7 +414,7 @@ namespace WICR_Estimator.ViewModels
             
 
         }
-        public void JobSetup_OnJobSetupChange(object sender, EventArgs e)
+        public virtual void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {
             JobSetup js = sender as JobSetup;
             if (js != null)
@@ -598,6 +598,18 @@ namespace WICR_Estimator.ViewModels
                     return result * (1 - productionRate);
                 case "1 inch Average":
                     double.TryParse(perMixRates[5 + addRow][0].ToString(), out result);
+                    return result * (1 - productionRate);
+                case "Access":
+                    double.TryParse(perMixRates[ addRow][0].ToString(), out result);
+                    return result * (1 - productionRate);
+                case "1/4 inch Expansion Joints":
+                    double.TryParse(perMixRates[1 + addRow][0].ToString(), out result);
+                    return result * (1 - productionRate);
+                case "Cement Board and screws for stair applications":
+                    double.TryParse(perMixRates[2 + addRow][0].ToString(), out result);
+                    return result * (1 - productionRate);
+                case "1 1/4 inch Mortar Bed with 2x2 or diamond metal lathe":
+                    double.TryParse(perMixRates[3 + addRow][0].ToString(), out result);
                     return result * (1 - productionRate);
                 default:
                     return 0;

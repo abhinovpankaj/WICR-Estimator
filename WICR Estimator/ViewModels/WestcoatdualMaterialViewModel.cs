@@ -326,7 +326,7 @@ namespace WICR_Estimator.ViewModels
         }
         public override void setCheckBoxes()
         {
-
+            ApplyCheckUnchecks("Westcoat WP-47 Fiberlathe");
         }
     }
 }
