@@ -133,7 +133,8 @@ namespace WICR_Estimator.ViewModels
                                 null, prj.ProjectJobSetUp);
                         }
                     }
-                    else if (prj.Name=="Paraseal" || prj.Name=="Paraseal LG")
+                    
+                    else if (prj.Name=="Paraseal" || prj.Name=="Paraseal LG"|| prj.Name == "Color Flake"||prj.Name== "Polyurethane Injection Block" || prj.Name == "Block Wall")
                     {
                         if (prj.MetalViewModel == null)
                         {

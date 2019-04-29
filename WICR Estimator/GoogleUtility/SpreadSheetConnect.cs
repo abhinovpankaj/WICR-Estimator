@@ -153,6 +153,15 @@ namespace WICR_Estimator.GoogleUtility
                 case "Dual Flex":
                     prjName = "DualFlex";
                     break;
+                case "Color Flake":
+                    prjName = "ColorFlake";
+                    break;
+                case "Polyurethane Injection Block":
+                    prjName = "DeNeef";
+                    break;
+                case "Block Wall":
+                    prjName = "Xypex";
+                    break;
                 default:
                     break;
             }

@@ -79,7 +79,7 @@ namespace WICR_Estimator.ViewModels
             Project prj = obj as Project;
             if (prj != null)
             {
-                if (prj.MaterialViewModel != null && prj.MetalViewModel != null && prj.SlopeViewModel != null)
+                if (prj.MaterialViewModel != null || prj.MetalViewModel != null || prj.SlopeViewModel != null)
                 {
                     isEnabled= true;
                 }
@@ -353,6 +353,9 @@ namespace WICR_Estimator.ViewModels
             Projects.Add(new Project { Name = "Dual Membrane", Rank = 19, GrpName = "Westcoat", MainGroup = "Below Tile" });
             Projects.Add(new Project { Name = "UPI Below Tile", Rank = 20, GrpName = "UPI", MainGroup = "Below Tile" });
             Projects.Add(new Project { Name = "Dual Flex", Rank = 21, GrpName = "Dexotex", MainGroup = "Below Tile" });
+            Projects.Add(new Project { Name = "Color Flake", Rank = 22, GrpName = "Westcoat", MainGroup = "Epoxy Coatings" });
+            Projects.Add(new Project { Name = "Polyurethane Injection Block", Rank = 23, GrpName = "DeNeef", MainGroup = "Below Grade" });
+            Projects.Add(new Project { Name = "Block Wall", Rank = 24, GrpName = "Xypex", MainGroup = "Below Grade" });
             ProjectView = CollectionViewSource.GetDefaultView(Projects);
             
             ProjectView.GroupDescriptions.Add(new PropertyGroupDescription("MainGroup"));

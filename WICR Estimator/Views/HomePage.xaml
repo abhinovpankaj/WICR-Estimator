@@ -94,6 +94,16 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                                                     <Setter Property="TextBlock.FontSize" Value="18"/>
                                                     <Setter Property="TextBlock.Foreground" Value="Blue"/>
                                                 </DataTrigger>
+                                                <DataTrigger Binding="{Binding Name}" Value="Below Tile">
+                                                    <Setter Property="TextBlock.FontWeight" Value="Bold"/>
+                                                    <Setter Property="TextBlock.FontSize" Value="18"/>
+                                                    <Setter Property="TextBlock.Foreground" Value="Blue"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Name}" Value="Epoxy Coatings">
+                                                    <Setter Property="TextBlock.FontWeight" Value="Bold"/>
+                                                    <Setter Property="TextBlock.FontSize" Value="18"/>
+                                                    <Setter Property="TextBlock.Foreground" Value="Blue"/>
+                                                </DataTrigger>
                                             </Style.Triggers> 
                                         </Style>
                                     </TextBlock.Style>

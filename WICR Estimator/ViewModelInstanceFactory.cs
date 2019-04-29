@@ -37,6 +37,9 @@ namespace WICR_Estimator
                 case "Dual Membrane":
                 case "UPI Below Tile":
                 case "Dual Flex":
+                case "Color Flake":
+                case "Polyurethane Injection Block":
+                case "Block Wall":
                     return new MetalViewModel(Js);
                 
                 default:
@@ -130,8 +133,15 @@ namespace WICR_Estimator
                 case "Dual Membrane":
                     return new WestcoatdualMaterialViewModel(metalT, slopeT, Js);
                 case "Dual Flex":
+                    return new DualFlexMaterialViewModel(metalT, slopeT, Js);
                 case "UPI Below Tile":
                     return new UPIBelowTileMaterialViewModel(metalT, slopeT, Js);
+                case "Color Flake":
+                    return new DexoColorFlakeMaterialViewModel(metalT, null, Js);
+                case "Polyurethane Injection Block":
+                    return new DeneefMaterialViewModel(metalT, null, Js);
+                case "Block Wall":
+                    return new XypexMaterialViewModel(metalT, null, Js);
                 default:
                     return null;
             }

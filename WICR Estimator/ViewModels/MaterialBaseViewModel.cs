@@ -161,7 +161,7 @@ namespace WICR_Estimator.ViewModels
             double calcHrs = 0;
             double sqStairs = 0;
             double qty = 0;
-
+            string operation = "";
             if (isPrevailingWage)
             {
                 double.TryParse(freightData[5][0].ToString(), out prPerc);
@@ -199,7 +199,7 @@ namespace WICR_Estimator.ViewModels
             {
                 sqStairs = qty;
             }
-
+            operation = GetOperation(matName);
             return (new SystemMaterial
             {
                 Name = matName,
@@ -210,7 +210,7 @@ namespace WICR_Estimator.ViewModels
                 Weight = w, 
                 Qty = qty,
                 SMSqftH = sqh,
-                Operation = matName,
+                Operation = operation,
                 HorizontalProductionRate = hprRate,
                 StairsProductionRate = pRateStairs,
                 StairSqft = sqStairs,
@@ -225,6 +225,11 @@ namespace WICR_Estimator.ViewModels
                 IsMaterialEnabled = getCheckboxEnabledStatus(matName),
                 IncludeInLaborMinCharge=IncludedInLaborMin(matName)
             });
+        }
+
+        public virtual string GetOperation(string matName)
+        {
+            return matName;
         }
 
         public virtual bool IncludedInLaborMin(string matName)

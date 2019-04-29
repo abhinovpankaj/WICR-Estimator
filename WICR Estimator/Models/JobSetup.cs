@@ -194,7 +194,7 @@ namespace WICR_Estimator.Models
             {
                 SqftLabel = "SQ FT OF VERTICAL LAGGING WALLS";
             }
-            else if (name == "201" || name == "250")
+            else if (name == "201" || name == "250"|| name=="Block Wall")
             {
                 SqftLabel = "TOTAL SQ FT HORIZONTAL CONCRETE";
             }
@@ -202,6 +202,10 @@ namespace WICR_Estimator.Models
                 SqftLabel = "TOTAL SQ FT HORIZONTAL (NEOBOND ANTI-FRACTURE)";
             else if (name == "860")
                 SqftLabel = "TOTAL SQ FT CONCRETE DECKS";
+            else if (name == "Color Flake")
+                SqftLabel = "TOTAL SQ FT FLOOR";
+            else if (name == "Polyurethane Injection Block")
+                SqftLabel = "TOTAL SQ FT HORIZONTAL CONCRETE FLOOR";
             else
                 SqftLabel = "Total Sqft";
 
@@ -290,12 +294,18 @@ namespace WICR_Estimator.Models
                     return "LF OF PERIMETER FOOTING (STANDARD PARAGRANULAR DETAIL AND TERM BAR)";
                 else if (ProjectName == "Paraseal LG")
                     return "LF OF PERIMETER FOOTING (adds term bar only )";
-                else if (ProjectName == "Tufflex" || ProjectName == "201" || ProjectName == "250"|| ProjectName=="UPI Below Tile")
+                else if (ProjectName == "Tufflex" || ProjectName == "201" || ProjectName == "250" || ProjectName == "UPI Below Tile")
                     return "LINEAR FOOTAGE OF PERIMETER (DECKS)";
                 else if (ProjectName == "860")
                     return "LINEAR FOOTAGE OF DECK TO WALL METAL(fluid applied detail)";
                 else if (ProjectName == "Dual Flex")
                     return "PERIMETER";
+                else if (ProjectName == "Polyurethane Injection Block")
+                    return "LINEAR FOOTAGE OF COLD JOINTS";
+                else if (ProjectName == "Color Flake")
+                    return "LINEAR FOOTAGE OF 3/16 inch COVE BASE";
+                else if (ProjectName == "Block Wall")
+                    return "LINEAR FOOTAGE OF INSIDE CORNERS";
                 else
                     return "Lf Perimeter for Burlap and Membrane";
             }
@@ -309,6 +319,8 @@ namespace WICR_Estimator.Models
                 {
                     return "TOTAL SQ FT VERTICAL WALLS (MEMBRANE ONLY)";
                 }
+                else if (ProjectName == "Polyurethane Injection Block")
+                    return "TOTAL SQ FT VERTICAL BLOCK (EXCL 1ST 2 COURSES)";
                 else
                     return "TOTAL SQ FT VERTICAL (BLOCK WALL)";
             }
@@ -741,7 +753,8 @@ namespace WICR_Estimator.Models
                     return "# PENETRATIONS or DRAINS";
                 }
                 else if (ProjectName == "201" || ProjectName == "250" || ProjectName == "Dexcellent II"||
-                    ProjectName=="860"|| ProjectName == "UPI Below Tile" || ProjectName=="Dual Flex")
+                    ProjectName=="860"|| ProjectName == "UPI Below Tile" || ProjectName=="Dual Flex"||ProjectName=="Color Flake"||
+                    ProjectName== "Polyurethane Injection Block" || ProjectName == "Block Wall")
                     return "# RISERS (3.5-4 FT WIDE)";
                 else if (ProjectName == "Paraseal LG")
                     return "TIE BACKS (block outs must be priced separately)";
@@ -770,7 +783,8 @@ namespace WICR_Estimator.Models
             get
             {
                 if (ProjectName == "Pedestrian System" || ProjectName == "Parking Garage" || ProjectName == "Paraseal" ||
-                    ProjectName == "Paraseal LG" || ProjectName=="860"||ProjectName=="UPI Below Tile")
+                    ProjectName == "Paraseal LG" || ProjectName=="860"||ProjectName=="UPI Below Tile"||ProjectName=="Color Flake"
+                    ||ProjectName== "Polyurethane Injection Block" || ProjectName == "Block Wall")
                 {
                     return System.Windows.Visibility.Collapsed;
                 }
@@ -1106,7 +1120,8 @@ namespace WICR_Estimator.Models
             get
             {
 
-                if (ProjectName == "201" || ProjectName == "250"||ProjectName=="860"||ProjectName=="Dual Flex")
+                if (ProjectName == "201" || ProjectName == "250"||ProjectName=="860"||ProjectName=="Dual Flex"||ProjectName== "Polyurethane Injection Block"
+                    ||ProjectName=="Block Wall")
                 {
                     return System.Windows.Visibility.Visible;
                 }

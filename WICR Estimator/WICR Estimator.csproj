@@ -149,8 +149,10 @@
     <Compile Include="ViewModels\ALXMaterialViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\Carlisle860MaterialViewModel.cs" />
+    <Compile Include="ViewModels\DeneefMaterialViewModel.cs" />
     <Compile Include="ViewModels\DesertbrandMaterialViewModel.cs" />
     <Compile Include="ViewModels\DexellentIIMaterialViewModel.cs" />
+    <Compile Include="ViewModels\DexoColorFlakeMaterialViewModel.cs" />
     <Compile Include="ViewModels\DexoMaterialViewModel.cs" />
     <Compile Include="ViewModels\DexoMetalViewModel.cs" />
     <Compile Include="ViewModels\DexoSlopeViewModel.cs" />
@@ -181,6 +183,7 @@
     <Compile Include="ViewModels\WestcoatdualMaterialViewModel.cs" />
     <Compile Include="ViewModels\WWRehabMaterialViewModel.cs" />
     <Compile Include="ViewModels\WWResealMaterialViewModel.cs" />
+    <Compile Include="ViewModels\XypexMaterialViewModel.cs" />
     <Compile Include="Views\CalculationDetailsPage.xaml.cs">
       <DependentUpon>CalculationDetailsPage.xaml</DependentUpon>
     </Compile>

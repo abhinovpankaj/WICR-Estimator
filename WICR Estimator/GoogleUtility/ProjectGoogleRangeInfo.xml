@@ -187,4 +187,28 @@
     <MaterialRange>H1844:N1861</MaterialRange>
     <FreightRange>E48:F54</FreightRange>
   </DualFlex>
+<ColorFlake>
+    <RateRange>E2</RateRange>
+    <MetalRange>F3:M43</MetalRange>
+    <LaborRange>E1917:E1936</LaborRange>
+    <SlopeRange>P1820:Q1836</SlopeRange>
+    <MaterialRange>H1900:N1912</MaterialRange>
+    <FreightRange>E48:F54</FreightRange>
+  </ColorFlake>
+<Xypex>
+    <RateRange>E2</RateRange>
+    <MetalRange>F3:M43</MetalRange>
+    <LaborRange>E1970:E1989</LaborRange>
+    <SlopeRange>P1820:Q1836</SlopeRange>
+    <MaterialRange>H1950:N1958</MaterialRange>
+    <FreightRange>E48:F54</FreightRange>
+  </Xypex>
+<DeNeef>
+    <RateRange>E2</RateRange>
+    <MetalRange>F3:M43</MetalRange>
+    <LaborRange>E2020:E2039</LaborRange>
+    <SlopeRange>P1820:Q1836</SlopeRange>
+    <MaterialRange>H2000:N2010</MaterialRange>
+    <FreightRange>E48:F54</FreightRange>
+  </DeNeef>
 </Projects>
