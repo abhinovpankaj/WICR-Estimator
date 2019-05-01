@@ -20,7 +20,12 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
-
+        <Style x:Key="RBxStyle" TargetType="RadioButton">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
         <Style x:Key="TextBoxStyle" TargetType="TextBox">
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Margin" Value="5,0,5,10"/>
@@ -158,16 +163,22 @@
                                            TextWrapping="Wrap"/>
                         </CheckBox>
                         <StackPanel  Visibility="{Binding DualFlexVisible}">
-                            <CheckBox  Style="{StaticResource CheckBoxStyle}"
+                            <Border BorderBrush="Gray" BorderThickness="1" Margin="2">
+                                <StackPanel>
+                                    <RadioButton GroupName="Mortar" Style="{StaticResource RBxStyle}"
                                IsChecked="{Binding HasQuarterMortarBed,UpdateSourceTrigger=PropertyChanged}">
-                                <TextBlock Text="1  1/4 inch MORTAR BED WITH 2X2 METAL"
+                                        <TextBlock Text="1  1/4 inch MORTAR BED WITH 2X2 METAL"
                                            TextWrapping="Wrap"/>
-                            </CheckBox>
-                            <CheckBox  Style="{StaticResource CheckBoxStyle}"
+                                    </RadioButton>
+                                    <RadioButton  GroupName="Mortar" Style="{StaticResource RBxStyle}"
                                IsChecked="{Binding HasQuarterLessMortarBed,UpdateSourceTrigger=PropertyChanged}">
-                                <TextBlock Text="3/4 INCH MORTAR BED WITH METAL LATHE"
+                                        <TextBlock Text="3/4 INCH MORTAR BED WITH METAL LATHE"
                                            TextWrapping="Wrap"/>
-                            </CheckBox>
+                                    </RadioButton>
+                                </StackPanel>
+                                
+                            </Border>
+                            
                             <CheckBox  Style="{StaticResource CheckBoxStyle}"
                                IsChecked="{Binding HasElastex,UpdateSourceTrigger=PropertyChanged}">
                                 <TextBlock Text="ADD FOR ELASTATEX 2-MEMBRANE SYSTEM"

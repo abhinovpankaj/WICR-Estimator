@@ -25,6 +25,7 @@ namespace WICR_Estimator.Models
             this.GSLaborRate = LaborRateGS;           
 
         }
+        public double riserCount { get; set;}
         public string SlopeType { get; set; }
         public string Thickness { get; set; }
         public double LaborRate { get; set; }
@@ -85,6 +86,7 @@ namespace WICR_Estimator.Models
         {
             set
             {
+
                 if (value != totalMixes)
                 {
                     totalMixes = value;
@@ -93,7 +95,7 @@ namespace WICR_Estimator.Models
             }
             get
             {
-                if (SlopeType=="")
+                if (SlopeType == "")
                 {
                     switch (Thickness)
                     {
@@ -130,12 +132,14 @@ namespace WICR_Estimator.Models
                         case "1/4 inch Expansion Joints":
                             return Total;
                         case "Cement Board and screws for stair applications":
-                            return 0;
+                            return riserCount * (20.0 / 24 * 3.5 / 15);
+                        case "1 1/4 inch Mortar Bed with 2x2 or diamond metal lathe":
+                            return  hasMortarBed ? Total / 22 * 3 : Total / 22 * 5;
                         default:
                             return 0;
                     }
                 }
-                
+
             }
         }
         private double priceperMix;
@@ -161,6 +165,8 @@ namespace WICR_Estimator.Models
             }
         }
         private double labrExtnSlope;
+        public double latheRate { get; set; }
+
         public double LaborExtensionSlope
         {        
             set
@@ -177,9 +183,16 @@ namespace WICR_Estimator.Models
             }
         }
 
+        public bool hasMortarBed { get; set; }
+
         public virtual double CalculateLaborextensionSlope()
         {
-            return (Total / GSLaborRate) * LaborRate; ;
+            if (Thickness== "1 1/4 inch Mortar Bed with 2x2 or diamond metal lathe")
+            {
+                return (Total / GSLaborRate + Total / latheRate) * LaborRate;
+            }
+            else
+                return (Total / GSLaborRate) * LaborRate; ;
         }
         private void changeProperty()
         {

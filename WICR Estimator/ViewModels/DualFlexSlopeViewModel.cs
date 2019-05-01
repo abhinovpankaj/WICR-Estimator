@@ -33,7 +33,7 @@ namespace WICR_Estimator.ViewModels
 
         private double mortarSumTotal;
         [DataMember]
-        public double MortarSumTotal
+        public double UrethaneSumTotal
         {
             get
             {
@@ -44,13 +44,13 @@ namespace WICR_Estimator.ViewModels
                 if (mortarSumTotal != value)
                 {
                     mortarSumTotal = value;
-                    OnPropertyChanged("MortarSumTotal");
+                    OnPropertyChanged("UrethaneSumTotal");
                 }
             }
         }
         private double mortarSumTotalMixes;
         [DataMember]
-        public double MortarSumTotalMixes
+        public double UrethaneSumTotalMixes
         {
             get
             {
@@ -61,14 +61,14 @@ namespace WICR_Estimator.ViewModels
                 if (mortarSumTotalMixes != value)
                 {
                     mortarSumTotalMixes = value;
-                    OnPropertyChanged("MortarSumTotalMixes");
+                    OnPropertyChanged("UrethaneSumTotalMixes");
                 }
             }
         }
         //  mortarSumTotalLaborExt
         private double mortarSumTotalMatExt;
         [DataMember]
-        public double MortarSumTotalMatExt
+        public double UrethaneSumTotalMatExt
         {
             get
             {
@@ -79,13 +79,13 @@ namespace WICR_Estimator.ViewModels
                 if (mortarSumTotalMatExt != value)
                 {
                     mortarSumTotalMatExt = value;
-                    OnPropertyChanged("MortarSumTotalMatExt");
+                    OnPropertyChanged("UrethaneSumTotalMatExt");
                 }
             }
         }
         private double mortarSumTotalLaborExt;
         [DataMember]
-        public double MortarSumTotalLaborExt
+        public double UrethaneSumTotalLaborExt
         {
             get
             {
@@ -96,7 +96,7 @@ namespace WICR_Estimator.ViewModels
                 if (mortarSumTotalLaborExt != value)
                 {
                     mortarSumTotalLaborExt = value;
-                    OnPropertyChanged("MortarSumTotalLaborExt");
+                    OnPropertyChanged("UrethaneSumTotalLaborExt");
                 }
             }
         }
@@ -130,7 +130,7 @@ namespace WICR_Estimator.ViewModels
 
         public override void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {
-            
+            base.JobSetup_OnJobSetupChange(sender, e);
             JobSetup js = sender as JobSetup;
             if (js != null)
             {
@@ -138,12 +138,15 @@ namespace WICR_Estimator.ViewModels
                 riserCount = js.RiserCount;
                 isApprovedForCement = js.IsApprovedForSandCement;
                 easyAccessNoLadder = js.HasEasyAccess;
-                totalSqft = js.TotalSqft;
                 hasMortarBed = js.HasQuarterLessMortarBed;
                 hasQuarterMortarBed = js.HasQuarterMortarBed;
+                totalSqft = (hasQuarterMortarBed || hasMortarBed) == true ? js.TotalSqft : 0 ;
+                
             }
+            UrethaneSlopes = CreateSlopes(9);
             UpdateSpecialSlope();
-            base.JobSetup_OnJobSetupChange(sender, e);
+            CalculateAll();
+            
             
         }
 
@@ -153,9 +156,11 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(perMixRates[13][0].ToString(), out val1);
             double.TryParse(perMixRates[14][0].ToString(), out val2);
             double latherate = hasMortarBed ?val1: val2;
+
             Slope slp = UrethaneSlopes.FirstOrDefault(x => x.Thickness == "1 1/4 inch Mortar Bed with 2x2 or diamond metal lathe");
             if (slp!=null)
             {
+                slp.latheRate = latherate;
                 slp.LaborExtensionSlope = (slp.Sqft / slp.GSLaborRate + slp.Sqft / latherate) * laborRate;
             }
             
@@ -246,10 +251,11 @@ namespace WICR_Estimator.ViewModels
                 {
                     Thickness = "1/4 inch Expansion Joints",
                     DeckCount = 1,
-                    Sqft = totalSqft+linearCopingFootage /120*22,
+                    Sqft = Math.Round(linearCopingFootage+ totalSqft / 120*22,2),
                     GSLaborRate = getGSLaborRate("1/4 inch Expansion Joints", RowN),
                     LaborRate = laborRate,
                     PricePerMix = getPricePerMix("1/4 inch Expansion Joints", isApprovedForCement, RowN),
+                     
                     SlopeType = RowN == 0 ? "" : "DualFlex",                    
                 });
                 Slope slp=
@@ -257,26 +263,28 @@ namespace WICR_Estimator.ViewModels
                 {
                     Thickness = "Cement Board and screws for stair applications",
                     DeckCount = 0,
-                    Sqft = riserCount*20*3.5 / 24,
+                    riserCount=riserCount,
+                    Sqft = Math.Round(riserCount*20*3.5 / 24,2),
                     GSLaborRate = getGSLaborRate("Cement Board and screws for stair applications", RowN),
                     LaborRate = laborRate,
                     PricePerMix = getPricePerMix("Cement Board and screws for stair applications", isApprovedForCement, RowN),
                     SlopeType = RowN == 0 ? "" : "DualFlex"
                 };
-                slp.TotalMixes = riserCount * (20 / 24 * 3.5 / 15);
+                
                 slopes.Add(slp);
 
-                slp=new Slope
+                slp = new Slope
                 {
                     Thickness = "1 1/4 inch Mortar Bed with 2x2 or diamond metal lathe",
                     DeckCount = 1,
                     Sqft = totalSqft,
+                    hasMortarBed = hasMortarBed,
                     GSLaborRate = getGSLaborRate("1 1/4 inch Mortar Bed with 2x2 or diamond metal lathe", RowN),
                     LaborRate = laborRate,
                     PricePerMix = getPricePerMix("1 1/4 inch Mortar Bed with 2x2 or diamond metal lathe", isApprovedForCement, RowN),
                     SlopeType = RowN == 0 ? "" : "DualFlex"
                 };
-                slp.TotalMixes = hasMortarBed ? slp.Total / 22 * 3 : slp.Total / 22 * 5;
+                
                 slopes.Add(slp);
                 return slopes;
             }
@@ -290,35 +298,69 @@ namespace WICR_Estimator.ViewModels
             if (UrethaneSlopes.Count > 0)
             {
                 ///sumtotal              
-                MortarSumTotal = Math.Round(UrethaneSlopes.Select(x => x.Total).Sum(), 2);
+                UrethaneSumTotal = Math.Round(UrethaneSlopes.Select(x => x.Total).Sum(), 2);
 
                 ///sumtotalmixes
-                MortarSumTotalMixes = Math.Round(UrethaneSlopes.Select(x => x.TotalMixes).Sum(), 2);
+                UrethaneSumTotalMixes = Math.Round(UrethaneSlopes.Select(x => x.TotalMixes).Sum(), 2);
 
                 ///sumtotalmatext
 
-                MortarSumTotalMatExt = Math.Round(UrethaneSlopes.Select(x => x.MaterialExtensionSlope).Sum(), 2);
+                UrethaneSumTotalMatExt = Math.Round(UrethaneSlopes.Select(x => x.MaterialExtensionSlope).Sum(), 2);
                 //sumtotallaborext
 
-                MortarSumTotalLaborExt = Math.Round(UrethaneSlopes.Select(x => x.LaborExtensionSlope).Sum(), 2);
+                UrethaneSumTotalLaborExt = Math.Round(UrethaneSlopes.Select(x => x.LaborExtensionSlope).Sum(), 2);
 
             }
+            OnPropertyChanged("MortarSumTotal");
+            OnPropertyChanged("MortarSumTotalMixes");
+            OnPropertyChanged("MortarSumTotalMatExt");
+            OnPropertyChanged("MortarSumTotalLaborExt");
         }
 
         public override void CalculateTotalMixes()
         {
-            base.CalculateTotalMixes();
+            //base.CalculateTotalMixes();
             double minLabVal = 0;
             double lCost = 0;
+            if (Slopes.Count > 0)
+            {
+                LaborCost = Math.Round(SumTotalLaborExt, 2);
+                double.TryParse(perMixRates[8][0].ToString(), out minLabVal);
+
+                MinimumLaborCost = hasQuarterMortarBed ?0: minLabVal * laborRate;
+
+                lCost = SumTotalLaborExt == 0 ? 0 : LaborCost > MinimumLaborCost ? LaborCost : MinimumLaborCost;
+                if (isPrevailingWage)
+                {
+                    if (hasDiscount)
+                        TotalLaborCost = lCost * (1 + prevailingWage + deductionOnLargeJob);
+                    else
+                        TotalLaborCost = lCost * (1 + prevailingWage);
+
+                }
+                else
+                {
+                    if (hasDiscount)
+                        TotalLaborCost = lCost * (1 + deductionOnLargeJob);
+                    else
+                        TotalLaborCost = lCost;
+                }
+                TotalMaterialCost = Math.Round(SumTotalMatExt, 2);
+                TotalWeight = Math.Round(50 * SumTotalMixes, 2);
+                TotalFrightCost = Math.Round(FreightCalculator(TotalWeight), 2);
+            }
+
+            minLabVal = 0;
+            lCost = 0;
             if (UrethaneSlopes.Count > 0)
             {
 
-                lCost = Math.Round(MortarSumTotalLaborExt, 2);
+                lCost = Math.Round(UrethaneSumTotalLaborExt, 2);
                 double.TryParse(perMixRates[16][0].ToString(), out minLabVal);
 
-                MortarMinimumLaborCost = minLabVal * laborRate;
+                MortarMinimumLaborCost =hasQuarterMortarBed ? minLabVal * laborRate:18*laborRate;
 
-                lCost = MortarSumTotalLaborExt == 0 ? 0 : lCost > MortarMinimumLaborCost ? lCost : MortarMinimumLaborCost;
+                lCost = UrethaneSumTotalLaborExt == 0 ? 0 : lCost > MortarMinimumLaborCost ? lCost : MortarMinimumLaborCost;
                 if (isPrevailingWage)
                 {
                     if (hasDiscount)
@@ -333,9 +375,10 @@ namespace WICR_Estimator.ViewModels
                         lCost = lCost * (1 + deductionOnLargeJob);
 
                 }
+
                 TotalLaborCost = TotalLaborCost + lCost;
-                TotalMaterialCost = TotalMaterialCost + Math.Round(MortarSumTotalMatExt, 2);
-                double mortarTotalWeight = Math.Round(50 * MortarSumTotalMixes, 2);
+                TotalMaterialCost = TotalMaterialCost + Math.Round(UrethaneSumTotalMatExt, 2);
+                double mortarTotalWeight = Math.Round(50 * UrethaneSumTotalMixes, 2);
                 TotalFrightCost = Math.Round(FreightCalculator(TotalWeight), 2) + Math.Round(FreightCalculator(mortarTotalWeight), 2);
                 TotalWeight = TotalWeight + mortarTotalWeight;
 

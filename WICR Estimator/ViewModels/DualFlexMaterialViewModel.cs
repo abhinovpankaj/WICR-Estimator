@@ -47,14 +47,55 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("DETAIL TAPE (4 PW inch polyester-NEW PLYWOOD)", "150 SF ROLL");
             materialNames.Add("SIKA 1-A CAULKING (NEW PLYWOOD)", "TUBE");
             materialNames.Add("ENTER # OF DECKS TO WATER TEST \"NO DAM'S NEEDED\"", "EACH");
-            materialNames.Add("MIRADRAIN HC 1\" DRAIN - PUNCHED 12\" X 100'  (QUICK DRAIN)", "LINEAR FEET");
             materialNames.Add("ADD LF FOR DAMMING @ DRIP EDGE", "LF");
             
             materialNames.Add("Plywood 3/4 & blocking (# of 4x8 sheets)", "4X8 Sheets");
             materialNames.Add("Stucco Material Remove and replace (LF)", "LF");
 
         }
-        
+
+        public override string GetOperation(string matName)
+        {
+            switch (matName)
+            {
+                case "OPTIONAL ADD FOR LABOR ON NON-COMPETITIVE QUOTES":
+                    return "ADD FOR LABOR";
+                case "RP II FABRIC 10 IN WIDE FOR PERIMETER (300 LF) FROM ACME":
+                    return "STAIR & PERIMETER DETAIL";
+                case "RP FABRIC 40 IN WIDE (1000 S.F.) FROM ACME BY THE YARD":
+                    return "ROLL OUT GLASS";
+                case "NEOBOND LIQUID":
+                    return "SATURATE GLASS";
+                case "RESISTITE LIQUID":
+                    return "PREP FLOOR";
+                case "RESISTITE POWDER":
+                    return "ADD TO FILLER";
+                case "NEOBOND MEMBRANE AND RP FABRIC FOR WALLS  (2 COATS)":
+                    return "2 COATS WITH GLASS FABRIC";
+                case "INTERLAMINATE PRIMER (XYLENE FROM LOWRYS)":
+                    return "PRIME AFTER CONSTRUCTION";
+                case "ELASTATEX 500 RESIN AND CATALYST (2 COATS/ HORIZONTAL SURFACES ONLY) 40 MILS":
+                    return "TROWEL 2 COATS";
+                case "DETAIL TAPE (4 inch PW polyester cloth-PERIMETER)":
+                    return "STAIR & PERIMETER";
+                case "SIKA 1-A CAULKING (PERIMETER)":
+                    return "ADD SAND AND TOP COAT";
+                case "DETAIL TAPE (4 PW inch polyester-NEW PLYWOOD)":
+                case "SIKA 1-A CAULKING (NEW PLYWOOD)":
+                    return "DETAIL JOINTS & SEAMS";
+                
+                case "ENTER # OF DECKS TO WATER TEST \"NO DAM'S NEEDED\"":
+                    return "PLUG DRAIN & FLOOD";
+                case "ADD LF FOR DAMMING @ DRIP EDGE":
+                    return "DAM UP WITH METAL";
+                case "Plywood 3/4 & blocking (# of 4x8 sheets)":
+                    return "REMOVE AND REPLACE DRYROT";
+                case "Stucco Material Remove and replace (LF)":
+                    return "REMOVE AND REPLACE 12 IN. OF STUCCO";
+                default:
+                    return "";
+            }
+        }
         public override void FetchMaterialValuesAsync(bool hasSetupChanged)
         {
             Dictionary<string, double> qtyList = new Dictionary<string, double>();
@@ -152,7 +193,7 @@ namespace WICR_Estimator.ViewModels
         }
         public override void CalculateCostPerSqFT()
         {
-            CostPerSquareFeet = (totalSqft  + totalSqftVertical) == 0 ? 0 : Math.Round(TotalMaterialCost / (totalSqft +  totalSqftVertical), 2);
+            CostPerSquareFeet = (totalSqft  + totalSqftVertical+riserCount) == 0 ? 0 : Math.Round(TotalMaterialCost / (totalSqft +  totalSqftVertical+riserCount), 2);
         }
         public override bool getCheckboxCheckStatus(string materialName)
         {
@@ -227,7 +268,7 @@ namespace WICR_Estimator.ViewModels
                 case "Stucco Material Remove and replace (LF)":
                     return 0;
                 default:
-                    return lfArea / coverage;
+                    return coverage == 0 ? 0 : lfArea / coverage;
             }
         }
 
@@ -386,19 +427,7 @@ namespace WICR_Estimator.ViewModels
         public override void ApplyCheckUnchecks(object obj)
         {
 
-            SystemMaterial sysmat = null;
-            bool ischecked = false, ischecked1 = false;
-            if (obj.ToString() == "MIRADRAIN 6000 XL (VERTICAL ONLY)" || obj.ToString() == "MIRADRAIN 6000 XL  (HORIZONTAL ONLY)")
-            {
-                sysmat = SystemMaterials.Where(x => x.Name == "MIRADRAIN 6000 XL (VERTICAL ONLY)").FirstOrDefault();
-                ischecked = sysmat.IsMaterialChecked;
-                sysmat = SystemMaterials.Where(x => x.Name == "MIRADRAIN 6000 XL  (HORIZONTAL ONLY)").FirstOrDefault();
-                ischecked1 = sysmat.IsMaterialChecked;
-            }
-            SystemMaterials.Where(x => x.Name == "MIRASTICK ADHESIVE (GLUE DOWN DRAIN MAT)").FirstOrDefault().IsMaterialChecked = ischecked || ischecked1;
-
-            calculateRLqty();
-            CalculateLaborMinCharge();
+            
         }
 
         public override double CalculateLabrExtn(double calhrs, double setupMin, string matName = "")
@@ -408,7 +437,7 @@ namespace WICR_Estimator.ViewModels
                 return 0;
             }
             else
-                return setupMin > calhrs ? setupMin * laborRate : calhrs * laborRate;
+                return (setupMin + calhrs ) * laborRate;
         }
         public override void setCheckBoxes()
         {

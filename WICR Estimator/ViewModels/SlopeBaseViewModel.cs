@@ -414,6 +414,7 @@ namespace WICR_Estimator.ViewModels
             
 
         }
+        
         public virtual void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {
             JobSetup js = sender as JobSetup;

@@ -752,12 +752,14 @@ namespace WICR_Estimator.Models
                 {
                     return "# PENETRATIONS or DRAINS";
                 }
-                else if (ProjectName == "201" || ProjectName == "250" || ProjectName == "Dexcellent II"||
-                    ProjectName=="860"|| ProjectName == "UPI Below Tile" || ProjectName=="Dual Flex"||ProjectName=="Color Flake"||
-                    ProjectName== "Polyurethane Injection Block" || ProjectName == "Block Wall")
+                else if (ProjectName == "201" || ProjectName == "250" || ProjectName == "Dexcellent II" ||
+                    ProjectName == "860" || ProjectName == "UPI Below Tile" || ProjectName == "Color Flake" ||
+                    ProjectName == "Polyurethane Injection Block" || ProjectName == "Block Wall")
                     return "# RISERS (3.5-4 FT WIDE)";
                 else if (ProjectName == "Paraseal LG")
                     return "TIE BACKS (block outs must be priced separately)";
+                else if (ProjectName == "Dual Flex")
+                    return "#  RISERS INCLUDES METAL (3.5-4 FT WIDE)";
                 else
                     return "Stair Risers - Confirm stair width";
             }
@@ -923,7 +925,7 @@ namespace WICR_Estimator.Models
             get
             {
                 if (ProjectName=="Resistite" ||ProjectName=="Multicoat" || 
-                    ProjectName=="Paraseal"||ProjectName== "860")
+                    ProjectName=="Paraseal"||ProjectName== "860"|| ProjectName=="Dual Flex")
                 {
                     return System.Windows.Visibility.Visible;
                 }
