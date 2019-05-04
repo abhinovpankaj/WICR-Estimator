@@ -213,13 +213,13 @@ namespace WICR_Estimator.ViewModels
         }
         public override void CalculateLaborMinCharge()
         {
-            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
-                                        x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
-            LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
-                                         x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
+            //LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+            //                            x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
+            //LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+            //                             x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
 
-            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 :
-                                                (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
+            //LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 :
+            //                                    (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
             base.CalculateLaborMinCharge();
         }
         public override void calculateRLqty()

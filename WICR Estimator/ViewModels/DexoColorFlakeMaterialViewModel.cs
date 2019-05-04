@@ -131,13 +131,13 @@ namespace WICR_Estimator.ViewModels
         }
         public override void CalculateLaborMinCharge()
         {
-            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
-                                         x.IsMaterialChecked && x.LaborExtension != 0).ToList().Select(x => x.Hours).Sum();
-            LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
-                                         x.IsMaterialChecked && x.LaborExtension != 0).ToList().Select(x => x.SetupMinCharge).Sum();
+            //LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+            //                             x.IsMaterialChecked && x.LaborExtension != 0).ToList().Select(x => x.Hours).Sum();
+            //LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+            //                             x.IsMaterialChecked && x.LaborExtension != 0).ToList().Select(x => x.SetupMinCharge).Sum();
 
-            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 :
-                                                (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
+            //LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 :
+            //                                    (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
             base.CalculateLaborMinCharge();
         }
         public override double getLaborUnitPrice(double laborExtension, double riserCount, double totalSqft, double sqftVert = 0, double sqftHor = 0,
@@ -208,7 +208,7 @@ namespace WICR_Estimator.ViewModels
                 SystemMaterials = sysMat;
 
             setExceptionValues(null);
-            //setCheckBoxes();
+            setCheckBoxes();
             if (OtherMaterials.Count == 0)
             {
                 OtherMaterials = GetOtherMaterials();
@@ -227,9 +227,14 @@ namespace WICR_Estimator.ViewModels
             return true;
         }
 
+        public override void setCheckBoxes()
+        {
+           SystemMaterial sysmat = SystemMaterials.Where(x => x.Name == "1 COAT (6 MILS) OF VC 200 PRIMER IN LIEU OF BONDCOAT (FOR HYDROSTATIC up to 10 lbs.)").FirstOrDefault();
+           bool ischecked = sysmat.IsMaterialChecked;
+            SystemMaterials.Where(x => x.Name == "EC-12 Epoxy Primer").FirstOrDefault().IsMaterialChecked = !ischecked;
+        }
 
-        
-        
+
 
         public override double getlfArea(string materialName)
         {

@@ -17,6 +17,7 @@ using System.IO;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
 using System.Xml;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace WICR_Estimator.ViewModels
 {
@@ -364,8 +365,172 @@ namespace WICR_Estimator.ViewModels
             ProjectView.SortDescriptions.Add(new SortDescription("GrpName", ListSortDirection.Ascending));          
 
         }
+        #region SummaryRegion
+        private static XmlDocument doc;
+        Microsoft.Office.Interop.Excel.Application exlApp;
+        Microsoft.Office.Interop.Excel.Workbook exlWb;
+        Microsoft.Office.Interop.Excel.Worksheet exlWs;
+        #endregion
+
+        private string getStartRange(string section)
+        {
+            if (doc == null)
+            {
+                doc = new XmlDocument();
+                doc.Load("ProjectGoogleRangeInfo.xml");
+            }
+            XmlNode node = doc.DocumentElement.SelectSingleNode("/Sections/" + section);
+            return node.InnerText;
+        }
+        
+        private void writeMetals(MetalViewModel MVM)
+        {
+            int k = 0;
+            string startRange = getStartRange("Metals");
+            foreach (Metal item in MVM.Metals)
+            {
+                exlWs.Range[startRange].Value = item.Name;
+                exlWs.Range[startRange].Offset[k, 1].Value = item.Size;
+                exlWs.Range[startRange].Offset[k, 2].Value = item.Units;
+                exlWs.Range[startRange].Offset[k, 3].Value = item.MaterialPrice;
+                exlWs.Range[startRange].Offset[k, 4].Value = item.SpecialMetalPricing;
+                k = k + 1;
+            }
+            k = 0;
+            startRange = getStartRange("AddonMetals");
+           
+            foreach (AddOnMetal item in MVM.AddOnMetals)
+            {
+                exlWs.Range[startRange].Value = item.Name;
+                exlWs.Range[startRange].Offset[k, 1].Value = item.Size;
+                exlWs.Range[startRange].Offset[k, 2].Value = item.Units;
+                exlWs.Range[startRange].Offset[k, 3].Value = item.MaterialPrice;
+                exlWs.Range[startRange].Offset[k, 4].Value = item.SpecialMetalPricing;
+                k = k + 1;
+            }
+            k = 0;
+            startRange = getStartRange("MiscMetals");
+            foreach (MiscMetal item in MVM.MiscMetals)
+            {
+                exlWs.Range[startRange].Value = item.Name;
+                
+                exlWs.Range[startRange].Offset[k, 1].Value = item.Units;
+                exlWs.Range[startRange].Offset[k, 2].Value = item.UnitPrice;
+                exlWs.Range[startRange].Offset[k, 3].Value = item.LaborUnitPrice;
+                exlWs.Range[startRange].Offset[k, 3].Value = item.MaterialPrice;
+                k = k + 1;
+            }
+        }
+        private void writeSlope(SlopeBaseViewModel SVM)
+        {
+            int k = 0;
+            string startRange = getStartRange("Slope");
+            foreach (Slope item in SVM.Slopes)
+            {
+                exlWs.Range[startRange].Value = item.Thickness;
+                exlWs.Range[startRange].Offset[k, 1].Value = item.Sqft;
+                exlWs.Range[startRange].Offset[k, 2].Value = item.DeckCount;
+                exlWs.Range[startRange].Offset[k, 3].Value = item.Total;
+                exlWs.Range[startRange].Offset[k, 4].Value = item.TotalMixes;
+                k = k + 1;
+            }
+            exlWs.Range[startRange].Offset[k, 3].Value = SVM.SumTotal;
+            exlWs.Range[startRange].Offset[k, 4].Value = SVM.SumTotalMixes;
+
+            //startRange = getStartRange("UrethaneSlope");
+            //foreach (Slope item in SVM)
+            //{
+            //    exlWs.Range[startRange].Value = item.Thickness;
+            //    exlWs.Range[startRange].Offset[k, 1].Value = item.Sqft;
+            //    exlWs.Range[startRange].Offset[k, 2].Value = item.DeckCount;
+            //    exlWs.Range[startRange].Offset[k, 3].Value = item.Total;
+            //    exlWs.Range[startRange].Offset[k, 4].Value = item.TotalMixes;
+            //    k = k + 1;
+            //}
+            //exlWs.Range[startRange].Offset[k, 3].Value = SVM.SumTotal;
+            //exlWs.Range[startRange].Offset[k, 4].Value = SVM.SumTotalMixes;
+        }
+        private void WriteToSummary()
+        {
+            if (exlApp==null)
+            {
+                exlApp = new Microsoft.Office.Interop.Excel.Application();
+                exlWb = exlApp.Workbooks.Open(@"C: \Users\abhin\Desktop\SummaryTemplate.xlsx");
+                exlWs = (Excel.Worksheet)exlWb.Worksheets["Summary"];
+
+                exlApp.Visible = true;
+            }
+
+            
+
+           
+            
+            //Write Addon metals details
+            
+            //Similarly for Slopes and Misc Metals, sub contract and Other labor costs.
+            string jobSetupRange = "";
+            int k = 0;
+            //jobname 
+            exlWs.Range[jobSetupRange].Value = "JOB NAME";
+            exlWs.Range[jobSetupRange].Offset[k, 1].Value = SelectedProjects[0].Name;
+            k++;
+            exlWs.Range[jobSetupRange].Offset[k, 0].Value = "BID BY";
+            exlWs.Range[jobSetupRange].Offset[k, 1].Value = SelectedProjects[0].ProjectJobSetUp.BidBy;
+            k++;
+            exlWs.Range[jobSetupRange].Offset[k, 0].Value = "DATE";
+            exlWs.Range[jobSetupRange].Offset[k, 1].Value = SelectedProjects[0].ProjectJobSetUp.JobDate;
+            k++;
+            exlWs.Range[jobSetupRange].Offset[k, 0].Value = "NOTE HERE IF A DIFFERENT PRODUCT IS BEING USED";
+            exlWs.Range[jobSetupRange].Offset[k, 1].Value = SelectedProjects[0].ProjectJobSetUp.SpecialProductName;
+            k++;
+            exlWs.Range[jobSetupRange].Offset[k, 0].Value = "DATE";
+            exlWs.Range[jobSetupRange].Offset[k, 1].Value = SelectedProjects[0].ProjectJobSetUp.JobDate;
+            k++;
+            if (SelectedProjects[0].ProjectJobSetUp.IsNewPlywoodVisible == System.Windows.Visibility.Visible)
+            {
+                exlWs.Range[jobSetupRange].Offset[k, 0].Value = "NEW PLYWOOD (Y or N)";
+                exlWs.Range[jobSetupRange].Offset[k, 1].Value = SelectedProjects[0].ProjectJobSetUp.IsNewPlywood.ToString();
+                k++;
+            }
+            if (SelectedProjects[0].ProjectJobSetUp.IsPlywoodSqftVisible == System.Windows.Visibility.Visible)
+            {
+                exlWs.Range[jobSetupRange].Offset[k, 0].Value = "PLYWOOD SQFT";
+                exlWs.Range[jobSetupRange].Offset[k, 1].Value = SelectedProjects[0].ProjectJobSetUp.TotalSqftPlywood;
+                k++;
+            }
+            if (SelectedProjects[0].ProjectJobSetUp.IsSqftConcreteVisible == System.Windows.Visibility.Visible)
+            {
+                exlWs.Range[jobSetupRange].Offset[k, 0].Value = SelectedProjects[0].ProjectJobSetUp.SqftLabel;
+                exlWs.Range[jobSetupRange].Offset[k, 1].Value = SelectedProjects[0].ProjectJobSetUp.TotalSqft;
+                k++;
+            }
+            if (SelectedProjects[0].ProjectJobSetUp.IsSqftVerticleVisible == System.Windows.Visibility.Visible)
+            {
+                exlWs.Range[jobSetupRange].Offset[k, 0].Value = SelectedProjects[0].ProjectJobSetUp.VerticalSqftLabel;
+                exlWs.Range[jobSetupRange].Offset[k, 1].Value = SelectedProjects[0].ProjectJobSetUp.TotalSqftVertical;
+                k++;
+            }
+            if (SelectedProjects[0].ProjectJobSetUp.IsJobByArchitectVisible == System.Windows.Visibility.Visible)
+            {
+                exlWs.Range[jobSetupRange].Offset[k, 0].Value = "Is This Job Specified By Architect?";
+                exlWs.Range[jobSetupRange].Offset[k, 1].Value = SelectedProjects[0].ProjectJobSetUp.IsJobSpecifiedByArchitect;
+                k++;
+            }
+
+            //LINEAR FOOTAGE OF DECK PERIMETER
+            //# RISERS (3.5-4 FT WIDE)   
+            //# DECKS
+            //Stair Width
+            //IS THIS JOB APPROVED FOR SAND AND CEMENT(Y or N)
+            //PREVAILING WAGE(Y or N)
+            //Actual Prevailing Wage
+
+        }
+        
 
         #endregion
+
+        
         public string Name
         {
             get

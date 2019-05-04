@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Sections>
+  <JobSetup>A3</JobSetup>
+  <Metals>G3</Metals>
+  <Slope>A47</Slope>
+  <UrethaneSlope>A59</UrethaneSlope>
+  <AddonMetals>O3</AddonMetals>
+  <MiscMetals>G26</MiscMetals>
+  <SystemMaterials>G42</SystemMaterials>
+  <OtherSystemMaterials>A75</OtherSystemMaterials>
+  <SubSystemMaterials>A93</SubSystemMaterials>
+  <Labor>L86</Labor>
+  <LaborOtherCosts>A100</LaborOtherCosts>
+  <CostSummary>H100</CostSummary>
+</Sections>

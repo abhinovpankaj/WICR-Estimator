@@ -68,7 +68,7 @@ namespace WICR_Estimator.ViewModels
         private ObservableCollection<OtherItem> otherLaborMaterials;
         private ObservableCollection<LaborContract> subContractLaborItems;
         private string weatherWearType;
-       
+        private bool isDataAvailable;
         private double markUpPerc;
         
         private bool isSpecialMetal;
@@ -97,6 +97,7 @@ namespace WICR_Estimator.ViewModels
             OtherLaborMaterials = new ObservableCollection<OtherItem>();
             SubContractLaborItems = new ObservableCollection<LaborContract>();
             weatherWearType = "Weather Wear";
+            IncludeDriveHours = true;
             totalSqft = 1000;
             stairWidth = 4.5;
             riserCount = 30;
@@ -667,8 +668,9 @@ namespace WICR_Estimator.ViewModels
         public virtual void driveHrs(int hrs,double tSqft)
         {
             TotalHrsDriveLabor = tSqft < 1001 ? hrs : Math.Ceiling(tSqft / 1000 ) * hrs;
-            DriveLaborValue = Math.Round(TotalHrsDriveLabor * laborRate,2);
-            OnPropertyChanged("DriveLaborValue");
+            
+            //DriveLaborValue = Math.Round(TotalHrsDriveLabor * laborRate,2);
+            //OnPropertyChanged("DriveLaborValue");
             OnPropertyChanged("TotalHrsDriveLabor");
         }
         public void calLaborHrs(int hrs,double tSqft)
@@ -699,8 +701,14 @@ namespace WICR_Estimator.ViewModels
                 TotalHrsDriveLabor = 4;
             }
             double DHLR = 0;
-            double.TryParse(freightData[6][0].ToString(), out DHLR);
-            DriveLaborValue = TotalHrsDriveLabor * DHLR;
+            if (freightData!=null)
+            {
+                double.TryParse(freightData[6][0].ToString(), out DHLR);
+            }
+            
+
+            DriveLaborValue =IncludeDriveHours ? TotalHrsDriveLabor * DHLR:0;
+
             TotalHrsLabor = TotalHrsSystemLabor + TotalHrsMetalLabor + TotalHrsSlopeLabor;
             OnPropertyChanged("DriveLaborValue");
             OnPropertyChanged("TotalHrsDriveLabor");
@@ -1047,9 +1055,9 @@ namespace WICR_Estimator.ViewModels
                 calculateRLqty();
             }
             //update Add labor for minimum cost
-            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false && x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
+            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false && x.IsMaterialChecked&&x.LaborExtension!=0).ToList().Select(x => x.Hours).Sum();
             //New Change Min Labor
-            LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false && x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
+            LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false && x.IsMaterialChecked&&x.LaborExtension!=0).ToList().Select(x => x.SetupMinCharge).Sum();
             //
             LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs)) * laborRate;
             LaborMinChargeLaborUnitPrice = (riserCount + totalSqft) == 0 ? 0 : LaborMinChargeLaborExtension / (riserCount + totalSqft);
@@ -1070,6 +1078,7 @@ namespace WICR_Estimator.ViewModels
         //Get data from googlesheets
         private void getDatafromGoogle(string prjName)
         {
+            isDataAvailable = true;
             if (materialDetails == null)
             {
                 //materialDetails = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "H33:K59");
@@ -1177,8 +1186,8 @@ namespace WICR_Estimator.ViewModels
             calculateMaterialTotals();
             CalOCTotal();
             calculateLaborTotals();
-            CalculateCostBreakup();
             calculateLaborHrs();
+            CalculateCostBreakup();            
             populateCalculation();
         }
        
@@ -1445,7 +1454,14 @@ namespace WICR_Estimator.ViewModels
         public virtual void CalculateLaborMinCharge()
         {
             //update Add labor for minimum cost
-            
+
+            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+                                        x.IsMaterialChecked&&x.LaborExtension!=0).ToList().Select(x => x.Hours).Sum();
+            LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+                                         x.IsMaterialChecked&&x.LaborExtension!=0).ToList().Select(x => x.SetupMinCharge).Sum();
+            LaborMinChargeLaborExtension = (LaborMinChargeMinSetup + LaborMinChargeHrs) > 20 ? 0 :
+                                                (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
+
             LaborMinChargeLaborUnitPrice = (riserCount + totalSqft) == 0 ? 0 : LaborMinChargeLaborExtension / (riserCount + totalSqft);
             if (LaborMinChargeMinSetup + LaborMinChargeHrs < 20)
             {
@@ -2635,11 +2651,11 @@ namespace WICR_Estimator.ViewModels
                 case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
                 case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
                 case "WEATHER SEAL XL TWO COATS":
-                    return lfArea / coverage;
+                    return coverage == 0 ? 0 : lfArea / coverage;
                 case "LIP COLOR":
                 case "AJ-44A DRESSING(SEALER)":
                 case "VISTA PAINT ACRIPOXY":
-                    return lfArea / coverage < 0.5 ? 0.5 : lfArea / coverage;
+                    return coverage==0 ? 0.5:lfArea / coverage < 0.5 ? 0.5 : lfArea / coverage;
                 case "STAIR NOSING FROM DEXOTEX":
                     return lfArea*stairWidth ;
                 case "NEOTEX-38 PASTE":
@@ -2902,6 +2918,27 @@ namespace WICR_Estimator.ViewModels
         public double MaterialPerc { get; set; }
         public double LaborPerc { get; set; }
         public double TotalOCLaborExtension { get; set; }
+        private bool includeDriveHrs;
+        public bool IncludeDriveHours
+        {
+            get
+            {
+                return includeDriveHrs;
+            }
+            set
+            {
+                if (value!=includeDriveHrs)
+                {
+                    includeDriveHrs = value;
+                    if (isDataAvailable)
+                    {
+                        CalculateAllMaterial();
+                    }
+                    
+                    OnPropertyChanged("IncludeDriveHours");
+                }
+            }
+        }
         public double DriveLaborValue { get; set; }
         #region LaborSheet TotalProperties
 

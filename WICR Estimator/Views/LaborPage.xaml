@@ -272,9 +272,17 @@
                        Style="{StaticResource LabelStyle1}"/>
                 <!--<Label Content="Freight hours" Grid.Row="4"
                        Style="{StaticResource LabelStyle1}"/>-->
-                <Label Content="Drive hours" Grid.Row="5"
-                       
-                       Style="{StaticResource LabelStyle1}"/>
+                <StackPanel Grid.Row="5" Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                           
+                            HorizontalAlignment="Right">
+                    <CheckBox IsChecked="{Binding IncludeDriveHours}"
+                              Margin="5"></CheckBox>
+                    <Label Content="Drive hours"  
+                           Style="{StaticResource LabelStyle1}"/>
+                
+                </StackPanel>
+                
                 <Border BorderThickness="0,2,0,0" Margin="2,10,2,10"
                         BorderBrush="Black" Grid.Row="6"
                         Grid.ColumnSpan="2"/>
@@ -332,7 +340,7 @@
                         BorderThickness="0,0,0,1">
                     <TextBlock IsEnabled="False" 
                                Background="Yellow"
-                         Margin="5" Grid.Column="1"                      
+                          Grid.Column="1"                      
                          Width="100"
                          FontSize="14"                
                          Text="{Binding TotalHrsDriveLabor, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
