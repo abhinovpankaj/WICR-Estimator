@@ -284,7 +284,7 @@ namespace WICR_Estimator.Models
         {
             get
             {
-                if (ProjectName == "Weather Wear" || ProjectName == "Weather Wear Rehab")
+                if (ProjectName == "Weather Wear" || ProjectName == "Weather Wear Rehab" || ProjectName == "Reseal all systems")
                     return "Linear Footage of Deck Perimeter";
                 else if (ProjectName == "Resistite" || ProjectName == "Multicoat")
                     return "LINEAR FOOTAGE OF DECK TO WALL DETAIL";
@@ -300,6 +300,8 @@ namespace WICR_Estimator.Models
                     return "LINEAR FOOTAGE OF DECK TO WALL METAL(fluid applied detail)";
                 else if (ProjectName == "Dual Flex")
                     return "PERIMETER";
+                else if (ProjectName == "Desert Crete")
+                    return "LINEAR FOOTAGE OF DECK TO WALL METAL (COVE BASE)";
                 else if (ProjectName == "Polyurethane Injection Block")
                     return "LINEAR FOOTAGE OF COLD JOINTS";
                 else if (ProjectName == "Color Flake")
@@ -786,7 +788,7 @@ namespace WICR_Estimator.Models
             {
                 if (ProjectName == "Pedestrian System" || ProjectName == "Parking Garage" || ProjectName == "Paraseal" ||
                     ProjectName == "Paraseal LG" || ProjectName=="860"||ProjectName=="UPI Below Tile"||ProjectName=="Color Flake"
-                    ||ProjectName== "Polyurethane Injection Block" || ProjectName == "Block Wall")
+                    ||ProjectName== "Polyurethane Injection Block" || ProjectName == "Block Wall"||ProjectName=="Reseal all systems")
                 {
                     return System.Windows.Visibility.Collapsed;
                 }

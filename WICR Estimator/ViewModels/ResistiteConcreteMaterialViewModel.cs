@@ -440,7 +440,7 @@ namespace WICR_Estimator.ViewModels
                 }
 
             }
-            
+            calculateRLqty();
 
         }
         public override double getQuantity(string materialName, double coverage, double lfArea)

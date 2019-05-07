@@ -194,7 +194,7 @@ namespace WICR_Estimator.ViewModels
             {
                 case "Sand or pressure wash to prepare area":
                 case "Concrete cracks greater than 1/32 inch (route 1/4 x 1/4) epoxy gel fill, ilica sand, and fiber tape":
-                    return setupMin > calhrs ?setupMin * laborRate : calhrs * laborRate;
+                    return calhrs==0 ?0:setupMin > calhrs ?setupMin * laborRate : calhrs * laborRate;
                 default:
                     return base.CalculateLabrExtn(calhrs,setupMin,"") ;
             }

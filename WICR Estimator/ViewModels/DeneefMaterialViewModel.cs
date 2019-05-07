@@ -140,9 +140,13 @@ namespace WICR_Estimator.ViewModels
                     SystemMaterials[i] = sysMat[i];
 
                     SystemMaterials[i].SpecialMaterialPricing = sp;
-                    SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                    SystemMaterials[i].IsMaterialChecked = iscbChecked;
-                    
+                    if (iscbEnabled)
+                    {
+                        SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                        SystemMaterials[i].IsMaterialChecked = iscbChecked;
+
+                    }
+
                 }
 
             }
@@ -218,9 +222,22 @@ namespace WICR_Estimator.ViewModels
                     }
                     break;
                 }
+
             }
             SystemMaterials.Where(x=>x.Name== "DeNeef Flex catalist").FirstOrDefault().Qty= Math.Ceiling(qty *4);
-           
+            SystemMaterial sysmat = SystemMaterials.Where(x => x.Name == "Inject resin").FirstOrDefault();
+            if (sysmat!=null)
+            {
+                SystemMaterial mat = SystemMaterials.Where(x => x.Name == "Add labor for additional injection material").FirstOrDefault();
+                bool ischecked = mat.IsMaterialChecked;
+                mat.Qty =sysmat.LaborExtension*0.3 /25;
+                mat.IsMaterialChecked = ischecked;
+            }
+            sysmat = SystemMaterials.Where(x => x.Name == "Add material/labor for patch and plug holes/EA HOLE").FirstOrDefault();
+            if (sysmat != null)
+            {
+                sysmat.Hours = sysmat.IsMaterialChecked ? (totalSqft + totalVerticalSqft) * 0.5 / 25 : 0;
+            }
         }
         public override bool canApply(object obj)
         {
@@ -235,7 +252,7 @@ namespace WICR_Estimator.ViewModels
                 
                     return false;
                 case "Inject resin":
-                    return totalVerticalSqft + totalSqft + riserCount > 0 ? true : false;
+                    return totalVerticalSqft + totalSqft + riserCount +linearCoping> 0 ? true : false;
                 default:
                     return  true;
             }

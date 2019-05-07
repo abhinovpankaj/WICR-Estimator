@@ -1583,7 +1583,7 @@ namespace WICR_Estimator.ViewModels
             return false;
         }
         
-        public double CalculateHrs(double horzSft, double prodHor, double stairSqft, double prodStair, double vertSqft=0, double prodVert=0)
+        public virtual double CalculateHrs(double horzSft, double prodHor, double stairSqft, double prodStair, double vertSqft=0, double prodVert=0)
         {
             double val1 = prodHor != 0 ? horzSft / prodHor : 0;
             double val2 = prodStair != 0 ? stairSqft / prodStair : 0;

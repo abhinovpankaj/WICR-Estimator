@@ -290,7 +290,7 @@ namespace WICR_Estimator.ViewModels
                     || item.Name == "EXTRA STAIR NOSING"
                     || item.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)"
                     || item.Name == "1/20 SAND/ #100 LB"
-                    ||item.Name== "UI 7118 CONCRETE PRIMER 1-1/2 GAL KIT"
+                    
                     || item.Name== "7016 - AR - INTERMEDIATE COAT / 5 GAL PAILS 20 MILS"
                     || item.Name == "Stucco Material Remove and replace (LF)")
                 {

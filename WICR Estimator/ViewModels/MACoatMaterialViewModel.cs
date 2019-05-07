@@ -321,37 +321,7 @@ namespace WICR_Estimator.ViewModels
         {
             base.setExceptionValues(s);
 
-            //if (SystemMaterials.Count != 0)
-            //{
-            //    SystemMaterial item = SystemMaterials.Where(x => x.Name == "Extra stair nosing lf").FirstOrDefault();
-            //    if (item != null)
-            //    {
-            //        item.StairSqft = item.Qty;
-            //        item.SMSqftH = 0;
-            //        item.Hours = CalculateHrs(0, 0, item.StairSqft, item.StairsProductionRate);
-            //        item.LaborExtension = (item.Hours + item.SetupMinCharge) * laborRate;
-            //        item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
-
-            //    }
-
-            //    item = SystemMaterials.Where(x => x.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)").FirstOrDefault();
-            //    if (item != null)
-            //    {
-            //        item.SMSqftH = item.Qty * 32;
-            //        item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, 0, item.StairsProductionRate);
-            //        item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
-            //        item.LaborUnitPrice = item.LaborExtension / item.Qty;
-            //    }
-
-            //    item = SystemMaterials.Where(x => x.Name == "Stucco Material Remove and replace (LF)").FirstOrDefault();
-            //    if (item != null)
-            //    {
-            //        item.SMSqftH = item.Qty;
-            //        item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, 0, 0);
-            //        item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
-            //        item.LaborUnitPrice = item.LaborExtension / item.Qty;
-            //    }
-            //}
+            
             CalculateLaborMinCharge();
         }
 

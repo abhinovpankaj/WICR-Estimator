@@ -21,7 +21,7 @@ namespace WICR_Estimator.ViewModels
             FetchMaterialValuesAsync(false);
 
         }
-
+       
         private void FillMaterialList()
         {
 
@@ -224,8 +224,12 @@ namespace WICR_Estimator.ViewModels
 
         private void getEKLQnty()
         {
-            
 
+            SystemMaterial sysMat = SystemMaterials.Where(x => x.Name == "Add for Gamma Cure in lieu of wet cure").FirstOrDefault();
+            if (sysMat!=null)
+            {
+                sysMat.Hours = sysMat.IsMaterialChecked ? (totalSqft + totalVerticalSqft) * 0.2 / 25:0;
+            }
         }
         public override bool canApply(object obj)
         {

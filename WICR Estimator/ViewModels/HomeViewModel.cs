@@ -436,19 +436,70 @@ namespace WICR_Estimator.ViewModels
             }
             exlWs.Range[startRange].Offset[k, 3].Value = SVM.SumTotal;
             exlWs.Range[startRange].Offset[k, 4].Value = SVM.SumTotalMixes;
+            if (SVM.IsUrethaneVisible == System.Windows.Visibility.Visible)
+            {
+                startRange = getStartRange("UrethaneSlope");
+                PedestrianSlopeViewModel PVM = SVM as PedestrianSlopeViewModel;
+                if (PVM !=null)
+                {
+                    foreach (Slope item in PVM.UrethaneSlopes)
+                    {
+                        exlWs.Range[startRange].Value = item.Thickness;
+                        exlWs.Range[startRange].Offset[k, 1].Value = item.Sqft;
+                        exlWs.Range[startRange].Offset[k, 2].Value = item.DeckCount;
+                        exlWs.Range[startRange].Offset[k, 3].Value = item.Total;
+                        exlWs.Range[startRange].Offset[k, 4].Value = item.TotalMixes;
+                        k = k + 1;
+                    }
+                    exlWs.Range[startRange].Offset[k, 3].Value = PVM.UrethaneSumTotal;
+                    exlWs.Range[startRange].Offset[k, 4].Value = PVM.UrethaneSumTotalMixes;
+                }
+                
+            }
+            
+        }
+        private void WriteMaterials(MaterialBaseViewModel MVM)
+        {
+            int k = 0;
+            string startRange = getStartRange("OtherSystemMaterials");
+            foreach (OtherItem item in MVM.OtherMaterials)
+            {
+                exlWs.Range[startRange].Value = item.Name;
+                exlWs.Range[startRange].Offset[k, 1].Value = item.Quantity;
+                exlWs.Range[startRange].Offset[k, 2].Value = item.MaterialPrice;
+                exlWs.Range[startRange].Offset[k, 3].Value = item.Extension;
+                
+                k = k + 1;
+            }
+            exlWs.Range[startRange].Offset[k, 3].Value = MVM.TotalMaterialCost;
 
-            //startRange = getStartRange("UrethaneSlope");
-            //foreach (Slope item in SVM)
-            //{
-            //    exlWs.Range[startRange].Value = item.Thickness;
-            //    exlWs.Range[startRange].Offset[k, 1].Value = item.Sqft;
-            //    exlWs.Range[startRange].Offset[k, 2].Value = item.DeckCount;
-            //    exlWs.Range[startRange].Offset[k, 3].Value = item.Total;
-            //    exlWs.Range[startRange].Offset[k, 4].Value = item.TotalMixes;
-            //    k = k + 1;
-            //}
-            //exlWs.Range[startRange].Offset[k, 3].Value = SVM.SumTotal;
-            //exlWs.Range[startRange].Offset[k, 4].Value = SVM.SumTotalMixes;
+            startRange = getStartRange("SubSystemMaterials");
+            foreach (LaborContract item in MVM.SubContractLaborItems)
+            {
+                exlWs.Range[startRange].Value = item.Name;
+                exlWs.Range[startRange].Offset[k, 1].Value = item.UnitConlbrcst;
+                exlWs.Range[startRange].Offset[k, 2].Value = item.UnitPriceConlbrcst;
+                exlWs.Range[startRange].Offset[k, 3].Value = item.MaterialExtensionConlbrcst;
+
+                k = k + 1;
+            }
+            exlWs.Range[startRange].Offset[k, 3].Value = MVM.TotalSubContractLaborCostBrkp;
+
+        }
+        private void WriteLabor(MaterialBaseViewModel MVM)
+        {
+            int k = 0;
+            string startRange = getStartRange("OtherSystemMaterials");
+            foreach (OtherItem item in MVM.OtherMaterials)
+            {
+                exlWs.Range[startRange].Value = item.Name;
+                exlWs.Range[startRange].Offset[k, 1].Value = item.Quantity;
+                exlWs.Range[startRange].Offset[k, 2].Value = item.MaterialPrice;
+                exlWs.Range[startRange].Offset[k, 3].Value = item.Extension;
+
+                k = k + 1;
+            }
+            exlWs.Range[startRange].Offset[k, 3].Value = MVM.TotalMaterialCost;
         }
         private void WriteToSummary()
         {
@@ -460,10 +511,6 @@ namespace WICR_Estimator.ViewModels
 
                 exlApp.Visible = true;
             }
-
-            
-
-           
             
             //Write Addon metals details
             

@@ -104,7 +104,17 @@ namespace WICR_Estimator.ViewModels
             CalculateLaborMinCharge();
             CalculateAllMaterial();
         }
-        
+        public override bool IncludedInLaborMin(string matName)
+        {
+            switch (matName)
+            {
+                case "Plywood 3/4 & blocking (# of 4x8 sheets)":
+                case "Stucco Material Remove and replace (LF)":
+                    return false;
+                default:
+                    return true;
+            }
+        }
         public override ObservableCollection<SystemMaterial> GetSystemMaterial()
         {
 
@@ -1061,9 +1071,9 @@ namespace WICR_Estimator.ViewModels
                 MaterialExtension = mp * qty
             });
 
-            LaborMinChargeMinSetup = smP.Where(x => x.IsMaterialChecked && x.IncludeInLaborMinCharge == false).Select(x => x.SetupMinCharge).Sum();
+            LaborMinChargeMinSetup = smP.Where(x => x.IsMaterialChecked && x.IncludeInLaborMinCharge == false&&x.LaborExtension!=0).Select(x => x.SetupMinCharge).Sum();
             
-            LaborMinChargeHrs = smP.Where(x => x.IsMaterialChecked && x.IncludeInLaborMinCharge == false).ToList().Select(x => x.Hours).Sum();
+            LaborMinChargeHrs = smP.Where(x => x.IsMaterialChecked && x.IncludeInLaborMinCharge == false&&x.LaborExtension!=0).ToList().Select(x => x.Hours).Sum();
             LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate);
             LaborMinChargeLaborUnitPrice = LaborMinChargeLaborExtension / (riserCount + totalSqft);
 
@@ -1077,13 +1087,28 @@ namespace WICR_Estimator.ViewModels
         }
         public override void CalculateLaborMinCharge()
         {
-            //LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false &&
-            //                            x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
-            //LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false &&
-            //                             x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
-            //LaborMinChargeLaborExtension = (LaborMinChargeMinSetup + LaborMinChargeHrs) > 20 ? 0 :
-            //                                    (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
-            base.CalculateLaborMinCharge();
+            //update Add labor for minimum cost
+
+            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false &&
+                                        x.IsMaterialChecked && x.LaborExtension != 0).ToList().Select(x => x.Hours).Sum();
+            LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false &&
+                                         x.IsMaterialChecked && x.LaborExtension != 0).ToList().Select(x => x.SetupMinCharge).Sum();
+            LaborMinChargeLaborExtension = (LaborMinChargeMinSetup + LaborMinChargeHrs) > 20 ? 0 :
+                                                (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
+
+            LaborMinChargeLaborUnitPrice = (riserCount + totalSqft) == 0 ? 0 : LaborMinChargeLaborExtension / (riserCount + totalSqft);
+            if (LaborMinChargeMinSetup + LaborMinChargeHrs < 20)
+            {
+                AddLaborMinCharge = true;
+            }
+            else
+                AddLaborMinCharge = false;
+            OnPropertyChanged("LaborMinChargeMinSetup");
+            OnPropertyChanged("AddLaborMinCharge");
+            OnPropertyChanged("LaborMinChargeHrs");
+            OnPropertyChanged("LaborMinChargeLaborExtension");
+            OnPropertyChanged("LaborMinChargeLaborUnitPrice");
+
         }
         public override bool getCheckboxCheckStatus(string materialName)
         {
