@@ -47,7 +47,7 @@ namespace WICR_Estimator.ViewModels
         {
             Slopes = new ObservableCollection<Slope>();
             SlopeTotals = new Totals { TabName = "Slope" };
-            
+            IsOverrridable = true;
         }
 
         #region public properties
@@ -101,6 +101,10 @@ namespace WICR_Estimator.ViewModels
                 isUrethaneVisible = value;
                 OnPropertyChanged("IsUrethaneVisible");
             }
+        }
+        public bool IsOverrridable
+        {
+            get;set;
         }
         [DataMember]
         public bool OverrideManually
@@ -393,6 +397,11 @@ namespace WICR_Estimator.ViewModels
         }
         public void GetSlopeDetailsFromGoogle(string projectName)
         {
+            if (projectName.Contains('.'))
+            {
+                projectName = projectName.Split('.')[0];
+            }
+
             if (perMixRates == null)
             {
                 //perMixRates = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "P25:Q30");

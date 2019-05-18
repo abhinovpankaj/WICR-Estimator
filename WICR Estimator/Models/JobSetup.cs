@@ -34,6 +34,7 @@ namespace WICR_Estimator.Models
                 }
             }
         }
+        
         private string projectname;
 
         public string FirstCheckBoxLabel { get; set; }
@@ -66,7 +67,7 @@ namespace WICR_Estimator.Models
         {
             return true;
         }
-        private string jobDate=DateTime.Today.ToShortDateString();
+        private string jobDate;
         public string JobDate
         {
             get { return jobDate; }
@@ -130,11 +131,15 @@ namespace WICR_Estimator.Models
                 {
                     specialProductName = value;
                     OnPropertyChanged("SpecialProductName");
-                    ProjectName = value;
-                    if (ProjectName=="")
+                    //ProjectName = value;
+                    //if (ProjectName=="")
+                    //{
+                    //    //ProjectName = "Dexotex Weather Wear";
+                    //}              
+                    if (OnProjectNameChange != null)
                     {
-                        //ProjectName = "Dexotex Weather Wear";
-                    }              
+                        OnProjectNameChange(this, EventArgs.Empty);
+                    }
                 }
             }
         }
@@ -381,19 +386,20 @@ namespace WICR_Estimator.Models
                 }
             }
         }
-        private DateTime date;
-        public DateTime Date
+        public string WorkArea { get; set; }
+        private DateTime? selecteddate;
+        public DateTime? SelectedDate
         {
             get
             {
-                return date;
+                return selecteddate;
             }
             set
             {
-                if (value != date)
+                if (value != selecteddate)
                 {
-                    date = value;
-                    OnPropertyChanged("Date");
+                    selecteddate = value;                   
+                    OnPropertyChanged("SelectedDate");
                 }
             }
         }

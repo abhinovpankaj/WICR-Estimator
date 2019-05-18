@@ -505,6 +505,11 @@ namespace WICR_Estimator.ViewModels
 
         public void GetMetalDetailsFromGoogle(string projectName)
         {
+            if (projectName.Contains('.'))
+            {
+                projectName = projectName.Split('.')[0];
+            }
+
             if (pWage == null)
             {             
                 GSData gsData = DataSerializer.DSInstance.deserializeGoogleData(projectName);

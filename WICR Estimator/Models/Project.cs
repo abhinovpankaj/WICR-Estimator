@@ -13,6 +13,7 @@ namespace WICR_Estimator.Models
           
     public class Project: BaseViewModel
     {
+        public Dictionary<string, int> lastUsedRows;
         public System.Windows.Visibility ISVisible
         {
             get
@@ -35,6 +36,7 @@ namespace WICR_Estimator.Models
         public int CopyCount { get; set; }
 
         public string Name { get; set; }
+        
         public double MetalCost
         {
             get
@@ -69,6 +71,18 @@ namespace WICR_Estimator.Models
                 }
                 else
                     return 0;
+            }
+        }
+        public string WorkArea
+        {
+            get
+            {
+                if (ProjectJobSetUp != null)
+                {
+                    return ProjectJobSetUp.WorkArea;
+                }
+                else
+                    return "";
             }
         }
         public double SubContractCost { get; set; }

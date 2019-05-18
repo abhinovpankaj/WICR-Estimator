@@ -380,6 +380,7 @@
             <CheckBox x:Name="OverrideCheckboxUrethan"
                       Content="Manually Overwrite Total Mixes"
                       FontWeight="Bold"
+                      IsEnabled="{Binding IsOverrridable}"
                       IsChecked="{Binding UrethaneOverrideManually}"/>
         </StackPanel>
         <GroupBox x:Name="groupBox2"

@@ -6,6 +6,7 @@
       xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
       xmlns:local="clr-namespace:WICR_Estimator.Views"
       xmlns:conv="clr-namespace:WICR_Estimator.Converters"
+      xmlns:System="clr-namespace:System;assembly=mscorlib"
       xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
       mc:Ignorable="d" d:DesignWidth="1050" d:DesignHeight="800"
       >
@@ -182,6 +183,8 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
             <DataGrid.Columns >
                 <DataGridTextColumn Header="Name" IsReadOnly="True"
                                     Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Work Area" IsReadOnly="True"
+                                    Binding="{Binding WorkArea}"/>
                 <DataGridTextColumn Header="Metal Cost" 
                                     Binding="{Binding MetalCost,StringFormat='c'}"/>
                 <DataGridTextColumn Header ="Slope Cost"
@@ -218,17 +221,24 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
         </DataGrid>
         <StackPanel Grid.Column="2"
                     Grid.RowSpan="2">
-            <TextBlock Text="Project Name" 
+            <TextBlock Text="Job Name" 
                        FontSize="14"
                        Margin="5,5,5,0"/>
             <TextBox Margin="5,0,5,0"
+                     Text="{Binding JobName}"
                      FontSize="14"/>
-            <TextBlock Text="Prepared By" Margin="5,5,5,0"
+            <TextBlock Text="Prepared By"
+                       
+                       Margin="5,5,5,0"
                        FontSize="14"/>
             <TextBox Margin="5,0,5,10"
+                     Text="{Binding PreparedBy}"
                      FontSize="14"/>
             <DatePicker Margin="5" Height="30"
                         FontSize="14"
+                        SelectedDate="{Binding JobDate, Mode=TwoWay,
+                        UpdateSourceTrigger=PropertyChanged,
+                        TargetNullValue={x:Static System:DateTime.Now}}"
                         VerticalContentAlignment="Center"
                         HorizontalContentAlignment="Left"/>
             <Button Content="Load Estimate" Margin="5" 
@@ -237,9 +247,11 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
             <Button Content="Save Estimate" 
                     Command="{Binding SaveEstimate}"
                     Style="{StaticResource ButtonTemplate}"/>
-            <Button Content="Create Estimate"
+            <Button Content="Refresh"
+                    Command="{Binding ClearProjects}"
                     Style="{StaticResource ButtonTemplate}"/>
             <Button Content="Create Summary Sheet"
+                    Command="{Binding CreateSummary}"
                     Style="{StaticResource ButtonTemplate}"/>
             <Button Content="Refresh Google Data"
                     x:Name="refreshGData"

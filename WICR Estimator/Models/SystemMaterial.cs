@@ -296,23 +296,28 @@ namespace WICR_Estimator.Models
             {
                 //if (qtysm != value)
                 //{
-                    qtysm = value;
+
+                qtysm = value;
+                if (!IsMaterialEnabled)
+                {
                     if (qtysm != 0)
                     {
                         IsMaterialChecked = true;
                     }
                     else
                         IsMaterialChecked = false;
-                    OnPropertyChanged("Qty");
-                    MaterialExtension = value * materialPrice;
-                    FreightExtension = value * weight;
-                    OnPropertyChanged("MaterialExtension");
-                    OnPropertyChanged("FreightExtension");
-                    OnPropertyChanged("LaborExtension");
-                    if (OnQTyChanged!=null)
-                    {
-                        OnQTyChanged(this.Name, EventArgs.Empty);
-                    }
+                }
+                
+                OnPropertyChanged("Qty");
+                MaterialExtension = value * materialPrice;
+                FreightExtension = value * weight;
+                OnPropertyChanged("MaterialExtension");
+                OnPropertyChanged("FreightExtension");
+                OnPropertyChanged("LaborExtension");
+                if (OnQTyChanged!=null)
+                {
+                    OnQTyChanged(this.Name, EventArgs.Empty);
+                }
                 //}
             }
         }

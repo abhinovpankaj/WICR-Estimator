@@ -100,7 +100,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
-
+        
         public double MortarMinimumLaborCost { get; private set; }
         #endregion
 
@@ -114,6 +114,10 @@ namespace WICR_Estimator.ViewModels
         public DualFlexSlopeViewModel(JobSetup Js)
         {
             IsUrethaneVisible = System.Windows.Visibility.Visible;
+            if (Js.ProjectName=="Dual Flex")
+            {
+                IsOverrridable = false;
+            }
             GetSlopeDetailsFromGoogle(Js.ProjectName);
 
             isApprovedForCement = Js.IsApprovedForSandCement;

@@ -173,7 +173,17 @@ namespace WICR_Estimator.ViewModels
         {
             foreach (Project item in EnabledProjects)
             {
-                item.Name = item.ProjectJobSetUp.ProjectName;
+                if (item.ProjectJobSetUp.SpecialProductName!=null)
+                {
+                    if (item.ProjectJobSetUp.SpecialProductName != "")
+                    {
+                        item.Name = item.ProjectJobSetUp.SpecialProductName;
+                    }
+                    else
+                        item.Name = item.ProjectJobSetUp.ProjectName;
+                }
+                
+
             }
            
         }

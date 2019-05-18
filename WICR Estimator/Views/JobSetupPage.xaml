@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WICR_Estimator.Views"
+      xmlns:System="clr-namespace:System;assembly=mscorlib"
       mc:Ignorable="d" 
       d:DesignHeight="500" d:DesignWidth="1000"
       >
@@ -48,7 +49,9 @@
             <StackPanel HorizontalAlignment="Stretch" Margin="5">
                 <DatePicker Margin="5" Height="30"
                             FontSize="14"
-                            Text="{Binding JobDate,UpdateSourceTrigger=LostFocus}"
+                            SelectedDate="{Binding SelectedDate, Mode=TwoWay,
+                            UpdateSourceTrigger=PropertyChanged,
+                            TargetNullValue={x:Static System:DateTime.Now}}"                           
                             VerticalContentAlignment="Center"
                             HorizontalContentAlignment="Left"/>
                 
@@ -80,6 +83,11 @@
                     <ComboBoxItem Content="6-12 Months"/>
                     <ComboBoxItem Content=">12 Months"/>
                 </ComboBox>
+                <TextBlock Style="{StaticResource FieldHeader}"
+                           Margin="5,10,10,0" Text="Work Area"/>
+                <TextBox Margin="5,0,5,0"
+                         Text="{Binding WorkArea,UpdateSourceTrigger=LostFocus}"
+                         VerticalContentAlignment="Center"/>
                 <TextBlock Style="{StaticResource FieldHeader}"
                            Margin="5,30,10,0"
                        Text="NOTE:DIFFERENT PRODUCT USED"/>

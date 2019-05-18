@@ -12,6 +12,11 @@ namespace WICR_Estimator
     {
         public static MetalBaseViewModel GetMetalViewModelInstance(string projectName,Models.JobSetup Js)
         {
+            if (projectName.Contains('.'))
+            {
+                projectName = projectName.Split('.')[0];
+            }
+            
             switch (projectName)
             {
                 case "Weather Wear":
@@ -50,6 +55,11 @@ namespace WICR_Estimator
 
         public static SlopeBaseViewModel GetSlopeViewModelInstance(string projectName,Models.JobSetup Js)
         {
+            if (projectName.Contains('.'))
+            {
+                projectName = projectName.Split('.')[0];
+            }
+
             switch (projectName)
             {
                 case "Weather Wear":
@@ -86,6 +96,11 @@ namespace WICR_Estimator
         }
         public static MaterialBaseViewModel GetMaterialViewModelInstance(string projectName,Totals metalT,Totals slopeT, Models.JobSetup Js)
         {
+            if (projectName.Contains('.'))
+            {
+                projectName = projectName.Split('.')[0];
+            }
+
             switch (projectName)
             {
                 case "Weather Wear":

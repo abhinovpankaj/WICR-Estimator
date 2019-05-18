@@ -106,6 +106,7 @@ namespace WICR_Estimator.ViewModels
             calculateRLqty();
             CalculateLaborMinCharge();
             CalculateAllMaterial();
+            
         }
         public override void CalculateLaborMinCharge()
         {

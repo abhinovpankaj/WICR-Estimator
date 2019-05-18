@@ -1,15 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Sections>
-  <JobSetup>A3</JobSetup>
-  <Metals>G3</Metals>
-  <Slope>A47</Slope>
-  <UrethaneSlope>A59</UrethaneSlope>
-  <AddonMetals>O3</AddonMetals>
-  <MiscMetals>G26</MiscMetals>
-  <SystemMaterials>G42</SystemMaterials>
-  <OtherSystemMaterials>A75</OtherSystemMaterials>
-  <SubSystemMaterials>A93</SubSystemMaterials>
-  <Labor>L86</Labor>
-  <LaborOtherCosts>A100</LaborOtherCosts>
-  <CostSummary>H100</CostSummary>
+  <JobSetup>A1</JobSetup>
+  <Metals>G1</Metals>
+  <MiscMetals>A26</MiscMetals>
+  <Slope>A46</Slope>
+  <OverriddenSlope>A55</OverriddenSlope>
+  <UrethaneSlope>A57</UrethaneSlope>
+  <OverriddenUrethaneSlope>A66</OverriddenUrethaneSlope>
+  <SystemMaterials>G41</SystemMaterials>
+  <OtherSystemMaterials>A82</OtherSystemMaterials>
+  <SubSystemMaterials>A68</SubSystemMaterials>
+  <LaborOtherCosts>A104</LaborOtherCosts>
+  <CostSummary>G77</CostSummary>
+  <LaborHours>A75</LaborHours>
+  <MaterialOtherCostTotal>A102</MaterialOtherCostTotal>
+  <LaborOtherCostTotal>A124</LaborOtherCostTotal>
 </Sections>

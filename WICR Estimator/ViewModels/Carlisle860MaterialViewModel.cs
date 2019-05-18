@@ -371,7 +371,7 @@ namespace WICR_Estimator.ViewModels
                     item.SMSqftV = item.Qty;                   
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate,item.SMSqftV,item.VerticalProductionRate);
 
-                    item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
+                    item.LaborExtension =item.Hours==0 ?0: item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
                     item.LaborUnitPrice = item.LaborExtension / item.Qty;
                 }
 
@@ -381,7 +381,7 @@ namespace WICR_Estimator.ViewModels
                     item.SMSqftV = item.Qty;
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate, item.SMSqftV, item.VerticalProductionRate);
 
-                    item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
+                    item.LaborExtension = item.Hours == 0 ? 0 : item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
                     item.LaborUnitPrice = item.LaborExtension / item.Qty;
                 }
 
@@ -391,7 +391,7 @@ namespace WICR_Estimator.ViewModels
                     item.SMSqftV = item.Qty;
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate, item.SMSqftV, item.VerticalProductionRate);
 
-                    item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
+                    item.LaborExtension = item.Hours == 0 ? 0 : item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
                     item.LaborUnitPrice = item.LaborExtension / item.Qty;
                 }
 
@@ -438,8 +438,9 @@ namespace WICR_Estimator.ViewModels
                 ischecked = sysmat.IsMaterialChecked;
                 sysmat = SystemMaterials.Where(x => x.Name == "MIRADRAIN 6000 XL  (HORIZONTAL ONLY)").FirstOrDefault();
                 ischecked1 = sysmat.IsMaterialChecked;
+                SystemMaterials.Where(x => x.Name == "MIRASTICK ADHESIVE (GLUE DOWN DRAIN MAT)").FirstOrDefault().IsMaterialChecked = ischecked || ischecked1;
             }
-            SystemMaterials.Where(x => x.Name == "MIRASTICK ADHESIVE (GLUE DOWN DRAIN MAT)").FirstOrDefault().IsMaterialChecked = ischecked || ischecked1;
+            
    
             calculateRLqty();
             CalculateLaborMinCharge();
@@ -457,9 +458,11 @@ namespace WICR_Estimator.ViewModels
         public override void setCheckBoxes()
         {
             SystemMaterial sysmat = SystemMaterials.FirstOrDefault(x => x.Name == "MIRADRAIN 6000 XL (VERTICAL ONLY)");
-            if (sysmat != null)
+            SystemMaterial sysmat1 = SystemMaterials.FirstOrDefault(x => x.Name == "MIRADRAIN 6000 XL  (HORIZONTAL ONLY)");
+
+            if (sysmat != null && sysmat1!=null)
             {
-                SystemMaterials.FirstOrDefault(x => x.Name == "MIRASTICK ADHESIVE (GLUE DOWN DRAIN MAT)").IsMaterialChecked = sysmat.IsMaterialChecked;
+                SystemMaterials.FirstOrDefault(x => x.Name == "MIRASTICK ADHESIVE (GLUE DOWN DRAIN MAT)").IsMaterialChecked = sysmat.IsMaterialChecked||sysmat1.IsMaterialChecked;
             }
         }
     }
