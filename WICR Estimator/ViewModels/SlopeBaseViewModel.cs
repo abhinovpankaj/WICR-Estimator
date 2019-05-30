@@ -15,6 +15,7 @@ namespace WICR_Estimator.ViewModels
     [KnownType(typeof(DexoSlopeViewModel))]
     [KnownType(typeof(PedestrianSlopeViewModel))]
     [KnownType(typeof(EnduroKoteSlopeViewModel))]
+    [KnownType(typeof(DualFlexSlopeViewModel))]
     [DataContract]
     public class SlopeBaseViewModel:BaseViewModel
     {

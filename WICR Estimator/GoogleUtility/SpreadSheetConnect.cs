@@ -27,6 +27,7 @@ namespace WICR_Estimator.GoogleUtility
         private static string spreadsheetId = "1pQG-Z9vaaWhCjCUiG1XqmEj1Pjavoz86RCfG6-ews2k";
 
         public async static Task<IList<IList<Object>>> GetDataFromGoogleSheetsAsync(string projectName, DataType datatype)
+        //public static IList<IList<Object>> GetDataFromGoogleSheetsAsync(string projectName, DataType datatype)
         {
             if (credential==null)
             {
@@ -64,10 +65,10 @@ namespace WICR_Estimator.GoogleUtility
             String range =  "Pricing!" + GetRangeFromXML(projectName, datatype);
             SpreadsheetsResource.ValuesResource.GetRequest request =
                     service.Spreadsheets.Values.Get(spreadsheetId, range);
-                       
-            ValueRange response =await request.ExecuteAsync();
-            
-            
+
+            //ValueRange response = request.ExecuteAsync().Result;
+            ValueRange response = await request.ExecuteAsync();
+
             return response.Values;
             
         }

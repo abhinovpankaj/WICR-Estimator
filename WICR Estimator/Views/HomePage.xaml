@@ -118,6 +118,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
         </Style>
     </UserControl.Resources>
     <Grid>
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width=".75*"/>
             <ColumnDefinition Width="Auto"/>
@@ -132,6 +133,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                    FontSize="16"
                    Margin="5,5,0,5"
                    FontWeight="Bold"/>
+            
         </StackPanel>
 
         <ListView HorizontalContentAlignment="Stretch" 
@@ -169,48 +171,67 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
             </ListView.ItemContainerStyle>
             
         </ListView>
-        
-        <DataGrid ItemsSource="{Binding SelectedProjects,UpdateSourceTrigger=PropertyChanged}"
+        <Grid Grid.RowSpan="2" Grid.Column="1">
+            <Popup  HorizontalAlignment="Stretch"
+                   IsOpen="{Binding IsProcessing}"
+                   Height="100"
+                    AllowsTransparency="True"
+                Placement="Center"
+                    Width="500"
+                   VerticalAlignment="Top">
+                <StackPanel Background="LightBlue">
+                    <TextBlock Background="LightBlue" FontSize="15"
+                               Margin="10"                              
+                           Text="{Binding StatusMessage}">
+
+                    </TextBlock>
+                    <ProgressBar  Height="10" Margin="10"
+                        Minimum="1" Maximum="27" Value="{Binding CompletedProjects}" />
+                </StackPanel>
+
+            </Popup>
+            <DataGrid ItemsSource="{Binding SelectedProjects,UpdateSourceTrigger=PropertyChanged}"
                   FontSize="14"
-                  HorizontalAlignment="Stretch"
                   VerticalAlignment="Top"
-                  Grid.RowSpan="2"
+                  HorizontalAlignment="Stretch"
+                  
                   IsReadOnly="True"
                   CanUserAddRows="False"
                   AutoGenerateColumns="False"
+                  
                   Margin="10,2,10,0"
-                  Grid.Column="1">
-            <DataGrid.Columns >
-                <DataGridTextColumn Header="Name" IsReadOnly="True"
+                  >
+                <DataGrid.Columns >
+                    <DataGridTextColumn Header="Name" IsReadOnly="True"
                                     Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Work Area" IsReadOnly="True"
+                    <DataGridTextColumn Header="Work Area" IsReadOnly="True"
                                     Binding="{Binding WorkArea}"/>
-                <DataGridTextColumn Header="Metal Cost" 
+                    <DataGridTextColumn Header="Metal Cost" 
                                     Binding="{Binding MetalCost,StringFormat='c'}"/>
-                <DataGridTextColumn Header ="Slope Cost"
+                    <DataGridTextColumn Header ="Slope Cost"
                                     Binding="{Binding SlopeCost,StringFormat='c'}"
                                     IsReadOnly="False"/>
-                <DataGridTextColumn Header ="System Cost"
+                    <DataGridTextColumn Header ="System Cost"
                                     Binding="{Binding SystemNOther,StringFormat='c'}"
                                     IsReadOnly="False"/>
-                <DataGridTextColumn Header ="Material Cost" 
+                    <DataGridTextColumn Header ="Material Cost" 
                                     Binding="{Binding MaterialCost,StringFormat='c'}"
                                     IsReadOnly="False"/>
-                <DataGridTextColumn Header ="Labor Cost" 
+                    <DataGridTextColumn Header ="Labor Cost" 
                                     Binding="{Binding LaborCost,StringFormat='c'}"
                                     IsReadOnly="False"/>
-                
-                <DataGridTextColumn Header ="Labor %" 
+
+                    <DataGridTextColumn Header ="Labor %" 
                                     Binding="{Binding LaborPercentage}"
                                     IsReadOnly="False"/>
-                <DataGridTextColumn Header ="Total Cost" 
+                    <DataGridTextColumn Header ="Total Cost" 
                                     Binding="{Binding TotalCost,StringFormat='c'}"
                                     IsReadOnly="False"/>
-                <!--<DataGridTextColumn Header ="Sub Contract Cost" 
+                    <!--<DataGridTextColumn Header ="Sub Contract Cost" 
                                     Binding="{Binding SubContractCost}"
                                     IsReadOnly="False"/>-->
-            </DataGrid.Columns>
-            <!--<i:Interaction.Triggers>
+                </DataGrid.Columns>
+                <!--<i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding ChangePageCommand}" 
                             CommandParameter="{Binding Path=SelectedItem,
@@ -218,7 +239,48 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                         AncestorType=DataGrid}}" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>-->
-        </DataGrid>
+            </DataGrid>
+            <StackPanel DataContext="{Binding ProjectTotals,UpdateSourceTrigger=PropertyChanged}"
+                  HorizontalAlignment="Stretch"
+                  Orientation="Horizontal"
+                  VerticalAlignment="Bottom"
+                  Background="LightBlue"
+                  Grid.Row="1"     
+                  Margin="10,2,10,10"
+                  Grid.Column="1">
+                <TextBlock FontSize="15" FontWeight="Bold" Text="Totals:" Margin="0,0,10,0"/>
+                <TextBlock FontSize="14" FontWeight="SemiBold" Text="Metal Cost"/>
+                <TextBlock FontSize="14" FontWeight="SemiBold"
+                       Text="{Binding MetalCost}"
+                       Margin="5,0,0,0"/>
+                <TextBlock FontSize="14" FontWeight="SemiBold" Text="Slope Cost"/>
+                <TextBlock FontSize="14" FontWeight="SemiBold"
+                       Text="{Binding SlopeCost}"
+                       Margin="5,0,0,0"/>
+                <TextBlock FontSize="14" FontWeight="SemiBold" Text="System Cost"/>
+                <TextBlock FontSize="14" FontWeight="SemiBold"
+                       Text="{Binding SystemCost}"
+                       Margin="5,0,0,0"/>
+                <TextBlock FontSize="14" FontWeight="SemiBold" Text="Material Cost"/>
+                <TextBlock FontSize="14" FontWeight="SemiBold"
+                       Text="{Binding MaterialCost}"
+                       Margin="5,0,0,0"/>
+                <TextBlock FontSize="14" FontWeight="SemiBold" Text="Labor Cost"/>
+                <TextBlock FontSize="14" FontWeight="SemiBold"
+                       Text="{Binding LaborCost}"
+                       Margin="5,0,0,0"/>
+                <TextBlock FontSize="14" FontWeight="SemiBold" Text="Labor %"/>
+                <TextBlock FontSize="14" FontWeight="SemiBold"
+                       Text="{Binding LaborPercentage}"
+                       Margin="5,0,0,0"/>
+                <TextBlock FontSize="14" FontWeight="SemiBold" Text="Total Cost"/>
+                <TextBlock FontSize="14" FontWeight="SemiBold"
+                       Text="{Binding TotalCost}"
+                       Margin="5,0,0,0"/>
+            </StackPanel>
+            
+        </Grid>
+        
         <StackPanel Grid.Column="2"
                     Grid.RowSpan="2">
             <TextBlock Text="Job Name" 
@@ -236,7 +298,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                      FontSize="14"/>
             <DatePicker Margin="5" Height="30"
                         FontSize="14"
-                        SelectedDate="{Binding JobDate, Mode=TwoWay,
+                        SelectedDate="{Binding JobCreationDate, Mode=TwoWay,
                         UpdateSourceTrigger=PropertyChanged,
                         TargetNullValue={x:Static System:DateTime.Now}}"
                         VerticalContentAlignment="Center"
@@ -255,7 +317,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                     Style="{StaticResource ButtonTemplate}"/>
             <Button Content="Refresh Google Data"
                     x:Name="refreshGData"
-                    Click="refreshGData_Click"
+                    Command="{Binding RefreshGoogleData}"
                     Style="{StaticResource ButtonTemplate}"/>
             <CheckBox Content="Login As Admin"
                           Margin="10" x:Name="cbpasswordSection"

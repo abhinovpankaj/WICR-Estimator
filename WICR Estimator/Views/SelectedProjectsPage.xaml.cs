@@ -25,7 +25,7 @@ namespace WICR_Estimator.Views
         public SelectedProjectsPage()
         {
             InitializeComponent();
-            this.DataContext = new ProjectViewModel();
+            //this.DataContext = new ProjectViewModel();
         }
     }
 }

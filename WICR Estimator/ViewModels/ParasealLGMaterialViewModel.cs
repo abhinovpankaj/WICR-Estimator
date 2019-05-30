@@ -69,6 +69,11 @@ namespace WICR_Estimator.ViewModels
                 }
 
             }
+            if (materialNames == null)
+            {
+                materialNames = new Dictionary<string, string>();
+                FillMaterialList();
+            }
             var sysMat = GetSystemMaterial(materialNames);
 
             #region  Update Special Material Pricing and QTY on JobSetup change
@@ -114,7 +119,7 @@ namespace WICR_Estimator.ViewModels
             if (OtherMaterials.Count == 0)
             {
                 OtherMaterials = GetOtherMaterials();
-                OtherLaborMaterials = GetOtherMaterials();
+                OtherLaborMaterials = OtherMaterials;
             }
 
 

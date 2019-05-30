@@ -171,10 +171,10 @@
                     <!--<DataGridTextColumn Header="Unit Price"
                                     IsReadOnly="{Binding IsReadOnly}"
                                     Binding="{Binding UnitPrice}"/>-->
-                    <DataGridTemplateColumn Header="Unit Price">
+                    <DataGridTemplateColumn Header="Unit Labor Price">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding UnitPrice,UpdateSourceTrigger=PropertyChanged}"
+                                <TextBox Text="{Binding UnitPrice,UpdateSourceTrigger=LostFocus}"
                                      IsEnabled="{Binding IsEditable}"
                                          Style="{StaticResource editableTextbox}">
 

@@ -486,8 +486,8 @@ namespace WICR_Estimator.ViewModels
             met.Add(new AddOnMetal("L - METAL / FLASHING", "4X8", getMetalPR(1), laborRate, 0, getMetalMP(1), false));
             met.Add(new AddOnMetal("DRIP EDGE METAL", "4X4", getMetalPR(3), laborRate, 0, getMetalMP(3), false));
             met.Add(new AddOnMetal("DRIP EDGE METAL", "3X4", getMetalPR(4), laborRate, 0, getMetalMP(4), false));
-            met.Add(new AddOnMetal("STAIR METAL", "4X10", getMetalPR(6), laborRate, getUnits(1), getMetalMP(6), true));
-            met.Add(new AddOnMetal("STAIR METAL", "4X8", getMetalPR(7), laborRate, getUnits(1), getMetalMP(7), true));
+            met.Add(new AddOnMetal("STAIR METAL", "4X10", getMetalPR(6), laborRate, getUnits(0), getMetalMP(6), true));
+            met.Add(new AddOnMetal("STAIR METAL", "4X8", getMetalPR(7), laborRate, getUnits(0), getMetalMP(7), true));
             met.Add(new AddOnMetal("Door Pan", "10' - 12'", getMetalPR(11), laborRate, 0, getMetalMP(11), false));
             met.Add(new AddOnMetal("Door Pan", "8'", getMetalPR(12), laborRate, 0, getMetalMP(12), false));
             met.Add(new AddOnMetal("Door Pan", "6'", getMetalPR(13), laborRate, 0, getMetalMP(13), false));

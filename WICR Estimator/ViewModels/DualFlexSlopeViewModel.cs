@@ -150,8 +150,7 @@ namespace WICR_Estimator.ViewModels
             UrethaneSlopes = CreateSlopes(9);
             UpdateSpecialSlope();
             CalculateAll();
-            
-            
+                        
         }
 
         private void UpdateSpecialSlope()
@@ -166,11 +165,10 @@ namespace WICR_Estimator.ViewModels
             {
                 slp.latheRate = latherate;
                 slp.LaborExtensionSlope = (slp.Sqft / slp.GSLaborRate + slp.Sqft / latherate) * laborRate;
-            }
-            
+            }           
         }
 
-        
+
         public override double getPricePerMix(string thickness, bool isApproved, int addRow = 0)
         {
             double result,val1,val2,val3;

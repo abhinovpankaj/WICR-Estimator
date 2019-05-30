@@ -19,6 +19,12 @@ namespace WICR_Estimator
     /// </summary>
     public partial class WaitWindow : Window
     {
+        public string UpdateMessage { get; set; }
+        public WaitWindow(string msg)
+            :base()
+        {
+            UpdateMessage = msg;                      
+        }
         public WaitWindow()
         {
             InitializeComponent();

@@ -38,7 +38,7 @@ namespace WICR_Estimator.ViewModels
                 }
 
             }
-
+            
             var sysMat = GetSystemMaterial();
 
             if (hasSetupChanged)

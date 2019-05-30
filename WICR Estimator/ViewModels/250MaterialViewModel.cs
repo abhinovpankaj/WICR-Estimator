@@ -83,6 +83,11 @@ namespace WICR_Estimator.ViewModels
                 }
 
             }
+            if (materialNames == null)
+            {
+                materialNames = new Dictionary<string, string>();
+                FillMaterialList();
+            }
             var sysMat = GetSystemMaterial(materialNames);
 
             //remove GC 250 System Material
@@ -146,7 +151,7 @@ namespace WICR_Estimator.ViewModels
             if (OtherMaterials.Count == 0)
             {
                 OtherMaterials = GetOtherMaterials();
-                OtherLaborMaterials = GetOtherMaterials();
+                OtherLaborMaterials = OtherMaterials;
             }
 
 

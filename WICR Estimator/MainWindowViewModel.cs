@@ -24,7 +24,7 @@ namespace WICR_Estimator
         {
             // Add available pages
             PageViewModels.Add(new HomeViewModel());
-            PageViewModels.Add(new ProjectViewModel());
+            PageViewModels.Add(new ProjectViewModel(HomeViewModel.MyselectedProjects));
 
             // Set starting page
             CurrentPageViewModel = PageViewModels[0];

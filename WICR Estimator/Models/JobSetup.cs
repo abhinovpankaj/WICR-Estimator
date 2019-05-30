@@ -387,7 +387,7 @@ namespace WICR_Estimator.Models
             }
         }
         public string WorkArea { get; set; }
-        private DateTime? selecteddate;
+        private DateTime? selecteddate=DateTime.Now;
         public DateTime? SelectedDate
         {
             get

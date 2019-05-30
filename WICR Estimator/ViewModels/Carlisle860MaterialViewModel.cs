@@ -70,6 +70,11 @@ namespace WICR_Estimator.ViewModels
                 }
 
             }
+            if (materialNames == null)
+            {
+                materialNames = new Dictionary<string, string>();
+                FillMaterialList();
+            }
             var sysMat = GetSystemMaterial(materialNames);
 
             #region  Update Special Material Pricing and QTY on JobSetup change
@@ -114,7 +119,7 @@ namespace WICR_Estimator.ViewModels
             if (OtherMaterials.Count == 0)
             {
                 OtherMaterials = GetOtherMaterials();
-                OtherLaborMaterials = GetOtherMaterials();
+                OtherLaborMaterials = OtherMaterials;
             }
 
 
@@ -364,8 +369,9 @@ namespace WICR_Estimator.ViewModels
         {
             if (SystemMaterials.Count != 0)
             {
-
+                
                 SystemMaterial item = SystemMaterials.Where(x => x.Name == "MIRADRAIN HC 1\" DRAIN - PUNCHED 12\" X 100'  (QUICK DRAIN)").FirstOrDefault();
+
                 if (item != null)
                 {
                     item.SMSqftV = item.Qty;                   

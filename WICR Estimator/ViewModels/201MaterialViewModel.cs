@@ -90,6 +90,11 @@ namespace WICR_Estimator.ViewModels
                 }
 
             }
+            if (materialNames==null)
+            {
+                materialNames = new Dictionary<string, string>();
+                FillMaterialList();
+            }
             var sysMat = GetSystemMaterial(materialNames);
 
             //remove GC 250 System Material
@@ -153,7 +158,7 @@ namespace WICR_Estimator.ViewModels
             if (OtherMaterials.Count == 0)
             {
                 OtherMaterials = GetOtherMaterials();
-                OtherLaborMaterials = GetOtherMaterials();
+                OtherLaborMaterials = OtherMaterials;
             }
 
 
@@ -526,7 +531,12 @@ namespace WICR_Estimator.ViewModels
                 ischecked1 = sysmat.IsMaterialChecked;
                 SystemMaterials.Where(x => x.Name == "CALIFORNIA SEALER FROM LOWRYS (GLUING DRAIN MAT)").FirstOrDefault().IsMaterialChecked = ischecked || ischecked1;
             }
-            
+            if (obj.ToString()== "Vulkem Tremproof 201 L 30 MILS")
+            {
+                sysmat = SystemMaterials.Where(x => x.Name == "Vulkem Tremproof 201 L 30 MILS").FirstOrDefault();
+                ischecked = sysmat.IsMaterialChecked;
+                SystemMaterials.Where(x => x.Name == "Vulkem Tremproof 201 R 30 MILS").FirstOrDefault().IsMaterialChecked = ischecked;
+            }
             calculateRLqty();
             CalculateLaborMinCharge();
         }

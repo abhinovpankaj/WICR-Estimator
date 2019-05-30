@@ -10,7 +10,135 @@ using WICR_Estimator.ViewModels;
 
 namespace WICR_Estimator.Models
 {
-          
+       
+    public class ProjectsTotal:BaseViewModel
+    {
+        private string name;
+        private string workArea;
+        private double metalCost;
+        private double slopeCost;
+
+        private double systemCost;
+        private double materialCost;
+        private double laborCost;
+        private double totalCost;
+        private string laborPerc;
+
+        public string Name
+        {
+            get { return name; }
+            set
+            {
+                if (value!=name)
+                {
+                    name = value;
+                    OnPropertyChanged("Name");
+                }
+            }
+        }
+        public string WorkArea
+        {
+            get { return workArea; }
+            set
+            {
+                if (value != workArea)
+                {
+                    workArea = value;
+                    OnPropertyChanged("WorkArea");
+                }
+            }
+        }
+
+        public double MetalCost
+        {
+            get { return metalCost; }
+            set
+            {
+                if (value != metalCost)
+                {
+                    metalCost = value;
+                    OnPropertyChanged("MetalCost");
+                }
+            }
+        }
+
+        public double SlopeCost
+        {
+            get { return slopeCost; }
+            set
+            {
+                if (value != slopeCost)
+                {
+                    slopeCost = value;
+                    OnPropertyChanged("SlopeCost");
+                }
+            }
+        }
+
+        public double SystemCost
+        {
+            get { return systemCost; }
+            set
+            {
+                if (value != systemCost)
+                {
+                    systemCost = value;
+                    OnPropertyChanged("SystemCost");
+                }
+            }
+        }
+        public double MaterialCost
+        {
+            get { return materialCost; }
+            set
+            {
+                if (value != materialCost)
+                {
+                    materialCost = value;
+                    OnPropertyChanged("MaterialCost");
+                }
+            }
+        }
+        public double LaborCost
+        {
+            get { return laborCost; }
+            set
+            {
+                if (value != laborCost)
+                {
+                    laborCost = value;
+                    OnPropertyChanged("LaborCost");
+                }
+            }
+        }
+
+        public double TotalCost
+        {
+            get { return totalCost; }
+            set
+            {
+                if (value != totalCost)
+                {
+                    totalCost = value;
+                    OnPropertyChanged("TotalCost");
+                }
+            }
+        }
+        public string LaborPercentage
+        {
+            get { return laborPerc; }
+            set
+            {
+                if (value != laborPerc)
+                {
+                    laborPerc = value;
+                    OnPropertyChanged("LaborPercentage");
+                }
+            }
+        }
+        
+
+    }
     public class Project: BaseViewModel
     {
         public Dictionary<string, int> lastUsedRows;

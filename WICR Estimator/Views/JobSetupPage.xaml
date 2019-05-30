@@ -171,21 +171,21 @@
                                            TextWrapping="Wrap"/>
                         </CheckBox>
                         <StackPanel  Visibility="{Binding DualFlexVisible}">
-                            <Border BorderBrush="Gray" BorderThickness="1" Margin="2">
+                            <!--<Border BorderBrush="Gray" BorderThickness="1" Margin="2">-->
                                 <StackPanel>
-                                    <RadioButton GroupName="Mortar" Style="{StaticResource RBxStyle}"
+                                    <CheckBox  Style="{StaticResource CheckBoxStyle}"
                                IsChecked="{Binding HasQuarterMortarBed,UpdateSourceTrigger=PropertyChanged}">
                                         <TextBlock Text="1  1/4 inch MORTAR BED WITH 2X2 METAL"
                                            TextWrapping="Wrap"/>
-                                    </RadioButton>
-                                    <RadioButton  GroupName="Mortar" Style="{StaticResource RBxStyle}"
+                                    </CheckBox>
+                                    <CheckBox  Style="{StaticResource CheckBoxStyle}"
                                IsChecked="{Binding HasQuarterLessMortarBed,UpdateSourceTrigger=PropertyChanged}">
                                         <TextBlock Text="3/4 INCH MORTAR BED WITH METAL LATHE"
                                            TextWrapping="Wrap"/>
-                                    </RadioButton>
+                                    </CheckBox>
                                 </StackPanel>
                                 
-                            </Border>
+                            <!--</Border>-->
                             
                             <CheckBox  Style="{StaticResource CheckBoxStyle}"
                                IsChecked="{Binding HasElastex,UpdateSourceTrigger=PropertyChanged}">

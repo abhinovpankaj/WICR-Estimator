@@ -18,6 +18,9 @@ using System.Xml.Serialization;
 using System.Runtime.Serialization;
 using System.Xml;
 using Excel = Microsoft.Office.Interop.Excel;
+using System.Runtime.Remoting.Contexts;
+using System.Diagnostics;
+using System.Threading;
 
 namespace WICR_Estimator.ViewModels
 {
@@ -26,6 +29,8 @@ namespace WICR_Estimator.ViewModels
     {
         
         public static event EventHandler OnLoggedAsAdmin;
+        public static event EventHandler OnProjectSelectionChange;
+        
         public HomeViewModel()
         {
             FillProjects();
@@ -37,20 +42,113 @@ namespace WICR_Estimator.ViewModels
             ReplicateProject = new DelegateCommand(Replicate, canReplicate);
             ClearProjects = new DelegateCommand(Clear, canClear);
             CreateSummary = new DelegateCommand(GenerateSummary, canCreateSummary);
-            
+            RefreshGoogleData = new DelegateCommand(DeleteGoogleData, canDelete);
+            ProjectTotals = new ProjectsTotal();
         }
 
         
-
         private void Project_OnSelectedProjectChange(object sender, EventArgs e)
         {
+            if (OnProjectSelectionChange!=null)
+            {
+                OnProjectSelectionChange(SelectedProjects, EventArgs.Empty);
+            }
+            double tabsLaborTotal = 0;
             MyselectedProjects = SelectedProjects;
             OnPropertyChanged("SelectedProjects");
+            if (SelectedProjects != null)
+            {
+                ProjectTotals.Name = "Totals";
+                ProjectTotals.LaborCost = Math.Round(SelectedProjects.Sum(x => x.LaborCost),2);
+                ProjectTotals.SlopeCost = Math.Round(SelectedProjects.Sum(x => x.SlopeCost),2);
+                ProjectTotals.MetalCost = Math.Round(SelectedProjects.Sum(x => x.MetalCost),2);
+                ProjectTotals.SystemCost = Math.Round(SelectedProjects.Sum(x => x.SystemNOther), 2);
+                ProjectTotals.MaterialCost = Math.Round(SelectedProjects.Sum(x => x.MaterialCost), 2);
+                ProjectTotals.TotalCost = Math.Round(SelectedProjects.Sum(x => x.TotalCost), 2);
+
+                foreach (Project item in SelectedProjects)
+                {
+                    if (item.MaterialViewModel!=null)
+                    {
+                        tabsLaborTotal = tabsLaborTotal + item.MaterialViewModel.AllTabsLaborTotal;
+                    }
+                    
+
+                }
+                if (ProjectTotals.TotalCost!=0)
+                {
+                    ProjectTotals.LaborPercentage = Math.Round(tabsLaborTotal / ProjectTotals.TotalCost * 100, 2).ToString() + "%";
+                }           
+            }
+
         }
         #region Properties\Commands
+        private bool isprocessing;
+        public bool IsProcessing
+        {
+            get
+            {
+                return isprocessing;
+            }
+            set
+            {
+                if (value != isprocessing)
+                {
+                    isprocessing = value;
+                    OnPropertyChanged("IsProcessing");
+                }
+            }
+        }
+        private int completedProjects;
+        public int CompletedProjects
+        {
+            get
+            {
+                return completedProjects;
+            }
+            set
+            {
+                if (value != completedProjects)
+                {
+                    completedProjects = value;
+                    OnPropertyChanged("CompletedProjects");
+                }
+            }
+        }
+        private string statusMessage;
+        public string StatusMessage
+        {
+            get
+            {
+                return statusMessage;
+            }
+            set
+            {
+                if (value != statusMessage)
+                {
+                    statusMessage = value;
+                    OnPropertyChanged("StatusMessage");
+                }
+            }
+        }
         public string JobName { get; set; }
         public string PreparedBy { get; set; }
-        public DateTime? JobDate { get; set; }
+        private DateTime? jobCreationdate;
+        public DateTime? JobCreationDate
+        {
+            get
+            {
+                return jobCreationdate;
+            }
+            set
+            {
+                if (value != jobCreationdate)
+                {
+                    jobCreationdate = value;
+                    OnPropertyChanged("JobCreationDate");
+                }
+            }
+        }
         public string LoginMessage { get; set; }
         private bool showLogin;
         public bool ShowLogin
@@ -88,6 +186,28 @@ namespace WICR_Estimator.ViewModels
             else
                 return false;
         }
+        
+        private void DeleteGoogleData(object obj)
+        {
+            IsProcessing = true;
+            StatusMessage = "Deleting the previous Google data";
+
+            if (System.IO.Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR"))
+            {
+                Directory.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR", true);
+            }
+            DownloadGoogleData();
+            
+        }
+        private bool canDelete(object obj)
+        {
+            if (IsProcessing)
+            {
+                return false;
+            }
+            else
+                return true;
+        }
 
         private void GenerateSummary(object obj)
         {
@@ -95,39 +215,44 @@ namespace WICR_Estimator.ViewModels
         }
         private bool canClear(object obj)
         {
-            return true;
+            if (SelectedProjects.Count > 0)
+            {
+                return true;
+            }
+            else
+                return false;
         }
-
+        
         private void Clear(object obj)
         {
+            string message = "All the Project selection and values will be cleared. \nDo you want to proceed?";
+            string caption = "Refresh WICR Tool";
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult result;
+
+            // Displays the MessageBox.
             
-            //foreach (Project item in Projects)
-            //{
-            //    if (item.IsSelectedProject)
-            //    {
-            //        item.IsSelectedProject = false;
-            //        item.ProjectJobSetUp = null;
-            //        item.MetalViewModel = null;
-            //        item.SlopeViewModel = null;
-            //        item.MaterialViewModel = null;
-                    
-            //    }
-            //}
-            //MyselectedProjects = null;
-            //SelectedProjects = null;
-            //OnPropertyChanged("SelectedProjects");
-            //OnPropertyChanged("Projects");
-            FillProjects();
-            Project.OnSelectedProjectChange += Project_OnSelectedProjectChange;
-            Project_OnSelectedProjectChange(null, null);
+            result = MessageBox.Show(message, caption, buttons);
+            if (result == System.Windows.Forms.DialogResult.Yes)
+            {
+
+                Process.Start(Application.ExecutablePath);
+                
+                
+                Thread.Sleep(1000);
+                Environment.Exit(-1);
+            }
+            
+
         }
+        
         private bool canReplicate(object obj)
         {
             bool isEnabled = false;
             Project prj = obj as Project;
             if (prj != null)
             {
-                if (prj.MaterialViewModel != null || prj.MetalViewModel != null || prj.SlopeViewModel != null)
+                if (prj.MaterialViewModel != null ||prj.ProjectJobSetUp!=null)
                 {
                     isEnabled= true;
                 }
@@ -142,22 +267,15 @@ namespace WICR_Estimator.ViewModels
                 if (prj.IsSelectedProject)
                 {
                     Project replicatedProject = new Project();
-                    //replicatedProject = ReplicateObject.DeepClone(prj);
-
+                    
                     prj.CopyCount++;
                     replicatedProject.Name = prj.Name + "." + prj.CopyCount;
                     replicatedProject.GrpName = "Copied";
                     replicatedProject.MainGroup = "Replicated Projects";
                     replicatedProject.IsSelectedProject = true;
-                    //replicatedProject.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
+                    
                     SelectedProjects.Add(replicatedProject);
                     Projects.Add(replicatedProject);
-                    //replicatedProject.MetalViewModel.MetalTotals.OnTotalsChange += replicatedProject.MaterialViewModel.MetalTotals_OnTotalsChange;
-                    //replicatedProject.SlopeViewModel.SlopeTotals.OnTotalsChange += replicatedProject.MaterialViewModel.MetalTotals_OnTotalsChange;
-                    //replicatedProject.ProjectJobSetUp.JobSetupChange += replicatedProject.MaterialViewModel.JobSetup_OnJobSetupChange;
-                    //replicatedProject.ProjectJobSetUp.JobSetupChange += replicatedProject.MetalViewModel.JobSetup_OnJobSetupChange;
-
-                    //replicatedProject.ProjectJobSetUp.JobSetupChange += replicatedProject.SlopeViewModel.JobSetup_OnJobSetupChange;
                     Project_OnSelectedProjectChange(Projects[0], null);
                 }
             }
@@ -200,13 +318,24 @@ namespace WICR_Estimator.ViewModels
                     Projects.Add(item);
                     //replicatedProject.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
                     SelectedProjects.Add(item);
-
-                    item.MetalViewModel.MetalTotals.OnTotalsChange += item.MaterialViewModel.MetalTotals_OnTotalsChange;
-                    item.SlopeViewModel.SlopeTotals.OnTotalsChange += item.MaterialViewModel.MetalTotals_OnTotalsChange;
-                    item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
-                    item.ProjectJobSetUp.JobSetupChange += item.MetalViewModel.JobSetup_OnJobSetupChange;
+                    if (item.MetalViewModel!=null)
+                    {
+                        item.MetalViewModel.MetalTotals.OnTotalsChange += item.MaterialViewModel.MetalTotals_OnTotalsChange;
+                        item.ProjectJobSetUp.JobSetupChange += item.MetalViewModel.JobSetup_OnJobSetupChange;
+                    }
+                    if (item.SlopeViewModel!=null)
+                    {
+                        item.SlopeViewModel.SlopeTotals.OnTotalsChange += item.MaterialViewModel.MetalTotals_OnTotalsChange;
+                        item.ProjectJobSetUp.JobSetupChange += item.SlopeViewModel.JobSetup_OnJobSetupChange;
+                    }
+                    if (item.ProjectJobSetUp!=null)
+                    {
+                        item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
+                    }
+                    
+                    
                     item.MaterialViewModel.CheckboxCommand = new DelegateCommand(item.MaterialViewModel.ApplyCheckUnchecks, item.MaterialViewModel.canApply);
-                    item.ProjectJobSetUp.JobSetupChange += item.SlopeViewModel.JobSetup_OnJobSetupChange;
+                    
                     
                 }
                 Project_OnSelectedProjectChange(Projects[0], null);
@@ -270,6 +399,7 @@ namespace WICR_Estimator.ViewModels
         }
         public DelegateCommand ClearProjects { get; set; }
         public DelegateCommand CreateSummary { get; set; }
+        public DelegateCommand RefreshGoogleData { get; set; }
         public DelegateCommand ReplicateProject { get; set; }
         private DelegateCommand showCalculationDetails;
         public DelegateCommand ShowCalculationDetails
@@ -352,8 +482,60 @@ namespace WICR_Estimator.ViewModels
             }
         }
 
-        
+        private ProjectsTotal prjTotals;
+        public ProjectsTotal ProjectTotals
+        {
+            get { return prjTotals; }
+            set
+            {
+                if (prjTotals!=value)
+                {
+                    prjTotals = value;
+                    OnPropertyChanged("ProjectTotals");
+                }
+            }
+        }
         #region Methods
+        private async void DownloadGoogleData()
+        {
+            IList<IList<object>> LaborRate = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Rate);
+            
+            IList<IList<object>> MetalData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Metal);
+            IList<IList<object>> FreightData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Freight);
+
+            foreach (var prj in Projects)
+            {
+                var values = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, prj.Name);
+                if (values == null)
+                {
+                    StatusMessage = "Please Wait! Refreshing Google Data for " + prj.Name;
+                    CompletedProjects++;
+                    DataSerializer.DSInstance.googleData = new GSData();
+                    
+                    DataSerializer.DSInstance.googleData.LaborRate = LaborRate;
+
+                    //Thread.Sleep(1000);
+                    DataSerializer.DSInstance.googleData.MetalData = MetalData;
+
+                    //Thread.Sleep(1000);
+                    DataSerializer.DSInstance.googleData.SlopeData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Slope);
+                    Thread.Sleep(1000);
+
+                    DataSerializer.DSInstance.googleData.MaterialData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Material);
+
+                    //Thread.Sleep(1000);
+                    DataSerializer.DSInstance.googleData.LaborData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Labor);
+                    //Thread.Sleep(1000);
+                    DataSerializer.DSInstance.googleData.FreightData = FreightData;
+
+                    DataSerializer.DSInstance.serializeGoogleData(DataSerializer.DSInstance.googleData, prj.Name);
+                    Thread.Sleep(3000);
+                }
+            }
+            IsProcessing = false;
+            CompletedProjects = 0;
+
+        }
         private bool canShow(object obj)
         {
             return true;
@@ -512,6 +694,7 @@ namespace WICR_Estimator.ViewModels
         }
         private int writeSlope(SlopeBaseViewModel SVM)
         {
+            
             int k = 2;
             string startRange;
             Excel.Range dataRange;
@@ -546,21 +729,11 @@ namespace WICR_Estimator.ViewModels
             k = 2;
             if (SVM.IsUrethaneVisible == System.Windows.Visibility.Visible)
             {
-
-                
-                PedestrianSlopeViewModel PVM = SVM as PedestrianSlopeViewModel;
-                if (PVM !=null)
+                if (currentProjectName == "Dual Flex")
                 {
-                    if (PVM.UrethaneOverrideManually)
-                    {
-                        startRange = getStartRange("OverriddenUrethaneSlope");
-                        dataRange = exlWs.Range[startRange];
-                        k = 0;
-                        dataRange.Value = "Yes";
-                        dataRange.Offset[k , 1].Value = PVM.TotalMixesMan;
-                        dataRange.Offset[k, 2].Value = PVM.UrethaneSumTotalMixes;
-                    }
-                    else
+                    DualFlexSlopeViewModel PVM = SVM as DualFlexSlopeViewModel;
+
+                    if (PVM != null)
                     {
                         startRange = getStartRange("UrethaneSlope");
                         dataRange = exlWs.Range[startRange].Offset[k, 0];
@@ -574,19 +747,56 @@ namespace WICR_Estimator.ViewModels
                             dataRange.Offset[k, 4].Value = item.TotalMixes;
                             k = k + 1;
                         }
-                        dataRange.Offset[k, 3].Value = PVM.UrethaneSumTotal;
-                        dataRange.Offset[k, 4].Value = PVM.UrethaneSumTotalMixes;
+                        
+                        dataRange.Offset[k+1, 3].Value = PVM.UrethaneSumTotal;
+                        dataRange.Offset[k+1, 4].Value = PVM.UrethaneSumTotalMixes;
+                       
                     }
-                    
+                    k = 0;
                 }
-                k = 0;
-                
+                else
+                {
+                    PedestrianSlopeViewModel PVM = SVM as PedestrianSlopeViewModel;
+                    if (PVM != null)
+                    {
+                        if (PVM.UrethaneOverrideManually)
+                        {
+                            startRange = getStartRange("OverriddenUrethaneSlope");
+                            dataRange = exlWs.Range[startRange];
+                            k = 0;
+                            dataRange.Value = "Yes";
+                            dataRange.Offset[k, 1].Value = PVM.UrethaneTotalMixesMan;
+                            dataRange.Offset[k, 3].Value = PVM.UrethaneAverageMixesPrice;
+                        }
+                        else
+                        {
+                            startRange = getStartRange("UrethaneSlope");
+                            dataRange = exlWs.Range[startRange].Offset[k, 0];
+                            k = 0;
+                            foreach (Slope item in PVM.UrethaneSlopes)
+                            {
+                                dataRange.Offset[k, 0].Value = item.Thickness;
+                                dataRange.Offset[k, 1].Value = item.Sqft;
+                                dataRange.Offset[k, 2].Value = item.DeckCount;
+                                dataRange.Offset[k, 3].Value = item.Total;
+                                dataRange.Offset[k, 4].Value = item.TotalMixes;
+                                k = k + 1;
+                            }
+                            dataRange.Offset[k, 3].Value = PVM.UrethaneSumTotal;
+                            dataRange.Offset[k, 4].Value = PVM.UrethaneSumTotalMixes;
+                        }
+
+                    }
+                    k = 0;
+
+                }
             }
             else
             {
                 k = 57;
             }
             return k;
+    
         }
         private string WriteMaterials(MaterialBaseViewModel MVM)
         {
@@ -648,11 +858,13 @@ namespace WICR_Estimator.ViewModels
             dataRange.Offset[k, 3].Value = MVM.TotalSubContractLaborCostBrkp;
             return rowString;
         }
+        private string currentProjectName;
         private int WriteJobSetup(JobSetup Js)
         {
             int k = 2;
+            currentProjectName = Js.ProjectName;
             string jobSetupRange = getStartRange("JobSetup");
-            if (Js.SpecialProductName!="")
+            if (Js.SpecialProductName=="" || Js.SpecialProductName==null)
             {
                 exlWs.Range[jobSetupRange].Offset[1, 0].Value = Js.ProjectName + "("+ Js.WorkArea+")";
             }
@@ -668,7 +880,7 @@ namespace WICR_Estimator.ViewModels
             dataRange.Offset[k, 1].Value = PreparedBy;
             k++;
             dataRange.Offset[k, 0].Value = "DATE";
-            dataRange.Offset[k, 1].Value = JobDate;
+            dataRange.Offset[k, 1].Value = Js.SelectedDate;
             dataRange.Offset[k, 1].NumberFormat = "mm-dd-yyyy";
             k++;
             dataRange.Offset[k, 0].Value = "NOTE HERE IF A DIFFERENT PRODUCT IS BEING USED";
@@ -759,7 +971,118 @@ namespace WICR_Estimator.ViewModels
             dataRange.Offset[k, 1].Value = Js.StairWidth;
             k++;
 
-            
+            //check if dual Flex is visible
+            if (Js.DualFlexVisible ==System.Windows.Visibility.Visible)
+            {
+                dataRange.Offset[k, 0].Value = "1  1/4 inch MORTAR BED WITH 2X2 METAL";
+                dataRange.Offset[k, 1].Value = Js.HasQuarterMortarBed;
+                k++;
+                dataRange.Offset[k, 0].Value = "3/4 INCH MORTAR BED WITH METAL LATHE";
+                dataRange.Offset[k, 1].Value = Js.HasQuarterLessMortarBed;
+                k++;
+                dataRange.Offset[k, 0].Value = "ADD FOR ELASTATEX 2-MEMBRANE SYSTEM";
+                dataRange.Offset[k, 1].Value = Js.HasElastex;
+                k++;
+                dataRange.Offset[k, 0].Value = "EASY ACCESS WITH  NO LADDER?";
+                dataRange.Offset[k, 1].Value = Js.HasEasyAccess;
+                k++;
+            }
+            //check if section 250 is visible
+            if (Js.Is201SectionVisible == System.Windows.Visibility.Visible)
+            {
+                dataRange.Offset[k, 0].Value = "TERM BAR (LF)";
+                dataRange.Offset[k, 1].Value = Js.TermBarLF;
+                k++;
+                dataRange.Offset[k, 0].Value = "REBAR PREP @ WALLS (LF)";
+                dataRange.Offset[k, 1].Value = Js.RebarPrepWallsLF;
+                k++;
+                dataRange.Offset[k, 0].Value = "SUPERSTOP (LF)";
+                dataRange.Offset[k, 1].Value = Js.SuperStopLF;
+                k++;
+                dataRange.Offset[k, 0].Value = "PENETRATIONS";
+                dataRange.Offset[k, 1].Value = Js.Penetrations;
+                k++;
+            }
+            //check if section 201 is visible
+            if (Js.Is201SectionVisible == System.Windows.Visibility.Visible)
+            {
+                dataRange.Offset[k, 0].Value = "TERM BAR (LF)";
+                dataRange.Offset[k, 1].Value = Js.TermBarLF;
+                k++;
+                dataRange.Offset[k, 0].Value = "REBAR PREP @ WALLS (LF)";
+                dataRange.Offset[k, 1].Value = Js.RebarPrepWallsLF;
+                k++;
+                dataRange.Offset[k, 0].Value = "SUPERSTOP (LF)";
+                dataRange.Offset[k, 1].Value = Js.SuperStopLF;
+                k++;
+                dataRange.Offset[k, 0].Value = "PENETRATIONS";
+                dataRange.Offset[k, 1].Value = Js.Penetrations;
+                k++;
+            }
+            //check if section 860 is visible
+            if (Js.Is860SectionVisible==System.Windows.Visibility.Visible)
+            {
+                dataRange.Offset[k, 0].Value = "SUPER STOP AT FOOTING (Y/N)";
+                dataRange.Offset[k, 1].Value = Js.SuperStopAtFooting;
+                k++;
+                dataRange.Offset[k, 0].Value = "ADDITIONAL TERM BAR (LF)";
+                dataRange.Offset[k, 1].Value = Js.TermBarLF;
+                k++;
+                dataRange.Offset[k, 0].Value = "INSIDE AND OUTSIDE CORNER DETAILS (LF)";
+                dataRange.Offset[k, 1].Value = Js.InsideOutsideCornerDetails;
+                k++;
+                dataRange.Offset[k, 0].Value = "PENETRATIONS (EA)";
+                dataRange.Offset[k, 1].Value = Js.Penetrations;
+                k++;
+            }
+            //check if section Paraseal is visible
+            if (Js.IsParasealSectionVisible == System.Windows.Visibility.Visible)
+            {
+                dataRange.Offset[k, 0].Value = "SUPER STOP AT FOOTING?";
+                dataRange.Offset[k, 1].Value = Js.SuperStopAtFooting;
+                k++;
+                dataRange.Offset[k, 0].Value = "ADDITIONAL TERM BAR (LF)";
+                dataRange.Offset[k, 1].Value = Js.AdditionalTermBarLF;
+                k++;
+                
+                dataRange.Offset[k, 0].Value = "INSIDE AND OUTSIDE CORNER DETAILS (LF)";
+                dataRange.Offset[k, 1].Value = Js.InsideOutsideCornerDetails;
+                k++;
+                
+            }
+            //check if section ParasealLG is visible
+            if (Js.IsParasealLGSectionVisible == System.Windows.Visibility.Visible)
+            {
+                dataRange.Offset[k, 0].Value = "SUPER STOP NEEDED AT FOOTING? (Y/N)";
+                dataRange.Offset[k, 1].Value = Js.SuperStopAtFooting;
+                k++;
+                dataRange.Offset[k, 0].Value = "ADDITIONAL TERM BAR (LF)";
+                dataRange.Offset[k, 1].Value = Js.AdditionalTermBarLF;
+                k++;
+                dataRange.Offset[k, 0].Value = "RAKERS/CORNER BRACES EA";
+                dataRange.Offset[k, 1].Value = Js.RakerCornerBases;
+                k++;
+
+                dataRange.Offset[k, 0].Value = "CEMENT BOARD DETAIL EA";
+                dataRange.Offset[k, 1].Value = Js.CementBoardDetail;
+                k++;
+               
+                               
+                dataRange.Offset[k, 0].Value = "INSIDE AND OUTSIDE CORNER DETAILS MATERIAL ONLY (LF)";
+                dataRange.Offset[k, 1].Value = Js.InsideOutsideCornerDetails;
+                k++;
+                dataRange.Offset[k, 0].Value = "ROCK POCKETS EA.";
+                dataRange.Offset[k, 1].Value = Js.RockPockets;
+                k++;
+
+                dataRange.Offset[k, 0].Value = "LABOR FOR 3 FT STRIP OF PARASEAL AT FOUNDATION OR OTHER AREAS (LF)";
+                dataRange.Offset[k, 1].Value = Js.ParasealFoundation;
+                k++;
+                dataRange.Offset[k, 0].Value = "REAR/MID LAGGING LF of beam";
+                dataRange.Offset[k, 1].Value = Js.RearMidLagging;
+                k++;
+
+            }
             dataRange.Offset[k, 0].Value = "Future Projects";
             dataRange.Offset[k, 1].Value = Js.ProjectDelayFactor;
             k++;
@@ -834,10 +1157,17 @@ namespace WICR_Estimator.ViewModels
             dataRange.Offset[k, l].Value = MVM.TotalSale;
             k=0;
             l++;
-
-            dataRange.Offset[k, l].Value = MVM.SlopeTotals.LaborExtTotal;
+            if (MVM.SlopeTotals!=null)
+            {
+                dataRange.Offset[k, l].Value = MVM.SlopeTotals.LaborExtTotal;
+                
+            }
             k++;
-            dataRange.Offset[k, l].Value = MVM.MetalTotals.LaborExtTotal;
+            if (MVM.MetalTotals!=null)
+            {
+                dataRange.Offset[k, l].Value = MVM.MetalTotals.LaborExtTotal;
+            }
+            
             k++;
             dataRange.Offset[k, l].Value = MVM.TotalLaborExtension;
             k++;
@@ -846,10 +1176,17 @@ namespace WICR_Estimator.ViewModels
             dataRange.Offset[k, l].Value = MVM.AllTabsLaborTotal;
             k = 0;
             l++;
-
-            dataRange.Offset[k, l].Value = MVM.SlopeTotals.MaterialExtTotal;
+            if (MVM.SlopeTotals!=null)
+            {
+                dataRange.Offset[k, l].Value = MVM.SlopeTotals.MaterialExtTotal;
+            }
+            
             k++;
-            dataRange.Offset[k, l].Value = MVM.MetalTotals.MaterialExtTotal;
+            if (MVM.MetalTotals!=null)
+            {
+                dataRange.Offset[k, l].Value = MVM.MetalTotals.MaterialExtTotal;
+            }
+            
             k++;
             dataRange.Offset[k, l].Value = MVM.TotalMaterialCostbrkp;
             k++;
@@ -858,10 +1195,17 @@ namespace WICR_Estimator.ViewModels
             dataRange.Offset[k, l].Value = MVM.AllTabsMaterialTotal;
             k = 0;
             l++;
-
-            dataRange.Offset[k, l].Value = MVM.SlopeTotals.MaterialFreightTotal;
+            if (MVM.SlopeTotals!=null)
+            {
+                dataRange.Offset[k, l].Value = MVM.SlopeTotals.MaterialFreightTotal;
+            }
+            
             k++;
-            dataRange.Offset[k, l].Value = MVM.MetalTotals.MaterialFreightTotal;
+            if (MVM.SlopeTotals!=null)
+            {
+                dataRange.Offset[k, l].Value = MVM.MetalTotals.MaterialFreightTotal;
+            }
+            
             k++;
             dataRange.Offset[k, l].Value = MVM.TotalFreightCostBrkp;
             k++;
@@ -870,10 +1214,17 @@ namespace WICR_Estimator.ViewModels
             dataRange.Offset[k, l].Value = MVM.AllTabsFreightTotal;
             k = 0;
             l++;
-
-            dataRange.Offset[k, l].Value = MVM.SlopeTotals.SubContractLabor;
+            if (MVM.SlopeTotals!=null)
+            {
+                dataRange.Offset[k, l].Value = MVM.SlopeTotals.SubContractLabor;
+            }
+           
             k++;
-            dataRange.Offset[k, l].Value = MVM.MetalTotals.SubContractLabor;
+            if (MVM.MetalTotals!=null)
+            {
+                dataRange.Offset[k, l].Value = MVM.MetalTotals.SubContractLabor;
+            }
+            
             k++;
             dataRange.Offset[k, l].Value = 0;
             k++;
@@ -888,6 +1239,7 @@ namespace WICR_Estimator.ViewModels
 
         private void clearEmptyRows(Project item)
         {
+            bool metalDeleted=false, slopeDeleted=false,bothSlopeDeleted=false;
             try
             {              
                 //delete empty Labor Other Costs
@@ -899,47 +1251,149 @@ namespace WICR_Estimator.ViewModels
                 exlWs.Range["A" + rowN, "E101"].Delete(Excel.XlDeleteShiftDirection.xlShiftUp);
 
                 //delete empty Slopes
-                rowN = item.lastUsedRows["UrethaneSlope"];
-                if (rowN!=0)
+                if (item.SlopeViewModel!=null)
                 {
+                    if (item.lastUsedRows.ContainsKey("UrethaneSlope"))
+                    {
+                        rowN = item.lastUsedRows["UrethaneSlope"];
+                        if (rowN != 0)
+                        {
+                            exlWs.Range["A" + rowN, "E67"].Delete(Excel.XlDeleteShiftDirection.xlShiftUp);
+                            slopeDeleted = true;
+                        }
+                    }
+                    if (currentProjectName=="Dual Flex")
+                    {
+                        exlWs.Range["A63", "E63"].Delete(Excel.XlDeleteShiftDirection.xlShiftUp);
+                        
+                    }
+                }
+                else
+                {
+                    rowN = 46;
                     exlWs.Range["A" + rowN, "E67"].Delete(Excel.XlDeleteShiftDirection.xlShiftUp);
+
+                    bothSlopeDeleted = true;
                 }
                 
                 //delete empty System Materials
                 rowN = item.lastUsedRows["SystemMaterials"];
                 exlWs.Range["G" + rowN, "L75"].Delete(Excel.XlDeleteShiftDirection.xlShiftUp);
 
-                //delete empty Misc metals
-                rowN = item.lastUsedRows["MiscMetals"];
-                exlWs.Range["A" + rowN, "E44"].Delete(Excel.XlDeleteShiftDirection.xlShiftUp);
+
+                //Delete Metals         
+                if (item.MetalViewModel == null)
+                {
+                    rowN = 26;
+                    exlWs.Range["G1", "L40"].Delete(Excel.XlDeleteShiftDirection.xlShiftUp);
+                    exlWs.Range["A" + rowN, "E44"].Delete(Excel.XlDeleteShiftDirection.xlShiftUp);
+                    metalDeleted = true;
+                }
+                else
+                {
+                    rowN = item.lastUsedRows["MiscMetals"];
+                    exlWs.Range["A" + rowN, "E44"].Delete(Excel.XlDeleteShiftDirection.xlShiftUp);                    
+                }
+                
                 //delete empty jobsetup
                 rowN = item.lastUsedRows["JobSetup"];
                 exlWs.Range["A" + rowN, "E24"].Delete(Excel.XlDeleteShiftDirection.xlShiftUp);
 
-                //check if Sub Contract Labor is Starting before Row 40
-                Excel.Range subRange = exlWs.Range["A1", "E100"];
-                // You should specify all these parameters every time you call this method,
-                // since they can be overridden in the user interface. 
-                Excel.Range foundRange = subRange.Find("Material SUB CONTRACT LABOR", Type.Missing,
-                    Excel.XlFindLookIn.xlValues, Excel.XlLookAt.xlPart,
-                    Excel.XlSearchOrder.xlByRows, Excel.XlSearchDirection.xlNext, false,
-                    Type.Missing, Type.Missing);
-                
-                if (foundRange!=null)
+                //check if Sub Contract Labor is Starting before Row 40 only if Metal and Slope has been deleted
+                if (slopeDeleted  || metalDeleted)
                 {
-                    int foundRow = foundRange.Row;
+                    Excel.Range subRange = exlWs.Range["A1", "E100"];
                     
-                    if (foundRow < 40)
+                    Excel.Range foundRange = subRange.Find("Material SUB CONTRACT LABOR", Type.Missing,
+                        Excel.XlFindLookIn.xlValues, Excel.XlLookAt.xlPart,
+                        Excel.XlSearchOrder.xlByRows, Excel.XlSearchDirection.xlNext, false,
+                        Type.Missing, Type.Missing);
+
+                    if (foundRange != null)
                     {
-                        do
+                        int foundRow = foundRange.Row;
+
+                        if (foundRow < 40)
                         {
-                            exlWs.Range["A" + foundRow, "E" + foundRow].Insert(Excel.XlInsertShiftDirection.xlShiftDown);
-                            foundRow++;
-                        } while (foundRow<41);
-                        
+                            do
+                            {
+                                exlWs.Range["A" + foundRow, "E" + foundRow].Insert(Excel.XlInsertShiftDirection.xlShiftDown);
+                                foundRow++;
+                            } while (foundRow < 41);
+
+                        }
                     }
                 }
-               
+                else if (bothSlopeDeleted)
+                {
+                    Excel.Range subRange = exlWs.Range["A1", "E100"];
+
+                    Excel.Range foundRange = subRange.Find("Material OTHER COSTS", Type.Missing,
+                        Excel.XlFindLookIn.xlValues, Excel.XlLookAt.xlPart,
+                        Excel.XlSearchOrder.xlByRows, Excel.XlSearchDirection.xlNext, false,
+                        Type.Missing, Type.Missing);
+
+                    if (foundRange != null)
+                    {
+                        int foundRow = foundRange.Row;
+
+                        if (foundRow < 40)
+                        {
+                            do
+                            {
+                                exlWs.Range["A" + foundRow, "E" + foundRow].Insert(Excel.XlInsertShiftDirection.xlShiftDown);
+                                foundRow++;
+                            } while (foundRow < 41);
+
+                        }
+                        else
+                        {
+                            foundRange = subRange.Find("Labor Hours", Type.Missing,
+                        Excel.XlFindLookIn.xlValues, Excel.XlLookAt.xlPart,
+                        Excel.XlSearchOrder.xlByRows, Excel.XlSearchDirection.xlNext, false,
+                        Type.Missing, Type.Missing);
+                            if (foundRange != null)
+                            {
+                                foundRow = foundRange.Row;
+
+                                if (foundRow < 40)
+                                {
+                                    do
+                                    {
+                                        exlWs.Range["A" + foundRow, "E" + foundRow].Insert(Excel.XlInsertShiftDirection.xlShiftDown);
+                                        foundRow++;
+                                    } while (foundRow < 41);
+
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    Excel.Range subRange = exlWs.Range["A1", "E100"];
+
+                    Excel.Range foundRange = subRange.Find("Urethane Slope", Type.Missing,
+                        Excel.XlFindLookIn.xlValues, Excel.XlLookAt.xlPart,
+                        Excel.XlSearchOrder.xlByRows, Excel.XlSearchDirection.xlNext, false,
+                        Type.Missing, Type.Missing);
+                    if (foundRange != null)
+                    {
+                        int foundRow = foundRange.Row;
+
+                        if (foundRow <= 40)
+                        {
+                            do
+                            {
+                                exlWs.Range["A" + foundRow, "E" + foundRow].Insert(Excel.XlInsertShiftDirection.xlShiftDown);
+                                foundRow++;
+                            } while (foundRow < 41);
+
+                        }
+                    }
+                }
+
+
             }
             catch (Exception ex)
             {
@@ -970,8 +1424,10 @@ namespace WICR_Estimator.ViewModels
                 {
                     item.lastUsedRows = new Dictionary<string, int>();
                     ws.Copy(summaryWb.Worksheets["Sheet1"]);
+                    
                     exlWs = (Excel.Worksheet)summaryWb.Worksheets["Summary"];
-                    exlWs.Name = item.Name + " Summary";
+
+                    exlWs.Name = item.Name.Length>22 ? item.Name.Substring(0,21):item.Name + " Summary";
                     item.lastUsedRows.Add("JobSetup",  WriteJobSetup(item.ProjectJobSetUp));
 
                     if (item.MetalViewModel != null)
@@ -1005,10 +1461,10 @@ namespace WICR_Estimator.ViewModels
                 saveFileDialog.Filter = "Execl files (*.xlsx)|*.xlsx";
                 saveFileDialog.FilterIndex = 0;
                 saveFileDialog.RestoreDirectory = true;
-                saveFileDialog.CreatePrompt = true;
-                if (JobDate!=null)
+                saveFileDialog.CreatePrompt = false;
+                if (JobCreationDate != null)
                 {
-                    saveFileDialog.FileName = JobName + " " + string.Format(JobDate.Value.ToShortDateString(), "mm-dd-yyyy");
+                    saveFileDialog.FileName = JobName + " " + string.Format(JobCreationDate.Value.ToShortDateString(), "mm-dd-yyyy");
                 }
                 
                 saveFileDialog.Title = "Save WICR Estimator Summary";

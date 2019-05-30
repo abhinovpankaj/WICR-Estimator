@@ -70,6 +70,11 @@ namespace WICR_Estimator.ViewModels
                 }
 
             }
+            if (materialNames == null)
+            {
+                materialNames = new Dictionary<string, string>();
+                FillMaterialList();
+            }
             var sysMat = GetSystemMaterial(materialNames);
 
             #region  Update Special Material Pricing and QTY on JobSetup change
@@ -356,7 +361,8 @@ namespace WICR_Estimator.ViewModels
                 isChecked = SystemMaterials.Where(x => x.Name == "Select Y for protection coat over membrane below tile (GU80-1 TOP COAT)").FirstOrDefault().IsMaterialChecked;
                 SystemMaterials.Where(x => x.Name == "GU80-1 top coat texture coat semi-smooth or knockdown").FirstOrDefault().IsMaterialChecked = !isChecked;
                 SystemMaterials.Where(x => x.Name == "GS88 Sealer").FirstOrDefault().IsMaterialChecked = !isChecked;
-                
+                SystemMaterials.Where(x => x.Name == "Color Jar Pigment, 1 JAR per PAIL OF GS88").FirstOrDefault().IsMaterialChecked = isChecked;
+
             }
             calculateRLqty();
             CalculateLaborMinCharge();

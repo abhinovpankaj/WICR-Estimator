@@ -227,9 +227,9 @@
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <DataGridTextColumn Header="Unit"
-                                    Binding="{Binding LQuantity,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                    Binding="{Binding LQuantity,Mode=TwoWay,UpdateSourceTrigger=LostFocus}"/>
                                 <DataGridTextColumn Header="Labor Unit Price ($)"
-                                    Binding="{Binding LMaterialPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                    Binding="{Binding LMaterialPrice,Mode=TwoWay,UpdateSourceTrigger=LostFocus}"/>
                                 <DataGridTextColumn Header="Labor Price($)" 
                                         IsReadOnly="True"
                                         Binding="{Binding LExtension,Mode=OneWay,UpdateSourceTrigger=PropertyChanged ,StringFormat={}{0:C}}"/>

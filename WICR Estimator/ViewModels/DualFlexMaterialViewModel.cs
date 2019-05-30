@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using WICR_Estimator.Models;
 
 namespace WICR_Estimator.ViewModels
 {
+    [DataContract]
     class DualFlexMaterialViewModel:MaterialBaseViewModel
     {
         private Dictionary<string, string> materialNames;
@@ -109,6 +111,11 @@ namespace WICR_Estimator.ViewModels
                 }
 
             }
+            if (materialNames == null)
+            {
+                materialNames = new Dictionary<string, string>();
+                FillMaterialList();
+            }
             var sysMat = GetSystemMaterial(materialNames);
 
             #region  Update Special Material Pricing and QTY on JobSetup change
@@ -153,7 +160,7 @@ namespace WICR_Estimator.ViewModels
             if (OtherMaterials.Count == 0)
             {
                 OtherMaterials = GetOtherMaterials();
-                OtherLaborMaterials = GetOtherMaterials();
+                OtherLaborMaterials = OtherMaterials;
             }
 
 

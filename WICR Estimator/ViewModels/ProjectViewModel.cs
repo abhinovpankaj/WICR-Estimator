@@ -27,8 +27,17 @@ namespace WICR_Estimator.ViewModels
 
         public ProjectViewModel()
         {
-            initializeApp();
+            EnabledProjects = new ObservableCollection<Project>();
+            EnabledProjects = HomeViewModel.MyselectedProjects;
+            
             HomeViewModel.OnLoggedAsAdmin += HomeViewModel_OnLoggedAsAdmin;
+            HomeViewModel.OnProjectSelectionChange += HomeViewModel_OnProjectSelectionChange;
+        }
+
+        private void HomeViewModel_OnProjectSelectionChange(object sender, EventArgs e)
+        {
+            EnabledProjects = sender as ObservableCollection<Project>;
+            initializeApp();
         }
 
 
@@ -73,6 +82,7 @@ namespace WICR_Estimator.ViewModels
         #endregion
 
         #region Methods
+
         private async void initializeApp()
         {
           
@@ -97,9 +107,9 @@ namespace WICR_Estimator.ViewModels
                     }
                     #region Google
                     var values = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, prj.Name);
-                        if (values == null)
-                        {
-                            DataSerializer.DSInstance.googleData = new GSData();
+                    if (values == null)
+                    {
+                        DataSerializer.DSInstance.googleData = new GSData();
                         //IList<IList<object>> LaborRate=await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Rate);
                         DataSerializer.DSInstance.googleData.LaborRate = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Rate);
 
@@ -121,6 +131,7 @@ namespace WICR_Estimator.ViewModels
                     }
 
                     #endregion
+
                     double laborRate = 0;
                     var rate = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, prj.Name);
                     double.TryParse(rate[0][0].ToString(),out laborRate);
@@ -158,8 +169,16 @@ namespace WICR_Estimator.ViewModels
                         }
                         if (prj.MaterialViewModel == null)
                         {
-                            prj.MaterialViewModel = ViewModelInstanceFactory.GetMaterialViewModelInstance(prj.Name, prj.MetalViewModel.MetalTotals,
+                            if (prj.SlopeViewModel!=null)
+                            {
+                                prj.MaterialViewModel = ViewModelInstanceFactory.GetMaterialViewModelInstance(prj.Name, prj.MetalViewModel.MetalTotals,
                                 prj.SlopeViewModel.SlopeTotals, prj.ProjectJobSetUp);
+                            }
+                            else
+                                prj.MaterialViewModel = ViewModelInstanceFactory.GetMaterialViewModelInstance(prj.Name, prj.MetalViewModel.MetalTotals,
+                                null, prj.ProjectJobSetUp);
+
+
                         }
                     }
                     prj.ProjectJobSetUp.TotalSalesCostTemp = prj.MaterialViewModel.TotalSale;

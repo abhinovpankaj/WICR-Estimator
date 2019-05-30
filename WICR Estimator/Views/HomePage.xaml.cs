@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -39,7 +40,7 @@ namespace WICR_Estimator.Views
                 Directory.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR",true);
             }
         }
-
+        
         //private void ListBox_Selected(object sender, RoutedEventArgs e)
         //{            
         //    HomeVM.SelectedProjects.Clear();

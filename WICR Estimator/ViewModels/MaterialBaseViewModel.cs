@@ -19,7 +19,7 @@ namespace WICR_Estimator.ViewModels
     [KnownType(typeof(XypexMaterialViewModel))]
     [KnownType(typeof(DeneefMaterialViewModel))]
     [KnownType(typeof(DexoColorFlakeMaterialViewModel))]
-    //[KnownType(typeof(DualFlexMaterialViewModel))]
+    [KnownType(typeof(DualFlexMaterialViewModel))]
     [KnownType(typeof(WWRehabMaterialViewModel))]
     [KnownType(typeof(MaterialViewModel))]
     [KnownType(typeof(_201MaterialViewModel))]
@@ -1126,7 +1126,7 @@ namespace WICR_Estimator.ViewModels
                 }
 
             }
-            
+          
             var sysMat = GetSystemMaterial();
 
             if (hasSetupChanged)
