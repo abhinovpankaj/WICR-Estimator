@@ -52,7 +52,7 @@ namespace WICR_Estimator.ViewModels
         public double prPerc = 0;
         public double totalSqft;
         public double stairWidth;
-        public int riserCount;
+        public double riserCount;
         public double deckPerimeter;
         public bool isApprovedforCement;
        
@@ -1181,7 +1181,7 @@ namespace WICR_Estimator.ViewModels
             {
                 OtherMaterials = GetOtherMaterials();
 
-                OtherLaborMaterials = OtherMaterials; //GetOtherMaterials();
+                OtherLaborMaterials = OtherMaterials; 
             }
 
 
@@ -1363,7 +1363,7 @@ namespace WICR_Estimator.ViewModels
             return true;
         }
 
-        private void CalculateCost(object obj)
+        public void CalculateCost(object obj)
         {
             
             calculateMaterialTotals();
@@ -1399,33 +1399,37 @@ namespace WICR_Estimator.ViewModels
         //Event handler to get JobSetup change updates.
         public virtual void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {
-            JobSetup js = sender as JobSetup;
-            if (js != null)
-            {
-                //weatherWearType = js.WeatherWearType;
-                totalSqft = js.TotalSqft;
-                stairWidth = js.StairWidth;
-                riserCount = js.RiserCount;
-                deckPerimeter = js.DeckPerimeter;
-                isPrevailingWage = js.IsPrevalingWage;
-                hasSpecialPricing = js.HasSpecialPricing;
-                isDiscounted = js.HasDiscount;
-                isApprovedforCement = js.IsApprovedForSandCement;
-                if (isPrevailingWage)
+            //Task task = new Task(() => 
+            //{
+                JobSetup js = sender as JobSetup;
+                if (js != null)
                 {
-                    preWage = js.ActualPrevailingWage == 0 ? 0 : (js.ActualPrevailingWage - laborRate) / laborRate;
+                    //weatherWearType = js.WeatherWearType;
+                    totalSqft = js.TotalSqft;
+                    stairWidth = js.StairWidth;
+                    riserCount = js.RiserCount;
+                    deckPerimeter = js.DeckPerimeter;
+                    isPrevailingWage = js.IsPrevalingWage;
+                    hasSpecialPricing = js.HasSpecialPricing;
+                    isDiscounted = js.HasDiscount;
+                    isApprovedforCement = js.IsApprovedForSandCement;
+                    if (isPrevailingWage)
+                    {
+                        preWage = js.ActualPrevailingWage == 0 ? 0 : (js.ActualPrevailingWage - laborRate) / laborRate;
+                    }
+                    else
+                        preWage = 0;
+                    hasContingencyDisc = js.VHasContingencyDisc;
+                    MarkUpPerc = js.MarkupPercentage;
+                    deckCount = js.DeckCount;
+                    actualPreWage = js.ActualPrevailingWage;
+                    MaterialPerc = getMaterialDiscount(js.ProjectDelayFactor);
                 }
-                else
-                    preWage = 0;
-                hasContingencyDisc = js.HasContingencyDisc;
-                MarkUpPerc = js.MarkupPercentage;
-                deckCount = js.DeckCount;
-                actualPreWage = js.ActualPrevailingWage;
-                MaterialPerc = getMaterialDiscount(js.ProjectDelayFactor);
-            }
-            FetchMaterialValuesAsync(true);
-            CalculateCost(null);
-            js.TotalSalesCostTemp = TotalSale;        
+                FetchMaterialValuesAsync(true);
+                CalculateCost(null);
+                js.TotalSalesCostTemp = TotalSale;
+            //});
+                    
         }
 
         #region notused
@@ -2916,7 +2920,7 @@ namespace WICR_Estimator.ViewModels
         private void CalculateCostBreakup()
         {
 
-            IEnumerable<SystemMaterial> systemCBMaterial = systemMaterials.Where(x => x.IsMaterialChecked == true);
+            IEnumerable<SystemMaterial> systemCBMaterial = SystemMaterials.Where(x => x.IsMaterialChecked == true);
             if (systemCBMaterial != null)
             {
                 TotalMaterialCostbrkp = (SumTotalMatExt + TotalOCExtension);
@@ -3050,8 +3054,10 @@ namespace WICR_Estimator.ViewModels
             }
         }
 
+        //New change for LaborUnitPricePer square Feet
         private void calculateLaborTotals()
         {
+            double additonalLaborMetalSlope = 0;
             double  laborDeduction = 0;
             AllTabsLaborTotal = 0;
             AllTabsMaterialTotal =0;
@@ -3070,9 +3076,9 @@ namespace WICR_Estimator.ViewModels
             TotalSetupTimeLabor = AddLaborMinCharge ? selectedLabors.Select(x => x.Hours).Sum() + LaborMinChargeMinSetup : selectedLabors.Select(x => x.Hours).Sum();
 
             TotalLaborUnitPrice = AddLaborMinCharge ? (selectedLabors.Select(x => x.LaborUnitPrice).Sum() +
-                OtherLaborMaterials.Sum(x=>x.LMaterialPrice)+
+                OtherLaborMaterials.Sum(x => x.LMaterialPrice)+
                 LaborMinChargeLaborUnitPrice) * (1 + preWage + laborDeduction) :
-                (selectedLabors.Select(x => x.LaborUnitPrice).Sum()+ OtherLaborMaterials.Sum(x => x.LMaterialPrice) ) * (1 + preWage + laborDeduction);
+                (selectedLabors.Select(x => x.LaborUnitPrice).Sum() + OtherLaborMaterials.Sum(x => x.LMaterialPrice)) * (1 + preWage + laborDeduction);
 
             TotalLaborExtension = AddLaborMinCharge ? (selectedLabors.Select(x => x.LaborExtension).Sum() + LaborMinChargeLaborExtension) * 
                 (1 + preWage + laborDeduction) :
@@ -3096,27 +3102,42 @@ namespace WICR_Estimator.ViewModels
 
             if (SlopeTotals != null)
             {
-                AllTabsLaborTotal = SlopeTotals.LaborExtTotal+AllTabsLaborTotal;
+               additonalLaborMetalSlope = (totalSqft + riserCount)==0 ? 0:SlopeTotals.LaborExtTotal / (totalSqft + riserCount);
+               AllTabsLaborTotal = SlopeTotals.LaborExtTotal+AllTabsLaborTotal;
                 AllTabsMaterialTotal = SlopeTotals.MaterialExtTotal +  AllTabsMaterialTotal;
                 AllTabsFreightTotal = SlopeTotals.MaterialFreightTotal +AllTabsFreightTotal;
                 AllTabsSubContractTotal = SlopeTotals.SubContractLabor +  AllTabsSubContractTotal;
+                TotalLaborUnitPrice = TotalLaborUnitPrice + additonalLaborMetalSlope;
             }
             if (MetalTotals!=null)
             {
+                additonalLaborMetalSlope = (totalSqft + riserCount) == 0 ? 0 : MetalTotals.LaborExtTotal / (totalSqft + riserCount);
+
                 AllTabsLaborTotal = AllTabsLaborTotal+ MetalTotals.LaborExtTotal ;
                 AllTabsMaterialTotal = AllTabsMaterialTotal+ MetalTotals.MaterialExtTotal ;
                 AllTabsFreightTotal = AllTabsFreightTotal+ MetalTotals.MaterialFreightTotal ;
                 AllTabsSubContractTotal = AllTabsSubContractTotal+ MetalTotals.SubContractLabor ;
-            }
+                TotalLaborUnitPrice = TotalLaborUnitPrice + additonalLaborMetalSlope;
+            }   
 
-            
+            TotalLaborWithoutDrive = AllTabsLaborTotal - DriveLaborValue;
+            OtherLaborMaterials.FirstOrDefault(x => x.Name == "Access issues?").LMaterialPrice = Math.Round(selectedLabors.Select(x => x.LaborExtension).Sum(),2);
             UpdateUILaborCost();
-
+            UpdateSumOfSqft();
         }
 
+        public virtual void UpdateSumOfSqft()
+        {
+            double sumVal = totalSqft;
+            TotalLaborUnitPrice = sumVal == 0 ? 0 : TotalLaborWithoutDrive / sumVal;
+            OnPropertyChanged("TotalLaborUnitPrice");
+        }
+
+        public double  TotalLaborWithoutDrive { get; set; }
 
         private void UpdateUILaborCost()
         {
+            OnPropertyChanged("TotalLaborWithoutDrive");
             OnPropertyChanged("TotalLaborUnitPrice");
             OnPropertyChanged("TotalLaborExtension");
             OnPropertyChanged("TotalSlopingPrice");
@@ -3551,7 +3572,7 @@ namespace WICR_Estimator.ViewModels
 
             TotalMetalPrice = finalMCost; //*(1+markUpPerc/100);
             TotalSlopingPrice = finalSCost; //* (1 + markUpPerc / 100);
-            TotalSystemPrice = finalSyCost; //* (1 + markUpPerc / 100);
+            TotalSystemPrice = finalSyCost; //* (1 + mar2kUpPerc / 100);
             TotalSubcontractLabor = finalSubLabCost; // * (1 + markUpPerc / 100);
             CalculateTotalSqFt();
             TotalSale = TotalMetalPrice + TotalSlopingPrice + TotalSystemPrice + TotalSubcontractLabor;

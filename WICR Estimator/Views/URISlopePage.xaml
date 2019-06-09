@@ -55,7 +55,7 @@
 
         </Grid.RowDefinitions>
         <StackPanel>
-            <Label Content="Slope Sand Cement Scrim"
+            <Label Content="{Binding SlopeHeaderText}"
                    FontSize="14"
                    FontWeight="Bold"
                    Margin="10,0,0,0"/>
@@ -207,7 +207,7 @@
         </GroupBox>
         <StackPanel Grid.Column="1"
                     Visibility="{Binding IsUrethaneVisible}">
-            <Label Content="Slope Sand and Urethane Fill"
+            <Label Content="{Binding UrethaneText}"
                    FontSize="14"
                    FontWeight="Bold"
                    Margin="10,0,0,0"/>

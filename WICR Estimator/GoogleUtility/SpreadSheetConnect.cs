@@ -90,7 +90,7 @@ namespace WICR_Estimator.GoogleUtility
                 case "Weather Wear Rehab":
                     prjName = "WeatherWearRehab";
                     break;
-                case "Barrier Gaurd":
+                case "Barrier Guard":
                     prjName = "DexotexBarrier";
                     break;
                 case "Endurokote":

@@ -31,7 +31,12 @@ namespace WICR_Estimator.ViewModels
             
         }
 
-
+        public override void UpdateSumOfSqft()
+        {
+            double sumVal = totalSqft + totalSqftPlywood + totalSqftVertical;
+            TotalLaborUnitPrice = sumVal == 0 ? 0 : TotalLaborWithoutDrive / sumVal;
+            OnPropertyChanged("TotalLaborUnitPrice");
+        }
         private void FillMaterialList()
         {
             materialNames.Add("CCW 702 WB PRIMER", "5 GAL PAIL");

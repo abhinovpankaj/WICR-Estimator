@@ -49,7 +49,7 @@ namespace WICR_Estimator.Converters
                     case "ENTER # OF DECKS TO WATER TEST \"NO DAM'S NEEDED\"":
                     case "ADD LF FOR DAMMING @ DRIP EDGE":
                     case "CALCIUM CHLORIDE TEST (MINIMUM OF 3 FOR EACH JOB)":
-                    case "PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL (LF DECK TO WALL) WITH SAND BROADCAST":
+                    case "PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL WITH SAND BROADCAST":
                     case "Add for penetrations  -customer to determine qty":
                         return true;
                     default:

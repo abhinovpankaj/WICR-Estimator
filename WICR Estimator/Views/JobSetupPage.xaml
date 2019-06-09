@@ -94,7 +94,7 @@
                 <TextBox Margin="5,0,5,0" Height="30"
                          Text="{Binding SpecialProductName,UpdateSourceTrigger=LostFocus}"
                          VerticalContentAlignment="Center"/>
-                <Border Margin="10" BorderBrush="Blue">
+                <!--<Border Margin="10" BorderBrush="Blue">
                     <StackPanel HorizontalAlignment="Center">
                         <TextBlock Text="Total Sale"  HorizontalAlignment="Center"
                                    FontSize="20"
@@ -105,7 +105,7 @@
                             Text="{Binding TotalSalesCostTemp,StringFormat=N2}"
                                    HorizontalAlignment="Center"/>
                     </StackPanel>
-                </Border>
+                </Border>-->
                 
                 <StackPanel Orientation="Horizontal" Background="LightGray"
                             Margin="0,30,0,0" Visibility="Hidden"
@@ -162,11 +162,12 @@
                         <CheckBox  Style="{StaticResource CheckBoxStyle}"
                                IsChecked="{Binding HasSpecialPricing,UpdateSourceTrigger=PropertyChanged}"
                            Content="Special Metal Pricing"/>
-                        <CheckBox  Style="{StaticResource CheckBoxStyle}"
+                        <CheckBox Style="{StaticResource CheckBoxStyle}"
                                IsChecked="{Binding HasDiscount,UpdateSourceTrigger=PropertyChanged}"
                            Content="Labor Discount Large Project (over 1,000 sq. ft.)"/>
-                        <CheckBox  Style="{StaticResource CheckBoxStyle}"
-                               IsChecked="{Binding HasContingencyDisc,UpdateSourceTrigger=PropertyChanged}">
+                        <CheckBox Style="{StaticResource CheckBoxStyle}"
+                                   IsEnabled="{Binding IsContingencyEnabled,UpdateSourceTrigger=PropertyChanged}"
+                               IsChecked="{Binding VHasContingencyDisc,UpdateSourceTrigger=PropertyChanged}">
                             <TextBlock Text="Contingency Discount for Large New Construction Project (over 1,000 sq. ft.)"
                                            TextWrapping="Wrap"/>
                         </CheckBox>

@@ -32,6 +32,8 @@ namespace WICR_Estimator.ViewModels
             
             base.JobSetup_OnJobSetupChange(sender, e);
         }
+
+        
         private void FillMaterialList()
         {
             materialNames.Add("2.5 Galvanized Lathe (18 s.f.)", "EA");

@@ -22,7 +22,7 @@ namespace WICR_Estimator.ViewModels
             FetchMaterialValuesAsync(false);
 
         }
-
+        
         public override void FetchMaterialValuesAsync(bool hasSetupChanged)
         {
             Dictionary<string, double> qtyList = new Dictionary<string, double>();

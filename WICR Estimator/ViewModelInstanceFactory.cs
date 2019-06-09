@@ -26,19 +26,19 @@ namespace WICR_Estimator
                 case "Desert Crete":
                 case "Pedestrian System":
                 case "Parking Garage":
-                case "Barrier Gaurd":
+                case "Barrier Guard":
                 case "Resistite":
                 case "MACoat":
                 case "ALX":
                 case "Multicoat":
                 case "Pli-Dek":
                 case "Tufflex":
-                case "Paraseal":
+                //case "Paraseal":
                 case "Paraseal LG":
                 case "201":
                 case "250":
                 case "Dexcellent II":
-                case "860":
+                //case "860":
                 case "Dual Membrane":
                 case "UPI Below Tile":
                 case "Dual Flex":
@@ -76,7 +76,7 @@ namespace WICR_Estimator
                     return new SlopeViewModel(Js);
                 case "Endurokote":
                     return new EnduroKoteSlopeViewModel(Js);
-                case "Barrier Gaurd":
+                case "Barrier Guard":
                     return new DexoSlopeViewModel(Js);
                 case "Pedestrian System":
                 case "Parking Garage":
@@ -107,7 +107,7 @@ namespace WICR_Estimator
                     return new MaterialViewModel(metalT,slopeT,Js);
                 case "Weather Wear Rehab":
                     return new WWRehabMaterialViewModel(metalT, slopeT, Js);
-                case "Barrier Gaurd":
+                case "Barrier Guard":
                     return new DexoMaterialViewModel(metalT,slopeT,Js);
                 case "Endurokote":
                     return new EnduroKoteMaterialViewModel(metalT, slopeT, Js);

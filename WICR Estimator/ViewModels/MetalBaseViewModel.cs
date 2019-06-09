@@ -446,7 +446,7 @@ namespace WICR_Estimator.ViewModels
         public virtual ObservableCollection<Metal> GetMetals()
         {
             ObservableCollection<Metal> met = new ObservableCollection<Metal>();
-            met.Add(new Metal("L - METAL / FLASHING", "4X6", getMetalPR(2), laborRate, 0, getMetalMP(2), false));
+            met.Add(new Metal("L - METAL / FLASHING", "4X6", getMetalPR(2), laborRate, 0, getMetalMP(2),false));
             met.Add(new Metal("DRIP EDGE METAL", "2X4", getMetalPR(5), laborRate, 0, getMetalMP(5), false));
             met.Add(new Metal("STAIR METAL", "4X6", getMetalPR(8), laborRate, getUnits(0), getMetalMP(8), true));
             met.Add(new Metal("STAIR METAL", "3X3", getMetalPR(9), laborRate, getUnits(1), getMetalMP(9), true));

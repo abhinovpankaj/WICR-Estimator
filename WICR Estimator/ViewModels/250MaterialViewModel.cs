@@ -63,7 +63,7 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("Vulkem Tremproof 201 R 30 MILS", "5 GAL PAIL");
             materialNames.Add("Plywood 3/4 & blocking (# of 4x8 sheets)", "4x8 sheets");
             materialNames.Add("Stucco Material Remove and replace (LF)", "LF");
-            materialNames.Add("PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL (LF DECK TO WALL) WITH SAND BROADCAST", "LF");
+            materialNames.Add("PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL WITH SAND BROADCAST", "LF");
            
         }
 
@@ -77,7 +77,7 @@ namespace WICR_Estimator.ViewModels
                     ||item.Name== "UNIVERSAL OUTLET"
                     ||item.Name== "Plywood 3/4 & blocking (# of 4x8 sheets)"
                     || item.Name == "Stucco Material Remove and replace (LF)"
-                    || item.Name == "PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL (LF DECK TO WALL) WITH SAND BROADCAST")
+                    || item.Name == "PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL WITH SAND BROADCAST")
                 {
                     qtyList.Add(item.Name, item.Qty);
                 }
@@ -129,7 +129,7 @@ namespace WICR_Estimator.ViewModels
                         || SystemMaterials[i].Name == "UNIVERSAL OUTLET"
                         || SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)"
                         || SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)"||
-                        SystemMaterials[i].Name == "PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL (LF DECK TO WALL) WITH SAND BROADCAST")
+                        SystemMaterials[i].Name == "PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL WITH SAND BROADCAST")
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
@@ -294,7 +294,7 @@ namespace WICR_Estimator.ViewModels
                 case "TERM BAR, VULKEM 116, PINS AND LOADS":
                     return Ceiling(termBar, 10);
                 case "UNIVERSAL OUTLET":
-                case "PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL (LF DECK TO WALL) WITH SAND BROADCAST":
+                case "PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL WITH SAND BROADCAST":
                     return 0;
                 case "SUPERSTOP(LF)":
                     return superStop;
@@ -475,7 +475,7 @@ namespace WICR_Estimator.ViewModels
                     item.LaborExtension = item.Hours==0?0:item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
                     item.LaborUnitPrice = item.LaborExtension / item.Qty;
                 }
-                item = SystemMaterials.Where(x => x.Name == "PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL (LF DECK TO WALL) WITH SAND BROADCAST").FirstOrDefault();
+                item = SystemMaterials.Where(x => x.Name == "PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL WITH SAND BROADCAST").FirstOrDefault();
                 if (item != null)
                 {
                     item.VerticalSqft = item.Qty;
@@ -508,6 +508,13 @@ namespace WICR_Estimator.ViewModels
                 default:
                     return true;
             }            
+        }
+
+        public override void UpdateSumOfSqft()
+        {
+            double sumVal = totalSqft + totalPlywoodSqft + totalSqftVertical;
+            TotalLaborUnitPrice = sumVal == 0 ? 0 : TotalLaborWithoutDrive / sumVal;
+            OnPropertyChanged("TotalLaborUnitPrice");
         }
         public override void ApplyCheckUnchecks(object obj)
         {

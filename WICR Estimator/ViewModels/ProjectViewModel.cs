@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using WICR_Estimator.Models;
 
@@ -32,11 +33,39 @@ namespace WICR_Estimator.ViewModels
             
             HomeViewModel.OnLoggedAsAdmin += HomeViewModel_OnLoggedAsAdmin;
             HomeViewModel.OnProjectSelectionChange += HomeViewModel_OnProjectSelectionChange;
+            
+            
+        }
+        List<Project> newlyAddedProjects;
+        private void EnabledProjects_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            newlyAddedProjects = e.NewItems as List<Project>;
+
+        }
+
+        public void UpdateJobSettings(object obj)
+        {
+            Project prj = obj as Project;
+            if (prj!=null)
+            {
+                prj.ProjectJobSetUp.UpdateJobSetup();
+            }
+            //foreach (Project item in EnabledProjects)
+            //{
+            //    item.ProjectJobSetUp.UpdateJobSetup();
+            //}
         }
 
         private void HomeViewModel_OnProjectSelectionChange(object sender, EventArgs e)
         {
+
+
             EnabledProjects = sender as ObservableCollection<Project>;
+
+            //if (EnabledProjects != null)
+            //{
+            //    EnabledProjects.CollectionChanged += EnabledProjects_CollectionChanged;
+            //}
             initializeApp();
         }
 
@@ -79,81 +108,105 @@ namespace WICR_Estimator.ViewModels
                 return "Project Page";
             }
         }
+
+        
         #endregion
 
         #region Methods
 
         private async void initializeApp()
         {
-          
             if (EnabledProjects == null)
             {
                 EnabledProjects = new ObservableCollection<Project>();
                 EnabledProjects = HomeViewModel.MyselectedProjects;
             }
+
             if (EnabledProjects!=null)
             {
+                 
                 foreach (Project prj in EnabledProjects)
                 {
                     if (prj.ProjectJobSetUp == null)
                     {
-                        //if (prj.Name=="Paraseal LG")
-                        //    prj.ProjectJobSetUp = new JobSetup(prj.Name);
-                        //else
+                        
                         prj.ProjectJobSetUp = new JobSetup(prj.Name);
 
                         prj.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
 
                     }
-                    #region Google
-                    var values = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, prj.Name);
+                    string originalProjectname;
+                    if (prj.Name.Contains('.'))
+                    {
+                        originalProjectname = prj.Name.Split('.')[0];
+                    }
+                    else
+                        originalProjectname = prj.Name;
+                        #region Google
+                    var values = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, originalProjectname);
                     if (values == null)
                     {
                         DataSerializer.DSInstance.googleData = new GSData();
                         //IList<IList<object>> LaborRate=await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Rate);
-                        DataSerializer.DSInstance.googleData.LaborRate = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Rate);
+                        DataSerializer.DSInstance.googleData.LaborRate = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Rate);
 
+                        DataSerializer.DSInstance.googleData.MetalData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Metal);
 
-                        DataSerializer.DSInstance.googleData.MetalData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Metal);
+                        Thread.Sleep(1000);
+                        DataSerializer.DSInstance.googleData.SlopeData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(originalProjectname, DataType.Slope);
 
+                        
+                        DataSerializer.DSInstance.googleData.MaterialData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(originalProjectname, DataType.Material);
 
-                        DataSerializer.DSInstance.googleData.SlopeData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Slope);
+                        Thread.Sleep(1000);
+                        DataSerializer.DSInstance.googleData.LaborData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(originalProjectname, DataType.Labor);
+                        DataSerializer.DSInstance.googleData.FreightData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Freight);
 
-
-                        DataSerializer.DSInstance.googleData.MaterialData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Material);
-
-
-                        DataSerializer.DSInstance.googleData.LaborData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Labor);
-                        DataSerializer.DSInstance.googleData.FreightData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Freight);
-
-                        DataSerializer.DSInstance.serializeGoogleData(DataSerializer.DSInstance.googleData, prj.Name);
+                        Thread.Sleep(2000);
+                        DataSerializer.DSInstance.serializeGoogleData(DataSerializer.DSInstance.googleData, originalProjectname);
 
                     }
 
                     #endregion
 
                     double laborRate = 0;
-                    var rate = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, prj.Name);
-                    double.TryParse(rate[0][0].ToString(),out laborRate);
-                    prj.ProjectJobSetUp.LaborRate = laborRate;
-                    if (prj.Name== "Reseal all systems")
+                    var rate = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, originalProjectname);
+                    if (rate!=null)
+                    {
+                        double.TryParse(rate[0][0].ToString(), out laborRate);
+                        prj.ProjectJobSetUp.LaborRate = laborRate;
+
+                    }
+                    
+                    if (originalProjectname == "Reseal all systems" || originalProjectname == "Paraseal")
                     {
                         if (prj.MaterialViewModel == null)
                         {
-                            prj.MaterialViewModel = ViewModelInstanceFactory.GetMaterialViewModelInstance(prj.Name, null,
+                            prj.MaterialViewModel = ViewModelInstanceFactory.GetMaterialViewModelInstance(originalProjectname, null,
                                 null, prj.ProjectJobSetUp);
                         }
                     }
-                    
-                    else if (prj.Name=="Paraseal" || prj.Name=="Paraseal LG"|| prj.Name == "Color Flake"||prj.Name== "Polyurethane Injection Block" || prj.Name == "Block Wall")
+                    else if(originalProjectname == "860")
                     {
-                        if (prj.MetalViewModel == null)
+                        if (prj.SlopeViewModel == null)
                         {
-                            prj.MetalViewModel = ViewModelInstanceFactory.GetMetalViewModelInstance(prj.Name, prj.ProjectJobSetUp);
+                            prj.SlopeViewModel = ViewModelInstanceFactory.GetSlopeViewModelInstance(originalProjectname, prj.ProjectJobSetUp);
                         }
                         if (prj.MaterialViewModel == null)
                         {
-                            prj.MaterialViewModel = ViewModelInstanceFactory.GetMaterialViewModelInstance(prj.Name, prj.MetalViewModel.MetalTotals,
+                            prj.MaterialViewModel = ViewModelInstanceFactory.GetMaterialViewModelInstance(originalProjectname, null,
+                                  prj.SlopeViewModel.SlopeTotals, prj.ProjectJobSetUp);
+                        }
+                    }
+                    else if (originalProjectname=="Paraseal LG"|| originalProjectname == "Color Flake"||originalProjectname== "Polyurethane Injection Block" || originalProjectname == "Block Wall")
+                    {
+                        if (prj.MetalViewModel == null)
+                        {
+                            prj.MetalViewModel = ViewModelInstanceFactory.GetMetalViewModelInstance(originalProjectname, prj.ProjectJobSetUp);
+                        }
+                        if (prj.MaterialViewModel == null)
+                        {
+                            prj.MaterialViewModel = ViewModelInstanceFactory.GetMaterialViewModelInstance(originalProjectname, prj.MetalViewModel.MetalTotals,
                                 null, prj.ProjectJobSetUp);
                         }
                     }
@@ -161,21 +214,21 @@ namespace WICR_Estimator.ViewModels
                     {
                         if (prj.MetalViewModel == null)
                         {
-                            prj.MetalViewModel = ViewModelInstanceFactory.GetMetalViewModelInstance(prj.Name, prj.ProjectJobSetUp);
+                            prj.MetalViewModel = ViewModelInstanceFactory.GetMetalViewModelInstance(originalProjectname, prj.ProjectJobSetUp);
                         }
                         if (prj.SlopeViewModel == null)
                         {
-                            prj.SlopeViewModel = ViewModelInstanceFactory.GetSlopeViewModelInstance(prj.Name, prj.ProjectJobSetUp);
+                            prj.SlopeViewModel = ViewModelInstanceFactory.GetSlopeViewModelInstance(originalProjectname, prj.ProjectJobSetUp);
                         }
                         if (prj.MaterialViewModel == null)
                         {
                             if (prj.SlopeViewModel!=null)
                             {
-                                prj.MaterialViewModel = ViewModelInstanceFactory.GetMaterialViewModelInstance(prj.Name, prj.MetalViewModel.MetalTotals,
+                                prj.MaterialViewModel = ViewModelInstanceFactory.GetMaterialViewModelInstance(originalProjectname, prj.MetalViewModel.MetalTotals,
                                 prj.SlopeViewModel.SlopeTotals, prj.ProjectJobSetUp);
                             }
                             else
-                                prj.MaterialViewModel = ViewModelInstanceFactory.GetMaterialViewModelInstance(prj.Name, prj.MetalViewModel.MetalTotals,
+                                prj.MaterialViewModel = ViewModelInstanceFactory.GetMaterialViewModelInstance(originalProjectname, prj.MetalViewModel.MetalTotals,
                                 null, prj.ProjectJobSetUp);
 
 

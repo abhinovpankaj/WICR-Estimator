@@ -138,6 +138,7 @@ namespace WICR_Estimator.ViewModels
                 case "Stucco Material Remove and replace (LF)":
                 case "GS13 Clear Sealer":
                 case "Select Y for protection coat over membrane below tile (GU80-1 TOP COAT)":
+                //case "Color Jar Pigment, 1 JAR per PAIL OF GS88":
                     return false;
                 
                 default:
@@ -300,8 +301,7 @@ namespace WICR_Estimator.ViewModels
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
 
                     item.LaborExtension = (item.Hours != 0) ? (item.SetupMinCharge + item.Hours) * laborRate : 0;
-                    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
-                    SystemMaterials.Where(x => x.Name == "Color Jar Pigment, 1 JAR per PAIL OF GS88").FirstOrDefault().IsMaterialChecked=!item.IsMaterialChecked;
+                    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);                   
                 }
 
                 item = SystemMaterials.Where(x => x.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)").FirstOrDefault();
@@ -361,7 +361,7 @@ namespace WICR_Estimator.ViewModels
                 isChecked = SystemMaterials.Where(x => x.Name == "Select Y for protection coat over membrane below tile (GU80-1 TOP COAT)").FirstOrDefault().IsMaterialChecked;
                 SystemMaterials.Where(x => x.Name == "GU80-1 top coat texture coat semi-smooth or knockdown").FirstOrDefault().IsMaterialChecked = !isChecked;
                 SystemMaterials.Where(x => x.Name == "GS88 Sealer").FirstOrDefault().IsMaterialChecked = !isChecked;
-                SystemMaterials.Where(x => x.Name == "Color Jar Pigment, 1 JAR per PAIL OF GS88").FirstOrDefault().IsMaterialChecked = isChecked;
+                SystemMaterials.Where(x => x.Name == "Color Jar Pigment, 1 JAR per PAIL OF GS88").FirstOrDefault().IsMaterialChecked = !isChecked;
 
             }
             calculateRLqty();

@@ -11,6 +11,7 @@ namespace WICR_Estimator
 {
     public class DataSerializer
     {
+        private readonly object serializeLock = new object();
         private static DataSerializer dsInstance = null;
         private static object sync = new object();
         public  GSData googleData;
@@ -73,31 +74,37 @@ namespace WICR_Estimator
 
         public void serializeGoogleData(GSData gData,string ProjectName)
         {
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\" + ProjectName + "_GoogleData.dat";
-            if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\"))
-                Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\");
-            IFormatter formatter = new BinaryFormatter();
-            Stream stream = new FileStream(path, FileMode.Create, FileAccess.Write);
+            lock (serializeLock)
+            {
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\" + ProjectName + "_GoogleData.dat";
+                if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\"))
+                    Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\");
+                IFormatter formatter = new BinaryFormatter();
+                Stream stream = new FileStream(path, FileMode.Create, FileAccess.Write);
 
+
+                formatter.Serialize(stream, gData);
+                stream.Close();
+            }
             
-            formatter.Serialize(stream, gData);
-            stream.Close();
         }
         public GSData deserializeGoogleData(string ProjectName)
         {
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\" + ProjectName + "_GoogleData.dat";
-            IFormatter formatter = new BinaryFormatter();
-            try
+            lock (serializeLock)
             {
-                Stream stream = new FileStream(path, FileMode.Open, FileAccess.Read);
-                GSData objnew = (GSData)formatter.Deserialize(stream);
-                return objnew;
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\" + ProjectName + "_GoogleData.dat";
+                IFormatter formatter = new BinaryFormatter();
+                try
+                {
+                    Stream stream = new FileStream(path, FileMode.Open, FileAccess.Read);
+                    GSData objnew = (GSData)formatter.Deserialize(stream);
+                    return objnew;
+                }
+                catch (FileNotFoundException ex)
+                {
+                    return null;
+                }
             }
-            catch (FileNotFoundException ex)
-            {
-                return null;
-            }
-            
         }
         public IList<IList<object>> deserializeGoogleData(DataType dataType,string ProjectName)
         {

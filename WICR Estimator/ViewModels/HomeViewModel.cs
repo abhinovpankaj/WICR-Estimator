@@ -21,6 +21,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 using System.Runtime.Remoting.Contexts;
 using System.Diagnostics;
 using System.Threading;
+using System.Drawing;
 
 namespace WICR_Estimator.ViewModels
 {
@@ -30,12 +31,12 @@ namespace WICR_Estimator.ViewModels
         
         public static event EventHandler OnLoggedAsAdmin;
         public static event EventHandler OnProjectSelectionChange;
-        
+        //private static NotifyIcon statusNotifier;
         public HomeViewModel()
         {
             FillProjects();
             Project.OnSelectedProjectChange += Project_OnSelectedProjectChange;
-            HidePasswordSection = System.Windows.Visibility.Hidden;
+            HidePasswordSection = System.Windows.Visibility.Collapsed;
             ShowCalculationDetails = new DelegateCommand(CanShowCalculationDetails, canShow);
             SaveEstimate = new DelegateCommand(SaveProjectEstimate, canSaveEstimate);
             LoadEstimate = new DelegateCommand(LoadProjectEstimate, canLoadEstimate);
@@ -44,9 +45,11 @@ namespace WICR_Estimator.ViewModels
             CreateSummary = new DelegateCommand(GenerateSummary, canCreateSummary);
             RefreshGoogleData = new DelegateCommand(DeleteGoogleData, canDelete);
             ProjectTotals = new ProjectsTotal();
+            //statusNotifier = new NotifyIcon();
+
         }
 
-        
+
         private void Project_OnSelectedProjectChange(object sender, EventArgs e)
         {
             if (OnProjectSelectionChange!=null)
@@ -162,7 +165,7 @@ namespace WICR_Estimator.ViewModels
                     if (!value)
                     {                    
                         LoginMessage = "";
-                        HidePasswordSection = System.Windows.Visibility.Hidden;
+                        HidePasswordSection = System.Windows.Visibility.Collapsed;
                         if (OnLoggedAsAdmin != null)
                         {
                             OnLoggedAsAdmin(false, EventArgs.Empty);
@@ -331,12 +334,11 @@ namespace WICR_Estimator.ViewModels
                     if (item.ProjectJobSetUp!=null)
                     {
                         item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
+
+                        item.ProjectJobSetUp.UpdateJobSetup();                       
                     }
-                    
-                    
+                                        
                     item.MaterialViewModel.CheckboxCommand = new DelegateCommand(item.MaterialViewModel.ApplyCheckUnchecks, item.MaterialViewModel.canApply);
-                    
-                    
                 }
                 Project_OnSelectedProjectChange(Projects[0], null);
                 reader.Close();
@@ -496,8 +498,18 @@ namespace WICR_Estimator.ViewModels
             }
         }
         #region Methods
+        
+        //private void SetBalloonTip()
+        //{
+        //    statusNotifier.Icon = SystemIcons.Information;
+        //    statusNotifier.BalloonTipTitle = "WICR";
+        //    //statusNotifier.BalloonTipText = "Balloon Tip Text.";
+        //    statusNotifier.BalloonTipIcon = ToolTipIcon.Info;
+        //    statusNotifier.Visible = true;
+        //}
         private async void DownloadGoogleData()
         {
+            //SetBalloonTip();
             IList<IList<object>> LaborRate = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Rate);
             
             IList<IList<object>> MetalData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Metal);
@@ -505,10 +517,14 @@ namespace WICR_Estimator.ViewModels
 
             foreach (var prj in Projects)
             {
+                
                 var values = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, prj.Name);
                 if (values == null)
                 {
                     StatusMessage = "Please Wait! Refreshing Google Data for " + prj.Name;
+                                        
+                    //statusNotifier.BalloonTipText = StatusMessage;
+                    //statusNotifier.ShowBalloonTip(2000);
                     CompletedProjects++;
                     DataSerializer.DSInstance.googleData = new GSData();
                     
@@ -549,7 +565,7 @@ namespace WICR_Estimator.ViewModels
                 passwordBox.Password = "";
                 LoginMessage = "Calculation Details Are Visible Now.";
 
-                HidePasswordSection = System.Windows.Visibility.Hidden;
+                HidePasswordSection = System.Windows.Visibility.Collapsed;
                 OnPropertyChanged("HidePasswordSection");
                 if (OnLoggedAsAdmin!=null)
                 {
@@ -575,7 +591,7 @@ namespace WICR_Estimator.ViewModels
             //SelectedProjects = new List<Project>();
             Projects.Add(new Project { Name = "Weather Wear", Rank = 1,GrpName= "Dexotex" ,MainGroup="Deck Coatings"});
             Projects.Add(new Project { Name = "Weather Wear Rehab", Rank = 2, GrpName = "Dexotex", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Barrier Gaurd", Rank = 3, GrpName = "Dexotex", MainGroup = "Deck Coatings" });
+            Projects.Add(new Project { Name = "Barrier Guard", Rank = 3, GrpName = "Dexotex", MainGroup = "Deck Coatings" });
             Projects.Add(new Project { Name = "Endurokote", Rank = 4,GrpName= "Endurokote", MainGroup = "Deck Coatings" });
             Projects.Add(new Project { Name = "Desert Crete", Rank = 5, GrpName = "Hill Brothers", MainGroup = "Deck Coatings" });
             Projects.Add(new Project { Name = "Paraseal", Rank = 6, GrpName = "Tremco", MainGroup = "Below Grade" });
@@ -1201,7 +1217,7 @@ namespace WICR_Estimator.ViewModels
             }
             
             k++;
-            if (MVM.SlopeTotals!=null)
+            if (MVM.MetalTotals!=null)
             {
                 dataRange.Offset[k, l].Value = MVM.MetalTotals.MaterialFreightTotal;
             }

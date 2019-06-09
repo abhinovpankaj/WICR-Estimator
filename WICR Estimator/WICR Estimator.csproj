@@ -142,6 +142,7 @@
     <Compile Include="Converters\UnitTextboxConverter.cs" />
     <Compile Include="DataSerializer.cs" />
     <Compile Include="DelegateCommand.cs" />
+    <Compile Include="ExpanderStateBehavior.cs" />
     <Compile Include="GoogleUtility\SpreadSheetConnect.cs" />
     <Compile Include="GSData.cs" />
     <Compile Include="IPageViewModel.cs" />

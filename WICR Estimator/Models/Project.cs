@@ -154,6 +154,14 @@ namespace WICR_Estimator.Models
                     return System.Windows.Visibility.Hidden;
             }    
         }
+        
+
+        private bool _isExpanded = true;
+        public bool IsGroupExpanded
+        {
+            get { return _isExpanded; }
+            set { _isExpanded = value; }
+        }
         public Project()
         {
             if (updatedJobSetup == null)

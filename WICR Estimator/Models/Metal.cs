@@ -161,7 +161,6 @@ namespace WICR_Estimator.Models
         { }
     }
 
-
     public class MiscMetal:Metal
     {
         public MiscMetal()

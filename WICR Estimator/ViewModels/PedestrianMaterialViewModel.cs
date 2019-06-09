@@ -28,7 +28,12 @@ namespace WICR_Estimator.ViewModels
             FetchMaterialValuesAsync(false);
 
         }
-        
+        public override void UpdateSumOfSqft()
+        {
+            double sumVal = totalSqft + TotalSqftPlywood;
+            TotalLaborUnitPrice = sumVal == 0 ? 0 : TotalLaborWithoutDrive / sumVal;
+            OnPropertyChanged("TotalLaborUnitPrice");
+        }
         private void setUnitChangeValues()
         {
             SystemMaterial item = SystemMaterials.Where(x => x.Name == "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)").FirstOrDefault();

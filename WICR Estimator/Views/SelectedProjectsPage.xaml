@@ -14,7 +14,7 @@
         <conv:NullToVisibilityConverter x:Key="nullToVisibilityConverter"/>
     </UserControl.Resources>
     <Grid>
-        <TabControl ItemsSource="{Binding EnabledProjects}" SelectedIndex="0" >
+        <TabControl ItemsSource="{Binding EnabledProjects}" SelectedIndex="0">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -25,15 +25,16 @@
             <TabControl.ContentTemplate>
                 <DataTemplate>
                     <DockPanel>
-                        <TabControl TabStripPlacement="Left" >
-                            <TabItem Header="Job Setup" Background="LightBlue" 
-                                     >
-                                <b:Interaction.Triggers>
+                        <TabControl TabStripPlacement="Left" SelectionChanged="TabControl_SelectionChanged">
+                            <TabItem Header="Job Setup" Background="LightBlue"                                    
+                                     Name="JobSetupTab">
+                                <!--<b:Interaction.Triggers>
                                     <b:EventTrigger EventName="LostFocus">
                                         <b:InvokeCommandAction  Command="{Binding UpdatedJobSetup}"
+                                                                CommandParameter="{Binding Name}"
                                                                 />
                                     </b:EventTrigger>
-                                </b:Interaction.Triggers>
+                                </b:Interaction.Triggers>-->
                                 <TabItem.Content>
                                     <Grid Margin="0,0,0,0" Background="LightBlue"
                                           DataContext="{Binding ProjectJobSetUp}">
@@ -43,6 +44,7 @@
                             </TabItem>
                             <TabItem Header="Metal" Visibility="{Binding Converter={StaticResource nullToVisibilityConverter}, 
                               Path=MetalViewModel}"
+                                    
                                  VerticalAlignment="Bottom">
                                 <TabItem.Content>
                                     <Grid Margin="0,0,0,0" 

@@ -49,6 +49,8 @@ namespace WICR_Estimator.ViewModels
             Slopes = new ObservableCollection<Slope>();
             SlopeTotals = new Totals { TabName = "Slope" };
             IsOverrridable = true;
+            UrethaneText="Slope Sand and Urethane Fill";
+            SlopeHeaderText = "Slope Sand Cement Scrim";
         }
 
         #region public properties
@@ -107,6 +109,11 @@ namespace WICR_Estimator.ViewModels
         {
             get;set;
         }
+        [DataMember]
+        public string SlopeHeaderText { get;  set; }
+        [DataMember]
+        public string UrethaneText { get;  set; }
+
         [DataMember]
         public bool OverrideManually
         {
@@ -630,6 +637,29 @@ namespace WICR_Estimator.ViewModels
         public virtual double getPricePerMix(string thickness, bool isApproved,int addRow=0)
         {
             double result;
+            if (addRow>0)
+            {
+                switch (thickness)
+                {
+                    case "1/4 inch Average":
+                        double.TryParse(perMixRates[1 + addRow][1].ToString(), out result);
+                        return result;
+                    case "1/2 inch Average":
+                        double.TryParse(perMixRates[2 + addRow][1].ToString(), out result);
+                        return result;
+                    case "3/4 inch Average":
+                        double.TryParse(perMixRates[3 + addRow][1].ToString(), out result);
+                        return result;
+                    case "1 1/4 inch Average":
+                        double.TryParse(perMixRates[5 + addRow][1].ToString(), out result);
+                        return result;
+                    case "1 inch Average":
+                        double.TryParse(perMixRates[4 + addRow][1].ToString(), out result);
+                        return result;
+                    default:
+                        return 0;
+                }
+            }
             if (isApproved)
             {
 
@@ -792,6 +822,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
 
+        
         private bool CanAutoFill(object obj)
         {
             return true;

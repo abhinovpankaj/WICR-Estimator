@@ -28,7 +28,12 @@ namespace WICR_Estimator.ViewModels
             FetchMaterialValuesAsync(false);
 
         }
-        
+        public override void UpdateSumOfSqft()
+        {
+            double sumVal = totalSqft + TotalSqftPlywood;
+            TotalLaborUnitPrice = sumVal == 0 ? 0 : TotalLaborWithoutDrive / sumVal;
+            OnPropertyChanged("TotalLaborUnitPrice");
+        }
         public override void ApplyCheckUnchecks(object obj)
         {
             

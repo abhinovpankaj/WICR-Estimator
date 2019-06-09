@@ -32,7 +32,12 @@ namespace WICR_Estimator.ViewModels
 
         }
 
-
+        public override void UpdateSumOfSqft()
+        {
+            double sumVal = totalSqft + totalSqftVertical;
+            TotalLaborUnitPrice = sumVal == 0 ? 0 : TotalLaborWithoutDrive / sumVal;
+            OnPropertyChanged("TotalLaborUnitPrice");
+        }
         private void FillMaterialList()
         {
             materialNames.Add("OPTIONAL ADD FOR LABOR ON NON-COMPETITIVE QUOTES", "");

@@ -117,6 +117,8 @@ namespace WICR_Estimator.ViewModels
             if (Js.ProjectName=="Dual Flex")
             {
                 IsOverrridable = false;
+                UrethaneText = "Manufacturer approvd Mortar Bed";
+                SlopeHeaderText = "Manufacturer approved underlay";
             }
             GetSlopeDetailsFromGoogle(Js.ProjectName);
 
