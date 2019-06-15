@@ -40,7 +40,54 @@ namespace WICR_Estimator.Views
                 Directory.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR",true);
             }
         }
-        
+
+        private void FilterTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //if(FilterTextBox.Text.Length==0)
+            //{
+            //    CollapseAll();
+            //}
+        }
+
+        private void CollapseAll()
+        {
+            // get each listBoxItem by index from the listBox
+            for (int i = 0; i < ProjectList.Items.Count; i++)
+            {
+                var ad = ProjectList.ItemContainerGenerator.ContainerFromIndex(i);
+                Expander item = (Expander)ProjectList.ItemContainerGenerator.ContainerFromIndex(i);
+
+                // find its parents expander
+                var exp = FindParent<Expander>(item);
+
+                if (exp != null)
+                {
+                    //if its not null expand it and see if it has a parent expander
+                    exp.IsExpanded = true;
+                    exp = FindParent<Expander>(exp);
+                    if (exp != null)
+                        exp.IsExpanded = false;
+                }
+
+            }
+        }
+
+        private T FindParent<T>(DependencyObject child)
+                where T : DependencyObject
+
+        {
+
+            T parent = VisualTreeHelper.GetParent(child) as T;
+
+            if (parent != null)
+
+                return parent;
+
+            else
+
+                return FindParent<T>(parent);
+
+        }
         //private void ListBox_Selected(object sender, RoutedEventArgs e)
         //{            
         //    HomeVM.SelectedProjects.Clear();

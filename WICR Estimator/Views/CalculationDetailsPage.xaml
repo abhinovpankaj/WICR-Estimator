@@ -134,6 +134,27 @@
                                 Name="slMat"
                     />
             </StackPanel>
+            <StackPanel VerticalAlignment="Center"
+                                HorizontalAlignment="Left"
+                                Margin="5">
+                <TextBlock Text="SubContract Profit Margin" 
+                                   HorizontalAlignment="Center"/>
+                <TextBox Text="{Binding ElementName=slSub,
+                                 Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                 TextAlignment="Right"
+                                 Width="40" 
+                                 HorizontalAlignment="Center"
+                                 Margin="5"/>
+                <Slider Maximum="1" Value="{Binding SubContractMarkup}"
+                                Width="200"
+                                LargeChange=".2"
+                                Minimum="0"
+                                TickPlacement="Both"
+                                TickFrequency=".05" 
+                                IsSnapToTickEnabled="True"
+                                Name="slSub"
+                    />
+            </StackPanel>
         </StackPanel>
     </Grid>
 </UserControl>

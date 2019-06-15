@@ -24,6 +24,9 @@ namespace WICR_Estimator.Models
         private double totalCost;
         private string laborPerc;
 
+
+       
+
         public string Name
         {
             get { return name; }
@@ -141,6 +144,8 @@ namespace WICR_Estimator.Models
     }
     public class Project: BaseViewModel
     {
+        public int ActiveTabIndex { get; set; }
+        public string OriginalProjectName { get; set; }
         public Dictionary<string, int> lastUsedRows;
         public System.Windows.Visibility ISVisible
         {
@@ -221,14 +226,28 @@ namespace WICR_Estimator.Models
                     return "";
             }
         }
+
+        public double CostPerSqFoot
+        {
+            get
+            {
+                if (MaterialViewModel != null)
+                {
+                    return Math.Round(MaterialViewModel.TotalCostperSqft,2);
+                }
+                else
+                    return 0;
+
+            }
+        }
         public double SubContractCost { get; set; }
         public double LaborCost
         {
             get
             {
-                if (MetalViewModel != null)
+                if (MaterialViewModel != null)
                 {
-                    return MetalViewModel.TotalLaborCost;
+                    return MaterialViewModel.AllTabsLaborTotal;
                 }
                 else
                     return 0;
@@ -239,9 +258,9 @@ namespace WICR_Estimator.Models
         {
             get
             {
-                if (MetalViewModel != null)
+                if (MaterialViewModel != null)
                 {
-                    return MetalViewModel.TotalMaterialCost;
+                    return MaterialViewModel.AllTabsMaterialTotal;
                 }
                 else
                     return 0;

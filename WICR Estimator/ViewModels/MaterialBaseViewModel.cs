@@ -3121,7 +3121,7 @@ namespace WICR_Estimator.ViewModels
             }   
 
             TotalLaborWithoutDrive = AllTabsLaborTotal - DriveLaborValue;
-            OtherLaborMaterials.FirstOrDefault(x => x.Name == "Access issues?").LMaterialPrice = Math.Round(selectedLabors.Select(x => x.LaborExtension).Sum(),2);
+            //OtherLaborMaterials.FirstOrDefault(x => x.Name == "Access issues?").LMaterialPrice = Math.Round(selectedLabors.Select(x => x.LaborExtension).Sum(),2);
             UpdateUILaborCost();
             UpdateSumOfSqft();
         }

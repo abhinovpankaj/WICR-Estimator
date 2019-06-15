@@ -51,7 +51,7 @@ namespace WICR_Estimator.ViewModels
             {
 
                 case "Add for Xypex Concentrate material":
-                    return totalVerticalSqft +totalSqft;
+                    return totalSqft;
                 case "Add for Xypex Mega Mix 1 (2nd coat)":
                 case "Add for Xypex modified (2nd coat)":
                 case "Add for Gamma Cure in lieu of wet cure":
@@ -117,7 +117,7 @@ namespace WICR_Estimator.ViewModels
             double sqftStairs = 0, string materialName = "")
         {
             //return base.getLaborUnitPrice(laborExtension, riserCount, totalSqft);
-
+            
             return laborExtension / (sqftVert + sqftHor + riserCount);
 
 
@@ -238,7 +238,7 @@ namespace WICR_Estimator.ViewModels
             SystemMaterial sysMat = SystemMaterials.Where(x => x.Name == "Add for Gamma Cure in lieu of wet cure").FirstOrDefault();
             if (sysMat!=null)
             {
-                sysMat.Hours = sysMat.IsMaterialChecked ? (totalSqft + totalVerticalSqft) * 0.2 / 25:0;
+                sysMat.Hours = sysMat.IsMaterialChecked ? (linearCoping + totalVerticalSqft) * 0.2 / 25:0;
             }
         }
         public override bool canApply(object obj)

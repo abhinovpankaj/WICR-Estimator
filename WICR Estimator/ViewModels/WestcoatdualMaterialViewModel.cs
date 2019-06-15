@@ -128,6 +128,7 @@ namespace WICR_Estimator.ViewModels
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
                 case "Stucco Material Remove and replace (LF)":
                 case "Slurry Coat: (1 bag, Gray) TC-1 Base Coat Cement with 1 Gal WP-81, 1/2 Gal Water":
+                case "Top Coat:  SC-10 Acrylic Top Coat":
                     return false;
 
                 default:

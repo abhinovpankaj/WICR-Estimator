@@ -127,21 +127,22 @@ namespace WICR_Estimator.ViewModels
                  
                 foreach (Project prj in EnabledProjects)
                 {
+                    prj.ActiveTabIndex = 0;
                     if (prj.ProjectJobSetUp == null)
                     {
                         
-                        prj.ProjectJobSetUp = new JobSetup(prj.Name);
+                        prj.ProjectJobSetUp = new JobSetup(prj.OriginalProjectName);
 
                         prj.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
 
                     }
-                    string originalProjectname;
-                    if (prj.Name.Contains('.'))
-                    {
-                        originalProjectname = prj.Name.Split('.')[0];
-                    }
-                    else
-                        originalProjectname = prj.Name;
+                    string originalProjectname=prj.OriginalProjectName;
+                    //if (prj.Name.Contains('.'))
+                    //{
+                    //    originalProjectname = prj.Name.Split('.')[0];
+                    //}
+                    //else
+                    //    originalProjectname = prj.Name;
                         #region Google
                     var values = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, originalProjectname);
                     if (values == null)

@@ -225,8 +225,8 @@ namespace WICR_Estimator.ViewModels
             else
                 return false;
         }
-        
-        private void Clear(object obj)
+       
+       private void Clear(object obj)
         {
             string message = "All the Project selection and values will be cleared. \nDo you want to proceed?";
             string caption = "Refresh WICR Tool";
@@ -273,6 +273,7 @@ namespace WICR_Estimator.ViewModels
                     
                     prj.CopyCount++;
                     replicatedProject.Name = prj.Name + "." + prj.CopyCount;
+                    replicatedProject.OriginalProjectName = prj.OriginalProjectName;
                     replicatedProject.GrpName = "Copied";
                     replicatedProject.MainGroup = "Replicated Projects";
                     replicatedProject.IsSelectedProject = true;
@@ -319,7 +320,7 @@ namespace WICR_Estimator.ViewModels
                     savedProject = Projects.Where(x => x.Name == item.Name).FirstOrDefault();
                     Projects.Remove(savedProject);
                     Projects.Add(item);
-                    //replicatedProject.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
+                    item.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
                     SelectedProjects.Add(item);
                     if (item.MetalViewModel!=null)
                     {
@@ -343,7 +344,8 @@ namespace WICR_Estimator.ViewModels
                 Project_OnSelectedProjectChange(Projects[0], null);
                 reader.Close();
             }
-            
+            ClearProjects.RaiseCanExecuteChanged();
+            CreateSummary.RaiseCanExecuteChanged();
         }
 
         private bool canLoadEstimate(object obj)
@@ -443,6 +445,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         #endregion
+        
         public System.Windows.Visibility HidePasswordSection { get; set; }
         public ICollectionView ProjectView { get; set; }
         private ObservableCollection<Project> projects;
@@ -589,41 +592,64 @@ namespace WICR_Estimator.ViewModels
         {
             Projects = new ObservableCollection<Project>();
             //SelectedProjects = new List<Project>();
-            Projects.Add(new Project { Name = "Weather Wear", Rank = 1,GrpName= "Dexotex" ,MainGroup="Deck Coatings"});
-            Projects.Add(new Project { Name = "Weather Wear Rehab", Rank = 2, GrpName = "Dexotex", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Barrier Guard", Rank = 3, GrpName = "Dexotex", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Endurokote", Rank = 4,GrpName= "Endurokote", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Desert Crete", Rank = 5, GrpName = "Hill Brothers", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Paraseal", Rank = 6, GrpName = "Tremco", MainGroup = "Below Grade" });
-            Projects.Add(new Project { Name = "Paraseal LG", Rank = 17, GrpName = "Tremco", MainGroup = "Below Grade" });
-            Projects.Add(new Project { Name = "860", Rank = 18, GrpName = "Carlisle", MainGroup = "Below Grade" });
-            Projects.Add(new Project { Name = "201", Rank = 18, GrpName = "Tremco", MainGroup = "Below Grade" });
-            Projects.Add(new Project { Name = "250", Rank = 19, GrpName = "Tremco", MainGroup = "Below Grade" });
-            Projects.Add(new Project { Name = "Pli-Dek", Rank = 7, GrpName = "Pli-Dek", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Pedestrian System", Rank = 8,GrpName= "UPI", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Parking Garage", Rank = 9, GrpName = "UPI", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Tufflex", Rank = 10, GrpName = "UPI", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Color Wash Reseal", Rank = 11, GrpName = "Westcoat", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "ALX", Rank = 12, GrpName = "Westcoat", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "MACoat", Rank = 13, GrpName = "Westcoat", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Reseal all systems", Rank = 14, GrpName = "Reseal", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Resistite", Rank = 15, GrpName = "Dexotex", MainGroup = "Concrete On Grade" });
-            Projects.Add(new Project { Name = "Multicoat", Rank = 16, GrpName = "Multicoat", MainGroup = "Concrete On Grade" });
-            Projects.Add(new Project { Name = "Dexcellent II", Rank = 16, GrpName = "Nevada Coatings", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Dual Membrane", Rank = 19, GrpName = "Westcoat", MainGroup = "Below Tile" });
-            Projects.Add(new Project { Name = "UPI Below Tile", Rank = 20, GrpName = "UPI", MainGroup = "Below Tile" });
-            Projects.Add(new Project { Name = "Dual Flex", Rank = 21, GrpName = "Dexotex", MainGroup = "Below Tile" });
-            Projects.Add(new Project { Name = "Color Flake", Rank = 22, GrpName = "Westcoat", MainGroup = "Epoxy Coatings" });
-            Projects.Add(new Project { Name = "Polyurethane Injection Block", Rank = 23, GrpName = "DeNeef", MainGroup = "Below Grade" });
-            Projects.Add(new Project { Name = "Block Wall", Rank = 24, GrpName = "Xypex", MainGroup = "Below Grade" });
+            Projects.Add(new Project { Name = "Weather Wear", OriginalProjectName= "Weather Wear", Rank = 1,GrpName= "Dexotex" ,MainGroup="Deck Coatings"});
+            Projects.Add(new Project { Name = "Weather Wear Rehab", OriginalProjectName = "Weather Wear Rehab", Rank = 2, GrpName = "Dexotex", MainGroup = "Deck Coatings" });
+            Projects.Add(new Project { Name = "Barrier Guard", OriginalProjectName = "Barrier Guard", Rank = 3, GrpName = "Dexotex", MainGroup = "Deck Coatings" });
+            Projects.Add(new Project { Name = "Endurokote", OriginalProjectName = "Endurokote", Rank = 4,GrpName= "Endurokote", MainGroup = "Deck Coatings" });
+            Projects.Add(new Project { Name = "Desert Crete", OriginalProjectName = "Desert Crete", Rank = 5, GrpName = "Hill Brothers", MainGroup = "Deck Coatings" });
+            Projects.Add(new Project { Name = "Paraseal", OriginalProjectName = "Paraseal", Rank = 6, GrpName = "Tremco", MainGroup = "Below Grade" });
+            Projects.Add(new Project { Name = "Paraseal LG", OriginalProjectName = "Paraseal LG", Rank = 17, GrpName = "Tremco", MainGroup = "Below Grade" });
+            Projects.Add(new Project { Name = "860", OriginalProjectName = "860", Rank = 18, GrpName = "Carlisle", MainGroup = "Below Grade" });
+            Projects.Add(new Project { Name = "201", OriginalProjectName = "201", Rank = 18, GrpName = "Tremco", MainGroup = "Below Grade" });
+            Projects.Add(new Project { Name = "250", OriginalProjectName = "250", Rank = 19, GrpName = "Tremco", MainGroup = "Below Grade" });
+            Projects.Add(new Project { Name = "Pli-Dek", OriginalProjectName = "Pli-Dek", Rank = 7, GrpName = "Pli -Dek", MainGroup = "Deck Coatings" });
+            Projects.Add(new Project { Name = "Pedestrian System", OriginalProjectName = "Pedestrian System", Rank = 8,GrpName= "UPI", MainGroup = "Deck Coatings" });
+            Projects.Add(new Project { Name = "Parking Garage", OriginalProjectName = "Parking Garage", Rank = 9, GrpName = "UPI", MainGroup = "Deck Coatings" });
+            Projects.Add(new Project { Name = "Tufflex", OriginalProjectName = "Tufflex", Rank = 10, GrpName = "UPI", MainGroup = "Deck Coatings" });
+            Projects.Add(new Project { Name = "Color Wash Reseal", OriginalProjectName = "Color Wash Reseal", Rank = 11, GrpName = "Westcoat", MainGroup = "Deck Coatings" });
+            Projects.Add(new Project { Name = "ALX", OriginalProjectName = "ALX", Rank = 12, GrpName = "Westcoat", MainGroup = "Deck Coatings" });
+            Projects.Add(new Project { Name = "MACoat", OriginalProjectName = "MACoat", Rank = 13, GrpName = "Westcoat", MainGroup = "Deck Coatings" });
+            Projects.Add(new Project { Name = "Reseal all systems", OriginalProjectName = "Reseal all systems", Rank = 14, GrpName = "Reseal", MainGroup = "Deck Coatings" });
+            Projects.Add(new Project { Name = "Resistite", OriginalProjectName = "Resistite", Rank = 15, GrpName = "Dexotex", MainGroup = "Concrete On Grade" });
+            Projects.Add(new Project { Name = "Multicoat", OriginalProjectName = "Multicoat", Rank = 16, GrpName = "Multicoat", MainGroup = "Concrete On Grade" });
+            Projects.Add(new Project { Name = "Dexcellent II", OriginalProjectName = "Dexcellent II", Rank = 16, GrpName = "Nevada Coatings", MainGroup = "Deck Coatings" });
+            Projects.Add(new Project { Name = "Dual Membrane", OriginalProjectName = "Dual Membrane", Rank = 19, GrpName = "Westcoat", MainGroup = "Below Tile" });
+            Projects.Add(new Project { Name = "UPI Below Tile", OriginalProjectName = "UPI Below Tile", Rank = 20, GrpName = "UPI", MainGroup = "Below Tile" });
+            Projects.Add(new Project { Name = "Dual Flex", OriginalProjectName = "Dual Flex", Rank = 21, GrpName = "Dexotex", MainGroup = "Below Tile" });
+            Projects.Add(new Project { Name = "Color Flake", OriginalProjectName = "Color Flake", Rank = 22, GrpName = "Westcoat", MainGroup = "Epoxy Coatings" });
+            Projects.Add(new Project { Name = "Polyurethane Injection Block", OriginalProjectName = "Polyurethane Injection Block", Rank = 23, GrpName = "DeNeef", MainGroup = "Below Grade" });
+            Projects.Add(new Project { Name = "Block Wall", OriginalProjectName = "Block Wall", Rank = 24, GrpName = "Xypex", MainGroup = "Below Grade" });
             ProjectView = CollectionViewSource.GetDefaultView(Projects);
             
             ProjectView.GroupDescriptions.Add(new PropertyGroupDescription("MainGroup"));
             ProjectView.SortDescriptions.Add(new SortDescription("MainGroup", ListSortDirection.Ascending));
             ProjectView.GroupDescriptions.Add(new PropertyGroupDescription("GrpName"));
-            ProjectView.SortDescriptions.Add(new SortDescription("GrpName", ListSortDirection.Ascending));          
-
+            ProjectView.SortDescriptions.Add(new SortDescription("GrpName", ListSortDirection.Ascending));
+            ProjectView.Filter = FilterProject;
         }
+
+        
+        private string _filterString=string.Empty;
+        public string FilterString
+        {
+            get { return _filterString; }
+            set
+            {
+                _filterString = value;
+                OnPropertyChanged("FilterString");
+                
+                ProjectView.Refresh();
+            }
+        }
+        private bool FilterProject(object item)
+        {
+            Project prj = item as Project;
+            prj.IsGroupExpanded = true;
+            return prj.Name.Contains(_filterString);
+            
+        }
+
+        
         private string getStartRange(string section)
         {
             if (doc == null)
@@ -1442,8 +1468,20 @@ namespace WICR_Estimator.ViewModels
                     ws.Copy(summaryWb.Worksheets["Sheet1"]);
                     
                     exlWs = (Excel.Worksheet)summaryWb.Worksheets["Summary"];
+                    if (item.Name.Length>22)
+                    {
+                        string suffix = item.Name.Contains(".") ? new string(item.Name.Reverse().ToArray()).Split('.')[0]:"";
+                        if (suffix=="")
+                        {
+                            exlWs.Name = item.Name.Substring(0, 21) ;
+                        }
+                        else
+                            exlWs.Name = item.Name.Substring(0, 17) + "." + suffix;
 
-                    exlWs.Name = item.Name.Length>22 ? item.Name.Substring(0,21):item.Name + " Summary";
+                    }
+                    else
+                        exlWs.Name = item.Name + " Summary";
+                    
                     item.lastUsedRows.Add("JobSetup",  WriteJobSetup(item.ProjectJobSetUp));
 
                     if (item.MetalViewModel != null)
@@ -1520,9 +1558,26 @@ namespace WICR_Estimator.ViewModels
         }
         #endregion
 
+        
+        private void ProjectJobSetUp_OnProjectNameChange(object sender, EventArgs e)
+        {
+            foreach (Project item in SelectedProjects)
+            {
+                if (item.ProjectJobSetUp.SpecialProductName != null)
+                {
+                    if (item.ProjectJobSetUp.SpecialProductName != "")
+                    {
+                        item.Name = item.ProjectJobSetUp.SpecialProductName;
+                    }
+                    else
+                        item.Name = item.ProjectJobSetUp.ProjectName;
+                }
+
+
+            }
+
+        }
         #endregion
-
-
         public string Name
         {
             get

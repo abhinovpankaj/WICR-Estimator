@@ -66,10 +66,11 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
             <Setter Property="Template">
                 <Setter.Value>
                      <ControlTemplate>
-                        <Expander Margin="10,5,0,0">
-                            <i:Interaction.Behaviors>
+                        <Expander Margin="10,5,0,0" IsExpanded="{Binding Mode=TwoWay,
+                                  UpdateSourceTrigger=Explicit,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Expander},AncestorLevel=1}, Path=IsExpanded}">
+                            <!--<i:Interaction.Behaviors>
                                 <behaviors:PersistGroupExpandedStateBehavior GroupName="{Binding Name}" />
-                            </i:Interaction.Behaviors>
+                            </i:Interaction.Behaviors>-->
                             <Expander.Header>
                                 <TextBlock Text="{Binding Name}"
                                            VerticalAlignment="Bottom">
@@ -137,7 +138,12 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                    FontSize="16"
                    Margin="5,5,0,5"
                    FontWeight="Bold"/>
-            
+            <TextBox Margin="5,0,5,5" 
+                     FontWeight="SemiBold"  
+                     x:Name="FilterTextBox"
+                     TextChanged="FilterTextBox_TextChanged"
+                     Text="{Binding FilterString,UpdateSourceTrigger=PropertyChanged}"
+                     FontSize="14"></TextBox>
         </StackPanel>
 
         <ListView HorizontalContentAlignment="Stretch" 
@@ -231,9 +237,9 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                     <DataGridTextColumn Header ="Total Cost" 
                                     Binding="{Binding TotalCost,StringFormat='c'}"
                                     IsReadOnly="False"/>
-                    <!--<DataGridTextColumn Header ="Sub Contract Cost" 
-                                    Binding="{Binding SubContractCost}"
-                                    IsReadOnly="False"/>-->
+                    <DataGridTextColumn Header ="Total Cost per SQFT" 
+                                    Binding="{Binding CostPerSqFoot,StringFormat='c'}"
+                                    IsReadOnly="False"/>
                 </DataGrid.Columns>
                 <!--<i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
