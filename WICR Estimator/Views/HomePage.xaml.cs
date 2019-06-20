@@ -31,6 +31,7 @@ namespace WICR_Estimator.Views
             InitializeComponent();
             //HomeVM = new HomeViewModel();
             //this.DataContext = HomeVM;
+            
         }
 
         private void refreshGData_Click(object sender, RoutedEventArgs e)

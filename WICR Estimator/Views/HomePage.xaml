@@ -8,7 +8,7 @@
       xmlns:conv="clr-namespace:WICR_Estimator.Converters"
       xmlns:System="clr-namespace:System;assembly=mscorlib"
       xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-      mc:Ignorable="d" d:DesignWidth="1050" d:DesignHeight="800"
+      mc:Ignorable="d" d:DesignWidth="1550" d:DesignHeight="800"
       xmlns:behaviors="clr-namespace:WICR_Estimator"       
       >
     <UserControl.Resources>
@@ -154,7 +154,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                  x:Name="ProjectList"
                  SelectionMode="Multiple"
                  ItemsSource="{Binding ProjectView}"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
                  ItemTemplate="{StaticResource ProjectTemplate}">
                  <!--<i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
@@ -185,6 +185,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
             <Popup  HorizontalAlignment="Stretch"
                    IsOpen="{Binding IsProcessing}"
                    Height="100"
+                   
                     AllowsTransparency="True"
                 Placement="Center"
                     Width="500"
@@ -291,6 +292,31 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                     x:Name="refreshGData"
                     Command="{Binding RefreshGoogleData}"
                     Style="{StaticResource ButtonTemplate}"/>
+            <CheckBox Content="Apply Latest Google Price"
+                      ToolTip="Please check if you want to apply the latest prices. To revert to old price reload the estimate file."
+                      Margin="10"
+                      x:Name="applynewPrice"
+                      FontSize="15"
+                      IsChecked="{Binding ApplyLatestPrice}"
+                      IsEnabled="{Binding CanApplyLatestPrice}"
+                      />
+            <TextBlock Text="Latest Prices have been applied.To revert to old price reload the estimate"
+                       Margin="10,0,0,0"
+                       Background="Aqua"
+                       Foreground="Blue"
+                       TextWrapping="Wrap">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="Visibility" Value="Hidden"/>
+                <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=applynewPrice, Path=IsChecked}"
+                                         Value="True">
+                        <Setter Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </TextBlock.Style>
+            </TextBlock>
             <CheckBox Content="Login As Admin"
                           Margin="10" x:Name="cbpasswordSection"
                           Foreground="#FF2A6DCD"

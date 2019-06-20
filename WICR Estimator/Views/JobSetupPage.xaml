@@ -92,6 +92,7 @@
                            Margin="5,30,10,0"
                        Text="NOTE:DIFFERENT PRODUCT USED"/>
                 <TextBox Margin="5,0,5,0" Height="30"
+                         MaxLength="20"
                          Text="{Binding SpecialProductName,UpdateSourceTrigger=LostFocus}"
                          VerticalContentAlignment="Center"/>
                 <!--<Border Margin="10" BorderBrush="Blue">

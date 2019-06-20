@@ -24,6 +24,12 @@ namespace WICR_Estimator
         public MainWindow()
         {
             InitializeComponent();
+            //DateTime d1 = new DateTime(2019, 7, 15);
+            //if (DateTime.UtcNow>d1)
+            //{
+            //    Environment.Exit(-1);
+            //}
+            
             this.DataContext = new MainWindowViewModel();
         }
     }

@@ -90,6 +90,11 @@ namespace WICR_Estimator
 
             CurrentPageViewModel = PageViewModels
                 .FirstOrDefault(vm => vm == viewModel);
+            if (CurrentPageViewModel is HomeViewModel)
+            {
+                HomeViewModel hvm = CurrentPageViewModel as HomeViewModel;
+                hvm.UpdateProjectTotals();
+            }
         }
 
         #endregion

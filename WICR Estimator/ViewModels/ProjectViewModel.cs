@@ -179,13 +179,16 @@ namespace WICR_Estimator.ViewModels
 
                     }
                     
+
                     if (originalProjectname == "Reseal all systems" || originalProjectname == "Paraseal")
                     {
                         if (prj.MaterialViewModel == null)
                         {
+
                             prj.MaterialViewModel = ViewModelInstanceFactory.GetMaterialViewModelInstance(originalProjectname, null,
                                 null, prj.ProjectJobSetUp);
                         }
+                        
                     }
                     else if(originalProjectname == "860")
                     {
@@ -217,6 +220,7 @@ namespace WICR_Estimator.ViewModels
                         {
                             prj.MetalViewModel = ViewModelInstanceFactory.GetMetalViewModelInstance(originalProjectname, prj.ProjectJobSetUp);
                         }
+                        
                         if (prj.SlopeViewModel == null)
                         {
                             prj.SlopeViewModel = ViewModelInstanceFactory.GetSlopeViewModelInstance(originalProjectname, prj.ProjectJobSetUp);

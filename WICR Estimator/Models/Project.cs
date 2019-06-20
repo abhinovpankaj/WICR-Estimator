@@ -25,7 +25,8 @@ namespace WICR_Estimator.Models
         private string laborPerc;
 
 
-       
+
+        
 
         public string Name
         {
@@ -147,6 +148,10 @@ namespace WICR_Estimator.Models
         public int ActiveTabIndex { get; set; }
         public string OriginalProjectName { get; set; }
         public Dictionary<string, int> lastUsedRows;
+
+        [XmlIgnore]
+        public bool ApplyLatestPrices { get; set; }
+
         public System.Windows.Visibility ISVisible
         {
             get
@@ -177,7 +182,20 @@ namespace WICR_Estimator.Models
         public int CopyCount { get; set; }
 
         public string Name { get; set; }
-        
+        public void UpdateMainTable()
+        {
+            OnPropertyChanged("TotalCost");
+            OnPropertyChanged("MetalCost");
+            OnPropertyChanged("SlopeCost");
+
+            OnPropertyChanged("SystemNOther");
+            OnPropertyChanged("CostPerSqFoot");
+            OnPropertyChanged("SystemNOther");
+            OnPropertyChanged("LaborCost");
+            OnPropertyChanged("TotalCost");
+            OnPropertyChanged("MaterialCost");
+            OnPropertyChanged("LaborPercentage");
+        }
         public double MetalCost
         {
             get
@@ -406,5 +424,7 @@ namespace WICR_Estimator.Models
         {
             return "Selected Project:"+ Name;
         }
+
+        
     }
 }

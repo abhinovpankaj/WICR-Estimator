@@ -145,7 +145,7 @@
                                  Width="40" 
                                  HorizontalAlignment="Center"
                                  Margin="5"/>
-                <Slider Maximum="1" Value="{Binding SubContractMarkup}"
+                <Slider Maximum="1" Value="{Binding SubContractProfitMargin}"
                                 Width="200"
                                 LargeChange=".2"
                                 Minimum="0"

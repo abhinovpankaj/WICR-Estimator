@@ -32,6 +32,7 @@ namespace WICR_Estimator.ViewModels
         public static event EventHandler OnLoggedAsAdmin;
         public static event EventHandler OnProjectSelectionChange;
         //private static NotifyIcon statusNotifier;
+
         public HomeViewModel()
         {
             FillProjects();
@@ -49,43 +50,44 @@ namespace WICR_Estimator.ViewModels
 
         }
 
+        #region Properties
 
-        private void Project_OnSelectedProjectChange(object sender, EventArgs e)
+        private bool applylatestPrice;
+        public bool ApplyLatestPrice
         {
-            if (OnProjectSelectionChange!=null)
+            get
+            { return applylatestPrice; }
+            set
             {
-                OnProjectSelectionChange(SelectedProjects, EventArgs.Empty);
-            }
-            double tabsLaborTotal = 0;
-            MyselectedProjects = SelectedProjects;
-            OnPropertyChanged("SelectedProjects");
-            if (SelectedProjects != null)
-            {
-                ProjectTotals.Name = "Totals";
-                ProjectTotals.LaborCost = Math.Round(SelectedProjects.Sum(x => x.LaborCost),2);
-                ProjectTotals.SlopeCost = Math.Round(SelectedProjects.Sum(x => x.SlopeCost),2);
-                ProjectTotals.MetalCost = Math.Round(SelectedProjects.Sum(x => x.MetalCost),2);
-                ProjectTotals.SystemCost = Math.Round(SelectedProjects.Sum(x => x.SystemNOther), 2);
-                ProjectTotals.MaterialCost = Math.Round(SelectedProjects.Sum(x => x.MaterialCost), 2);
-                ProjectTotals.TotalCost = Math.Round(SelectedProjects.Sum(x => x.TotalCost), 2);
-
-                foreach (Project item in SelectedProjects)
+                if (value != applylatestPrice)
                 {
-                    if (item.MaterialViewModel!=null)
+                    applylatestPrice = value;
+                    OnPropertyChanged("ApplyLatestPrice");
+                    if (SelectedProjects != null)
                     {
-                        tabsLaborTotal = tabsLaborTotal + item.MaterialViewModel.AllTabsLaborTotal;
+                        foreach (Project item in SelectedProjects)
+                        {
+                            item.ApplyLatestPrices = applylatestPrice;
+                            ApplyLatestGoogleData(item);
+                        }
                     }
-                    
-
+                    CanApplyLatestPrice = false;
+                    OnPropertyChanged("CanApplyLatestPrice");
                 }
-                if (ProjectTotals.TotalCost!=0)
-                {
-                    ProjectTotals.LaborPercentage = Math.Round(tabsLaborTotal / ProjectTotals.TotalCost * 100, 2).ToString() + "%";
-                }           
             }
-
         }
-        #region Properties\Commands
+        private string _filterString = string.Empty;
+        public string FilterString
+        {
+            get { return _filterString; }
+            set
+            {
+                _filterString = value;
+                OnPropertyChanged("FilterString");
+
+                ProjectView.Refresh();
+            }
+        }
         private bool isprocessing;
         public bool IsProcessing
         {
@@ -134,6 +136,9 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        
+        public bool CanApplyLatestPrice { get; set; }
+
         public string JobName { get; set; }
         public string PreparedBy { get; set; }
         private DateTime? jobCreationdate;
@@ -180,6 +185,63 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        public System.Windows.Visibility HidePasswordSection { get; set; }
+        public ICollectionView ProjectView { get; set; }
+        private ObservableCollection<Project> projects;
+        public ObservableCollection<Project> Projects
+        {
+            get
+            {
+                return projects;
+            }
+            set
+            {
+                if (projects != value)
+                {
+                    projects = value;
+                    OnPropertyChanged("Projects");
+                }
+            }
+        }
+
+        public static ObservableCollection<Project> MyselectedProjects;
+        private ObservableCollection<Project> selectedProjects;
+
+        public ObservableCollection<Project> SelectedProjects
+        {
+            get
+            {
+                var selected = Projects.Where(p => p.IsSelectedProject == true).ToList();
+                return new ObservableCollection<Project>(selected);
+            }
+            set
+            {
+                if (selectedProjects != value)
+                {
+                    selectedProjects = value;
+                    OnPropertyChanged("SelectedProjects");
+
+                    MyselectedProjects = selectedProjects;
+                }
+            }
+        }
+
+        private ProjectsTotal prjTotals;
+        public ProjectsTotal ProjectTotals
+        {
+            get { return prjTotals; }
+            set
+            {
+                if (prjTotals != value)
+                {
+                    prjTotals = value;
+                    OnPropertyChanged("ProjectTotals");
+                }
+            }
+        }
+        #endregion
+
+        #region Commands
         private bool canCreateSummary(object obj)
         {
             if (SelectedProjects.Count > 0)
@@ -340,13 +402,21 @@ namespace WICR_Estimator.ViewModels
                     }
                                         
                     item.MaterialViewModel.CheckboxCommand = new DelegateCommand(item.MaterialViewModel.ApplyCheckUnchecks, item.MaterialViewModel.canApply);
+                    
                 }
                 Project_OnSelectedProjectChange(Projects[0], null);
                 reader.Close();
-            }
-            ClearProjects.RaiseCanExecuteChanged();
-            CreateSummary.RaiseCanExecuteChanged();
+                ClearProjects.RaiseCanExecuteChanged();
+                CreateSummary.RaiseCanExecuteChanged();
+                CanApplyLatestPrice = true;
+                OnPropertyChanged("CanApplyLatestPrice");
+                ApplyLatestPrice = false;
+                
+            }          
+
         }
+
+        
 
         private bool canLoadEstimate(object obj)
         {
@@ -445,63 +515,85 @@ namespace WICR_Estimator.ViewModels
             }
         }
         #endregion
-        
-        public System.Windows.Visibility HidePasswordSection { get; set; }
-        public ICollectionView ProjectView { get; set; }
-        private ObservableCollection<Project> projects;
-        public ObservableCollection<Project> Projects
-        {
-            get
-            {
-                return projects;
-            }
-            set
-            {
-                if (projects != value)
-                {
-                    projects = value;
-                    OnPropertyChanged("Projects");
-                }
-            }
-        }
-        
-        public static ObservableCollection<Project> MyselectedProjects;
-        private ObservableCollection<Project> selectedProjects;
 
-        public ObservableCollection<Project> SelectedProjects
+
+        #region Private Methods
+        private void Project_OnSelectedProjectChange(object sender, EventArgs e)
         {
-            get
+            if (OnProjectSelectionChange != null)
             {
-                var selected = Projects.Where(p => p.IsSelectedProject == true).ToList();
-                return new ObservableCollection<Project>(selected);                
+                OnProjectSelectionChange(SelectedProjects, EventArgs.Empty);
             }
-            set
+
+            MyselectedProjects = SelectedProjects;
+            OnPropertyChanged("SelectedProjects");
+            if (SelectedProjects != null)
             {
-                if (selectedProjects != value)
-                {
-                    selectedProjects = value;
-                    OnPropertyChanged("SelectedProjects");
-                    
-                    MyselectedProjects = selectedProjects;
-                }
+                UpdateProjectTotals();
             }
         }
 
-        private ProjectsTotal prjTotals;
-        public ProjectsTotal ProjectTotals
+        private void ApplyLatestGoogleData(Project item)
         {
-            get { return prjTotals; }
-            set
+            double laborRate;
+            var rate = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, item.OriginalProjectName);
+            var freightData = DataSerializer.DSInstance.deserializeGoogleData(DataType.Freight, item.OriginalProjectName);
+            var laborData = DataSerializer.DSInstance.deserializeGoogleData(DataType.Labor, item.OriginalProjectName);
+
+            if (rate != null)
             {
-                if (prjTotals!=value)
-                {
-                    prjTotals = value;
-                    OnPropertyChanged("ProjectTotals");
-                }
+                double.TryParse(rate[0][0].ToString(), out laborRate);
+                item.ProjectJobSetUp.LaborRate = laborRate;
             }
+            else
+            {
+                MessageBox.Show("Latest Price data for this Project is not Available,Please refresh Data or generate new estimate for this project.");
+                return;
+            }
+            
+            if (item.MetalViewModel != null)
+            {
+                item.MetalViewModel.laborRate = laborRate;
+                item.MetalViewModel.metalDetails = DataSerializer.DSInstance.deserializeGoogleData(DataType.Metal, item.OriginalProjectName);
+                item.MetalViewModel.freightDetails =freightData ;
+                item.MetalViewModel.pWage = laborData;
+                item.MetalViewModel.OnJobSetupChange(null);
+            }
+            if (item.SlopeViewModel != null)
+            {
+                item.SlopeViewModel.pWage =laborData ;
+                item.SlopeViewModel.freightData = freightData;
+                item.SlopeViewModel.perMixRates = DataSerializer.DSInstance.deserializeGoogleData(DataType.Slope, item.OriginalProjectName);
+                item.SlopeViewModel.CalculateAll();
+            }
+            if (item.MaterialViewModel!=null)
+            {
+                item.MaterialViewModel.freightData = freightData;
+                item.MaterialViewModel.laborDetails= laborData;
+                item.MaterialViewModel.laborRate = laborRate;
+                item.MaterialViewModel.materialDetails= DataSerializer.DSInstance.deserializeGoogleData(DataType.Material, item.OriginalProjectName);
+                item.MaterialViewModel.CalculateCost(null);
+            }
+            item.UpdateMainTable();
         }
-        #region Methods
-        
+        private void ProjectJobSetUp_OnProjectNameChange(object sender, EventArgs e)
+        {
+            foreach (Project item in SelectedProjects)
+            {
+                if (item.ProjectJobSetUp.SpecialProductName != null)
+                {
+                    if (item.ProjectJobSetUp.SpecialProductName != "")
+                    {
+                        item.Name = item.ProjectJobSetUp.SpecialProductName;
+                    }
+                    else
+                        item.Name = item.ProjectJobSetUp.ProjectName;
+                }
+
+
+            }
+
+        }
         //private void SetBalloonTip()
         //{
         //    statusNotifier.Icon = SystemIcons.Information;
@@ -629,18 +721,7 @@ namespace WICR_Estimator.ViewModels
         }
 
         
-        private string _filterString=string.Empty;
-        public string FilterString
-        {
-            get { return _filterString; }
-            set
-            {
-                _filterString = value;
-                OnPropertyChanged("FilterString");
-                
-                ProjectView.Refresh();
-            }
-        }
+       
         private bool FilterProject(object item)
         {
             Project prj = item as Project;
@@ -661,7 +742,7 @@ namespace WICR_Estimator.ViewModels
             return node.InnerText;
         }
 
-        #region SummaryRegion
+        #region SummaryCreationRegion
         private static XmlDocument doc;
         Microsoft.Office.Interop.Excel.Application exlApp;
         Microsoft.Office.Interop.Excel.Workbook exlWb;
@@ -1559,25 +1640,39 @@ namespace WICR_Estimator.ViewModels
         #endregion
 
         
-        private void ProjectJobSetUp_OnProjectNameChange(object sender, EventArgs e)
+        
+        #endregion
+
+        #region Public Methods
+        public void UpdateProjectTotals()
         {
+            double tabsLaborTotal = 0;
+            ProjectTotals.Name = "Totals";
+            ProjectTotals.LaborCost = Math.Round(SelectedProjects.Sum(x => x.LaborCost), 2);
+            ProjectTotals.SlopeCost = Math.Round(SelectedProjects.Sum(x => x.SlopeCost), 2);
+            ProjectTotals.MetalCost = Math.Round(SelectedProjects.Sum(x => x.MetalCost), 2);
+            ProjectTotals.SystemCost = Math.Round(SelectedProjects.Sum(x => x.SystemNOther), 2);
+            ProjectTotals.MaterialCost = Math.Round(SelectedProjects.Sum(x => x.MaterialCost), 2);
+            ProjectTotals.TotalCost = Math.Round(SelectedProjects.Sum(x => x.TotalCost), 2);
+
             foreach (Project item in SelectedProjects)
             {
-                if (item.ProjectJobSetUp.SpecialProductName != null)
+                if (item.MaterialViewModel != null)
                 {
-                    if (item.ProjectJobSetUp.SpecialProductName != "")
-                    {
-                        item.Name = item.ProjectJobSetUp.SpecialProductName;
-                    }
-                    else
-                        item.Name = item.ProjectJobSetUp.ProjectName;
+                    tabsLaborTotal = tabsLaborTotal + item.MaterialViewModel.AllTabsLaborTotal;
                 }
 
 
             }
-
+            if (ProjectTotals.TotalCost != 0)
+            {
+                ProjectTotals.LaborPercentage = Math.Round(tabsLaborTotal / ProjectTotals.TotalCost * 100, 2).ToString() + "%";
+            }
+            else
+                ProjectTotals.LaborPercentage = "0%";
         }
         #endregion
+
         public string Name
         {
             get
