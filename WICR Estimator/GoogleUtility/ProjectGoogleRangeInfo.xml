@@ -36,7 +36,7 @@
     <RateRange>E2</RateRange>
     <MetalRange>F3:M43</MetalRange>
     <LaborRange>E470:E490</LaborRange>
-    <SlopeRange>P301:Q309</SlopeRange>
+    <SlopeRange>P458:Q466</SlopeRange>
     <MaterialRange>H440:N455</MaterialRange>
     <FreightRange>E48:F54</FreightRange>
   </WeatherWearReseal>

@@ -36,15 +36,16 @@ namespace WICR_Estimator
                 //case "Paraseal":
                 case "Paraseal LG":
                 case "201":
-                case "250":
+                case "250 GC":
                 case "Dexcellent II":
                 //case "860":
-                case "Dual Membrane":
-                case "UPI Below Tile":
+                case "Westcoat BT":
+                case "UPI BT":
                 case "Dual Flex":
-                case "Color Flake":
+                case "Westcoat Epoxy":
                 case "Polyurethane Injection Block":
                 case "Block Wall":
+                case "Reseal all systems":
                     return new MetalViewModel(Js);
                 
                 default:
@@ -72,7 +73,8 @@ namespace WICR_Estimator
                 case "Multicoat":
                 case "Pli-Dek":
                 case "Dexcellent II":
-                case "Dual Membrane":
+                case "Westcoat BT":
+                case "Reseal all systems":
                     return new SlopeViewModel(Js);
                 case "Endurokote":
                     return new EnduroKoteSlopeViewModel(Js);
@@ -82,9 +84,9 @@ namespace WICR_Estimator
                 case "Parking Garage":
                 case "Tufflex":
                 case "201":
-                case "250":
-                case "860":
-                case "UPI Below Tile":
+                case "250 GC":
+                case "860 Carlisle":
+                case "UPI BT":
                 
                     return new PedestrianSlopeViewModel(Js);
                 case "Dual Flex":
@@ -139,19 +141,19 @@ namespace WICR_Estimator
                     return new ParasealLGMaterialViewModel(metalT, slopeT, Js);
                 case "201":
                     return new _201MaterialViewModel(metalT, slopeT, Js);
-                case "250":
+                case "250 GC":
                     return new _250MaterialViewModel(metalT, slopeT, Js);
                 case "Dexcellent II":
                     return new DexellentIIMaterialViewModel(metalT, slopeT, Js);
-                case "860":
+                case "860 Carlisle":
                     return new Carlisle860MaterialViewModel(metalT, slopeT, Js);
-                case "Dual Membrane":
+                case "Westcoat BT":
                     return new WestcoatdualMaterialViewModel(metalT, slopeT, Js);
                 case "Dual Flex":
                     return new DualFlexMaterialViewModel(metalT, slopeT, Js);
-                case "UPI Below Tile":
+                case "UPI BT":
                     return new UPIBelowTileMaterialViewModel(metalT, slopeT, Js);
-                case "Color Flake":
+                case "Westcoat Epoxy":
                     return new DexoColorFlakeMaterialViewModel(metalT, null, Js);
                 case "Polyurethane Injection Block":
                     return new DeneefMaterialViewModel(metalT, null, Js);

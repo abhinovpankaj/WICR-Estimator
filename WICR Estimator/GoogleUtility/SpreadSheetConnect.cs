@@ -136,25 +136,25 @@ namespace WICR_Estimator.GoogleUtility
                     prjName = "ParasealLG";
                     break;
                 case "201":
-                case "250":
+                case "250 GC":
                     prjName = "Tremco201";
                     break;
                 case "Dexcellent II":
                     prjName = "Dexcellent";
                     break;
-                case "860":
+                case "860 Carlisle":
                     prjName = "Carlisle860";
                     break;
-                case "Dual Membrane":
+                case "Westcoat BT":
                     prjName = "WestcoatDualMembrane";
                     break;
-                case "UPI Below Tile":
+                case "UPI BT":
                     prjName = "UPIBelowTile";
                     break;
                 case "Dual Flex":
                     prjName = "DualFlex";
                     break;
-                case "Color Flake":
+                case "Westcoat Epoxy":
                     prjName = "ColorFlake";
                     break;
                 case "Polyurethane Injection Block":

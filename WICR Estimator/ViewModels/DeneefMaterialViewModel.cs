@@ -240,13 +240,19 @@ namespace WICR_Estimator.ViewModels
             {
                 SystemMaterial mat = SystemMaterials.Where(x => x.Name == "Add labor for additional injection material").FirstOrDefault();
                 bool ischecked = mat.IsMaterialChecked;
-                mat.Qty =sysmat.LaborExtension*0.3 /25;
+                mat.Hours =sysmat.LaborExtension*0.3 /25;
+                mat.LaborExtension = mat.Hours== 0 ? 0:mat.Hours >= mat.SetupMinCharge ? mat.Hours * laborRate : mat.SetupMinCharge * laborRate;
+                mat.LaborUnitPrice = mat.LaborExtension / (totalSqft+totalVerticalSqft+riserCount);
                 mat.IsMaterialChecked = ischecked;
             }
             sysmat = SystemMaterials.Where(x => x.Name == "Add material/labor for patch and plug holes/EA HOLE").FirstOrDefault();
             if (sysmat != null)
             {
-                sysmat.Hours = sysmat.IsMaterialChecked ? (totalSqft + totalVerticalSqft) * 0.5 / 25 : 0;
+                double vertSqft = (totalSqft + totalVerticalSqft) * 0.1;
+                double horSqft = linearCoping / 1.5;
+                sysmat.Hours = sysmat.IsMaterialChecked ? (vertSqft+horSqft) * 0.5 / 25 : 0;
+                sysmat.LaborExtension = sysmat.Hours == 0 ? 0 : sysmat.Hours >= sysmat.SetupMinCharge ? sysmat.Hours * laborRate : sysmat.SetupMinCharge * laborRate;
+                sysmat.LaborUnitPrice = sysmat.LaborExtension / (totalSqft + totalVerticalSqft + riserCount);
             }
         }
         public override bool canApply(object obj)

@@ -206,23 +206,23 @@ namespace WICR_Estimator.Models
             {
                 SqftLabel = "SQ FT OF VERTICAL LAGGING WALLS";
             }
-            else if (originalName == "201" || originalName == "250"|| originalName=="Block Wall")
+            else if (originalName == "201" || originalName == "250 GC"|| originalName=="Xypex")
             {
                 SqftLabel = "TOTAL SQ FT HORIZONTAL CONCRETE";
             }
             else if (originalName == "Dual Flex")
                 SqftLabel = "TOTAL SQ FT HORIZONTAL (NEOBOND ANTI-FRACTURE)";
-            else if (originalName == "860")
+            else if (originalName == "860 Carlisle")
                 SqftLabel = "TOTAL SQ FT CONCRETE DECKS";
-            else if (originalName == "Color Flake")
+            else if (originalName == "Westcoat Epoxy")
                 SqftLabel = "TOTAL SQ FT FLOOR";
             else if (originalName == "Polyurethane Injection Block")
                 SqftLabel = "TOTAL SQ FT HORIZONTAL CONCRETE FLOOR";
             else
                 SqftLabel = "Total Sqft";
 
-            if (originalName=="Pedestrian System" ||originalName=="Parking Garage"||originalName=="Tufflex" ||originalName=="201" || originalName == "250"
-                || originalName == "UPI Below Tile")
+            if (originalName=="Pedestrian System" ||originalName=="Parking Garage"||originalName=="Tufflex" ||originalName=="201" || originalName == "250 GC"
+                || originalName == "UPI BT")
             {
                 IsNewPlywood = false;
                 SqftLabel = "Total Sqft Concrete";
@@ -290,19 +290,18 @@ namespace WICR_Estimator.Models
             }
         }
         string originalName;
-        private void GetOriginalName()
+        public void GetOriginalName()
         {
            if (ProjectName.Contains('.'))
                 originalName = ProjectName.Split('.')[0];
             else
                 originalName = ProjectName;
         }
+
         public string DeckLabel
         {
-
             get
-            {
-                
+            {                
                 if (originalName == "Weather Wear" || originalName == "Weather Wear Rehab" || originalName == "Reseal all systems")
                     return "Linear Footage of Deck Perimeter";
                 else if (originalName == "Resistite" || originalName == "Multicoat")
@@ -313,9 +312,9 @@ namespace WICR_Estimator.Models
                     return "LF OF PERIMETER FOOTING (STANDARD PARAGRANULAR DETAIL AND TERM BAR)";
                 else if (originalName == "Paraseal LG")
                     return "LF OF PERIMETER FOOTING (adds term bar only )";
-                else if (originalName == "Tufflex" || originalName == "201" || originalName == "250" || originalName == "UPI Below Tile")
+                else if (originalName == "Tufflex" || originalName == "201" || originalName == "250 GC" || originalName == "UPI BT")
                     return "LINEAR FOOTAGE OF PERIMETER (DECKS)";
-                else if (originalName == "860")
+                else if (originalName == "860 Carlisle")
                     return "LINEAR FOOTAGE OF DECK TO WALL METAL(fluid applied detail)";
                 else if (originalName == "Dual Flex")
                     return "PERIMETER";
@@ -323,7 +322,7 @@ namespace WICR_Estimator.Models
                     return "LINEAR FOOTAGE OF DECK TO WALL METAL (COVE BASE)";
                 else if (originalName == "Polyurethane Injection Block")
                     return "LINEAR FOOTAGE OF COLD JOINTS";
-                else if (originalName == "Color Flake")
+                else if (originalName == "Westcoat Epoxy")
                     return "LINEAR FOOTAGE OF 3/16 inch COVE BASE";
                 else if (originalName == "Block Wall")
                     return "LINEAR FOOTAGE OF INSIDE CORNERS";
@@ -800,9 +799,9 @@ namespace WICR_Estimator.Models
                 {
                     return "# PENETRATIONS or DRAINS";
                 }
-                else if (originalName == "201" || originalName == "250" || originalName == "Dexcellent II" ||
-                    originalName == "860" || originalName == "UPI Below Tile" || originalName == "Color Flake" ||
-                    originalName == "Polyurethane Injection Block" || originalName == "Block Wall")
+                else if (originalName == "201" || originalName == "250 GC" || originalName == "Dexcellent II" ||
+                    originalName == "860 Carlisle" || originalName == "UPI BT" || originalName == "Westcoat Epoxy" ||
+                    originalName == "Polyurethane Injection Block" || originalName == "Xypex")
                     return "# RISERS (3.5-4 FT WIDE)";
                 else if (originalName == "Paraseal LG")
                     return "TIE BACKS (block outs must be priced separately)";
@@ -833,8 +832,8 @@ namespace WICR_Estimator.Models
             get
             {
                 if (originalName == "Pedestrian System" || originalName == "Parking Garage" || originalName == "Paraseal" || originalName == "Tufflex" ||
-                    originalName == "Paraseal LG" || originalName=="860"||originalName=="UPI Below Tile"||originalName=="Color Flake"
-                    ||originalName== "Polyurethane Injection Block" || originalName == "Block Wall"||originalName=="Reseal all systems")
+                    originalName == "Paraseal LG" || originalName=="860 Carlisle"||originalName=="UPI BT"||originalName=="Westcoat Epoxy"
+                    ||originalName== "Polyurethane Injection Block" || originalName == "Xypex")
                 {
                     return System.Windows.Visibility.Collapsed;
                 }
@@ -860,7 +859,7 @@ namespace WICR_Estimator.Models
         {
             get
             {
-                if (originalName == "Tufflex"||originalName=="UPI Below Tile")
+                if (originalName == "Tufflex"||originalName=="UPI BT")
                 {
                     return System.Windows.Visibility.Collapsed;
                 }
@@ -888,8 +887,8 @@ namespace WICR_Estimator.Models
             get
             {
                 if (originalName == "Pedestrian System" || originalName == "Parking Garage" 
-                    || originalName == "Tufflex" || originalName == "201" || originalName == "250"
-                    ||originalName=="860"||originalName == "UPI Below Tile")
+                    || originalName == "Tufflex" || originalName == "201" || originalName == "250 GC"
+                    ||originalName=="860 Carlisle"||originalName == "UPI BT")
                 {
                     return System.Windows.Visibility.Visible;
                 }
@@ -943,7 +942,7 @@ namespace WICR_Estimator.Models
                 {
                     return "LINEAR FOOTAGE OF UV PROTECTION AT WALL (801)";
                 }
-                else if (originalName == "860")
+                else if (originalName == "860 Carlisle")
                     return "LINEAR FOOTAGE OF FOOTING";
                 else if (originalName == "Dual Flex")
                     return "LINEAR FOOTAGE OF DECK TO WALL";
@@ -973,7 +972,7 @@ namespace WICR_Estimator.Models
             get
             {
                 if (originalName=="Resistite" ||originalName=="Multicoat" || 
-                    originalName=="Paraseal"||originalName== "860"|| originalName=="Dual Flex")
+                    originalName=="Paraseal"||originalName== "860 Carlisle" || originalName=="Dual Flex")
                 {
                     return System.Windows.Visibility.Visible;
                 }
@@ -987,7 +986,7 @@ namespace WICR_Estimator.Models
         {
             get
             {
-                if (originalName == "860")
+                if (originalName == "860 Carlisle")
                 {
                     return System.Windows.Visibility.Visible;
                 }
@@ -1156,7 +1155,7 @@ namespace WICR_Estimator.Models
             get
             {
 
-                if (originalName == "201"||originalName=="250")
+                if (originalName == "201"||originalName=="250 GC")
                 {
                     return System.Windows.Visibility.Visible;
                 }
@@ -1170,8 +1169,8 @@ namespace WICR_Estimator.Models
             get
             {
 
-                if (originalName == "201" || originalName == "250"||originalName=="860"||originalName=="Dual Flex"||originalName== "Polyurethane Injection Block"
-                    ||originalName=="Block Wall")
+                if (originalName == "201" || originalName == "250 GC"||originalName== "860 Carlisle" || originalName=="Dual Flex"||originalName== "Polyurethane Injection Block"
+                    ||originalName=="Xypex")
                 {
                     return System.Windows.Visibility.Visible;
                 }

@@ -118,7 +118,7 @@ namespace WICR_Estimator.ViewModels
         {
             //return base.getLaborUnitPrice(laborExtension, riserCount, totalSqft);
             
-            return laborExtension / (sqftVert + sqftHor + riserCount);
+            return (totalSqft + totalVerticalSqft + riserCount) == 0 ? 0 : laborExtension / (totalSqft + totalVerticalSqft + riserCount);
 
 
         }
@@ -239,6 +239,9 @@ namespace WICR_Estimator.ViewModels
             if (sysMat!=null)
             {
                 sysMat.Hours = sysMat.IsMaterialChecked ? (linearCoping + totalVerticalSqft) * 0.2 / 25:0;
+                sysMat.LaborExtension = sysMat.Hours == 0 ? 0 : sysMat.Hours > sysMat.SetupMinCharge ? sysMat.Hours * laborRate : sysMat.SetupMinCharge * laborRate;
+
+                sysMat.LaborUnitPrice = (totalSqft + totalVerticalSqft + riserCount)==0 ? 0:sysMat.LaborExtension / (totalSqft + totalVerticalSqft + riserCount);
             }
         }
         public override bool canApply(object obj)

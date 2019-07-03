@@ -40,11 +40,11 @@ namespace WICR_Estimator.ViewModels
         private void FillMaterialList()
         {
             materialNames.Add("CCW 702 WB PRIMER", "5 GAL PAIL");
-            materialNames.Add("CCW 703V FOR PLYWOOD SEAMS AND DETAILS", "4 GAL KIT");
-            materialNames.Add("CCW 703V (45 LF PER TUBE FOR CANT & TERMINATATIONS)", "4 GAL KIT");
-            materialNames.Add("CCW 703V (45 LF PER TUBE FOR SEAMS)", "4 GAL KIT");
+            materialNames.Add("CCW LM-800 XL FOR PLYWOOD SEAMS AND DETAILS", "4 GAL KIT");
+            materialNames.Add("CCW LM-800 XL (45 LF PER TUBE FOR CANT & TERMINATATIONS)", "4 GAL KIT");
+            materialNames.Add("CCW 704 MASTIC (45 LF PER TUBE FOR SEAMS)", "4 GAL KIT");
             materialNames.Add("CCW MIRADRI 860 (3 FT X 66.7 FT ROLLS)", "200 SQ FT/ROLL");
-            materialNames.Add("CCW 703V FOR PERIMETER DETAIL L METAL (45 LF PER TUBE) AND LIQUID MEMBRANE FOR DECK TO WALL", "4 GAL KIT");
+            materialNames.Add("CCW 704 MASTIC FOR PERIMETER DETAIL UNDER METAL (45 LF PER TUBE)", "4 GAL KIT");
             materialNames.Add("PENETRATIONS (DETAIL SHEET AND MASTIC)", "EACH");
             materialNames.Add("FIX LEAKS AFTER WATER TEST BY OTHERS", "");
             materialNames.Add("200 V PROTECTION (VERTICAL ONLY)", "670 SQ FT ROLL");
@@ -172,7 +172,7 @@ namespace WICR_Estimator.ViewModels
             {                
                 case "CCW 702 WB PRIMER":
                     return totalSqft+totalSqftVertical > 0 ? true : false;
-                case "CCW 703V FOR PERIMETER DETAIL L METAL (45 LF PER TUBE) AND LIQUID MEMBRANE FOR DECK TO WALL":
+                case "CCW 704 MASTIC FOR PERIMETER DETAIL UNDER METAL (45 LF PER TUBE)":
                     return deckPerimeter> 0 ? true : false;
                 case "PENETRATIONS (DETAIL SHEET AND MASTIC)":
                     return penetrations > 0 ? true : false;
@@ -217,15 +217,15 @@ namespace WICR_Estimator.ViewModels
             {
                 case "CCW 702 WB PRIMER":
                     return totalSqft + totalSqftVertical + deckPerimeter;
-                case "CCW 703V FOR PLYWOOD SEAMS AND DETAILS":
+                case "CCW LM-800 XL FOR PLYWOOD SEAMS AND DETAILS":
                     return totalSqftPlywood/32*12;
-                case "CCW 703V (45 LF PER TUBE FOR CANT & TERMINATATIONS)":
+                case "CCW LM-800 XL (45 LF PER TUBE FOR CANT & TERMINATATIONS)":
                     return linearFootage * 2 + deckPerimeter;
-                case "CCW 703V (45 LF PER TUBE FOR SEAMS)":
+                case "CCW 704 MASTIC (45 LF PER TUBE FOR SEAMS)":
                     return (totalSqftPlywood + totalSqft + totalSqftVertical) / 2.5 / 2 + riserCount*(stairWidth * 2 + 4);
                 case "CCW MIRADRI 860 (3 FT X 66.7 FT ROLLS)":
                     return (totalSqftPlywood + totalSqft + totalSqftVertical);
-                case "CCW 703V FOR PERIMETER DETAIL L METAL (45 LF PER TUBE) AND LIQUID MEMBRANE FOR DECK TO WALL":
+                case "CCW 704 MASTIC FOR PERIMETER DETAIL UNDER METAL (45 LF PER TUBE)":
                     return deckPerimeter+ riserCount * (stairWidth * 2 + 4);
                 case "PENETRATIONS (DETAIL SHEET AND MASTIC)":
                     return penetrations;
@@ -265,15 +265,15 @@ namespace WICR_Estimator.ViewModels
             {
                 case "CCW 702 WB PRIMER":
                     return totalSqft + totalSqftVertical + deckPerimeter;
-                case "CCW 703V FOR PLYWOOD SEAMS AND DETAILS":
+                case "CCW LM-800 XL FOR PLYWOOD SEAMS AND DETAILS":
                     return totalSqftPlywood / 32 * 12*1.2;
-                case "CCW 703V (45 LF PER TUBE FOR CANT & TERMINATATIONS)":
+                case "CCW LM-800 XL (45 LF PER TUBE FOR CANT & TERMINATATIONS)":
                     return  deckPerimeter;
-                case "CCW 703V (45 LF PER TUBE FOR SEAMS)":
+                case "CCW 704 MASTIC (45 LF PER TUBE FOR SEAMS)":
                     return (totalSqftPlywood + totalSqft ) / 2.5 / 2 ;
                 case "CCW MIRADRI 860 (3 FT X 66.7 FT ROLLS)":
                     return (totalSqftPlywood + totalSqft );
-                case "CCW 703V FOR PERIMETER DETAIL L METAL (45 LF PER TUBE) AND LIQUID MEMBRANE FOR DECK TO WALL":
+                case "CCW 704 MASTIC FOR PERIMETER DETAIL UNDER METAL (45 LF PER TUBE)":
                     return deckPerimeter;
                 case "PENETRATIONS (DETAIL SHEET AND MASTIC)":
                 case "FIX LEAKS AFTER WATER TEST BY OTHERS":
@@ -318,9 +318,9 @@ namespace WICR_Estimator.ViewModels
                 case "MIRASTICK ADHESIVE (GLUE DOWN DRAIN MAT)":
                     return  totalSqftVertical;
                 
-                case "CCW 703V (45 LF PER TUBE FOR CANT & TERMINATATIONS)":
+                case "CCW LM-800 XL (45 LF PER TUBE FOR CANT & TERMINATATIONS)":
                     return linearFootage*2;
-                case "CCW 703V (45 LF PER TUBE FOR SEAMS)":
+                case "CCW 704 MASTIC (45 LF PER TUBE FOR SEAMS)":
                     return (totalSqftVertical) / 2.5 / 2;
                 case "PENETRATIONS (DETAIL SHEET AND MASTIC)":
                     return penetrations;
@@ -335,9 +335,9 @@ namespace WICR_Estimator.ViewModels
         {
             switch (materialName)
             {
-                case "CCW 703V FOR PLYWOOD SEAMS AND DETAILS":
+                case "CCW LM-800 XL FOR PLYWOOD SEAMS AND DETAILS":
                 case "CCW MIRADRI 860 (3 FT X 66.7 FT ROLLS)":
-                case "CCW 703V (45 LF PER TUBE FOR SEAMS)":
+                case "CCW 704 MASTIC (45 LF PER TUBE FOR SEAMS)":
                     return riserCount * stairWidth * 2;
                 case "200 V PROTECTION (VERTICAL ONLY)":
                 case "300 HV PROTECTION (HORIZONTAL ONLY)":
@@ -345,8 +345,8 @@ namespace WICR_Estimator.ViewModels
                 case "MIRADRAIN 6000 XL  (HORIZONTAL ONLY)":
                     return riserCount * stairWidth;
                 
-                case "CCW 703V FOR PERIMETER DETAIL L METAL (45 LF PER TUBE) AND LIQUID MEMBRANE FOR DECK TO WALL":
-                case "CCW 703V (45 LF PER TUBE FOR CANT & TERMINATATIONS)":
+                case "CCW 704 MASTIC FOR PERIMETER DETAIL UNDER METAL (45 LF PER TUBE)":
+                case "CCW LM-800 XL (45 LF PER TUBE FOR CANT & TERMINATATIONS)":
                     return riserCount*2 * 2;
                 
                 

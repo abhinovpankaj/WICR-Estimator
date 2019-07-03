@@ -775,6 +775,7 @@ namespace WICR_Estimator.ViewModels
 
             if (obj.ToString() == "Lip Color")
             {
+                #region ifLipcolor
                 var materials = SystemMaterials.Where(x => x.IsCheckboxDependent == true).ToList();
 
                 foreach (SystemMaterial mat in materials)
@@ -851,9 +852,11 @@ namespace WICR_Estimator.ViewModels
                     }
 
                 }
+                #endregion
             }
             if (obj.ToString() == "Vista Paint Acripoxy")
             {
+                #region ifVista
                 var materials = SystemMaterials.Where(x => x.IsCheckboxDependent == true).ToList();
                 foreach (SystemMaterial mat in materials)
                 {
@@ -926,10 +929,11 @@ namespace WICR_Estimator.ViewModels
                         mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
                     }
                 }
+                #endregion
             }
             if (obj.ToString() == "Aj-44A Dressing(Sealer)")
             {
-
+                #region Aj44
                 var materials = SystemMaterials.Where(x => x.IsCheckboxDependent == true).ToList();
                 foreach (SystemMaterial mat in materials)
                 {
@@ -1005,6 +1009,7 @@ namespace WICR_Estimator.ViewModels
                     }
 
                 }
+                #endregion
             }
 
             if (obj.ToString() == "Neotex Standard Powder(Body Coat)" || obj.ToString() == "Neotex Standard Powder(Body Coat) 1")
@@ -1452,7 +1457,7 @@ namespace WICR_Estimator.ViewModels
                 }
                 FetchMaterialValuesAsync(true);
                 CalculateCost(null);
-                js.TotalSalesCostTemp = TotalSale;
+                //js.TotalSalesCostTemp = TotalSale;
             //});
                     
         }
@@ -1530,29 +1535,29 @@ namespace WICR_Estimator.ViewModels
 
         }
         public virtual bool getCheckboxCheckStatus(string materialName)
-        {
-            
-                switch (materialName.ToUpper())
-                {
-                    case "RESISTITE REGULAR OVER TEXTURE(#55 BAG)":
-                    case "30# DIVORCING FELT (200 SQ FT) FROM FORD WHOLESALE":
-                    case "RP FABRIC 10 INCH WIDE X (300 LF) FROM ACME":
-                    case "GLASMAT #4 (1200 SQ FT) FROM ACME":
-                    case "CPC MEMBRANE":
-                    case "NEOTEX-38 PASTE":
-                    case "NEOTEX STANDARD POWDER(BODY COAT)":
-                    case "NEOTEX STANDARD POWDER(BODY COAT) 1":
-                    case "RESISTITE LIQUID":
-                    case "LIP COLOR":
-                    case "RESISTITE UNIVERSAL PRIMER(ADD 50% WATER)":
-                    case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
-                    case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
-                    case "WEATHER SEAL XL TWO COATS":
-                    case "STAIR NOSING FROM DEXOTEX":
-                        return true;
-                    default:
-                        return false;
-                }
+        {            
+            switch (materialName.ToUpper())
+            {
+                case "RESISTITE REGULAR OVER TEXTURE(#55 BAG)":
+                case "30# DIVORCING FELT (200 SQ FT) FROM FORD WHOLESALE":
+                case "RP FABRIC 10 INCH WIDE X (300 LF) FROM ACME":
+                case "GLASMAT #4 (1200 SQ FT) FROM ACME":
+                case "CPC MEMBRANE":
+                case "NEOTEX-38 PASTE":
+                case "NEOTEX STANDARD POWDER(BODY COAT)":
+                case "NEOTEX STANDARD POWDER(BODY COAT) 1":
+                case "RESISTITE LIQUID":
+                case "LIP COLOR":
+                
+                case "RESISTITE UNIVERSAL PRIMER(ADD 50% WATER)":
+                case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
+                case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
+                case "WEATHER SEAL XL TWO COATS":
+                case "STAIR NOSING FROM DEXOTEX":
+                    return true;
+                default:
+                    return false;
+            }
             
             //else if (weatherWearType == "Weather Wear Rehab")
             //{
@@ -1591,47 +1596,23 @@ namespace WICR_Estimator.ViewModels
         }
         public virtual bool getCheckboxEnabledStatus(string materialName)
         {
-            //if (weatherWearType == "Weather Wear")
-            //{
-                switch (materialName.ToUpper())
-                {
-                    case "RESISTITE REGULAR OVER TEXTURE(#55 BAG)":
-                    case "LIP COLOR":
-                    case "AJ-44A DRESSING(SEALER)":
-                    case "VISTA PAINT ACRIPOXY":
-                    case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
-                    case "WEATHER SEAL XL TWO COATS":
-                    case "STAIR NOSING FROM DEXOTEX":
-                        return true;
-                    default:
-                        return false;
-                }
-            //}
-            ////else if (weatherWearType == "Weather Wear Rehab")
-            ////{
-            //    switch (materialName.ToUpper())
-            //    {
-            //        case "LIGHT CRACK REPAIR":
-            //        case "RESISTITE REGULAR OVER TEXTURE(#55 BAG)":
-            //        case "30# DIVORCING FELT (200 SQ FT) FROM FORD WHOLESALE":
-            //        case "RP FABRIC 10 INCH WIDE X (300 LF) FROM ACME":
-            //        case "GLASMAT #4 (1200 SQ FT) FROM ACME":
-            //        case "CPC MEMBRANE":
-            //        case "NEOTEX STANDARD POWDER(BODY COAT)":
-            //        case "NEOTEX STANDARD POWDER(BODY COAT) 1":
-            //        case "RESISTITE REGULAR WHITE":
-            //        case "LIP COLOR":
-            //        case "AJ-44A DRESSING(SEALER)":
-            //        case "VISTA PAINT ACRIPOXY":
-            //        case "STAIR NOSING FROM DEXOTEX":
-            //        //case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
-            //        case "WEATHER SEAL XL TWO COATS":
-            //            return true;
-            //        default:
-            //            return false;
-            //    }
-            //}
-            //return false;
+           
+            switch (materialName.ToUpper())
+            {
+                case "RESISTITE REGULAR OVER TEXTURE(#55 BAG)":
+                case "LIP COLOR":
+                case "AJ-44A DRESSING(SEALER)":
+                case "VISTA PAINT ACRIPOXY":
+                case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
+                case "WEATHER SEAL XL TWO COATS":
+                case "STAIR NOSING FROM DEXOTEX":
+                case "RESISTITE REGULAR GRAY":
+                case "RESISTITE REGULAR WHITE":
+                return true;
+                default:
+                    return false;
+            }
+           
         }
         
         public virtual double CalculateHrs(double horzSft, double prodHor, double stairSqft, double prodStair, double vertSqft=0, double prodVert=0)
@@ -3301,7 +3282,8 @@ namespace WICR_Estimator.ViewModels
             double actVal = isPrevailingWage ? 0 : facValue;
             double metalLabor = MetalTotals != null ? (MetalTotals.LaborExtTotal / calbackfactor + (MetalTotals.LaborExtTotal / calbackfactor * fac2)):0;
             double slopeLabor = SlopeTotals != null ? (SlopeTotals.LaborExtTotal / calbackfactor + (SlopeTotals.LaborExtTotal / calbackfactor * fac2)):0;
-            double systemLabor = (TotalLaborExtension / calbackfactor + (TotalLaborExtension / calbackfactor * fac2));
+            //double systemLabor = (TotalLaborExtension / calbackfactor + (TotalLaborExtension / calbackfactor * fac2))+DriveLaborValue;
+            double systemLabor = TotalLaborExtension + DriveLaborValue;
             LCostBreakUp.Add(new CostBreakup
             {
                 Name = "Workers Comp TL > $24.00",
@@ -3616,10 +3598,20 @@ namespace WICR_Estimator.ViewModels
 
         public virtual void CalculateTotalSqFt()
         {
-            CostperSqftSlope = TotalSlopingPrice / (totalSqft + riserCount);
-            CostperSqftMetal = TotalMetalPrice / (totalSqft + riserCount);
-            CostperSqftMaterial = TotalSystemPrice / (totalSqft + riserCount);
-            CostperSqftSubContract = TotalSubcontractLabor / (totalSqft + riserCount);
+            if ((totalSqft + riserCount)==0)
+            {
+                CostperSqftSlope = 0;
+                CostperSqftMetal =0;
+                CostperSqftMaterial = 0;
+                CostperSqftSubContract =0;
+            }
+            else
+            {
+                CostperSqftSlope = TotalSlopingPrice / (totalSqft + riserCount);
+                CostperSqftMetal = TotalMetalPrice / (totalSqft + riserCount);
+                CostperSqftMaterial = TotalSystemPrice / (totalSqft + riserCount);
+                CostperSqftSubContract = TotalSubcontractLabor / (totalSqft + riserCount);
+            }           
             TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
             OnPropertyChanged("CostperSqftSlope");
             OnPropertyChanged("CostperSqftMetal");

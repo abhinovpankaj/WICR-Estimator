@@ -180,7 +180,7 @@ namespace WICR_Estimator.ViewModels
                     }
                     
 
-                    if (originalProjectname == "Reseal all systems" || originalProjectname == "Paraseal")
+                    if (originalProjectname == "Paraseal")
                     {
                         if (prj.MaterialViewModel == null)
                         {
@@ -190,7 +190,7 @@ namespace WICR_Estimator.ViewModels
                         }
                         
                     }
-                    else if(originalProjectname == "860")
+                    else if(originalProjectname == "860 Carlisle")
                     {
                         if (prj.SlopeViewModel == null)
                         {
@@ -202,7 +202,7 @@ namespace WICR_Estimator.ViewModels
                                   prj.SlopeViewModel.SlopeTotals, prj.ProjectJobSetUp);
                         }
                     }
-                    else if (originalProjectname=="Paraseal LG"|| originalProjectname == "Color Flake"||originalProjectname== "Polyurethane Injection Block" || originalProjectname == "Block Wall")
+                    else if (originalProjectname=="Paraseal LG"|| originalProjectname == "Westcoat Epoxy"||originalProjectname== "Polyurethane Injection Block" || originalProjectname == "Block Wall")
                     {
                         if (prj.MetalViewModel == null)
                         {

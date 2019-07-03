@@ -488,7 +488,7 @@ namespace WICR_Estimator.ViewModels
             calLaborHrs(10, totalSqft);
 
         }
-        //calculate for Desert Crete
+        
         public override void calculateRLqty()
         {
             SystemMaterial sysMat;
@@ -633,6 +633,22 @@ namespace WICR_Estimator.ViewModels
             
             SystemMaterials.Where(x => x.Name == "CALIFORNIA SEALER FROM LOWRYS (GLUING DRAIN MAT)").FirstOrDefault().IsMaterialChecked=
                SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (VERTICAL ONLY)").FirstOrDefault().IsMaterialChecked;
+
+            SystemMaterial mat = SystemMaterials.Where(x => x.Name == "TERM BAR, VULKEM 116, PINS AND LOADS").FirstOrDefault();
+            if (mat!=null)
+            {
+                mat.IsMaterialChecked = mat.Qty > 0 ? true : false;
+            }
+            mat = SystemMaterials.Where(x => x.Name == "SUPERSTOP(LF)").FirstOrDefault();
+            if (mat != null)
+            {
+                mat.IsMaterialChecked = mat.Qty > 0 ? true : false;
+            }
+            mat = SystemMaterials.Where(x => x.Name == "PENETRATIONS").FirstOrDefault();
+            if (mat != null)
+            {
+                mat.IsMaterialChecked = mat.Qty > 0 ? true : false;
+            }            
         }
 
         private double Ceiling(double value, double significance)

@@ -52,7 +52,7 @@ namespace WICR_Estimator.ViewModels
                 case "RESISTITE REGULAR OR SMOOTH GRAY (KNOCK DOWN OR SMOOTH)":
                     return (calhrs+setupMin)*laborRate;
                 default:
-                    return setupMin > calhrs ? setupMin * laborRate : calhrs * laborRate; ;
+                    return calhrs==0 ? 0:setupMin > calhrs ? setupMin * laborRate : calhrs * laborRate; ;
             }
             
         }
