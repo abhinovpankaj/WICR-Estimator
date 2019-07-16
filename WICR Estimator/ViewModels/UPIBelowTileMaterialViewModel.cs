@@ -25,7 +25,7 @@ namespace WICR_Estimator.ViewModels
         }
         public override void UpdateSumOfSqft()
         {
-            double sumVal = totalSqft + totalSqftPlywood;
+            double sumVal = totalSqftPlywood;
             TotalLaborUnitPrice = sumVal == 0 ? 0 : TotalLaborWithoutDrive / sumVal;
             OnPropertyChanged("TotalLaborUnitPrice");
         }
@@ -36,6 +36,7 @@ namespace WICR_Estimator.ViewModels
             {
                 isNewPlywood = (bool)js.IsNewPlywood;
                 totalSqftPlywood = js.TotalSqftPlywood;
+                
             }
             base.JobSetup_OnJobSetupChange(sender, e);
         }
@@ -406,6 +407,30 @@ namespace WICR_Estimator.ViewModels
         {
             ApplyCheckUnchecks("ADD METAL LATHE AND STAPLES");
         }
-    
-}
+
+        public override void CalculateTotalSqFt()
+        {
+            if ((totalSqftPlywood + riserCount) == 0)
+            {
+                CostperSqftSlope = 0;
+                CostperSqftMetal = 0;
+                CostperSqftMaterial = 0;
+                CostperSqftSubContract = 0;
+            }
+            else
+            {
+                CostperSqftSlope = TotalSlopingPrice / (totalSqftPlywood + riserCount);
+                CostperSqftMetal = TotalMetalPrice / (totalSqftPlywood + riserCount);
+                CostperSqftMaterial = TotalSystemPrice / (totalSqftPlywood + riserCount);
+                CostperSqftSubContract = TotalSubcontractLabor / (totalSqftPlywood + riserCount);
+            }
+            TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
+            OnPropertyChanged("CostperSqftSlope");
+            OnPropertyChanged("CostperSqftMetal");
+            OnPropertyChanged("CostperSqftMaterial");
+            OnPropertyChanged("CostperSqftSubContract");
+            OnPropertyChanged("TotalCostperSqft");
+        }
+
+    }
 }

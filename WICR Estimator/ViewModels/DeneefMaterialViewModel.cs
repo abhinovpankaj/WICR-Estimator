@@ -335,5 +335,29 @@ namespace WICR_Estimator.ViewModels
             //CalculateLaborMinCharge();
 
         }
+        public override void CalculateTotalSqFt()
+        {
+            if ((totalSqft + totalVerticalSqft + linearCoping) == 0)
+            {
+                CostperSqftSlope = 0;
+                CostperSqftMetal = 0;
+                CostperSqftMaterial = 0;
+                CostperSqftSubContract = 0;
+            }
+            else
+            {
+                CostperSqftSlope = TotalSlopingPrice / (totalSqft + totalVerticalSqft + linearCoping);
+                CostperSqftMetal = TotalMetalPrice / (totalSqft + totalVerticalSqft + linearCoping);
+                CostperSqftMaterial = TotalSystemPrice / (totalSqft + totalVerticalSqft + linearCoping);
+                CostperSqftSubContract = TotalSubcontractLabor / (totalSqft + totalVerticalSqft + linearCoping);
+            }
+            TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
+            OnPropertyChanged("CostperSqftSlope");
+            OnPropertyChanged("CostperSqftMetal");
+            OnPropertyChanged("CostperSqftMaterial");
+            OnPropertyChanged("CostperSqftSubContract");
+            OnPropertyChanged("TotalCostperSqft");
+        }
+
     }
 }

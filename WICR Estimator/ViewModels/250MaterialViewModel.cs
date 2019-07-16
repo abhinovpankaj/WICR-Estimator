@@ -577,5 +577,29 @@ namespace WICR_Estimator.ViewModels
 
             return Convert.ToDouble(value);
         }
+
+        public override void CalculateTotalSqFt()
+        {
+            if ((totalSqft + totalPlywoodSqft + totalSqftVertical) == 0)
+            {
+                CostperSqftSlope = 0;
+                CostperSqftMetal = 0;
+                CostperSqftMaterial = 0;
+                CostperSqftSubContract = 0;
+            }
+            else
+            {
+                CostperSqftSlope = TotalSlopingPrice / (totalSqft + totalPlywoodSqft + totalSqftVertical);
+                CostperSqftMetal = TotalMetalPrice / (totalSqft + totalPlywoodSqft + totalSqftVertical);
+                CostperSqftMaterial = TotalSystemPrice / (totalSqft + totalPlywoodSqft + totalSqftVertical);
+                CostperSqftSubContract = TotalSubcontractLabor / (totalSqft + totalPlywoodSqft + totalSqftVertical);
+            }
+            TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
+            OnPropertyChanged("CostperSqftSlope");
+            OnPropertyChanged("CostperSqftMetal");
+            OnPropertyChanged("CostperSqftMaterial");
+            OnPropertyChanged("CostperSqftSubContract");
+            OnPropertyChanged("TotalCostperSqft");
+        }
     }
 }

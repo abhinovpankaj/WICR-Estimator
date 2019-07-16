@@ -380,66 +380,7 @@ namespace WICR_Estimator.ViewModels
         }
         public override void ApplyCheckUnchecks(object obj)
         {
-            //SystemMaterial sysmat=null;
-            //if (obj.ToString()== "PROTECTION MAT (HORIZONTAL ONLY)")
-            //{
-            //    SystemMaterials.Where(x => x.Name == "PROTECTION MAT (HORIZONTAL ONLY)").FirstOrDefault().IsMaterialEnabled = false;
-            //    sysmat = SystemMaterials.Where(x => x.Name == "PB-4 (VERTICAL ONLY)").FirstOrDefault();
-            //    sysmat.IsMaterialEnabled = true;
-            //    sysmat.IsMaterialChecked = false;
-
-            //    sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (VERTICAL ONLY)").FirstOrDefault();
-            //    sysmat.IsMaterialEnabled = true;
-            //    sysmat.IsMaterialChecked = false;
-
-            //    sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (HORIZONTAL ONLY)").FirstOrDefault();
-            //    sysmat.IsMaterialEnabled = true;
-            //    sysmat.IsMaterialChecked = false;
-            //}
-            //if (obj.ToString() == "PB-4 (VERTICAL ONLY)")
-            //{
-            //    sysmat = SystemMaterials.Where(x => x.Name == "PROTECTION MAT (HORIZONTAL ONLY)").FirstOrDefault();
-            //    sysmat.IsMaterialEnabled = true;
-            //    sysmat.IsMaterialChecked = false;
-
-            //    sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (VERTICAL ONLY)").FirstOrDefault();
-            //    sysmat.IsMaterialEnabled = true;
-            //    sysmat.IsMaterialChecked = false;
-
-            //    sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (HORIZONTAL ONLY)").FirstOrDefault();
-            //    sysmat.IsMaterialEnabled = true;
-            //    sysmat.IsMaterialChecked = false;
-            //}
-            //if (obj.ToString() == "TREMDRAIN 1000 (VERTICAL ONLY)")
-            //{
-            //    sysmat = SystemMaterials.Where(x => x.Name == "PROTECTION MAT (HORIZONTAL ONLY)").FirstOrDefault();
-            //    sysmat.IsMaterialEnabled = true;
-            //    sysmat.IsMaterialChecked = false;
-
-            //    sysmat = SystemMaterials.Where(x => x.Name == "PB-4 (VERTICAL ONLY)").FirstOrDefault();
-            //    sysmat.IsMaterialEnabled = true;
-            //    sysmat.IsMaterialChecked = false;
-
-            //    sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (HORIZONTAL ONLY)").FirstOrDefault();
-            //    sysmat.IsMaterialEnabled = true;
-            //    sysmat.IsMaterialChecked = false;
-
-            //    SystemMaterials.Where(x => x.Name == "PINS & LOADS").FirstOrDefault().Coverage = pinsCoverage + sysmat.Qty * 200 / 500;
-            //}
-            //if (obj.ToString() == "TREMDRAIN 1000 (HORIZONTAL ONLY)")
-            //{
-            //    sysmat = SystemMaterials.Where(x => x.Name == "PROTECTION MAT (HORIZONTAL ONLY)").FirstOrDefault();
-            //    sysmat.IsMaterialEnabled = true;
-            //    sysmat.IsMaterialChecked = false;
-
-            //    sysmat = SystemMaterials.Where(x => x.Name == "PB-4 (VERTICAL ONLY)").FirstOrDefault();
-            //    sysmat.IsMaterialEnabled = true;
-            //    sysmat.IsMaterialChecked = false;
-
-            //    sysmat = SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (VERTICAL ONLY)").FirstOrDefault();
-            //    sysmat.IsMaterialEnabled = true;
-            //    sysmat.IsMaterialChecked = false;
-            //}
+            
             calculateRLqty();
             CalculateLaborMinCharge();
         }
@@ -456,6 +397,30 @@ namespace WICR_Estimator.ViewModels
         public override void setCheckBoxes()
         {
 
+        }
+
+        public override void CalculateTotalSqFt()
+        {
+            if ((totalSqft +deckCount) == 0)
+            {
+                CostperSqftSlope = 0;
+                CostperSqftMetal = 0;
+                CostperSqftMaterial = 0;
+                CostperSqftSubContract = 0;
+            }
+            else
+            {
+                CostperSqftSlope = TotalSlopingPrice / (totalSqft + deckCount);
+                CostperSqftMetal = TotalMetalPrice / (totalSqft + deckCount);
+                CostperSqftMaterial = TotalSystemPrice / (totalSqft + deckCount);
+                CostperSqftSubContract = TotalSubcontractLabor / (totalSqft + deckCount);
+            }
+            TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
+            OnPropertyChanged("CostperSqftSlope");
+            OnPropertyChanged("CostperSqftMetal");
+            OnPropertyChanged("CostperSqftMaterial");
+            OnPropertyChanged("CostperSqftSubContract");
+            OnPropertyChanged("TotalCostperSqft");
         }
     }
 }

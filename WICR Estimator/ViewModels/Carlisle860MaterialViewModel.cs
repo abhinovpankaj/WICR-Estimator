@@ -476,5 +476,28 @@ namespace WICR_Estimator.ViewModels
                 SystemMaterials.FirstOrDefault(x => x.Name == "MIRASTICK ADHESIVE (GLUE DOWN DRAIN MAT)").IsMaterialChecked = sysmat.IsMaterialChecked||sysmat1.IsMaterialChecked;
             }
         }
+        public override void CalculateTotalSqFt()
+        {
+            if ((totalSqft + totalSqftVertical+totalSqftPlywood) == 0)
+            {
+                CostperSqftSlope = 0;
+                CostperSqftMetal = 0;
+                CostperSqftMaterial = 0;
+                CostperSqftSubContract = 0;
+            }
+            else
+            {
+                CostperSqftSlope = TotalSlopingPrice / (totalSqft + totalSqftVertical + totalSqftPlywood);
+                CostperSqftMetal = TotalMetalPrice / (totalSqft + totalSqftVertical + totalSqftPlywood);
+                CostperSqftMaterial = TotalSystemPrice / (totalSqft + totalSqftVertical + totalSqftPlywood);
+                CostperSqftSubContract = TotalSubcontractLabor / (totalSqft + totalSqftVertical + totalSqftPlywood);
+            }
+            TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
+            OnPropertyChanged("CostperSqftSlope");
+            OnPropertyChanged("CostperSqftMetal");
+            OnPropertyChanged("CostperSqftMaterial");
+            OnPropertyChanged("CostperSqftSubContract");
+            OnPropertyChanged("TotalCostperSqft");
+        }
     }
 }

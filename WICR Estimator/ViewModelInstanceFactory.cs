@@ -44,7 +44,7 @@ namespace WICR_Estimator
                 case "Dual Flex":
                 case "Westcoat Epoxy":
                 case "Polyurethane Injection Block":
-                case "Block Wall":
+                case "Xypex":
                 case "Reseal all systems":
                     return new MetalViewModel(Js);
                 
@@ -157,7 +157,7 @@ namespace WICR_Estimator
                     return new DexoColorFlakeMaterialViewModel(metalT, null, Js);
                 case "Polyurethane Injection Block":
                     return new DeneefMaterialViewModel(metalT, null, Js);
-                case "Block Wall":
+                case "Xypex":
                     return new XypexMaterialViewModel(metalT, null, Js);
                 default:
                     return null;

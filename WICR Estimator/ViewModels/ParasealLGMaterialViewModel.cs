@@ -515,5 +515,29 @@ namespace WICR_Estimator.ViewModels
             sysmat.IsMaterialChecked = !SystemMaterials.Where(x => x.Name == "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER").
                     FirstOrDefault().IsMaterialChecked;            
         }
+
+        public override void CalculateTotalSqFt()
+        {
+            if ((totalSqft + deckPerimeter ) == 0)
+            {
+                CostperSqftSlope = 0;
+                CostperSqftMetal = 0;
+                CostperSqftMaterial = 0;
+                CostperSqftSubContract = 0;
+            }
+            else
+            {
+                CostperSqftSlope = TotalSlopingPrice / (totalSqft + deckPerimeter);
+                CostperSqftMetal = TotalMetalPrice / (totalSqft + deckPerimeter);
+                CostperSqftMaterial = TotalSystemPrice / (totalSqft + deckPerimeter);
+                CostperSqftSubContract = TotalSubcontractLabor / (totalSqft + deckPerimeter);
+            }
+            TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
+            OnPropertyChanged("CostperSqftSlope");
+            OnPropertyChanged("CostperSqftMetal");
+            OnPropertyChanged("CostperSqftMaterial");
+            OnPropertyChanged("CostperSqftSubContract");
+            OnPropertyChanged("TotalCostperSqft");
+        }
     }
 }
