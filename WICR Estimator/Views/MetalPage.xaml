@@ -403,9 +403,9 @@
                     Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom">
-                <Button Content="Fill Grid" Command="{Binding FillValues}"
+                <!--<Button Content="Fill Grid" Command="{Binding FillValues}"
                         Height="30" 
-                    Width="100" Background="LightGreen"/>
+                    Width="100" Background="LightGreen"/>-->
                 <Button Command="{Binding CalculateCostCommand}"
                     ToolTip="Calculate Labor and Material Costs"
                     Height="30"

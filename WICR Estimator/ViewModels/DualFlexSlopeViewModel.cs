@@ -305,8 +305,8 @@ namespace WICR_Estimator.ViewModels
                 UrethaneSumTotal = Math.Round(UrethaneSlopes.Select(x => x.Total).Sum(), 2);
 
                 ///sumtotalmixes
-                UrethaneSumTotalMixes = Math.Round(UrethaneSlopes.Select(x => x.TotalMixes).Sum(), 2);
-
+                //UrethaneSumTotalMixes = Math.Round(UrethaneSlopes.Select(x => x.TotalMixes).Sum(), 2);
+                UrethaneSumTotalMixes = Math.Round(UrethaneSlopes.Where(x => x.Thickness== "1 1/4 inch Mortar Bed with 2x2 or diamond metal lathe").FirstOrDefault().TotalMixes, 2);
                 ///sumtotalmatext
 
                 UrethaneSumTotalMatExt = Math.Round(UrethaneSlopes.Select(x => x.MaterialExtensionSlope).Sum(), 2);

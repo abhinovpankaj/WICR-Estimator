@@ -14,7 +14,7 @@ namespace WICR_Estimator.Converters
         {
             if (value != null)
             {
-                if (value.ToString().Contains("STAIR METAL"))
+                if (value.ToString()=="STAIR METAL")
                 {
                     if (value.ToString().Length != 0)
                     {
