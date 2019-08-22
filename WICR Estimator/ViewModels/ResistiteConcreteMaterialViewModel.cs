@@ -444,6 +444,18 @@ namespace WICR_Estimator.ViewModels
                 }
 
             }
+            //new updates formula
+            var item1= SystemMaterials.Where(x => x.Name == "Caulk 1/2 to 3/4 inch control joints (SIKA 2C)").FirstOrDefault();
+            if (item1 != null)
+            {
+                item1.MaterialExtension = item1.SpecialMaterialPricing == 0 ? item1.SMSqft * item1.MaterialPrice : item1.Qty * item1.SpecialMaterialPricing;
+            }
+
+            item1 = SystemMaterials.Where(x => x.Name == "Remove and Replace Expansion joints- backer rod and sealant (SIKA 2C)").FirstOrDefault();
+            if (item1 != null)
+            {
+                item1.MaterialExtension = item1.SpecialMaterialPricing == 0 ? item1.SMSqft * item1.MaterialPrice : item1.Qty * item1.SpecialMaterialPricing;
+            }
             calculateRLqty();
 
         }

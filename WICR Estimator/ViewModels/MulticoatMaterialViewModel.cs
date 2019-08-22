@@ -446,6 +446,18 @@ namespace WICR_Estimator.ViewModels
                     sysMat1.Name = "Slurry coat over texture (Krete Kote 120 sq ft per mix)";
                     
                 }
+                //new updates formula
+                item = SystemMaterials.Where(x => x.Name == "Caulk 1/2 to 3/4 inch control joints (SIKA 2C)").FirstOrDefault();
+                if (item != null)
+                {
+                    item.MaterialExtension = item.SpecialMaterialPricing == 0 ? item.SMSqft * item.MaterialPrice : item.Qty * item.SpecialMaterialPricing;
+                }
+
+                item = SystemMaterials.Where(x => x.Name == "Remove and Replace Expansion joints- backer rod and sealant (SIKA 2C)").FirstOrDefault();
+                if (item != null)
+                {
+                    item.MaterialExtension = item.SpecialMaterialPricing == 0 ? item.SMSqft * item.MaterialPrice : item.Qty * item.SpecialMaterialPricing;
+                }
                 calculateRLqty();
             }
             CalculateLaborMinCharge();

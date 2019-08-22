@@ -413,6 +413,29 @@ namespace WICR_Estimator.ViewModels
                 sysmat.Qty = riserCount / sysmat.Coverage;
             }
         }
+        public override void CalculateTotalSqFt()
+        {
+            if ((totalSqft + TotalSqftPlywood ) == 0)
+            {
+                CostperSqftSlope = 0;
+                CostperSqftMetal = 0;
+                CostperSqftMaterial = 0;
+                CostperSqftSubContract = 0;
+            }
+            else
+            {
+                CostperSqftSlope = TotalSlopingPrice / (totalSqft + TotalSqftPlywood);
+                CostperSqftMetal = TotalMetalPrice / (totalSqft + TotalSqftPlywood);
+                CostperSqftMaterial = TotalSystemPrice / (totalSqft + TotalSqftPlywood);
+                CostperSqftSubContract = TotalSubcontractLabor / (totalSqft + TotalSqftPlywood);
+            }
+            TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
+            OnPropertyChanged("CostperSqftSlope");
+            OnPropertyChanged("CostperSqftMetal");
+            OnPropertyChanged("CostperSqftMaterial");
+            OnPropertyChanged("CostperSqftSubContract");
+            OnPropertyChanged("TotalCostperSqft");
+        }
 
         public override void setExceptionValues(object s)
         {

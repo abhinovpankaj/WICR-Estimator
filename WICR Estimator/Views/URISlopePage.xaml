@@ -601,12 +601,12 @@
         
         <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal"
                     HorizontalAlignment="Right">
-            <Button Content="Fill Grid" Command="{Binding FillValues}"
+            <!--<Button Content="Fill Grid" Command="{Binding FillValues}"
                     Height="30" 
                     Margin="10,5,25,5"
                     VerticalAlignment="Bottom"
                     HorizontalAlignment="Right"
-                    Width="100" Background="LightGreen"/>
+                    Width="100" Background="LightGreen"/>-->
             <Button Command="{Binding CalculateCostCommand}" 
                     VerticalAlignment="Bottom"
                     Height="30"

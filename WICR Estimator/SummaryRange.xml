@@ -15,4 +15,5 @@
   <LaborHours>A75</LaborHours>
   <MaterialOtherCostTotal>A102</MaterialOtherCostTotal>
   <LaborOtherCostTotal>A124</LaborOtherCostTotal>
+  <CostCalculationDetails>G86</CostCalculationDetails>
 </Sections>

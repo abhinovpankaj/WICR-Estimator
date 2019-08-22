@@ -37,10 +37,9 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("#191 QD INTERLAMINATE PRIMER", "1 GALLON");
             materialNames.Add("Vulkem Tremproof 250 GC L", "5 GAL PAIL");
             materialNames.Add("Vulkem Tremproof 250 GC R", "5 GAL PAIL");
-            materialNames.Add("Vulkem Tremproof 250 GC T", "5 GAL PAIL");
+            materialNames.Add("Tremco Dymonic 100 (Cant at footing and prep rebar)", "20OZ SAUSAGE");
             materialNames.Add("Vulkem Tremproof 201 L", "5 GAL PAIL");
             materialNames.Add("Vulkem Tremproof 201 R", "5 GAL PAIL");
-            materialNames.Add("Vulkem Tremproof 201 T", "5 GAL PAIL");
             materialNames.Add("GLASSMAT #II (FROM MERKOTE / LOWRYS) WALLS", "1200 SF ROLL");
             materialNames.Add("GLASSMAT #II (FROM MERKOTE / LOWRYS) FLOORS YES/NO", "1200 SF ROLL");
             materialNames.Add("PW POLYESTER FABRIC FROM UPI 4\"(PERIMETER)", "150 SF ROLL");
@@ -187,7 +186,7 @@ namespace WICR_Estimator.ViewModels
                 case "191 QD PRIMER AND PREPARATION FOR RE-SURFACE":
                 case "Vulkem Tremproof 250 GC L":
                 case "Vulkem Tremproof 250 GC R":
-                case "Vulkem Tremproof 250 GC T":
+                case "Tremco Dymonic 100 (Cant at footing and prep rebar)":
                 case "TREMDRAIN 1000 (VERTICAL ONLY)":
                 case "GLASSMAT #II (FROM MERKOTE / LOWRYS) FLOORS YES/NO":
                 case "CALIFORNIA SEALER FROM LOWRYS (GLUING DRAIN MAT)":
@@ -254,10 +253,10 @@ namespace WICR_Estimator.ViewModels
                 case "Vulkem Tremproof 250 GC R 30 MILS":
                     return totalSqftVertical + riserCount * stairWidth * 2;
 
-                case "Vulkem Tremproof 250 GC T":
+                case "Tremco Dymonic 100 (Cant at footing and prep rebar)":
                     return totalSqftVertical / 10 + rebarPrepWalls;
-                case "Vulkem Tremproof 201 T":
-                    return totalSqftVertical / 10 + penetrations;
+                //case "":
+                //    return totalSqftVertical / 10 + penetrations;
 
                 case "GLASSMAT #II (FROM MERKOTE / LOWRYS) WALLS":
                 case "PB-4 (VERTICAL ONLY)":
@@ -352,10 +351,10 @@ namespace WICR_Estimator.ViewModels
                 case "Vulkem Tremproof 250 GC R 30 MILS":
                     return totalSqftVertical;
                 
-                case "Vulkem Tremproof 250 GC T":
+                case "Tremco Dymonic 100 (Cant at footing and prep rebar)":
                     return rebarPrepWalls;
-                case "Vulkem Tremproof 201 T":
-                    return penetrations;
+                //case "Tremco Dymonic 100 (Cant at footing and prep rebar)":
+                //    return penetrations;
                 case "GLASSMAT #II (FROM MERKOTE / LOWRYS) FLOORS YES/NO":
                     return deckPerimeter;
                 case "TERM BAR, VULKEM 116, PINS AND LOADS":
@@ -600,6 +599,15 @@ namespace WICR_Estimator.ViewModels
             OnPropertyChanged("CostperSqftMaterial");
             OnPropertyChanged("CostperSqftSubContract");
             OnPropertyChanged("TotalCostperSqft");
+        }
+        public override double getLaborUnitPrice(double laborExtension, double riserCount, double totalSqft, double sqftVert = 0, double sqftHor = 0,
+            double sqftStairs = 0, string materialName = "")
+        {
+            //return base.getLaborUnitPrice(laborExtension, riserCount, totalSqft);
+
+            return (totalSqft + totalPlywoodSqft + totalSqftVertical+riserCount) == 0 ? 0 : laborExtension / (totalSqft + totalPlywoodSqft + totalSqftVertical + riserCount);
+
+
         }
     }
 }

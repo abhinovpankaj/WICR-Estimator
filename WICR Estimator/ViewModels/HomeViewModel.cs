@@ -1222,6 +1222,51 @@ namespace WICR_Estimator.ViewModels
             return k;
             
         }
+
+        private void writeCalculationDetails(MaterialBaseViewModel MVM)
+        {
+            int k = 2;
+            string startRange = getStartRange("CostCalculationDetails");
+
+            Excel.Range dataRange = exlWs.Range[startRange].Offset[k, 0];
+
+            k = 0;
+            CostBreakup costBreakUp = MVM.LCostBreakUp.Where(x => x.Name == "Workers Comp TL > $24.00").FirstOrDefault();
+            dataRange.Offset[k, 1].Value = costBreakUp.MetalCost + costBreakUp.SlopeCost + costBreakUp.SystemCost;
+
+            k++;
+            costBreakUp = MVM.LCostBreakUp.Where(x => x.Name == "Workers Comp All < $23.99").FirstOrDefault();
+            dataRange.Offset[k, 1].Value = costBreakUp.MetalCost + costBreakUp.SlopeCost + costBreakUp.SystemCost;
+
+            k++;
+            costBreakUp = MVM.LCostBreakUp.Where(x => x.Name == "Workers Comp Prevailing Wage").FirstOrDefault();
+            dataRange.Offset[k, 1].Value = costBreakUp.MetalCost + costBreakUp.SlopeCost + costBreakUp.SystemCost;
+
+            k++;
+            costBreakUp = MVM.LCostBreakUp.Where(x => x.Name == "Payroll Expense (SS, ET, Uemp, Dis, Medicare)").FirstOrDefault();
+            dataRange.Offset[k, 1].Value = costBreakUp.MetalCost + costBreakUp.SlopeCost + costBreakUp.SystemCost;
+
+
+            k++;
+            costBreakUp = MVM.LCostBreakUp.Where(x => x.Name == "Tax").FirstOrDefault();
+            dataRange.Offset[k, 1].Value = costBreakUp.MetalCost + costBreakUp.SlopeCost + costBreakUp.SystemCost;
+
+            k++;
+            dataRange.Offset[k, 1].Value = MVM.SubContractMarkup * MVM.TotalSubContractLaborCostBrkp; 
+
+            k++;
+            costBreakUp = MVM.LCostBreakUp.Where(x => x.Name == "General Liability").FirstOrDefault();
+            dataRange.Offset[k, 1].Value = costBreakUp.MetalCost + costBreakUp.SlopeCost + costBreakUp.SystemCost + costBreakUp.SubContractLaborCost;
+
+            k++;
+            costBreakUp = MVM.LCostBreakUp.Where(x => x.Name == "Direct Expense (Gas, Small Tools, Etc,)").FirstOrDefault();
+            dataRange.Offset[k, 1].Value = costBreakUp.MetalCost + costBreakUp.SlopeCost + costBreakUp.SystemCost+costBreakUp.SubContractLaborCost;
+
+            k++;
+            costBreakUp = MVM.LCostBreakUp.Where(x => x.Name == "Contingency").FirstOrDefault();
+            dataRange.Offset[k, 1].Value = costBreakUp.MetalCost + costBreakUp.SlopeCost + costBreakUp.SystemCost+ costBreakUp.SubContractLaborCost;
+
+        }
         private int WriteLabor(MaterialBaseViewModel MVM)
         {
             int rowN;
@@ -1590,6 +1635,7 @@ namespace WICR_Estimator.ViewModels
 
                         item.lastUsedRows.Add("LaborOtherCosts", WriteLabor(item.MaterialViewModel)); ;
                     }
+                    writeCalculationDetails(item.MaterialViewModel);
                     clearEmptyRows(item);
 
                 }
