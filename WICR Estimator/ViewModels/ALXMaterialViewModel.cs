@@ -332,15 +332,14 @@ namespace WICR_Estimator.ViewModels
         {
             switch (materialName)
             {
-                case "":
                 case "Staples (1\" Crown x 3/4 long Box of 13,500 qty)":
                 case "Grout and Texture Color Option: TC-40 Liquid Colorant":
                 case "Pattern:  1/4 inch grout tape, Standard 12 x 12 tile pattern, tape and labor":
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
                 case "Stucco Material Remove and replace (LF)":
-                    return 0.0000001;
-                case "Stair Nosing":
                 case "WP-81 Liquid":
+                    return 0;
+                case "Stair Nosing":               
                     return riserCount * stairWidth;
                 default:
                     return riserCount*stairWidth*2;

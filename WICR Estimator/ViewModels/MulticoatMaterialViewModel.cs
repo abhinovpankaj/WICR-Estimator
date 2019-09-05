@@ -483,7 +483,8 @@ namespace WICR_Estimator.ViewModels
         }
         public override double getQuantity(string materialName, double coverage, double lfArea)
         {
-            if (materialName== "Large cracks with reseal (route, fill with speed bond/sand and spot texture)")
+            if (materialName== "Large cracks with reseal (route, fill with speed bond/sand and spot texture)"
+                || materialName == "Large cracks with new system (route, fill with speed bond)")
             {
                 return 0;
             }

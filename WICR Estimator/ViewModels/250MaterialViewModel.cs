@@ -37,9 +37,10 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("#191 QD INTERLAMINATE PRIMER", "1 GALLON");
             materialNames.Add("Vulkem Tremproof 250 GC L", "5 GAL PAIL");
             materialNames.Add("Vulkem Tremproof 250 GC R", "5 GAL PAIL");
-            materialNames.Add("Tremco Dymonic 100 (Cant at footing and prep rebar)", "20OZ SAUSAGE");
+            
             materialNames.Add("Vulkem Tremproof 201 L", "5 GAL PAIL");
             materialNames.Add("Vulkem Tremproof 201 R", "5 GAL PAIL");
+            materialNames.Add("Tremco Dymonic 100 (Cant at footing and prep rebar)", "20OZ SAUSAGE");
             materialNames.Add("GLASSMAT #II (FROM MERKOTE / LOWRYS) WALLS", "1200 SF ROLL");
             materialNames.Add("GLASSMAT #II (FROM MERKOTE / LOWRYS) FLOORS YES/NO", "1200 SF ROLL");
             materialNames.Add("PW POLYESTER FABRIC FROM UPI 4\"(PERIMETER)", "150 SF ROLL");

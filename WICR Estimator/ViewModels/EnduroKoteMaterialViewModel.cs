@@ -311,7 +311,7 @@ namespace WICR_Estimator.ViewModels
                 SystemMaterial item = SystemMaterials.Where(x => x.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)").FirstOrDefault();
                 if (item != null)
                 {
-                    item.SMSqftH = item.Qty;
+                    item.SMSqftH = item.Qty*32;
                     item.SMSqft = item.Qty;
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
                     item.LaborExtension = item.Hours >= item.SetupMinCharge?item.Hours * laborRate:item.SetupMinCharge*laborRate;

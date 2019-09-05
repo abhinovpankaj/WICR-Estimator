@@ -281,11 +281,16 @@ namespace WICR_Estimator.ViewModels
             {
                 val4 = sysMat.Qty;
             }
-
+            double val5=0;
+            sysMat = SystemMaterials.Where(x => x.Name == "Underlay over rough surface: Grey TC-1 Cement").FirstOrDefault();
+            if (sysMat.IsMaterialChecked)
+            {
+                val5 = sysMat.Qty;
+            }
 
             sysMat = SystemMaterials.Where(x => x.Name == "WP-90 Liquid").FirstOrDefault();
             ischecked = sysMat.IsMaterialChecked;
-            sysMat.Qty = val1+val2+val3+val4/5;
+            sysMat.Qty = val5+val1+val2+val3+val4/5;
             sysMat.IsMaterialChecked = ischecked;
 
         }

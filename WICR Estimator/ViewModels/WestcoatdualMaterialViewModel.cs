@@ -182,7 +182,7 @@ namespace WICR_Estimator.ViewModels
                 case "Stucco Material Remove and replace (LF)":
                     return 0;
                 default:
-                    return lfArea / coverage;
+                    return coverage==0?0:lfArea / coverage;
             }
         }
 
@@ -206,7 +206,7 @@ namespace WICR_Estimator.ViewModels
             {
 
                 case "Staples (1\" Crown x 3 / 4 long 13,500 qty)":
-                case "Base Coat:  (1 bag, Gray) TC-1 Base Coat Cement with 1-1/4 Gal WP-81":
+                //case "Base Coat:  (1 bag, Gray) TC-1 Base Coat Cement with 1-1/4 Gal WP-81":
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
                 case "Stucco Material Remove and replace (LF)":
                 case "Westcoat WP-90 Resin":

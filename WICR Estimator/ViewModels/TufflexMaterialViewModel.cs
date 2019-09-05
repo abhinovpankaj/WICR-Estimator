@@ -225,7 +225,7 @@ namespace WICR_Estimator.ViewModels
                 case "Staples (3/4\" crown, Box of 13,500)":
                 case "1/20 Mesh Sand":
                 case "1/20 Mesh Sand Broadcast to Refusal":
-                case "Elasta-Tuff #6000-AL-SC Top Coat":
+                //case "Elasta-Tuff #6000-AL-SC Top Coat":
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
                 case "Stucco Material Remove and replace (LF)":
                     return 0;

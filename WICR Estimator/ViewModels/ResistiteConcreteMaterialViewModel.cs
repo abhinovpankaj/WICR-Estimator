@@ -463,7 +463,8 @@ namespace WICR_Estimator.ViewModels
         {
             if (materialName== "Add for saw cut joints"|| materialName== "Add for removing and replacing concrete (no more than 100 sq ft)"
                 ||materialName== "Caulk 1/2 to 3/4 inch control joints (SIKA 2C)"
-                ||materialName== "Large cracks with reseal (route, fill with speed bond/sand and spot texture)")
+                ||materialName== "Large cracks with reseal (route, fill with speed bond/sand and spot texture)"
+                ||materialName== "Large cracks with new system (route, fill with speed bond)")
             {
                 return 0;
             }
