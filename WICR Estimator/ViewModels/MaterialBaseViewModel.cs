@@ -153,12 +153,12 @@ namespace WICR_Estimator.ViewModels
             return laborExtension / (riserCount + totalSqft);
         }
         
-        public SystemMaterial getSMObject(int seq, string matName, string unit)
+        public  virtual SystemMaterial getSMObject(int seq, string matName, string unit)
         {
             double cov;
             double mp;
             double w;
-            double lfArea;
+            double lfArea=0;
             double setUpMin = 0; // Setup minimum charges from google sheet, col 6
             double pRateStairs = 0; ///Production rate stairs from google sheet, col 5
             double hprRate = 0;///Horizontal Production rate  from google sheet, col 4
@@ -181,19 +181,23 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(materialDetails[seq][2].ToString(), out cov);
             double.TryParse(materialDetails[seq][0].ToString(), out mp);
             double.TryParse(materialDetails[seq][3].ToString(), out w);
-            lfArea = getlfArea(matName);
+            
             double.TryParse(materialDetails[seq][6].ToString(), out setUpMin);
             double.TryParse(materialDetails[seq][5].ToString(), out pRateStairs);
             double.TryParse(materialDetails[seq][4].ToString(), out hprRate);
             pRateStairs = pRateStairs * (1 + prPerc);
             hprRate = hprRate * (1 + prPerc);
             vprRate = vprRate * (1 + prPerc);
+            
             sqv = getSqftAreaVertical(matName);
             sqh = getSqFtAreaH(matName);
             sqStairs = getSqFtStairs(matName);
+            lfArea = getlfArea(matName);
+            
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs,sqv,vprRate);
             
             labrExt = CalculateLabrExtn(calcHrs, setUpMin,matName);
+
             qty = getQuantity(matName, cov, lfArea);
             if (lfArea == -1)
             {
@@ -228,8 +232,8 @@ namespace WICR_Estimator.ViewModels
                 VerticalProductionRate = vprRate,
                 LaborUnitPrice = getLaborUnitPrice(labrExt, riserCount, totalSqft,sqv,sqh,sqStairs, matName),//labrExt / (riserCount + totalSqft),
                 FreightExtension = w * qty,
-                MaterialExtension = mp * qty,
-                IsMaterialChecked = getCheckboxCheckStatus(matName),
+                MaterialExtension = mp * qty,  //chnage for independent projects
+                IsMaterialChecked =  getCheckboxCheckStatus(matName),
                 IsMaterialEnabled = getCheckboxEnabledStatus(matName),
                 IncludeInLaborMinCharge=IncludedInLaborMin(matName)
             });
@@ -700,6 +704,11 @@ namespace WICR_Estimator.ViewModels
         }
         public void calLaborHrs(int hrs,double tSqft)
         {
+            if ( laborRate == 0)
+            {
+                return;
+            }
+
             TotalHrsSystemLabor = isPrevailingWage ? (TotalLaborExtension / actualPreWage) :
                                                   (TotalLaborExtension / laborRate) ;
             if (TotalHrsSystemLabor < 0)
@@ -1318,6 +1327,8 @@ namespace WICR_Estimator.ViewModels
             SC.Add(new LaborContract { Name = "" });
             SC.Add(new LaborContract { Name = "" });
             SC.Add(new LaborContract { Name = "" });
+            SC.Add(new LaborContract { Name = "" });
+            SC.Add(new LaborContract { Name = "" });
             return SC;
         }
 
@@ -1405,15 +1416,15 @@ namespace WICR_Estimator.ViewModels
             calculateLaborHrs();
             
             populateCalculation();
-           
-            //calculateMaterialTotals();
-            //CalOCTotal();
-            //CalSCTotal();
-            //CalculateCostBreakup();
 
-            //calculateLaborTotals();
-            //calculateLaborHrs();
-            //populateCalculation();
+            calculateMaterialTotals();
+            CalOCTotal();
+            CalSCTotal();
+            CalculateCostBreakup();
+
+            calculateLaborTotals();
+            calculateLaborHrs();
+            populateCalculation();
 
         }
 
@@ -2835,7 +2846,10 @@ namespace WICR_Estimator.ViewModels
         /// SubContract Cost
         private void CalSCTotal()
         {
-
+            if (SubContractLaborItems==null)
+            {
+                return;
+            }
             if (SubContractLaborItems.Count > 0)
             {
                 if (SubContractLaborItems.Count > 0)
@@ -2848,6 +2862,10 @@ namespace WICR_Estimator.ViewModels
         }
         private void calculateMaterialTotals()
         {
+            if (systemMaterials==null)
+            {
+                return;
+            }
             IEnumerable<SystemMaterial> selectedSystemMaterials = systemMaterials.Where(x => x.IsMaterialChecked == true);
             if (selectedSystemMaterials.Count() > 0)
             {
@@ -2925,6 +2943,10 @@ namespace WICR_Estimator.ViewModels
         //this is Material total
         private void CalculateCostBreakup()
         {
+            if (SystemMaterials==null)
+            {
+                return;
+            }
 
             IEnumerable<SystemMaterial> systemCBMaterial = SystemMaterials.Where(x => x.IsMaterialChecked == true);
             if (systemCBMaterial != null)
@@ -2966,10 +2988,12 @@ namespace WICR_Estimator.ViewModels
                 if (value!=includeDriveHrs)
                 {
                     includeDriveHrs = value;
-                    if (isDataAvailable)
-                    {
-                        CalculateAllMaterial();
-                    }
+                    //if (isDataAvailable)
+                    //{
+                        CalculateCost(null);
+                        CalculateCost(null);
+                        //CalculateAllMaterial();
+                    //}
                     
                     OnPropertyChanged("IncludeDriveHours");
                 }
@@ -3063,6 +3087,10 @@ namespace WICR_Estimator.ViewModels
         //New change for LaborUnitPricePer square Feet
         private void calculateLaborTotals()
         {
+            if (SystemMaterials==null)
+            {
+                return;
+            }
             double additonalLaborMetalSlope = 0;
             double  laborDeduction = 0;
             AllTabsLaborTotal = 0;
@@ -3160,6 +3188,10 @@ namespace WICR_Estimator.ViewModels
         }
         private double getTotals(double laborCost, double materialCost, double freightCost, double subcontractLabor)
         {
+            if (laborDetails==null)
+            {
+                return 0;
+            }
             double res = 0;
             double slopeTotal = laborCost;
 
@@ -3496,13 +3528,13 @@ namespace WICR_Estimator.ViewModels
                 MetalCost = totalCostM * facValue / MetalMarkup,
                 SlopeCost = totalCostS * facValue / SlopeMarkup,
                 SystemCost = totalCostSy * facValue / MaterialMarkup,
-                SubContractLaborCost = (totalCostSbLabor * facValue / SubContractMarkup)
+                SubContractLaborCost = (totalCostSbLabor * facValue / SubContractProfitMargin)
 
             });
             finalMCost = finalMCost + (totalCostM * facValue / MetalMarkup);
             finalSCost = finalSCost + (totalCostS * facValue / SlopeMarkup);
             finalSyCost = finalSyCost + (totalCostSy * facValue / MaterialMarkup);
-            finalSubLabCost = finalSubLabCost + (totalCostSbLabor * facValue / SubContractMarkup);
+            finalSubLabCost = finalSubLabCost + (totalCostSbLabor * facValue / SubContractProfitMargin);
             if (!hasContingencyDisc)
                 double.TryParse(laborDetails[13][0].ToString(), out facValue);
 

@@ -330,9 +330,9 @@ namespace WICR_Estimator.ViewModels
             //    bool isChecked = SystemMaterials.Where(x => x.Name == "2.5 Galvanized Lathe (18 s.f.) no less than 12 per sq ft.").FirstOrDefault().IsMaterialChecked;
             //    SystemMaterials.Where(x => x.Name == "Staples (3/4 Inch Crown, Box of 13,500)").FirstOrDefault().IsMaterialChecked = isChecked;                
             //}
-            //getEKLQnty();
+            getEKLQnty();
             ////update Add labor for minimum cost
-            //CalculateLaborMinCharge();
+            CalculateLaborMinCharge();
 
         }
         public override void CalculateTotalSqFt()

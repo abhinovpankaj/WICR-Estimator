@@ -202,6 +202,7 @@
     <Compile Include="ViewModels\EnduroKoteMaterialViewModel.cs" />
     <Compile Include="ViewModels\EnduroKoteSlopeViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
+    <Compile Include="ViewModels\IndependentMaterialViewModel.cs" />
     <Compile Include="ViewModels\MACoatMaterialViewModel.cs" />
     <Compile Include="ViewModels\MaterialBaseViewModel.cs" />
     <Compile Include="ViewModels\MaterialViewModel.cs" />
@@ -225,6 +226,8 @@
     <Compile Include="ViewModels\WWRehabMaterialViewModel.cs" />
     <Compile Include="ViewModels\WWResealMaterialViewModel.cs" />
     <Compile Include="ViewModels\XypexMaterialViewModel.cs" />
+    <Compile Include="ViewModels\ZeroMetalViewModel.cs" />
+    <Compile Include="ViewModels\ZeroSlopeViewModel.cs" />
     <Compile Include="Views\CalculationDetailsPage.xaml.cs">
       <DependentUpon>CalculationDetailsPage.xaml</DependentUpon>
     </Compile>

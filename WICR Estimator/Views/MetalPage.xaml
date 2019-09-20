@@ -62,16 +62,16 @@
                   Margin="10" IsTabStop="False"
                   CanUserAddRows="false"
                   ItemsSource="{Binding Metals}">
-                <DataGrid.RowStyle>
+                <!--<DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding ElementName=includeMe,Path=IsChecked}" Value="False">
+                        <DataTrigger Binding="{Binding IsStairMetalChecked}" Value="false">
                                 <Setter Property="Background" Value="Gray"/>
                                 <Setter Property="Foreground" Value="Gray"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </DataGrid.RowStyle>
+                </DataGrid.RowStyle>-->
                 <DataGrid.Columns>
                    
                     <DataGridTemplateColumn FocusManager.IsFocusScope="False"
@@ -79,9 +79,11 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <CheckBox x:Name="includeMe" Visibility="{Binding Name,
-                                    Converter={StaticResource checkBoxConv}}"
+                                <CheckBox x:Name="includeMe" Visibility="{Binding IsStairMetal}"
                                           IsChecked="{Binding IsStairMetalChecked,UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+                                <!--<CheckBox x:Name="includeMe" Visibility="{Binding Name,
+                                    Converter={StaticResource checkBoxConv}}"
+                                          IsChecked="{Binding IsStairMetalChecked,UpdateSourceTrigger=PropertyChanged}"></CheckBox>-->
                                     <TextBlock Text="{Binding Name}"/>
                                 </StackPanel>
                             </DataTemplate>

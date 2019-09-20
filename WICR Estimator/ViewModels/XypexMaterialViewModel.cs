@@ -279,7 +279,31 @@ namespace WICR_Estimator.ViewModels
         }
         public override void CalculateCostPerSqFT()
         {
-            CostPerSquareFeet = (totalSqft + totalVerticalSqft + riserCount) == 0 ? 0 : Math.Round(TotalMaterialCost / (totalSqft + totalVerticalSqft + riserCount), 2);
+            CostPerSquareFeet = (totalSqft + totalVerticalSqft ) == 0 ? 0 : Math.Round(TotalMaterialCost / (totalSqft + totalVerticalSqft ), 2);
+        }
+
+        public override void CalculateTotalSqFt()
+        {
+            if ((totalSqft +  totalVerticalSqft) == 0)
+            {
+                CostperSqftSlope = 0;
+                CostperSqftMetal = 0;
+                CostperSqftMaterial = 0;
+                CostperSqftSubContract = 0;
+            }
+            else
+            {
+                CostperSqftSlope = TotalSlopingPrice / (totalSqft + totalVerticalSqft );
+                CostperSqftMetal = TotalMetalPrice / (totalSqft + totalVerticalSqft);
+                CostperSqftMaterial = TotalSystemPrice / (totalSqft + totalVerticalSqft);
+                CostperSqftSubContract = TotalSubcontractLabor / (totalSqft + totalVerticalSqft);
+            }
+            TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
+            OnPropertyChanged("CostperSqftSlope");
+            OnPropertyChanged("CostperSqftMetal");
+            OnPropertyChanged("CostperSqftMaterial");
+            OnPropertyChanged("CostperSqftSubContract");
+            OnPropertyChanged("TotalCostperSqft");
         }
     }
 }

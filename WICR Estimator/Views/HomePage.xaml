@@ -14,9 +14,8 @@
     <UserControl.Resources>
         <conv:BoolToVisibilityConverter x:Key="VisibilityConv"/>
         <DataTemplate x:Key="ProjectTemplate">
-            <DockPanel 
-                        VerticalAlignment="Center"
-                        Background="#00C0E0FF">
+            <DockPanel VerticalAlignment="Center"
+                        >
                 <Image x:Name="tickImage" Source="..\Images\tick.png"
                        Height="25" HorizontalAlignment="Right"
                        VerticalAlignment="Center"
@@ -26,10 +25,9 @@
                            FontWeight="SemiBold"
                            VerticalAlignment="Center"
                            FontSize="15" />
-                <Button FontFamily="Segoe MDL2 Assets"
-                        
+                <Button FontFamily="Segoe MDL2 Assets"                       
                         FontSize="12"
-                        Background="AliceBlue"
+                        
                         BorderThickness="0"
                         Width="20"
                         Height="20"
@@ -83,32 +81,32 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                                                 <DataTrigger Binding="{Binding Name}" Value="Deck Coatings">
                                                     <Setter Property="TextBlock.FontWeight" Value="Bold"/>
                                                     <Setter Property="TextBlock.FontSize" Value="18"/>
-                                                    <Setter Property="TextBlock.Foreground" Value="Blue"/>
+                                                    <!--<Setter Property="TextBlock.Foreground" Value="BurlyWood"/>-->
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Name}" Value="Concrete On Grade">
                                                     <Setter Property="TextBlock.FontWeight" Value="Bold"/>
                                                     <Setter Property="TextBlock.FontSize" Value="18"/>
-                                                    <Setter Property="TextBlock.Foreground" Value="Blue"/>
+                                                    <!--<Setter Property="TextBlock.Foreground" Value="BurlyWood"/>-->
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Name}" Value="Below Grade">
                                                     <Setter Property="TextBlock.FontWeight" Value="Bold"/>
                                                     <Setter Property="TextBlock.FontSize" Value="18"/>
-                                                    <Setter Property="TextBlock.Foreground" Value="Blue"/>
+                                                    <!--<Setter Property="TextBlock.Foreground" Value="BurlyWood"/>-->
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Name}" Value="Replicated Projects">
                                                     <Setter Property="TextBlock.FontWeight" Value="Bold"/>
                                                     <Setter Property="TextBlock.FontSize" Value="18"/>
-                                                    <Setter Property="TextBlock.Foreground" Value="Blue"/>
+                                                    <!--<Setter Property="TextBlock.Foreground" Value="BurlyWood"/>-->
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Name}" Value="Below Tile">
                                                     <Setter Property="TextBlock.FontWeight" Value="Bold"/>
                                                     <Setter Property="TextBlock.FontSize" Value="18"/>
-                                                    <Setter Property="TextBlock.Foreground" Value="Blue"/>
+                                                    <!--<Setter Property="TextBlock.Foreground" Value="BurlyWood"/>-->
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Name}" Value="Epoxy Coatings">
                                                     <Setter Property="TextBlock.FontWeight" Value="Bold"/>
                                                     <Setter Property="TextBlock.FontSize" Value="18"/>
-                                                    <Setter Property="TextBlock.Foreground" Value="Blue"/>
+                                                    <!--<Setter Property="TextBlock.Foreground" Value="BurlyWood"/>-->
                                                 </DataTrigger>
                                             </Style.Triggers> 
                                         </Style>
@@ -133,8 +131,9 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Background="AntiqueWhite">
+        <StackPanel >
             <TextBlock Text="Projects for Estimates"
+                       
                    FontSize="16"
                    Margin="5,5,0,5"
                    FontWeight="Bold"/>
@@ -150,7 +149,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                  Grid.Row="1"
                  BorderBrush="Black"
                  BorderThickness="2,2,2,0"
-                 Background="AliceBlue"
+                 Background="#DDEBF7"
                  x:Name="ProjectList"
                  SelectionMode="Multiple"
                  ItemsSource="{Binding ProjectView}"
@@ -171,10 +170,23 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
             
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
-                    <Style.Triggers>
+                    <!--<Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Foreground" Value="Blue"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="Background" Value="#1F4E78"/>
                         </Trigger>
+                    </Style.Triggers>-->
+                    <Style.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.Setters>
+                                <Setter Property="Background" Value="#1F4E78" />
+                                <Setter Property="BorderBrush" Value="#1F4E78" />
+                                <Setter Property="Foreground" Value="White"/>
+                            </MultiTrigger.Setters>
+                        </MultiTrigger>
                     </Style.Triggers>
                     <Setter Property="IsSelected" Value="{Binding IsSelectedProject}" />
                 </Style>
@@ -208,14 +220,26 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                   IsReadOnly="True"
                   CanUserAddRows="False"
                   AutoGenerateColumns="False"
-                  
+                  Background="#BFBFBF"
                   Margin="10,2,10,0"
                   >
-                <DataGrid.Columns >
+                <DataGrid.Resources>
+                    <!--<Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Background" Value="#BFBFBF" />
+                    </Style>-->
+                    <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="{x:Type DataGridRow}">
+                        <Setter Property="Background" Value="#E2EFDA" />
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" IsReadOnly="True"
-                                    Binding="{Binding Name}"/>
+                                    Binding="{Binding Name}">
+                        
+                    </DataGridTextColumn>
                     <DataGridTextColumn Header="Work Area" IsReadOnly="True"
-                                    Binding="{Binding WorkArea}"/>
+                                    Binding="{Binding WorkArea}">
+                       
+                    </DataGridTextColumn>
                     <DataGridTextColumn Header="Metal Cost" 
                                     Binding="{Binding MetalCost,StringFormat='c'}"/>
                     <DataGridTextColumn Header ="Slope Cost"
@@ -337,13 +361,13 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                       FontSize="15"
                       Margin="5,5,5,5"
                       VerticalAlignment="Center"
-                      Background="LightBlue"
+                      Background="#DDEBF7"
                       BorderBrush="Black"
                       FontWeight="Bold"
                       BorderThickness="2">
                 <Grid DataContext="{Binding ProjectTotals,UpdateSourceTrigger=PropertyChanged}"
                   HorizontalAlignment="Stretch"
-                  Background="LightBlue"
+                  Background="#DDEBF7"
                   Grid.Row="1"    
                   Margin="10,0,10,10">
                     <Grid.ColumnDefinitions>
@@ -398,6 +422,10 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                     
                 </Grid>
             </GroupBox>
+            
+            <TextBlock Text="{Binding ProductVersion}" Margin="5"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Bottom"/>
         </StackPanel>
     </Grid>
 </UserControl>

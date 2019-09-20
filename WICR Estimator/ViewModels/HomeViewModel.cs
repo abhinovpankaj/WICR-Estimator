@@ -25,7 +25,7 @@ using System.Drawing;
 
 namespace WICR_Estimator.ViewModels
 {
-    
+    [Serializable]
     class HomeViewModel:BaseViewModel,IPageViewModel
     {
         
@@ -225,7 +225,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
-
+        
         private ProjectsTotal prjTotals;
         public ProjectsTotal ProjectTotals
         {
@@ -463,6 +463,7 @@ namespace WICR_Estimator.ViewModels
                     {
                         writer.Formatting = Formatting.Indented; // indent the Xml so it's human readable
                         serializer.WriteObject(writer,SelectedProjects );
+                        
                         writer.Flush();
                         MessageBox.Show("Project Estimate Saved Succesfully","Success");
                     }
@@ -1728,6 +1729,14 @@ namespace WICR_Estimator.ViewModels
                 return "Home Page";
             }
         }
-        
+
+        public string ProductVersion
+        {
+            
+            get
+            {
+                return "Version 1.0";
+            }
+        }
     }
 }

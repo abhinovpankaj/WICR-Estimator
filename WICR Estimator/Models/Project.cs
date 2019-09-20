@@ -143,8 +143,19 @@ namespace WICR_Estimator.Models
         
 
     }
+    
     public class Project: BaseViewModel
     {
+        
+        public string ProductVersion
+        {
+            set { value = "1.0"; }
+            get
+            {
+                return "1.0";
+            }
+        }
+
         public int ActiveTabIndex { get; set; }
         public string OriginalProjectName { get; set; }
         public Dictionary<string, int> lastUsedRows;
@@ -293,7 +304,7 @@ namespace WICR_Estimator.Models
             {
                 if (MaterialViewModel != null)
                 {
-                    return Math.Round(MaterialViewModel.AllTabsLaborTotal/ MaterialViewModel.TotalSale *100,2).ToString()+"%";
+                    return MaterialViewModel.TotalSale==0? "0": Math.Round(MaterialViewModel.AllTabsLaborTotal/ MaterialViewModel.TotalSale *100,2).ToString()+"%";
                 }
                 else
                     return "";

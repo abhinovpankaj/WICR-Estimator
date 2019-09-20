@@ -141,6 +141,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_81B1C24542564DE3B286FD8DD1E90F35"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_826471BA91EE438BB021F5263D9641D7"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -167,6 +173,12 @@
         {
         "MsmKey" = "8:_BC53F920AC373BF31FFB1558E313D577"
         "OwnerKey" = "8:_301A49FE15B74E688243A7CF97B587A4"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E6A292D7FC314000BA1973F73B7C9A3D"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -675,6 +687,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_81B1C24542564DE3B286FD8DD1E90F35"
+            {
+            "SourcePath" = "8:..\\WICR Estimator\\SummaryRange.xml"
+            "TargetName" = "8:SummaryRange.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_C499F98E2D61412E8ECAC2FAAD5B83E4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_826471BA91EE438BB021F5263D9641D7"
             {
             "SourcePath" = "8:..\\WICR Estimator\\appicon.ico"
@@ -786,6 +818,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E6A292D7FC314000BA1973F73B7C9A3D"
+            {
+            "SourcePath" = "8:..\\WICR Estimator\\SummaryTemplate.xlsx"
+            "TargetName" = "8:SummaryTemplate.xlsx"
+            "Tag" = "8:"
+            "Folder" = "8:_C499F98E2D61412E8ECAC2FAAD5B83E4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E75BC1C8BC6D47358C8E366FF436C259"
@@ -969,7 +1021,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:WICR Sales"
         "ProductCode" = "8:{5E4F15EF-3644-4AAA-AD81-398B42E4682C}"
-        "PackageCode" = "8:{24FE3975-06C3-49A9-A2BD-95B05A24001A}"
+        "PackageCode" = "8:{A031DC27-4F27-40EC-A59C-E898A2242C10}"
         "UpgradeCode" = "8:{07A16F57-558C-49A9-A739-E92AE3A14821}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

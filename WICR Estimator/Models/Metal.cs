@@ -17,7 +17,24 @@ namespace WICR_Estimator.Models
         
         public bool IsEditable { get; set; }
         //public string MetalDimensions { get; set; }
+        private System.Windows.Visibility isStairMetal;
+        public System.Windows.Visibility IsStairMetal
+        {
+            get
+            {
+                return isStairMetal;
+            }
+            set
+            {
+                if (value != isStairMetal)
+                {
+                    isStairMetal = value;
 
+                    OnPropertyChanged("IsStairMetal");
+
+                }
+            }
+        }
         private bool isStairMetalChecked;
         public bool IsStairMetalChecked
         {
@@ -30,7 +47,11 @@ namespace WICR_Estimator.Models
                 if (value!= isStairMetalChecked)
                 {
                     isStairMetalChecked = value;
+                    
                     OnPropertyChanged("IsStairMetalChecked");
+                    
+                    OnPropertyChanged("LaborExtension");
+                    OnPropertyChanged("MaterialExtension");
                 }
             }
         }
@@ -96,7 +117,19 @@ namespace WICR_Estimator.Models
                 return LaborRate / ProductionRate;
             }
         }
-        public virtual  double LaborExtension { get { return Units * LaborUnitPrice; } }
+        public virtual  double LaborExtension
+        {
+            get
+            {
+                if (Name.Contains("STAIR METAL"))
+                {
+                    return isStairMetalChecked ? Units * LaborUnitPrice : 0;
+                }
+                else
+                    return  Units * LaborUnitPrice;
+
+            }
+        }
         private double materialPrice;
         public double MaterialPrice
         {
@@ -119,12 +152,25 @@ namespace WICR_Estimator.Models
         {
             get
             {
-                if (SpecialMetalPricing == 0)
+                if (Name.Contains("STAIR METAL"))
                 {
-                    return MaterialPrice * Units;
+                    if (SpecialMetalPricing == 0)
+                    {
+                        return isStairMetalChecked ? MaterialPrice * Units : 0;
+                    }
+                    else
+                        return isStairMetalChecked ? SpecialMetalPricing * Units : 0;
                 }
                 else
-                    return SpecialMetalPricing * Units;
+                {
+                    if (SpecialMetalPricing == 0)
+                    {
+                        return MaterialPrice * Units;
+                    }
+                    else
+                        return SpecialMetalPricing * Units ;
+                }
+                
             }
         }
         private double specialMetalPricing;
@@ -155,6 +201,7 @@ namespace WICR_Estimator.Models
             this.MaterialPrice = materialPrice;
             this.Name = name;
             this.isStairMetalChecked = isStairMetal;
+            this.IsStairMetal = isStairMetal? System.Windows.Visibility.Visible: System.Windows.Visibility.Hidden;
             this.Size = size;
         }
         public Metal()

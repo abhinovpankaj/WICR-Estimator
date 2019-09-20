@@ -330,16 +330,18 @@ namespace WICR_Estimator.ViewModels
             else if (unitNo == 2)
             {
                 double addOnMetalUnits = 0;
-                for (int z = 0; z < 6; z++)
+                for (int z = 0; z < AddOnMetals.Count; z++)
                 {
                     if (AddOnMetals[z].IsMetalChecked==true)
                     {
                         addOnMetalUnits = addOnMetalUnits + AddOnMetals[z].Units;
                     }
                 }
-                
-                unit = isFlash ? (Metals[0].Units+ Metals[1].Units + Metals[2].Units + Metals[3].Units
-                    + addOnMetalUnits) *stairWidth : 0; 
+                //changed how pins and load are calculated ,removed Chivon as per mail on 12th Sept 2019.
+                //unit = isFlash ? (Metals[0].Units+ Metals[1].Units + Metals[2].Units + Metals[3].Units
+                //    + addOnMetalUnits) *stairWidth : 0; 
+                unit = isFlash ? (Metals.Sum(x=>x.Units)+  
+                   + addOnMetalUnits) *stairWidth : 0; 
                 //double.TryParse(metalDetails[37][0].ToString(), out unit);
             }
             else if (unitNo == 3)
@@ -474,7 +476,7 @@ namespace WICR_Estimator.ViewModels
             met.Add(new Metal("DOOR CORNERS SET OF 2 (L&R)", "", getMetalPR(24), laborRate, 0, getMetalMP(24), false));
             met.Add(new Metal("STRINGER TRANSITION CAP", "", getMetalPR(25), laborRate, 0, getMetalMP(25), false));
             met.Add(new Metal("DRIP TERMINATION", "", getMetalPR(40), laborRate, 0, getMetalMP(40), false));
-            met.Add(new Metal("2 inch CHIVON DRAINS", "", getMetalPR(29), laborRate, 0, getMetalMP(29), false));
+            met.Add(new Metal("2 inch DRAINS", "", getMetalPR(29), laborRate, 0, getMetalMP(29), false));//changed name ,removed Chivon as per mail on 12th Sept 2019.
             met.Add(new Metal("STANDARD SCUPPER", "4x4x9", getMetalPR(32), laborRate, 0, getMetalMP(32), false));
             met.Add(new Metal("SCUPPER WITH A COLLAR", "4x4x9", getMetalPR(33), laborRate, 0, getMetalMP(33), false));
             met.Add(new Metal("POST COLLARS w/  KERF", "4x4", getMetalPR(36), laborRate, 0, getMetalMP(36), false));
@@ -499,7 +501,7 @@ namespace WICR_Estimator.ViewModels
             met.Add(new Metal("DOOR CORNERS SET OF 2 (L&R)", "", getMetalPR(24), laborRate, 0, getMetalMP(24), false));
             met.Add(new Metal("STRINGER TRANSITION CAP", "", getMetalPR(25), laborRate, 0, getMetalMP(25), false));
             met.Add(new Metal("DRIP TERMINATION", "", getMetalPR(40), laborRate, 0, getMetalMP(40), false));
-            met.Add(new Metal("2 inch CHIVON DRAINS", "", getMetalPR(29), laborRate, 0, getMetalMP(29), false));
+            met.Add(new Metal("2 inch DRAINS", "", getMetalPR(29), laborRate, 0, getMetalMP(29), false)); //changed name ,removed Chivon as per mail on 12th Sept 2019.
             met.Add(new Metal("STANDARD SCUPPER", "4x4x9", getMetalPR(32), laborRate, 0, getMetalMP(32), false));
             met.Add(new Metal("SCUPPER WITH A COLLAR", "4x4x9", getMetalPR(33), laborRate, 0, getMetalMP(33), false));
             met.Add(new Metal("POST COLLARS w/  KERF", "4x4", getMetalPR(36), laborRate, 0, getMetalMP(36), false));
@@ -524,6 +526,7 @@ namespace WICR_Estimator.ViewModels
             met.Add(new AddOnMetal("DRIP EDGE METAL", "3X4", getMetalPR(4), laborRate, 0, getMetalMP(4), false));
             met.Add(new AddOnMetal("STAIR METAL", "4X10", getMetalPR(6), laborRate, getUnits(0), getMetalMP(6), true));
             met.Add(new AddOnMetal("STAIR METAL", "4X8", getMetalPR(7), laborRate, getUnits(0), getMetalMP(7), true));
+            met.Add(new AddOnMetal("Open End Stair Metal", "(Set of 2 L&R)", getMetalPR(10), laborRate, 0, getMetalMP(10), false));//Added missed metal ,as per mail on 12th Sept 2019.
             met.Add(new AddOnMetal("Door Pan", "10' - 12'", getMetalPR(11), laborRate, 0, getMetalMP(11), false));
             met.Add(new AddOnMetal("Door Pan", "8'", getMetalPR(12), laborRate, 0, getMetalMP(12), false));
             met.Add(new AddOnMetal("Door Pan", "6'", getMetalPR(13), laborRate, 0, getMetalMP(13), false));

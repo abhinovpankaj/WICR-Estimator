@@ -160,7 +160,7 @@ namespace WICR_Estimator.GoogleUtility
                 case "Polyurethane Injection Block":
                     prjName = "DeNeef";
                     break;
-                case "Block Wall":
+                case "Xypex":
                     prjName = "Xypex";
                     break;
                 default:
