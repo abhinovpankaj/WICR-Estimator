@@ -46,6 +46,7 @@ namespace WICR_Estimator
                 case "Polyurethane Injection Block":
                 case "Xypex":
                 case "Reseal all systems":
+                case "Blank":
                     return new MetalViewModel(Js);
                 
                 default:
@@ -75,6 +76,7 @@ namespace WICR_Estimator
                 case "Dexcellent II":
                 case "Westcoat BT":
                 case "Reseal all systems":
+                case "Blank":
                     return new SlopeViewModel(Js);
                 case "Endurokote":
                     return new EnduroKoteSlopeViewModel(Js);
@@ -159,6 +161,8 @@ namespace WICR_Estimator
                     return new DeneefMaterialViewModel(metalT, null, Js);
                 case "Xypex":
                     return new XypexMaterialViewModel(metalT, null, Js);
+                case "Blank":
+                    return new IndependentMaterialViewModel(metalT, slopeT, Js);
                 default:
                     return null;
             }

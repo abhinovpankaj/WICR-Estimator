@@ -1,5 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Projects>
+  <Blank>
+    <RateRange>E2</RateRange>
+    <MetalRange>F3:M43</MetalRange>
+    <LaborRange>E246:E266</LaborRange>
+    <SlopeRange>P85:Q93</SlopeRange>
+    <MaterialRange>H338:N341</MaterialRange>
+    <FreightRange>E48:F54</FreightRange>
+  </Blank>
   <WeatherWear>
     <RateRange>E2</RateRange>
     <MetalRange>F3:M43</MetalRange>

@@ -163,6 +163,9 @@ namespace WICR_Estimator.GoogleUtility
                 case "Xypex":
                     prjName = "Xypex";
                     break;
+                case "Blank":
+                    prjName = "Blank";
+                    break;
                 default:
                     break;
             }

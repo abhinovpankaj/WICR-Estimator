@@ -246,6 +246,9 @@
     <Compile Include="Views\SelectedProjectsPage.xaml.cs">
       <DependentUpon>SelectedProjectsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\IndependentSystemMaterialPage.xaml.cs">
+      <DependentUpon>IndependentSystemMaterialPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\URISlopePage.xaml.cs">
       <DependentUpon>URISlopePage.xaml</DependentUpon>
     </Compile>
@@ -301,6 +304,10 @@
     <Page Include="Views\SelectedProjectsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\IndependentSystemMaterialPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\URISlopePage.xaml">
       <Generator>MSBuild:Compile</Generator>

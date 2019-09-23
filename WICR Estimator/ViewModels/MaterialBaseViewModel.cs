@@ -116,9 +116,13 @@ namespace WICR_Estimator.ViewModels
             deckCount = 1;
             projectname = Js.ProjectName;
             actualPreWage = Js.ActualPrevailingWage;
-            Js.JobSetupChange += JobSetup_OnJobSetupChange;
-            SystemMaterial.OnQTyChanged += (s, e) => { setExceptionValues(s); };
-            CheckboxCommand = new DelegateCommand(ApplyCheckUnchecks, canApply);
+            if (!Js.IsProjectIndependent)
+            {
+                Js.JobSetupChange += JobSetup_OnJobSetupChange;
+                SystemMaterial.OnQTyChanged += (s, e) => { setExceptionValues(s); };
+                CheckboxCommand = new DelegateCommand(ApplyCheckUnchecks, canApply);
+            }
+            
         }
 
 
@@ -219,7 +223,7 @@ namespace WICR_Estimator.ViewModels
                 SMSqft = lfArea,
                 Coverage = cov,
                 MaterialPrice = mp,
-                Weight = w, 
+                Weight = w,
                 Qty = qty,
                 SMSqftH = sqh,
                 Operation = operation,
@@ -230,13 +234,18 @@ namespace WICR_Estimator.ViewModels
                 Hours = calcHrs,
                 LaborExtension = labrExt,
                 VerticalProductionRate = vprRate,
-                LaborUnitPrice = getLaborUnitPrice(labrExt, riserCount, totalSqft,sqv,sqh,sqStairs, matName),//labrExt / (riserCount + totalSqft),
+                LaborUnitPrice = getLaborUnitPrice(labrExt, riserCount, totalSqft, sqv, sqh, sqStairs, matName),//labrExt / (riserCount + totalSqft),
                 FreightExtension = w * qty,
                 MaterialExtension = mp * qty,  //chnage for independent projects
-                IsMaterialChecked =  getCheckboxCheckStatus(matName),
+                IsMaterialChecked = getCheckboxCheckStatus(matName),
                 IsMaterialEnabled = getCheckboxEnabledStatus(matName),
-                IncludeInLaborMinCharge=IncludedInLaborMin(matName)
+                IncludeInLaborMinCharge = IncludedInLaborMin(matName),
+                AllEditable = getEditable()
             });
+        }
+        public virtual bool getEditable()
+        {
+            return false;
         }
 
         public virtual string GetOperation(string matName)

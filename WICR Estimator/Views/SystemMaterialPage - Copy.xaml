@@ -69,28 +69,6 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <Style TargetType="{x:Type TextBox}" x:Key="editableTextboxQTY">
-
-            <Style.Triggers >
-
-                <DataTrigger Binding="{Binding IsMaterialChecked}" Value="False">
-                    <Setter Property="Background" Value="Gray"/>
-                    <Setter Property="Foreground" Value="Gray"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding AllEditable}" Value="True">
-                    <Setter Property="IsEnabled" Value="True"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding AllEditable}" Value="False">
-                    <Setter Property="IsEnabled" Value="{Binding Path=Name,
-                                Converter={StaticResource qtyTextboxConv}}"/>
-                </DataTrigger>
-
-                <Trigger Property="IsEnabled" Value="True">
-                    <Setter Property="Background" Value="LightYellow" />
-                    <Setter Property="ToolTip" Value="Please enter a numeric value."/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
         <Style TargetType="{x:Type DataGridCell}" x:Key="editableCell">
             <Style.Triggers >
                 <Trigger Property="IsReadOnly" Value="False">
@@ -164,11 +142,10 @@
                     
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Units" IsReadOnly="True"
+                <!--<DataGridTextColumn Header="Units" IsReadOnly="True"
                                     Binding="{Binding SMUnits}" KeyboardNavigation.IsTabStop="False">
-                </DataGridTextColumn>
-                <!--For creating editable Units for Independent Material ViewModel.-->
-                <!--<DataGridTemplateColumn Header="Units">
+                </DataGridTextColumn>-->
+                <DataGridTemplateColumn Header="Units">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox Text="{Binding SMUnits,UpdateSourceTrigger=LostFocus,Mode=TwoWay}"
@@ -178,7 +155,7 @@
                         </DataTemplate>
 
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>-->
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Sq ft or Lf Area" IsReadOnly="True"
                                     Binding="{Binding SMSqft,StringFormat={}{0:n2}}"
                                      KeyboardNavigation.IsTabStop="False">
@@ -194,7 +171,9 @@
                             <TextBox Text="{Binding Qty,UpdateSourceTrigger=PropertyChanged,
                                 StringFormat={}{0:n2}}"
                                      Name="qtyTb"
-                                     Style="{StaticResource editableTextboxQTY}"                                   
+                                     Style="{StaticResource editableTextbox}"
+                                    IsEnabled="{Binding Path=Name,
+                                Converter={StaticResource qtyTextboxConv}}"
                                      KeyboardNavigation.IsTabStop="{Binding Path=Name,
                                 Converter={StaticResource qtyTextboxConv}}"/>
                             

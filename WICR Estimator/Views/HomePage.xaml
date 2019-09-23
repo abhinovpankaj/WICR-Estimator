@@ -26,8 +26,7 @@
                            VerticalAlignment="Center"
                            FontSize="15" />
                 <Button FontFamily="Segoe MDL2 Assets"                       
-                        FontSize="12"
-                        
+                        FontSize="12"                        
                         BorderThickness="0"
                         Width="20"
                         Height="20"
@@ -38,6 +37,18 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                         Margin="0,0,10,0"
                         HorizontalAlignment="Right"
                         Content="&#xE8C8;"/>
+                <!--<Button FontFamily="Segoe MDL2 Assets"                       
+                        FontSize="12"                        
+                        BorderThickness="0"
+                        Width="20"
+                        Height="20"
+                        Command="{Binding RelativeSource={RelativeSource FindAncestor, 
+AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateIndependentProject}"
+                        CommandParameter="{Binding}"
+                        VerticalAlignment="Center"
+                        Margin="0,0,10,0"
+                        HorizontalAlignment="Right"
+                        Content="&#xE74C;"/>-->
             </DockPanel>
             <!--<DataTemplate.Triggers>
                 <DataTrigger
@@ -170,12 +181,6 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
             
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
-                    <!--<Style.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Foreground" Value="White"/>
-                            <Setter Property="Background" Value="#1F4E78"/>
-                        </Trigger>
-                    </Style.Triggers>-->
                     <Style.Triggers>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>

@@ -34,7 +34,7 @@ namespace WICR_Estimator.Models
                 }
             }
         }
-        
+        public bool IsProjectIndependent { get; set; }
         private string projectname;
 
         public string FirstCheckBoxLabel { get; set; }

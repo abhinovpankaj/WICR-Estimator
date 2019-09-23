@@ -523,6 +523,8 @@ namespace WICR_Estimator.Models
             //         "Vista Paint Acripoxy",
             // "Lip Color"
         }
+
+        public bool AllEditable { get; set; }
     }
     
     public class OtherItem:BaseViewModel

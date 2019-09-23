@@ -40,7 +40,11 @@ namespace WICR_Estimator.ViewModels
             //    }
             //}
             CalculateCost(null);
-            js.JobSetupChange += JobSetup_OnJobSetupChange;
+            if (!js.IsProjectIndependent)
+            {
+                js.JobSetupChange += JobSetup_OnJobSetupChange;
+            }
+            
         }
         public override ObservableCollection<Metal> GetMetals()
         {

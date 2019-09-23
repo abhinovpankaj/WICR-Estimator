@@ -1,94 +1,210 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using WICR_Estimator.Models;
 
 namespace WICR_Estimator.ViewModels
 {
+    [DataContract]
     public class IndependentMaterialViewModel:MaterialBaseViewModel
     {
-        public override SystemMaterial getSMObject(int seq, string matName, string unit)
+        private Dictionary<string, string> materialNames;
+        public IndependentMaterialViewModel(Totals metalTotals, Totals slopeTotals, JobSetup Js) : base(metalTotals, slopeTotals, Js)
         {
-            double cov;
-            double mp;
-            double w;
-            double lfArea;
-            double setUpMin = 0; // Setup minimum charges from google sheet, col 6
-            double pRateStairs = 0; ///Production rate stairs from google sheet, col 5
-            double hprRate = 0;///Horizontal Production rate  from google sheet, col 4
-            double vprRate = 0;///Vertical Production rate  from google sheet, col 1
-            double sqh = 0;
-            double sqv = 0;
-            double labrExt = 0;
-            double calcHrs = 0;
-            double sqStairs = 0;
-            double qty = 0;
-            string operation = "";
-            if (isPrevailingWage)
+            materialNames = new Dictionary<string, string>();
+
+            FillMaterialList();
+
+            FetchMaterialValuesAsync(false);
+
+        }
+
+        public override void FetchMaterialValuesAsync(bool hasSetupChanged)
+        {
+            Dictionary<string, double> qtyList = new Dictionary<string, double>();
+
+            foreach (SystemMaterial item in SystemMaterials)
             {
-                double.TryParse(freightData[5][0].ToString(), out prPerc);
+                if (item.Name == "Stucco Material Remove and replace (LF)" || item.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
+                    item.Name == "Extra stair nosing lf")
+                {
+                    qtyList.Add(item.Name, item.Qty);
+                }
+
             }
+            if (materialNames == null)
+            {
+                materialNames = new Dictionary<string, string>();
+                FillMaterialList();
+            }
+            var sysMat = GetSystemMaterial(materialNames);
+
+            #region  Update Special Material Pricing and QTY
+            if (hasSetupChanged)
+            {
+                for (int i = 0; i < SystemMaterials.Count; i++)
+                {
+
+                    double sp = SystemMaterials[i].SpecialMaterialPricing;
+                    bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
+                    bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
+                    SystemMaterials[i] = sysMat[i];
+
+                    SystemMaterials[i].SpecialMaterialPricing = sp;
+                    SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                    SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                    if (SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)" || SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
+                    SystemMaterials[i].Name == "Extra stair nosing lf")
+                    {
+                        if (qtyList.ContainsKey(SystemMaterials[i].Name))
+                        {
+                            SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                        }
+                    }
+
+                }
+
+            }
+            #endregion
             else
-                prPerc = 0;
+                SystemMaterials = sysMat;
 
-            double.TryParse(materialDetails[seq][1].ToString(), out vprRate);
-            double.TryParse(materialDetails[seq][2].ToString(), out cov);
-            double.TryParse(materialDetails[seq][0].ToString(), out mp);
-            double.TryParse(materialDetails[seq][3].ToString(), out w);
-            lfArea = getlfArea(matName);
-            double.TryParse(materialDetails[seq][6].ToString(), out setUpMin);
-            double.TryParse(materialDetails[seq][5].ToString(), out pRateStairs);
-            double.TryParse(materialDetails[seq][4].ToString(), out hprRate);
-            pRateStairs = pRateStairs * (1 + prPerc);
-            hprRate = hprRate * (1 + prPerc);
-            vprRate = vprRate * (1 + prPerc);
-            sqv = getSqftAreaVertical(matName);
-            sqh = getSqFtAreaH(matName);
-            sqStairs = getSqFtStairs(matName);
-            calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs, sqv, vprRate);
+            setExceptionValues(null);
+            //setCheckBoxes();
+            if (OtherMaterials.Count == 0)
+            {
+                OtherMaterials = GetOtherMaterials();
+                OtherLaborMaterials = GetOtherMaterials();
+            }
+            if (SubContractLaborItems.Count == 0)
+            {
+                SubContractLaborItems = GetLaborItems();
+            }
+            calculateRLqty();
+            CalculateLaborMinCharge();
+            CalculateAllMaterial();
+        }
+        public void FillMaterialList()
+        {
+            materialNames.Add("Extra stair nosing lf", "LF");
+            materialNames.Add("Plywood 3/4 & blocking (# of 4x8 sheets)", "4X8 Sheets");
+            materialNames.Add("Stucco Material Remove and replace (LF)", "LF");
+        }
 
-            labrExt = CalculateLabrExtn(calcHrs, setUpMin, matName);
-            qty = getQuantity(matName, cov, lfArea);
-            if (lfArea == -1)
+        public override bool getCheckboxCheckStatus(string materialName)
+        {
+            switch (materialName)
             {
-                lfArea = qty;
+                case "Extra stair nosing lf":
+                case "Plywood 3/4 & blocking (# of 4x8 sheets)":
+                case "Stucco Material Remove and replace (LF)":
+                    return false;
+                default:
+                    return true;
             }
-            if (sqh == -1)
+        }
+
+        public override bool getCheckboxEnabledStatus(string materialName)
+        {
+            return false;
+        }
+
+        public override void ApplyCheckUnchecks(object obj)
+        {
+            
+        }
+        public override void calculateLaborHrs()
+        {
+            calLaborHrs(6, totalSqft);
+        }
+        public override bool canApply(object obj)
+        {
+            return true;
+        }
+        public override void CalculateLaborMinCharge()
+        {
+            //LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+            //                            x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
+            //LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+            //                             x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
+
+            //LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 :
+            //                                    (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
+            base.CalculateLaborMinCharge();
+        }
+        public override void calculateRLqty()
+        {
+            
+        }
+
+        public override double getlfArea(string materialName)
+        {
+            switch (materialName)
             {
-                sqh = qty;
+                
+                case "Extra stair nosing lf":
+                case "Plywood 3/4 & blocking (# of 4x8 sheets)":
+                case "Stucco Material Remove and replace (LF)":
+                    return 0;
+                default:
+                    return totalSqft + stairWidth * riserCount * 2;
             }
-            if (sqStairs == -1)
+        }
+
+        public override double getSqFtAreaH(string materialName)
+        {
+            switch (materialName)
             {
-                sqStairs = qty;
+                 
+                default:
+                    return totalSqft;
             }
-            operation = GetOperation(matName);
-            return (new SystemMaterial
+        }
+
+        public override double getSqFtStairs(string materialName)
+        {
+            switch (materialName)
             {
-                Name = matName,
-                SMUnits = unit,
-                SMSqft = lfArea,
-                Coverage = cov,
-                MaterialPrice = mp,
-                Weight = w,
-                Qty = qty,
-                SMSqftH = sqh,
-                Operation = operation,
-                HorizontalProductionRate = hprRate,
-                StairsProductionRate = pRateStairs,
-                StairSqft = sqStairs,
-                SetupMinCharge = setUpMin,
-                Hours = calcHrs,
-                LaborExtension = labrExt,
-                VerticalProductionRate = vprRate,
-                LaborUnitPrice = getLaborUnitPrice(labrExt, riserCount, totalSqft, sqv, sqh, sqStairs, matName),//labrExt / (riserCount + totalSqft),
-                FreightExtension = w * qty,
-                MaterialExtension = mp * qty,
-                IsMaterialChecked = false,//getCheckboxCheckStatus(matName),
-                IsMaterialEnabled = true,//getCheckboxEnabledStatus(matName),
-                IncludeInLaborMinCharge = IncludedInLaborMin(matName)
-            });
+                case "Staples (1\" Crown x 3/4 long Box of 13,500 qty)":
+                case "Grout and Texture Color Option: TC-40 Liquid Colorant":
+                case "Pattern:  1/4 inch grout tape, Standard 12 x 12 tile pattern, tape and labor":
+                case "Plywood 3/4 & blocking (# of 4x8 sheets)":
+                case "Stucco Material Remove and replace (LF)":
+                case "WP-81 Liquid":
+                    return 0;
+                case "Stair Nosing":
+                    return riserCount * stairWidth;
+                default:
+                    return riserCount * stairWidth * 2;
+            }
+        }
+
+        public override double getQuantity(string materialName, double coverage, double lfArea)
+        {
+            switch (materialName)
+            {
+                case "Sheet Membrane; 6\" WP-40 for plywood seams only":
+                    return lfArea / 3 / coverage * 0.9;
+                case "Sheet Membrane; WP-40 for entire deck (10-YEAR MANUFACTURER WARRANTY REQ)":
+                    return (totalSqft + (riserCount * 8)) / (225 * 0.9);
+                default:
+                    return lfArea / coverage;
+            }
+        }
+
+        public override bool IncludedInLaborMin(string matName)
+        {
+            switch (matName)
+            {
+                case "Plywood 3/4 & blocking (# of 4x8 sheets)":
+                case "Stucco Material Remove and replace (LF)":
+                    return false;
+                default:
+                    return true;
+            }
         }
     }
 }

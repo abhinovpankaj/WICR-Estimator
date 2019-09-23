@@ -12,6 +12,26 @@
       >
     <UserControl.Resources>
         <conv:NullToVisibilityConverter x:Key="nullToVisibilityConverter"/>
+        <DataTemplate x:Key="DefaultContent">
+            <Grid Margin="0,0,0,0" Background="LightBlue"
+                  DataContext="{Binding MaterialViewModel}">
+                <local:SystemMaterialPage/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="IndependentContent">
+            <Grid Margin="0,0,0,0" Background="LightBlue"
+                  DataContext="{Binding MaterialViewModel}">
+                <local:IndependentSystemMaterialPage/>
+            </Grid>
+        </DataTemplate>
+        <Style x:Key="MaterialTabStyle" TargetType="ContentPresenter">
+            <Setter Property="ContentTemplate" Value="{StaticResource DefaultContent}"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding OriginalProjectName.}" Value="Blank">
+                    <Setter Property="ContentTemplate" Value="{StaticResource IndependentContent}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
     <Grid>
         <TabControl ItemsSource="{Binding EnabledProjects}" SelectedIndex="0">
@@ -70,13 +90,17 @@
                             <TabItem Header="Material"
                                  VerticalAlignment="Bottom">
                                 <TabItem.Content>
-                                    <Grid Margin="0,0,0,0" 
+                                    <!--<Grid Margin="0,0,0,0" 
                                       Background="LightBlue" 
                                           DataContext="{Binding MaterialViewModel}">
                                         <local:SystemMaterialPage/>
-                                    </Grid>
+                                    </Grid>-->
+                                    <ContentPresenter 
+                                        Style="{StaticResource  MaterialTabStyle}" 
+                                        Content="{Binding}"/>
                                 </TabItem.Content>
                             </TabItem>
+                            
                             <TabItem Header="Labor"
                                  VerticalAlignment="Bottom">
                                 <TabItem.Content>

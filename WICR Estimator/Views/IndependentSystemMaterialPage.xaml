@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="WICR_Estimator.Views.SystemMaterialPage"
+﻿<UserControl x:Class="WICR_Estimator.Views.IndependentSystemMaterialPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -106,7 +106,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -115,7 +115,7 @@
 
         <DataGrid AutoGenerateColumns="False" 
                   HorizontalAlignment="Left"
-                  Name="MaterialGrid" 
+                  Name="MaterialGridX" 
                   CanUserSortColumns="False"
                   Margin="10"
                   Grid.RowSpan="5"
@@ -138,7 +138,7 @@
                 <DataGridTemplateColumn Header="" KeyboardNavigation.IsTabStop="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox x:Name="includeMe" Command="{Binding DataContext.CheckboxCommand,
+                            <CheckBox x:Name="includeMeX" Command="{Binding DataContext.CheckboxCommand,
                                 ElementName=MaterialGrid}"
                                       CommandParameter="{Binding Name}"
                                       IsChecked="{Binding IsMaterialChecked,
@@ -234,8 +234,10 @@
 
         </DataGrid>
         
-        <Grid Grid.Column="1">
-            <GroupBox x:Name="OtherCost" 
+        <Grid Grid.Column="0" Grid.Row="1"
+              HorizontalAlignment="Center"
+              >
+            <GroupBox x:Name="OtherCostX" 
                   Header="Other Cost" Foreground="Maroon"
                   FontFamily="Arial"
                   FontSize="12"
@@ -245,7 +247,7 @@
 
 
                 <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Left"
-                      Name="OtherCostGrid" VerticalAlignment="Top"
+                      Name="OtherCostGridX" VerticalAlignment="Top"
                           CanUserSortColumns="False"
                       Margin="0,10,10,10"
                       Grid.Column="1"
@@ -288,16 +290,17 @@
         
         <!--Row 0 ELement-->
         <!--Row 1 ELement-->
-        <GroupBox Header ="Other Cost Total "
-                  Grid.Column="1"
-                  Grid.Row="1" 
+        <GroupBox Header ="Other Cost Total " HorizontalAlignment="Center"
+                  Grid.Column="0"
+                  Grid.Row="2" 
+                  VerticalAlignment="Top"
                   Foreground="Blue" 
                   FontSize="12" FontWeight="Bold">
             <StackPanel 
                     Orientation="Horizontal"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Bottom">
-                <Button Name="AddButton" Background="White"
+                <Button Name="AddButtonX" Background="White"
                     HorizontalAlignment="Right"
                                         Height="30"
                     Command="{Binding AddRowCommand}">
@@ -328,7 +331,7 @@
                        />
                 </StackPanel>
                 <StackPanel >
-                    <TextBox x:Name="TotalOCExtension"
+                    <TextBox x:Name="TotalOCExtensionX"
                              IsEnabled="False"                        
                              Margin="5"    
                              VerticalContentAlignment="Center"
@@ -345,8 +348,8 @@
         </GroupBox>
         <!--Row 1 ELement End-->
         <!--Row 2 ELement-->
-        <GroupBox x:Name="SubContract" Grid.Column="1" 
-                  Grid.Row="2"
+        <GroupBox x:Name="SubContractX" Grid.Column="1" 
+                  Grid.Row="0"
                   Header="Sub Contract Labor"
                   FontFamily="Arial"
                   FontWeight="Bold"
@@ -356,7 +359,7 @@
                   BorderThickness="0.5"  >
             <StackPanel>
                 <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Left"
-                      Name="SubConlbrcstGrid" VerticalAlignment="Top"
+                      Name="SubConlbrcstGridX" VerticalAlignment="Top"
                           CanUserSortColumns="False"
                      CellStyle="{StaticResource editableCell}"
                        Margin="0,10,10,10" Grid.Column="1"
@@ -385,7 +388,7 @@
                        Style="{StaticResource LabelStyle1}"  FontSize="12"
                           
                        />
-                    <TextBox x:Name="TotalSCExtension"
+                    <TextBox x:Name="TotalSCExtensionX"
                          IsEnabled="False" 
                              VerticalContentAlignment="Center"
                          Margin="0,5,5,5"                       
@@ -409,7 +412,7 @@
                                 Margin="5">
                         <TextBlock Text="SubContract Markup%" 
                                    HorizontalAlignment="Center"/>
-                        <TextBox Text="{Binding ElementName=slWidth,
+                        <TextBox Text="{Binding ElementName=slWidthX,
                                  Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                  TextAlignment="Right"
                                  Width="40" 
@@ -422,7 +425,7 @@
                                 TickPlacement="Both"
                                 TickFrequency=".05" 
                                 IsSnapToTickEnabled="True"
-                                Name="slWidth"
+                                Name="slWidthX"
                     />
                     </StackPanel>
                 </StackPanel>
@@ -430,7 +433,7 @@
             
         </GroupBox>
         
-        <GroupBox x:Name="groupBoxMisc" 
+        <GroupBox x:Name="groupBoxMiscX" 
                   Margin="10"
                   Grid.Column="1"
                 Grid.Row="3"
@@ -441,7 +444,7 @@
                   FontWeight="Bold"
                   BorderBrush="DarkBlue"
                   BorderThickness="0.5" >
-            <Grid x:Name="grid5">
+            <Grid x:Name="grid5X">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -476,7 +479,7 @@
                        Grid.Row="4"
                        Style="{StaticResource LabelStyle1}"  
                        />
-                <TextBox x:Name="TotalMaterialCostbrkp"
+                <TextBox x:Name="TotalMaterialCostbrkpX"
                          IsEnabled="False"
                          VerticalContentAlignment="Center"
                          Grid.Row="0"
@@ -485,14 +488,14 @@
                          Height="25" Width="150"
                          Text="{Binding TotalMaterialCost,
                     UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
-                <TextBox x:Name="TotalWeightbrkp"
+                <TextBox x:Name="TotalWeightbrkpX"
                          IsEnabled="False" Grid.Row="1" 
                          Grid.Column="2"
                          Margin="5,1,5,6"
                          VerticalContentAlignment="Center"
                          Text="{Binding TotalWeightbrkp,StringFormat=N2,
                     UpdateSourceTrigger=PropertyChanged}" Height="25" Width="150" />
-                <TextBox x:Name="TotalFreightCostBrkp"
+                <TextBox x:Name="TotalFreightCostBrkpX"
                          IsEnabled="False"
                          Grid.Row="2"
                          Margin="5,0,5,5"
@@ -500,7 +503,7 @@
                          VerticalContentAlignment="Center"
                          Text="{Binding TotalFreightCostBrkp,
                     UpdateSourceTrigger=PropertyChanged,StringFormat='c'}" Height="25" Width="150" />
-                <TextBox x:Name="TotalSubContractLaborCostBrkp"
+                <TextBox x:Name="TotalSubContractLaborCostBrkpX"
                          IsEnabled="False"
                          Grid.Row="3"
                          Margin="5,0,5,5"
@@ -508,7 +511,7 @@
                          Grid.Column="2"
                          Text="{Binding TotalSubContractLaborCostBrkp,StringFormat='c',
                     UpdateSourceTrigger=PropertyChanged}" Height="25" Width="150" />
-                <TextBox x:Name="CostpersqFeet"
+                <TextBox x:Name="CostpersqFeetX"
                          IsEnabled="False"
                          Grid.Row="4"
                          Margin="5,0,5,5"

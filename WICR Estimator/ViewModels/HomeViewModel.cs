@@ -42,12 +42,38 @@ namespace WICR_Estimator.ViewModels
             SaveEstimate = new DelegateCommand(SaveProjectEstimate, canSaveEstimate);
             LoadEstimate = new DelegateCommand(LoadProjectEstimate, canLoadEstimate);
             ReplicateProject = new DelegateCommand(Replicate, canReplicate);
+            ReplicateIndependentProject = new DelegateCommand(ReplicateIndependent, canReplicate);
             ClearProjects = new DelegateCommand(Clear, canClear);
             CreateSummary = new DelegateCommand(GenerateSummary, canCreateSummary);
             RefreshGoogleData = new DelegateCommand(DeleteGoogleData, canDelete);
             ProjectTotals = new ProjectsTotal();
             //statusNotifier = new NotifyIcon();
 
+        }
+
+        private void ReplicateIndependent(object obj)
+        {
+            Project prj = obj as Project;
+            if (prj != null)
+            {
+                if (prj.IsSelectedProject)
+                {
+                    Project replicatedProject = new Project();
+
+                    prj.CopyCount++;
+                    replicatedProject.Name = prj.Name + "." + prj.CopyCount;
+                    replicatedProject.OriginalProjectName = prj.OriginalProjectName;
+                    replicatedProject.GrpName = "Independent";
+                    replicatedProject.MainGroup = "Replicated Projects";
+                    replicatedProject.IsSelectedProject = true;
+                    replicatedProject.ProjectJobSetUp = new JobSetup(prj.OriginalProjectName);
+                    replicatedProject.ProjectJobSetUp.IsProjectIndependent = true;
+                    replicatedProject.MetalViewModel = new ZeroMetalViewModel(replicatedProject.ProjectJobSetUp);
+                    SelectedProjects.Add(replicatedProject);
+                    Projects.Add(replicatedProject);
+                    Project_OnSelectedProjectChange(Projects[0], null);
+                }
+            }
         }
 
         #region Properties
@@ -476,6 +502,7 @@ namespace WICR_Estimator.ViewModels
         public DelegateCommand CreateSummary { get; set; }
         public DelegateCommand RefreshGoogleData { get; set; }
         public DelegateCommand ReplicateProject { get; set; }
+        public DelegateCommand ReplicateIndependentProject { get; set; }
         private DelegateCommand showCalculationDetails;
         public DelegateCommand ShowCalculationDetails
         {
@@ -714,13 +741,14 @@ namespace WICR_Estimator.ViewModels
             Projects.Add(new Project { Name = "Westcoat Epoxy", OriginalProjectName = "Westcoat Epoxy", Rank = 22, GrpName = "Westcoat", MainGroup = "Epoxy Coatings" });
             Projects.Add(new Project { Name = "Polyurethane Injection Block", OriginalProjectName = "Polyurethane Injection Block", Rank = 23, GrpName = "DeNeef", MainGroup = "Below Grade" });
             Projects.Add(new Project { Name = "Xypex", OriginalProjectName ="Xypex", Rank = 24, GrpName = "Negative side coating", MainGroup = "Below Grade" });
+            Projects.Add(new Project { Name = "Blank", OriginalProjectName = "Blank", Rank = 25, GrpName = "Independent", MainGroup = "Blank Template" });
             ProjectView = CollectionViewSource.GetDefaultView(Projects);
             
             ProjectView.GroupDescriptions.Add(new PropertyGroupDescription("MainGroup"));
             ProjectView.SortDescriptions.Add(new SortDescription("MainGroup", ListSortDirection.Ascending));
             ProjectView.GroupDescriptions.Add(new PropertyGroupDescription("GrpName"));
             ProjectView.SortDescriptions.Add(new SortDescription("GrpName", ListSortDirection.Ascending));
-            ProjectView.Filter = FilterProject;
+            //ProjectView.Filter = FilterProject;
         }
 
         

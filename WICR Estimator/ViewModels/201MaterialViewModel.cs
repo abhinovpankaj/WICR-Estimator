@@ -27,11 +27,12 @@ namespace WICR_Estimator.ViewModels
         private double totalPlywoodSqft;
         [DataMember]
         private bool hasNewPlywood;
-        //private double termBar;
+
+        private bool  isIndependent;
         public _201MaterialViewModel(Totals metalTotals, Totals slopeTotals, JobSetup js) : base(metalTotals, slopeTotals, js)
         {
             materialNames = new Dictionary<string, string>();
-
+            isIndependent = js.IsProjectIndependent;
             FillMaterialList();
 
             FetchMaterialValuesAsync(false);
@@ -72,7 +73,15 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL WITH SAND BROADCAST", "LF");
            
         }
-
+        public override bool getEditable()
+        {
+            if (isIndependent)
+            {
+                return true;
+            }
+            else
+                return base.getEditable();
+        }
         public override string GetOperation(string matName)
         {
             switch (matName)
@@ -262,7 +271,10 @@ namespace WICR_Estimator.ViewModels
         }
         public override bool getCheckboxCheckStatus(string materialName)
         {
-            
+            if (isIndependent)
+            {
+                return false;
+            }
             switch (materialName)
             {
                 case "191 QD PRIMER AND PREPARATION FOR RE-SURFACE":
@@ -295,6 +307,10 @@ namespace WICR_Estimator.ViewModels
 
         public override bool getCheckboxEnabledStatus(string materialName)
         {
+            if (isIndependent)
+            {
+                return true;
+            }
             switch (materialName)
             {
                 case "191 QD PRIMER AND PREPARATION FOR RE-SURFACE":
@@ -321,6 +337,10 @@ namespace WICR_Estimator.ViewModels
         }
         public override double getlfArea(string materialName)
         {
+            if (isIndependent)
+            {
+                return 0; 
+            }
             switch (materialName)
             {
                 case "TREMDRAIN 1000 (HORIZONTAL ONLY)":
@@ -374,6 +394,10 @@ namespace WICR_Estimator.ViewModels
 
         public override double getQuantity(string materialName, double coverage, double lfArea)
         {
+            if (isIndependent)
+            {
+                return 0;
+            }
             switch (materialName)
             {
                 case "TERM BAR, VULKEM 116, PINS AND LOADS":
@@ -393,7 +417,10 @@ namespace WICR_Estimator.ViewModels
 
         public override double getSqFtAreaH(string materialName)
         {
-            
+            if (isIndependent)
+            {
+                return 0;
+            }
             switch (materialName)
             {
                 case "PARATERM BAR LF":
@@ -422,6 +449,10 @@ namespace WICR_Estimator.ViewModels
         }
         public override double getSqftAreaVertical(string materialName)
         {
+            if (isIndependent)
+            {
+                return 0;
+            }
             switch (materialName)
             {
                 case "191 QD PRIMER AND PREPARATION FOR RE-SURFACE":
@@ -456,6 +487,10 @@ namespace WICR_Estimator.ViewModels
         }
         public override double getSqFtStairs(string materialName)
         {
+            if (isIndependent)
+            {
+                return 0;
+            }
             switch (materialName)
             {
                 case "191 QD PRIMER AND PREPARATION FOR RE-SURFACE":
@@ -628,25 +663,28 @@ namespace WICR_Estimator.ViewModels
         }
         public override void setCheckBoxes()
         {
-            
-            SystemMaterials.Where(x => x.Name == "CALIFORNIA SEALER FROM LOWRYS (GLUING DRAIN MAT)").FirstOrDefault().IsMaterialChecked=
+            if (!isIndependent)
+            {
+                SystemMaterials.Where(x => x.Name == "CALIFORNIA SEALER FROM LOWRYS (GLUING DRAIN MAT)").FirstOrDefault().IsMaterialChecked =
                SystemMaterials.Where(x => x.Name == "TREMDRAIN 1000 (VERTICAL ONLY)").FirstOrDefault().IsMaterialChecked;
 
-            SystemMaterial mat = SystemMaterials.Where(x => x.Name == "TERM BAR, VULKEM 116, PINS AND LOADS").FirstOrDefault();
-            if (mat!=null)
-            {
-                mat.IsMaterialChecked = mat.Qty > 0 ? true : false;
+                SystemMaterial mat = SystemMaterials.Where(x => x.Name == "TERM BAR, VULKEM 116, PINS AND LOADS").FirstOrDefault();
+                if (mat != null)
+                {
+                    mat.IsMaterialChecked = mat.Qty > 0 ? true : false;
+                }
+                mat = SystemMaterials.Where(x => x.Name == "SUPERSTOP(LF)").FirstOrDefault();
+                if (mat != null)
+                {
+                    mat.IsMaterialChecked = mat.Qty > 0 ? true : false;
+                }
+                mat = SystemMaterials.Where(x => x.Name == "PENETRATIONS").FirstOrDefault();
+                if (mat != null)
+                {
+                    mat.IsMaterialChecked = mat.Qty > 0 ? true : false;
+                }
             }
-            mat = SystemMaterials.Where(x => x.Name == "SUPERSTOP(LF)").FirstOrDefault();
-            if (mat != null)
-            {
-                mat.IsMaterialChecked = mat.Qty > 0 ? true : false;
-            }
-            mat = SystemMaterials.Where(x => x.Name == "PENETRATIONS").FirstOrDefault();
-            if (mat != null)
-            {
-                mat.IsMaterialChecked = mat.Qty > 0 ? true : false;
-            }            
+            
         }
 
         private double Ceiling(double value, double significance)
