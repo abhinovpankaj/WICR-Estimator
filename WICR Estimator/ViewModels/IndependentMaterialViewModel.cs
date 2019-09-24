@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -86,6 +87,26 @@ namespace WICR_Estimator.ViewModels
             calculateRLqty();
             CalculateLaborMinCharge();
             CalculateAllMaterial();
+        }
+        public override ObservableCollection<OtherItem> GetOtherMaterials()
+        {
+            ObservableCollection<OtherItem> om = new ObservableCollection<OtherItem>();
+            om.Add(new OtherItem { Name = "Access issues?", IsReadOnly = false });
+            om.Add(new OtherItem { Name = "Additional prep?", IsReadOnly = false });
+            om.Add(new OtherItem { Name = "Additional labor?", IsReadOnly = false });
+            om.Add(new OtherItem { Name = "Alternate material?", IsReadOnly = false });
+            om.Add(new OtherItem { Name = "Additional Move ons?", IsReadOnly = false });
+            om.Add(new OtherItem { Name = "", IsReadOnly = false });
+            om.Add(new OtherItem { Name = "", IsReadOnly = false });
+            om.Add(new OtherItem { Name = "", IsReadOnly = false });
+            om.Add(new OtherItem { Name = "", IsReadOnly = false });
+            om.Add(new OtherItem { Name = "", IsReadOnly = false });
+            om.Add(new OtherItem { Name = "", IsReadOnly = false });
+            om.Add(new OtherItem { Name = "", IsReadOnly = false });
+            om.Add(new OtherItem { Name = "", IsReadOnly = false });
+            om.Add(new OtherItem { Name = "", IsReadOnly = false });
+            om.Add(new OtherItem { Name = "", IsReadOnly = false });
+            return om;
         }
         public void FillMaterialList()
         {

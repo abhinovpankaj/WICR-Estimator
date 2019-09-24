@@ -40,7 +40,7 @@ namespace WICR_Estimator.ViewModels
     [KnownType(typeof(TufflexMaterialViewModel))]
     [KnownType(typeof(WestcoatColorMaterialViewModel))]
     [KnownType(typeof(UPIBelowTileMaterialViewModel))]
-
+    [KnownType(typeof(IndependentMaterialViewModel))]
     public class MaterialBaseViewModel:BaseViewModel
     {
         [DataMember]
@@ -2882,6 +2882,16 @@ namespace WICR_Estimator.ViewModels
                 SumMatPrice = selectedSystemMaterials.Select(x => x.MaterialPrice).Sum();
                 SumTotalMatExt = selectedSystemMaterials.Select(x => x.MaterialExtension).Sum();
                 SumWeight = selectedSystemMaterials.Select(x => x.FreightExtension).Sum();
+                //Total Freight
+
+                SumFreight = FreightCalculator(SumWeight);
+            }
+            else
+            {
+                SumQty = 0;
+                SumMatPrice = 0;
+                SumTotalMatExt = 0;
+                SumWeight = 0;
                 //Total Freight
 
                 SumFreight = FreightCalculator(SumWeight);

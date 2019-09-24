@@ -27,8 +27,28 @@
         <Style x:Key="MaterialTabStyle" TargetType="ContentPresenter">
             <Setter Property="ContentTemplate" Value="{StaticResource DefaultContent}"/>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding OriginalProjectName.}" Value="Blank">
+                <DataTrigger Binding="{Binding OriginalProjectName}" Value="Blank">
                     <Setter Property="ContentTemplate" Value="{StaticResource IndependentContent}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <DataTemplate x:Key="DefaultContentLabor">
+            <Grid Margin="0,0,0,0" Background="LightBlue"
+                  DataContext="{Binding MaterialViewModel}">
+                <local:LaborPage/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="IndependentContentLabor">
+            <Grid Margin="0,0,0,0" Background="LightBlue"
+                  DataContext="{Binding MaterialViewModel}">
+                <local:IndependentLaborPage/>
+            </Grid>
+        </DataTemplate>
+        <Style x:Key="LaborTabStyle" TargetType="ContentPresenter">
+            <Setter Property="ContentTemplate" Value="{StaticResource DefaultContentLabor}"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding OriginalProjectName}" Value="Blank">
+                    <Setter Property="ContentTemplate" Value="{StaticResource IndependentContentLabor}"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
@@ -104,11 +124,15 @@
                             <TabItem Header="Labor"
                                  VerticalAlignment="Bottom">
                                 <TabItem.Content>
-                                    <Grid Margin="0,0,0,0" 
+                                    <!--<Grid Margin="0,0,0,0" 
                                       Background="LightBlue" 
                                           DataContext="{Binding MaterialViewModel}">
-                                        <local:LaborPage/>
-                                    </Grid>
+                                        <local:LaborPage/>-->
+                                    <!--</Grid>-->
+                                    <ContentPresenter 
+                                        Style="{StaticResource  LaborTabStyle}" 
+                                        Content="{Binding}"/>
+                                    
                                 </TabItem.Content>
                             </TabItem>
                             <TabItem Header="Calculation Details"                        

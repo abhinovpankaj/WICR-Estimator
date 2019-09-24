@@ -237,6 +237,9 @@
     <Compile Include="Views\JobSetupPage.xaml.cs">
       <DependentUpon>JobSetupPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\IndependentLaborPage.xaml.cs">
+      <DependentUpon>IndependentLaborPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LaborPage.xaml.cs">
       <DependentUpon>LaborPage.xaml</DependentUpon>
     </Compile>
@@ -292,6 +295,10 @@
     <Page Include="Views\JobSetupPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\IndependentLaborPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\LaborPage.xaml">
       <SubType>Designer</SubType>
