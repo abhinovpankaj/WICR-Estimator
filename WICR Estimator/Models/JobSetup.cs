@@ -14,6 +14,7 @@ namespace WICR_Estimator.Models
     public class JobSetup : BaseViewModel
     {
 
+        public bool HasTabSwitched { get; set; }
         private double actualPrevailingWage;
         public double ActualPrevailingWage
         {
@@ -238,17 +239,17 @@ namespace WICR_Estimator.Models
             IsApprovedForSandCement = true;
             IsPrevalingWage = false;
             HasDiscount = false;
-            StairWidth = 4.5;
-            TotalSqft = 1000;
-            RiserCount = 30;
+            //StairWidth = 4.5;
+            //TotalSqft = 1000;
+            //RiserCount = 30;
                        
-            DeckPerimeter = 300;
-            //WeatherWearType = "Weather Wear";
-            DeckCount = 1;
+            //DeckPerimeter = 300;
+            ////WeatherWearType = "Weather Wear";
+            //DeckCount = 1;
             VendorName = "Chivon";
             MaterialName = "24ga. Galvanized Primed Steel";
             EnableMoreMarkupCommand = new DelegateCommand(CanAddMoreMarkup, canAdd);
-            MinMarkUp = -10;
+            //MinMarkUp = -10;
             AllowMoreMarkUp = false;
             FirstCheckBoxLabel = "Approved for Sand & Cement ?";
             ProjectDelayFactor = "0-3 Months";

@@ -46,8 +46,9 @@ namespace WICR_Estimator
                 case "Polyurethane Injection Block":
                 case "Xypex":
                 case "Reseal all systems":
-                case "Blank":
                     return new MetalViewModel(Js);
+                case "Blank":
+                    return new ZeroMetalViewModel(Js);
                 
                 default:
                     return null;

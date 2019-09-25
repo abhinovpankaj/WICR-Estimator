@@ -408,12 +408,14 @@ namespace WICR_Estimator.ViewModels
                    double units = Metals[i].Units;
                    double sp = Metals[i].SpecialMetalPricing;
                    bool isSelected = Metals[i].IsStairMetalChecked;
+                
                    Metals[i] = met[i];
                    if (!Metals[i].Name.Contains("STAIR METAL"))
                    {
                        Metals[i].Units = units;
+                        Metals[i].IsStairMetalChecked = isSelected;
 
-                   }
+                    }
                    else
                    {
                        Metals[i].IsStairMetalChecked = isSelected;
@@ -607,7 +609,7 @@ namespace WICR_Estimator.ViewModels
             MetalTotals.LaborExtTotal = TotalLaborCost;
         }
 
-        public void updateLaborCost()
+        public virtual void updateLaborCost()
         {
             double stairCost = 0;
             double addOnMetalCost = 0;
@@ -665,7 +667,7 @@ namespace WICR_Estimator.ViewModels
 
             return val;
         }
-        protected void updateMaterialCost()
+        protected virtual void updateMaterialCost()
         {
             double stairCost = 0;
             double normCost = 0;

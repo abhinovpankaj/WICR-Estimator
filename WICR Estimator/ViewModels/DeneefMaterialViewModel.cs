@@ -98,17 +98,7 @@ namespace WICR_Estimator.ViewModels
         {
             calLaborHrs(6,totalSqft); ;
         }
-        public override void CalculateLaborMinCharge()
-        {
-           //LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
-           //                             x.IsMaterialChecked&&x.LaborExtension!=0).ToList().Select(x => x.Hours).Sum();
-           // LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
-           //                              x.IsMaterialChecked&&x.LaborExtension!=0).ToList().Select(x => x.SetupMinCharge).Sum();
-
-           // LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 :
-                                                //(20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
-            base.CalculateLaborMinCharge();
-        }
+        
         public override double getLaborUnitPrice(double laborExtension, double riserCount, double totalSqft,double sqftVert=0,double sqftHor=0,
             double sqftStairs=0,string materialName="")
         {
@@ -176,7 +166,7 @@ namespace WICR_Estimator.ViewModels
                 SubContractLaborItems = GetLaborItems();
             }
             getEKLQnty();
-            CalculateLaborMinCharge();
+            CalculateLaborMinCharge(hasSetupChanged);
             CalculateAllMaterial();
         }
         public override bool IncludedInLaborMin(string matName)
@@ -294,22 +284,7 @@ namespace WICR_Estimator.ViewModels
         }
         public override void setExceptionValues(object s)
         {
-            ////base.setExceptionValues();
-            //if (SystemMaterials.Count != 0)
-            //{
-            //    SystemMaterial item = SystemMaterials.Where(x => x.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)").FirstOrDefault();
-            //    if (item != null)
-            //    {
-            //        item.SMSqftH = item.Qty;
-            //        item.SMSqft = item.Qty;
-            //        item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
-            //        item.LaborExtension = item.Hours >= item.SetupMinCharge?item.Hours * laborRate:item.SetupMinCharge*laborRate;
-            //        item.LaborUnitPrice = item.LaborExtension / (item.SMSqftH + item.SMSqftV+item.StairSqft);
-
-            //    }
-                
-            //    CalculateLaborMinCharge();
-            //}
+            
         }
 
         public override void ApplyCheckUnchecks(object obj)
@@ -332,7 +307,7 @@ namespace WICR_Estimator.ViewModels
             //}
             getEKLQnty();
             ////update Add labor for minimum cost
-            CalculateLaborMinCharge();
+            CalculateLaborMinCharge(false);
 
         }
         public override void CalculateTotalSqFt()

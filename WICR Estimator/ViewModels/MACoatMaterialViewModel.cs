@@ -109,21 +109,11 @@ namespace WICR_Estimator.ViewModels
                 SubContractLaborItems = GetLaborItems();
             }
             calculateRLqty();
-            CalculateLaborMinCharge();
+            CalculateLaborMinCharge(hasSetupChanged);
             CalculateAllMaterial();
             
         }
-        public override void CalculateLaborMinCharge()
-        {
-            //LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
-            //                            x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
-            //LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
-            //                             x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
-
-            //LaborMinChargeLaborExtension =( LaborMinChargeMinSetup + LaborMinChargeHrs) > 20? 0 :
-            //                                    (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
-            base.CalculateLaborMinCharge();
-        }
+        
         public override bool IncludedInLaborMin(string matName)
         {
             switch (matName)
@@ -213,7 +203,7 @@ namespace WICR_Estimator.ViewModels
                     SystemMaterials.Where(x => x.Name == "SC-10 Topcoat").FirstOrDefault().IsMaterialChecked = false;
             }
             calculateRLqty();
-            CalculateLaborMinCharge();
+            CalculateLaborMinCharge(false);
         }
 
         public override double getlfArea(string materialName)
@@ -333,7 +323,7 @@ namespace WICR_Estimator.ViewModels
             base.setExceptionValues(s);
 
             
-            CalculateLaborMinCharge();
+            CalculateLaborMinCharge(false);
         }
 
         public override void calculateLaborHrs()

@@ -76,7 +76,7 @@ namespace WICR_Estimator.ViewModels
         private string weatherWearType;
         private bool isDataAvailable;
         private double markUpPerc;
-        
+        private double previousLaborCharges;
         private bool isSpecialMetal;
         private bool hasSpecialPricing;
         
@@ -105,15 +105,15 @@ namespace WICR_Estimator.ViewModels
             
             weatherWearType = "Weather Wear";
             IncludeDriveHours = true;
-            totalSqft = 1000;
-            stairWidth = 4.5;
-            riserCount = 30;
-            deckPerimeter = 300;
+            //totalSqft = 1000;
+            //stairWidth = 4.5;
+            //riserCount = 30;
+            //deckPerimeter = 300;
             isSpecialMetal = false;
             isDiscounted = false;
             isPrevailingWage = false;
             isApprovedforCement = true;
-            deckCount = 1;
+            //deckCount = 1;
             projectname = Js.ProjectName;
             actualPreWage = Js.ActualPrevailingWage;
             if (!Js.IsProjectIndependent)
@@ -1102,23 +1102,26 @@ namespace WICR_Estimator.ViewModels
             {
                 calculateRLqty();
             }
-            //update Add labor for minimum cost
-            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false && x.IsMaterialChecked&&x.LaborExtension!=0).ToList().Select(x => x.Hours).Sum();
-            //New Change Min Labor
-            LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false && x.IsMaterialChecked&&x.LaborExtension!=0).ToList().Select(x => x.SetupMinCharge).Sum();
-            //
-            LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs)) * laborRate;
-            LaborMinChargeLaborUnitPrice = (riserCount + totalSqft) == 0 ? 0 : LaborMinChargeLaborExtension / (riserCount + totalSqft);
-            if (LaborMinChargeMinSetup + LaborMinChargeHrs < 20)
-            {
-                AddLaborMinCharge = true;
-            }
-            else
-                AddLaborMinCharge = false;
-            OnPropertyChanged("AddLaborMinCharge");
-            OnPropertyChanged("LaborMinChargeHrs");
-            OnPropertyChanged("LaborMinChargeLaborExtension");
-            OnPropertyChanged("LaborMinChargeLaborUnitPrice");
+            CalculateLaborMinCharge(false);
+            ////update Add labor for minimum cost
+            //LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false && x.IsMaterialChecked&&x.LaborExtension!=0).ToList().Select(x => x.Hours).Sum();
+            ////New Change Min Labor
+            //LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false && x.IsMaterialChecked&&x.LaborExtension!=0).ToList().Select(x => x.SetupMinCharge).Sum();
+            ////
+            //LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs)) * laborRate;
+            //LaborMinChargeLaborUnitPrice = (riserCount + totalSqft) == 0 ? 0 : LaborMinChargeLaborExtension / (riserCount + totalSqft);
+
+            //if (LaborMinChargeMinSetup + LaborMinChargeHrs < 20)
+            //{
+            //    AddLaborMinCharge = true;
+            //}
+            //else
+            //    AddLaborMinCharge = false;
+
+            //OnPropertyChanged("AddLaborMinCharge");
+            //OnPropertyChanged("LaborMinChargeHrs");
+            //OnPropertyChanged("LaborMinChargeLaborExtension");
+            //OnPropertyChanged("LaborMinChargeLaborUnitPrice");
 
         }
 
@@ -1237,7 +1240,7 @@ namespace WICR_Estimator.ViewModels
             {
                 SubContractLaborItems = GetLaborItems();
             }
-
+            CalculateLaborMinCharge(hasSetupChanged);
             CalculateAllMaterial();
             
         }
@@ -1423,7 +1426,7 @@ namespace WICR_Estimator.ViewModels
             
             calculateLaborTotals();
             calculateLaborHrs();
-            
+            CalculateLaborMinCharge(false);
             populateCalculation();
 
             calculateMaterialTotals();
@@ -1528,7 +1531,7 @@ namespace WICR_Estimator.ViewModels
                     return 0;
             }
         }
-        public virtual void CalculateLaborMinCharge()
+        public virtual void CalculateLaborMinCharge(bool hasSetupChanged)
         {
             //update Add labor for minimum cost
 
@@ -1540,12 +1543,24 @@ namespace WICR_Estimator.ViewModels
                                                 (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
 
             LaborMinChargeLaborUnitPrice = (riserCount + totalSqft) == 0 ? 0 : LaborMinChargeLaborExtension / (riserCount + totalSqft);
-            if (LaborMinChargeMinSetup + LaborMinChargeHrs < 20)
+            if (previousLaborCharges != LaborMinChargeMinSetup + LaborMinChargeHrs)
             {
-                AddLaborMinCharge = true;
+                if (LaborMinChargeMinSetup + LaborMinChargeHrs < 20)
+                {
+                    AddLaborMinCharge = true;
+                }
+                else
+                    AddLaborMinCharge = false;
+                previousLaborCharges = LaborMinChargeMinSetup + LaborMinChargeHrs;
             }
-            else
-                AddLaborMinCharge = false;
+            //else if(LaborMinChargeMinSetup + LaborMinChargeHrs==0)
+            //{
+            //    AddLaborMinCharge = true;
+            //}
+            
+                
+
+
             OnPropertyChanged("LaborMinChargeMinSetup");
             OnPropertyChanged("AddLaborMinCharge");
             OnPropertyChanged("LaborMinChargeHrs");

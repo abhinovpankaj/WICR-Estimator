@@ -106,19 +106,10 @@ namespace WICR_Estimator.ViewModels
                 SubContractLaborItems = GetLaborItems();
             }
             calculateRLqty();
-            CalculateLaborMinCharge();
+            CalculateLaborMinCharge(hasSetupChanged);
             CalculateAllMaterial();
         }
-        public override void CalculateLaborMinCharge()
-        {
-            //LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
-            //                            x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
-            //LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
-            //                             x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
-            //LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 :
-            //                                    (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
-            base.CalculateLaborMinCharge();
-        }
+        
         public override bool IncludedInLaborMin(string matName)
         {
             return true;
@@ -296,7 +287,7 @@ namespace WICR_Estimator.ViewModels
                     item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
                 }
             }
-            CalculateLaborMinCharge();
+            CalculateLaborMinCharge(false);
         }
 
         public override void ApplyCheckUnchecks(object obj)
@@ -312,7 +303,7 @@ namespace WICR_Estimator.ViewModels
                 }
 
             }
-            CalculateLaborMinCharge();
+            CalculateLaborMinCharge(false);
         }
 
         public override void setCheckBoxes()

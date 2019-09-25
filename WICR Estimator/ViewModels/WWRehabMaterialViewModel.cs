@@ -101,7 +101,7 @@ namespace WICR_Estimator.ViewModels
             {
                 SubContractLaborItems = GetLaborItems();
             }
-            CalculateLaborMinCharge();
+            CalculateLaborMinCharge(hasSetupChanged);
             CalculateAllMaterial();
         }
         public override bool IncludedInLaborMin(string matName)
@@ -1082,32 +1082,35 @@ namespace WICR_Estimator.ViewModels
         public override void ApplyCheckUnchecks(object obj)
         {
             base.ApplyCheckUnchecks(obj);
-            CalculateLaborMinCharge();
+            CalculateLaborMinCharge(false);
 
         }
-        public override void CalculateLaborMinCharge()
+        public override void CalculateLaborMinCharge(bool hasSetupChanged)
         {
             //update Add labor for minimum cost
+            base.CalculateLaborMinCharge(hasSetupChanged);
+            //LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false &&
+            //                            x.IsMaterialChecked && x.LaborExtension != 0).ToList().Select(x => x.Hours).Sum();
+            //LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false &&
+            //                             x.IsMaterialChecked && x.LaborExtension != 0).ToList().Select(x => x.SetupMinCharge).Sum();
+            //LaborMinChargeLaborExtension = (LaborMinChargeMinSetup + LaborMinChargeHrs) > 20 ? 0 :
+            //                                    (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
 
-            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false &&
-                                        x.IsMaterialChecked && x.LaborExtension != 0).ToList().Select(x => x.Hours).Sum();
-            LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false &&
-                                         x.IsMaterialChecked && x.LaborExtension != 0).ToList().Select(x => x.SetupMinCharge).Sum();
-            LaborMinChargeLaborExtension = (LaborMinChargeMinSetup + LaborMinChargeHrs) > 20 ? 0 :
-                                                (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
-
-            LaborMinChargeLaborUnitPrice = (riserCount + totalSqft) == 0 ? 0 : LaborMinChargeLaborExtension / (riserCount + totalSqft);
-            if (LaborMinChargeMinSetup + LaborMinChargeHrs < 20)
-            {
-                AddLaborMinCharge = true;
-            }
-            else
-                AddLaborMinCharge = false;
-            OnPropertyChanged("LaborMinChargeMinSetup");
-            OnPropertyChanged("AddLaborMinCharge");
-            OnPropertyChanged("LaborMinChargeHrs");
-            OnPropertyChanged("LaborMinChargeLaborExtension");
-            OnPropertyChanged("LaborMinChargeLaborUnitPrice");
+            //LaborMinChargeLaborUnitPrice = (riserCount + totalSqft) == 0 ? 0 : LaborMinChargeLaborExtension / (riserCount + totalSqft);
+            //if(!hasSetupChanged)
+            //{
+            //    if (LaborMinChargeMinSetup + LaborMinChargeHrs < 20)
+            //    {
+            //        AddLaborMinCharge = true;
+            //    }
+            //    else
+            //        AddLaborMinCharge = false;
+            //}
+            //OnPropertyChanged("LaborMinChargeMinSetup");
+            //OnPropertyChanged("AddLaborMinCharge");
+            //OnPropertyChanged("LaborMinChargeHrs");
+            //OnPropertyChanged("LaborMinChargeLaborExtension");
+            //OnPropertyChanged("LaborMinChargeLaborUnitPrice");
 
         }
         public override bool getCheckboxCheckStatus(string materialName)

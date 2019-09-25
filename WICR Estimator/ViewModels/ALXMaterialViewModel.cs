@@ -85,7 +85,7 @@ namespace WICR_Estimator.ViewModels
                 SubContractLaborItems = GetLaborItems();
             }
             calculateRLqty();
-            CalculateLaborMinCharge();
+            CalculateLaborMinCharge(false);
             CalculateAllMaterial();
         }
         public void FillMaterialList()
@@ -216,17 +216,7 @@ namespace WICR_Estimator.ViewModels
         {
             return true;
         }
-        public override void CalculateLaborMinCharge()
-        {
-            //LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
-            //                            x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
-            //LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
-            //                             x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
-
-            //LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 :
-            //                                    (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
-            base.CalculateLaborMinCharge();
-        }
+        
         public override void calculateRLqty()
         {
             #region Grout and Texture Color Option: TC-40 Liquid Colorant
@@ -293,7 +283,7 @@ namespace WICR_Estimator.ViewModels
                 sysMat.Qty=((val1*1.25) +val2+val3+val4+val5+val6)/ 5;
             }
             #endregion
-            CalculateLaborMinCharge();
+            CalculateLaborMinCharge(false);
 
         }
 

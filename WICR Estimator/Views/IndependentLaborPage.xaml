@@ -119,7 +119,7 @@
                                     IsReadOnly="True">
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Operation" KeyboardNavigation.IsTabStop="False"
-                                    IsReadOnly="True"
+                                    IsReadOnly="False"
                                     Binding="{Binding Operation}">
                     </DataGridTextColumn>
 
@@ -210,12 +210,12 @@
                       CanUserAddRows="false"                      
                   ItemsSource="{Binding OtherLaborMaterials,UpdateSourceTrigger=PropertyChanged}">
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="Items" IsReadOnly="True"
+                            <DataGridTemplateColumn Header="Items"
                                                     Width=".5*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox Text="{Binding Name,UpdateSourceTrigger=LostFocus}"
-                                     IsReadOnly="True">
+                                     IsReadOnly="False">
 
                                         </TextBox>
                                     </DataTemplate>

@@ -127,20 +127,11 @@ namespace WICR_Estimator.ViewModels
             }
             calculateRLqty();
 
-            CalculateLaborMinCharge();
+            CalculateLaborMinCharge(hasSetupChanged);
             CalculateAllMaterial();
         }
 
-        public override void CalculateLaborMinCharge()
-        {
-            //LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
-            //                            x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
-            //LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
-            //                              x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
-            //LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 :
-            //                                    (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
-            base.CalculateLaborMinCharge();
-        }
+        
         public override void calculateRLqty()
         {
 
@@ -324,7 +315,7 @@ namespace WICR_Estimator.ViewModels
                 bool ischecked = SystemMaterials.Where(x => x.Name == "Vista Paint Acripoxy (TOPCOAT)").FirstOrDefault().IsMaterialChecked;
                 SystemMaterials.Where(x => x.Name == "Dexcelent II Final Coat (TOPCOAT)").FirstOrDefault().IsMaterialChecked = !ischecked;
             }             
-            CalculateLaborMinCharge();
+            CalculateLaborMinCharge(false);
             CalculateAllMaterial();
         }
         public override bool IncludedInLaborMin(string matName)

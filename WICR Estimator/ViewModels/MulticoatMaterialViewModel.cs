@@ -128,7 +128,7 @@ namespace WICR_Estimator.ViewModels
                 SubContractLaborItems = GetLaborItems();
             }
             calculateRLqty();
-            CalculateLaborMinCharge();
+            CalculateLaborMinCharge(hasSetupChanged);
             CalculateAllMaterial();
         }
 
@@ -175,7 +175,7 @@ namespace WICR_Estimator.ViewModels
                 sysMat2.Qty = sysMat2.Coverage == 0 ? 0 : sysMat2.SMSqft / sysMat2.Coverage;
                 sysMat2.IsMaterialChecked = ischecked;
             }
-            CalculateLaborMinCharge();
+            CalculateLaborMinCharge(false);
 
         }
         public override bool canApply(object obj)
@@ -460,22 +460,13 @@ namespace WICR_Estimator.ViewModels
                 }
                 calculateRLqty();
             }
-            CalculateLaborMinCharge();
+            CalculateLaborMinCharge(false);
         }
         public override bool IncludedInLaborMin(string matName)
         {
             return true;
         }
-        public override void CalculateLaborMinCharge()
-        {
-            //LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
-            //                            x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
-            //LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
-            //                             x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
-            //LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 :
-            //                                    (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
-            base.CalculateLaborMinCharge();
-        }
+        
         public override void calculateLaborHrs()
         {
             //calculateRLqty();

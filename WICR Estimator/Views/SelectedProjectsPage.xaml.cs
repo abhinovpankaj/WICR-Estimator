@@ -50,6 +50,7 @@ namespace WICR_Estimator.Views
                     ProjectViewModel vm = this.DataContext as ProjectViewModel;
                     if (vm != null)
                     {
+                       
                         vm.UpdateJobSettings(tabControl.DataContext);
                     }
                 }

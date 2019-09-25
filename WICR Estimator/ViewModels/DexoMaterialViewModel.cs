@@ -123,7 +123,7 @@ namespace WICR_Estimator.ViewModels
             }
             //set  resititeLiquid QTY
             resistiteQty();
-            CalculateLaborMinCharge();
+            CalculateLaborMinCharge(hasSetupChanged);
             CalculateAllMaterial();
         }
 
@@ -188,18 +188,7 @@ namespace WICR_Estimator.ViewModels
                     return true;
             }
         }
-        public override void CalculateLaborMinCharge()
-        {
-            //LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true && 
-            //                            x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
-            //LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
-            //                            x.IsMaterialChecked).ToList().Select(x => x.SetupMinCharge).Sum();
-            //LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 : 
-            //                                    (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
-            //OnPropertyChanged("LaborMinChargeHrs");
-            //OnPropertyChanged("LaborMinChargeMinSetup");
-            base.CalculateLaborMinCharge();
-        }
+        
         public override void calculateLaborHrs()
         {
             calLaborHrs(6,totalSqft);
@@ -647,7 +636,7 @@ namespace WICR_Estimator.ViewModels
                     SystemMaterials.Where(x => x.Name == "Barrier Guard membrane over smooth surface").First().IsMaterialChecked;
 
             }
-            CalculateLaborMinCharge();
+            CalculateLaborMinCharge(false);
         }
 
 
@@ -700,7 +689,7 @@ namespace WICR_Estimator.ViewModels
 
                 }
             }
-            CalculateLaborMinCharge();
+            CalculateLaborMinCharge(false);
         }
 
     }
