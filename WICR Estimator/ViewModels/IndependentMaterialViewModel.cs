@@ -85,8 +85,12 @@ namespace WICR_Estimator.ViewModels
                 SubContractLaborItems = GetLaborItems();
             }
             calculateRLqty();
-            CalculateLaborMinCharge(hasSetupChanged);
+            //CalculateLaborMinCharge(hasSetupChanged);
             CalculateAllMaterial();
+        }
+        public override void CalculateLaborMinCharge(bool hasSetupChanged)
+        {
+            
         }
         public override ObservableCollection<OtherItem> GetOtherMaterials()
         {

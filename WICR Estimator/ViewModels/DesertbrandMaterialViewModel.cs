@@ -246,7 +246,7 @@ namespace WICR_Estimator.ViewModels
                 double calVal = ((0.31 * val2) + val1 / 2.5 / 2);
                 sysmat.Qty =(bool) IsJobSpecifiedByArchitect?0.31*val2:calVal;
             }
-
+            CalculateLaborMinCharge(false);
         }
 
         public override bool canApply(object obj)
@@ -303,8 +303,10 @@ namespace WICR_Estimator.ViewModels
                     item.LaborExtension = (item.Hours != 0) ? (item.SetupMinCharge + item.Hours) * laborRate : 0;
                     item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
                 }
+                calculateRLqty();
+                //CalculateLaborMinCharge(false);
             }
-            CalculateLaborMinCharge(false);
+                
         }
         public override bool IncludedInLaborMin(string matName)
         {
@@ -325,7 +327,7 @@ namespace WICR_Estimator.ViewModels
                 SystemMaterials.Where(x => x.Name == "Staples").FirstOrDefault().IsMaterialChecked = isChecked;
             }
             calculateRLqty();
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
         }
 
         public override void setCheckBoxes()

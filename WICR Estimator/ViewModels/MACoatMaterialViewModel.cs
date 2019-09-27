@@ -203,7 +203,7 @@ namespace WICR_Estimator.ViewModels
                     SystemMaterials.Where(x => x.Name == "SC-10 Topcoat").FirstOrDefault().IsMaterialChecked = false;
             }
             calculateRLqty();
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
         }
 
         public override double getlfArea(string materialName)
@@ -282,7 +282,7 @@ namespace WICR_Estimator.ViewModels
             ischecked = sysMat.IsMaterialChecked;
             sysMat.Qty = val5+val1+val2+val3+val4/5;
             sysMat.IsMaterialChecked = ischecked;
-
+            CalculateLaborMinCharge(false);
         }
 
         public override void setCheckBoxes()
@@ -322,8 +322,8 @@ namespace WICR_Estimator.ViewModels
         {
             base.setExceptionValues(s);
 
-            
-            CalculateLaborMinCharge(false);
+            calculateRLqty();
+            //CalculateLaborMinCharge(false);
         }
 
         public override void calculateLaborHrs()

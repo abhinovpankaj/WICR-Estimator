@@ -379,6 +379,7 @@ namespace WICR_Estimator.ViewModels
         }
         public override void setExceptionValues(object s)
         {
+            bool isExceptionValueSet=false;
             if (SystemMaterials.Count != 0)
             {
 
@@ -390,6 +391,7 @@ namespace WICR_Estimator.ViewModels
 
                     item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
                     item.LaborUnitPrice = item.LaborExtension / item.Qty;
+                    isExceptionValueSet = true;
                 }
 
                 item = SystemMaterials.Where(x => x.Name == "ADD LF FOR DAMMING @ DRIP EDGE").FirstOrDefault();
@@ -400,6 +402,7 @@ namespace WICR_Estimator.ViewModels
 
                     item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
                     item.LaborUnitPrice = item.LaborExtension / item.Qty;
+                    isExceptionValueSet = true;
                 }
 
                
@@ -412,6 +415,7 @@ namespace WICR_Estimator.ViewModels
 
                     item.LaborExtension = item.Hours == 0 ? 0 : item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
                     item.LaborUnitPrice = item.LaborExtension / item.Qty / 32;
+                    isExceptionValueSet = true;
                 }
                 item = SystemMaterials.Where(x => x.Name == "Stucco Material Remove and replace (LF)").FirstOrDefault();
                 if (item != null)
@@ -421,9 +425,12 @@ namespace WICR_Estimator.ViewModels
 
                     item.LaborExtension = item.Hours == 0 ? 0 : item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
                     item.LaborUnitPrice = item.LaborExtension / item.Qty;
+                    isExceptionValueSet = true;
                 }
+                if (isExceptionValueSet ==true)
+                    CalculateLaborMinCharge(false);
             }
-            CalculateLaborMinCharge(false);
+            
         }
         
         public override void ApplyCheckUnchecks(object obj)

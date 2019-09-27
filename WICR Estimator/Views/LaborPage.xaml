@@ -123,8 +123,9 @@
                     </DataGridTextColumn>
 
                     <DataGridTextColumn Header="#Hours" KeyboardNavigation.IsTabStop="False"
-                                    Binding="{Binding Hours, StringFormat={}{0:n2}}">
-
+                                    Binding="{Binding Hours, StringFormat={}{0:n2}}"
+                                        IsReadOnly="True">
+                        
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="SetUp Min Charges" Binding="{Binding SetupMinCharge,UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"
                                     IsReadOnly="True"

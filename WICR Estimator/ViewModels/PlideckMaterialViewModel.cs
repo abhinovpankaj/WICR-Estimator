@@ -59,16 +59,7 @@ namespace WICR_Estimator.ViewModels
                 {
                     qtyList.Add(item.Name, item.Qty);
                 }
-                if (item.Name == "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH) UPI 7013 SC BASE COAT"
-                    || item.Name == "Striping for small cracKs (less than 1/8\")"
-                    || item.Name == "Route and caulk moving cracks (greater than 1/8\")"
-                    || item.Name == "SECOND INTERMEDIATE COAT FOR HIGH TRAFFIC")
-                {
-                    double unit = 0;
-                    double.TryParse(item.SMUnits, out unit);
-                    qtyList.Add(item.Name, unit);
-                }
-
+                
             }
             if (materialNames == null)
             {
@@ -89,8 +80,11 @@ namespace WICR_Estimator.ViewModels
                     SystemMaterials[i] = sysMat[i];
 
                     SystemMaterials[i].SpecialMaterialPricing = sp;
-                    SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                    SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                    if (iscbEnabled)
+                    {
+                        SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                        SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                    }
                     if (SystemMaterials[i].Name == "Extra stair nosing lf" || SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
                         SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)")
                     {
@@ -187,7 +181,7 @@ namespace WICR_Estimator.ViewModels
                 case "Stucco Material Remove and replace (LF)":
                      return 0;
                 default:
-                    return lfArea / coverage;
+                    return coverage==0?0:lfArea / coverage;
             }
         }
 
@@ -271,7 +265,7 @@ namespace WICR_Estimator.ViewModels
                 sysmat.Qty=(val1+val2+val3+val4) / 5;
                 sysmat.IsMaterialChecked = ischecked;
             }
-
+            CalculateLaborMinCharge(false);
 
         }
 
@@ -314,9 +308,11 @@ namespace WICR_Estimator.ViewModels
                     item.MaterialExtension = item.SpecialMaterialPricing == 0 ? item.Qty * item.MaterialPrice : item.Qty * item.SpecialMaterialPricing;
                     item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
                     item.LaborUnitPrice = item.LaborExtension / item.Qty;
-                }                 
+                }
+                calculateRLqty();
+                //CalculateLaborMinCharge(false);
             }
-            CalculateLaborMinCharge(false);
+            
         }
         public override bool IncludedInLaborMin(string matName)
         {
@@ -331,7 +327,7 @@ namespace WICR_Estimator.ViewModels
         }
         public override double getLaborUnitPrice(double laborExtension, double riserCount, double totalSqft, double sqftVert = 0, double sqftHor = 0, double sqftStairs = 0, string matName = "")
         {
-            return laborExtension/(totalSqft+ sqftVert+sqftHor);
+            return totalSqft + sqftVert + sqftHor==0?0:laborExtension / (totalSqft+ sqftVert+sqftHor);
         }
         public override void ApplyCheckUnchecks(object obj)
         {
@@ -356,7 +352,7 @@ namespace WICR_Estimator.ViewModels
 
             }
             calculateRLqty();
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
         }
 
         public override void setCheckBoxes()

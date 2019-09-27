@@ -688,8 +688,9 @@ namespace WICR_Estimator.ViewModels
                     item.LaborUnitPrice = item.LaborExtension / item.Qty;
 
                 }
+                CalculateLaborMinCharge(false);
             }
-            CalculateLaborMinCharge(false);
+            
         }
 
     }

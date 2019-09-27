@@ -248,8 +248,8 @@ namespace WICR_Estimator.ViewModels
                 sysmat.Qty = val1*0.25 +( val2 + val3 + val4) / 5;
                 sysmat.IsMaterialChecked = ischecked;
             }
-
-
+            CalculateLaborMinCharge(false);
+                    
         }
 
         public override bool canApply(object obj)
@@ -282,7 +282,8 @@ namespace WICR_Estimator.ViewModels
                     item.LaborUnitPrice = item.LaborExtension / item.Qty;
                 }
             }
-            CalculateLaborMinCharge(false);
+            calculateRLqty();
+            //CalculateLaborMinCharge(false);
         }
         public override bool IncludedInLaborMin(string matName)
         {
@@ -308,7 +309,7 @@ namespace WICR_Estimator.ViewModels
             }
             
             calculateRLqty();
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
         }
 
         public override double getSqftAreaVertical(string materialName)

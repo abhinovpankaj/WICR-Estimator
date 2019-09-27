@@ -75,19 +75,19 @@ namespace WICR_Estimator.ViewModels
             }
                 
 
-            setExceptionValues(null);
-            foreach (var mat in SystemMaterials)
-            {
-                if (mat.Name == "Lip Color" || mat.Name == "Aj-44A Dressing(Sealer)" || mat.Name == "Vista Paint Acripoxy")
-                {
-                    if (mat.IsMaterialChecked)
-                    {
-                        ApplyCheckUnchecks(mat.Name);
-                        break;
-                    }
-                }
-            }
             
+            //foreach (var mat in SystemMaterials)
+            //{
+            //    if (mat.Name == "Lip Color" || mat.Name == "Aj-44A Dressing(Sealer)" || mat.Name == "Vista Paint Acripoxy")
+            //    {
+            //        if (mat.IsMaterialChecked)
+            //        {
+            //            ApplyCheckUnchecks(mat.Name);
+            //            break;
+            //        }
+            //    }
+            //}
+            setExceptionValues(null);
             calculateRLqty();
 
             if (OtherMaterials.Count == 0)
@@ -174,7 +174,8 @@ namespace WICR_Estimator.ViewModels
                 LaborExtension = labrExt,
                 LaborUnitPrice = labrExt / (riserCount + totalSqft),
                 FreightExtension = w * qty,
-                MaterialExtension = mp * qty
+                MaterialExtension = mp * qty,
+                IncludeInLaborMinCharge = true
 
             });
             int.TryParse(materialDetails[0][2].ToString(), out cov);
@@ -215,7 +216,8 @@ namespace WICR_Estimator.ViewModels
                     LaborExtension = labrExt,
                     LaborUnitPrice = labrExt / (riserCount + totalSqft),
                     FreightExtension = w * qty,
-                    MaterialExtension = mp * qty
+                    MaterialExtension = mp * qty,
+                    IncludeInLaborMinCharge = true
 
                 });
                 int.TryParse(materialDetails[1][2].ToString(), out cov);
@@ -257,7 +259,8 @@ namespace WICR_Estimator.ViewModels
                     LaborExtension = labrExt,
                     LaborUnitPrice = labrExt / (riserCount + totalSqft),
                     FreightExtension = w * qty,
-                    MaterialExtension = mp * qty
+                    MaterialExtension = mp * qty,
+                    IncludeInLaborMinCharge = true
 
                 });
                 int.TryParse(materialDetails[2][2].ToString(), out cov);
@@ -296,7 +299,8 @@ namespace WICR_Estimator.ViewModels
                     LaborExtension = labrExt,
                     LaborUnitPrice = labrExt / (riserCount + totalSqft),
                     FreightExtension = w * qty,
-                    MaterialExtension = mp * qty
+                    MaterialExtension = mp * qty,
+                    IncludeInLaborMinCharge = true
                 });
             
             
@@ -336,7 +340,8 @@ namespace WICR_Estimator.ViewModels
                 LaborExtension = labrExt,
                 LaborUnitPrice = labrExt / (riserCount + totalSqft),
                 FreightExtension = w * qty,
-                MaterialExtension = mp * qty
+                MaterialExtension = mp * qty,
+                IncludeInLaborMinCharge = true
             });
             int.TryParse(materialDetails[5][2].ToString(), out cov);
             double.TryParse(materialDetails[5][0].ToString(), out mp);
@@ -374,7 +379,8 @@ namespace WICR_Estimator.ViewModels
                 LaborExtension = labrExt,
                 LaborUnitPrice = labrExt / (riserCount + totalSqft),
                 FreightExtension = w * qty,
-                MaterialExtension = mp * qty
+                MaterialExtension = mp * qty,
+                IncludeInLaborMinCharge = true
             });
             int.TryParse(materialDetails[6][2].ToString(), out cov);
             double.TryParse(materialDetails[6][0].ToString(), out mp);
@@ -412,7 +418,8 @@ namespace WICR_Estimator.ViewModels
                 LaborExtension = labrExt,
                 LaborUnitPrice = labrExt / (riserCount + totalSqft),
                 FreightExtension = w * qty,
-                MaterialExtension = mp * qty
+                MaterialExtension = mp * qty,
+                IncludeInLaborMinCharge = true
             });
             int.TryParse(materialDetails[7][2].ToString(), out cov);
             double.TryParse(materialDetails[7][0].ToString(), out mp);
@@ -449,7 +456,8 @@ namespace WICR_Estimator.ViewModels
                 LaborExtension = labrExt,
                 LaborUnitPrice = labrExt / (riserCount + totalSqft),
                 FreightExtension = w * qty,
-                MaterialExtension = mp * qty
+                MaterialExtension = mp * qty,
+                IncludeInLaborMinCharge = true
             });
             int.TryParse(materialDetails[8][2].ToString(), out cov);
             double.TryParse(materialDetails[8][0].ToString(), out mp);
@@ -487,7 +495,8 @@ namespace WICR_Estimator.ViewModels
                 LaborExtension = labrExt,
                 LaborUnitPrice = labrExt / (riserCount + totalSqft),
                 FreightExtension = w * qty,
-                MaterialExtension = mp * qty
+                MaterialExtension = mp * qty,
+                IncludeInLaborMinCharge = true
             });
             int.TryParse(materialDetails[9][2].ToString(), out cov);
             double.TryParse(materialDetails[9][0].ToString(), out mp);
@@ -525,7 +534,8 @@ namespace WICR_Estimator.ViewModels
                 LaborExtension = labrExt,
                 LaborUnitPrice = labrExt / (riserCount + totalSqft),
                 FreightExtension = w * qty,
-                MaterialExtension = mp * qty
+                MaterialExtension = mp * qty,
+                IncludeInLaborMinCharge = true
             });
             int.TryParse(materialDetails[10][2].ToString(), out cov);
             double.TryParse(materialDetails[10][0].ToString(), out mp);
@@ -563,7 +573,8 @@ namespace WICR_Estimator.ViewModels
                 LaborExtension = labrExt,
                 LaborUnitPrice = labrExt / (riserCount + totalSqft),
                 FreightExtension = w * qty,
-                MaterialExtension = mp * qty
+                MaterialExtension = mp * qty,
+                IncludeInLaborMinCharge = true
             });
             int.TryParse(materialDetails[11][2].ToString(), out cov);
             double.TryParse(materialDetails[11][0].ToString(), out mp);
@@ -601,7 +612,8 @@ namespace WICR_Estimator.ViewModels
                 LaborExtension = labrExt,
                 LaborUnitPrice = labrExt / (riserCount + totalSqft),
                 FreightExtension = w * qty,
-                MaterialExtension = mp * qty
+                MaterialExtension = mp * qty,
+                IncludeInLaborMinCharge = true
             });
             
             int.TryParse(materialDetails[13][2].ToString(), out cov);
@@ -640,7 +652,8 @@ namespace WICR_Estimator.ViewModels
                 LaborExtension = labrExt,
                 LaborUnitPrice = labrExt / (riserCount + totalSqft),
                 FreightExtension = w * qty,
-                MaterialExtension = mp * qty
+                MaterialExtension = mp * qty,
+                IncludeInLaborMinCharge = true
             });
 
 
@@ -680,7 +693,8 @@ namespace WICR_Estimator.ViewModels
                 LaborExtension = labrExt,
                 LaborUnitPrice = labrExt / (riserCount + totalSqft),
                 FreightExtension = w * qty,
-                MaterialExtension = mp * qty
+                MaterialExtension = mp * qty,
+                IncludeInLaborMinCharge = true
             });
             int.TryParse(materialDetails[16][2].ToString(), out cov);
             double.TryParse(materialDetails[16][0].ToString(), out mp);
@@ -718,7 +732,8 @@ namespace WICR_Estimator.ViewModels
                 LaborExtension = labrExt,
                 LaborUnitPrice = labrExt / (riserCount + totalSqft),
                 FreightExtension = w * qty,
-                MaterialExtension = mp * qty
+                MaterialExtension = mp * qty,
+                IncludeInLaborMinCharge = true
             });
             int.TryParse(materialDetails[17][2].ToString(), out cov);
             double.TryParse(materialDetails[17][0].ToString(), out mp);
@@ -756,7 +771,8 @@ namespace WICR_Estimator.ViewModels
                 LaborExtension = labrExt,
                 LaborUnitPrice = labrExt / (riserCount + totalSqft),
                 FreightExtension = w * qty,
-                MaterialExtension = mp * qty
+                MaterialExtension = mp * qty,
+                IncludeInLaborMinCharge = true
             });
             int.TryParse(materialDetails[18][2].ToString(), out cov);
             double.TryParse(materialDetails[18][0].ToString(), out mp);
@@ -794,7 +810,8 @@ namespace WICR_Estimator.ViewModels
                 LaborExtension = labrExt,
                 LaborUnitPrice = labrExt / (riserCount + totalSqft),
                 FreightExtension = w * qty,
-                MaterialExtension = mp * qty
+                MaterialExtension = mp * qty,
+                IncludeInLaborMinCharge = true
             });
 
             int.TryParse(materialDetails[19][2].ToString(), out cov);
@@ -832,7 +849,8 @@ namespace WICR_Estimator.ViewModels
                 LaborExtension = labrExt,
                 LaborUnitPrice = labrExt / (riserCount + totalSqft),
                 FreightExtension = w * qty,
-                MaterialExtension = mp * qty
+                MaterialExtension = mp * qty,
+                IncludeInLaborMinCharge = true
             });
 
                       
@@ -855,7 +873,7 @@ namespace WICR_Estimator.ViewModels
             smP.Add(new SystemMaterial
             {
                 IsCheckboxDependent = true,
-                IncludeInLaborMinCharge = false,
+                IncludeInLaborMinCharge = true,
 
                 IsMaterialEnabled = getCheckboxEnabledStatus("Custom Texture Skip Trowel(Resistite Smooth White)"),
                 Name = "Custom Texture Skip Trowel(Resistite Smooth White)",
@@ -877,6 +895,7 @@ namespace WICR_Estimator.ViewModels
                 FreightExtension = w * qty,
                 MaterialExtension = mp * qty,
                 IsMaterialChecked = isch,
+                
 
             });
             int.TryParse(materialDetails[22][2].ToString(), out cov);
@@ -898,7 +917,7 @@ namespace WICR_Estimator.ViewModels
                 IsMaterialChecked = getCheckboxCheckStatus("Weather Seal XL two Coats"),
                 IsMaterialEnabled = getCheckboxEnabledStatus("Weather Seal XL two Coats"),
                 Name = "Weather Seal XL two Coats",
-                IncludeInLaborMinCharge = false,
+                IncludeInLaborMinCharge = true,
                 SMUnits = "Sq Ft",
                 SMSqft = lfArea,
                 Coverage = cov,
@@ -940,7 +959,7 @@ namespace WICR_Estimator.ViewModels
                 SMSqft = lfArea,
                 Coverage = cov,
                 MaterialPrice = mp,
-                IncludeInLaborMinCharge = false,
+                IncludeInLaborMinCharge = true,
                 Weight = w,
                 Qty = qty,
                 SMSqftH = sqh,
@@ -975,7 +994,7 @@ namespace WICR_Estimator.ViewModels
                 IsMaterialChecked = getCheckboxCheckStatus("Extra Stair Nosing Lf"),
                 IsMaterialEnabled = getCheckboxEnabledStatus("Extra Stair Nosing Lf"),
                 Name = "Extra Stair Nosing Lf",
-                IncludeInLaborMinCharge = false,
+                IncludeInLaborMinCharge = true,
                 SMUnits = "Sq Ft",
                 SMSqft = lfArea,
                 Coverage = cov,
@@ -1015,7 +1034,7 @@ namespace WICR_Estimator.ViewModels
                 Name = "Plywood 3/4 & Blocking(# Of 4X8 Sheets)",
                 SMUnits = "Sq Ft",
                 SMSqft = lfArea,
-                IncludeInLaborMinCharge = true,
+                IncludeInLaborMinCharge = false,
                 Coverage = cov,
                 MaterialPrice = mp,
                 Weight = w,
@@ -1055,7 +1074,7 @@ namespace WICR_Estimator.ViewModels
                 SMSqft = lfArea,
                 Coverage = cov,
                 MaterialPrice = mp,
-                IncludeInLaborMinCharge = true,
+                IncludeInLaborMinCharge = false,
                 Weight = w,
                 Qty = qty,
                 SMSqftH = sqh,
@@ -1071,9 +1090,9 @@ namespace WICR_Estimator.ViewModels
                 MaterialExtension = mp * qty
             });
 
-            LaborMinChargeMinSetup = smP.Where(x => x.IsMaterialChecked && x.IncludeInLaborMinCharge == false&&x.LaborExtension!=0).Select(x => x.SetupMinCharge).Sum();
+            LaborMinChargeMinSetup = smP.Where(x => x.IsMaterialChecked && x.IncludeInLaborMinCharge == true&&x.LaborExtension!=0).Select(x => x.SetupMinCharge).Sum();
             
-            LaborMinChargeHrs = smP.Where(x => x.IsMaterialChecked && x.IncludeInLaborMinCharge == false&&x.LaborExtension!=0).ToList().Select(x => x.Hours).Sum();
+            LaborMinChargeHrs = smP.Where(x => x.IsMaterialChecked && x.IncludeInLaborMinCharge == true&&x.LaborExtension!=0).ToList().Select(x => x.Hours).Sum();
             LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs) * laborRate);
             LaborMinChargeLaborUnitPrice = LaborMinChargeLaborExtension / (riserCount + totalSqft);
 
@@ -1082,7 +1101,7 @@ namespace WICR_Estimator.ViewModels
         public override void ApplyCheckUnchecks(object obj)
         {
             base.ApplyCheckUnchecks(obj);
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
 
         }
         public override void CalculateLaborMinCharge(bool hasSetupChanged)

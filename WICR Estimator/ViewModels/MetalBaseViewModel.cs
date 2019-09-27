@@ -514,7 +514,7 @@ namespace WICR_Estimator.ViewModels
             ObservableCollection<MiscMetal> misc = new ObservableCollection<MiscMetal>();
             misc.Add(new MiscMetal { Name = "Pins & Loads for metal over concrete", Units = getUnits(2), UnitPrice = getUnitPrice(0), MaterialPrice = getMetalMP(37), IsEditable = false });
             misc.Add(new MiscMetal { Name = "Nosing for Concrete risers", Units = getUnits(3), UnitPrice = getUnitPrice(1), MaterialPrice = getMetalMP(38), IsEditable = false });
-            misc.Add(new MiscMetal { Name = "OTHER DRAINS TO BE ITEMIZED", Units = 1, UnitPrice = 8, MaterialPrice = 0, IsEditable = true });
+            misc.Add(new MiscMetal { Name = "OTHER DRAINS TO BE ITEMIZED", Units = 0, UnitPrice = 0, MaterialPrice = 0, IsEditable = true });
             return misc;
         }
 

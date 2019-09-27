@@ -540,7 +540,7 @@ namespace WICR_Estimator.ViewModels
             {
                 sysMat.Qty = penetrations;
             }
-            
+            //CalculateLaborMinCharge(false);
         }
 
         public override bool canApply(object obj)

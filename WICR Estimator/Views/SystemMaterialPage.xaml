@@ -164,11 +164,11 @@
                     
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Units" IsReadOnly="True"
+                <!--<DataGridTextColumn Header="Units" IsReadOnly="True"
                                     Binding="{Binding SMUnits}" KeyboardNavigation.IsTabStop="False">
-                </DataGridTextColumn>
+                </DataGridTextColumn>-->
                 <!--For creating editable Units for Independent Material ViewModel.-->
-                <!--<DataGridTemplateColumn Header="Units">
+                <DataGridTemplateColumn Header="Units">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox Text="{Binding SMUnits,UpdateSourceTrigger=LostFocus,Mode=TwoWay}"
@@ -178,7 +178,7 @@
                         </DataTemplate>
 
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>-->
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Sq ft or Lf Area" IsReadOnly="True"
                                     Binding="{Binding SMSqft,StringFormat={}{0:n2}}"
                                      KeyboardNavigation.IsTabStop="False">
@@ -191,7 +191,7 @@
                 <DataGridTemplateColumn Header="Qty">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding Qty,UpdateSourceTrigger=PropertyChanged,
+                            <TextBox Text="{Binding Qty,UpdateSourceTrigger=LostFocus,
                                 StringFormat={}{0:n2}}"
                                      Name="qtyTb"
                                      Style="{StaticResource editableTextboxQTY}"                                   

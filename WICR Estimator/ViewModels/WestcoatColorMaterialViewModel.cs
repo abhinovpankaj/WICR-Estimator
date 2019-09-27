@@ -243,7 +243,7 @@ namespace WICR_Estimator.ViewModels
                 sysmat.Qty = val1 + val2;
                 sysmat.IsMaterialChecked = ischecked;
             }
-
+            CalculateLaborMinCharge(false);
         }
 
         public override bool canApply(object obj)
@@ -287,7 +287,8 @@ namespace WICR_Estimator.ViewModels
                     item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
                 }
             }
-            CalculateLaborMinCharge(false);
+            calculateRLqty();
+            //CalculateLaborMinCharge(false);
         }
 
         public override void ApplyCheckUnchecks(object obj)
@@ -303,7 +304,8 @@ namespace WICR_Estimator.ViewModels
                 }
 
             }
-            CalculateLaborMinCharge(false);
+            calculateRLqty();
+           // CalculateLaborMinCharge(false);
         }
 
         public override void setCheckBoxes()

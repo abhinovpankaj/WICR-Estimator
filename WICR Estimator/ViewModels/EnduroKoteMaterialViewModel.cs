@@ -252,6 +252,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
             SystemMaterials.Where(x=>x.Name== "EKL Acrylic Emulsion").FirstOrDefault().Qty= qty / 5;
+            CalculateLaborMinCharge(false);
            
         }
         public override bool canApply(object obj)
@@ -332,7 +333,8 @@ namespace WICR_Estimator.ViewModels
 
 
                 }
-                CalculateLaborMinCharge(false);
+                getEKLQnty();
+                //CalculateLaborMinCharge(false);
             }
         }
 
@@ -356,7 +358,7 @@ namespace WICR_Estimator.ViewModels
             }
             getEKLQnty();
             //update Add labor for minimum cost
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
 
         }
     }

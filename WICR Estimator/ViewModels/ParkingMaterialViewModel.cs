@@ -28,16 +28,19 @@ namespace WICR_Estimator.ViewModels
             FetchMaterialValuesAsync(false);
 
         }
+        public override void ApplyCheckUnchecks(object obj)
+        {
+            //base.ApplyCheckUnchecks(obj);
+            calculateRLqty();
+            CalculateLaborMinCharge(false);
+        }
         public override void UpdateSumOfSqft()
         {
             double sumVal = totalSqft + TotalSqftPlywood;
             TotalLaborUnitPrice = sumVal == 0 ? 0 : TotalLaborWithoutDrive / sumVal;
             OnPropertyChanged("TotalLaborUnitPrice");
         }
-        public override void ApplyCheckUnchecks(object obj)
-        {
-            
-        }
+        
         public void FillMaterialList()
         {
             MaterialNames.Add("SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)", riserCount.ToString());
@@ -241,14 +244,14 @@ namespace WICR_Estimator.ViewModels
                 item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft + TotalSqftPlywood);
 
             }
-            calculateRLqty();
-            CalculateLaborMinCharge(false);
+            //calculateRLqty();
+            //CalculateLaborMinCharge(false);
         }
         
         public override double getLaborUnitPrice(double laborExtension, double riserCount, double totalSqft, double sqftVert = 0, double sqftHor = 0, double sqftStairs = 0, string matName = "")
         {
             
-            return laborExtension / (TotalSqftPlywood + totalSqft + riserCount);
+            return (TotalSqftPlywood + totalSqft + riserCount)==0?0:laborExtension / (TotalSqftPlywood + totalSqft + riserCount);
         }
         
         public override bool canApply(object obj)
@@ -354,7 +357,7 @@ namespace WICR_Estimator.ViewModels
                     return locVal;
                 
                 default:
-                    return lfArea / coverage;
+                    return coverage==0?0:lfArea / coverage;
             }
         }
         
@@ -394,15 +397,16 @@ namespace WICR_Estimator.ViewModels
             }
             SystemMaterial sysmat = SystemMaterials.Where(x => x.Name == "9801 ACCELERATOR").FirstOrDefault();
 
-            sysmat.Qty = qty / sysmat.Coverage;
+            sysmat.Qty = sysmat.Coverage==0?0: qty / sysmat.Coverage;
             sysmat = SystemMaterials.Where(x => x.Name == "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)").FirstOrDefault();
             if (sysmat!=null)
             {
                 //double myVal = 0;
                 sysmat.SMUnits = riserCount.ToString();
                 //double.TryParse(sysmat.SMUnits,out myVal);
-                sysmat.Qty = riserCount / sysmat.Coverage;
+                sysmat.Qty = sysmat.Coverage==0?0: riserCount / sysmat.Coverage;
             }
+            //CalculateLaborMinCharge(false);
         }
         public override void CalculateTotalSqFt()
         {
@@ -465,7 +469,7 @@ namespace WICR_Estimator.ViewModels
                 item.LaborUnitPrice = item.LaborExtension / (TotalSqftPlywood + totalSqft + riserCount);
 
             }
-            
+            calculateRLqty();
            
         }
         public override void calculateLaborHrs()

@@ -316,13 +316,14 @@ namespace WICR_Estimator.Models
                 OnPropertyChanged("LaborExtension");
                 if (OnQTyChanged!=null && allowHooking(Name))
                 {
-                    OnQTyChanged(this.Name, EventArgs.Empty);
                     if (qtysm != 0)
                     {
                         IsMaterialChecked = true;
                     }
                     else
                         IsMaterialChecked = false;
+                    OnQTyChanged(this.Name, EventArgs.Empty);
+                    
                 }
                 //}
             }
