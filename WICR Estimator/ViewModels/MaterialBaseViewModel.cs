@@ -1536,7 +1536,10 @@ namespace WICR_Estimator.ViewModels
         public virtual void CalculateLaborMinCharge(bool hasSetupChanged)
         {
             //update Add labor for minimum cost
-
+            if (SystemMaterials==null)
+            {
+                return;
+            }
             LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
                                         x.IsMaterialChecked&&x.LaborExtension!=0).ToList().Select(x => x.Hours).Sum();
             LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&

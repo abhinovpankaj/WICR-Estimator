@@ -249,7 +249,7 @@ namespace WICR_Estimator.Models
             VendorName = "Chivon";
             MaterialName = "24ga. Galvanized Primed Steel";
             EnableMoreMarkupCommand = new DelegateCommand(CanAddMoreMarkup, canAdd);
-            //MinMarkUp = -10;
+            MinMarkUp = -10;
             AllowMoreMarkUp = false;
             FirstCheckBoxLabel = "Approved for Sand & Cement ?";
             ProjectDelayFactor = "0-3 Months";

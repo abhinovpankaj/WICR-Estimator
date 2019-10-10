@@ -409,6 +409,15 @@ namespace WICR_Estimator.ViewModels
                     savedProject = Projects.Where(x => x.Name == item.Name).FirstOrDefault();
                     Projects.Remove(savedProject);
                     Projects.Add(item);
+                    //fill the Creaters Details
+                    string [] creationArray = item.CreationDetails.Split(new string[] { ":;" }, StringSplitOptions.None);
+                    JobName = creationArray[0];
+                    PreparedBy = creationArray[1];
+                    JobCreationDate = DateTime.Parse(creationArray[2]);
+                    OnPropertyChanged("JobName");
+                    OnPropertyChanged("JobCreationDate");
+                    OnPropertyChanged("PreparedBy");
+
                     item.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
                     SelectedProjects.Add(item);
                     if (item.ProjectJobSetUp != null)
@@ -488,6 +497,10 @@ namespace WICR_Estimator.ViewModels
                     using (var writer = new XmlTextWriter(saveFileDialog1.FileName,null))
                     {
                         writer.Formatting = Formatting.Indented; // indent the Xml so it's human readable
+                        foreach (Project item in SelectedProjects)
+                        {
+                            item.CreationDetails = JobName + ":;" + PreparedBy + ":;" + JobCreationDate.ToString();
+                        }
                         serializer.WriteObject(writer,SelectedProjects );
                         
                         writer.Flush();
@@ -1034,7 +1047,7 @@ namespace WICR_Estimator.ViewModels
             dataRange.Offset[k, 1].Value = PreparedBy;
             k++;
             dataRange.Offset[k, 0].Value = "DATE";
-            dataRange.Offset[k, 1].Value = Js.SelectedDate;
+            dataRange.Offset[k, 1].Value = JobCreationDate.Value.ToShortDateString(); //Js.SelectedDate; 
             dataRange.Offset[k, 1].NumberFormat = "mm-dd-yyyy";
             k++;
             dataRange.Offset[k, 0].Value = "NOTE HERE IF A DIFFERENT PRODUCT IS BEING USED";

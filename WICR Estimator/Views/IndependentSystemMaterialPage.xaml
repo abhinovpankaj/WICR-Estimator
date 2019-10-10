@@ -225,7 +225,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox Text="{Binding SpecialMaterialPricing,UpdateSourceTrigger=LostFocus}"
-                             Style="{StaticResource editableTextbox}">
+                             Style="{StaticResource editableTextbox}" IsEnabled="True">
                                 </TextBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

@@ -155,6 +155,7 @@ namespace WICR_Estimator.Models
                 return "1.0";
             }
         }
+        public string CreationDetails { get; set; }
 
         public int ActiveTabIndex { get; set; }
         public string OriginalProjectName { get; set; }
