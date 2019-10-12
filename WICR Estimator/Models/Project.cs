@@ -149,10 +149,10 @@ namespace WICR_Estimator.Models
         
         public string ProductVersion
         {
-            set { value = "1.0"; }
+            set { value = "1.1"; }
             get
             {
-                return "1.0";
+                return "1.1";
             }
         }
         public string CreationDetails { get; set; }

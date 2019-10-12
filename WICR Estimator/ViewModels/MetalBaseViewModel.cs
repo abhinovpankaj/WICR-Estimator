@@ -12,6 +12,7 @@ using WICR_Estimator.Models;
 namespace WICR_Estimator.ViewModels
 {
     [KnownType(typeof(MetalViewModel))]
+    [KnownType(typeof(ZeroMetalViewModel))]
     public class MetalBaseViewModel:BaseViewModel
     {
 

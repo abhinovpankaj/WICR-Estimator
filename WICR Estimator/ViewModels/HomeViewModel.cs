@@ -400,52 +400,70 @@ namespace WICR_Estimator.ViewModels
                 FileStream fs = new FileStream(filePath, FileMode.Open);
                 XmlDictionaryReader reader =
                 XmlDictionaryReader.CreateTextReader(fs, new XmlDictionaryReaderQuotas());
-                ObservableCollection<Project> est = (ObservableCollection<Project>)deserializer.ReadObject(reader );
-
-                //SelectedProjects = (ObservableCollection<Project>)deserializer.ReadObject(reader);//est.ToObservableCollection();
-
-                foreach (Project item in est)
+                try
                 {
-                    savedProject = Projects.Where(x => x.Name == item.Name).FirstOrDefault();
-                    Projects.Remove(savedProject);
-                    Projects.Add(item);
-                    //fill the Creaters Details
-                    string [] creationArray = item.CreationDetails.Split(new string[] { ":;" }, StringSplitOptions.None);
-                    JobName = creationArray[0];
-                    PreparedBy = creationArray[1];
-                    JobCreationDate = DateTime.Parse(creationArray[2]);
-                    OnPropertyChanged("JobName");
-                    OnPropertyChanged("JobCreationDate");
-                    OnPropertyChanged("PreparedBy");
+                    ObservableCollection<Project> est = (ObservableCollection<Project>)deserializer.ReadObject(reader);
 
-                    item.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
-                    SelectedProjects.Add(item);
-                    if (item.ProjectJobSetUp != null)
+                    //SelectedProjects = (ObservableCollection<Project>)deserializer.ReadObject(reader);//est.ToObservableCollection();
+
+                    foreach (Project item in est)
                     {
-                        item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
-                        item.ProjectJobSetUp.GetOriginalName();
-                        item.ProjectJobSetUp.UpdateJobSetup();
+                        savedProject = Projects.Where(x => x.Name == item.Name).FirstOrDefault();
+                        Projects.Remove(savedProject);
+                        Projects.Add(item);
+                        if (item.CreationDetails != null)
+                        {
+                            //fill the Creaters Details
+                            string[] creationArray = item.CreationDetails.Split(new string[] { ":;" }, StringSplitOptions.None);
+                            JobName = creationArray[0];
+                            PreparedBy = creationArray[1];
+                            DateTime res = DateTime.Today;
+                            if (creationArray[2].Length > 0)
+                            {
+                                DateTime.TryParse(creationArray[2], out res);
+                                JobCreationDate = res;
+                            }
+
+                            OnPropertyChanged("JobName");
+                            OnPropertyChanged("JobCreationDate");
+                            OnPropertyChanged("PreparedBy");
+                        }
+
+                        item.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
+                        SelectedProjects.Add(item);
+                        if (item.ProjectJobSetUp != null)
+                        {
+                            item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
+                            item.ProjectJobSetUp.GetOriginalName();
+                            item.ProjectJobSetUp.UpdateJobSetup();
+                        }
+                        if (item.MetalViewModel != null)
+                        {
+                            item.MetalViewModel.MetalTotals.OnTotalsChange += item.MaterialViewModel.MetalTotals_OnTotalsChange;
+                            item.ProjectJobSetUp.JobSetupChange += item.MetalViewModel.JobSetup_OnJobSetupChange;
+                        }
+                        if (item.SlopeViewModel != null)
+                        {
+                            item.SlopeViewModel.SlopeTotals.OnTotalsChange += item.MaterialViewModel.MetalTotals_OnTotalsChange;
+                            item.ProjectJobSetUp.JobSetupChange += item.SlopeViewModel.JobSetup_OnJobSetupChange;
+                        }
+                        item.MaterialViewModel.CheckboxCommand = new DelegateCommand(item.MaterialViewModel.ApplyCheckUnchecks, item.MaterialViewModel.canApply);
+                        SystemMaterial.OnQTyChanged += (s, e) => { item.MaterialViewModel.setExceptionValues(s); };
                     }
-                    if (item.MetalViewModel!=null)
-                    {
-                        item.MetalViewModel.MetalTotals.OnTotalsChange += item.MaterialViewModel.MetalTotals_OnTotalsChange;
-                        item.ProjectJobSetUp.JobSetupChange += item.MetalViewModel.JobSetup_OnJobSetupChange;
-                    }
-                    if (item.SlopeViewModel!=null)
-                    {
-                        item.SlopeViewModel.SlopeTotals.OnTotalsChange += item.MaterialViewModel.MetalTotals_OnTotalsChange;
-                        item.ProjectJobSetUp.JobSetupChange += item.SlopeViewModel.JobSetup_OnJobSetupChange;
-                    }                                        
-                    item.MaterialViewModel.CheckboxCommand = new DelegateCommand(item.MaterialViewModel.ApplyCheckUnchecks, item.MaterialViewModel.canApply);
-                    SystemMaterial.OnQTyChanged += (s, e) => { item.MaterialViewModel.setExceptionValues(s); };
+                    Project_OnSelectedProjectChange(Projects[0], null);
+                    reader.Close();
+                    ClearProjects.RaiseCanExecuteChanged();
+                    CreateSummary.RaiseCanExecuteChanged();
+                    CanApplyLatestPrice = true;
+                    OnPropertyChanged("CanApplyLatestPrice");
+                    ApplyLatestPrice = false;
                 }
-                Project_OnSelectedProjectChange(Projects[0], null);
-                reader.Close();
-                ClearProjects.RaiseCanExecuteChanged();
-                CreateSummary.RaiseCanExecuteChanged();
-                CanApplyLatestPrice = true;
-                OnPropertyChanged("CanApplyLatestPrice");
-                ApplyLatestPrice = false;
+                catch
+                {
+                    MessageBox.Show("Your estimate seems to be created in Older version of WICR Estimator. \n\nPlease re-create the estimates, Or Contact the manufacturer.");
+                }
+                
+
                 
             }          
 
@@ -1047,7 +1065,7 @@ namespace WICR_Estimator.ViewModels
             dataRange.Offset[k, 1].Value = PreparedBy;
             k++;
             dataRange.Offset[k, 0].Value = "DATE";
-            dataRange.Offset[k, 1].Value = JobCreationDate.Value.ToShortDateString(); //Js.SelectedDate; 
+            dataRange.Offset[k, 1].Value = Js.SelectedDate; 
             dataRange.Offset[k, 1].NumberFormat = "mm-dd-yyyy";
             k++;
             dataRange.Offset[k, 0].Value = "NOTE HERE IF A DIFFERENT PRODUCT IS BEING USED";
