@@ -9,7 +9,8 @@
       xmlns:System="clr-namespace:System;assembly=mscorlib"
       xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
       mc:Ignorable="d" d:DesignWidth="1550" d:DesignHeight="800"
-      xmlns:behaviors="clr-namespace:WICR_Estimator"       
+      xmlns:behaviors="clr-namespace:WICR_Estimator"
+              
       >
     <UserControl.Resources>
         <conv:BoolToVisibilityConverter x:Key="VisibilityConv"/>

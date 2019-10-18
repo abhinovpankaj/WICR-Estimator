@@ -372,9 +372,14 @@ namespace WICR_Estimator.ViewModels
             sysMat = SystemMaterials.Where(x => x.Name == "PARASEAL LG ROLLS (4X24)").FirstOrDefault();
             if (sysMat != null)
             {
-                OtherMaterials.Where(x => x.Name == "Linear footage for seams if needed for submerged conditions")
-                    .FirstOrDefault().Quantity = Math.Round(sysMat.Qty * 28,2);
-                OtherLaborMaterials.Where(x => x.Name == "Linear footage for seams if needed for submerged conditions").FirstOrDefault().LQuantity = Math.Round(sysMat.Qty * 28,2);
+                OtherItem olm = OtherMaterials.Where(x => x.Name == "Linear footage for seams if needed for submerged conditions")
+                    .FirstOrDefault();
+                if (olm!=null)
+                {
+                    olm.Quantity = Math.Round(sysMat.Qty * 28, 2);
+                    olm.LQuantity = Math.Round(sysMat.Qty * 28, 2);
+                }
+                
             }
         }
 

@@ -17,6 +17,7 @@ namespace WICR_Estimator.ViewModels
         public MaterialViewModel(Totals metalTotals, Totals slopeTotals, JobSetup Js) : base(metalTotals, slopeTotals, Js)
         {
             FetchMaterialValuesAsync(false);
+            ApplyCheckUnchecks("Aj - 44A Dressing(Sealer)");
         }
 
         public MaterialViewModel()

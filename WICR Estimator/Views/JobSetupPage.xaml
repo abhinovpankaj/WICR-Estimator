@@ -352,45 +352,45 @@
                 <TextBox Style="{StaticResource TextBoxStyle}"
                           IsEnabled="{Binding IsPrevalingWage}"
                          Text="{Binding ActualPrevailingWage,
-                    UpdateSourceTrigger=LostFocus}"/>
+                    UpdateSourceTrigger=PropertyChanged}"/>
 
                 <TextBlock Style="{StaticResource FieldHeader}"
                        Text="Total Sq Ft Plywood"
                            Visibility="{Binding IsPlywoodSqftVisible}"/>
                 <TextBox Style="{StaticResource TextBoxStyle}"
                           Visibility="{Binding IsPlywoodSqftVisible}"
-                         Text="{Binding TotalSqftPlywood,UpdateSourceTrigger=LostFocus}"/>
+                         Text="{Binding TotalSqftPlywood,UpdateSourceTrigger=PropertyChanged}"/>
                 <StackPanel Visibility="{Binding IsSqftConcreteVisible}">
                     <TextBlock Style="{StaticResource FieldHeader}"
                        Text="{Binding SqftLabel}"/>
                     <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding TotalSqft,UpdateSourceTrigger=LostFocus}"/>
+                         Text="{Binding TotalSqft,UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <StackPanel Visibility="{Binding IsSqftVerticleVisible}">
                     <TextBlock Style="{StaticResource FieldHeader}"
                        Text="{Binding VerticalSqftLabel}"/>
                     <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding TotalSqftVertical,UpdateSourceTrigger=LostFocus}"/>
+                         Text="{Binding TotalSqftVertical,UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <TextBlock Style="{StaticResource FieldHeader}"
                            Visibility="{Binding IslinearCopingFootageVisible}"
                        Text="{Binding LinearFootageText}"/>
                 <TextBox Style="{StaticResource TextBoxStyle}"
                          Visibility="{Binding IslinearCopingFootageVisible}"
-                         Text="{Binding LinearCopingFootage,UpdateSourceTrigger=LostFocus}"/>
+                         Text="{Binding LinearCopingFootage,UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Style="{StaticResource FieldHeader}"
                        Text="{Binding DeckLabel}"
                            />
                 <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding DeckPerimeter ,UpdateSourceTrigger=LostFocus}"/>
+                         Text="{Binding DeckPerimeter ,UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Style="{StaticResource FieldHeader}"
                        Text="{Binding StairRiserText}"/>
                 <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding RiserCount,UpdateSourceTrigger=LostFocus}"/>
+                         Text="{Binding RiserCount,UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Style="{StaticResource FieldHeader}"
                        Text="{Binding DeckCountText}"/>
                 <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding DeckCount,UpdateSourceTrigger=LostFocus}"/>
+                         Text="{Binding DeckCount,UpdateSourceTrigger=PropertyChanged}"/>
                 <!--<TextBlock Style="{StaticResource FieldHeader}"
                        Text="Mark Up % "/>
                 <TextBox Style="{StaticResource TextBoxStyle}"

@@ -45,12 +45,12 @@ namespace WICR_Estimator.Views
             var tabControl = e.RemovedItems[0] as TabItem;
             if (tabControl != null)
             {
-                if (tabControl.Header.ToString()=="Job Setup")
+                if (tabControl.Header.ToString() == "Job Setup")
                 {
                     ProjectViewModel vm = this.DataContext as ProjectViewModel;
                     if (vm != null)
                     {
-                       
+
                         vm.UpdateJobSettings(tabControl.DataContext);
                     }
                 }

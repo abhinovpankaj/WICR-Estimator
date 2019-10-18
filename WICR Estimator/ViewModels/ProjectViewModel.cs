@@ -12,6 +12,8 @@ namespace WICR_Estimator.ViewModels
 
     class ProjectViewModel : BaseViewModel, IPageViewModel
     {
+        //Retain the active tab
+        public int ActiveTabIndex { get; set; }
         private ObservableCollection<Project> enabledProjects;
         public ProjectViewModel(ObservableCollection<Project> enabledProjects)
             :this()

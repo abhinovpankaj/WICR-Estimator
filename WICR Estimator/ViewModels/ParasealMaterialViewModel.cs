@@ -183,7 +183,7 @@ namespace WICR_Estimator.ViewModels
             {
                 case "PARATERM BAR LF (TOP ONLY- STANDARD INSTALL)":
                 case "PARAMASTIC AND PARASTICK AND DRY (FOR PENETRATIONS)":
-                case "PINS & LOADS":
+                //case "PINS & LOADS":
                 case "PB-4 (VERTICAL ONLY)":
                 case "TREMDRAIN 1000 (VERTICAL ONLY)":
                 case "PROTECTION MAT (HORIZONTAL ONLY)":
@@ -324,8 +324,13 @@ namespace WICR_Estimator.ViewModels
                 SystemMaterial myMat = SystemMaterials.Where(x => x.Name == "SEAM TAPE").FirstOrDefault();
                 myMat.SMSqft = sysMat.Qty * 28;
                 myMat.Qty = myMat.SMSqft / myMat.Coverage;
-                OtherMaterials.Where(x => x.Name == "Linear footage for seams if needed for submerged conditions").FirstOrDefault().Quantity= Math.Round(sysMat.Qty * 28,2);
-                OtherLaborMaterials.Where(x => x.Name == "Linear footage for seams if needed for submerged conditions").FirstOrDefault().LQuantity = Math.Round(sysMat.Qty * 28,2);
+                OtherItem oLm = OtherMaterials.Where(x => x.Name == "Linear footage for seams if needed for submerged conditions").FirstOrDefault();
+                if (oLm!=null)
+                {
+                    oLm.Quantity = Math.Round(sysMat.Qty * 28, 2);
+                    oLm.LQuantity = Math.Round(sysMat.Qty * 28, 2);
+                }
+                
             }
         }
 

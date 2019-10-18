@@ -54,7 +54,7 @@
         </Style>
     </UserControl.Resources>
     <Grid>
-        <TabControl ItemsSource="{Binding EnabledProjects}" SelectedIndex="0">
+        <TabControl ItemsSource="{Binding EnabledProjects}" SelectedIndex="{Binding ActiveTabIndex}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">

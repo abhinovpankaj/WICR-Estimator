@@ -357,7 +357,7 @@ namespace WICR_Estimator.ViewModels
 
         public override void setCheckBoxes()
         {
-            
+            ApplyCheckUnchecks("2.5 Galvanized Lathe");
         }
     }
 }

@@ -373,7 +373,78 @@ namespace WICR_Estimator.ViewModels
             }
         }
 
-        
+        public void OpenEstimateFile(string filePath)
+        {
+            Project savedProject = null;
+            DataContractSerializer deserializer = new DataContractSerializer(typeof(ObservableCollection<Project>));
+
+            FileStream fs = new FileStream(filePath, FileMode.Open);
+            XmlDictionaryReader reader =
+            XmlDictionaryReader.CreateTextReader(fs, new XmlDictionaryReaderQuotas());
+            try
+            {
+                ObservableCollection<Project> est = (ObservableCollection<Project>)deserializer.ReadObject(reader);
+
+                //SelectedProjects = (ObservableCollection<Project>)deserializer.ReadObject(reader);//est.ToObservableCollection();
+
+                foreach (Project item in est)
+                {
+                    savedProject = Projects.Where(x => x.Name == item.Name).FirstOrDefault();
+                    Projects.Remove(savedProject);
+                    Projects.Add(item);
+                    if (item.CreationDetails != null)
+                    {
+                        //fill the Creaters Details
+                        string[] creationArray = item.CreationDetails.Split(new string[] { ":;" }, StringSplitOptions.None);
+                        JobName = creationArray[0];
+                        PreparedBy = creationArray[1];
+                        DateTime res = DateTime.Today;
+                        if (creationArray[2].Length > 0)
+                        {
+                            DateTime.TryParse(creationArray[2], out res);
+                            JobCreationDate = res;
+                        }
+
+                        OnPropertyChanged("JobName");
+                        OnPropertyChanged("JobCreationDate");
+                        OnPropertyChanged("PreparedBy");
+                    }
+
+                    item.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
+                    SelectedProjects.Add(item);
+                    if (item.ProjectJobSetUp != null)
+                    {
+                        item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
+                        item.ProjectJobSetUp.GetOriginalName();
+                        //item.ProjectJobSetUp.UpdateJobSetup();
+                    }
+                    if (item.MetalViewModel != null)
+                    {
+                        item.MetalViewModel.MetalTotals.OnTotalsChange += item.MaterialViewModel.MetalTotals_OnTotalsChange;
+                        item.ProjectJobSetUp.JobSetupChange += item.MetalViewModel.JobSetup_OnJobSetupChange;
+                    }
+                    if (item.SlopeViewModel != null)
+                    {
+                        item.SlopeViewModel.SlopeTotals.OnTotalsChange += item.MaterialViewModel.MetalTotals_OnTotalsChange;
+                        item.ProjectJobSetUp.JobSetupChange += item.SlopeViewModel.JobSetup_OnJobSetupChange;
+                    }
+                    item.MaterialViewModel.CheckboxCommand = new DelegateCommand(item.MaterialViewModel.ApplyCheckUnchecks, item.MaterialViewModel.canApply);
+                    SystemMaterial.OnQTyChanged += (s, e) => { item.MaterialViewModel.setExceptionValues(s); };
+                }
+                Project_OnSelectedProjectChange(Projects[0], null);
+                reader.Close();
+                ClearProjects.RaiseCanExecuteChanged();
+                CreateSummary.RaiseCanExecuteChanged();
+                CanApplyLatestPrice = true;
+                OnPropertyChanged("CanApplyLatestPrice");
+                ApplyLatestPrice = false;
+            }
+            catch
+            {
+                MessageBox.Show("Your estimate seems to be created in Older version of WICR Estimator. \n\nPlease re-create the estimates, Or Contact the manufacturer.");
+            }
+        }
+
         private void LoadProjectEstimate(object obj)
         {
             Project savedProject = null;
@@ -435,7 +506,7 @@ namespace WICR_Estimator.ViewModels
                         {
                             item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
                             item.ProjectJobSetUp.GetOriginalName();
-                            item.ProjectJobSetUp.UpdateJobSetup();
+                            //item.ProjectJobSetUp.UpdateJobSetup();
                         }
                         if (item.MetalViewModel != null)
                         {

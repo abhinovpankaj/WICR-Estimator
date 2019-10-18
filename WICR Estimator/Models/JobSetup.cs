@@ -239,7 +239,7 @@ namespace WICR_Estimator.Models
             IsApprovedForSandCement = true;
             IsPrevalingWage = false;
             HasDiscount = false;
-            //StairWidth = 4.5;
+            StairWidth = 4.5;
             //TotalSqft = 1000;
             //RiserCount = 30;
                        

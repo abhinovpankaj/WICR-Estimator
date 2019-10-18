@@ -227,6 +227,10 @@ namespace WICR_Estimator.ViewModels
         //TC-40 Liquid Colorant
         public override void calculateRLqty()
         {
+            if (SystemMaterials.Count==0)
+            {
+                return;
+            }
             double val1=0, val2=0, val3=0,val4=0;
             SystemMaterial sysMat = SystemMaterials.Where(x => x.Name == "Grout Coat for Tile Pattern:  Grey TC-5 Texture Cement").FirstOrDefault();
             if (sysMat.IsMaterialChecked)

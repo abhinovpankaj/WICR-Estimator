@@ -598,12 +598,12 @@ namespace WICR_Estimator.ViewModels
 
             set
             {
-                if (value != addLaborMinCharge)
-                {
+                //if (value != addLaborMinCharge)
+                //{
                     addLaborMinCharge = value;
                     previousMinLaborCheckboxStatus = addLaborMinCharge;
                     OnPropertyChanged("AddLaborMinCharge");
-                }
+                //}
             }
         }
         [DataMember]
@@ -1214,18 +1214,19 @@ namespace WICR_Estimator.ViewModels
                 SystemMaterials = sysMat;
                 setCheckBoxes();
             }
-            //foreach (var mat in SystemMaterials)
-            //{
-            //    if (mat.Name== "Lip Color"|| mat.Name == "Aj-44A Dressing(Sealer)"|| mat.Name == "Vista Paint Acripoxy")
-            //    {
-            //        if (mat.IsMaterialChecked)
-            //        {
-            //            ApplyCheckUnchecks(mat.Name);
-            //            break;
-            //        }
-            //    }
-            //}
-   
+
+            foreach (var mat in SystemMaterials)
+            {
+                if (mat.Name == "Lip Color" || mat.Name == "Aj-44A Dressing(Sealer)" || mat.Name == "Vista Paint Acripoxy")
+                {
+                    if (mat.IsMaterialChecked)
+                    {
+                        ApplyCheckUnchecks(mat.Name);
+                        break;
+                    }
+                }
+            }
+
             setExceptionValues(null);
             
             calculateRLqty();
