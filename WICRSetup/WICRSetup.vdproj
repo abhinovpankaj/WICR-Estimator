@@ -959,11 +959,11 @@
                 }
                 "Verbs"
                 {
-                    "{95C0C507-CBF0-42B8-B119-07219E384A4A}:_5E02A5AFDC3647E1A0054B216A39CABB"
+                    "{95C0C507-CBF0-42B8-B119-07219E384A4A}:_427B582B944446A8B9575BDB727A1902"
                     {
-                    "Command" = "8:&Open"
+                    "Command" = "8:Open"
                     "Verb" = "8:open"
-                    "Arguments" = "8:\"C:\\Program Files (x86)\\Practicaltools\\WICR Estimator\\WICR Estimator.exe\" \"%1\""
+                    "Arguments" = "8:\"%1\""
                     "Order" = "3:0"
                     }
                 }
@@ -1044,7 +1044,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:WICR Estimator"
         "ProductCode" = "8:{5E4F15EF-3644-4AAA-AD81-398B42E4682C}"
-        "PackageCode" = "8:{69AE3480-23BF-4917-ACDC-EBF41378DF94}"
+        "PackageCode" = "8:{E6534D10-7BBE-494D-8555-3549D4FCFBBF}"
         "UpgradeCode" = "8:{07A16F57-558C-49A9-A739-E92AE3A14821}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

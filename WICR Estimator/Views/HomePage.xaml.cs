@@ -90,21 +90,17 @@ namespace WICR_Estimator.Views
 
         }
 
-        //private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        //{
-        //       //if (e.Args.Length == 1) //make sure an argument is passed
-        //        //{
-
-        //        //    FileInfo file = new FileInfo(e.Args[0]);
-
-        //        //    if (file.Exists) 
-        //        //    {
-        //        ViewModels.HomeViewModel hm = new ViewModels.HomeViewModel();
-        //        hm.OpenEstimateFile(@"C:\Users\priya\OneDrive\Documents\BLANMULTI.est");
-        //        //}
-        //        //}
-            
-        //}
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            //MessageBox.Show("homepageloading");
+            ViewModels.HomeViewModel hm = new ViewModels.HomeViewModel();
+            if (HomeViewModel.LoadedFile!=string.Empty)
+            {
+                hm.OpenEstimateFile(HomeViewModel.LoadedFile);
+                this.DataContext = hm;
+            }
+            //MessageBox.Show(HomeViewModel.LoadedFile);
+        }
         //private void ListBox_Selected(object sender, RoutedEventArgs e)
         //{            
         //    HomeVM.SelectedProjects.Clear();

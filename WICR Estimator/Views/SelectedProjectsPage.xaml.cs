@@ -94,5 +94,65 @@ namespace WICR_Estimator.Views
 
             }
         }
+
+        private void TabItem_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            var tabItem = e.Source as TabItem;
+
+            if (tabItem == null)
+                return;
+
+            if (Mouse.PrimaryDevice.LeftButton == MouseButtonState.Pressed)
+            {
+                pStart = e.GetPosition(tabItem);
+                DragDrop.DoDragDrop(tabItem, tabItem, DragDropEffects.All);
+            }
+        }
+
+        Point pStart;
+        private void TabItem_Drop(object sender, DragEventArgs e)
+        {
+            var tabItemTarget = e.Source as TabItem;
+            var tabItemSource = e.Data.GetData(typeof(TabItem)) as TabItem;
+            var srcProject = tabItemSource.DataContext as Project;
+            var targetProject = tabItemTarget.DataContext as Project;
+            if (!tabItemTarget.Equals(tabItemSource))
+            {
+                var tabControl = GetParent((Visual)tabItemTarget);//tabItemTarget.Parent as TabControl;
+                var projectVM = tabControl.DataContext as ProjectViewModel;
+
+                int sourceIndex = projectVM.EnabledProjects.IndexOf(srcProject);
+                int targetIndex = projectVM.EnabledProjects.IndexOf(targetProject);
+
+                var temp = projectVM.EnabledProjects.ElementAt(sourceIndex);
+                projectVM.EnabledProjects.RemoveAt(sourceIndex);
+                projectVM.EnabledProjects.Insert(targetIndex, temp);
+
+                tabControl.SelectedIndex = targetIndex;
+
+            }
+        }
+
+        private TabControl GetParent(Visual v)
+        {
+            while (v != null)
+            {
+                v = VisualTreeHelper.GetParent(v) as Visual;
+                if (v is TabControl)
+                    break;
+            }
+            return v as TabControl;
+        }
+
+        private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var tbControl = sender as TabControl;
+            ProjectViewModel vm = this.DataContext as ProjectViewModel;
+            if (vm != null)
+            {
+
+                //vm.TabSelectedIndex= tbControl.SelectedIndex;
+            }
+        }
     }
 }

@@ -10,7 +10,7 @@
       xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
       mc:Ignorable="d" d:DesignWidth="1550" d:DesignHeight="800"
       xmlns:behaviors="clr-namespace:WICR_Estimator"
-              
+           Loaded="UserControl_Loaded"    
       >
     <UserControl.Resources>
         <conv:BoolToVisibilityConverter x:Key="VisibilityConv"/>

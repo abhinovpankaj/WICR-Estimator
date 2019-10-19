@@ -50,7 +50,7 @@ namespace WICR_Estimator.ViewModels
             //statusNotifier = new NotifyIcon();
 
         }
-
+        
         private void ReplicateIndependent(object obj)
         {
             Project prj = obj as Project;
@@ -77,7 +77,7 @@ namespace WICR_Estimator.ViewModels
         }
 
         #region Properties
-
+        public static string LoadedFile=string.Empty;
         private bool applylatestPrice;
         public bool ApplyLatestPrice
         {
@@ -438,6 +438,7 @@ namespace WICR_Estimator.ViewModels
                 CanApplyLatestPrice = true;
                 OnPropertyChanged("CanApplyLatestPrice");
                 ApplyLatestPrice = false;
+                OnPropertyChanged("SelectedProjects");
             }
             catch
             {
