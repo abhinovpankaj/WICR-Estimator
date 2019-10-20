@@ -53,7 +53,7 @@ namespace WICR_Estimator.ViewModels
 
             MetalName = "16oz Copper";
             vendorName = "Chivon";
-            riserCount = 30;
+            riserCount = 0;
             stairWidth = 4.5;
             CheckboxCommand = new DelegateCommand(ApplyCheckUnchecks, canApply);
         }

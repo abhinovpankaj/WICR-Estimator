@@ -93,12 +93,13 @@ namespace WICR_Estimator.Views
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             //MessageBox.Show("homepageloading");
-            ViewModels.HomeViewModel hm = new ViewModels.HomeViewModel();
-            if (HomeViewModel.LoadedFile!=string.Empty)
-            {
-                hm.OpenEstimateFile(HomeViewModel.LoadedFile);
-                this.DataContext = hm;
-            }
+            //ViewModels.HomeViewModel hm = new ViewModels.HomeViewModel();
+            
+            //if (HomeViewModel.LoadedFile != string.Empty)
+            //{
+            //    hm.OpenEstimateFile(HomeViewModel.LoadedFile);
+            //    this.DataContext = hm;
+            //}
             //MessageBox.Show(HomeViewModel.LoadedFile);
         }
         //private void ListBox_Selected(object sender, RoutedEventArgs e)

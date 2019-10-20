@@ -421,7 +421,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateIndependentProject
                        Text="{Binding LaborPercentage}"
                        Margin="5,0,5,5"/>
 
-                        <TextBlock FontSize="13" FontWeight="SemiBold"
+                        <TextBlock FontSize="14" FontWeight="Bold" Background="#FFE7BA0A"
                        Text="{Binding TotalCost}"
                        Margin="5,0,5,5"/>
                     </StackPanel>

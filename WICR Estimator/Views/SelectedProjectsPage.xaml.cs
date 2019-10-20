@@ -93,8 +93,11 @@ namespace WICR_Estimator.Views
 
 
             }
+
+            //Save Project Status
         }
 
+        #region  dragdrop
         private void TabItem_PreviewMouseMove(object sender, MouseEventArgs e)
         {
             var tabItem = e.Source as TabItem;
@@ -146,13 +149,14 @@ namespace WICR_Estimator.Views
 
         private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var tbControl = sender as TabControl;
-            ProjectViewModel vm = this.DataContext as ProjectViewModel;
-            if (vm != null)
-            {
+            //var tbControl = sender as TabControl;
+            //ProjectViewModel vm = this.DataContext as ProjectViewModel;
+            //if (vm != null)
+            //{
 
-                //vm.TabSelectedIndex= tbControl.SelectedIndex;
-            }
+            //    vm.ActiveTabIndex= tbControl.SelectedIndex;
+            //}
         }
+        #endregion
     }
 }

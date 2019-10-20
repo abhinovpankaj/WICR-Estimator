@@ -95,7 +95,7 @@
                          MaxLength="20"
                          Text="{Binding SpecialProductName,UpdateSourceTrigger=LostFocus}"
                          VerticalContentAlignment="Center"/>
-                <!--<Border Margin="10" BorderBrush="Blue">
+                <Border Margin="10" BorderBrush="Blue" Background="#FFE7BA0A">
                     <StackPanel HorizontalAlignment="Center">
                         <TextBlock Text="Total Sale"  HorizontalAlignment="Center"
                                    FontSize="20"
@@ -106,7 +106,7 @@
                             Text="{Binding TotalSalesCostTemp,StringFormat=N2}"
                                    HorizontalAlignment="Center"/>
                     </StackPanel>
-                </Border>-->
+                </Border>
                 
                 <StackPanel Orientation="Horizontal" Background="LightGray"
                             Margin="0,30,0,0" Visibility="Hidden"

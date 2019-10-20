@@ -47,7 +47,7 @@ namespace WICR_Estimator
             //MessageBox.Show(e.Args[0]);
             if (e.Args.Length == 1) //make sure an argument is passed
             {
-                MessageBox.Show(e.Args[0]);
+                //MessageBox.Show(e.Args[0]);
                 FileInfo file = new FileInfo(e.Args[0]);
                 if (file.Exists) //make sure it's actually a file
                 {

@@ -28,10 +28,7 @@ namespace WICR_Estimator.Models
                 {
                     actualPrevailingWage = value;
                     OnPropertyChanged("ActualPrevailingWage");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -121,10 +118,7 @@ namespace WICR_Estimator.Models
                 {
                     projectDelayFactor = value;
                     OnPropertyChanged("ProjectDelayFactor");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -138,11 +132,7 @@ namespace WICR_Estimator.Models
                 {
                     specialProductName = value;
                     OnPropertyChanged("SpecialProductName");
-                    //ProjectName = value;
-                    //if (ProjectName=="")
-                    //{
-                    //    //ProjectName = "Dexotex Weather Wear";
-                    //}              
+                    
                     if (OnProjectNameChange != null)
                     {
                         OnProjectNameChange(this, EventArgs.Empty);
@@ -226,7 +216,7 @@ namespace WICR_Estimator.Models
                 || originalName == "UPI BT")
             {
                 IsNewPlywood = false;
-                SqftLabel = "Total Sqft Concrete";
+                SqftLabel = "Total Sqft Horizontal Concrete";
             }
 
 
@@ -253,6 +243,7 @@ namespace WICR_Estimator.Models
             AllowMoreMarkUp = false;
             FirstCheckBoxLabel = "Approved for Sand & Cement ?";
             ProjectDelayFactor = "0-3 Months";
+            UpdateJobSetup();
         }
 
         public double MinMarkUp { get; set; }
@@ -283,10 +274,7 @@ namespace WICR_Estimator.Models
                 {
                     isContingencyEnabled = value;
                     OnPropertyChanged("IsContingencyEnabled");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -376,11 +364,8 @@ namespace WICR_Estimator.Models
                 {
                     vendorName = value;
                     OnPropertyChanged("VendorName");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
-                    
+                    UpdateJobSetup();
+
                 }
             }
         }
@@ -429,7 +414,7 @@ namespace WICR_Estimator.Models
                 if (value != totalSqft)
                 {
                     totalSqft = value;                    
-                    if (value>=1000)
+                    if (value>=1000||TotalSqftVertical>=1000 ||TotalSqftPlywood>=1000 )
                     {
                         VHasContingencyDisc = false;
                         IsContingencyEnabled = true;
@@ -442,12 +427,10 @@ namespace WICR_Estimator.Models
                         VHasContingencyDisc = false;
                     }
                     OnPropertyChanged("IsContingencyEnabled");
-                    OnPropertyChanged("HasContingencyDisc");
+                    OnPropertyChanged("VHasContingencyDisc");
                     OnPropertyChanged("TotalSqft");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
+                   
                 }
             }
         }
@@ -462,10 +445,7 @@ namespace WICR_Estimator.Models
                 {
                     vhasContingencyDisc = value;
                     OnPropertyChanged("VHasContingencyDisc");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -483,10 +463,7 @@ namespace WICR_Estimator.Models
                 {
                     deckPerimeter = value;
                     OnPropertyChanged("DeckPerimeter");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -505,10 +482,7 @@ namespace WICR_Estimator.Models
                 {
                     riserCount = value;
                     OnPropertyChanged("RiserCount");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -525,10 +499,7 @@ namespace WICR_Estimator.Models
                 {
                     deckCount = value;
                     OnPropertyChanged("DeckCount");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -547,10 +518,7 @@ namespace WICR_Estimator.Models
                     //IsReseal = value;
                     
                     OnPropertyChanged("IsApprovedForSandCement");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -567,10 +535,7 @@ namespace WICR_Estimator.Models
                 {
                     isPrevalingWage = value;
                     OnPropertyChanged("IsPrevalingWage");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -592,10 +557,7 @@ namespace WICR_Estimator.Models
                 {
                     laborRate = value;
                     OnPropertyChanged("LaborRate");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -613,10 +575,7 @@ namespace WICR_Estimator.Models
                 {
                     hasSpecialMaterial = value;
                     OnPropertyChanged("HasSpecialMaterial");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -633,10 +592,7 @@ namespace WICR_Estimator.Models
                 {
                     isFlashingRequired = value;
                     OnPropertyChanged("IsFlashingRequired");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -653,10 +609,7 @@ namespace WICR_Estimator.Models
                 {
                     hasSpecialPricing = value;
                     OnPropertyChanged("HasSpecialPricing");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -673,10 +626,7 @@ namespace WICR_Estimator.Models
                 {
                     hasDiscount = value;
                     OnPropertyChanged("HasDiscount");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -693,10 +643,7 @@ namespace WICR_Estimator.Models
                 {
                     markupPercentage = value;
                     OnPropertyChanged("MarkupPercentage");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -713,10 +660,7 @@ namespace WICR_Estimator.Models
                 {
                     materialName = value;
                     OnPropertyChanged("MaterialName");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
 
                 }
             }
@@ -734,10 +678,7 @@ namespace WICR_Estimator.Models
                 {
                     stairWidth = value;
                     OnPropertyChanged("StairWidth");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -753,10 +694,7 @@ namespace WICR_Estimator.Models
                 {
                     isJobSpecifiedByArchitect = value;
                     OnPropertyChanged("IsJobSpecifiedByArchitect");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -785,10 +723,7 @@ namespace WICR_Estimator.Models
                 {
                     isNewPlywood = value;
                     OnPropertyChanged("IsNewPlywood");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -907,10 +842,7 @@ namespace WICR_Estimator.Models
                 {
                     isReseal = value;
                     OnPropertyChanged("IsReseal");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -923,11 +855,23 @@ namespace WICR_Estimator.Models
                 if (value != totalSqftPlywood)
                 {
                     totalSqftPlywood = value;
+                    if (value >= 1000 || TotalSqftVertical >= 1000 || TotalSqft >= 1000)
+                    {
+                        VHasContingencyDisc = false;
+                        IsContingencyEnabled = true;
+                    }
+
+
+                    else
+                    {
+                        IsContingencyEnabled = false;
+                        VHasContingencyDisc = false;
+                    }
+                    OnPropertyChanged("IsContingencyEnabled");
+                    OnPropertyChanged("VHasContingencyDisc");
                     OnPropertyChanged("TotalSqftPlywood");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup(); //JobSetupChange(this, EventArgs.Empty);
+                    
                 }
             }
         }
@@ -961,10 +905,7 @@ namespace WICR_Estimator.Models
                 {
                     linearCopingFootage = value;
                     OnPropertyChanged("LinearCopingFootage");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -1009,10 +950,7 @@ namespace WICR_Estimator.Models
                 {
                     additonalTermbarLF = value;
                     OnPropertyChanged("AdditionalTermBarLF");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -1026,10 +964,7 @@ namespace WICR_Estimator.Models
                 {
                     superStopAtFooting = value;
                     OnPropertyChanged("SuperStopAtFooting");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -1043,10 +978,7 @@ namespace WICR_Estimator.Models
                 {
                     insideOutsideCornerDetails = value;
                     OnPropertyChanged("InsideOutsideCornerDetails");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -1091,7 +1023,7 @@ namespace WICR_Estimator.Models
                 {
                     rakerCornerBases = value;
                     OnPropertyChanged("RakerCornerBases");
-                    //OnJobSetupChanged(null);
+                    UpdateJobSetup();
                 }
             }
         }
@@ -1104,7 +1036,8 @@ namespace WICR_Estimator.Models
                 if (value != cementBoardDetail)
                 {
                     cementBoardDetail = value;
-                    //OnJobSetupChanged(null);
+                    OnPropertyChanged("CementBoardDetail");
+                    UpdateJobSetup();
                 }
             }
         }
@@ -1118,7 +1051,7 @@ namespace WICR_Estimator.Models
                 {
                     rockPockets = value;
                     OnPropertyChanged("RockPockets");
-                   //OnJobSetupChanged(null);
+                    UpdateJobSetup();
                 }
             }
         }
@@ -1131,7 +1064,7 @@ namespace WICR_Estimator.Models
                 if (value != parasealFoundation)
                 {
                     parasealFoundation = value;
-                    //OnJobSetupChanged(null);
+                    UpdateJobSetup();
                 }
             }
         }
@@ -1145,7 +1078,7 @@ namespace WICR_Estimator.Models
                 {
                     rearMidLagging = value;
                     OnPropertyChanged("RearMidLagging");
-                    //OnJobSetupChanged(null);
+                    UpdateJobSetup();
                 }
             }
         }
@@ -1188,8 +1121,22 @@ namespace WICR_Estimator.Models
                 if (value != totalSqftVertical)
                 {
                     totalSqftVertical = value;
+                    if (value >= 1000||TotalSqft>=1000||TotalSqftPlywood>=1000)
+                    {
+                        VHasContingencyDisc = false;
+                        IsContingencyEnabled = true;
+                    }
+
+
+                    else
+                    {
+                        IsContingencyEnabled = false;
+                        VHasContingencyDisc = false;
+                    }
+                    OnPropertyChanged("IsContingencyEnabled");
+                    OnPropertyChanged("VHasContingencyDisc");
                     OnPropertyChanged("TotalSqftVertical");
-                    //OnJobSetupChanged(null);
+                    UpdateJobSetup();
                 }
             }
         }
@@ -1204,7 +1151,7 @@ namespace WICR_Estimator.Models
                 {
                     termBarLF = value;
                     OnPropertyChanged("TermBarLF");
-                    //OnJobSetupChanged(null);
+                    UpdateJobSetup();
                 }
             }
         }
@@ -1218,7 +1165,7 @@ namespace WICR_Estimator.Models
                 {
                     rebarPrepWallsLF = value;
                     OnPropertyChanged("RebarPrepWallsLF");
-                    //OnJobSetupChanged(null);
+                    UpdateJobSetup();
                 }
             }
         }
@@ -1232,7 +1179,7 @@ namespace WICR_Estimator.Models
                 {
                     superStopLF = value;
                     OnPropertyChanged("SuperStopLF");
-                    //OnJobSetupChanged(null);
+                    UpdateJobSetup();
                 }
             }
         }
@@ -1246,7 +1193,7 @@ namespace WICR_Estimator.Models
                 {
                     penetrations = value;
                     OnPropertyChanged("Penetrations");
-                    //OnJobSetupChanged(null);
+                    UpdateJobSetup();
                 }
             }
         }
@@ -1276,10 +1223,7 @@ namespace WICR_Estimator.Models
                 {
                     hasQuarterMortarBed = value;
                     OnPropertyChanged("HasQuarterMortarBed");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -1293,10 +1237,7 @@ namespace WICR_Estimator.Models
                 {
                     hasQuarterLessMortarBed = value;
                     OnPropertyChanged("HasQuarterLessMortarBed");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -1310,10 +1251,7 @@ namespace WICR_Estimator.Models
                 {
                     hasElastex = value;
                     OnPropertyChanged("HasElastex");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }
@@ -1327,10 +1265,7 @@ namespace WICR_Estimator.Models
                 {
                     hasEasyAccess = value;
                     OnPropertyChanged("HasEasyAccess");
-                    //if (JobSetupChange != null)
-                    //{
-                    //    JobSetupChange(this, EventArgs.Empty);
-                    //}
+                    UpdateJobSetup();
                 }
             }
         }

@@ -15,6 +15,7 @@ namespace WICR_Estimator.ViewModels
     [DataContract]
     public class BaseViewModel : INotifyPropertyChanged
     {
+        public static bool IsDirty;
         public BaseViewModel()
         { }
         
@@ -27,6 +28,12 @@ namespace WICR_Estimator.ViewModels
             if (PropertyChanged != null)
             {
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                Models.JobSetup js = this as Models.JobSetup;
+                if (js!=null)
+                {                   
+                    IsDirty = true;
+                }
+                
                 //switch (propertyName)
                 //{
                 //    case "SpecialProductName":
@@ -51,35 +58,6 @@ namespace WICR_Estimator.ViewModels
                 //        break;
                 //}
             }
-        }
-
-        //XmlSchema IXmlSerializable.GetSchema()
-        //{
-        //    return null;
-        //}
-        //private IList<IList<object>> m_Child;
-        //public IList<IList<object>> Child
-        //{
-        //    get { return m_Child; }
-        //    set { m_Child = value; }
-        //}
-        //void IXmlSerializable.ReadXml(XmlReader reader)
-        //{
-        //    reader.ReadStartElement("Child");
-        //    string strType = reader.GetAttribute("type");
-        //    XmlSerializer serial = new XmlSerializer(Type.GetType(strType));
-        //    m_Child = (IList<IList<object>>)serial.Deserialize(reader);
-        //    reader.ReadEndElement();
-        //}
-
-        //void IXmlSerializable.WriteXml(XmlWriter writer)
-        //{
-        //    writer.WriteStartElement("Child");
-        //    string strType = m_Child.GetType().FullName;
-        //    writer.WriteAttributeString("type", strType);
-        //    XmlSerializer serial = new XmlSerializer(Type.GetType(strType));
-        //    serial.Serialize(writer, m_Child);
-        //    writer.WriteEndElement();
-        //}
+        }      
     }
 }

@@ -47,7 +47,7 @@ namespace WICR_Estimator.ViewModels
                 item.Qty = unit / item.Coverage;
                 item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, 0, 0);
                 item.LaborExtension = item.Hours==0?0:item.Hours> item.SetupMinCharge? item.Hours * laborRate: item.SetupMinCharge*laborRate;
-                item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft+TotalSqftPlywood);
+                item.LaborUnitPrice = (riserCount + totalSqft + TotalSqftPlywood)==0?0:item.LaborExtension / (riserCount + totalSqft+TotalSqftPlywood);
 
             }
         }
@@ -135,8 +135,12 @@ namespace WICR_Estimator.ViewModels
                     SystemMaterials[i] = sysMat[i];
 
                     SystemMaterials[i].SpecialMaterialPricing = sp;
-                    SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                    SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                    if(iscbEnabled)
+                    {
+                        SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                        SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                    }
+                    
                     if (SystemMaterials[i].Name == "EXTRA STAIR NOSING" || SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
                         SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)")
                     {
@@ -207,7 +211,7 @@ namespace WICR_Estimator.ViewModels
         public override double getLaborUnitPrice(double laborExtension, double riserCount, double totalSqft, double sqftVert = 0, double sqftHor = 0, double sqftStairs = 0, string matName = "")
         {
             //return base.getLaborUnitPrice(laborExtension, riserCount, totalSqft, sqftVert, sqftHor, sqftStairs, matName);
-            return laborExtension / (TotalSqftPlywood + totalSqft + riserCount);
+            return (TotalSqftPlywood + totalSqft + riserCount)==0?0:laborExtension / (TotalSqftPlywood + totalSqft + riserCount);
         }
 
         public override double CalculateLabrExtn(double calhrs, double setupMin, string matName = "")
@@ -223,10 +227,10 @@ namespace WICR_Estimator.ViewModels
 
         public override void CalculateTotalSqFt()
         {
-            CostperSqftSlope = TotalSlopingPrice / (totalSqft + riserCount+TotalSqftPlywood);
-            CostperSqftMetal = TotalMetalPrice / (totalSqft + riserCount + TotalSqftPlywood);
-            CostperSqftMaterial = TotalSystemPrice / (totalSqft + riserCount + TotalSqftPlywood);
-            CostperSqftSubContract = TotalSubcontractLabor / (totalSqft + riserCount + TotalSqftPlywood);
+            CostperSqftSlope = (totalSqft + riserCount + TotalSqftPlywood) == 0 ?0: TotalSlopingPrice / (totalSqft + riserCount+TotalSqftPlywood);
+            CostperSqftMetal = (totalSqft + riserCount + TotalSqftPlywood) == 0 ? 0 : TotalMetalPrice / (totalSqft + riserCount + TotalSqftPlywood);
+            CostperSqftMaterial = (totalSqft + riserCount + TotalSqftPlywood) == 0 ? 0 : TotalSystemPrice / (totalSqft + riserCount + TotalSqftPlywood);
+            CostperSqftSubContract = (totalSqft + riserCount + TotalSqftPlywood) == 0 ? 0 : TotalSubcontractLabor / (totalSqft + riserCount + TotalSqftPlywood);
             TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
             OnPropertyChanged("CostperSqftSlope");
             OnPropertyChanged("CostperSqftMetal");
@@ -248,7 +252,7 @@ namespace WICR_Estimator.ViewModels
                     return false;
                 case "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL":
                     return IsReseal;
-                case "INTERLAMINATE PRIMER (XYLENE) FROM LOWRYS":
+                
                 case "7013 SC BASE COAT/ 5 GAL PAILS 40 MILS":
                 case "INTEGRAL STAIR NOSING (EXCEL STYLE)":
                     return !IsReseal;
@@ -268,6 +272,7 @@ namespace WICR_Estimator.ViewModels
         {
             switch (materialName)
             {
+                case "INTERLAMINATE PRIMER (XYLENE) FROM LOWRYS":
                 case "UI 7118 CONCRETE PRIMER 1-1/2 GAL KIT":
                 case "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL":
                 case "1/20 SAND/ #100 LB":
@@ -289,7 +294,7 @@ namespace WICR_Estimator.ViewModels
                     || item.Name == "EXTRA STAIR NOSING"
                     || item.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)"
                     || item.Name == "1/20 SAND/ #100 LB"
-                    
+                    ||item.Name== "INTERLAMINATE PRIMER (XYLENE) FROM LOWRYS"
                     || item.Name== "7016 - AR - INTERMEDIATE COAT / 5 GAL PAILS 20 MILS"
                     || item.Name == "Stucco Material Remove and replace (LF)")
                 {
@@ -415,7 +420,7 @@ namespace WICR_Estimator.ViewModels
                 item.Hours = CalculateHrs(0, 0, item.StairSqft, item.StairsProductionRate);
                 
                 item.LaborExtension = item.Hours == 0 ? 0 : item.Hours > item.SetupMinCharge ? item.Hours * laborRate : item.SetupMinCharge * laborRate;
-                item.LaborUnitPrice = item.LaborExtension / (TotalSqftPlywood+totalSqft+riserCount);
+                item.LaborUnitPrice = (TotalSqftPlywood + totalSqft + riserCount)==0?0:item.LaborExtension / (TotalSqftPlywood+totalSqft+riserCount);
 
             }
             

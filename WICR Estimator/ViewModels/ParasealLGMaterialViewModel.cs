@@ -207,6 +207,8 @@ namespace WICR_Estimator.ViewModels
             base.JobSetup_OnJobSetupChange(sender, e);
             SystemMaterial SM = SystemMaterials.FirstOrDefault(x => x.Name == "LABOR FOR ALL PENETRATIONS, CEMENT BOARD, LAGGING PREP");
             SM.Hours = (cementBoardDetail / 30) * 16 + (rakerCornerBases / 12) * 16 + (riserCount / 20) * 8 + (rockPockets / 8) * 16 + (rearMidLagging / 280) * 16;
+            SM.LaborExtension = SM.Hours == 0 ? 0 : SM.SetupMinCharge > SM.Hours ? SM.SetupMinCharge * laborRate : SM.Hours * laborRate;
+            SM.LaborUnitPrice = laborRate;//SM.LaborExtension / SM.Qty;
         }
         public override bool getCheckboxCheckStatus(string materialName)
         {

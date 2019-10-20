@@ -480,6 +480,7 @@ namespace WICR_Estimator.ViewModels
 
                     foreach (Project item in est)
                     {
+                        bool addminLabor = item.MaterialViewModel.ZAddLaborMinCharge;
                         savedProject = Projects.Where(x => x.Name == item.Name).FirstOrDefault();
                         Projects.Remove(savedProject);
                         Projects.Add(item);
@@ -521,6 +522,7 @@ namespace WICR_Estimator.ViewModels
                         }
                         item.MaterialViewModel.CheckboxCommand = new DelegateCommand(item.MaterialViewModel.ApplyCheckUnchecks, item.MaterialViewModel.canApply);
                         SystemMaterial.OnQTyChanged += (s, e) => { item.MaterialViewModel.setExceptionValues(s); };
+                        item.MaterialViewModel.ZAddLaborMinCharge = addminLabor;
                     }
                     Project_OnSelectedProjectChange(Projects[0], null);
                     reader.Close();
@@ -1868,6 +1870,6 @@ namespace WICR_Estimator.ViewModels
             {
                 return "Version 1.0";
             }
-        }
+        }       
     }
 }

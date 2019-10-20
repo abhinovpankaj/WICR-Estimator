@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WICR_Estimator.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="700">
+             d:DesignHeight="700" d:DesignWidth="1400">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -155,6 +155,21 @@
                                 Name="slSub"
                     />
             </StackPanel>
+            <StackPanel>
+                
+                    <TextBlock Text="Total Sales" Width="120" 
+                               Margin="30,5,10,5"
+                               HorizontalAlignment="Stretch"
+                               FontWeight="Bold" FontSize="14"/>
+                
+                <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,0">
+                    <TextBlock HorizontalAlignment="Stretch" Width="100"
+                                   FontWeight="Bold" Background="#FFE7BA0A" FontSize="14"
+                        Text="{Binding TotalSale,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
+                </Border>
+            </StackPanel>
+            
         </StackPanel>
     </Grid>
 </UserControl>

@@ -9,7 +9,7 @@
         xmlns:myViews="clr-namespace:WICR_Estimator.Views"
         mc:Ignorable="d"
         Icon="Images\WICR Logo.ico"
-        Title="WICR Estimator"
+        Title="WICR Estimator" Closing="Window_Closing"
         WindowState="Maximized">
     <Window.Resources>
         <DataTemplate DataType="{x:Type myVM:HomeViewModel}">

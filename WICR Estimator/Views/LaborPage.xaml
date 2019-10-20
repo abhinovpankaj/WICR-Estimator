@@ -369,7 +369,7 @@
                             Margin="0,15,0,0">
                     <CheckBox Content="ADD LABOR FOR MINIMUM CHARGE" 
                               Margin="20,5,0,5"
-                              IsChecked="{Binding AddLaborMinCharge}"
+                              IsChecked="{Binding ZAddLaborMinCharge}"
                               FontSize="15"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -554,7 +554,7 @@
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,0">
                         <TextBlock HorizontalAlignment="Stretch" Width="100"
-                                   FontWeight="Bold"
+                                   FontWeight="Bold" Background="#FFE7BA0A" FontSize="14"
                         Text="{Binding TotalSale,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
                     </Border>
                 </ListBoxItem>

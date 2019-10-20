@@ -107,7 +107,7 @@ namespace WICR_Estimator.ViewModels
             weatherWearType = "Weather Wear";
             IncludeDriveHours = true;
             //totalSqft = 1000;
-            //stairWidth = 4.5;
+            stairWidth = 4.5;
             //riserCount = 30;
             //deckPerimeter = 300;
             isSpecialMetal = false;
@@ -592,7 +592,7 @@ namespace WICR_Estimator.ViewModels
 
         private bool addLaborMinCharge;
         [DataMember]
-        public bool AddLaborMinCharge
+        public bool ZAddLaborMinCharge
         {
             get { return addLaborMinCharge; }
 
@@ -602,7 +602,7 @@ namespace WICR_Estimator.ViewModels
                 //{
                     addLaborMinCharge = value;
                     previousMinLaborCheckboxStatus = addLaborMinCharge;
-                    OnPropertyChanged("AddLaborMinCharge");
+                    OnPropertyChanged("ZAddLaborMinCharge");
                 //}
             }
         }
@@ -1243,9 +1243,9 @@ namespace WICR_Estimator.ViewModels
             {
                 SubContractLaborItems = GetLaborItems();
             }
-            CalculateLaborMinCharge(hasSetupChanged);
-            CalculateAllMaterial();
             
+            CalculateAllMaterial();
+            CalculateLaborMinCharge(hasSetupChanged);
         }
 
         public void CalculateAllMaterial()
@@ -1439,6 +1439,7 @@ namespace WICR_Estimator.ViewModels
 
             calculateLaborTotals();
             calculateLaborHrs();
+            CalculateLaborMinCharge(false);
             populateCalculation();
 
         }
@@ -1483,7 +1484,7 @@ namespace WICR_Estimator.ViewModels
                 }
                 FetchMaterialValuesAsync(true);
                 CalculateCost(null);
-                //js.TotalSalesCostTemp = TotalSale;
+                js.TotalSalesCostTemp = TotalSale;
             //});
                     
         }
@@ -1541,12 +1542,14 @@ namespace WICR_Estimator.ViewModels
             {
                 return;
             }
-            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
-                                        x.IsMaterialChecked&&x.LaborExtension!=0).ToList().Select(x => x.Hours).Sum();
-            LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
-                                         x.IsMaterialChecked&&x.LaborExtension!=0).ToList().Select(x => x.SetupMinCharge).Sum();
-            LaborMinChargeLaborExtension = (LaborMinChargeMinSetup + LaborMinChargeHrs) > 20 ? 0 :
-                                                (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
+            //LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+            // x.IsMaterialChecked&&x.LaborExtension!=0).ToList().Select(x => x.Hours).Sum();
+            //LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+            //x.IsMaterialChecked&&x.LaborExtension!=0).ToList().Select(x => x.SetupMinCharge).Sum();
+            //LaborMinChargeLaborExtension = (LaborMinChargeMinSetup + LaborMinChargeHrs) > 20 ? 0 :
+            //                                    (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
+            
+            LaborMinChargeLaborExtension = TotalHrsSystemLabor > 20 ? 0 : isPrevailingWage ? actualPreWage * (20 - TotalHrsSystemLabor) : laborRate * (20 - TotalHrsSystemLabor);
 
             LaborMinChargeLaborUnitPrice = (riserCount + totalSqft) == 0 ? 0 : LaborMinChargeLaborExtension / (riserCount + totalSqft);
 
@@ -1555,20 +1558,20 @@ namespace WICR_Estimator.ViewModels
             {
                 if (LaborMinChargeMinSetup + LaborMinChargeHrs < 20)
                 {
-                    AddLaborMinCharge = true;
+                    ZAddLaborMinCharge = true;
                 }
                 else
-                    AddLaborMinCharge = false;
+                    ZAddLaborMinCharge = false;
                 previousLaborCharges = SystemMaterials.Where(x => x.IsMaterialChecked).ToList().Select(x => x.MaterialExtension).Sum()+
                                         SystemMaterials.Where(x => x.IsMaterialChecked).ToList().Select(x => x.LaborExtension).Sum();//LaborMinChargeMinSetup + LaborMinChargeHrs;
-                previousMinLaborCheckboxStatus = AddLaborMinCharge;
+                previousMinLaborCheckboxStatus = ZAddLaborMinCharge;
             }
             if (LaborMinChargeMinSetup + LaborMinChargeHrs==0)
             {
-                AddLaborMinCharge = previousMinLaborCheckboxStatus;
+                ZAddLaborMinCharge = previousMinLaborCheckboxStatus;
             }
             OnPropertyChanged("LaborMinChargeMinSetup");
-            OnPropertyChanged("AddLaborMinCharge");
+            OnPropertyChanged("ZAddLaborMinCharge");
             OnPropertyChanged("LaborMinChargeHrs");
             OnPropertyChanged("LaborMinChargeLaborExtension");
             OnPropertyChanged("LaborMinChargeLaborUnitPrice");
@@ -2561,7 +2564,7 @@ namespace WICR_Estimator.ViewModels
             sqStairs = getSqFtStairs("Extra Stair Nosing Lf"); //getvalue from systemMaterial
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
             labrExt = (calcHrs != 0) ? (setUpMin + calcHrs) * laborRate : 0;
-            qty = 1;
+            qty = 0;
             smP.Add(new SystemMaterial
             {
                 IsMaterialChecked = getCheckboxCheckStatus("Extra Stair Nosing Lf"),
@@ -3164,14 +3167,14 @@ namespace WICR_Estimator.ViewModels
                 double.TryParse(laborDetails[1][0].ToString(), out laborDeduction);
             }
             IEnumerable<SystemMaterial> selectedLabors = SystemMaterials.Where(x => x.IsMaterialChecked == true).ToList();
-            TotalSetupTimeLabor = AddLaborMinCharge ? selectedLabors.Select(x => x.Hours).Sum() + LaborMinChargeMinSetup : selectedLabors.Select(x => x.Hours).Sum();
+            TotalSetupTimeLabor = ZAddLaborMinCharge ? selectedLabors.Select(x => x.Hours).Sum() + LaborMinChargeMinSetup : selectedLabors.Select(x => x.Hours).Sum();
 
-            TotalLaborUnitPrice = AddLaborMinCharge ? (selectedLabors.Select(x => x.LaborUnitPrice).Sum() +
+            TotalLaborUnitPrice = ZAddLaborMinCharge ? (selectedLabors.Select(x => x.LaborUnitPrice).Sum() +
                 OtherLaborMaterials.Sum(x => x.LMaterialPrice)+
                 LaborMinChargeLaborUnitPrice) * (1 + preWage + laborDeduction) :
                 (selectedLabors.Select(x => x.LaborUnitPrice).Sum() + OtherLaborMaterials.Sum(x => x.LMaterialPrice)) * (1 + preWage + laborDeduction);
 
-            TotalLaborExtension = AddLaborMinCharge ? (selectedLabors.Select(x => x.LaborExtension).Sum() + LaborMinChargeLaborExtension) * 
+            TotalLaborExtension = ZAddLaborMinCharge ? (selectedLabors.Select(x => x.LaborExtension).Sum() + LaborMinChargeLaborExtension) * 
                 (1 + preWage + laborDeduction) :
                 selectedLabors.Select(x => x.LaborExtension).Sum() * (1 + preWage + laborDeduction);
             TotalLaborExtension = TotalLaborExtension + TotalOCLaborExtension * (1 + preWage + laborDeduction);
