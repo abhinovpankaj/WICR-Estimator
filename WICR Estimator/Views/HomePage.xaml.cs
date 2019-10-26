@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml;
 using WICR_Estimator.Models;
 using WICR_Estimator.ViewModels;
 
@@ -24,7 +26,7 @@ namespace WICR_Estimator.Views
     /// Interaction logic for HomePage.xaml
     /// </summary>
     public partial class HomePage : UserControl
-    {
+    {       
         //HomeViewModel HomeVM;
         public HomePage()
         {
@@ -92,16 +94,23 @@ namespace WICR_Estimator.Views
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            //MessageBox.Show("homepageloading");
-            //ViewModels.HomeViewModel hm = new ViewModels.HomeViewModel();
+            if (HomeViewModel.isEstimateLoaded)
+            {
+                return;
+            }
+            ViewModels.HomeViewModel hm = this.DataContext as HomeViewModel;
+            if (hm!=null)
+            {
+                if (HomeViewModel.LoadedFile != string.Empty)
+                {
+                    hm.OpenEstimateFile(HomeViewModel.LoadedFile);
+                    HomeViewModel.isEstimateLoaded = true;
+                    HomeViewModel.filePath = HomeViewModel.LoadedFile;
+                }
+            }
             
-            //if (HomeViewModel.LoadedFile != string.Empty)
-            //{
-            //    hm.OpenEstimateFile(HomeViewModel.LoadedFile);
-            //    this.DataContext = hm;
-            //}
-            //MessageBox.Show(HomeViewModel.LoadedFile);
         }
+
         //private void ListBox_Selected(object sender, RoutedEventArgs e)
         //{            
         //    HomeVM.SelectedProjects.Clear();
@@ -111,5 +120,8 @@ namespace WICR_Estimator.Views
         //    }
         //    HomeVM.SelectedProjects = HomeVM.SelectedProjects.OrderBy(project => project.Rank).ToList();
         //}
+
+        
+        
     }
 }

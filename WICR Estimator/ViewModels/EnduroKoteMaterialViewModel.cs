@@ -13,6 +13,7 @@ namespace WICR_Estimator.ViewModels
     public class EnduroKoteMaterialViewModel:MaterialBaseViewModel
     {
         private Dictionary<string, string> materialNames;
+        private bool IsSystemOverConcrete;
         public EnduroKoteMaterialViewModel(Totals metalTotals, Totals slopeTotals, JobSetup Js) : base(metalTotals, slopeTotals, Js)
         {
             materialNames = new Dictionary<string, string>();
@@ -21,6 +22,15 @@ namespace WICR_Estimator.ViewModels
             
         }
 
+        public override void JobSetup_OnJobSetupChange(object sender, EventArgs e)
+        {
+            JobSetup Js = sender as JobSetup;
+            if (Js != null)
+            {
+                IsSystemOverConcrete = Js.IsSystemOverConcrete;
+            }
+            base.JobSetup_OnJobSetupChange(sender, e);
+        }
         private void FillMaterialList()
         {
 
@@ -125,7 +135,11 @@ namespace WICR_Estimator.ViewModels
                 SystemMaterials = sysMat;
 
             setExceptionValues(null);
-            //setCheckBoxes();
+            if (hasSetupChanged)
+            {
+                setCheckBoxes();
+            }
+            
             if (OtherMaterials.Count == 0)
             {
                 OtherMaterials = GetOtherMaterials();
@@ -270,6 +284,10 @@ namespace WICR_Estimator.ViewModels
                 case "Stucco Material Remove and replace(LF)":
                 case "Caulk, dymonic 100":
                     return false;
+                case "2.5 Galvanized Lathe (18 s.f.) no less than 12 per sq ft.":
+                case "Staples (3/4 Inch Crown, Box of 13,500)":
+                case "Base Coat EKC Cementitious Mix":
+                    return !IsSystemOverConcrete;
                 default:
                     return  true;
             }
@@ -360,6 +378,18 @@ namespace WICR_Estimator.ViewModels
             //update Add labor for minimum cost
             //CalculateLaborMinCharge(false);
 
+        }
+
+        public override void setCheckBoxes()
+        {
+            foreach (SystemMaterial item in SystemMaterials)
+            {
+                if (item.Name== "2.5 Galvanized Lathe (18 s.f.) no less than 12 per sq ft."|| item.Name == "Base Coat EKC Cementitious Mix"
+                    || item.Name == "Staples (3/4 Inch Crown, Box of 13,500)")
+                {
+                    item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
+                }
+            }
         }
     }
 }

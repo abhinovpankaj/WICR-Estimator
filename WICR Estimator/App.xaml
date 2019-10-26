@@ -12,7 +12,20 @@
                 <ResourceDictionary Source="Resources\PageStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>-->
-        
 
+        <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
+            <Setter Property="Stylus.IsFlicksEnabled" Value="True" />
+            <Style.Triggers>
+                <Trigger Property="Orientation" Value="Horizontal">
+                    <Setter Property="Height" Value="5" />
+                    <Setter Property="MinHeight" Value="5" />
+                </Trigger>
+                <Trigger Property="Orientation" Value="Vertical">
+                    <Setter Property="Width" Value="5" />
+                    <Setter Property="MinWidth" Value="5" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
     </Application.Resources>
 </Application>

@@ -51,7 +51,7 @@ namespace WICR_Estimator.Views
                     if (vm != null)
                     {
 
-                        vm.UpdateJobSettings(tabControl.DataContext);
+                        //vm.UpdateJobSettings(tabControl.DataContext);
                     }
                 }
                 if (tabControl.Header.ToString() == "Metal")
@@ -70,7 +70,6 @@ namespace WICR_Estimator.Views
                     {
                         prj.SlopeViewModel.CalculateAll();
                     }
-
                 }
                 if (tabControl.Header.ToString() == "Material")
                 {
@@ -78,6 +77,7 @@ namespace WICR_Estimator.Views
                     if (prj != null)
                     {
                         prj.MaterialViewModel.CalculateCost(null);
+                        prj.ProjectJobSetUp.TotalSalesCostTemp = prj.MaterialViewModel.TotalSale;
                     }
 
                 }
@@ -87,6 +87,7 @@ namespace WICR_Estimator.Views
                     if (prj != null)
                     {
                         prj.MaterialViewModel.CalculateCost(null);
+                        prj.ProjectJobSetUp.TotalSalesCostTemp = prj.MaterialViewModel.TotalSale;
                     }
 
                 }
@@ -115,25 +116,34 @@ namespace WICR_Estimator.Views
         Point pStart;
         private void TabItem_Drop(object sender, DragEventArgs e)
         {
-            var tabItemTarget = e.Source as TabItem;
-            var tabItemSource = e.Data.GetData(typeof(TabItem)) as TabItem;
-            var srcProject = tabItemSource.DataContext as Project;
-            var targetProject = tabItemTarget.DataContext as Project;
-            if (!tabItemTarget.Equals(tabItemSource))
+            try
             {
-                var tabControl = GetParent((Visual)tabItemTarget);//tabItemTarget.Parent as TabControl;
-                var projectVM = tabControl.DataContext as ProjectViewModel;
+                var tabItemTarget = e.Source as TabItem;
+                var tabItemSource = e.Data.GetData(typeof(TabItem)) as TabItem;
+                var srcProject = tabItemSource.DataContext as Project;
+                var targetProject = tabItemTarget.DataContext as Project;
+                if (!tabItemTarget.Equals(tabItemSource))
+                {
+                    var tabControl = GetParent((Visual)tabItemTarget);//tabItemTarget.Parent as TabControl;
+                    var projectVM = tabControl.DataContext as ProjectViewModel;
 
-                int sourceIndex = projectVM.EnabledProjects.IndexOf(srcProject);
-                int targetIndex = projectVM.EnabledProjects.IndexOf(targetProject);
+                    int sourceIndex = projectVM.EnabledProjects.IndexOf(srcProject);
+                    int targetIndex = projectVM.EnabledProjects.IndexOf(targetProject);
 
-                var temp = projectVM.EnabledProjects.ElementAt(sourceIndex);
-                projectVM.EnabledProjects.RemoveAt(sourceIndex);
-                projectVM.EnabledProjects.Insert(targetIndex, temp);
+                    var temp = projectVM.EnabledProjects.ElementAt(sourceIndex);
+                    projectVM.EnabledProjects.RemoveAt(sourceIndex);
+                    projectVM.EnabledProjects.Insert(targetIndex, temp);
 
-                tabControl.SelectedIndex = targetIndex;
+                    tabControl.SelectedIndex = targetIndex;
 
+                }
             }
+            catch (Exception)
+            {
+
+                
+            }
+            
         }
 
         private TabControl GetParent(Visual v)

@@ -13,6 +13,7 @@ namespace WICR_Estimator.ViewModels
     {
         private Dictionary<string, string> materialNames;
         private bool? IsJobSpecifiedByArchitect;
+        private bool IsSystemOverConcrete;
         public DesertbrandMaterialViewModel(Totals metalTotals, Totals slopeTotals, JobSetup Js) : base(metalTotals, slopeTotals, Js)
         {
             materialNames = new Dictionary<string, string>();
@@ -28,6 +29,7 @@ namespace WICR_Estimator.ViewModels
             if (Js!=null)
             {
                 IsJobSpecifiedByArchitect = Js.IsJobSpecifiedByArchitect;
+                IsSystemOverConcrete = Js.IsSystemOverConcrete;
             }
             
             base.JobSetup_OnJobSetupChange(sender, e);
@@ -106,7 +108,11 @@ namespace WICR_Estimator.ViewModels
                 SystemMaterials = sysMat;
 
             setExceptionValues(null);
-            setCheckBoxes();
+            if (hasSetupChanged)
+            {
+                setCheckBoxes();
+            }
+            
 
             if (OtherMaterials.Count == 0)
             {
@@ -136,6 +142,9 @@ namespace WICR_Estimator.ViewModels
                     return (bool)IsJobSpecifiedByArchitect;
                 case "BASE COAT Desert Crete poly base mixed with water":
                     return (bool)!IsJobSpecifiedByArchitect;
+                case "2.5 Galvanized Lathe (18 s.f.)":
+                case "Staples":
+                    return !IsSystemOverConcrete;
                 default:
                     return true;
             }
@@ -343,6 +352,13 @@ namespace WICR_Estimator.ViewModels
             sysmat.IsMaterialChecked = !isSpecified;
             sysmat.IsMaterialEnabled = !isSpecified;
             
+            foreach (SystemMaterial item in SystemMaterials)
+            {
+                if (item.Name == "2.5 Galvanized Lathe (18 s.f.)" || item.Name == "Staples")
+                {
+                    item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
+                }
+            }
         }
     }
 }

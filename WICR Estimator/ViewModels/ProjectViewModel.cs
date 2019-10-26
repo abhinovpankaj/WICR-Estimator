@@ -107,7 +107,7 @@ namespace WICR_Estimator.ViewModels
         {
             get
             {
-                return "Project Page";
+                return "Projects";
             }
         }
 
@@ -136,7 +136,7 @@ namespace WICR_Estimator.ViewModels
                         prj.ProjectJobSetUp = new JobSetup(prj.OriginalProjectName);
 
                         prj.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
-
+                        prj.ProjectJobSetUp.UpdateJobSetup();
                     }
                     string originalProjectname=prj.OriginalProjectName;
                     //if (prj.Name.Contains('.'))
@@ -252,19 +252,27 @@ namespace WICR_Estimator.ViewModels
         {
             foreach (Project item in EnabledProjects)
             {
-                if (item.ProjectJobSetUp.SpecialProductName!=null)
+                //if (item.ProjectJobSetUp.SpecialProductName!=null)
+                //{
+                //    if (item.ProjectJobSetUp.SpecialProductName != "")
+                //    {
+                //        item.Name = item.ProjectJobSetUp.SpecialProductName;
+                //    }
+                //    else
+                //        item.Name = item.ProjectJobSetUp.ProjectName;
+                //}
+                if (item.ProjectJobSetUp.WorkArea != null)
                 {
-                    if (item.ProjectJobSetUp.SpecialProductName != "")
+                    if (item.ProjectJobSetUp.WorkArea != "")
                     {
-                        item.Name = item.ProjectJobSetUp.SpecialProductName;
+                        item.Name = item.ProjectJobSetUp.WorkArea;
                     }
                     else
                         item.Name = item.ProjectJobSetUp.ProjectName;
                 }
-                
 
             }
-           
+
         }
 
         private void ProjectJobSetUp_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

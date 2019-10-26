@@ -42,10 +42,13 @@
             <ColumnDefinition Width="Auto"/>
             
         </Grid.ColumnDefinitions>
-        <Border BorderThickness="1" BorderBrush="Black"
+        <Border BorderThickness="0" BorderBrush="Black"
                 Background="AliceBlue"
                 Margin="10"
                 Padding="0,0,0,15">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" Color="#82000000" />
+            </Border.Effect>
             <StackPanel HorizontalAlignment="Stretch" Margin="5">
                 <DatePicker Margin="5" Height="30"
                             FontSize="14"
@@ -75,7 +78,7 @@
                 </ComboBox>
                 <TextBlock Style="{StaticResource FieldHeader}"
                        Text="Project Start Date"/>
-                <ComboBox Text="{Binding ProjectDelayFactor,UpdateSourceTrigger=LostFocus}" 
+                <ComboBox Text="{Binding ProjectDelayFactor,UpdateSourceTrigger=PropertyChanged}" 
                           Width="180" HorizontalAlignment="Left"
                           Margin="5,0,0,0">
                     <ComboBoxItem Content="0-3 Months" IsSelected="True"/>
@@ -127,12 +130,15 @@
 
         </Border>
         
-        <Border BorderThickness="1" BorderBrush="Black"
+        <Border BorderThickness="0" BorderBrush="Black"
                 Grid.Column="1"
                 Background="AliceBlue"
                 Margin="10"
                 Width="350"
                 Padding="0,0,0,15">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" Color="#82000000" />
+            </Border.Effect>
             <ScrollViewer>
                 <StackPanel>
                     <StackPanel>
@@ -146,6 +152,10 @@
                               IsChecked="{Binding IsJobSpecifiedByArchitect,
                         UpdateSourceTrigger=PropertyChanged}"
                               Content="Is This Job Specified By Architect"/>
+                        <CheckBox Style="{StaticResource CheckBoxStyle}"
+                                  Visibility="{Binding IsSystemOverConcreteVisible}"
+                              IsChecked="{Binding IsSystemOverConcrete,UpdateSourceTrigger=PropertyChanged}"
+                              Content="System Over Concrete"/>
                         <CheckBox Style="{StaticResource CheckBoxStyle}"
                                   Visibility="{Binding IsSandCementVisible}"
                               IsChecked="{Binding IsApprovedForSandCement,UpdateSourceTrigger=PropertyChanged}"
@@ -233,11 +243,11 @@
                             <TextBlock Text="ADDITIONAL TERM BAR (LF)"
                            Style="{StaticResource FieldHeader}"/>
                             <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding AdditionalTermBarLF ,UpdateSourceTrigger=LostFocus}"/>
+                         Text="{Binding AdditionalTermBarLF ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="INSIDE AND OUTSIDE CORNER DETAILS (LF)"
                            Style="{StaticResource FieldHeader}"/>
                             <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding InsideOutsideCornerDetails ,UpdateSourceTrigger=LostFocus}"/>
+                         Text="{Binding InsideOutsideCornerDetails ,UpdateSourceTrigger=PropertyChanged}"/>
                             <CheckBox Style="{StaticResource CheckBoxStyle}"
                           IsChecked="{Binding SuperStopAtFooting,
                     UpdateSourceTrigger=PropertyChanged}"
@@ -255,19 +265,19 @@
                             <TextBlock Text="ADDITIONAL TERM BAR (LF)"
                            Style="{StaticResource FieldHeader}"/>
                             <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding AdditionalTermBarLF ,UpdateSourceTrigger=LostFocus}"/>
+                         Text="{Binding AdditionalTermBarLF ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="RAKERS/CORNER BRACES EA"
                            Style="{StaticResource FieldHeader}"/>
                             <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding RakerCornerBases ,UpdateSourceTrigger=LostFocus}"/>
+                         Text="{Binding RakerCornerBases ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="CEMENT BOARD DETAIL EA"
                            Style="{StaticResource FieldHeader}"/>
                             <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding CementBoardDetail ,UpdateSourceTrigger=LostFocus}"/>
+                         Text="{Binding CementBoardDetail ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="INSIDE AND OUTSIDE CORNER DETAILS (LF)"
                            Style="{StaticResource FieldHeader}"/>
                             <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding InsideOutsideCornerDetails ,UpdateSourceTrigger=LostFocus}"/>
+                         Text="{Binding InsideOutsideCornerDetails ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="ROCK POCKETS EA."
                            Style="{StaticResource FieldHeader}"/>
                             <TextBox Style="{StaticResource TextBoxStyle}"
@@ -275,11 +285,11 @@
                             <TextBlock Text="LABOR FOR 3 FT STRIP OF PARASEAL AT FOUNDATION OR OTHER AREAS (LF)"
                            Style="{StaticResource FieldHeader}"/>
                             <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding ParasealFoundation ,UpdateSourceTrigger=LostFocus}"/>
+                         Text="{Binding ParasealFoundation ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="REAR/MID LAGGING LF of beam"
                            Style="{StaticResource FieldHeader}"/>
                             <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding RearMidLagging ,UpdateSourceTrigger=LostFocus}"/>
+                         Text="{Binding RearMidLagging ,UpdateSourceTrigger=PropertyChanged}"/>
                             <CheckBox Style="{StaticResource CheckBoxStyle}"
                           IsChecked="{Binding SuperStopAtFooting,
                     UpdateSourceTrigger=PropertyChanged}"
@@ -296,19 +306,19 @@
                             <TextBlock Text="TERM BAR (LF)"
                                         Style="{StaticResource FieldHeader}"/>
                             <TextBox Style="{StaticResource TextBoxStyle}"
-                                     Text="{Binding TermBarLF ,UpdateSourceTrigger=LostFocus}"/>
+                                     Text="{Binding TermBarLF ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="REBAR PREP @ WALLS (LF)"
                                        Style="{StaticResource FieldHeader}"/>
                             <TextBox Style="{StaticResource TextBoxStyle}"
-                                     Text="{Binding RebarPrepWallsLF ,UpdateSourceTrigger=LostFocus}"/>
+                                     Text="{Binding RebarPrepWallsLF ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="SUPERSTOP (LF)"
                                        Style="{StaticResource FieldHeader}"/>
                             <TextBox Style="{StaticResource TextBoxStyle}"
-                                     Text="{Binding SuperStopLF ,UpdateSourceTrigger=LostFocus}"/>
+                                     Text="{Binding SuperStopLF ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="PENETRATIONS"
                                        Style="{StaticResource FieldHeader}"/>
                             <TextBox Style="{StaticResource TextBoxStyle}"
-                                     Text="{Binding Penetrations ,UpdateSourceTrigger=LostFocus}"/>
+                                     Text="{Binding Penetrations ,UpdateSourceTrigger=PropertyChanged}"/>
                             
                         </StackPanel>
                         
@@ -322,15 +332,15 @@
                             <TextBlock Text="ADDITIONAL TERM BAR (LF)"
                                         Style="{StaticResource FieldHeader}"/>
                             <TextBox Style="{StaticResource TextBoxStyle}"
-                                     Text="{Binding TermBarLF ,UpdateSourceTrigger=LostFocus}"/>
+                                     Text="{Binding TermBarLF ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="INSIDE AND OUTSIDE CORNER DETAILS (LF)"
                                        Style="{StaticResource FieldHeader}"/>
                             <TextBox Style="{StaticResource TextBoxStyle}"
-                                     Text="{Binding InsideOutsideCornerDetails ,UpdateSourceTrigger=LostFocus}"/>
+                                     Text="{Binding InsideOutsideCornerDetails ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="PENETRATIONS"
                                        Style="{StaticResource FieldHeader}"/>
                             <TextBox Style="{StaticResource TextBoxStyle}"
-                                     Text="{Binding Penetrations ,UpdateSourceTrigger=LostFocus}"/>
+                                     Text="{Binding Penetrations ,UpdateSourceTrigger=PropertyChanged}"/>
                             <CheckBox Style="{StaticResource CheckBoxStyle}"
                                       IsChecked="{Binding SuperStopAtFooting,
                                       UpdateSourceTrigger=PropertyChanged}"
@@ -341,11 +351,14 @@
                 </StackPanel>
             </ScrollViewer>
         </Border>
-        <Border BorderThickness="1" BorderBrush="Black"
+        <Border BorderThickness="0" BorderBrush="Black"
                 Background="AliceBlue"
                 Grid.Column="2"
                 Margin="10"
                 Padding="0,0,0,15">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" Color="#82000000" />
+            </Border.Effect>
             <StackPanel>
                 <TextBlock Style="{StaticResource FieldHeader}"
                        Text="Actual Prevailing Wage"/>

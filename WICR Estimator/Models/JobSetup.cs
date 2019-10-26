@@ -385,7 +385,27 @@ namespace WICR_Estimator.Models
                 }
             }
         }
-        public string WorkArea { get; set; }
+        private string workArea;
+        public string WorkArea
+        {
+            get
+            {
+                return workArea;
+            }
+            set
+            {
+                if (value!=workArea)
+                {
+
+                    workArea = value;
+                    OnPropertyChanged("WorkArea");
+                    if (OnProjectNameChange != null)
+                    {
+                        OnProjectNameChange(this, EventArgs.Empty);
+                    }
+                }
+            }
+        }
         private DateTime? selecteddate=DateTime.Now;
         public DateTime? SelectedDate
         {
@@ -694,6 +714,33 @@ namespace WICR_Estimator.Models
                 {
                     isJobSpecifiedByArchitect = value;
                     OnPropertyChanged("IsJobSpecifiedByArchitect");
+                    UpdateJobSetup();
+                }
+            }
+        }
+        
+        public System.Windows.Visibility IsSystemOverConcreteVisible
+        {
+            get
+            {
+                if (originalName == "Dexcellent II"|| originalName == "Endurokote" || originalName == "Pli-Dek" || originalName == "Desert Crete")
+                {
+                    return System.Windows.Visibility.Visible;
+                }
+                else
+                    return System.Windows.Visibility.Collapsed;
+            }
+        }
+        private bool isSystemOverConcrete;
+        public bool IsSystemOverConcrete
+        {
+            get { return isSystemOverConcrete; }
+            set
+            {
+                if (value != isSystemOverConcrete)
+                {
+                    isSystemOverConcrete = value;
+                    OnPropertyChanged("IsSystemOverConcrete");
                     UpdateJobSetup();
                 }
             }

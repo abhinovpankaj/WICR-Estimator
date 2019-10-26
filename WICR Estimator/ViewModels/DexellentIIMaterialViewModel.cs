@@ -13,6 +13,8 @@ namespace WICR_Estimator.ViewModels
     {
         
         private Dictionary<string, string> materialNames;
+        private bool IsSystemOverConcrete;
+
         private double linearFootageCoping;
         public DexellentIIMaterialViewModel(Totals metalTotals, Totals slopeTotals, JobSetup Js) 
             : base(metalTotals, slopeTotals, Js)
@@ -21,7 +23,7 @@ namespace WICR_Estimator.ViewModels
             FillMaterialList();
             FetchMaterialValuesAsync(false);
         }
-
+        
         private void FillMaterialList()
         {
             materialNames.Add("2.5 Galvanized Lathe (18 s.f.)","EA");
@@ -51,6 +53,7 @@ namespace WICR_Estimator.ViewModels
             if (js != null)
             {
                 linearFootageCoping = js.DeckPerimeter;
+                IsSystemOverConcrete = js.IsSystemOverConcrete;
             }
 
             base.JobSetup_OnJobSetupChange(sender, e);
@@ -206,6 +209,11 @@ namespace WICR_Estimator.ViewModels
                 case "Base Coat w Dexcelcrete Gray Powder":
                 case "(Stairs Only) Base Coat with Dexcelcrete Gray Powder":
                     return !isApprovedforCement;
+                case "2.5 Galvanized Lathe (18 s.f.)":
+                case "Staples (3/4 Inch Crown, Box of 13,500)":
+                //case "(Stairs Only) Base Coat with Sand Cement and Acrylic Binder":
+                //case "(Stairs Only) Base Coat with Dexcelcrete Gray Powder":
+                    return !IsSystemOverConcrete;
                 default:
                     return true;
             }

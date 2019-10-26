@@ -14,7 +14,7 @@ namespace WICR_Estimator
 
         readonly Action<object> _execute;
         readonly Predicate<object> _canExecute;
-        public event EventHandler CanExecuteChanged;
+        //public event EventHandler CanExecuteChanged;
         #endregion // Fields
 
         #region Constructors
@@ -55,23 +55,24 @@ namespace WICR_Estimator
 
         public void RaiseCanExecuteChanged()
         {
-            if (CanExecuteChanged != null)
-            {
-                CanExecuteChanged(this, EventArgs.Empty);
-            }
+            //if (CanExecuteChanged != null)
+            //{
+            //    CanExecuteChanged(this, EventArgs.Empty);
+            //}
+            CommandManager.InvalidateRequerySuggested();
         }
 
-        //public event EventHandler CanExecuteChanged
-        //{
-        //    add { CommandManager.RequerySuggested += value; }
-        //    remove { CommandManager.RequerySuggested -= value; }
-        //}
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
 
         public void Execute(object parameters)
         {
             _execute(parameters);
         }
-
+        
         #endregion // ICommand Members
     }
 }

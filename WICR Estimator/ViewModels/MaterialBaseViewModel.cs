@@ -119,6 +119,7 @@ namespace WICR_Estimator.ViewModels
             actualPreWage = Js.ActualPrevailingWage;
             if (!Js.IsProjectIndependent)
             {
+                
                 Js.JobSetupChange += JobSetup_OnJobSetupChange;
                 SystemMaterial.OnQTyChanged += (s, e) => { setExceptionValues(s); };
                 CheckboxCommand = new DelegateCommand(ApplyCheckUnchecks, canApply);
@@ -1425,11 +1426,13 @@ namespace WICR_Estimator.ViewModels
             calculateMaterialTotals();
             CalOCTotal();
             CalSCTotal();
-            CalculateCostBreakup();
+            
             
             calculateLaborTotals();
-            calculateLaborHrs();
+            CalculateCostBreakup();
             CalculateLaborMinCharge(false);
+            calculateLaborHrs();
+            
             populateCalculation();
 
             calculateMaterialTotals();
@@ -1440,7 +1443,7 @@ namespace WICR_Estimator.ViewModels
             calculateLaborTotals();
             calculateLaborHrs();
             CalculateLaborMinCharge(false);
-            populateCalculation();
+            populateCalculation();           
 
         }
 
@@ -1542,14 +1545,14 @@ namespace WICR_Estimator.ViewModels
             {
                 return;
             }
-            //LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
-            // x.IsMaterialChecked&&x.LaborExtension!=0).ToList().Select(x => x.Hours).Sum();
-            //LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
-            //x.IsMaterialChecked&&x.LaborExtension!=0).ToList().Select(x => x.SetupMinCharge).Sum();
-            //LaborMinChargeLaborExtension = (LaborMinChargeMinSetup + LaborMinChargeHrs) > 20 ? 0 :
-            //                                    (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
-            
-            LaborMinChargeLaborExtension = TotalHrsSystemLabor > 20 ? 0 : isPrevailingWage ? actualPreWage * (20 - TotalHrsSystemLabor) : laborRate * (20 - TotalHrsSystemLabor);
+            LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+             x.IsMaterialChecked && x.LaborExtension != 0).ToList().Select(x => x.Hours).Sum();
+            LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
+            x.IsMaterialChecked && x.LaborExtension != 0).ToList().Select(x => x.SetupMinCharge).Sum();
+            LaborMinChargeLaborExtension = (LaborMinChargeMinSetup + LaborMinChargeHrs) > 20 ? 0 :
+                                                (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
+
+            //LaborMinChargeLaborExtension = TotalHrsSystemLabor > 20 ? 0 : isPrevailingWage ? actualPreWage * (20 - TotalHrsSystemLabor) : laborRate * (20 - TotalHrsSystemLabor);
 
             LaborMinChargeLaborUnitPrice = (riserCount + totalSqft) == 0 ? 0 : LaborMinChargeLaborExtension / (riserCount + totalSqft);
 
@@ -3167,12 +3170,13 @@ namespace WICR_Estimator.ViewModels
                 double.TryParse(laborDetails[1][0].ToString(), out laborDeduction);
             }
             IEnumerable<SystemMaterial> selectedLabors = SystemMaterials.Where(x => x.IsMaterialChecked == true).ToList();
-            TotalSetupTimeLabor = ZAddLaborMinCharge ? selectedLabors.Select(x => x.Hours).Sum() + LaborMinChargeMinSetup : selectedLabors.Select(x => x.Hours).Sum();
 
-            TotalLaborUnitPrice = ZAddLaborMinCharge ? (selectedLabors.Select(x => x.LaborUnitPrice).Sum() +
-                OtherLaborMaterials.Sum(x => x.LMaterialPrice)+
-                LaborMinChargeLaborUnitPrice) * (1 + preWage + laborDeduction) :
-                (selectedLabors.Select(x => x.LaborUnitPrice).Sum() + OtherLaborMaterials.Sum(x => x.LMaterialPrice)) * (1 + preWage + laborDeduction);
+            //TotalSetupTimeLabor = ZAddLaborMinCharge ? selectedLabors.Select(x => x.Hours).Sum() + LaborMinChargeMinSetup : selectedLabors.Select(x => x.Hours).Sum();
+
+            //TotalLaborUnitPrice = ZAddLaborMinCharge ? (selectedLabors.Select(x => x.LaborUnitPrice).Sum() +
+            //    OtherLaborMaterials.Sum(x => x.LMaterialPrice)+
+            //    LaborMinChargeLaborUnitPrice) * (1 + preWage + laborDeduction) :
+            //    (selectedLabors.Select(x => x.LaborUnitPrice).Sum() + OtherLaborMaterials.Sum(x => x.LMaterialPrice)) * (1 + preWage + laborDeduction);
 
             TotalLaborExtension = ZAddLaborMinCharge ? (selectedLabors.Select(x => x.LaborExtension).Sum() + LaborMinChargeLaborExtension) * 
                 (1 + preWage + laborDeduction) :

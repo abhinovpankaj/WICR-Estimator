@@ -279,27 +279,31 @@
                     VerticalAlignment="Bottom">
                 <Button Name="AddButton" Background="White"
                     HorizontalAlignment="Right"
+                        FontFamily="Segoe UI Symbol"
+                    Content="&#xE109;" Width="30"
                                         Height="30"
                     Command="{Binding AddRowCommand}">
-                    <Button.Content>
+                    <!--<Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <Image Source="../Images/Add1.ico"
                                Height="25"/>
                         </StackPanel>
-                    </Button.Content>
+                    </Button.Content>-->
                 </Button>
                 <Button Command="{Binding RemoveCommand}"                   
                     Height="30"
                     Margin="5"
+                        FontFamily="Segoe UI Symbol"
+                    Content="&#xE108;" Width="30"
                     Background="White"
                     HorizontalAlignment="Right"
                    >
-                    <Button.Content>
+                    <!--<Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <Image Source="../Images/RNew.ico"
                                Height="25"/>
                         </StackPanel>
-                    </Button.Content>
+                    </Button.Content>-->
                 </Button>
                 <StackPanel>
                     <Label Content="Total ($) :" Grid.Row="0" Grid.Column="1"  
@@ -517,11 +521,13 @@
 
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&#xE1D0;" FontFamily="Segoe UI Symbol" FontSize="16"
+                                       VerticalAlignment="Center"/>
                         <TextBlock Text="Calculate" VerticalAlignment="Center"
                                    HorizontalAlignment="Left"
-                                   Margin="0,0,5,0" FontSize="12" FontWeight="bold"/>
-                        <Image Source="../Images/Calculator.png"
-                               Height="25" />
+                                   Margin="5,0,5,0" FontSize="12" FontWeight="bold"/>
+                        <!--<Image Source="../Images/Calculator.png"
+                               Height="25" />-->
                     </StackPanel>
                 </Button.Content>
             </Button>

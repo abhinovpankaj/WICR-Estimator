@@ -270,7 +270,10 @@
                   FontSize="14"
                   FontWeight="Bold"
                   BorderBrush="DarkBlue"
-                  BorderThickness="0.5" >
+                  BorderThickness="0" >
+            <GroupBox.Effect>
+                <DropShadowEffect BlurRadius="10" Color="AliceBlue"/>
+            </GroupBox.Effect>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -369,11 +372,13 @@ Text="{Binding TotalMaterialCost,UpdateSourceTrigger=PropertyChanged ,StringForm
                 IsEnabled="{Binding AddRowCommand}">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&#xE1D0;" FontFamily="Segoe UI Symbol" FontSize="16"
+                                       VerticalAlignment="Center"/>
                         <TextBlock Text="Calculate" VerticalAlignment="Center"
                                    HorizontalAlignment="Left"
-                                   Margin="0,0,5,0" FontSize="12" FontWeight="bold"/>
-                        <Image Source="../Images/Calculator.png"
-                               Height="25" Width="36"/>
+                                   Margin="5,0,5,0" FontSize="12" FontWeight="bold"/>
+                        <!--<Image Source="../Images/Calculator.png"
+                               Height="25" Width="36"/>-->
                     </StackPanel>
                 </Button.Content>
             </Button>

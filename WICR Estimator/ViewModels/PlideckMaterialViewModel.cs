@@ -12,7 +12,7 @@ namespace WICR_Estimator.ViewModels
     public class PlideckMaterialViewModel:MaterialBaseViewModel
     {
         private Dictionary<string, string> materialNames;
-
+        private bool IsSystemOverConcrete;
         public PlideckMaterialViewModel(Totals metalTotals, Totals slopeTotals, JobSetup Js) : base(metalTotals, slopeTotals, Js)
         {
             materialNames = new Dictionary<string, string>();
@@ -22,7 +22,15 @@ namespace WICR_Estimator.ViewModels
             FetchMaterialValuesAsync(false);
 
         }
-
+        public override void JobSetup_OnJobSetupChange(object sender, EventArgs e)
+        {
+            JobSetup Js = sender as JobSetup;
+            if (Js != null)
+            {
+                IsSystemOverConcrete = Js.IsSystemOverConcrete;
+            }
+            base.JobSetup_OnJobSetupChange(sender, e);
+        }
         private void FillMaterialList()
         {
             materialNames.Add("2.5 Galvanized Lathe", "EA");
@@ -104,7 +112,11 @@ namespace WICR_Estimator.ViewModels
                 SystemMaterials = sysMat;
 
             setExceptionValues(null);
-            setCheckBoxes();
+            if (hasSetupChanged)
+            {
+                setCheckBoxes();
+            }
+            
 
             if (OtherMaterials.Count == 0)
             {
@@ -134,7 +146,10 @@ namespace WICR_Estimator.ViewModels
                 case "Select Y for protection coat over membrane below tile (GU80-1 TOP COAT)":
                 //case "Color Jar Pigment, 1 JAR per PAIL OF GS88":
                     return false;
-                
+                case "2.5 Galvanized Lathe":
+                case "Staples":
+                case "GU80-1 grey Base Coat":
+                    return !IsSystemOverConcrete;
                 default:
                     return true;
             }
@@ -357,7 +372,14 @@ namespace WICR_Estimator.ViewModels
 
         public override void setCheckBoxes()
         {
-            ApplyCheckUnchecks("2.5 Galvanized Lathe");
+            foreach (SystemMaterial item in SystemMaterials)
+            {
+                if (item.Name == "2.5 Galvanized Lathe" || item.Name == "Staples"
+                    || item.Name == "GU80-1 grey Base Coat")
+                {
+                    item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
+                }
+            }
         }
     }
 }

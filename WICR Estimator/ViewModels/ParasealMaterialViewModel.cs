@@ -107,7 +107,8 @@ namespace WICR_Estimator.ViewModels
                 SystemMaterials = sysMat;
 
             setExceptionValues(null);
-            setCheckBoxes();
+            //if(hasSetupChanged)
+            //    setCheckBoxes();
 
             if (OtherMaterials.Count == 0)
             {
@@ -165,7 +166,7 @@ namespace WICR_Estimator.ViewModels
                 case "PARAGRANULAR (FOR CANT AT FOOTING)":
                     return deckPerimeter > 0 ? true : false;
                 case "PARAMASTIC AND PARASTICK AND DRY (FOR PENETRATIONS)":
-                    return riserCount > 0 ? true : false;
+                        return riserCount > 0 ? true : false;
                 case "INSIDE AND OUTSIDE CORNER DETAILS (PARASEAL)":
                     return  insideOutsideCornerDetails> 0 ? true : false;
                 case "SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT":
@@ -181,8 +182,8 @@ namespace WICR_Estimator.ViewModels
         {
             switch (materialName)
             {
-                case "PARATERM BAR LF (TOP ONLY- STANDARD INSTALL)":
-                case "PARAMASTIC AND PARASTICK AND DRY (FOR PENETRATIONS)":
+                //case "PARATERM BAR LF (TOP ONLY- STANDARD INSTALL)":
+                //case "PARAMASTIC AND PARASTICK AND DRY (FOR PENETRATIONS)":
                 //case "PINS & LOADS":
                 case "PB-4 (VERTICAL ONLY)":
                 case "TREMDRAIN 1000 (VERTICAL ONLY)":
@@ -392,6 +393,17 @@ namespace WICR_Estimator.ViewModels
         }
         public override void setCheckBoxes()
         {
+            SystemMaterial sm = SystemMaterials.FirstOrDefault(x => x.Name == "PINS & LOADS");
+            if (sm != null)
+            {
+                sm.IsMaterialChecked = totalSqft > 0 ? true : false;
+            }
+
+            sm = SystemMaterials.FirstOrDefault(x => x.Name == "PARAMASTIC AND PARASTICK AND DRY (FOR PENETRATIONS)");
+            if (sm != null)
+            {
+                sm.IsMaterialChecked = riserCount > 0 ? true : false;
+            }
 
         }
 
