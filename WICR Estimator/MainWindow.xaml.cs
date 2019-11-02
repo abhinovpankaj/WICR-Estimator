@@ -49,8 +49,12 @@ namespace WICR_Estimator
                 {
                     case MessageBoxResult.Yes:
                         //Save the state.
-                        SaveEstimate(ViewModels.HomeViewModel.MyselectedProjects);
-                        
+                        //SaveEstimate(ViewModels.HomeViewModel.MyselectedProjects);
+                        MainWindowViewModel vm = this.DataContext as MainWindowViewModel;
+                        if (vm!=null)
+                        {
+                            vm.SaveEstimateCommand.Execute(null);
+                        }
                         break;
                     case MessageBoxResult.Cancel:
                         e.Cancel = true;

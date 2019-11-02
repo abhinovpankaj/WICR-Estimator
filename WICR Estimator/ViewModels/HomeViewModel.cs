@@ -168,8 +168,34 @@ namespace WICR_Estimator.ViewModels
         
         public bool CanApplyLatestPrice { get; set; }
 
-        public string JobName { get; set; }
-        public string PreparedBy { get; set; }
+        private string jobname;
+        public string JobName
+        {
+            get { return jobname; }
+            set
+            {
+                if (value!=jobname)
+                {
+                    jobname = value;
+                    OnPropertyChanged("JobName");
+                    BaseViewModel.IsDirty = true;
+                }
+            }
+        }
+        private string preparedBy;
+        public string PreparedBy
+        {
+            get { return preparedBy; }
+            set
+            {
+                if (value != preparedBy)
+                {
+                    preparedBy = value;
+                    OnPropertyChanged("PreparedBy");
+                    BaseViewModel.IsDirty = true;
+                }
+            }
+        }
         private DateTime? jobCreationdate;
         public DateTime? JobCreationDate
         {
@@ -183,6 +209,7 @@ namespace WICR_Estimator.ViewModels
                 {
                     jobCreationdate = value;
                     OnPropertyChanged("JobCreationDate");
+                    BaseViewModel.IsDirty = true;
                 }
             }
         }
@@ -536,10 +563,15 @@ namespace WICR_Estimator.ViewModels
                 OnPropertyChanged("CanApplyLatestPrice");
                 ApplyLatestPrice = false;
             }
-            catch
+            catch(Exception ex)
             {
-                MessageBox.Show("Your estimate seems to be created in Older version of WICR Estimator. \n\nPlease re-create the estimates, Or Contact the manufacturer.");
+                MessageBox.Show("Your estimate seems to be created in Older version of WICR Estimator. \n\nPlease re-create the estimates, Or Contact the manufacturer."
+                    +ex.Message);
             }  
+            finally
+            {
+                reader.Close();
+            }
         }
 
         

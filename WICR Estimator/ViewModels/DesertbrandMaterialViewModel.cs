@@ -139,9 +139,9 @@ namespace WICR_Estimator.ViewModels
                 case "Stucco Material Remove and replace (LF)":
                     return false;
                 case "BASE COAT 50 lb Desert Crete Level Max 20/30":
-                    return (bool)IsJobSpecifiedByArchitect;
+                    return IsSystemOverConcrete == true ? !IsSystemOverConcrete : (bool)IsJobSpecifiedByArchitect;
                 case "BASE COAT Desert Crete poly base mixed with water":
-                    return (bool)!IsJobSpecifiedByArchitect;
+                    return IsSystemOverConcrete == true ? !IsSystemOverConcrete : (bool)!IsJobSpecifiedByArchitect;
                 case "2.5 Galvanized Lathe (18 s.f.)":
                 case "Staples":
                     return !IsSystemOverConcrete;

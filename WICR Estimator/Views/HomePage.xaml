@@ -22,7 +22,7 @@
                        VerticalAlignment="Center"
                       Visibility="{Binding IsSelectedProject,
                     Converter={StaticResource VisibilityConv}}"/>
-                <TextBlock Text="{Binding Path=Name}"
+                <TextBlock Text="{Binding Path=OriginalProjectName}"
                            FontWeight="SemiBold"
                            VerticalAlignment="Center"
                            FontSize="15" />
@@ -242,7 +242,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateIndependentProject
                 </DataGrid.Resources>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" IsReadOnly="True"
-                                    Binding="{Binding Name}">
+                                    Binding="{Binding OriginalProjectName}">
                         
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Work Area" IsReadOnly="True"

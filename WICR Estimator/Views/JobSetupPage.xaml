@@ -89,7 +89,7 @@
                 <TextBlock Style="{StaticResource FieldHeader}"
                            Margin="5,10,10,0" Text="Work Area"/>
                 <TextBox Margin="5,0,5,0"
-                         Text="{Binding WorkArea,UpdateSourceTrigger=LostFocus}"
+                         Text="{Binding WorkArea,UpdateSourceTrigger=PropertyChanged}"
                          VerticalContentAlignment="Center"/>
                 <TextBlock Style="{StaticResource FieldHeader}"
                            Margin="5,30,10,0"

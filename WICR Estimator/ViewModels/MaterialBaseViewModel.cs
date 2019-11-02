@@ -276,6 +276,7 @@ namespace WICR_Estimator.ViewModels
                     default:
                         break;
                 }
+                BaseViewModel.IsDirty = true;
             }
             CalculateCost(null);
 
@@ -1105,7 +1106,7 @@ namespace WICR_Estimator.ViewModels
             {
                 calculateRLqty();
             }
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
             ////update Add labor for minimum cost
             //LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false && x.IsMaterialChecked&&x.LaborExtension!=0).ToList().Select(x => x.Hours).Sum();
             ////New Change Min Labor
@@ -1245,8 +1246,10 @@ namespace WICR_Estimator.ViewModels
                 SubContractLaborItems = GetLaborItems();
             }
             
-            CalculateAllMaterial();
-            CalculateLaborMinCharge(hasSetupChanged);
+            //CalculateAllMaterial();
+            //CalculateLaborMinCharge(hasSetupChanged);
+            //calculateLaborTotalsWithMinLabor();
+            CalculateCost(null);
         }
 
         public void CalculateAllMaterial()
@@ -1254,6 +1257,7 @@ namespace WICR_Estimator.ViewModels
             calculateMaterialTotals();
             CalOCTotal();
             calculateLaborTotals();
+            
             calculateLaborHrs();
             CalculateCostBreakup();            
             populateCalculation();
@@ -1419,33 +1423,47 @@ namespace WICR_Estimator.ViewModels
         {
             return true;
         }
-
+        double previousSale = 0;
         public void CalculateCost(object obj)
         {
             
             calculateMaterialTotals();
             CalOCTotal();
             CalSCTotal();
-            
-            
+
+
+            //calculateLaborTotals();
+            //CalculateCostBreakup();
+            //CalculateLaborMinCharge(false);
+            //calculateLaborHrs();
+
+            //populateCalculation();
+
+            //calculateMaterialTotals();
+            //CalOCTotal();
+            //CalSCTotal();
+            //CalculateCostBreakup();
+
+            //calculateLaborTotals();
+            //calculateLaborHrs();
+            //CalculateLaborMinCharge(false);
+            //populateCalculation();           
+
             calculateLaborTotals();
             CalculateCostBreakup();
-            CalculateLaborMinCharge(false);
-            calculateLaborHrs();
             
+            calculateLaborHrs();
+            CalculateLaborMinCharge(false);
+            calculateLaborTotalsWithMinLabor();
             populateCalculation();
-
-            calculateMaterialTotals();
-            CalOCTotal();
-            CalSCTotal();
-            CalculateCostBreakup();
-
-            calculateLaborTotals();
-            calculateLaborHrs();
-            CalculateLaborMinCharge(false);
-            populateCalculation();           
-
+            if (TotalSale!=previousSale)
+            {
+                BaseViewModel.IsDirty = true;
+                previousSale = TotalSale;
+            }
         }
+
+        
 
         private bool CanAddRows(object obj)
         {
@@ -1549,27 +1567,32 @@ namespace WICR_Estimator.ViewModels
              x.IsMaterialChecked && x.LaborExtension != 0).ToList().Select(x => x.Hours).Sum();
             LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == true &&
             x.IsMaterialChecked && x.LaborExtension != 0).ToList().Select(x => x.SetupMinCharge).Sum();
-            LaborMinChargeLaborExtension = (LaborMinChargeMinSetup + LaborMinChargeHrs) > 20 ? 0 :
-                                                (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
 
-            //LaborMinChargeLaborExtension = TotalHrsSystemLabor > 20 ? 0 : isPrevailingWage ? actualPreWage * (20 - TotalHrsSystemLabor) : laborRate * (20 - TotalHrsSystemLabor);
+            //LaborMinChargeLaborExtension = (LaborMinChargeMinSetup + LaborMinChargeHrs) > 20 ? 0 :
+            //                                    (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
+
+            LaborMinChargeLaborExtension = TotalHrsSystemLabor > 20 ? 0 : isPrevailingWage ? actualPreWage * (20 - TotalHrsSystemLabor) : 
+                laborRate * (20 - TotalHrsSystemLabor);
 
             LaborMinChargeLaborUnitPrice = (riserCount + totalSqft) == 0 ? 0 : LaborMinChargeLaborExtension / (riserCount + totalSqft);
 
             if (previousLaborCharges != SystemMaterials.Where(x=>x.IsMaterialChecked).ToList().Select(x => x.MaterialExtension).Sum()+ 
                 SystemMaterials.Where(x => x.IsMaterialChecked).ToList().Select(x => x.LaborExtension).Sum())
             {
-                if (LaborMinChargeMinSetup + LaborMinChargeHrs < 20)
+                //if (LaborMinChargeMinSetup + LaborMinChargeHrs < 20)
+                if (TotalHrsSystemLabor < 20)
                 {
                     ZAddLaborMinCharge = true;
                 }
                 else
                     ZAddLaborMinCharge = false;
+
                 previousLaborCharges = SystemMaterials.Where(x => x.IsMaterialChecked).ToList().Select(x => x.MaterialExtension).Sum()+
-                                        SystemMaterials.Where(x => x.IsMaterialChecked).ToList().Select(x => x.LaborExtension).Sum();//LaborMinChargeMinSetup + LaborMinChargeHrs;
+                                        SystemMaterials.Where(x => x.IsMaterialChecked).ToList().Select(x => x.LaborExtension).Sum();
                 previousMinLaborCheckboxStatus = ZAddLaborMinCharge;
             }
-            if (LaborMinChargeMinSetup + LaborMinChargeHrs==0)
+            //if (LaborMinChargeMinSetup + LaborMinChargeHrs==0)
+            if (TotalHrsSystemLabor ==0)
             {
                 ZAddLaborMinCharge = previousMinLaborCheckboxStatus;
             }
@@ -3177,10 +3200,14 @@ namespace WICR_Estimator.ViewModels
             //    OtherLaborMaterials.Sum(x => x.LMaterialPrice)+
             //    LaborMinChargeLaborUnitPrice) * (1 + preWage + laborDeduction) :
             //    (selectedLabors.Select(x => x.LaborUnitPrice).Sum() + OtherLaborMaterials.Sum(x => x.LMaterialPrice)) * (1 + preWage + laborDeduction);
+            
+            //new min labor logic 
+            //TotalLaborExtension = ZAddLaborMinCharge ? (selectedLabors.Select(x => x.LaborExtension).Sum() + LaborMinChargeLaborExtension) * 
+            //    (1 + preWage + laborDeduction) :
+            //    selectedLabors.Select(x => x.LaborExtension).Sum() * (1 + preWage + laborDeduction);
+            TotalLaborExtension = selectedLabors.Select(x => x.LaborExtension).Sum() * (1 + preWage + laborDeduction);
+            //Ends
 
-            TotalLaborExtension = ZAddLaborMinCharge ? (selectedLabors.Select(x => x.LaborExtension).Sum() + LaborMinChargeLaborExtension) * 
-                (1 + preWage + laborDeduction) :
-                selectedLabors.Select(x => x.LaborExtension).Sum() * (1 + preWage + laborDeduction);
             TotalLaborExtension = TotalLaborExtension + TotalOCLaborExtension * (1 + preWage + laborDeduction);
             if (SlopeTotals != null && MetalTotals != null)
             {
@@ -3224,6 +3251,25 @@ namespace WICR_Estimator.ViewModels
             UpdateSumOfSqft();
         }
 
+        private void calculateLaborTotalsWithMinLabor()
+        {
+            double extrHrs = 0;
+            double laborDeduction = 0;
+            if (isDiscounted)
+            {
+                double.TryParse(laborDetails[1][0].ToString(), out laborDeduction);
+            }
+            if (ZAddLaborMinCharge)
+            {
+                TotalLaborExtension = TotalLaborExtension + LaborMinChargeLaborExtension * (1 + preWage + laborDeduction);
+                extrHrs= TotalHrsSystemLabor<20?20 - TotalHrsSystemLabor:0;
+                
+            }
+            TotalHrsSystemLabor = TotalHrsSystemLabor + extrHrs;
+            OnPropertyChanged("TotalHrsSystemLabor");
+            TotalHrsLabor = TotalHrsSystemLabor + TotalHrsMetalLabor + TotalHrsSlopeLabor;
+            OnPropertyChanged("TotalHrsLabor");
+        }
         public virtual void UpdateSumOfSqft()
         {
             double sumVal = totalSqft;

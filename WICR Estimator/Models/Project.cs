@@ -158,7 +158,20 @@ namespace WICR_Estimator.Models
         public string CreationDetails { get; set; }
 
         public int ActiveTabIndex { get; set; }
-        public string OriginalProjectName { get; set; }
+        private string originalProjectName;
+
+        public string OriginalProjectName
+        {
+            get { return originalProjectName; }
+            set
+            {
+                if (value!=originalProjectName)
+                {
+                    originalProjectName = value;
+                    OnPropertyChanged("OriginalProjectName");
+                }
+            }
+        }
         public Dictionary<string, int> lastUsedRows;
 
         [XmlIgnore]

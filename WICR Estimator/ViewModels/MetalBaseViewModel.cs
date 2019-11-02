@@ -378,6 +378,10 @@ namespace WICR_Estimator.ViewModels
 
         public void OnJobSetupChange(JobSetup Js)
         {
+            if (Js==null)
+            {
+                return;
+            }
               if (Js != null)
                {
                    MetalName = Js.MaterialName;

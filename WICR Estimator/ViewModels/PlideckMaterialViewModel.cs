@@ -374,8 +374,7 @@ namespace WICR_Estimator.ViewModels
         {
             foreach (SystemMaterial item in SystemMaterials)
             {
-                if (item.Name == "2.5 Galvanized Lathe" || item.Name == "Staples"
-                    || item.Name == "GU80-1 grey Base Coat")
+                if (item.Name == "Staples"                    || item.Name == "GU80-1 grey Base Coat")
                 {
                     item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
                 }

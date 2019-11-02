@@ -205,14 +205,13 @@ namespace WICR_Estimator.ViewModels
             {
                 case "Base Coat with Sand Cement and Acrylic binder from HD (MIX)":
                 case "(Stairs Only) Base Coat with Sand Cement and Acrylic Binder":
-                    return isApprovedforCement;
+                    return IsSystemOverConcrete==true? !IsSystemOverConcrete:isApprovedforCement;
                 case "Base Coat w Dexcelcrete Gray Powder":
                 case "(Stairs Only) Base Coat with Dexcelcrete Gray Powder":
-                    return !isApprovedforCement;
+                    return IsSystemOverConcrete == true ? !IsSystemOverConcrete : !isApprovedforCement;
                 case "2.5 Galvanized Lathe (18 s.f.)":
                 case "Staples (3/4 Inch Crown, Box of 13,500)":
-                //case "(Stairs Only) Base Coat with Sand Cement and Acrylic Binder":
-                //case "(Stairs Only) Base Coat with Dexcelcrete Gray Powder":
+                
                     return !IsSystemOverConcrete;
                 default:
                     return true;
