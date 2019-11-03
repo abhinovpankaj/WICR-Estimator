@@ -135,7 +135,7 @@ namespace WICR_Estimator.ViewModels
             //CalculateAllMaterial();
         }
 
-
+        bool prevStatus;
         public override bool getCheckboxCheckStatus(string materialName)
         {
             switch (materialName)
@@ -149,6 +149,7 @@ namespace WICR_Estimator.ViewModels
                     return false;
                 case "2.5 Galvanized Lathe":
                 case "Staples":
+                    return IsSystemOverConcrete == true ? false:prevStatus;
                 case "GU80-1 grey Base Coat":
                     return !IsSystemOverConcrete;
                 default:
@@ -352,6 +353,7 @@ namespace WICR_Estimator.ViewModels
             {
                 isChecked = SystemMaterials.Where(x => x.Name == "2.5 Galvanized Lathe").FirstOrDefault().IsMaterialChecked;
                 SystemMaterials.Where(x => x.Name == "Staples").FirstOrDefault().IsMaterialChecked = isChecked;
+                prevStatus = isChecked;
             }
             if (obj.ToString()== "PD Resin (If dimension exceeds 20 ft in any direction or for below tile)")
             {
@@ -375,16 +377,16 @@ namespace WICR_Estimator.ViewModels
         {
             foreach (SystemMaterial item in SystemMaterials)
             {
-                if ( item.Name == "GU80-1 grey Base Coat")
+                if ( item.Name == "GU80-1 grey Base Coat"||item.Name== "2.5 Galvanized Lathe"|| item.Name == "Staples")
                 {
                     
                     item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
                 }
-                if (item.Name == "Staples")
-                {
-                    bool isChecked = SystemMaterials.Where(x => x.Name == "2.5 Galvanized Lathe").FirstOrDefault().IsMaterialChecked;
-                    SystemMaterials.Where(x => x.Name == "Staples").FirstOrDefault().IsMaterialChecked = isChecked;
-                }
+                //if (item.Name == "Staples")
+                //{
+                //    bool isChecked = SystemMaterials.Where(x => x.Name == "2.5 Galvanized Lathe").FirstOrDefault().IsMaterialChecked;
+                //    SystemMaterials.Where(x => x.Name == "Staples").FirstOrDefault().IsMaterialChecked = isChecked;
+                //}
             }
         }
     }

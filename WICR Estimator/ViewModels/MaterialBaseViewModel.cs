@@ -605,6 +605,7 @@ namespace WICR_Estimator.ViewModels
                     addLaborMinCharge = value;
                     previousMinLaborCheckboxStatus = addLaborMinCharge;
                     OnPropertyChanged("ZAddLaborMinCharge");
+                    
                 //}
             }
         }
@@ -757,6 +758,7 @@ namespace WICR_Estimator.ViewModels
             DriveLaborValue =IncludeDriveHours ? TotalHrsDriveLabor * DHLR:0;
 
             TotalHrsLabor = TotalHrsSystemLabor + TotalHrsMetalLabor + TotalHrsSlopeLabor;
+           
             OnPropertyChanged("DriveLaborValue");
             OnPropertyChanged("TotalHrsDriveLabor");
             OnPropertyChanged("TotalHrsLabor");
@@ -1250,6 +1252,7 @@ namespace WICR_Estimator.ViewModels
             //CalculateLaborMinCharge(hasSetupChanged);
             //calculateLaborTotalsWithMinLabor();
             CalculateCost(null);
+            
         }
 
         public void CalculateAllMaterial()
@@ -1448,11 +1451,12 @@ namespace WICR_Estimator.ViewModels
             //calculateLaborHrs();
             //CalculateLaborMinCharge(false);
             //populateCalculation();           
-
+            calculateLaborHrs();
             calculateLaborTotals();
+            
             CalculateCostBreakup();
             
-            calculateLaborHrs();
+            
             CalculateLaborMinCharge(false);
             calculateLaborTotalsWithMinLabor();
             populateCalculation();
@@ -3261,9 +3265,14 @@ namespace WICR_Estimator.ViewModels
             }
             if (ZAddLaborMinCharge)
             {
+
+                
                 TotalLaborExtension = TotalLaborExtension + LaborMinChargeLaborExtension * (1 + preWage + laborDeduction);
                 extrHrs= TotalHrsSystemLabor<20?20 - TotalHrsSystemLabor:0;
-                
+                AllTabsLaborTotal = AllTabsLaborTotal + LaborMinChargeLaborExtension * (1 + preWage + laborDeduction); ;
+                OnPropertyChanged("AllTabsLaborTotal");
+                OnPropertyChanged("TotalLaborExtension");
+
             }
             TotalHrsSystemLabor = TotalHrsSystemLabor + extrHrs;
             OnPropertyChanged("TotalHrsSystemLabor");

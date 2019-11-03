@@ -988,7 +988,7 @@ namespace WICR_Estimator.ViewModels
             sqStairs = getSqFtStairs("Extra Stair Nosing Lf"); //getvalue from systemMaterial
             calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs);
             labrExt = calcHrs > 0 ? calcHrs >= setUpMin ? calcHrs * laborRate : setUpMin * laborRate : 0;
-            qty = 1;
+            //qty = 1;
             smP.Add(new SystemMaterial
             {
                 IsMaterialChecked = getCheckboxCheckStatus("Extra Stair Nosing Lf"),
