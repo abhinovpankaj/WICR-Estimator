@@ -492,11 +492,14 @@ namespace WICR_Estimator.ViewModels
                     ShowReadOnly = true
                 };
 
-                if (openFileDialog1.ShowDialog() == DialogResult.OK)
-                {
-                    filePath = openFileDialog1.FileName;
-                }
-            
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                filePath = openFileDialog1.FileName;
+            }
+            else
+            {
+                return;
+            }
             
             DataContractSerializer deserializer = new DataContractSerializer(typeof(ObservableCollection<Project>));
                 
@@ -554,6 +557,7 @@ namespace WICR_Estimator.ViewModels
                     item.MaterialViewModel.CheckboxCommand = new DelegateCommand(item.MaterialViewModel.ApplyCheckUnchecks, item.MaterialViewModel.canApply);
                     SystemMaterial.OnQTyChanged += (s, e) => { item.MaterialViewModel.setExceptionValues(s); };
                     item.MaterialViewModel.ZAddLaborMinCharge = addminLabor;
+                    item.MaterialViewModel.CalculateCost(null);
                 }
                 Project_OnSelectedProjectChange(Projects[0], null);
                 reader.Close();
@@ -562,6 +566,8 @@ namespace WICR_Estimator.ViewModels
                 CanApplyLatestPrice = true;
                 OnPropertyChanged("CanApplyLatestPrice");
                 ApplyLatestPrice = false;
+
+
             }
             catch(Exception ex)
             {

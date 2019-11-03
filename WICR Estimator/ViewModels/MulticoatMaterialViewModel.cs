@@ -128,8 +128,9 @@ namespace WICR_Estimator.ViewModels
                 SubContractLaborItems = GetLaborItems();
             }
             calculateRLqty();
-            CalculateLaborMinCharge(hasSetupChanged);
-            CalculateAllMaterial();
+            //CalculateLaborMinCharge(hasSetupChanged);
+            //CalculateAllMaterial();
+            CalculateCost(null);
         }
 
         public override void setCheckBoxes()

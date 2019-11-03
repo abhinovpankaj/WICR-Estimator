@@ -86,7 +86,8 @@ namespace WICR_Estimator.ViewModels
             }
             calculateRLqty();
             //CalculateLaborMinCharge(hasSetupChanged);
-            CalculateAllMaterial();
+            //CalculateAllMaterial();
+            CalculateCost(null);
         }
         public override void CalculateLaborMinCharge(bool hasSetupChanged)
         {

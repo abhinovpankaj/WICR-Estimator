@@ -123,8 +123,9 @@ namespace WICR_Estimator.ViewModels
             }
             //set  resititeLiquid QTY
             resistiteQty();
-            CalculateLaborMinCharge(hasSetupChanged);
-            CalculateAllMaterial();
+            CalculateCost(null);
+            //CalculateLaborMinCharge(hasSetupChanged);
+            //CalculateAllMaterial();
         }
 
         public override void JobSetup_OnJobSetupChange(object sender, EventArgs e)

@@ -85,8 +85,9 @@ namespace WICR_Estimator.ViewModels
                 SubContractLaborItems = GetLaborItems();
             }
             calculateRLqty();
-            CalculateLaborMinCharge(false);
-            CalculateAllMaterial();
+            //CalculateLaborMinCharge(false);
+            //CalculateAllMaterial();
+            CalculateCost(null);
         }
         public void FillMaterialList()
         {

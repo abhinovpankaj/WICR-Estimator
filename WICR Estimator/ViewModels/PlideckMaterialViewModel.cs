@@ -130,8 +130,9 @@ namespace WICR_Estimator.ViewModels
                 SubContractLaborItems = GetLaborItems();
             }
             calculateRLqty();
-            CalculateLaborMinCharge(hasSetupChanged);
-            CalculateAllMaterial();
+            CalculateCost(null);
+            //CalculateLaborMinCharge(hasSetupChanged);
+            //CalculateAllMaterial();
         }
 
 
@@ -374,9 +375,15 @@ namespace WICR_Estimator.ViewModels
         {
             foreach (SystemMaterial item in SystemMaterials)
             {
-                if (item.Name == "Staples"                    || item.Name == "GU80-1 grey Base Coat")
+                if ( item.Name == "GU80-1 grey Base Coat")
                 {
+                    
                     item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
+                }
+                if (item.Name == "Staples")
+                {
+                    bool isChecked = SystemMaterials.Where(x => x.Name == "2.5 Galvanized Lathe").FirstOrDefault().IsMaterialChecked;
+                    SystemMaterials.Where(x => x.Name == "Staples").FirstOrDefault().IsMaterialChecked = isChecked;
                 }
             }
         }

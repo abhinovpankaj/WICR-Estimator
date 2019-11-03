@@ -150,8 +150,9 @@ namespace WICR_Estimator.ViewModels
                 SubContractLaborItems = GetLaborItems();
             }
             getEKLQnty();
-            CalculateLaborMinCharge(hasSetupChanged);
-            CalculateAllMaterial();
+            CalculateCost(null);
+            //CalculateLaborMinCharge(hasSetupChanged);
+            //CalculateAllMaterial();
         }
         public override bool IncludedInLaborMin(string matName)
         {

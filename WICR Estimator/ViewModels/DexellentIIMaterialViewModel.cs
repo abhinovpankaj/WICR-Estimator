@@ -130,8 +130,7 @@ namespace WICR_Estimator.ViewModels
             }
             calculateRLqty();
 
-            CalculateLaborMinCharge(hasSetupChanged);
-            CalculateAllMaterial();
+            CalculateCost(null);
         }
 
         

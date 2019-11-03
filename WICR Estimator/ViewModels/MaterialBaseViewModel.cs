@@ -1574,7 +1574,7 @@ namespace WICR_Estimator.ViewModels
             LaborMinChargeLaborExtension = TotalHrsSystemLabor > 20 ? 0 : isPrevailingWage ? actualPreWage * (20 - TotalHrsSystemLabor) : 
                 laborRate * (20 - TotalHrsSystemLabor);
 
-            LaborMinChargeLaborUnitPrice = (riserCount + totalSqft) == 0 ? 0 : LaborMinChargeLaborExtension / (riserCount + totalSqft);
+            LaborMinChargeLaborUnitPrice = TotalHrsSystemLabor > 20 ? 0 : (20 - TotalHrsSystemLabor);//(riserCount + totalSqft) == 0 ? 0 : LaborMinChargeLaborExtension / (riserCount + totalSqft);
 
             if (previousLaborCharges != SystemMaterials.Where(x=>x.IsMaterialChecked).ToList().Select(x => x.MaterialExtension).Sum()+ 
                 SystemMaterials.Where(x => x.IsMaterialChecked).ToList().Select(x => x.LaborExtension).Sum())
