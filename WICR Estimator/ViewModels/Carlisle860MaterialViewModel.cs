@@ -252,9 +252,10 @@ namespace WICR_Estimator.ViewModels
             switch (materialName)
             {
                 case "TERM BAR":
-                case "WATERSTOP (MIRASTOP)":
-                    return additionalTermBarLF;
                 
+                    return additionalTermBarLF;
+                case "WATERSTOP (MIRASTOP)":
+                    return linearFootage;
                 default:
                     return lfArea / coverage;
             }
@@ -426,7 +427,7 @@ namespace WICR_Estimator.ViewModels
                     item.LaborUnitPrice = item.LaborExtension / item.Qty;
                 }
             }
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
         }
         
         public override void ApplyCheckUnchecks(object obj)
@@ -445,7 +446,7 @@ namespace WICR_Estimator.ViewModels
             
    
             calculateRLqty();
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
         }
 
         public override double CalculateLabrExtn(double calhrs, double setupMin, string matName = "")

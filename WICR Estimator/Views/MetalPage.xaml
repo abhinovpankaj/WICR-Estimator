@@ -10,12 +10,26 @@
     <UserControl.Resources>
         <conv:CheckBoxVisibilityConverter x:Key="checkBoxConv"/>
         <conv:EnableTextboxConverter x:Key="textboxConv"/>
+        <conv:HasFieldEdited x:Key="HasFieldEdited"/>
         <Style TargetType="{x:Type TextBox}" x:Key="editableTextbox">
             <Style.Triggers >
                 <Trigger Property="IsEnabled" Value="True">
                     <Setter Property="Background" Value="LightYellow" />
                 </Trigger>
+                <DataTrigger Binding="{Binding Tag,RelativeSource={RelativeSource Self}
+                                        }" 
+                             Value="True">
+                    <Setter Property="FontWeight" Value="Bold" />
+                    <Setter Property="Background" Value="Green" />
+                    <Setter Property="Foreground" Value="White" />
+                </DataTrigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="White" />
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="FontStyle" Value="Normal"/>
+                </Trigger>
             </Style.Triggers>
+            
         </Style>
         <Style TargetType="{x:Type TextBox}" x:Key="addOnTextBox">
             <Setter Property="Background" Value="Gray" />
@@ -31,6 +45,18 @@
                         <Setter Property="Foreground" Value="Black"/>
                     </MultiDataTrigger.Setters>
                 </MultiDataTrigger>
+                <DataTrigger Binding="{Binding Tag,RelativeSource={RelativeSource Self}
+                                        }" 
+                             Value="True">
+                    <Setter Property="FontWeight" Value="Bold" />
+                    <Setter Property="Background" Value="Green" />
+                    <Setter Property="Foreground" Value="White" />
+                </DataTrigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="White" />
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="FontWeight" Value="Normal"/>
+                </Trigger>
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
                         <Condition Binding="{Binding IsMetalChecked}" Value="True"/>
@@ -80,7 +106,8 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
                                 <CheckBox x:Name="includeMe" Visibility="{Binding IsStairMetal}"
-                                          IsChecked="{Binding IsStairMetalChecked,UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+                                          IsChecked="{Binding IsStairMetalChecked,
+                                    UpdateSourceTrigger=PropertyChanged}"></CheckBox>
                                 <!--<CheckBox x:Name="includeMe" Visibility="{Binding Name,
                                     Converter={StaticResource checkBoxConv}}"
                                           IsChecked="{Binding IsStairMetalChecked,UpdateSourceTrigger=PropertyChanged}"></CheckBox>-->
@@ -92,7 +119,8 @@
                     <DataGridTemplateColumn Header="Size">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding Size,UpdateSourceTrigger=LostFocus}"
+                            <TextBox 
+                                    Text="{Binding Size,UpdateSourceTrigger=LostFocus}"
                                          HorizontalAlignment="Stretch"
                                     IsEnabled="True" Style="{StaticResource  editableTextbox}"
                                          />
@@ -103,7 +131,8 @@
                     <DataGridTemplateColumn Header="Units">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding Units,UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox Tag="{Binding Units, Converter={StaticResource HasFieldEdited }}"
+                                Text="{Binding Units,UpdateSourceTrigger=PropertyChanged}"
                                      IsEnabled="{Binding Name,Converter={StaticResource textboxConv}}"
                                          Style="{StaticResource editableTextbox }">
 
@@ -118,7 +147,9 @@
                                         Header="Special Material Pricing($)">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding SpecialMetalPricing ,StringFormat={}{0:C},UpdateSourceTrigger=LostFocus}"
+                            <TextBox Tag="{Binding SpecialMetalPricing, Converter={StaticResource HasFieldEdited }}"
+                                    Text="{Binding SpecialMetalPricing ,StringFormat={}{0:C},
+                                UpdateSourceTrigger=PropertyChanged}"
                                     IsEnabled="True" Style="{StaticResource  editableTextbox}"
                                          >
                                     
@@ -162,7 +193,9 @@
                     <DataGridTemplateColumn Header="Units">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding Units,UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox Tag="{Binding Units, 
+                                Converter={StaticResource HasFieldEdited }}" 
+                                     Text="{Binding Units,UpdateSourceTrigger=PropertyChanged}"
                                      IsEnabled="{Binding IsEditable}"
                                          Style="{StaticResource editableTextbox}">
 
@@ -176,7 +209,8 @@
                     <DataGridTemplateColumn Header="Unit Labor Price">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding UnitPrice,UpdateSourceTrigger=LostFocus}"
+                            <TextBox Tag="{Binding UnitPrice, Converter={StaticResource HasFieldEdited }}"
+                                     Text="{Binding UnitPrice,UpdateSourceTrigger=PropertyChanged}"
                                      IsEnabled="{Binding IsEditable}"
                                          Style="{StaticResource editableTextbox}">
 
@@ -190,7 +224,7 @@
                                 <TextBox Text="{Binding MaterialPrice,UpdateSourceTrigger=PropertyChanged,
                                     StringFormat={}{0:C}}"
                                      IsEnabled="{Binding IsEditable}"
-                                         
+                                      Tag="{Binding MaterialPrice, Converter={StaticResource HasFieldEdited }}"   
                                          Style="{StaticResource editableTextbox}">
 
                                 </TextBox>
@@ -332,7 +366,8 @@
                     <DataGridTemplateColumn Header="Units">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding Units,UpdateSourceTrigger=PropertyChanged}"
+                                <TextBox Tag="{Binding Units, Converter={StaticResource HasFieldEdited }}"
+                                    Text="{Binding Units,UpdateSourceTrigger=PropertyChanged}"
                                      IsEnabled="{Binding Name,Converter={StaticResource textboxConv}}"
                                          Style="{StaticResource addOnTextBox }">
 
@@ -347,7 +382,8 @@
                                         Header="Special Material Pricing($)">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding SpecialMetalPricing,UpdateSourceTrigger=LostFocus}"
+                                <TextBox Tag="{Binding SpecialMetalPricing, Converter={StaticResource HasFieldEdited}}"
+                                         Text="{Binding SpecialMetalPricing,StringFormat={}{0:C},UpdateSourceTrigger=PropertyChanged}"
                                     IsEnabled="True" Style="{StaticResource  addOnTextBox}"
                                          >
 

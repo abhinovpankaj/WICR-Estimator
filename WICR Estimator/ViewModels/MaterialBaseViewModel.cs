@@ -716,6 +716,7 @@ namespace WICR_Estimator.ViewModels
             //OnPropertyChanged("DriveLaborValue");
             OnPropertyChanged("TotalHrsDriveLabor");
         }
+        double tempTotalLaborExtension = 0;
         public void calLaborHrs(int hrs,double tSqft)
         {
             if ( laborRate == 0)
@@ -723,8 +724,8 @@ namespace WICR_Estimator.ViewModels
                 return;
             }
 
-            TotalHrsSystemLabor = isPrevailingWage ? (TotalLaborExtension / actualPreWage) :
-                                                  (TotalLaborExtension / laborRate) ;
+            TotalHrsSystemLabor = isPrevailingWage ? (tempTotalLaborExtension / actualPreWage) :  //change TotalLaborExtension with private field
+                                                  (tempTotalLaborExtension / laborRate) ;
             if (TotalHrsSystemLabor < 0)
             {
                 TotalHrsSystemLabor = 0;
@@ -764,10 +765,7 @@ namespace WICR_Estimator.ViewModels
             OnPropertyChanged("TotalHrsLabor");
 
         }
-        private void calculateLaborforMinCharge()
-        {
-
-        }
+        
         #endregion
 
         
@@ -1434,23 +1432,8 @@ namespace WICR_Estimator.ViewModels
             CalOCTotal();
             CalSCTotal();
 
+            calculateLaborTotals();
 
-            //calculateLaborTotals();
-            //CalculateCostBreakup();
-            //CalculateLaborMinCharge(false);
-            //calculateLaborHrs();
-
-            //populateCalculation();
-
-            //calculateMaterialTotals();
-            //CalOCTotal();
-            //CalSCTotal();
-            //CalculateCostBreakup();
-
-            //calculateLaborTotals();
-            //calculateLaborHrs();
-            //CalculateLaborMinCharge(false);
-            //populateCalculation();           
             calculateLaborHrs();
             calculateLaborTotals();
             
@@ -1513,36 +1496,6 @@ namespace WICR_Estimator.ViewModels
             //});
                     
         }
-
-        #region notused
-        private void reCalculate()
-        {
-
-            foreach (SystemMaterial material in SystemMaterials)
-            {
-                material.SMSqft = getlfArea(material.Name);
-                material.StairSqft = getSqFtStairs(material.Name);
-                material.Hours = CalculateHrs(material.SMSqftH, material.HorizontalProductionRate, material.StairSqft, material.StairsProductionRate);
-                material.LaborExtension = (material.Hours != 0) ? (material.SetupMinCharge + material.Hours) * laborRate : 0;
-                material.IsMaterialChecked = getCheckboxCheckStatus(material.Name);
-                material.IsMaterialEnabled = getCheckboxEnabledStatus(material.Name);
-                material.Qty = getQuantity(material.Name, material.Coverage, material.SMSqft);
-                material.LaborUnitPrice = material.LaborExtension / (riserCount + totalSqft);
-                material.FreightExtension = material.Weight * material.Qty;
-                material.MaterialExtension = material.MaterialPrice * material.Qty;
-            }
-
-            setExceptionValues(null);
-            setCheckBoxes();
-
-            calculateMaterialTotals();
-            CalOCTotal();
-            CalculateCostBreakup();
-            calculateLaborTotals();
-            calculateLaborHrs();
-            populateCalculation();
-        }
-        #endregion 
 
         public double getMaterialDiscount(string delay)
         {
@@ -3211,8 +3164,9 @@ namespace WICR_Estimator.ViewModels
             //    selectedLabors.Select(x => x.LaborExtension).Sum() * (1 + preWage + laborDeduction);
             TotalLaborExtension = selectedLabors.Select(x => x.LaborExtension).Sum() * (1 + preWage + laborDeduction);
             //Ends
-
+            
             TotalLaborExtension = TotalLaborExtension + TotalOCLaborExtension * (1 + preWage + laborDeduction);
+            tempTotalLaborExtension = TotalLaborExtension;
             if (SlopeTotals != null && MetalTotals != null)
             {
                 TotalSlopingPrice = getTotals(SlopeTotals.LaborExtTotal, SlopeTotals.MaterialExtTotal, SlopeTotals.MaterialFreightTotal, 0);

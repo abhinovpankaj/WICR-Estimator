@@ -431,7 +431,7 @@ namespace WICR_Estimator.ViewModels
                 }
 
             }
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
         }
         
         public override bool IncludedInLaborMin(string matName)
@@ -491,7 +491,7 @@ namespace WICR_Estimator.ViewModels
             //    sysmat.IsMaterialChecked = false;
             //}
             calculateRLqty();
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
         }
 
         public override double CalculateLabrExtn(double calhrs, double setupMin, string matName = "")

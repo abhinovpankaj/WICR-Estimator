@@ -418,6 +418,7 @@ namespace WICR_Estimator.ViewModels
 
                 foreach (Project item in est)
                 {
+                    bool adminLabor = item.MaterialViewModel.ZAddLaborMinCharge;
                     savedProject = Projects.Where(x => x.Name == item.Name).FirstOrDefault();
                     Projects.Remove(savedProject);
                     Projects.Add(item);
@@ -459,6 +460,8 @@ namespace WICR_Estimator.ViewModels
                     }
                     item.MaterialViewModel.CheckboxCommand = new DelegateCommand(item.MaterialViewModel.ApplyCheckUnchecks, item.MaterialViewModel.canApply);
                     SystemMaterial.OnQTyChanged += (s, e) => { item.MaterialViewModel.setExceptionValues(s); };
+                    item.MaterialViewModel.CalculateCost(null);
+                    item.MaterialViewModel.ZAddLaborMinCharge = adminLabor;
                 }
                 Project_OnSelectedProjectChange(Projects[0], null);
                 reader.Close();
@@ -514,7 +517,7 @@ namespace WICR_Estimator.ViewModels
 
                 foreach (Project item in est)
                 {
-                    bool addminLabor = item.MaterialViewModel.ZAddLaborMinCharge;
+                    bool adminLabor = item.MaterialViewModel.ZAddLaborMinCharge;
                     savedProject = Projects.Where(x => x.Name == item.Name).FirstOrDefault();
                     Projects.Remove(savedProject);
                     Projects.Add(item);
@@ -541,6 +544,7 @@ namespace WICR_Estimator.ViewModels
                     if (item.ProjectJobSetUp != null)
                     {
                         item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
+                        item.ProjectJobSetUp.EnableMoreMarkupCommand = new DelegateCommand(item.ProjectJobSetUp.CanAddMoreMarkup, item.ProjectJobSetUp.canAdd);
                         item.ProjectJobSetUp.GetOriginalName();
                         //item.ProjectJobSetUp.UpdateJobSetup();
                     }
@@ -555,9 +559,11 @@ namespace WICR_Estimator.ViewModels
                         item.ProjectJobSetUp.JobSetupChange += item.SlopeViewModel.JobSetup_OnJobSetupChange;
                     }
                     item.MaterialViewModel.CheckboxCommand = new DelegateCommand(item.MaterialViewModel.ApplyCheckUnchecks, item.MaterialViewModel.canApply);
+
                     SystemMaterial.OnQTyChanged += (s, e) => { item.MaterialViewModel.setExceptionValues(s); };
-                    item.MaterialViewModel.ZAddLaborMinCharge = addminLabor;
+                    
                     item.MaterialViewModel.CalculateCost(null);
+                    item.MaterialViewModel.ZAddLaborMinCharge = adminLabor;
                 }
                 Project_OnSelectedProjectChange(Projects[0], null);
                 reader.Close();
@@ -856,11 +862,11 @@ namespace WICR_Estimator.ViewModels
         {
             Projects = new ObservableCollection<Project>();
             //SelectedProjects = new List<Project>();
-            Projects.Add(new Project { Name = "Weather Wear", OriginalProjectName= "Weather Wear", Rank = 1,GrpName= "Dexotex" ,MainGroup="Deck Coatings"});
-            Projects.Add(new Project { Name = "Weather Wear Rehab", OriginalProjectName = "Weather Wear Rehab", Rank = 2, GrpName = "Dexotex", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Barrier Guard", OriginalProjectName = "Barrier Guard", Rank = 3, GrpName = "Dexotex", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Endurokote", OriginalProjectName = "Endurokote", Rank = 4,GrpName= "Endurokote", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Desert Crete", OriginalProjectName = "Desert Crete", Rank = 5, GrpName = "Hill Brothers", MainGroup = "Deck Coatings" });
+            Projects.Add(new Project { Name = "Weather Wear", OriginalProjectName= "Weather Wear",GrpName= "Dexotex" ,MainGroup="Deck Coatings"});
+            Projects.Add(new Project { Name = "Weather Wear Rehab", OriginalProjectName = "Weather Wear Rehab", GrpName = "Dexotex", MainGroup = "Deck Coatings" });
+            Projects.Add(new Project { Name = "Barrier Guard", OriginalProjectName = "Barrier Guard", GrpName = "Dexotex", MainGroup = "Deck Coatings" });
+            Projects.Add(new Project { Name = "Endurokote", OriginalProjectName = "Endurokote",GrpName= "Endurokote", MainGroup = "Deck Coatings" });
+            Projects.Add(new Project { Name = "Desert Crete", OriginalProjectName = "Desert Crete", GrpName = "Hill Brothers", MainGroup = "Deck Coatings" });
             Projects.Add(new Project { Name = "Paraseal", OriginalProjectName = "Paraseal", Rank = 6, GrpName = "Tremco", MainGroup = "Below Grade" });
             Projects.Add(new Project { Name = "Paraseal LG", OriginalProjectName = "Paraseal LG", Rank = 17, GrpName = "Tremco", MainGroup = "Below Grade" });
             Projects.Add(new Project { Name = "860 Carlisle", OriginalProjectName = "860 Carlisle", Rank = 18, GrpName = "Carlisle", MainGroup = "Below Grade" });
@@ -890,7 +896,7 @@ namespace WICR_Estimator.ViewModels
             ProjectView.SortDescriptions.Add(new SortDescription("MainGroup", ListSortDirection.Ascending));
             ProjectView.GroupDescriptions.Add(new PropertyGroupDescription("GrpName"));
             ProjectView.SortDescriptions.Add(new SortDescription("GrpName", ListSortDirection.Ascending));
-            //ProjectView.Filter = FilterProject;
+            ProjectView.Filter = FilterProject;
         }
 
         
@@ -1755,7 +1761,7 @@ namespace WICR_Estimator.ViewModels
                     exlApp = new Microsoft.Office.Interop.Excel.Application();
                     var dir = AppDomain.CurrentDomain.BaseDirectory;
                     exlWb = exlApp.Workbooks.Open(dir +"SummaryTemplate.xlsx");
-                    exlApp.Visible = true;
+                    exlApp.Visible = false;
                     exlApp.DisplayAlerts = false;
                 }
                 summaryWb = exlApp.Workbooks.Add();

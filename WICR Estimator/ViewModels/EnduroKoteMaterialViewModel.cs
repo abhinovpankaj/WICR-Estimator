@@ -267,7 +267,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
             SystemMaterials.Where(x=>x.Name== "EKL Acrylic Emulsion").FirstOrDefault().Qty= qty / 5;
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
            
         }
         public override bool canApply(object obj)
@@ -281,8 +281,8 @@ namespace WICR_Estimator.ViewModels
                 case "Select Y for protection coat over membrane below tile(GU80-1 TOP COAT)":
                 case "Stair Nosing":
                 case "Extra stair nosing lf":
-                case "Plywood 3 / 4 & blocking(# of 4x8 sheets)":
-                case "Stucco Material Remove and replace(LF)":
+                case "Plywood 3/4 & blocking (# of 4x8 sheets)":
+                case "Stucco Material Remove and replace (LF)":
                 case "Caulk, dymonic 100":
                     return false;
                 case "2.5 Galvanized Lathe (18 s.f.) no less than 12 per sq ft.":

@@ -321,8 +321,8 @@ namespace WICR_Estimator.ViewModels
                 bool ischecked = SystemMaterials.Where(x => x.Name == "Vista Paint Acripoxy (TOPCOAT)").FirstOrDefault().IsMaterialChecked;
                 SystemMaterials.Where(x => x.Name == "Dexcelent II Final Coat (TOPCOAT)").FirstOrDefault().IsMaterialChecked = !ischecked;
             }             
-            CalculateLaborMinCharge(false);
-            CalculateAllMaterial();
+            //CalculateLaborMinCharge(false);
+            //CalculateAllMaterial();
         }
         public override bool IncludedInLaborMin(string matName)
         {

@@ -6,9 +6,11 @@
       xmlns:local="clr-namespace:WICR_Estimator.Views"
       xmlns:System="clr-namespace:System;assembly=mscorlib"
       mc:Ignorable="d" 
+      xmlns:conv="clr-namespace:WICR_Estimator.Converters"
       d:DesignHeight="500" d:DesignWidth="1000"
       >
     <UserControl.Resources>
+        <conv:HasFieldEdited x:Key="HasFieldEdited"/>
         <Style x:Key="FieldHeader" TargetType="TextBlock">
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Margin" Value="5,5,5,0"/>
@@ -31,7 +33,26 @@
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Margin" Value="5,0,5,10"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
-
+            <Style.Triggers>
+                
+                    <Trigger Property="IsEnabled" Value="True">
+                        <Setter Property="Background" Value="LightYellow" />
+                    <Setter Property="ToolTip" Value="Please enter a numeric value."/>
+                </Trigger>
+                <DataTrigger Binding="{Binding Text,RelativeSource={RelativeSource Self},
+                                       Converter={StaticResource HasFieldEdited} }" 
+                             Value="True">
+                    <Setter Property="FontWeight" Value="Bold" />
+                    <Setter Property="Background" Value="Green" />
+                    <Setter Property="Foreground" Value="White" />
+                </DataTrigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="FontWeight" Value="Normal" />
+                    <Setter Property="Background" Value="White" />
+                    <Setter Property="Foreground" Value="Black" />
+                </Trigger>
+            </Style.Triggers>
+            
         </Style>
     </UserControl.Resources>
     <Grid Background="LightBlue">
@@ -89,6 +110,7 @@
                 <TextBlock Style="{StaticResource FieldHeader}"
                            Margin="5,10,10,0" Text="Work Area"/>
                 <TextBox Margin="5,0,5,0"
+                         Style="{StaticResource TextBoxStyle}"
                          Text="{Binding WorkArea,UpdateSourceTrigger=PropertyChanged}"
                          VerticalContentAlignment="Center"/>
                 <TextBlock Style="{StaticResource FieldHeader}"
@@ -222,7 +244,7 @@
                             <TextBox Text="{Binding ElementName=slWidth,
                 Path=Value, UpdateSourceTrigger=LostFocus}"
                      TextAlignment="Right"
-                     Width="40" 
+                     Width="40" Style="{StaticResource TextBoxStyle}"
                          HorizontalAlignment="Center"
                      Margin="5"/>
                             <Slider Maximum="10" Value="{Binding StairWidth}"
@@ -417,6 +439,7 @@
                              Path=Value, UpdateSourceTrigger=PropertyChanged}"
                              TextAlignment="Right"
                              Width="40" 
+                             Style="{StaticResource TextBoxStyle}"
                              HorizontalAlignment="Left"
                              Margin="5"/>
                     <Slider Value="{Binding MarkupPercentage}" Maximum="100"

@@ -487,7 +487,7 @@ namespace WICR_Estimator.ViewModels
                     item.LaborUnitPrice = item.LaborExtension / item.Qty;
                 }
             }   
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
         }
         
         public override bool IncludedInLaborMin(string matName)
@@ -525,7 +525,7 @@ namespace WICR_Estimator.ViewModels
 
             
             calculateRLqty();
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
         }
 
         

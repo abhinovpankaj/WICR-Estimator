@@ -281,7 +281,7 @@ namespace WICR_Estimator.ViewModels
                     item.LaborUnitPrice = item.LaborExtension / item.Qty;
                 }
             }
-            CalculateLaborMinCharge(false);
+           // CalculateLaborMinCharge(false);
         }
         public override bool IncludedInLaborMin(string matName)
         {
@@ -298,7 +298,7 @@ namespace WICR_Estimator.ViewModels
         {
             
             calculateRLqty();
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
         }
         public override double CalculateLabrExtn(double calhrs, double setupMin, string matName = "")
         {
@@ -325,10 +325,10 @@ namespace WICR_Estimator.ViewModels
         }
         public override void CalculateTotalSqFt()
         {
-            CostperSqftSlope = TotalSlopingPrice / (TotalSqftPlywood + riserCount);
-            CostperSqftMetal = TotalMetalPrice / (TotalSqftPlywood + riserCount);
-            CostperSqftMaterial = TotalSystemPrice / (TotalSqftPlywood + riserCount);
-            CostperSqftSubContract = TotalSubcontractLabor / (TotalSqftPlywood + riserCount);
+            CostperSqftSlope = (TotalSqftPlywood + riserCount)==0?0:TotalSlopingPrice / (TotalSqftPlywood + riserCount);
+            CostperSqftMetal = (TotalSqftPlywood + riserCount) == 0 ? 0 : TotalMetalPrice / (TotalSqftPlywood + riserCount);
+            CostperSqftMaterial = (TotalSqftPlywood + riserCount) == 0 ? 0 : TotalSystemPrice / (TotalSqftPlywood + riserCount);
+            CostperSqftSubContract = (TotalSqftPlywood + riserCount) == 0 ? 0 : TotalSubcontractLabor / (TotalSqftPlywood + riserCount);
             TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
             OnPropertyChanged("CostperSqftSlope");
             OnPropertyChanged("CostperSqftMetal");

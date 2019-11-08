@@ -325,7 +325,7 @@ namespace WICR_Estimator.ViewModels
             }
             
             calculateRLqty();
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
         }
         public override void calculateRLqty()
         {

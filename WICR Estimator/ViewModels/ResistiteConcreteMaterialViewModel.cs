@@ -177,7 +177,7 @@ namespace WICR_Estimator.ViewModels
                 sysMat2.IsMaterialChecked = isChecked;
 
             }
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
         }
         public override bool canApply(object obj)
         {

@@ -224,9 +224,13 @@ namespace WICR_Estimator.Models
                 {
                     sqft = value;
                     OnPropertyChanged("SMSqft");
-                    //Resistite Change
-                    //Qty = sqft / Coverage;
-                    //OnPropertyChanged("Qty");
+                    //Paraseal Change
+                    if (name== "SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT")
+                    {
+                        Qty = sqft / coverage;
+                        OnPropertyChanged("Qty");
+                    }
+
                 }
             }
         }

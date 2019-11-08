@@ -282,7 +282,7 @@ namespace WICR_Estimator.ViewModels
                 sysmat.Qty=(val1+val2+val3+val4) / 5;
                 sysmat.IsMaterialChecked = ischecked;
             }
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
 
         }
 

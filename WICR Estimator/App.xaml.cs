@@ -24,6 +24,7 @@ namespace WICR_Estimator
             //EventManager.RegisterClassHandler(typeof(TextBox), TextBox.MouseDownEvent,
             //new RoutedEventHandler(TextBox_GotFocus));
             EventManager.RegisterClassHandler(typeof(TextBox), TextBox.PreviewMouseDownEvent, new MouseButtonEventHandler(TextBox_PreviewMouseDown));
+
             base.OnStartup(e);
         }
 

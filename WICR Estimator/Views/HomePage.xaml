@@ -95,6 +95,11 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateIndependentProject
                                                     <Setter Property="TextBlock.FontSize" Value="18"/>
                                                     <!--<Setter Property="TextBlock.Foreground" Value="BurlyWood"/>-->
                                                 </DataTrigger>
+                                                <DataTrigger Binding="{Binding Name}" Value="Blank Template">
+                                                    <Setter Property="TextBlock.FontWeight" Value="Bold"/>
+                                                    <Setter Property="TextBlock.FontSize" Value="18"/>
+                                                    <!--<Setter Property="TextBlock.Foreground" Value="BurlyWood"/>-->
+                                                </DataTrigger>
                                                 <DataTrigger Binding="{Binding Name}" Value="Concrete On Grade">
                                                     <Setter Property="TextBlock.FontWeight" Value="Bold"/>
                                                     <Setter Property="TextBlock.FontSize" Value="18"/>

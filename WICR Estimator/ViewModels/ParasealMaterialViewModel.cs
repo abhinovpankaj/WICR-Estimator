@@ -51,7 +51,7 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("UV PROTECTION DETAIL (PRIME AND COAT WITH VULKEM 801)", "LINEAR FEET");
             
         }
-
+        private double sqftSuperStop=0; 
         public override void FetchMaterialValuesAsync(bool hasSetupChanged)
         {
             Dictionary<string, double> qtyList = new Dictionary<string, double>();
@@ -62,7 +62,10 @@ namespace WICR_Estimator.ViewModels
                 {
                     qtyList.Add(item.Name, item.Qty);
                 }
-                
+                if (item.Name== "SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT")
+                {
+                    sqftSuperStop = item.SMSqft;
+                }
             }
             if (materialNames == null)
             {
@@ -204,7 +207,7 @@ namespace WICR_Estimator.ViewModels
                 case "PARATERM BAR LF (TOP ONLY- STANDARD INSTALL)":
                 case "PARAGRANULAR (FOR CANT AT FOOTING)":
                 case "SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT":
-                    return deckPerimeter;
+                    return deckPerimeter>sqftSuperStop?deckPerimeter:sqftSuperStop;  //change for special handling
                 case "VULKEM 116 CAULK (FOR TERM BAR)":
                     return deckPerimeter + additionalTermBarLF;
                 case "EXTRA PARATERM BAR LF (BOTTOM OR SIDES)":
@@ -369,7 +372,7 @@ namespace WICR_Estimator.ViewModels
                 }
                 
             }
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
         }
         
         public override bool IncludedInLaborMin(string matName)

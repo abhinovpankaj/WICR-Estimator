@@ -308,7 +308,7 @@ namespace WICR_Estimator.ViewModels
             //}
             getEKLQnty();
             ////update Add labor for minimum cost
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
 
         }
         public override void CalculateTotalSqFt()

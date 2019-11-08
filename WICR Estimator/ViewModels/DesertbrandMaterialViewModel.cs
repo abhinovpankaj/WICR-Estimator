@@ -256,7 +256,7 @@ namespace WICR_Estimator.ViewModels
                 double calVal = ((0.31 * val2) + val1 / 2.5 / 2);
                 sysmat.Qty =(bool) IsJobSpecifiedByArchitect?0.31*val2:calVal;
             }
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
         }
 
         public override bool canApply(object obj)

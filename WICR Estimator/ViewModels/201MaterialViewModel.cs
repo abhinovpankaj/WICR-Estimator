@@ -606,7 +606,7 @@ namespace WICR_Estimator.ViewModels
                     item.LaborUnitPrice = item.LaborExtension / item.Qty;
                 }
             }   
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
         }
         
         public override bool IncludedInLaborMin(string matName)
@@ -640,7 +640,7 @@ namespace WICR_Estimator.ViewModels
                 SystemMaterials.Where(x => x.Name == "Vulkem Tremproof 201 R 30 MILS").FirstOrDefault().IsMaterialChecked = ischecked;
             }
             calculateRLqty();
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
         }
 
         

@@ -342,7 +342,7 @@ namespace WICR_Estimator.ViewModels
                 //unit = isFlash ? (Metals[0].Units+ Metals[1].Units + Metals[2].Units + Metals[3].Units
                 //    + addOnMetalUnits) *stairWidth : 0; 
                 unit = isFlash ? (Metals.Sum(x=>x.Units)+  
-                   + addOnMetalUnits) : 0; 
+                   + addOnMetalUnits)*4 : 0; 
                 //double.TryParse(metalDetails[37][0].ToString(), out unit);
             }
             else if (unitNo == 3)

@@ -637,7 +637,7 @@ namespace WICR_Estimator.ViewModels
                     SystemMaterials.Where(x => x.Name == "Barrier Guard membrane over smooth surface").First().IsMaterialChecked;
 
             }
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
         }
 
 
@@ -689,7 +689,7 @@ namespace WICR_Estimator.ViewModels
                     item.LaborUnitPrice = item.LaborExtension / item.Qty;
 
                 }
-                CalculateLaborMinCharge(false);
+                //CalculateLaborMinCharge(false);
             }
             
         }

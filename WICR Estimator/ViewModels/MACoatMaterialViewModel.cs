@@ -287,7 +287,7 @@ namespace WICR_Estimator.ViewModels
             ischecked = sysMat.IsMaterialChecked;
             sysMat.Qty = val5+val1+val2+val3+val4/5;
             sysMat.IsMaterialChecked = ischecked;
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
         }
 
         public override void setCheckBoxes()

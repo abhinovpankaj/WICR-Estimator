@@ -428,8 +428,8 @@ namespace WICR_Estimator.ViewModels
                     item.LaborUnitPrice = item.LaborExtension / item.Qty;
                     isExceptionValueSet = true;
                 }
-                if (isExceptionValueSet ==true)
-                    CalculateLaborMinCharge(false);
+                //if (isExceptionValueSet ==true)
+                    //CalculateLaborMinCharge(false);
             }
             
         }

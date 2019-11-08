@@ -176,7 +176,7 @@ namespace WICR_Estimator.ViewModels
                 sysMat2.Qty = sysMat2.Coverage == 0 ? 0 : sysMat2.SMSqft / sysMat2.Coverage;
                 sysMat2.IsMaterialChecked = ischecked;
             }
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
 
         }
         public override bool canApply(object obj)
@@ -461,7 +461,7 @@ namespace WICR_Estimator.ViewModels
                 }
                 calculateRLqty();
             }
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
         }
         public override bool IncludedInLaborMin(string matName)
         {

@@ -284,7 +284,7 @@ namespace WICR_Estimator.ViewModels
                 sysMat.Qty=((val1*1.25) +val2+val3+val4+val5+val6)/ 5;
             }
             #endregion
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
 
         }
 

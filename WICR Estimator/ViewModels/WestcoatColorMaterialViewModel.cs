@@ -244,7 +244,7 @@ namespace WICR_Estimator.ViewModels
                 sysmat.Qty = val1 + val2;
                 sysmat.IsMaterialChecked = ischecked;
             }
-            CalculateLaborMinCharge(false);
+            //CalculateLaborMinCharge(false);
         }
 
         public override bool canApply(object obj)

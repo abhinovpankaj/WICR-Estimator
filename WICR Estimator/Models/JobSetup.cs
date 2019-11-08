@@ -67,7 +67,7 @@ namespace WICR_Estimator.Models
                 JobSetupChange(this, EventArgs.Empty);
             }
         }
-        private bool canAdd(object obj)
+        public bool canAdd(object obj)
         {
             return true;
         }
@@ -86,7 +86,7 @@ namespace WICR_Estimator.Models
         }
         public System.Windows.Visibility HidePasswordSection { get; set; }
         public string LoginMessage { get; set; }
-        private void CanAddMoreMarkup(object obj)
+        public void CanAddMoreMarkup(object obj)
         {
             var passwordBox = obj as PasswordBox;
             var password = passwordBox.Password;

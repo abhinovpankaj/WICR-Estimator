@@ -161,6 +161,8 @@
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\CheckboxVisibilityConverter.cs" />
     <Compile Include="Converters\EnableTextboxConverter.cs" />
+    <Compile Include="Converters\HasFieldEdited.cs" />
+    <Compile Include="Converters\IsNull.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\QtyTextboxConv.cs" />
     <Compile Include="Converters\RoundUpConverter.cs" />

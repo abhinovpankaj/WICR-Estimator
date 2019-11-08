@@ -144,6 +144,7 @@ namespace WICR_Estimator.Models
 
     }
     
+    
     public class Project: BaseViewModel
     {
         
@@ -174,7 +175,7 @@ namespace WICR_Estimator.Models
         }
         public Dictionary<string, int> lastUsedRows;
 
-        [XmlIgnore]
+        [IgnoreDataMember]
         public bool ApplyLatestPrices { get; set; }
 
         public System.Windows.Visibility ISVisible
@@ -355,7 +356,10 @@ namespace WICR_Estimator.Models
                 }
             }
         }
+
+        [IgnoreDataMember]
         public int Rank { get; set; }
+
         public string GrpName { get; set; }
         public string MainGroup { get; set; }
 
