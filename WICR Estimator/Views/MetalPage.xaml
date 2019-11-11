@@ -26,7 +26,7 @@
                 <Trigger Property="IsEnabled" Value="False">
                     <Setter Property="Background" Value="White" />
                     <Setter Property="Foreground" Value="Black"/>
-                    <Setter Property="FontStyle" Value="Normal"/>
+                    <Setter Property="FontWeight" Value="Normal"/>
                 </Trigger>
             </Style.Triggers>
             

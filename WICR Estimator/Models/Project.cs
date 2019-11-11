@@ -423,7 +423,7 @@ namespace WICR_Estimator.Models
         public static event EventHandler OnSelectedProjectChange;
         
         private ICommand updatedJobSetup;
-        //[XmlIgnore]
+        
         [IgnoreDataMember]
         public ICommand UpdatedJobSetup
         {

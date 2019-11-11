@@ -254,7 +254,11 @@ namespace WICR_Estimator.ViewModels
             if (sysmat != null)
             {
                 double calVal = ((0.31 * val2) + val1 / 2.5 / 2);
-                sysmat.Qty =(bool) IsJobSpecifiedByArchitect?0.31*val2:calVal;
+                if (IsJobSpecifiedByArchitect!=null)
+                {
+                    sysmat.Qty = (bool)IsJobSpecifiedByArchitect ? 0.31 * val2 : calVal;
+                }
+                
             }
             //CalculateLaborMinCharge(false);
         }
@@ -343,7 +347,12 @@ namespace WICR_Estimator.ViewModels
         public override void setCheckBoxes()
         {
             //base.setCheckBoxes();
-            bool isSpecified = (bool)IsJobSpecifiedByArchitect;
+            bool isSpecified = false;
+            if (IsJobSpecifiedByArchitect!=null)
+            {
+                isSpecified = (bool)IsJobSpecifiedByArchitect;
+            }
+            
             
             SystemMaterial sysmat = SystemMaterials.Where(x => x.Name == "BASE COAT Desert Crete poly base mixed with water").FirstOrDefault();
             sysmat.IsMaterialChecked = isSpecified;

@@ -419,9 +419,15 @@ namespace WICR_Estimator.ViewModels
                 foreach (Project item in est)
                 {
                     bool adminLabor = item.MaterialViewModel.ZAddLaborMinCharge;
-                    savedProject = Projects.Where(x => x.Name == item.Name).FirstOrDefault();
+                    savedProject = Projects.Where(x => x.Name == item.OriginalProjectName).FirstOrDefault();
                     Projects.Remove(savedProject);
                     Projects.Add(item);
+                    //code to rename the Material Name for paraseal LG, to make sure old estimates work.
+                    if (item.OriginalProjectName == "Paraseal LG")
+                    {
+                        SystemMaterial sm = item.MaterialViewModel.SystemMaterials.First(x => x.Name == "SUPER STOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT\"");
+                        sm.Name = "SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT";
+                    }
                     if (item.CreationDetails != null)
                     {
                         //fill the Creaters Details
@@ -471,6 +477,8 @@ namespace WICR_Estimator.ViewModels
                 OnPropertyChanged("CanApplyLatestPrice");
                 ApplyLatestPrice = false;
                 OnPropertyChanged("SelectedProjects");
+                OnPropertyChanged("Projects");
+
             }
             catch
             {
@@ -518,9 +526,15 @@ namespace WICR_Estimator.ViewModels
                 foreach (Project item in est)
                 {
                     bool adminLabor = item.MaterialViewModel.ZAddLaborMinCharge;
-                    savedProject = Projects.Where(x => x.Name == item.Name).FirstOrDefault();
+                    savedProject = Projects.Where(x => x.Name == item.OriginalProjectName).FirstOrDefault();
                     Projects.Remove(savedProject);
                     Projects.Add(item);
+                    //code to rename the Material Name for paraseal LG, to make sure old estimates work.
+                    if (item.OriginalProjectName=="Paraseal LG")
+                    {
+                        SystemMaterial sm = item.MaterialViewModel.SystemMaterials.First(x => x.Name == "SUPER STOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT\"");
+                        sm.Name = "SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT";
+                    }
                     if (item.CreationDetails != null)
                     {
                         //fill the Creaters Details
@@ -572,6 +586,8 @@ namespace WICR_Estimator.ViewModels
                 CanApplyLatestPrice = true;
                 OnPropertyChanged("CanApplyLatestPrice");
                 ApplyLatestPrice = false;
+                OnPropertyChanged("Projects");
+                OnPropertyChanged("SelectedProjects");
 
 
             }

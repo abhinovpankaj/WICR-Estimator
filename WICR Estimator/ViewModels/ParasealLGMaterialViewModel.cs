@@ -43,7 +43,7 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("PARASEAL LG CORNER DETAILS & LABOR FOR STARTER STRIP", "ROLLS");
             materialNames.Add("LABOR FOR ALL PENETRATIONS, CEMENT BOARD, LAGGING PREP", "");
             materialNames.Add("NON-POUROUS PRIMER", "1GAL");
-            materialNames.Add("SUPER STOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT\"", "ROLL");
+            materialNames.Add("SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT", "ROLL");
             materialNames.Add("PINS & LOADS", "EACH");
 
             materialNames.Add("**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER", "5 GAL PAIL");
@@ -76,7 +76,7 @@ namespace WICR_Estimator.ViewModels
                 case "LABOR FOR ALL PENETRATIONS, CEMENT BOARD, LAGGING PREP":
                     return "DETAIL PENETRATIONS, LAGGING, ETC";
                
-                case "SUPER STOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT\"":
+                case "SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT":
                     return "INSTALL SUPERSTOP @ FOOTING AND ADDITIONAL AT WALLS";
                 case "NON-POUROUS PRIMER":
                 case "PINS & LOADS":
@@ -100,6 +100,7 @@ namespace WICR_Estimator.ViewModels
                     return matName;
             }
         }
+        private double sqftSuperStop = 0;
         public override void FetchMaterialValuesAsync(bool hasSetupChanged)
         {
             Dictionary<string, double> qtyList = new Dictionary<string, double>();
@@ -111,7 +112,10 @@ namespace WICR_Estimator.ViewModels
                 {
                     qtyList.Add(item.Name, item.Qty);
                 }
-
+                if (item.Name == "SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT")
+                {
+                    sqftSuperStop = item.SMSqft;
+                }
             }
             if (materialNames == null)
             {
@@ -229,7 +233,7 @@ namespace WICR_Estimator.ViewModels
                     return deckPerimeter>0? true:false;
                 case "NON-POUROUS PRIMER":
                     return rakerCornerBases+ rearMidLagging > 0 ? true : false;
-                case "SUPER STOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT\"":
+                case "SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT":
                     return superStopFooting;
                 case "PINS & LOADS":
                 case "TREMDRAIN 1000 (VERTICAL ONLY)":
@@ -278,9 +282,9 @@ namespace WICR_Estimator.ViewModels
                     return deckPerimeter+additionalTermBarLF;
                 case "NON-POUROUS PRIMER":
                     return rearMidLagging + rakerCornerBases * 15; 
-                case "SUPER STOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT\"":
-                    return deckPerimeter+deckCount;
-                
+                case "SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT":
+                    return (deckPerimeter+deckCount)>sqftSuperStop? (deckPerimeter + deckCount): sqftSuperStop;  //change for special handling
+
                 case "TREMDRAIN 1000 (VERTICAL ONLY)":
                     return totalSqft;
                 
@@ -315,7 +319,7 @@ namespace WICR_Estimator.ViewModels
                     return riserCount;
                 case "PARATERM BAR LF":
                     return deckPerimeter;
-                case "SUPER STOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT\"":
+                case "SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT":
                     return deckPerimeter + deckCount;
                 default:
                     return 0;
