@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:WICR_Estimator.Views"
               xmlns:conv="clr-namespace:WICR_Estimator.Converters"
              mc:Ignorable="d" 
+             
              d:DesignHeight="700" d:DesignWidth="1200">
     <UserControl.Resources>
         <conv:CheckBoxVisibilityConverter x:Key="checkBoxConv"/>
@@ -193,7 +194,7 @@
                         <DataTemplate>
                             <TextBox Tag="{Binding SMSqft,Converter={StaticResource HasFieldEdited}}" 
                                      Text="{Binding SMSqft,StringFormat={}{0:n2},
-                                UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}">
+                                UpdateSourceTrigger=LostFocus,Mode=TwoWay}">
 
                                 <TextBox.Style>
                                     <Style TargetType="{x:Type TextBox}">
@@ -247,7 +248,8 @@
                 <DataGridTemplateColumn Header="Qty">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox Tag="{Binding Qty,Converter={StaticResource HasFieldEdited}}" Text="{Binding Qty,UpdateSourceTrigger=PropertyChanged,
+                            <TextBox Tag="{Binding Qty,Converter={StaticResource HasFieldEdited}}" 
+                                     Text="{Binding Qty,UpdateSourceTrigger=LostFocus,
                                 StringFormat={}{0:n2}}"
                                      Name="qtyTb"
                                      Style="{StaticResource editableTextbox}"
@@ -282,7 +284,7 @@
                 <DataGridTemplateColumn Header="Special Pricing($)">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox Tag="{Binding SpecialMaterialPricing,Converter={StaticResource HasFieldEdited}}" 
+                            <TextBox Tag="{Binding SpecialMaterialPricing,StringFormat={}{0:C},Converter={StaticResource HasFieldEdited}}" 
                                      Text="{Binding SpecialMaterialPricing,UpdateSourceTrigger=LostFocus}"
                              Style="{StaticResource editableTextbox}"
                                      IsEnabled="True">
@@ -309,6 +311,7 @@
                           CanUserSortColumns="False"
                       Margin="0,10,10,10"
                       Grid.Column="1"
+                           
                       CanUserAddRows="false" 
                       CellStyle="{StaticResource editableCell}"
                   ItemsSource="{Binding OtherMaterials,UpdateSourceTrigger=PropertyChanged}">
@@ -316,12 +319,14 @@
                     <DataGrid.Columns>
 
                         <DataGridTextColumn Header="Items"
+                                            
                                             Width="200"
                                             Binding="{Binding Name,
-                        Mode=TwoWay,UpdateSourceTrigger=LostFocus}"/>
+                        Mode=TwoWay,UpdateSourceTrigger=LostFocus}"
+                                            />
                         <DataGridTextColumn Header="Quantity"
                                     Binding="{Binding Quantity,
-                        Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                        Mode=TwoWay,UpdateSourceTrigger=LostFocus}">
                             <DataGridTextColumn.CellStyle>
                                 <Style TargetType="{x:Type DataGridCell}">
                                     <Style.Triggers >
@@ -341,7 +346,7 @@
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Material Price ($)"
                                     Binding="{Binding MaterialPrice,
-                        Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                        Mode=TwoWay,UpdateSourceTrigger=LostFocus}">
                             <DataGridTextColumn.CellStyle>
                                 <Style TargetType="{x:Type DataGridCell}">
                                     <Style.Triggers >
@@ -448,7 +453,7 @@
                                     Binding="{Binding Name}"/>
                         <DataGridTextColumn Header="Units"
                                     IsReadOnly="{Binding IsReadOnly,Source= UnitConlbrcst}"
-                                    Binding="{Binding UnitConlbrcst,UpdateSourceTrigger=PropertyChanged}">
+                                    Binding="{Binding UnitConlbrcst,UpdateSourceTrigger=LostFocus}">
                             <DataGridTextColumn.CellStyle>
                                 <Style TargetType="{x:Type DataGridCell}">
                                     <Style.Triggers >
@@ -468,7 +473,7 @@
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Unit Price ($)"
                                     IsReadOnly="{Binding IsReadOnly}"
-                                    Binding="{Binding UnitPriceConlbrcst,UpdateSourceTrigger=PropertyChanged}">
+                                    Binding="{Binding UnitPriceConlbrcst,UpdateSourceTrigger=LostFocus}">
                             <DataGridTextColumn.CellStyle>
                                 <Style TargetType="{x:Type DataGridCell}">
                                     <Style.Triggers >

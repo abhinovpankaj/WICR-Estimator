@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,10 +25,27 @@ namespace WICR_Estimator
             //EventManager.RegisterClassHandler(typeof(TextBox), TextBox.MouseDownEvent,
             //new RoutedEventHandler(TextBox_GotFocus));
             EventManager.RegisterClassHandler(typeof(TextBox), TextBox.PreviewMouseDownEvent, new MouseButtonEventHandler(TextBox_PreviewMouseDown));
-
+            //EventManager.RegisterClassHandler(typeof(TextBox), TextBox.PreviewTextInputEvent, new RoutedEventHandler(TextBox_PreviewTextInput));
             base.OnStartup(e);
         }
 
+        private void TextBox_PreviewTextInput(object sender, RoutedEventArgs e)
+        {
+            TextCompositionEventArgs textArgs = e as TextCompositionEventArgs;
+            if (textArgs!=null)
+            {
+                int result=0;
+                bool success=Int32.TryParse(textArgs.Text, out result);
+                //Regex regex = new Regex("^[.][0-9]+$|^[0-9]*[.]{0,1}[0-9]*$");
+                //textArgs.Handled = !regex.IsMatch((sender as TextBox).Text.Insert((sender as TextBox).SelectionStart, textArgs.Text));
+                if (!success || textArgs.Text == ".")
+                {
+                    e.Handled = true;
+                }
+            }
+            
+        }
+    
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
             (sender as TextBox).SelectAll();

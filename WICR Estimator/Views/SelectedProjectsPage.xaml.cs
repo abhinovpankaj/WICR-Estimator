@@ -75,7 +75,8 @@ namespace WICR_Estimator.Views
                 {
                     Project prj = tabControl.DataContext as Project;
                     if (prj != null)
-                    {
+                    {   
+                        
                         prj.MaterialViewModel.CalculateCost(null);
                         prj.ProjectJobSetUp.TotalSalesCostTemp = prj.MaterialViewModel.TotalSale;
                     }

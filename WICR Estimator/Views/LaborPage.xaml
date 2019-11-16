@@ -229,7 +229,7 @@
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <DataGridTextColumn Header="Unit"
-                                    Binding="{Binding LQuantity,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                                    Binding="{Binding LQuantity,Mode=TwoWay,UpdateSourceTrigger=LostFocus}">
                                     <DataGridTextColumn.CellStyle>
                                         <Style TargetType="{x:Type DataGridCell}">
                                             <Style.Triggers >
@@ -248,7 +248,7 @@
                                     </DataGridTextColumn.CellStyle>
                                 </DataGridTextColumn>
                                 <DataGridTextColumn Header="Labor Unit Price ($)"
-                                    Binding="{Binding LMaterialPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                                    Binding="{Binding LMaterialPrice,Mode=TwoWay,UpdateSourceTrigger=LostFocus}">
                                     <DataGridTextColumn.CellStyle>
                                         <Style TargetType="{x:Type DataGridCell}">
                                             <Style.Triggers >
@@ -268,7 +268,8 @@
                                 </DataGridTextColumn>
                                 <DataGridTextColumn Header="Labor Price($)" 
                                         IsReadOnly="True"
-                                        Binding="{Binding LExtension,Mode=OneWay,UpdateSourceTrigger=PropertyChanged ,StringFormat={}{0:C}}"/>
+                                        Binding="{Binding LExtension,Mode=OneWay,
+                                    UpdateSourceTrigger=PropertyChanged ,StringFormat={}{0:C}}"/>
                             </DataGrid.Columns>
 
                         </DataGrid>

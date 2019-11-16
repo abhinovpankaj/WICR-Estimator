@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using WICR_Estimator.Models;
 
 namespace WICR_Estimator.ViewModels
@@ -250,17 +251,24 @@ namespace WICR_Estimator.ViewModels
 
         private void ProjectJobSetUp_OnProjectNameChange(object sender, EventArgs e)
         {
+            JobSetup js = sender as JobSetup;
+            if (js != null)
+            {
+                if (js.WorkArea!="")
+                {
+                    var prj = EnabledProjects.Where(x => x.WorkArea == js.WorkArea && x.OriginalProjectName != js.ProjectName);
+                    if (prj.Count() != 0)
+                    {
+                        MessageBox.Show("Same Workarea name has already been applied", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        js.WorkArea = "";
+                        return;
+                    }
+                }
+                
+            }
             foreach (Project item in EnabledProjects)
             {
-                //if (item.ProjectJobSetUp.SpecialProductName!=null)
-                //{
-                //    if (item.ProjectJobSetUp.SpecialProductName != "")
-                //    {
-                //        item.Name = item.ProjectJobSetUp.SpecialProductName;
-                //    }
-                //    else
-                //        item.Name = item.ProjectJobSetUp.ProjectName;
-                //}
+                
                 if (item.ProjectJobSetUp.WorkArea != null)
                 {
                     if (item.ProjectJobSetUp.WorkArea != "")

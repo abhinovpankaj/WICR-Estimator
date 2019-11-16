@@ -132,7 +132,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                             <TextBox Tag="{Binding Units, Converter={StaticResource HasFieldEdited }}"
-                                Text="{Binding Units,UpdateSourceTrigger=PropertyChanged}"
+                                Text="{Binding Units,UpdateSourceTrigger=LostFocus}"
                                      IsEnabled="{Binding Name,Converter={StaticResource textboxConv}}"
                                          Style="{StaticResource editableTextbox }">
 
@@ -147,9 +147,10 @@
                                         Header="Special Material Pricing($)">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                            <TextBox Tag="{Binding SpecialMetalPricing, Converter={StaticResource HasFieldEdited }}"
+                            <TextBox Tag="{Binding SpecialMetalPricing, 
+                                Converter={StaticResource HasFieldEdited }}"
                                     Text="{Binding SpecialMetalPricing ,StringFormat={}{0:C},
-                                UpdateSourceTrigger=PropertyChanged}"
+                                UpdateSourceTrigger=LostFocus}"
                                     IsEnabled="True" Style="{StaticResource  editableTextbox}"
                                          >
                                     
@@ -195,7 +196,7 @@
                             <DataTemplate>
                             <TextBox Tag="{Binding Units, 
                                 Converter={StaticResource HasFieldEdited }}" 
-                                     Text="{Binding Units,UpdateSourceTrigger=PropertyChanged}"
+                                     Text="{Binding Units,UpdateSourceTrigger=LostFocus}"
                                      IsEnabled="{Binding IsEditable}"
                                          Style="{StaticResource editableTextbox}">
 
@@ -210,7 +211,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                             <TextBox Tag="{Binding UnitPrice, Converter={StaticResource HasFieldEdited }}"
-                                     Text="{Binding UnitPrice,UpdateSourceTrigger=PropertyChanged}"
+                                     Text="{Binding UnitPrice,UpdateSourceTrigger=LostFocus}"
                                      IsEnabled="{Binding IsEditable}"
                                          Style="{StaticResource editableTextbox}">
 
@@ -221,7 +222,8 @@
                     <DataGridTemplateColumn Header="Material Price($)">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding MaterialPrice,UpdateSourceTrigger=PropertyChanged,
+                                <TextBox Text="{Binding MaterialPrice,
+                                    UpdateSourceTrigger=LostFocus,
                                     StringFormat={}{0:C}}"
                                      IsEnabled="{Binding IsEditable}"
                                       Tag="{Binding MaterialPrice, Converter={StaticResource HasFieldEdited }}"   
@@ -367,7 +369,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox Tag="{Binding Units, Converter={StaticResource HasFieldEdited }}"
-                                    Text="{Binding Units,UpdateSourceTrigger=PropertyChanged}"
+                                    Text="{Binding Units,UpdateSourceTrigger=LostFocus}"
                                      IsEnabled="{Binding Name,Converter={StaticResource textboxConv}}"
                                          Style="{StaticResource addOnTextBox }">
 
@@ -382,8 +384,10 @@
                                         Header="Special Material Pricing($)">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Tag="{Binding SpecialMetalPricing, Converter={StaticResource HasFieldEdited}}"
-                                         Text="{Binding SpecialMetalPricing,StringFormat={}{0:C},UpdateSourceTrigger=PropertyChanged}"
+                                <TextBox Tag="{Binding SpecialMetalPricing, 
+                                    Converter={StaticResource HasFieldEdited}}"
+                                         Text="{Binding SpecialMetalPricing,StringFormat={}{0:C},
+                                    UpdateSourceTrigger=LostFocus}"
                                     IsEnabled="True" Style="{StaticResource  addOnTextBox}"
                                          >
 

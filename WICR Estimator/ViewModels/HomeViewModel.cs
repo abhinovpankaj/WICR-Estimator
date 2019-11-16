@@ -532,8 +532,12 @@ namespace WICR_Estimator.ViewModels
                     //code to rename the Material Name for paraseal LG, to make sure old estimates work.
                     if (item.OriginalProjectName=="Paraseal LG")
                     {
-                        SystemMaterial sm = item.MaterialViewModel.SystemMaterials.First(x => x.Name == "SUPER STOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT\"");
-                        sm.Name = "SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT";
+                        SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "SUPER STOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT\"");
+                        if (sm!=null)
+                        {
+                            sm.Name = "SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT";
+                        }
+                        
                     }
                     if (item.CreationDetails != null)
                     {
@@ -772,13 +776,29 @@ namespace WICR_Estimator.ViewModels
         }
         private void ProjectJobSetUp_OnProjectNameChange(object sender, EventArgs e)
         {
+            JobSetup js = sender as JobSetup;
+            if (js != null)
+            {
+                if (js.WorkArea != "")
+                {
+                    var prj = SelectedProjects.Where(x => x.WorkArea == js.WorkArea && x.OriginalProjectName != js.ProjectName);
+                    if (prj.Count() != 0)
+                    {
+                        MessageBox.Show("Same Workarea name has already been applied", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        js.WorkArea = "";
+                        return;
+                    }
+                }
+
+            }
             foreach (Project item in SelectedProjects)
             {
-                if (item.ProjectJobSetUp.SpecialProductName != null)
+                
+                if (item.ProjectJobSetUp.WorkArea != null)
                 {
-                    if (item.ProjectJobSetUp.SpecialProductName != "")
+                    if (item.ProjectJobSetUp.WorkArea != "")
                     {
-                        item.Name = item.ProjectJobSetUp.SpecialProductName;
+                        item.Name = item.ProjectJobSetUp.WorkArea;
                     }
                     else
                         item.Name = item.ProjectJobSetUp.ProjectName;
@@ -931,7 +951,8 @@ namespace WICR_Estimator.ViewModels
             if (doc == null)
             {
                 doc = new XmlDocument();
-                doc.Load("SummaryRange.xml");
+                var dir = AppDomain.CurrentDomain.BaseDirectory;
+                doc.Load(dir+"SummaryRange.xml");
             }
             XmlNode node = doc.DocumentElement.SelectSingleNode("/Sections/" + section);
             return node.InnerText;

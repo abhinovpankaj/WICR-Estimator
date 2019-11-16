@@ -110,8 +110,9 @@
                 <TextBlock Style="{StaticResource FieldHeader}"
                            Margin="5,10,10,0" Text="Work Area"/>
                 <TextBox Margin="5,0,5,0"
+                         ToolTip="Enter unique workarea for each projects."
                          Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding WorkArea,UpdateSourceTrigger=PropertyChanged}"
+                         Text="{Binding WorkArea,UpdateSourceTrigger=LostFocus}"
                          VerticalContentAlignment="Center"/>
                 <TextBlock Style="{StaticResource FieldHeader}"
                            Margin="5,30,10,0"
@@ -130,9 +131,27 @@
                                    Foreground="Blue"
                             Text="{Binding TotalSalesCostTemp,StringFormat=N2}"
                                    HorizontalAlignment="Center"/>
+                        
+
                     </StackPanel>
                 </Border>
-                
+                <!--<Button Background="White"
+                            Margin="15,40,15,15"
+                            Height="35"
+                            FontSize="15"                        
+                            ToolTip="Apply Changes"                            
+                            Command="{Binding ApplyChangesCommnad}" >
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontFamily="Segoe UI Symbol"
+                                       VerticalAlignment="Center"
+                                       Text="&#xE10B;"/>
+                            <TextBlock Text="Apply Changes"
+                                       Margin="5,0,0,0"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button.Content>
+                    </Button>-->
                 <StackPanel Orientation="Horizontal" Background="LightGray"
                             Margin="0,30,0,0" Visibility="Hidden"
                             >
@@ -242,7 +261,7 @@
                             <TextBlock Text="Stair Width" HorizontalAlignment="Center"
                            Style="{StaticResource FieldHeader}"/>
                             <TextBox Text="{Binding ElementName=slWidth,
-                Path=Value, UpdateSourceTrigger=LostFocus}"
+                Path=Value, UpdateSourceTrigger=PropertyChanged}"
                      TextAlignment="Right"
                      Width="40" Style="{StaticResource TextBoxStyle}"
                          HorizontalAlignment="Center"
@@ -303,7 +322,7 @@
                             <TextBlock Text="ROCK POCKETS EA."
                            Style="{StaticResource FieldHeader}"/>
                             <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding RockPockets ,UpdateSourceTrigger=LostFocus}"/>
+                         Text="{Binding RockPockets ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="LABOR FOR 3 FT STRIP OF PARASEAL AT FOUNDATION OR OTHER AREAS (LF)"
                            Style="{StaticResource FieldHeader}"/>
                             <TextBox Style="{StaticResource TextBoxStyle}"

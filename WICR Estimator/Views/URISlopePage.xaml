@@ -92,7 +92,8 @@
                     <DataGridTemplateColumn Header="Sq ft">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Tag="{Binding Sqft,Converter={StaticResource HasFieldEdited}}" Text="{Binding Sqft,UpdateSourceTrigger=PropertyChanged}"
+                                <TextBox Tag="{Binding Sqft,Converter={StaticResource HasFieldEdited}}"
+                                         Text="{Binding Sqft,UpdateSourceTrigger=LostFocus}"
                                      Style="{StaticResource editableTextbox}"
                             >
                                 </TextBox>
@@ -102,7 +103,8 @@
                     <DataGridTemplateColumn Header="#Decks or areas">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Tag="{Binding DeckCount,Converter={StaticResource HasFieldEdited}}" Text="{Binding DeckCount,UpdateSourceTrigger=PropertyChanged}"
+                                <TextBox Tag="{Binding DeckCount,Converter={StaticResource HasFieldEdited}}"
+                                         Text="{Binding DeckCount,UpdateSourceTrigger=LostFocus}"
                                      Style="{StaticResource editableTextbox}">
 
                                 </TextBox>
@@ -245,7 +247,8 @@
                     <DataGridTemplateColumn Header="Sq ft">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Tag="{Binding Sqft,Converter={StaticResource HasFieldEdited}}" Text="{Binding Sqft,UpdateSourceTrigger=PropertyChanged}"
+                                <TextBox Tag="{Binding Sqft,Converter={StaticResource HasFieldEdited}}"
+                                         Text="{Binding Sqft,UpdateSourceTrigger=LostFocus}"
                                      Style="{StaticResource editableTextbox}"
                             >
                                 </TextBox>
@@ -255,7 +258,8 @@
                     <DataGridTemplateColumn Header="#Decks or areas">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Tag="{Binding DeckCount,Converter={StaticResource HasFieldEdited}}" Text="{Binding DeckCount,UpdateSourceTrigger=PropertyChanged}"
+                                <TextBox Tag="{Binding DeckCount,Converter={StaticResource HasFieldEdited}}"
+                                         Text="{Binding DeckCount,UpdateSourceTrigger=LostFocus}"
                                      Style="{StaticResource editableTextbox}">
 
                                 </TextBox>
@@ -424,7 +428,7 @@
                          Style="{StaticResource editableTextbox}"
                          VerticalContentAlignment="Center"
                          Height="25" Width="150"  
-                         Text="{Binding TotalMixesMan,UpdateSourceTrigger=PropertyChanged}">
+                         Text="{Binding TotalMixesMan,UpdateSourceTrigger=LostFocus}">
 
                 </TextBox>
                 <!--07-10-18-->
@@ -437,7 +441,7 @@
                          Margin="5,0,5,5"
                          Width="150"
                          Tag="{Binding AverageMixesPrice,Converter={StaticResource HasFieldEdited}}"
-                         Text="{Binding AverageMixesPrice,UpdateSourceTrigger=PropertyChanged}">
+                         Text="{Binding AverageMixesPrice,UpdateSourceTrigger=LostFocus}">
                 </TextBox>
 
             </Grid>
@@ -475,7 +479,7 @@
                          VerticalContentAlignment="Center"
                          Height="25" Width="150"  
                          Tag="{Binding UrethaneTotalMixesMan,Converter={StaticResource HasFieldEdited} }"
-                         Text="{Binding UrethaneTotalMixesMan,UpdateSourceTrigger=PropertyChanged}">
+                         Text="{Binding UrethaneTotalMixesMan,UpdateSourceTrigger=LostFocus}">
 
                 </TextBox>
                 <!--07-10-18-->
@@ -488,7 +492,7 @@
                          Margin="5,0,5,5"
                          Width="150"
                          Tag="{Binding UrethaneAverageMixesPrice,Converter={StaticResource HasFieldEdited} }"
-                         Text="{Binding UrethaneAverageMixesPrice,UpdateSourceTrigger=PropertyChanged}">
+                         Text="{Binding UrethaneAverageMixesPrice,UpdateSourceTrigger=LostFocus}">
                 </TextBox>
 
             </Grid>

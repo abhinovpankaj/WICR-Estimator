@@ -239,12 +239,24 @@ namespace WICR_Estimator.Models
             VendorName = "Chivon";
             MaterialName = "24ga. Galvanized Primed Steel";
             EnableMoreMarkupCommand = new DelegateCommand(CanAddMoreMarkup, canAdd);
+            //ApplyChangesCommnad = new DelegateCommand(ApplyChanges, canApply);
             MinMarkUp = -10;
             AllowMoreMarkUp = false;
             FirstCheckBoxLabel = "Approved for Sand & Cement ?";
             ProjectDelayFactor = "0-3 Months";
             UpdateJobSetup();
         }
+
+        //private bool canApply(object obj)
+        //{
+        //    return HomeViewModel.IsDirty;
+        //}
+
+        //private void ApplyChanges(object obj)
+        //{
+        //    UpdateJobSetup();
+        //    //HomeViewModel.IsDirty = false;
+        //}
 
         public double MinMarkUp { get; set; }
         
@@ -264,6 +276,23 @@ namespace WICR_Estimator.Models
             }
         }
 
+        //ApplyChangesCommnad
+
+        //private DelegateCommand applyChangesCommand;
+
+        //[IgnoreDataMember]
+        //public DelegateCommand ApplyChangesCommnad
+        //{
+        //    get { return applyChangesCommand; }
+        //    set
+        //    {
+        //        if (value != applyChangesCommand)
+        //        {
+        //            applyChangesCommand = value;
+        //            OnPropertyChanged("ApplyChangesCommnad");
+        //        }
+        //    }
+        //}
         private bool isContingencyEnabled;
         public bool IsContingencyEnabled
         {
@@ -433,21 +462,9 @@ namespace WICR_Estimator.Models
             {
                 if (value != totalSqft)
                 {
-                    totalSqft = value;                    
-                    if (value>=1000||TotalSqftVertical>=1000 ||TotalSqftPlywood>=1000 )
-                    {
-                        VHasContingencyDisc = false;
-                        IsContingencyEnabled = true;
-                    }
+                    totalSqft = value;
 
-                         
-                    else
-                    {
-                        IsContingencyEnabled = false;
-                        VHasContingencyDisc = false;
-                    }
-                    OnPropertyChanged("IsContingencyEnabled");
-                    OnPropertyChanged("VHasContingencyDisc");
+                    setContingency();
                     OnPropertyChanged("TotalSqft");
                     UpdateJobSetup();
                    
@@ -518,6 +535,7 @@ namespace WICR_Estimator.Models
                 if (value != deckCount)
                 {
                     deckCount = value;
+                    setContingency();
                     OnPropertyChanged("DeckCount");
                     UpdateJobSetup();
                 }
@@ -902,27 +920,46 @@ namespace WICR_Estimator.Models
                 if (value != totalSqftPlywood)
                 {
                     totalSqftPlywood = value;
-                    if (value >= 1000 || TotalSqftVertical >= 1000 || TotalSqft >= 1000)
-                    {
-                        VHasContingencyDisc = false;
-                        IsContingencyEnabled = true;
-                    }
-
-
-                    else
-                    {
-                        IsContingencyEnabled = false;
-                        VHasContingencyDisc = false;
-                    }
-                    OnPropertyChanged("IsContingencyEnabled");
-                    OnPropertyChanged("VHasContingencyDisc");
-                    OnPropertyChanged("TotalSqftPlywood");
+                    setContingency();
                     UpdateJobSetup(); //JobSetupChange(this, EventArgs.Empty);
-                    
+                    OnPropertyChanged("TotalSqftPlywood");
                 }
             }
         }
 
+        private void setContingency()
+        {
+            if (originalName== "Paraseal" )
+            {
+                if (DeckCount >= 1000 || TotalSqftVertical >= 1000 || TotalSqft >= 1000)
+                {
+                    VHasContingencyDisc = false;
+                    IsContingencyEnabled = true;
+                }
+                else
+                {
+                    IsContingencyEnabled = false;
+                    VHasContingencyDisc = false;
+                }
+            }
+            else
+            {
+                if (TotalSqftPlywood >= 1000 || TotalSqftVertical >= 1000 || TotalSqft >= 1000)
+                {
+                    VHasContingencyDisc = false;
+                    IsContingencyEnabled = true;
+                }
+                else
+                {
+                    IsContingencyEnabled = false;
+                    VHasContingencyDisc = false;
+                }
+            }
+            
+            OnPropertyChanged("IsContingencyEnabled");
+            OnPropertyChanged("VHasContingencyDisc");
+            
+        }
         #endregion
 
         #region Resistite
@@ -1168,20 +1205,7 @@ namespace WICR_Estimator.Models
                 if (value != totalSqftVertical)
                 {
                     totalSqftVertical = value;
-                    if (value >= 1000||TotalSqft>=1000||TotalSqftPlywood>=1000)
-                    {
-                        VHasContingencyDisc = false;
-                        IsContingencyEnabled = true;
-                    }
-
-
-                    else
-                    {
-                        IsContingencyEnabled = false;
-                        VHasContingencyDisc = false;
-                    }
-                    OnPropertyChanged("IsContingencyEnabled");
-                    OnPropertyChanged("VHasContingencyDisc");
+                    setContingency();
                     OnPropertyChanged("TotalSqftVertical");
                     UpdateJobSetup();
                 }
