@@ -74,9 +74,10 @@ namespace WICR_Estimator.Views
                 if (tabControl.Header.ToString() == "Material")
                 {
                     Project prj = tabControl.DataContext as Project;
+                    
                     if (prj != null)
-                    {   
-                        
+                    {
+                        //CommitTables(tabControl);
                         prj.MaterialViewModel.CalculateCost(null);
                         prj.ProjectJobSetUp.TotalSalesCostTemp = prj.MaterialViewModel.TotalSale;
                     }
@@ -97,6 +98,19 @@ namespace WICR_Estimator.Views
             }
 
             //Save Project Status
+        }
+
+        private void CommitTables(DependencyObject control)
+        {
+            if (control is DataGrid)
+            {
+                DataGrid grid = control as DataGrid;
+                grid.CommitEdit(DataGridEditingUnit.Row, true);
+                return;
+            }
+            int childrenCount = VisualTreeHelper.GetChildrenCount(control);
+            for (int childIndex = 0; childIndex < childrenCount; childIndex++)
+                CommitTables(VisualTreeHelper.GetChild(control, childIndex));
         }
 
         #region  dragdrop

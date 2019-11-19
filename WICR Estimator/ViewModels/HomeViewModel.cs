@@ -425,8 +425,12 @@ namespace WICR_Estimator.ViewModels
                     //code to rename the Material Name for paraseal LG, to make sure old estimates work.
                     if (item.OriginalProjectName == "Paraseal LG")
                     {
-                        SystemMaterial sm = item.MaterialViewModel.SystemMaterials.First(x => x.Name == "SUPER STOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT\"");
-                        sm.Name = "SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT";
+                        SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "SUPER STOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT\"");
+                        if (sm!=null)
+                        {
+                            sm.Name = "SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT";
+                        }
+                        
                     }
                     if (item.CreationDetails != null)
                     {
@@ -452,7 +456,7 @@ namespace WICR_Estimator.ViewModels
                     {
                         item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
                         item.ProjectJobSetUp.GetOriginalName();
-                        //item.ProjectJobSetUp.UpdateJobSetup();
+                        item.ProjectJobSetUp.UpdateJobSetup();
                     }
                     if (item.MetalViewModel != null)
                     {
@@ -466,7 +470,21 @@ namespace WICR_Estimator.ViewModels
                     }
                     item.MaterialViewModel.CheckboxCommand = new DelegateCommand(item.MaterialViewModel.ApplyCheckUnchecks, item.MaterialViewModel.canApply);
                     SystemMaterial.OnQTyChanged += (s, e) => { item.MaterialViewModel.setExceptionValues(s); };
-                    item.MaterialViewModel.CalculateCost(null);
+
+                    //keep other material and other labor materials in sync
+                    var ot = item.MaterialViewModel.OtherLaborMaterials;
+                    item.MaterialViewModel.OtherLaborMaterials = item.MaterialViewModel.OtherMaterials;
+                    int k = 0;
+                    foreach (OtherItem olm in item.MaterialViewModel.OtherLaborMaterials)
+                    {
+                        //olm.Name = ot[k].Name;
+                        olm.LQuantity = ot[k].LQuantity;
+                        olm.LMaterialPrice = ot[k].LMaterialPrice;
+                        k++;
+                    }
+                    //ends
+
+                    //item.MaterialViewModel.CalculateCost(null);
                     item.MaterialViewModel.ZAddLaborMinCharge = adminLabor;
                 }
                 Project_OnSelectedProjectChange(Projects[0], null);
@@ -564,7 +582,7 @@ namespace WICR_Estimator.ViewModels
                         item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
                         item.ProjectJobSetUp.EnableMoreMarkupCommand = new DelegateCommand(item.ProjectJobSetUp.CanAddMoreMarkup, item.ProjectJobSetUp.canAdd);
                         item.ProjectJobSetUp.GetOriginalName();
-                        //item.ProjectJobSetUp.UpdateJobSetup();
+                        item.ProjectJobSetUp.UpdateJobSetup();
                     }
                     if (item.MetalViewModel != null)
                     {
@@ -580,7 +598,20 @@ namespace WICR_Estimator.ViewModels
 
                     SystemMaterial.OnQTyChanged += (s, e) => { item.MaterialViewModel.setExceptionValues(s); };
                     
-                    item.MaterialViewModel.CalculateCost(null);
+                    //keep other material and other labor materials in sync
+                    var ot= item.MaterialViewModel.OtherLaborMaterials;
+                    item.MaterialViewModel.OtherLaborMaterials= item.MaterialViewModel.OtherMaterials;
+                    int k = 0;
+                    foreach (OtherItem olm in item.MaterialViewModel.OtherLaborMaterials)
+                    {
+                        //olm.Name = ot[k].Name;
+                        olm.LQuantity = ot[k].LQuantity;
+                        olm.LMaterialPrice = ot[k].LMaterialPrice;
+                        k++;
+                    }
+                    //ends
+
+                    //item.MaterialViewModel.CalculateCost(null);
                     item.MaterialViewModel.ZAddLaborMinCharge = adminLabor;
                 }
                 Project_OnSelectedProjectChange(Projects[0], null);

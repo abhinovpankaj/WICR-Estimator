@@ -221,7 +221,8 @@
                                 <DataGridTemplateColumn Header="Items" IsReadOnly="True">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBox Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}"
+                                            <TextBox BorderThickness="0"
+                                                Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}"
                                      IsReadOnly="True">
 
                                             </TextBox>

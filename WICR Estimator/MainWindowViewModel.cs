@@ -164,7 +164,7 @@ namespace WICR_Estimator
                 MainWindowViewModel vm = this;
                 if (vm != null)
                 {
-                    HomeViewModel hm = vm.PageViewModels.FirstOrDefault(x => x.Name == "Home Page") as HomeViewModel;
+                    HomeViewModel hm = vm.PageViewModels.FirstOrDefault(x => x.Name == "Home") as HomeViewModel;
                     if (hm != null)
                     {
                         JobName = hm.JobName;

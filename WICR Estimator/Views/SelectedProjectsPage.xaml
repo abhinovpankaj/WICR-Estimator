@@ -115,7 +115,7 @@
                                     </Grid>
                                 </TabItem.Content>
                             </TabItem>
-                            <TabItem Header="Material"
+                            <TabItem Header="Material" Name="materialTab"
                                  VerticalAlignment="Bottom">
                                 <TabItem.Content>
                                     <!--<Grid Margin="0,0,0,0" 
@@ -129,7 +129,7 @@
                                 </TabItem.Content>
                             </TabItem>
                             
-                            <TabItem Header="Labor"
+                            <TabItem Header="Labor" 
                                  VerticalAlignment="Bottom">
                                 <TabItem.Content>
                                     <!--<Grid Margin="0,0,0,0" 

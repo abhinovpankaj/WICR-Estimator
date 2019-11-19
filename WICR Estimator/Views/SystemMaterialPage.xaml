@@ -311,22 +311,33 @@
                           CanUserSortColumns="False"
                       Margin="0,10,10,10"
                       Grid.Column="1"
-                           
+                      
                       CanUserAddRows="false" 
                       CellStyle="{StaticResource editableCell}"
                   ItemsSource="{Binding OtherMaterials,UpdateSourceTrigger=PropertyChanged}">
 
                     <DataGrid.Columns>
 
-                        <DataGridTextColumn Header="Items"
-                                            
+                        <!--<DataGridTextColumn Header="Items"
+                                             
                                             Width="200"
                                             Binding="{Binding Name,
-                        Mode=TwoWay,UpdateSourceTrigger=LostFocus}"
-                                            />
-                        <DataGridTextColumn Header="Quantity"
+                        Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                            />-->
+                        <DataGridTemplateColumn Header="Items" Width="200">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding Name,Mode=TwoWay,
+                                        UpdateSourceTrigger=PropertyChanged}"
+                                             BorderThickness="0"
+                                        KeyboardNavigation.IsTabStop="False">
+                                    </TextBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!--<DataGridTextColumn Header="Quantity" 
                                     Binding="{Binding Quantity,
-                        Mode=TwoWay,UpdateSourceTrigger=LostFocus}">
+                        Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                             <DataGridTextColumn.CellStyle>
                                 <Style TargetType="{x:Type DataGridCell}">
                                     <Style.Triggers >
@@ -343,10 +354,39 @@
                                     </Style.Triggers>
                                 </Style>
                             </DataGridTextColumn.CellStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Header="Material Price ($)"
+                        </DataGridTextColumn>-->
+                        <DataGridTemplateColumn Header="Quantity" 
+                                    >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding Quantity,
+                        Mode=TwoWay,UpdateSourceTrigger=LostFocus}"
+                                             BorderThickness="0"
+                                             >
+                                        <TextBox.Style>
+                                            <Style TargetType="{x:Type TextBox}">
+                                                <Style.Triggers >
+                                                    <Trigger Property="IsReadOnly" Value="False">
+                                                        <Setter Property="Background" Value="LightYellow" />
+                                                    </Trigger>
+                                                    <DataTrigger Binding="{Binding Quantity, 
+                                            Converter={StaticResource HasFieldEdited}}" 
+                                                     Value="True">
+                                                        <Setter Property="Background" Value="Green" />
+                                                        <Setter Property="Foreground" Value="White"/>
+                                                        <Setter Property="FontWeight" Value="Bold"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBox.Style>
+                                    </TextBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            
+                        </DataGridTemplateColumn>
+                        <!--<DataGridTextColumn Header="Material Price ($)"
                                     Binding="{Binding MaterialPrice,
-                        Mode=TwoWay,UpdateSourceTrigger=LostFocus}">
+                        Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                             <DataGridTextColumn.CellStyle>
                                 <Style TargetType="{x:Type DataGridCell}">
                                     <Style.Triggers >
@@ -363,7 +403,35 @@
                                     </Style.Triggers>
                                 </Style>
                             </DataGridTextColumn.CellStyle>
-                        </DataGridTextColumn>
+                        </DataGridTextColumn>-->
+                        <DataGridTemplateColumn Header="Material Price ($)" 
+                                    >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding MaterialPrice,
+                        Mode=TwoWay,UpdateSourceTrigger=LostFocus}"
+                                             BorderThickness="0">
+                                        <TextBox.Style>
+                                            <Style TargetType="{x:Type TextBox}">
+                                                <Style.Triggers >
+                                                    <Trigger Property="IsReadOnly" Value="False">
+                                                        <Setter Property="Background" Value="LightYellow" />
+                                                    </Trigger>
+                                                    <DataTrigger Binding="{Binding MaterialPrice, 
+                                            Converter={StaticResource HasFieldEdited}}" 
+                                                     Value="True">
+                                                        <Setter Property="Background" Value="Green" />
+                                                        <Setter Property="Foreground" Value="White"/>
+                                                        <Setter Property="FontWeight" Value="Bold"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBox.Style>
+                                    </TextBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn Header="Extension($)" 
                                         IsReadOnly="True"
                                         Binding="{Binding Extension,Mode=OneWay,
