@@ -14,6 +14,7 @@
       >
     <UserControl.Resources>
         <conv:BoolToVisibilityConverter x:Key="VisibilityConv"/>
+        <conv:OriginalProjectnameConverter x:Key="projectNameConv"/>
         <DataTemplate x:Key="ProjectTemplate">
             <DockPanel VerticalAlignment="Center"
                         >
@@ -22,7 +23,7 @@
                        VerticalAlignment="Center"
                       Visibility="{Binding IsSelectedProject,
                     Converter={StaticResource VisibilityConv}}"/>
-                <TextBlock Text="{Binding Path=OriginalProjectName}"
+                <TextBlock Text="{Binding Converter={ StaticResource projectNameConv}}"
                            FontWeight="SemiBold"
                            VerticalAlignment="Center"
                            FontSize="15" />
@@ -247,7 +248,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateIndependentProject
                 </DataGrid.Resources>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" IsReadOnly="True"
-                                    Binding="{Binding OriginalProjectName}">
+                                    Binding="{Binding Converter={ StaticResource  projectNameConv}}">
                         
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Work Area" IsReadOnly="True"

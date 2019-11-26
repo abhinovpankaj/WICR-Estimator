@@ -66,8 +66,18 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("TOTAL DRAIN MINUS BOTTOM TD 1000(IN LIEU OF ROCK & PIPE)", "LINEAR FEET");
             materialNames.Add("Vulkem Tremproof 250 GC L 30 MILS", "5 GAL PAIL");
             materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS", "5 GAL PAIL");
+
+            //additional
+            materialNames.Add("Vulkem Tremproof 250 GC L 30 MILS(Additional)", "5 GAL PAIL");
+            materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS(Additional)", "5 GAL PAIL");
+
             materialNames.Add("Vulkem Tremproof 201 L 30 MILS", "5 GAL PAIL");
             materialNames.Add("Vulkem Tremproof 201 R 30 MILS", "5 GAL PAIL");
+
+            //additional
+            materialNames.Add("Vulkem Tremproof 201 L 30 MILS(Additional)", "5 GAL PAIL");
+            materialNames.Add("Vulkem Tremproof 201 R 30 MILS(Additional)", "5 GAL PAIL");
+
             materialNames.Add("Plywood 3/4 & blocking (# of 4x8 sheets)", "4x8 sheets");
             materialNames.Add("Stucco Material Remove and replace (LF)", "LF");
             materialNames.Add("PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL WITH SAND BROADCAST", "LF");
@@ -136,10 +146,11 @@ namespace WICR_Estimator.ViewModels
                 case "TOTAL DRAIN MINUS BOTTOM TD 1000(IN LIEU OF ROCK & PIPE)":
                     return "BID THIS INSTEAD OF ROCK & PIPE";
                 case "Vulkem Tremproof 250 GC L 30 MILS":
-                    
+                case "Vulkem Tremproof 250 GC L 30 MILS(Additional)":
                 case "Vulkem Tremproof 201 L 30 MILS":
-                    
+                case "Vulkem Tremproof 201 L 30 MILS(Additional)":
                 case "Vulkem Tremproof 201 R 30 MILS":
+                case "Vulkem Tremproof 201 R 30 MILS(Additional)":
                     return "TROWEL OR SQUEEGE  30 MIL COAT";
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
                     return "PREMOVE AND REPLACE DRYROT";
@@ -195,9 +206,10 @@ namespace WICR_Estimator.ViewModels
                     SystemMaterials[i].SpecialMaterialPricing = sp;
                     if (iscbEnabled)
                     {
-                        if (SystemMaterials[i].Name == "Vulkem Tremproof 201 L 30 MILS" || SystemMaterials[i].Name == "Vulkem Tremproof 201 R 30 MILS"
-                            || SystemMaterials[i].Name == "Vulkem Tremproof 250 GC L 30 MILS" 
-                            || SystemMaterials[i].Name == "Vulkem Tremproof 250 GC R 30 MILS")
+                        if (SystemMaterials[i].Name == "Vulkem Tremproof 201 L 30 MILS" || SystemMaterials[i].Name== "Vulkem Tremproof 201 L 30 MILS(Additional)"
+                            || SystemMaterials[i].Name == "Vulkem Tremproof 201 R 30 MILS" ||SystemMaterials[i].Name== "Vulkem Tremproof 201 R 30 MILS(Additional)"
+                            || SystemMaterials[i].Name == "Vulkem Tremproof 250 GC L 30 MILS" ||SystemMaterials[i].Name== "Vulkem Tremproof 250 GC L 30 MILS(Additional)"
+                            || SystemMaterials[i].Name == "Vulkem Tremproof 250 GC R 30 MILS" || SystemMaterials[i].Name == "Vulkem Tremproof 250 GC R 30 MILS(Additional)")
                         {
                             SystemMaterials[i].IsMaterialChecked = iscbChecked;
                         }
@@ -296,7 +308,9 @@ namespace WICR_Estimator.ViewModels
                 case "TREMCO DYMONIC 100 OR VULKEM 116 (PLYWOOD JOINTS)":
                     return hasNewPlywood;
                 case "Vulkem Tremproof 250 GC L 30 MILS":
+                case "Vulkem Tremproof 250 GC L 30 MILS(Additional)":
                 case "Vulkem Tremproof 201 L 30 MILS":
+                case "Vulkem Tremproof 201 L 30 MILS(Additional)":
                     return totalSqft + totalPlywoodSqft > 0 ? true : false;
                 case "Vulkem Tremproof 250 GC R 30 MILS":
                 //case "Vulkem Tremproof 201 R 30 MILS":
@@ -323,7 +337,9 @@ namespace WICR_Estimator.ViewModels
                 case "TREMDRAIN 1000 (VERTICAL ONLY)":
                 case "TREMDRAIN 1000 (HORIZONTAL ONLY)":
                 case "Vulkem Tremproof 201 L 30 MILS":
+                case "Vulkem Tremproof 201 L 30 MILS(Additional)":
                 case "Vulkem Tremproof 201 R 30 MILS":
+                case "Vulkem Tremproof 201 R 30 MILS(Additional)":
                     return true;
                 
                 default:
@@ -351,13 +367,17 @@ namespace WICR_Estimator.ViewModels
                 case "Vulkem Tremproof 201 L":
                 case "GLASSMAT #II (FROM MERKOTE / LOWRYS) FLOORS YES/NO":
                 case "Vulkem Tremproof 250 GC L 30 MILS":
+                case "Vulkem Tremproof 250 GC L 30 MILS(Additional)":
                 case "Vulkem Tremproof 201 L 30 MILS":
+                case "Vulkem Tremproof 201 L 30 MILS(Additional)":
                     return totalPlywoodSqft + totalSqft;
 
                 case "Vulkem Tremproof 250 GC R":
                 case "Vulkem Tremproof 201 R":
                 case "Vulkem Tremproof 201 R 30 MILS":
+                case "Vulkem Tremproof 201 R 30 MILS(Additional)":
                 case "Vulkem Tremproof 250 GC R 30 MILS":
+                case "Vulkem Tremproof 250 GC R 30 MILS(Additional)":
                     return totalSqftVertical + riserCount * stairWidth * 2;
 
                 case "Tremco Dymonic 100 (Cant at footing and prep rebar)":
@@ -435,7 +455,9 @@ namespace WICR_Estimator.ViewModels
                 case "PROTECTION MAT (HORIZONTAL ONLY)":
                 case "TREMDRAIN 1000 (HORIZONTAL ONLY)":
                 case "Vulkem Tremproof 201 L 30 MILS":
+                case "Vulkem Tremproof 201 L 30 MILS(Additional)":
                 case "Vulkem Tremproof 250 GC L 30 MILS":
+                case "Vulkem Tremproof 250 GC L 30 MILS(Additional)":
                     return totalPlywoodSqft+totalSqft;
                 case "PW POLYESTER FABRIC FROM UPI 4\"(PERIMETER)":
                     return deckPerimeter;
@@ -466,7 +488,9 @@ namespace WICR_Estimator.ViewModels
                 case "TREMDRAIN 1000 (VERTICAL ONLY)":
                 case "CALIFORNIA SEALER FROM LOWRYS (GLUING DRAIN MAT)":
                 case "Vulkem Tremproof 201 R 30 MILS":
+                case "Vulkem Tremproof 201 R 30 MILS(Additional)":
                 case "Vulkem Tremproof 250 GC R 30 MILS":
+                case "Vulkem Tremproof 250 GC R 30 MILS(Additional)":
                     return totalSqftVertical;
                 case "Vulkem Tremproof 250 GC L":
                 case "Tremco Dymonic 100 (Cant at footing and prep rebar)":
@@ -502,7 +526,9 @@ namespace WICR_Estimator.ViewModels
                 case "PW POLYESTER FABRIC FROM UPI 4\"(PLYWOOD SEAMS)":
                 case "TREMDRAIN 1000 (HORIZONTAL ONLY)":
                 case "Vulkem Tremproof 201 R 30 MILS":
+                case "Vulkem Tremproof 201 R 30 MILS(Additional)":
                 case "Vulkem Tremproof 250 GC R 30 MILS":
+                case "Vulkem Tremproof 250 GC R 30 MILS(Additional)":
                 case "Vulkem Tremproof 201 L":
                 case "Vulkem Tremproof 201 R":
                     return riserCount*stairWidth*2;
@@ -638,6 +664,12 @@ namespace WICR_Estimator.ViewModels
                 sysmat = SystemMaterials.Where(x => x.Name == "Vulkem Tremproof 201 L 30 MILS").FirstOrDefault();
                 ischecked = sysmat.IsMaterialChecked;
                 SystemMaterials.Where(x => x.Name == "Vulkem Tremproof 201 R 30 MILS").FirstOrDefault().IsMaterialChecked = ischecked;
+            }
+            if (obj.ToString() == "Vulkem Tremproof 201 L 30 MILS(Additional)")
+            {
+                sysmat = SystemMaterials.Where(x => x.Name == "Vulkem Tremproof 201 L 30 MILS(Additional)").FirstOrDefault();
+                ischecked = sysmat.IsMaterialChecked;
+                SystemMaterials.Where(x => x.Name == "Vulkem Tremproof 201 R 30 MILS(Additional)").FirstOrDefault().IsMaterialChecked = ischecked;
             }
             calculateRLqty();
             //CalculateLaborMinCharge(false);

@@ -56,7 +56,10 @@
         </Style>
     </UserControl.Resources>
     <Grid Background="LightBlue">
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
@@ -501,5 +504,30 @@
                 </StackPanel>
             </StackPanel>   
         </Border>
+        <!--<Border BorderThickness="0" BorderBrush="Black"
+                Background="AliceBlue"
+                Grid.ColumnSpan="2"
+                Grid.Row="1"
+                Margin="10"
+                >
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" Color="#82000000" />
+            </Border.Effect>-->
+            <Grid Grid.ColumnSpan="2" Grid.Row="1"
+                        Margin="10,0,10,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="NOTES TO BILL:" FontSize="14"/>
+                <TextBox Height="70" TextWrapping="Wrap" FontSize="13"
+                         Grid.Row="1"
+                         Text="{Binding NotesToBill,UpdateSourceTrigger=PropertyChanged}"
+                         Width="450" HorizontalAlignment="Left">
+                    
+                </TextBox>
+            </Grid>
+            
+        <!--</Border>-->
     </Grid>
 </UserControl>

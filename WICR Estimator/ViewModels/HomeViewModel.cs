@@ -380,6 +380,7 @@ namespace WICR_Estimator.ViewModels
             }
             return isEnabled;
         }
+
         private void Replicate(object obj)
         {
             Project prj = obj as Project;
@@ -390,7 +391,8 @@ namespace WICR_Estimator.ViewModels
                     Project replicatedProject = new Project();
                     
                     prj.CopyCount++;
-                    replicatedProject.Name = prj.Name + "." + prj.CopyCount;
+                    string prjName = prj.WorkArea == null ? prj.Name + "." + prj.CopyCount : prj.WorkArea;
+                    replicatedProject.Name = prjName; 
                     replicatedProject.OriginalProjectName = prj.OriginalProjectName;
                     replicatedProject.GrpName = "Copied";
                     replicatedProject.MainGroup = "Replicated Projects";
@@ -402,6 +404,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+
         public void OpenEstimateFile(string filePath)
         {
             Project savedProject = null;
@@ -1241,6 +1244,8 @@ namespace WICR_Estimator.ViewModels
             else
                 exlWs.Range[jobSetupRange].Offset[1, 0].Value = Js.SpecialProductName + "(" + Js.WorkArea + ")";
 
+            exlWs.Range["G99"].Value = Js.NotesToBill;
+
             Excel.Range dataRange = exlWs.Range[jobSetupRange].Offset[k, 0];
             k = 0;
             dataRange.Offset[k, 0].Value = "JOB NAME";
@@ -1855,6 +1860,7 @@ namespace WICR_Estimator.ViewModels
                     else
                         exlWs.Name = item.Name + " Summary";
                     
+
                     item.lastUsedRows.Add("JobSetup",  WriteJobSetup(item.ProjectJobSetUp));
 
                     if (item.MetalViewModel != null)

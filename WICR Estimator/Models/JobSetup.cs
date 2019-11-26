@@ -36,6 +36,21 @@ namespace WICR_Estimator.Models
         private string projectname;
 
         public string FirstCheckBoxLabel { get; set; }
+
+        private string notesToBill;
+
+        public string NotesToBill
+        {
+            get { return notesToBill; }
+            set
+            {
+                if (value != notesToBill)
+                {
+                    notesToBill = value;
+                    OnPropertyChanged("NotesToBill");                  
+                }
+            }
+        }
         public string ProjectName
         {
             get { return projectname; }

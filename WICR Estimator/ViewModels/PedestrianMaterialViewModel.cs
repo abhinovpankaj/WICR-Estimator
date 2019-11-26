@@ -167,7 +167,12 @@ namespace WICR_Estimator.ViewModels
                 SystemMaterials = sysMat;
                 
             }
-            setCheckBoxes();
+
+            if (hasSetupChanged)
+            {
+                setCheckBoxes();
+            }
+            
             setExceptionValues(null);
             
             if (OtherMaterials.Count == 0)
@@ -297,17 +302,23 @@ namespace WICR_Estimator.ViewModels
                     || item.Name == "1/20 SAND/ #100 LB"
                     ||item.Name== "INTERLAMINATE PRIMER (XYLENE) FROM LOWRYS"
                     || item.Name== "7016 - AR - INTERMEDIATE COAT / 5 GAL PAILS 20 MILS"
-                    || item.Name == "Stucco Material Remove and replace (LF)")
+                    || item.Name == "Stucco Material Remove and replace (LF)"
+                    )
                 {
 
                 }
                 else
                 {
-                    //if (!item.IsMaterialEnabled)
+                    //if (item.Name== "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL")
                     //{
-                        item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
+                    //    bool ischecked = item.IsMaterialChecked;
+                    //    if (IsReseal)
+                    //    {
+                    //        item.IsMaterialChecked = IsReseal;
+                    //    }
                     //}
-                    
+                    //else
+                        item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);        
                 }
 
             }
