@@ -283,15 +283,15 @@ namespace WICR_Estimator.ViewModels
         }
         public override void setExceptionValues(object s)
         {
-            if (s==null)
-            {
-                return;
-            }
-            if (s.ToString()== "Slurry Coat for repairs" || s.ToString()== "Slurry coat over texture (Krete Kote 120 sq ft per mix)"
-                ||s.ToString()== "Texture for repairs" || s.ToString()== "Krete Kote or Top Cote texture")
-            {
-                return;
-            }
+            //if (s==null)
+            //{
+            //    return;
+            //}
+            //if (s.ToString()== "Slurry Coat for repairs" || s.ToString()== "Slurry coat over texture (Krete Kote 120 sq ft per mix)"
+            //    ||s.ToString()== "Texture for repairs" || s.ToString()== "Krete Kote or Top Cote texture")
+            //{
+            //    return;
+            //}
             double val1 = 0, val2 = 0;
             if (SystemMaterials.Count > 0)
             {
