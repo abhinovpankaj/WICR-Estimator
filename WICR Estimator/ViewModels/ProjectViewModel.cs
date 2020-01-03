@@ -130,6 +130,7 @@ namespace WICR_Estimator.ViewModels
                  
                 foreach (Project prj in EnabledProjects)
                 {
+                    
                     prj.ActiveTabIndex = 0;
                     if (prj.ProjectJobSetUp == null)
                     {

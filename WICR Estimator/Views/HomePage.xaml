@@ -314,9 +314,21 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateIndependentProject
                         TargetNullValue={x:Static System:DateTime.Now}}"
                         VerticalContentAlignment="Center"
                         HorizontalContentAlignment="Left"/>
-            <Button Content="Load Estimate" Margin="5" 
+            <Button  Margin="5" 
                     Command="{Binding LoadEstimate}"
-                    Style="{StaticResource ButtonTemplate}"/>
+                    Style="{StaticResource ButtonTemplate}">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Load Estimate"/>
+                        <Label Content="{Binding SelectedProjects[0].ProductVersion}"
+                               HorizontalAlignment="Right"
+                               FontSize="8"
+                               Foreground="Blue"                              
+                               Margin="20,0,0,0"
+                               VerticalAlignment="Bottom"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
             <Button Content="Save As Estimate" 
                     Command="{Binding SaveEstimate}"
                     Style="{StaticResource ButtonTemplate}"/>

@@ -309,7 +309,7 @@ namespace WICR_Estimator.ViewModels
                 }
                 else
                 {
-                    //if (item.Name== "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL")
+                    //if (item.Name == "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL")
                     //{
                     //    bool ischecked = item.IsMaterialChecked;
                     //    if (IsReseal)

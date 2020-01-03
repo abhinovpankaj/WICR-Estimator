@@ -147,13 +147,20 @@ namespace WICR_Estimator.Models
     
     public class Project: BaseViewModel
     {
-        
+        private string productVersion;
         public string ProductVersion
         {
-            set { value = "1.1"; }
+            set
+            {
+                if (value!=productVersion)
+                {
+                    productVersion = value;
+                    OnPropertyChanged("ProductVersion");
+                }
+            }
             get
             {
-                return "1.1";
+                return productVersion;//"2.0";
             }
         }
         public string CreationDetails { get; set; }

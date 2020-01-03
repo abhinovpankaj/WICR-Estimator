@@ -481,14 +481,14 @@ namespace WICR_Estimator.ViewModels
                 }
 
             }
-            #endregion
+            
 
             else
             {
                 SystemMaterials = sysMat;
                 setCheckBoxes();
             }
-                
+            #endregion
 
             setExceptionValues(null);
             if (OtherMaterials.Count == 0)
@@ -593,8 +593,8 @@ namespace WICR_Estimator.ViewModels
             {
                 case "SLURRY COAT (RESISTITE) OVER TEXTURE":
                     return totalSqft + riserCount * 4 * 2;
-                case "LIGHT CRACK REPAIR":
-                    return totalSqft;
+                //case "LIGHT CRACK REPAIR":
+                    //return totalSqft;
                 case "LARGE CRACK REPAIR":
                 case "BUBBLE REPAIR (MEASURE SQ FT)":
                 case "RESISTITE LIQUID":

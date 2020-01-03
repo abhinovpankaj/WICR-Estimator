@@ -519,7 +519,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <TextBlock Text="NOTES TO BILL:" FontSize="14"/>
+            <TextBlock Text="NOTES TO FIELD:" FontSize="14"/>
                 <TextBox Height="70" TextWrapping="Wrap" FontSize="13"
                          Grid.Row="1"
                          Text="{Binding NotesToBill,UpdateSourceTrigger=PropertyChanged}"
