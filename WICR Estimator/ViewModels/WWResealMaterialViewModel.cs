@@ -662,7 +662,6 @@ namespace WICR_Estimator.ViewModels
             switch (materialName)
             {
                 case "VISTA PAINT ACRAPOXY SEALER":
-                
                 case "DEXOTEX AJ-44":
                 case "WESTCOAT SC-10":
                 case "UPI PERMASHIELD":

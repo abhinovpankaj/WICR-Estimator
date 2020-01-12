@@ -438,6 +438,8 @@ namespace WICR_Estimator.ViewModels
                 if (val2 > 0 || val1 > 0)
                 {
                     sysMat2.Name = "Texture for repairs";
+                    sysMat1.Hours = 0;
+                    sysMat2.Hours = 0;
                     sysMat1.Name = "Slurry Coat for repairs";
                     
                 }
