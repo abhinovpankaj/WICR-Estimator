@@ -404,7 +404,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
-
+        //Double click open Estimate
         public void OpenEstimateFile(string filePath)
         {
             Project savedProject = null;
@@ -543,6 +543,7 @@ namespace WICR_Estimator.ViewModels
                 MessageBox.Show("Your estimate seems to be created in Older version of WICR Estimator. \n\nPlease re-create the estimates, Or Contact the manufacturer.");
             }
         }
+        //Browse Open Estimate.
         private void LoadProjectEstimate(object obj)
         {
             Project savedProject = null;
@@ -608,13 +609,19 @@ namespace WICR_Estimator.ViewModels
                     }
                     //code for UPI Pedestrian 
                     
-                    bool ischecked=false;
+                    bool ischecked=false,ischecked2=false;
                     if (item.OriginalProjectName == "Pedestrian System")
                     {
                         SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL");
                         if (sm != null)
                         {
                             ischecked = sm.IsMaterialChecked;
+                        }
+                        //7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL
+                        sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "UI 7118 CONCRETE PRIMER 1-1/2 GAL KIT");
+                        if (sm != null)
+                        {
+                            ischecked2 = sm.IsMaterialChecked;
                         }
                     }
 
@@ -675,7 +682,7 @@ namespace WICR_Estimator.ViewModels
                     //item.MaterialViewModel.CalculateCost(null);
                     item.MaterialViewModel.ZAddLaborMinCharge = adminLabor;
                     item.ProductVersion = ver;
-                    if (item.OriginalProjectName == "Reseal all systems")
+                    if (item.OriginalProjectName == "Reseal all systems" || item.OriginalProjectName=="Weather Wear"||item.OriginalProjectName=="Weather Wear Rehab")
                     {
                         item.MaterialViewModel.CalculateCost(null);
                         //item.MaterialViewModel.CalculateLaborMinCharge(false);
@@ -689,6 +696,11 @@ namespace WICR_Estimator.ViewModels
                         if (sm != null)
                         {
                             sm.IsMaterialChecked = ischecked;
+                        }
+                        sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "UI 7118 CONCRETE PRIMER 1-1/2 GAL KIT");
+                        if (sm != null)
+                        {
+                             sm.IsMaterialChecked= ischecked2 ;
                         }
                     }
                 }

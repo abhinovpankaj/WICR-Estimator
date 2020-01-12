@@ -592,7 +592,7 @@ namespace WICR_Estimator.ViewModels
             switch (materialName)
             {
                 case "SLURRY COAT (RESISTITE) OVER TEXTURE":
-                    return totalSqft + riserCount * 4 * 2;
+                    return totalSqft + riserCount * stairWidth * 2; //changed again : Small issue with Reseal sheet
                 //case "LIGHT CRACK REPAIR":
                     //return totalSqft;
                 case "LARGE CRACK REPAIR":
@@ -668,7 +668,7 @@ namespace WICR_Estimator.ViewModels
                 case "UPI PERMASHIELD":
                 case "PLI DEK GS88 WITH COLOR JAR 1 PER PAIL":
                 case "OPTIONAL FOR WEATHER SEAL XL":
-                    return lfArea / coverage < 1 ? minVal : lfArea / coverage;
+                    return lfArea / coverage < 0.4 ? minVal : lfArea / coverage;//changed from 1 to 0.4
                 default:
                     return lfArea/coverage;
             }

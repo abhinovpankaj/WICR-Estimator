@@ -135,11 +135,11 @@ namespace WICR_Estimator.ViewModels
                     SystemMaterials[i] = sysMat[i];
 
                     SystemMaterials[i].SpecialMaterialPricing = sp;
-                    if(iscbEnabled)
-                    {
+                    //if(iscbEnabled)
+                    //{
                         SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
                         SystemMaterials[i].IsMaterialChecked = iscbChecked;
-                    }
+                    //}
                     
                     if (SystemMaterials[i].Name == "EXTRA STAIR NOSING" || SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
                         SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)")
@@ -167,13 +167,12 @@ namespace WICR_Estimator.ViewModels
                 SystemMaterials = sysMat;
                 
             }
-
+            setExceptionValues(null);
             if (hasSetupChanged)
             {
                 setCheckBoxes();
-            }
+            }          
             
-            setExceptionValues(null);
             
             if (OtherMaterials.Count == 0)
             {
@@ -302,7 +301,7 @@ namespace WICR_Estimator.ViewModels
                     || item.Name == "1/20 SAND/ #100 LB"
                     ||item.Name== "INTERLAMINATE PRIMER (XYLENE) FROM LOWRYS"
                     || item.Name== "7016 - AR - INTERMEDIATE COAT / 5 GAL PAILS 20 MILS"
-                    || item.Name == "Stucco Material Remove and replace (LF)"
+                    || item.Name == "Stucco Material Remove and replace (LF)"                   
                     )
                 {
 
@@ -435,7 +434,7 @@ namespace WICR_Estimator.ViewModels
                 item.LaborUnitPrice = (TotalSqftPlywood + totalSqft + riserCount)==0?0:item.LaborExtension / (TotalSqftPlywood+totalSqft+riserCount);
 
             }
-            
+            calculateRLqty();
 
         }
         public override double getSqFtAreaH(string materialName)
