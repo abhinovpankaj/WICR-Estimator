@@ -1584,12 +1584,14 @@ namespace WICR_Estimator.ViewModels
                 case "NEOTEX STANDARD POWDER(BODY COAT) 1":
                 case "RESISTITE LIQUID":
                 case "LIP COLOR":
-                
+                case "RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)":
                 case "RESISTITE UNIVERSAL PRIMER(ADD 50% WATER)":
                 case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
                 case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
                 case "WEATHER SEAL XL TWO COATS":
                 case "STAIR NOSING FROM DEXOTEX":
+                case "RESISTITE REGULAR GRAY":
+                case "RESISTITE REGULAR WHITE":
                     return true;
                 default:
                     return false;

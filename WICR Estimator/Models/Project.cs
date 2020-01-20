@@ -160,7 +160,7 @@ namespace WICR_Estimator.Models
             }
             get
             {
-                return productVersion;//"2.0";
+                return productVersion;//"2.1";
             }
         }
         public string CreationDetails { get; set; }

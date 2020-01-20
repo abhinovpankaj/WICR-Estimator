@@ -437,17 +437,31 @@ namespace WICR_Estimator.ViewModels
 
                 if (val2 > 0 || val1 > 0)
                 {
-                    sysMat2.Name = "Texture for repairs";
-                    sysMat1.Hours = 0;
-                    sysMat2.Hours = 0;
                     sysMat1.Name = "Slurry Coat for repairs";
+                    
+                    sysMat1.Hours = 0;
+                    sysMat1.LaborExtension = 0;
+                    sysMat1.LaborUnitPrice = 0;
+                    sysMat2.Name = "Texture for repairs";
+                    sysMat2.Hours = 0;
+                    sysMat2.LaborExtension = 0;
+                    sysMat2.LaborUnitPrice = 0;
+                    
                     
                 }
                 else
                 {
                     sysMat2.Name = "Krete Kote or Top Cote texture";
+                    sysMat2.Hours = CalculateHrs(sysMat2.SMSqftH, sysMat2.HorizontalProductionRate, sysMat2.StairSqft, sysMat2.StairsProductionRate);
+
+                    sysMat2.LaborExtension = (sysMat2.Hours != 0) ? (sysMat2.SetupMinCharge + sysMat2.Hours) * laborRate : 0;
+                    sysMat2.LaborUnitPrice = sysMat2.LaborExtension / (riserCount + totalSqft);
                     sysMat1.Name = "Slurry coat over texture (Krete Kote 120 sq ft per mix)";
-                    
+                    sysMat1.Hours = CalculateHrs(sysMat1.SMSqftH, sysMat1.HorizontalProductionRate, sysMat1.StairSqft, sysMat1.StairsProductionRate);
+
+                    sysMat1.LaborExtension = (sysMat1.Hours != 0) ? (sysMat1.SetupMinCharge + sysMat1.Hours) * laborRate : 0;
+                    sysMat1.LaborUnitPrice = sysMat1.LaborExtension / (riserCount + totalSqft);
+
                 }
                 //new updates formula
                 item = SystemMaterials.Where(x => x.Name == "Caulk 1/2 to 3/4 inch control joints (SIKA 2C)").FirstOrDefault();

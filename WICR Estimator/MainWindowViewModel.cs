@@ -182,7 +182,7 @@ namespace WICR_Estimator
                         foreach (Project item in SelectedProjects)
                         {
                             item.CreationDetails = JobName + ":;" + PreparedBy + ":;" + JobCreationDate.ToString();
-                            item.ProductVersion = "2.0";
+                            item.ProductVersion = "2.1";
                         }
                         serializer.WriteObject(writer, SelectedProjects);
 
