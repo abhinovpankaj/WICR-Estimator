@@ -368,7 +368,11 @@ namespace WICR_Estimator.ViewModels
         }
         //calculateQTY for 9801 ACCELERATOR
         public override void calculateRLqty()
-        {            
+        {
+            if (SystemMaterials.Count==0)
+            {
+                return;
+            }
             double qty = 0;
             foreach (var item in SystemMaterials)
             {

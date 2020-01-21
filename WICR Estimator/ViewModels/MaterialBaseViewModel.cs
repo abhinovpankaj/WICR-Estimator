@@ -247,7 +247,7 @@ namespace WICR_Estimator.ViewModels
                     AllEditable = getEditable()
                 });
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return null;
                 
