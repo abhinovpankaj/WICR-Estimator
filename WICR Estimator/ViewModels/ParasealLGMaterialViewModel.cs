@@ -149,6 +149,7 @@ namespace WICR_Estimator.ViewModels
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
                             SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            SystemMaterials[i].IsMaterialChecked = SystemMaterials[i].Qty > 0 ? true : false;
 
                         }
                     }
@@ -229,6 +230,10 @@ namespace WICR_Estimator.ViewModels
                 case "PARAGRANULAR (FOR CANT AT FOOTING)":
                 case "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER":
                     return false;
+                //case "VISQUINE PROTECTION FOR INCLEMENT WEATHER":
+                //case "UNIVERSAL OUTLETS":
+                //case "TOTAL DRAIN 2' x 50' ( In lieu of rock & pipe) \"LINEAR FEET\"":
+                //    return getQuantity()
                 case "PARATERM BAR LF":
                     return deckPerimeter>0? true:false;
                 case "NON-POUROUS PRIMER":

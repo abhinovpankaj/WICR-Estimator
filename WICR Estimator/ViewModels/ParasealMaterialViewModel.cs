@@ -97,6 +97,10 @@ namespace WICR_Estimator.ViewModels
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
                             SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            if (SystemMaterials[i].Name == "UNIVERSAL OUTLET")
+                            {
+                                SystemMaterials[i].IsMaterialChecked = SystemMaterials[i].Qty > 0 ? true:false;
+                            }
 
                         }
                     }                  
@@ -162,7 +166,7 @@ namespace WICR_Estimator.ViewModels
                 case "TREMDRAIN 1000 (VERTICAL ONLY)":
                 case "TREMDRAIN 1000 (HORIZONTAL ONLY)":
                 case "TOTAL DRAIN 2' x 50' ( In lieu of rock & pipe) \"LINEAR FEET\"":
-                
+                //case "UNIVERSAL OUTLET":
                     return false;
                 case "EXTRA PARATERM BAR LF (BOTTOM OR SIDES)":
                     return additionalTermBarLF>0 ? true : false;

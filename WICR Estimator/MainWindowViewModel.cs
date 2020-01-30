@@ -181,6 +181,7 @@ namespace WICR_Estimator
                         writer.Formatting = Formatting.Indented; // indent the Xml so it's human readable
                         foreach (Project item in SelectedProjects)
                         {
+                            item.MaterialViewModel.CalculateCost(null);
                             item.CreationDetails = JobName + ":;" + PreparedBy + ":;" + JobCreationDate.ToString();
                             item.ProductVersion = "2.1";
                         }
