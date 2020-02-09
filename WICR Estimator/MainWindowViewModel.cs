@@ -162,9 +162,10 @@ namespace WICR_Estimator
             try
             {
                 MainWindowViewModel vm = this;
+                HomeViewModel hm=null;
                 if (vm != null)
                 {
-                    HomeViewModel hm = vm.PageViewModels.FirstOrDefault(x => x.Name == "Home") as HomeViewModel;
+                    hm = vm.PageViewModels.FirstOrDefault(x => x.Name == "Home") as HomeViewModel;
                     if (hm != null)
                     {
                         JobName = hm.JobName;
@@ -182,8 +183,12 @@ namespace WICR_Estimator
                         foreach (Project item in SelectedProjects)
                         {
                             item.MaterialViewModel.CalculateCost(null);
+                            item.UpdateMainTable();
+                            if(hm!=null)
+                                hm.UpdateProjectTotals();
+
                             item.CreationDetails = JobName + ":;" + PreparedBy + ":;" + JobCreationDate.ToString();
-                            item.ProductVersion = "2.1";
+                            item.ProductVersion = "2.2";
                         }
                         serializer.WriteObject(writer, SelectedProjects);
 

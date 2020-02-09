@@ -24,10 +24,6 @@ namespace WICR_Estimator.Models
         private double totalCost;
         private string laborPerc;
 
-
-
-        
-
         public string Name
         {
             get { return name; }
@@ -229,8 +225,22 @@ namespace WICR_Estimator.Models
             OnPropertyChanged("MaterialCost");
             OnPropertyChanged("LaborPercentage");
         }
+        //private double metalCost;
         public double MetalCost
         {
+            //set
+            //{
+            //    if (value!=metalCost)
+            //    {
+            //        if (MaterialViewModel != null)
+            //        {
+            //            metalCost= MaterialViewModel.TotalMetalPrice;
+            //        }
+            //        else
+            //            metalCost= 0;
+            //    }
+            //    OnPropertyChanged("MetalCost");
+            //}
             get
             {
                 if (MaterialViewModel != null)
@@ -241,8 +251,21 @@ namespace WICR_Estimator.Models
                     return 0;
             }
         }
+        //private double slopeCost;
         public double SlopeCost
         {
+            //set
+            //{
+            //    if (value!=slopeCost)
+            //    {
+            //        if (MaterialViewModel != null)
+            //        {
+            //            slopeCost= MaterialViewModel.TotalSlopingPrice;
+            //        }
+            //        else
+            //            slopeCost= 0;
+            //    }
+            //}
             get
             {
                 if (MaterialViewModel != null)
@@ -253,8 +276,21 @@ namespace WICR_Estimator.Models
                     return 0;
             }
         }
+        //private double systemNOther;
         public double  SystemNOther
         {
+            //set
+            //{
+            //    if (value!=systemNOther)
+            //    {
+            //        if (MaterialViewModel != null)
+            //        {
+            //            systemNOther= MaterialViewModel.TotalSystemPrice;
+            //        }
+            //        else
+            //            systemNOther= 0;
+            //    }
+            //}
             get
             {
                 if (MaterialViewModel != null)
@@ -265,8 +301,21 @@ namespace WICR_Estimator.Models
                     return 0;
             }
         }
+        //private string workArea;
         public string WorkArea
         {
+            //set
+            //{
+            //    if (value!=workArea)
+            //    {
+            //        if (ProjectJobSetUp != null)
+            //        {
+            //            workArea= ProjectJobSetUp.WorkArea;
+            //        }
+            //        else
+            //            workArea= "";
+            //    }
+            //}
             get
             {
                 if (ProjectJobSetUp != null)
@@ -277,23 +326,49 @@ namespace WICR_Estimator.Models
                     return "";
             }
         }
-
+        private double costPerSqft;
         public double CostPerSqFoot
         {
+            //set
+            //{
+            //    if (value!=costPerSqft)
+            //    {
+            //        if (MaterialViewModel != null)
+            //        {
+            //            costPerSqft= Math.Round(MaterialViewModel.TotalCostperSqft, 2);
+            //        }
+            //        else
+            //            costPerSqft= 0;
+            //    }
+            //}
             get
             {
+
                 if (MaterialViewModel != null)
                 {
-                    return Math.Round(MaterialViewModel.TotalCostperSqft,2);
+                    return Math.Round(MaterialViewModel.TotalCostperSqft, 2);
                 }
                 else
                     return 0;
-
             }
         }
         public double SubContractCost { get; set; }
+
+        //private double laborCost;
         public double LaborCost
         {
+            //set
+            //{
+            //    if (value!=laborCost)
+            //    {
+            //        if (MaterialViewModel != null)
+            //        {
+            //            laborCost= MaterialViewModel.AllTabsLaborTotal;
+            //        }
+            //        else
+            //            laborCost= 0;
+            //    }
+            //}
             get
             {
                 if (MaterialViewModel != null)
@@ -302,11 +377,23 @@ namespace WICR_Estimator.Models
                 }
                 else
                     return 0;
-                
             }
         }
+        //private double materialCost;
         public double MaterialCost
         {
+            //set
+            //{
+            //    if (value!=materialCost)
+            //    {
+            //        if (MaterialViewModel != null)
+            //        {
+            //            materialCost= MaterialViewModel.AllTabsMaterialTotal;
+            //        }
+            //        else
+            //            materialCost= 0;
+            //    }
+            //}
             get
             {
                 if (MaterialViewModel != null)
@@ -318,31 +405,57 @@ namespace WICR_Estimator.Models
 
             }
         }
-        
 
+        //private string laborPerc;
         public string LaborPercentage
         {
+            //set
+            //{
+            //    if (value!=laborPerc)
+            //    {
+            //        if (MaterialViewModel != null)
+            //        {
+            //            laborPerc= MaterialViewModel.TotalSale == 0 ? "0" : Math.Round(MaterialViewModel.AllTabsLaborTotal / MaterialViewModel.TotalSale * 100, 2).ToString() + "%";
+            //        }
+            //        else
+            //            laborPerc= "";
+            //    }
+            //}
             get
             {
                 if (MaterialViewModel != null)
                 {
-                    return MaterialViewModel.TotalSale==0? "0": Math.Round(MaterialViewModel.AllTabsLaborTotal/ MaterialViewModel.TotalSale *100,2).ToString()+"%";
+                    return MaterialViewModel.TotalSale == 0 ? "0" : Math.Round(MaterialViewModel.AllTabsLaborTotal / MaterialViewModel.TotalSale * 100, 2).ToString() + "%";
                 }
                 else
-                    return "";
+                    return  "";
             }
         }
-        public double TotalCost {
+       // private double totalCost;
+        public double TotalCost
+        {
+        //    set
+        //    {
+        //        if (value!=totalCost)
+        //        {
+        //            if (MaterialViewModel != null)
+        //            {
+        //                totalCost= MaterialViewModel.TotalSale;
+        //            }
+        //            else
+        //                totalCost= 0;
+        //        }
+        //    }
             get
             {
                 if (MaterialViewModel != null)
-                {
-                    return MaterialViewModel.TotalSale;
-                }
-                else
-                    return 0;
+                    {
+                        return MaterialViewModel.TotalSale;
+                    }
+                    else
+                        return 0;
             }
-        }
+}
         private bool isSelectedProject;
         public bool IsSelectedProject
         {
@@ -386,7 +499,6 @@ namespace WICR_Estimator.Models
                 {
                     metalViewModel = value;
                     OnPropertyChanged("MetalViewModel");
-
                 }
             }
         }
