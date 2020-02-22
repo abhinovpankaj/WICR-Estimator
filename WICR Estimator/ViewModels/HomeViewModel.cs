@@ -499,7 +499,7 @@ namespace WICR_Estimator.ViewModels
                     }
                     item.MaterialViewModel.CheckboxCommand = new DelegateCommand(item.MaterialViewModel.ApplyCheckUnchecks, item.MaterialViewModel.canApply);
                     SystemMaterial.OnQTyChanged += (s, e) => { item.MaterialViewModel.setExceptionValues(s); };
-
+                    SystemMaterial.OnUnitChanged += (s, e) => { item.MaterialViewModel.setUnitChangeValues(); };
                     //keep other material and other labor materials in sync
                     var ot = item.MaterialViewModel.OtherLaborMaterials;
                     item.MaterialViewModel.OtherLaborMaterials = item.MaterialViewModel.OtherMaterials;
@@ -677,7 +677,7 @@ namespace WICR_Estimator.ViewModels
                     item.MaterialViewModel.CheckboxCommand = new DelegateCommand(item.MaterialViewModel.ApplyCheckUnchecks, item.MaterialViewModel.canApply);
 
                     SystemMaterial.OnQTyChanged += (s, e) => { item.MaterialViewModel.setExceptionValues(s); };
-                    
+                    SystemMaterial.OnUnitChanged += (s, e) => { item.MaterialViewModel.setUnitChangeValues(); };
                     //keep other material and other labor materials in sync
                     var ot= item.MaterialViewModel.OtherLaborMaterials;
                     item.MaterialViewModel.OtherLaborMaterials= item.MaterialViewModel.OtherMaterials;
@@ -1041,8 +1041,9 @@ namespace WICR_Estimator.ViewModels
             OnPropertyChanged("LoginMessage");
         }
 
-        void FillProjects()
+        async void  FillProjects()
         {
+            
             Projects = new ObservableCollection<Project>();
             //SelectedProjects = new List<Project>();
             Projects.Add(new Project { Name = "Weather Wear", OriginalProjectName= "Weather Wear",GrpName= "Dexotex" ,MainGroup="Deck Coatings",ProductVersion="2.2"});
@@ -1080,10 +1081,36 @@ namespace WICR_Estimator.ViewModels
             ProjectView.GroupDescriptions.Add(new PropertyGroupDescription("GrpName"));
             ProjectView.SortDescriptions.Add(new SortDescription("GrpName", ListSortDirection.Ascending));
             ProjectView.Filter = FilterProject;
+
+            //Check If GoogleSheet has been Updated
+            if ( await IsGoogleSheetUpated())
+            {
+                MessageBox.Show("Material prices and values for materials/metals have been changed,Please relaunch once the Google Refresh is complete");
+                DeleteGoogleData(null);
+            }
         }
 
-        
-       
+        private async Task<bool> IsGoogleSheetUpated()
+        {
+            
+                DataSerializer.DSInstance.googleData = new GSData();
+                //IList<IList<object>> LaborRate=await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Rate);
+                DataSerializer.DSInstance.googleData.LaborRate = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("IsSheetUpdated", DataType.Rate);
+
+                DataSerializer.DSInstance.googleData.MetalData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("IsSheetUpdated", DataType.Metal);
+            if (Properties.Settings.Default.LastUpdated!= DataSerializer.DSInstance.googleData.LaborRate[0][0].ToString())
+            {
+                if (DataSerializer.DSInstance.googleData.MetalData[0][0].ToString()=="Yes")
+                {
+                    Properties.Settings.Default.LastUpdated = DataSerializer.DSInstance.googleData.LaborRate[0][0].ToString();
+                    return true;
+                }
+            }
+           
+
+            //DataSerializer.DSInstance.serializeGoogleData(DataSerializer.DSInstance.googleData, "IsSheetUpdated");
+            return false;
+        }
         private bool FilterProject(object item)
         {
             Project prj = item as Project;
@@ -2099,6 +2126,14 @@ namespace WICR_Estimator.ViewModels
             {
                 return "Version 2.2";
             }
-        }       
+        }
+        
+        public string LastUpdatedOn
+        {
+            get
+            {
+                return Properties.Settings.Default.LastUpdated;
+            }
+        }
     }
 }

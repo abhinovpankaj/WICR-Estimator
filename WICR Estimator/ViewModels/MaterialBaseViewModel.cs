@@ -148,7 +148,10 @@ namespace WICR_Estimator.ViewModels
             //calculateLaborHrs();
         }
 
-        
+        public virtual void setUnitChangeValues()
+        {
+
+        }
         public virtual double CalculateLabrExtn(double calhrs,double setupMin,string matName="")
         {
             return (calhrs != 0) ? (setupMin + calhrs) * laborRate : 0;

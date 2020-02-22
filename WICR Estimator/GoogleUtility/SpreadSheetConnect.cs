@@ -84,6 +84,9 @@ namespace WICR_Estimator.GoogleUtility
             }
             switch (projectName)
             {
+                case "IsSheetUpdated":
+                    prjName = "IsSheetUpdated";
+                    break;
                 case "Weather Wear":
                     prjName = "WeatherWear";
                     break;

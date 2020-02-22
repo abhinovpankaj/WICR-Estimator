@@ -184,7 +184,7 @@ namespace WICR_Estimator.ViewModels
             //CalculateAllMaterial();
 
         }
-        private void setUnitChangeValues()
+        public override void setUnitChangeValues()
         {
             SystemMaterial item = SystemMaterials.Where(x => x.Name == "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH) UPI 7013 SC BASE COAT").FirstOrDefault();
             if (item != null)

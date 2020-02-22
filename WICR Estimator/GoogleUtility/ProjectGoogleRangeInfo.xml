@@ -1,5 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Projects>
+  <IsSheetUpdated>
+    <MetalRange>A2</MetalRange>
+    <RateRange>A3</RateRange>
+  </IsSheetUpdated>
   <Blank>
     <RateRange>E2</RateRange>
     <MetalRange>F3:M43</MetalRange>
