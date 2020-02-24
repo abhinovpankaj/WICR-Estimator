@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using System.Xml;
 using WICR_Estimator.Models;
 using WICR_Estimator.ViewModels;
@@ -38,6 +39,7 @@ namespace WICR_Estimator
             //}
             
             this.DataContext = new MainWindowViewModel();
+
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -119,5 +121,8 @@ namespace WICR_Estimator
                 ViewModels.BaseViewModel.IsDirty = false;
             }
         }
+
+        
+
     }
 }
