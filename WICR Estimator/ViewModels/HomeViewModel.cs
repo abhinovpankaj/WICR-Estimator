@@ -22,6 +22,8 @@ using System.Runtime.Remoting.Contexts;
 using System.Diagnostics;
 using System.Threading;
 using System.Drawing;
+using System.Windows.Interop;
+using System.Runtime.InteropServices;
 
 namespace WICR_Estimator.ViewModels
 {
@@ -57,12 +59,19 @@ namespace WICR_Estimator.ViewModels
         private async void CheckPriceUpdate()
         {
             //Check If GoogleSheet has been Updated
-            if (await IsGoogleSheetUpated())
+            try
             {
-                MessageBox.Show("Material prices and values for materials/metals have been changed,Please relaunch once the Google Refresh is complete");
-                DeleteGoogleData(null);
-                UpdateLastDate(lastUpdate);
+                if (await IsGoogleSheetUpated())
+                {
+                    MessageBox.Show("Material prices and values for materials/metals have been changed,Tool will restart once google data is refreshed.");
+                    DeleteGoogleData(null);
+                }
             }
+            catch (Exception)
+            {
+
+            }
+            
         }
         private void ReplicateIndependent(object obj)
         {
@@ -320,21 +329,27 @@ namespace WICR_Estimator.ViewModels
         
         private void DeleteGoogleData(object obj)
         {
+
             try
             {
                 IsProcessing = true;
+                MainWindowViewModel.WindowStyle = System.Windows.WindowStyle.None;
+                
                 StatusMessage = "Deleting the previous Google data";
 
                 if (System.IO.Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR"))
                 {
                     Directory.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR", true);
+                    Thread.Sleep(2000);
                 }
+
                 DownloadGoogleData();
+                
             }
             catch (Exception ex)
             {
 
-                throw ex;
+                System.Windows.Forms.MessageBox.Show( ex.Message);
             }
             
             
@@ -365,6 +380,13 @@ namespace WICR_Estimator.ViewModels
        
        private void Clear(object obj)
         {
+            if (obj!=null)
+            {
+                Process.Start(Application.ExecutablePath);
+                Thread.Sleep(1000);
+                Environment.Exit(-1);
+            }
+
             string message = "All the Project selection and values will be cleared. \nDo you want to proceed?";
             string caption = "Refresh WICR Tool";
             MessageBoxButtons buttons = MessageBoxButtons.YesNo;
@@ -377,8 +399,6 @@ namespace WICR_Estimator.ViewModels
             {
 
                 Process.Start(Application.ExecutablePath);
-                
-                
                 Thread.Sleep(1000);
                 Environment.Exit(-1);
             }
@@ -479,6 +499,14 @@ namespace WICR_Estimator.ViewModels
                             ischecked2 = sm.IsMaterialChecked;
                         }
                     }
+                    else if (item.OriginalProjectName == "Pli-Dek")
+                    {
+                        SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "2.5 Galvanized Lathe");
+                        if (sm != null)
+                        {
+                            ischecked = sm.IsMaterialChecked;
+                        }
+                    }
 
                     if (item.CreationDetails != null)
                     {
@@ -555,6 +583,25 @@ namespace WICR_Estimator.ViewModels
                         {
                             sm.IsMaterialChecked = ischecked2;
                         }
+                        item.MaterialViewModel.CalculateCost(null);
+                    }
+                    else if (item.OriginalProjectName == "Pli-Dek")
+                    {
+                        SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "2.5 Galvanized Lathe");
+                        if (sm != null)
+                        {
+                            sm.IsMaterialChecked = ischecked;
+                        }
+                        sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "Staples");
+                        if (sm != null)
+                        {
+                            sm.IsMaterialChecked = ischecked;
+                        }
+                        item.MaterialViewModel.CalculateCost(null);
+                    }
+                    else if (item.OriginalProjectName== "Parking Garage")
+                    {
+                        item.MaterialViewModel.setUnitChangeValues();
                         item.MaterialViewModel.CalculateCost(null);
                     }
                 }
@@ -654,6 +701,15 @@ namespace WICR_Estimator.ViewModels
                         {
                             ischecked2 = sm.IsMaterialChecked;
                         }
+                    
+                    }
+                    else if(item.OriginalProjectName == "Pli-Dek")
+                    {
+                        SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "2.5 Galvanized Lathe");
+                        if (sm != null)
+                        {
+                            ischecked = sm.IsMaterialChecked;
+                        }
                     }
 
                     if (item.CreationDetails != null)
@@ -734,6 +790,25 @@ namespace WICR_Estimator.ViewModels
                         {
                              sm.IsMaterialChecked= ischecked2 ;
                         }
+                        item.MaterialViewModel.CalculateCost(null);
+                    }
+                    else if (item.OriginalProjectName == "Pli-Dek")
+                    {
+                        SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "2.5 Galvanized Lathe");
+                        if (sm != null)
+                        {
+                            sm.IsMaterialChecked= ischecked ;
+                        }
+                        sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "Staples");
+                        if (sm != null)
+                        {
+                            sm.IsMaterialChecked = ischecked;
+                        }
+                        item.MaterialViewModel.CalculateCost(null);
+                    }
+                    else if (item.OriginalProjectName == "Parking Garage")
+                    {
+                        item.MaterialViewModel.setUnitChangeValues();
                         item.MaterialViewModel.CalculateCost(null);
                     }
                 }
@@ -911,7 +986,7 @@ namespace WICR_Estimator.ViewModels
                 item.MetalViewModel.metalDetails = DataSerializer.DSInstance.deserializeGoogleData(DataType.Metal, item.OriginalProjectName);
                 item.MetalViewModel.freightDetails =freightData ;
                 item.MetalViewModel.pWage = laborData;
-                item.MetalViewModel.OnJobSetupChange(null);
+                item.MetalViewModel.OnJobSetupChange(item.ProjectJobSetUp);
             }
             if (item.SlopeViewModel != null)
             {
@@ -986,10 +1061,10 @@ namespace WICR_Estimator.ViewModels
             {
                 try
                 {
-                    var values = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, prj.Name);
+                    var values = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, prj.OriginalProjectName);
                     if (values == null)
                     {
-                        StatusMessage = "Please Wait! Refreshing Google Data for " + prj.Name;
+                        StatusMessage = "Please Wait! Refreshing Google Data for " + prj.OriginalProjectName;
 
                         //statusNotifier.BalloonTipText = StatusMessage;
                         //statusNotifier.ShowBalloonTip(2000);
@@ -1002,17 +1077,17 @@ namespace WICR_Estimator.ViewModels
                         DataSerializer.DSInstance.googleData.MetalData = MetalData;
 
                         //Thread.Sleep(1000);
-                        DataSerializer.DSInstance.googleData.SlopeData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Slope);
+                        DataSerializer.DSInstance.googleData.SlopeData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.OriginalProjectName, DataType.Slope);
                         Thread.Sleep(1000);
 
-                        DataSerializer.DSInstance.googleData.MaterialData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Material);
+                        DataSerializer.DSInstance.googleData.MaterialData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.OriginalProjectName, DataType.Material);
 
                         //Thread.Sleep(1000);`
-                        DataSerializer.DSInstance.googleData.LaborData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Labor);
+                        DataSerializer.DSInstance.googleData.LaborData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.OriginalProjectName, DataType.Labor);
                         //Thread.Sleep(1000);
                         DataSerializer.DSInstance.googleData.FreightData = FreightData;
 
-                        DataSerializer.DSInstance.serializeGoogleData(DataSerializer.DSInstance.googleData, prj.Name);
+                        DataSerializer.DSInstance.serializeGoogleData(DataSerializer.DSInstance.googleData, prj.OriginalProjectName);
                         Thread.Sleep(3000);
                     }
                 }
@@ -1023,9 +1098,12 @@ namespace WICR_Estimator.ViewModels
                 }
                 
             }
-            IsProcessing = false;
-            CompletedProjects = 0;
+            UpdateLastDate(lastUpdate);
 
+            IsProcessing = false;
+            //MainWindowViewModel.WindowStyle = System.Windows.WindowStyle.SingleBorderWindow;
+            CompletedProjects = 0;
+            Clear(true);
         }
         private bool canShow(object obj)
         {
@@ -1062,29 +1140,46 @@ namespace WICR_Estimator.ViewModels
         #region GoogleDataUpdateCheck
         private string GetLastUpdateDate()
         {
-            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\"
-                + "LastUpdatedOn.txt";
-            if (!File.Exists(filePath))
+            string txtVal = string.Empty;
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\WICR\\";
+                //+ "LastUpdatedOn.txt";
+            if (!Directory.Exists(filePath))
             {
                 return "01-01-1900";
             }
             else
-                return System.IO.File.ReadAllText(filePath);
+                txtVal= System.IO.File.ReadAllText(Path.Combine(filePath, "LastUpdatedOn.txt"));
+
+            return txtVal;
         }
+        private readonly object fileLock = new object();
         private void UpdateLastDate(string date)
         {
-            string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\";
-            if (System.IO.Directory.Exists(folderPath))
+            if (date=="")
             {
-                System.IO.File.WriteAllText(folderPath + "LastUpdatedOn.txt", date);
+                var lastDate =  GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("IsSheetUpdated", DataType.Rate);
+                date = lastDate[0][0].ToString();
             }
-            else
+            lock (fileLock)
             {
-                System.IO.Directory.CreateDirectory(folderPath);
-                System.IO.File.WriteAllText(folderPath + "LastUpdatedOn.txt", date);
+                try
+                {
+                    string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\WICR\\";
+                    if (!System.IO.Directory.Exists(folderPath))
+                    {
+                        System.IO.Directory.CreateDirectory(folderPath);
+                    }
+                    Thread.Sleep(200);
+                    System.IO.File.WriteAllText(Path.Combine(folderPath, "LastUpdatedOn.txt"), date);
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.Forms.MessageBox.Show(ex.Message);
+                }
             }
         }
         string lastUpdate = string.Empty;
+
         private async Task<bool> IsGoogleSheetUpated()
         {  
             //IList<IList<object>> LaborRate=await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Rate);
@@ -2168,6 +2263,8 @@ namespace WICR_Estimator.ViewModels
                 return "Version 2.3";
             }
         }
-              
+
+       
+
     }
 }

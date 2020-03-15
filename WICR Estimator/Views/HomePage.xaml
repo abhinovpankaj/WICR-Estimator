@@ -212,11 +212,11 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateIndependentProject
             <Popup  HorizontalAlignment="Stretch"
                    IsOpen="{Binding IsProcessing}"
                    Height="100"
-                   
+                     
                     AllowsTransparency="True"
-                Placement="Center"
+                    Placement="Center"
                     Width="500"
-                   VerticalAlignment="Top">
+                   VerticalAlignment="Center">
                 <StackPanel Background="LightBlue">
                     <TextBlock Background="LightBlue" FontSize="15"
                                Margin="10"                              

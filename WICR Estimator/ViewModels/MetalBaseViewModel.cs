@@ -51,7 +51,7 @@ namespace WICR_Estimator.ViewModels
             MiscMetals = new ObservableCollection<MiscMetal>();
             MetalTotals = new Totals { TabName = "Metal" };
 
-            MetalName = "16oz Copper";
+            MetalName = "24ga. Galvanized Primed Steel";
             vendorName = "Chivon";
             riserCount = 0;
             stairWidth = 4.5;
@@ -305,7 +305,7 @@ namespace WICR_Estimator.ViewModels
                         colN = 3;
                         break;
                     default:
-                        colN = 4;
+                        colN = 2;
                         break;
                 }
                 if (vendorName != "Chivon")
@@ -599,8 +599,8 @@ namespace WICR_Estimator.ViewModels
             //double.TryParse(data.ToArray<object>()[0].ToString(), out deductionOnLargeJob);
 
             //double.TryParse(pWage[0][0].ToString(), out prevailingWage);
-            
-            double.TryParse(pWage[1][0].ToString(), out deductionOnLargeJob);
+            if (pWage!=null)
+                double.TryParse(pWage[1][0].ToString(), out deductionOnLargeJob);
 
         }
 

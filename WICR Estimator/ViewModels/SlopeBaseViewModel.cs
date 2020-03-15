@@ -426,7 +426,11 @@ namespace WICR_Estimator.ViewModels
             }
             double.TryParse(perMixRates[6][1].ToString(), out manualAvgMixPrice);
             //double.TryParse(pWage[0][0].ToString(), out prevailingWage);
-            double.TryParse(pWage[1][0].ToString(), out deductionOnLargeJob);
+            if (pWage!=null)
+            {
+                double.TryParse(pWage[1][0].ToString(), out deductionOnLargeJob);
+            }
+            
 
             
 

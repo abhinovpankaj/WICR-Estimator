@@ -273,6 +273,8 @@ namespace WICR_Estimator.ViewModels
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
                 case "INTERLAMINATE PRIMER (XYLENE) FROM LOWRYS":
                 case "Stucco Material Remove and replace (LF)":
+                case "Route and caulk moving cracks (greater than 1/8\")":
+                case "SECOND INTERMEDIATE COAT FOR HIGH TRAFFIC":
                     return false;
                 case "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL":
                     return IsReseal;
@@ -327,6 +329,8 @@ namespace WICR_Estimator.ViewModels
                 case "EXTRA STAIR NOSING":
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
                 case "Stucco Material Remove and replace (LF)":
+                case "Route and caulk moving cracks (greater than 1/8\")":
+                case "SECOND INTERMEDIATE COAT FOR HIGH TRAFFIC":
                     return 0;
                 case "3 IN. WHITE GLASS TAPE (PERIMETER)":
                 case "SIKA 1-A CAULKING (PERIMETER)":

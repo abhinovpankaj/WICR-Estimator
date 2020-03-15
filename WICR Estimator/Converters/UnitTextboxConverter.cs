@@ -22,6 +22,7 @@ namespace WICR_Estimator.Converters
                     case "Striping for small cracKs (less than 1/8\")":
                     case "Route and caulk moving cracks (greater than 1/8\")":
                     case "SECOND INTERMEDIATE COAT FOR HIGH TRAFFIC":
+                    
                         return true;
                     default:
                         return false;

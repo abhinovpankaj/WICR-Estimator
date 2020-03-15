@@ -37,10 +37,29 @@ namespace WICR_Estimator
 
             // Set starting page
             CurrentPageViewModel = PageViewModels[0];
+            WindowStyle = WindowStyle.SingleBorderWindow;
         }
 
         #region Properties / Commands
+        //private static WindowStyle windowStyle;
+        public static WindowStyle WindowStyle
+        { get;set;
+            //get
+            //{
+            //    return windowStyle;
+            //}
 
+            //set
+            //{
+            //    if (value!=windowStyle)
+            //    {
+            //        WindowStyle = value;
+            //        if (PropertyChanged != null)
+            //        {
+            //            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            //        }
+            //}
+        }
         public DelegateCommand SaveEstimateCommand
         {
             get

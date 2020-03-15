@@ -186,6 +186,7 @@
     <Compile Include="Models\Project.cs" />
     <Compile Include="Models\Slope.cs" />
     <Compile Include="Models\Totals.cs" />
+    <Compile Include="NativeClass.cs" />
     <Compile Include="ObjectExtension.cs" />
     <Compile Include="ViewModelInstanceFactory.cs" />
     <Compile Include="ViewModels\250MaterialViewModel.cs" />

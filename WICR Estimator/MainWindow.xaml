@@ -9,7 +9,8 @@
         xmlns:myViews="clr-namespace:WICR_Estimator.Views"
         mc:Ignorable="d"
         Icon="Images\WICR Logo.ico"
-         
+        WindowStyle="{Binding WindowStyle}"
+        Loaded="Window_Loaded"
         Title="WICR Estimator" Closing="Window_Closing"
         WindowState="Maximized">
     <Window.Resources>
