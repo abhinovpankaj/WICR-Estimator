@@ -207,7 +207,7 @@ namespace WICR_Estimator
                                 hm.UpdateProjectTotals();
 
                             item.CreationDetails = JobName + ":;" + PreparedBy + ":;" + JobCreationDate.ToString();
-                            item.ProductVersion = "2.3";
+                            item.ProductVersion = "2.4";
                         }
                         serializer.WriteObject(writer, SelectedProjects);
 

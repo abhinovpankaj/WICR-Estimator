@@ -1279,6 +1279,12 @@ namespace WICR_Estimator.ViewModels
 
         public virtual void setExceptionValues(object s)
         {
+            if (s!=null)
+            {
+                SystemMaterial item = SystemMaterials.Where(x => x.Name == s.ToString()).FirstOrDefault();
+                item.IsMaterialChecked = item.Qty > 0 ? true : false;
+            }
+
             if (SystemMaterials.Count != 0)
             {
                 SystemMaterial item = SystemMaterials.Where(x => x.Name == "Extra stair nosing lf").FirstOrDefault();

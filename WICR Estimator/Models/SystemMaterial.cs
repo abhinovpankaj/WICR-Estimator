@@ -315,10 +315,8 @@ namespace WICR_Estimator.Models
                 OnPropertyChanged("Qty");
                 MaterialExtension = value * materialPrice;
                 FreightExtension = value * weight;
-                OnPropertyChanged("MaterialExtension");
-                OnPropertyChanged("FreightExtension");
-                OnPropertyChanged("LaborExtension");
-                if (OnQTyChanged!=null && allowHooking(Name))
+                
+                if (allowHooking(Name))
                 {
                     if (qtysm != 0)
                     {
@@ -326,10 +324,15 @@ namespace WICR_Estimator.Models
                     }
                     else
                         IsMaterialChecked = false;
-                    OnQTyChanged(this.Name, EventArgs.Empty);
-                    
+                    if (OnQTyChanged != null )
+                    {
+                        OnQTyChanged(this.Name, EventArgs.Empty);
+                    }
                 }
                 //}
+                OnPropertyChanged("MaterialExtension");
+                OnPropertyChanged("FreightExtension");
+                OnPropertyChanged("LaborExtension");
             }
         }
         private double laborUnitPrice;
