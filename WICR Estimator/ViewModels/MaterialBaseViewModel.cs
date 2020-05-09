@@ -1282,7 +1282,11 @@ namespace WICR_Estimator.ViewModels
             if (s!=null)
             {
                 SystemMaterial item = SystemMaterials.Where(x => x.Name == s.ToString()).FirstOrDefault();
-                item.IsMaterialChecked = item.Qty > 0 ? true : false;
+                if (item!=null)
+                {
+                    item.IsMaterialChecked = item.Qty > 0 ? true : false;
+                }
+                
             }
 
             if (SystemMaterials.Count != 0)

@@ -324,12 +324,13 @@ namespace WICR_Estimator.Models
                     }
                     else
                         IsMaterialChecked = false;
+
                     if (OnQTyChanged != null )
                     {
                         OnQTyChanged(this.Name, EventArgs.Empty);
                     }
                 }
-                //}
+                
                 OnPropertyChanged("MaterialExtension");
                 OnPropertyChanged("FreightExtension");
                 OnPropertyChanged("LaborExtension");
@@ -447,7 +448,10 @@ namespace WICR_Estimator.Models
                     else
                     {
                         matExt = MaterialPrice * Qty;
-                        OnQTyChanged(this.Name,null);
+                        if (OnQTyChanged != null)
+                        {
+                            OnQTyChanged(this.Name, null);
+                        }
                     }
                         
                     

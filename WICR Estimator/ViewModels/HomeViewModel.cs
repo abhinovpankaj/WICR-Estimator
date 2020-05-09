@@ -730,6 +730,8 @@ namespace WICR_Estimator.ViewModels
                         OnPropertyChanged("JobCreationDate");
                         OnPropertyChanged("PreparedBy");
                     }
+                    SystemMaterial.OnQTyChanged += (s, e) => { item.MaterialViewModel.setExceptionValues(s); };
+                    SystemMaterial.OnUnitChanged += (s, e) => { item.MaterialViewModel.setUnitChangeValues(); };
 
                     item.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
                     SelectedProjects.Add(item);
@@ -751,9 +753,7 @@ namespace WICR_Estimator.ViewModels
                         item.ProjectJobSetUp.JobSetupChange += item.SlopeViewModel.JobSetup_OnJobSetupChange;
                     }
                     item.MaterialViewModel.CheckboxCommand = new DelegateCommand(item.MaterialViewModel.ApplyCheckUnchecks, item.MaterialViewModel.canApply);
-
-                    SystemMaterial.OnQTyChanged += (s, e) => { item.MaterialViewModel.setExceptionValues(s); };
-                    SystemMaterial.OnUnitChanged += (s, e) => { item.MaterialViewModel.setUnitChangeValues(); };
+                   
                     //keep other material and other labor materials in sync
                     var ot= item.MaterialViewModel.OtherLaborMaterials;
                     item.MaterialViewModel.OtherLaborMaterials= item.MaterialViewModel.OtherMaterials;
@@ -813,6 +813,8 @@ namespace WICR_Estimator.ViewModels
                         item.MaterialViewModel.CalculateCost(null);
                     }
                 }
+                
+
                 Project_OnSelectedProjectChange(Projects[0], null);
                 reader.Close();
                 ClearProjects.RaiseCanExecuteChanged();
@@ -963,8 +965,9 @@ namespace WICR_Estimator.ViewModels
             }
         }
 
-        private void ApplyLatestGoogleData(Project item)
+        private  async void ApplyLatestGoogleData(Project item)
         {
+            await DownloadGoogleData(item);
             double laborRate;
             var rate = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, item.OriginalProjectName);
             var freightData = DataSerializer.DSInstance.deserializeGoogleData(DataType.Freight, item.OriginalProjectName);
@@ -1050,6 +1053,54 @@ namespace WICR_Estimator.ViewModels
         //    statusNotifier.BalloonTipIcon = ToolTipIcon.Info;
         //    statusNotifier.Visible = true;
         //}
+        private async Task DownloadGoogleData(Project prj)
+        {
+            IsProcessing = true;
+            StatusMessage = "Please Wait! Refreshing Google Data for " + prj.OriginalProjectName;
+            CompletedProjects+=4;
+            IList<IList<object>> LaborRate = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Rate);
+            CompletedProjects+=4;
+            IList<IList<object>> MetalData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Metal);
+            CompletedProjects+=4;
+            IList<IList<object>> FreightData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Freight);
+            CompletedProjects+=4;
+            try
+            {
+
+                var values = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, prj.OriginalProjectName);
+                  
+                   
+                DataSerializer.DSInstance.googleData = new GSData();
+
+                DataSerializer.DSInstance.googleData.LaborRate = LaborRate;
+
+                //Thread.Sleep(1000);
+                DataSerializer.DSInstance.googleData.MetalData = MetalData;
+
+                //Thread.Sleep(1000);
+                DataSerializer.DSInstance.googleData.SlopeData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.OriginalProjectName, DataType.Slope);
+                Thread.Sleep(1000);
+                CompletedProjects += 4;
+                DataSerializer.DSInstance.googleData.MaterialData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.OriginalProjectName, DataType.Material);
+
+                //Thread.Sleep(1000);`
+                DataSerializer.DSInstance.googleData.LaborData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.OriginalProjectName, DataType.Labor);
+                //Thread.Sleep(1000);
+                CompletedProjects += 4;
+                DataSerializer.DSInstance.googleData.FreightData = FreightData;
+
+                DataSerializer.DSInstance.serializeGoogleData(DataSerializer.DSInstance.googleData, prj.OriginalProjectName);
+                Thread.Sleep(2000);
+                CompletedProjects += 4;
+            }
+            catch (Exception)
+            {
+
+                //throw;
+            }
+            IsProcessing = false;
+            CompletedProjects = 0;
+        }
         private async void DownloadGoogleData()
         {
             //SetBalloonTip();
@@ -1104,7 +1155,7 @@ namespace WICR_Estimator.ViewModels
             IsProcessing = false;
             //MainWindowViewModel.WindowStyle = System.Windows.WindowStyle.SingleBorderWindow;
             CompletedProjects = 0;
-            Clear(true);
+            Clear(true);                      
         }
         private bool canShow(object obj)
         {

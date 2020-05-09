@@ -459,26 +459,43 @@ namespace WICR_Estimator.ViewModels
             #region  Update Special Material Pricing and QTY on JobSetup change
             if (hasSetupChanged)
             {
-                for (int i = 0; i < SystemMaterials.Count; i++)
+                try
+                {
+                    for (int i = 0; i < SystemMaterials.Count; i++)
+                    {
+
+                        double sp = SystemMaterials[i].SpecialMaterialPricing;
+                        bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
+                        bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
+                        //if (sysMat[i]==null)
+                        //{
+                        //    continue;
+                        //}
+                        SystemMaterials[i] = sysMat[i];
+
+                        SystemMaterials[i].SpecialMaterialPricing = sp;
+                        //if (iscbEnabled)
+                        //{
+                        SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                        SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                        //}
+
+                        if (SystemMaterials[i].Name == "LARGE CRACK REPAIR" || SystemMaterials[i].Name == "BUBBLE REPAIR (MEASURE SQ FT)")
+                        {
+                            if (qtyList.ContainsKey(SystemMaterials[i].Name))
+                            {
+                                SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            }
+                        }
+
+                    }
+                }
+                catch (Exception ex)
                 {
 
-                    double sp = SystemMaterials[i].SpecialMaterialPricing;
-                    bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
-                    bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
-                    SystemMaterials[i] = sysMat[i];
-
-                    SystemMaterials[i].SpecialMaterialPricing = sp;
-                    SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                    SystemMaterials[i].IsMaterialChecked = iscbChecked;
-                    if (SystemMaterials[i].Name == "LARGE CRACK REPAIR" || SystemMaterials[i].Name == "BUBBLE REPAIR (MEASURE SQ FT)")
-                    {
-                        if (qtyList.ContainsKey(SystemMaterials[i].Name))
-                        {
-                            SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
-                        }
-                    }
-
+                    throw ex;
                 }
+                
 
             }
             
