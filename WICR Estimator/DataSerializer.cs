@@ -116,29 +116,34 @@ namespace WICR_Estimator
             IFormatter formatter = new BinaryFormatter();
             try
             {
-                Stream stream = new FileStream(path, FileMode.Open, FileAccess.Read);
-                GSData objnew = (GSData)formatter.Deserialize(stream);
-                switch (dataType)
+                using (Stream stream = new FileStream(path, FileMode.Open, FileAccess.Read))
                 {
-                    case DataType.Labor:
-                        return objnew.LaborData;
+                    
+                    GSData objnew = (GSData)formatter.Deserialize(stream);
+                    switch (dataType)
+                    {
+                        case DataType.Labor:
+                            return objnew.LaborData;
 
-                    case DataType.Material:
-                        return objnew.MaterialData;
+                        case DataType.Material:
+                            return objnew.MaterialData;
 
-                    case DataType.Metal:
-                        return objnew.MetalData;
+                        case DataType.Metal:
+                            return objnew.MetalData;
 
-                    case DataType.Slope:
-                        return objnew.SlopeData;
+                        case DataType.Slope:
+                            return objnew.SlopeData;
 
-                    case DataType.Rate:
-                        return objnew.LaborRate;
-                    case DataType.Freight:
-                        return objnew.FreightData;
-                    default:
-                        return null;
+                        case DataType.Rate:
+                            return objnew.LaborRate;
+                        case DataType.Freight:
+                            return objnew.FreightData;
+                        default:
+                            return null;
+
+                    } 
                 }
+                
             }
             catch (FileNotFoundException ex)
             {

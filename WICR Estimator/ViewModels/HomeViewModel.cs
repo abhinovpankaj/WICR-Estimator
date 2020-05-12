@@ -965,9 +965,9 @@ namespace WICR_Estimator.ViewModels
             }
         }
 
-        private  async void ApplyLatestGoogleData(Project item)
+        private  void ApplyLatestGoogleData(Project item)
         {
-            await DownloadGoogleData(item);
+            //await DownloadGoogleData(item);
             double laborRate;
             var rate = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, item.OriginalProjectName);
             var freightData = DataSerializer.DSInstance.deserializeGoogleData(DataType.Freight, item.OriginalProjectName);
@@ -998,7 +998,7 @@ namespace WICR_Estimator.ViewModels
                 item.SlopeViewModel.freightData = freightData;
                 item.SlopeViewModel.perMixRates = DataSerializer.DSInstance.deserializeGoogleData(DataType.Slope, item.OriginalProjectName);
                 item.SlopeViewModel.JobSetup_OnJobSetupChange(item.ProjectJobSetUp, null);
-                //item.SlopeViewModel.CalculateAll();
+                item.SlopeViewModel.CalculateAll();
             }
             if (item.MaterialViewModel!=null)
             {
@@ -1007,7 +1007,7 @@ namespace WICR_Estimator.ViewModels
                 item.MaterialViewModel.laborRate = laborRate;
                 item.MaterialViewModel.materialDetails= DataSerializer.DSInstance.deserializeGoogleData(DataType.Material, item.OriginalProjectName);
                 item.MaterialViewModel.JobSetup_OnJobSetupChange(item.ProjectJobSetUp, null);
-                //item.MaterialViewModel.CalculateCost(null);
+                item.MaterialViewModel.CalculateCost(null);
             }
             item.UpdateMainTable();
         }
