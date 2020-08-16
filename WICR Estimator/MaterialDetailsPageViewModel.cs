@@ -10,7 +10,7 @@ using WICR_Estimator.ViewModels;
 
 namespace WICR_Estimator
 {
-    public class MaterialDetailsPageViewModel : BaseViewModel
+    public class MaterialDetailsPageViewModel : BaseViewModel,IPageViewModel
     {
         private ObservableCollection<SysMaterial> _materials = new ObservableCollection<SysMaterial>();
         public ObservableCollection<SysMaterial> Materials
@@ -45,6 +45,9 @@ namespace WICR_Estimator
                 }
             }
         }
+
+        public string Name => "Material Details";
+
         public MaterialDetailsPageViewModel()
         {
             //using (var client = new HttpClient())

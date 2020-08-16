@@ -28,6 +28,7 @@ namespace WICR_Estimator
         private List<IPageViewModel> _pageViewModels;
         private DelegateCommand _minimizeCommand;
         private DelegateCommand _closeWindowCommand;
+        private DelegateCommand _navigationCommand;
         #endregion
 
         public MainWindowViewModel()
@@ -35,7 +36,8 @@ namespace WICR_Estimator
             // Add available pages
             PageViewModels.Add(new HomeViewModel());
             PageViewModels.Add(new ProjectViewModel(HomeViewModel.MyselectedProjects));
-
+            PageViewModels.Add(new MaterialDetailsPageViewModel());
+            PageViewModels.Add(new LoginPageViewModel());
             // Set starting page
             CurrentPageViewModel = PageViewModels[0];
             CurWindowState = WindowState.Maximized;
@@ -278,6 +280,48 @@ namespace WICR_Estimator
         private bool canMinimize(object obj)
         {
             return true;
+        }
+
+        public DelegateCommand NavigationCommand
+        {
+            get
+            {
+                if (_navigationCommand == null)
+                {
+                    _navigationCommand = new DelegateCommand(NavigatePage, canNavigate);
+                }
+
+                return _navigationCommand;
+            }
+        }
+
+        private bool canNavigate(object obj)
+        {
+            return true;
+        }
+
+        private void NavigatePage(object obj)
+        {
+            System.Windows.Controls.ListViewItem listItem = obj as System.Windows.Controls.ListViewItem;
+            switch (listItem.Name)
+            {
+                case "Estimates":
+                    ChangeViewModel(PageViewModels[0]);
+                    break;
+                case "ProjectList":
+                    ChangeViewModel(PageViewModels[1]);
+                    break;
+                case "Login":
+                    ChangeViewModel(PageViewModels[3]);
+                    break;
+                case "Prices":
+                    ChangeViewModel(PageViewModels[2]);
+                    break;
+                default:
+                    break;
+            }
+            
+            
         }
 
         public DelegateCommand CloseCommand

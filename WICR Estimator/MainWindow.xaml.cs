@@ -39,9 +39,10 @@ namespace WICR_Estimator
             //{
             //    Environment.Exit(-1);
             //}
-            
+            this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+            //MaxWidth = SystemParameters.VirtualScreenWidth;
             this.DataContext = new MainWindowViewModel();
-
+            
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

@@ -191,6 +191,7 @@
     <Compile Include="GoogleUtility\SpreadSheetConnect.cs" />
     <Compile Include="GSData.cs" />
     <Compile Include="IPageViewModel.cs" />
+    <Compile Include="LoginPageViewModel.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
