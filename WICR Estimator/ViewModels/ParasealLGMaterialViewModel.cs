@@ -229,7 +229,7 @@ namespace WICR_Estimator.ViewModels
                     return true;
                 case "PARAGRANULAR (FOR CANT AT FOOTING)":
                 case "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER":
-                    
+                case "PARAMASTIC (1000 LF PER PAIL FOR PREP & TERMINATIONS)": //Add 25-5-2020
                 case "VISQUINE PROTECTION FOR INCLEMENT WEATHER":
                 case "UNIVERSAL OUTLETS":
                 case "TOTAL DRAIN 2' x 50' ( In lieu of rock & pipe) \"LINEAR FEET\"":
@@ -258,7 +258,8 @@ namespace WICR_Estimator.ViewModels
             switch (materialName)
             {
                 case "PARAGRANULAR (FOR CANT AT FOOTING)":
-                case "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER":
+                case "PARAMASTIC (1000 LF PER PAIL FOR PREP & TERMINATIONS)"://Add 25-5-2020
+                //case "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER":
                     return true;
                 default:
                     return false;
@@ -450,13 +451,15 @@ namespace WICR_Estimator.ViewModels
         public override void ApplyCheckUnchecks(object obj)
         {
             SystemMaterial sysmat = null;
-            if (obj.ToString() == "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER")
-            {
-                sysmat=SystemMaterials.Where(x => x.Name == "PARAMASTIC (1000 LF PER PAIL FOR PREP & TERMINATIONS)").FirstOrDefault();
+            //change 25-5-2020
+            //if (obj.ToString() == "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER")
+            //{
+            //    sysmat=SystemMaterials.Where(x => x.Name == "PARAMASTIC (1000 LF PER PAIL FOR PREP & TERMINATIONS)").FirstOrDefault();
 
-                sysmat.IsMaterialChecked=!SystemMaterials.Where(x => x.Name == "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER").
-                    FirstOrDefault().IsMaterialChecked;               
-            }
+            //    sysmat.IsMaterialChecked=!SystemMaterials.Where(x => x.Name == "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER").
+            //        FirstOrDefault().IsMaterialChecked;               
+            //}
+
             //if (obj.ToString() == "PB-4 (VERTICAL ONLY)")
             //{
             //    sysmat = SystemMaterials.Where(x => x.Name == "PROTECTION MAT (HORIZONTAL ONLY)").FirstOrDefault();
@@ -518,10 +521,10 @@ namespace WICR_Estimator.ViewModels
          
         public override void setCheckBoxes()
         {
-            SystemMaterial sysmat = null;
-            sysmat = SystemMaterials.Where(x => x.Name == "PARAMASTIC (1000 LF PER PAIL FOR PREP & TERMINATIONS)").FirstOrDefault();
-            sysmat.IsMaterialChecked = !SystemMaterials.Where(x => x.Name == "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER").
-                    FirstOrDefault().IsMaterialChecked;            
+            //SystemMaterial sysmat = null;
+            //sysmat = SystemMaterials.Where(x => x.Name == "PARAMASTIC (1000 LF PER PAIL FOR PREP & TERMINATIONS)").FirstOrDefault();
+            //sysmat.IsMaterialChecked = !SystemMaterials.Where(x => x.Name == "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER").
+            //        FirstOrDefault().IsMaterialChecked;            
         }
 
         public override void CalculateTotalSqFt()

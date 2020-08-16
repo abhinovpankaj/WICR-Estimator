@@ -18,7 +18,7 @@ using WICR_Estimator.Views;
 
 namespace WICR_Estimator
 {
-    class MainWindowViewModel:BaseViewModel
+    class MainWindowViewModel : BaseViewModel, ICloseWindow
     {
         #region Fields
 
@@ -26,7 +26,8 @@ namespace WICR_Estimator
         private DelegateCommand _saveEstimateCommand;
         private IPageViewModel _currentPageViewModel;
         private List<IPageViewModel> _pageViewModels;
-
+        private DelegateCommand _minimizeCommand;
+        private DelegateCommand _closeWindowCommand;
         #endregion
 
         public MainWindowViewModel()
@@ -37,13 +38,14 @@ namespace WICR_Estimator
 
             // Set starting page
             CurrentPageViewModel = PageViewModels[0];
-            WindowStyle = WindowStyle.SingleBorderWindow;
+            CurWindowState = WindowState.Maximized;
+            //WindowStyle = WindowStyle.SingleBorderWindow;
         }
 
         #region Properties / Commands
         //private static WindowStyle windowStyle;
         public static WindowStyle WindowStyle
-        { get;set;
+        { get; set;
             //get
             //{
             //    return windowStyle;
@@ -181,7 +183,7 @@ namespace WICR_Estimator
             try
             {
                 MainWindowViewModel vm = this;
-                HomeViewModel hm=null;
+                HomeViewModel hm = null;
                 if (vm != null)
                 {
                     hm = vm.PageViewModels.FirstOrDefault(x => x.Name == "Home") as HomeViewModel;
@@ -203,7 +205,7 @@ namespace WICR_Estimator
                         {
                             item.MaterialViewModel.CalculateCost(null);
                             item.UpdateMainTable();
-                            if(hm!=null)
+                            if (hm != null)
                                 hm.UpdateProjectTotals();
 
                             item.CreationDetails = JobName + ":;" + PreparedBy + ":;" + JobCreationDate.ToString();
@@ -224,24 +226,90 @@ namespace WICR_Estimator
 
                 SetBalloonTip("Failed to Save the Project Estimate.");
             }
-            
-            
+
         }
         #endregion
         private void SetBalloonTip(string tip)
         {
-             NotifyIcon statusNotifier=new NotifyIcon();
+            NotifyIcon statusNotifier = new NotifyIcon();
 
             statusNotifier.Icon = SystemIcons.Information;
             statusNotifier.BalloonTipTitle = "WICR";
             statusNotifier.BalloonTipText = tip;
             statusNotifier.BalloonTipIcon = ToolTipIcon.Info;
             statusNotifier.Visible = true;
-            
+
             statusNotifier.ShowBalloonTip(1500);
 
         }
+
+        #region WindowState
+        private WindowState _curWindowState;
+        public WindowState CurWindowState
+        {
+            get
+            {
+                return _curWindowState;
+            }
+            set
+            {
+                _curWindowState = value;
+                base.OnPropertyChanged("CurWindowState");
+            }
+        }
+        public DelegateCommand MinimizeCommand
+        {
+            get
+            {
+                if (_minimizeCommand == null)
+                {
+                    _minimizeCommand = new DelegateCommand(MinimizeWindow, canMinimize);
+                }
+
+                return _minimizeCommand;
+            }
+        }
+
+        private void MinimizeWindow(object obj)
+        {
+            CurWindowState = WindowState.Minimized;
+        }
+
+        private bool canMinimize(object obj)
+        {
+            return true;
+        }
+
+        public DelegateCommand CloseCommand
+        {
+            get
+            {
+                if (_closeWindowCommand == null)
+                {
+                    _closeWindowCommand = new DelegateCommand(CloseWindow, canClose);
+                }
+
+                return _closeWindowCommand;
+            }
+        }
+
+        private bool canClose(object obj)
+        {
+            return true;
+        }
+
+        private void CloseWindow(object obj)
+        {
+            Close?.Invoke();
+        }
+        public Action Close {get;set;}
+        #endregion
+
     }
-    
+
+    internal interface ICloseWindow
+    {
+        Action Close { get; set; }
+    }
 }
 

@@ -1,0 +1,82 @@
+﻿<UserControl x:Class="WICR_Estimator.MaterialDetailsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WICR_Estimator"
+      xmlns:behaviors="clr-namespace:WPFTextBoxAutoComplete;assembly=WPFTextBoxAutoComplete"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Background="{DynamicResource MaterialDesignPaper}"
+      FontFamily="{DynamicResource MaterialDesignFont}"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+     TextElement.FontWeight="Regular"
+     TextElement.FontSize="13"
+     TextOptions.TextFormattingMode="Ideal"
+     TextOptions.TextRenderingMode="Auto"
+     >
+    
+    <StackPanel>
+        <!--<TextBox Margin="10,30,10,10"
+		Width="300" Text="test"
+                 FontSize="25"
+		HorizontalAlignment="Left"	 
+		behaviors:AutoCompleteBehavior.AutoCompleteItemsSource="{Binding TestItems}" 
+		behaviors:AutoCompleteBehavior.AutoCompleteStringComparison="InvariantCultureIgnoreCase"/>-->
+	
+        <!--<Grid Margin="10,5">
+            <materialDesign:Card Padding="20"
+                             UniformCornerRadius="5"
+                             Height="80"
+                             Width="300"
+                                 HorizontalAlignment="Left"
+                             VerticalContentAlignment="Center">
+                <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center">My First Material Design App</TextBlock>
+            </materialDesign:Card>
+        </Grid>-->
+        <!--<ComboBox HorizontalAlignment="Left"   
+                  Margin="10,20"  
+                  IsEditable="True"
+                  VerticalAlignment="Top"   
+                  Width="600"   
+                  ItemsSource="{Binding Path=Materials}"    
+                  SelectedItem="{Binding Path=SelectedMaterial}"  
+                  DisplayMemberPath="MaterialName"/>-->
+        <TextBox Width="450"
+                 HorizontalAlignment="Left"
+                 Margin="10" Name="txtFilter" TextChanged="txtFilter_TextChanged" />
+        
+            <ListView Name="materials" Width="450" HorizontalAlignment="Left"                    
+                  SelectedItem="{Binding Path=SelectedMaterial}" ScrollViewer.VerticalScrollBarVisibility="Visible"
+                  ScrollViewer.CanContentScroll="False">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+
+                        <!--<materialDesign:Card
+                                 UniformCornerRadius="5"
+                                 Height="40"
+                                 Width="320"
+                                 HorizontalAlignment="Left"-->
+                        <!--VerticalContentAlignment="Center">-->
+                        <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}"
+                                       VerticalAlignment="Center"
+                                       
+                                       Height="50"
+                                   TextWrapping="Wrap"
+                                       Text="{Binding MaterialName}"
+                                       HorizontalAlignment="Center"/>
+                        <!--</materialDesign:Card>-->
+
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        
+        
+    </StackPanel>
+    
+    
+    
+</UserControl>

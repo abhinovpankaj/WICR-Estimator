@@ -151,9 +151,9 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateIndependentProject
         </Grid.RowDefinitions>
         <StackPanel >
             <TextBlock Text="Projects for Estimates"
-                       
+                   HorizontalAlignment="Center"    
                    FontSize="16"
-                   Margin="5,5,0,5"
+                   Margin="5,10,0,5"
                    FontWeight="Bold"/>
             <!--<TextBox Margin="5,0,5,5" 
                      FontWeight="SemiBold"  
@@ -209,6 +209,10 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateIndependentProject
             
         </ListView>
         <Grid Grid.RowSpan="2" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
             <Popup  HorizontalAlignment="Stretch"
                    IsOpen="{Binding IsProcessing}"
                    Height="100"
@@ -217,26 +221,26 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateIndependentProject
                     Placement="Center"
                     Width="500"
                    VerticalAlignment="Center">
-                <StackPanel Background="LightBlue">
-                    <TextBlock Background="LightBlue" FontSize="15"
+                <StackPanel Background="{StaticResource AccentColorBrush}">
+                    <TextBlock Background="{StaticResource AccentColorBrush}" FontSize="15"
                                Margin="10"                              
                            Text="{Binding StatusMessage}">
 
                     </TextBlock>
                     <ProgressBar  Height="10" Margin="10"
-                        Minimum="1" Maximum="27" Value="{Binding CompletedProjects}" />
+                        Minimum="1" Maximum="28" Value="{Binding CompletedProjects}" />
                 </StackPanel>
 
             </Popup>
             <DataGrid ItemsSource="{Binding SelectedProjects,UpdateSourceTrigger=PropertyChanged}"
-                  FontSize="14"
+                  
                   VerticalAlignment="Top"
                   HorizontalAlignment="Stretch"                  
                   IsReadOnly="True"
                   CanUserAddRows="False"
                   AutoGenerateColumns="False"
                   Background="#BFBFBF"
-                  Margin="10,2,10,0"
+                  Margin="10,10,10,0"
                   >
                 <DataGrid.Resources>
                     <!--<Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
@@ -276,18 +280,11 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateIndependentProject
                     <DataGridTextColumn Header ="Total Cost" 
                                     Binding="{Binding TotalCost,StringFormat='c'}"
                                     IsReadOnly="False"/>
-                    <DataGridTextColumn Header ="Total Cost per SQFT" 
+                    <DataGridTextColumn Header ="Total Cost/Sqft" 
                                     Binding="{Binding CostPerSqFoot,StringFormat='c'}"
                                     IsReadOnly="False"/>
                 </DataGrid.Columns>
-                <!--<i:Interaction.Triggers>
-                <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding ChangePageCommand}" 
-                            CommandParameter="{Binding Path=SelectedItem,
-                        RelativeSource={RelativeSource Mode=FindAncestor,
-                        AncestorType=DataGrid}}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>-->
+                
             </DataGrid>
             
         </Grid>
@@ -314,9 +311,9 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateIndependentProject
                         TargetNullValue={x:Static System:DateTime.Now}}"
                         VerticalContentAlignment="Center"
                         HorizontalContentAlignment="Left"/>
-            <Button  Margin="5" 
+            <Button  Margin="20,5" 
                     Command="{Binding LoadEstimate}"
-                    Style="{StaticResource ButtonTemplate}">
+                    >
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Load Estimate"/>
@@ -329,19 +326,20 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateIndependentProject
                     </StackPanel>
                 </Button.Content>
             </Button>
-            <Button Content="Save As Estimate" 
+            <Button Content="Save As Estimate" Margin="20,5"
+                    
                     Command="{Binding SaveEstimate}"
-                    Style="{StaticResource ButtonTemplate}"/>
-            <Button Content="Refresh"
+                    />
+            <Button Content="Refresh" Margin="20,5"
                     Command="{Binding ClearProjects}"
-                    Style="{StaticResource ButtonTemplate}"/>
-            <Button Content="Create Summary Sheet"
+                    />
+            <Button Content="Create Summary Sheet" Margin="20,5"
                     Command="{Binding CreateSummary}"
-                    Style="{StaticResource ButtonTemplate}"/>
-            <Button Content="Refresh Google Data"
+                    />
+            <Button Content="Refresh Google Data" Margin="20,5"
                     x:Name="refreshGData"
                     Command="{Binding RefreshGoogleData}"
-                    Style="{StaticResource ButtonTemplate}"/>
+                    />
             <CheckBox Content="Apply Latest Google Price"
                       ToolTip="Please check if you want to apply the latest prices. To revert to old price reload the estimate file."
                       Margin="10,2,0,0"

@@ -167,6 +167,7 @@ namespace WICR_Estimator.ViewModels
                 case "TREMDRAIN 1000 (HORIZONTAL ONLY)":
                 case "TOTAL DRAIN 2' x 50' ( In lieu of rock & pipe) \"LINEAR FEET\"":
                 case "UNIVERSAL OUTLET":
+                case "PARAMASTIC (1000 LF PER PAIL FOR PREP & TERMINATIONS)":
                     return false;
                 case "EXTRA PARATERM BAR LF (BOTTOM OR SIDES)":
                     return additionalTermBarLF>0 ? true : false;
@@ -190,13 +191,14 @@ namespace WICR_Estimator.ViewModels
         {
             switch (materialName)
             {
-                //case "PARATERM BAR LF (TOP ONLY- STANDARD INSTALL)":
-                //case "PARAMASTIC AND PARASTICK AND DRY (FOR PENETRATIONS)":
                 //case "PINS & LOADS":
+                //case "PARATERM BAR LF (TOP ONLY- STANDARD INSTALL)":
+                case "PARAMASTIC AND PARASTICK AND DRY (FOR PENETRATIONS)":               
                 case "PB-4 (VERTICAL ONLY)":
                 case "TREMDRAIN 1000 (VERTICAL ONLY)":
                 case "PROTECTION MAT (HORIZONTAL ONLY)":
                 case "TREMDRAIN 1000 (HORIZONTAL ONLY)":
+                case "PARAMASTIC (1000 LF PER PAIL FOR PREP & TERMINATIONS)":
                     return true;
                 default:
                     return false;

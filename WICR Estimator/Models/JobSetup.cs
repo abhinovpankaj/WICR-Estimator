@@ -206,24 +206,24 @@ namespace WICR_Estimator.Models
             GetOriginalName();
             if (originalName == "Paraseal")
             {
-                SqftLabel = "SQ FT OF VERTICAL CONCRETE WALLS";
+                SqftLabel = "Sqft of Vertical Concrete Walls";
             }
             else if (originalName == "Paraseal LG")
             {
-                SqftLabel = "SQ FT OF VERTICAL LAGGING WALLS";
+                SqftLabel = "Sqft of Vertical Lagging Walls";
             }
             else if (originalName == "201" || originalName == "250 GC"|| originalName=="Xypex")
             {
-                SqftLabel = "TOTAL SQ FT HORIZONTAL CONCRETE";
+                SqftLabel = "Total Sqft Horizontal Concrete";
             }
             else if (originalName == "Dual Flex")
-                SqftLabel = "TOTAL SQ FT HORIZONTAL (NEOBOND ANTI-FRACTURE)";
+                SqftLabel = "Total Sqft Horizontal (Neobond Anti-Fracture)";
             else if (originalName == "860 Carlisle")
-                SqftLabel = "TOTAL SQ FT CONCRETE DECKS";
+                SqftLabel = "Total Sqft Concrete Decks";
             else if (originalName == "Westcoat Epoxy")
-                SqftLabel = "TOTAL SQ FT FLOOR";
+                SqftLabel = "Total Sqft Floor";
             else if (originalName == "Polyurethane Injection Block")
-                SqftLabel = "TOTAL SQ FT HORIZONTAL CONCRETE FLOOR";
+                SqftLabel = "Total Sqft Horizontal Concrete Floor";
             else
                 SqftLabel = "Total Sqft";
 
@@ -336,29 +336,29 @@ namespace WICR_Estimator.Models
             get
             {                
                 if (originalName == "Weather Wear" || originalName == "Weather Wear Rehab" || originalName == "Reseal all systems")
-                    return "Linear Footage of Deck Perimeter";
+                    return "Linear of Deck Perimeter";
                 else if (originalName == "Resistite" || originalName == "Multicoat")
-                    return "LINEAR FOOTAGE OF DECK TO WALL DETAIL";
+                    return "Linear of Deck to Wall Detail";
                 else if (originalName == "Dexcellent II")
-                    return "LINEAR FOOTAGE OF DECK TO WALL METAL";
+                    return "Linear of Deck to Wall Metal";
                 else if (originalName == "Paraseal")
-                    return "LF OF PERIMETER FOOTING (STANDARD PARAGRANULAR DETAIL AND TERM BAR)";
+                    return "LF of Perimeter Footing (Standard Paragranular Detail and Term Bar)";
                 else if (originalName == "Paraseal LG")
-                    return "LF OF PERIMETER FOOTING (adds term bar only )";
+                    return "LF of Perimeter Footing (adds term bar only )";
                 else if (originalName == "Tufflex" || originalName == "201" || originalName == "250 GC" || originalName == "UPI BT")
-                    return "LINEAR FOOTAGE OF PERIMETER (DECKS)";
+                    return "Linear of Perimeter (Decks)";
                 else if (originalName == "860 Carlisle")
-                    return "LINEAR FOOTAGE OF DECK TO WALL METAL(fluid applied detail)";
+                    return "Linear of Wall Metal(fluid applied detail)";
                 else if (originalName == "Dual Flex")
                     return "PERIMETER";
                 else if (originalName == "Desert Crete")
-                    return "LINEAR FOOTAGE OF DECK TO WALL METAL (COVE BASE)";
+                    return "Linear of Deck to Wall Metal (Cove Base)";
                 else if (originalName == "Polyurethane Injection Block")
-                    return "LINEAR FOOTAGE OF COLD JOINTS";
+                    return "Linear of Cold Joints";
                 else if (originalName == "Westcoat Epoxy")
-                    return "LINEAR FOOTAGE OF 3/16 inch COVE BASE";
+                    return "Linear of 3/16 inch Cove Base";
                 else if (originalName == "Block Wall")
-                    return "LINEAR FOOTAGE OF INSIDE CORNERS";
+                    return "Linear of Inside Corners";
                 else
                     return "Lf Perimeter for Burlap and Membrane";
             }
@@ -370,12 +370,12 @@ namespace WICR_Estimator.Models
             {
                 if (originalName == "Dual Flex")
                 {
-                    return "TOTAL SQ FT VERTICAL WALLS (MEMBRANE ONLY)";
+                    return "Total Sqft Vertical Walls (Membrane Only)";
                 }
                 else if (originalName == "Polyurethane Injection Block")
-                    return "TOTAL SQ FT VERTICAL BLOCK (EXCL 1ST 2 COURSES)";
+                    return "Toatl Sqft Vertical Block (Excl 1st 2 Courses)";
                 else
-                    return "TOTAL SQ FT VERTICAL (BLOCK WALL)";
+                    return "Total Sqft Vertical (Block Wall)";
             }
         }
         private string jobName;
@@ -818,11 +818,11 @@ namespace WICR_Estimator.Models
                 else if (originalName == "201" || originalName == "250 GC" || originalName == "Dexcellent II" ||
                     originalName == "860 Carlisle" || originalName == "UPI BT" || originalName == "Westcoat Epoxy" ||
                     originalName == "Polyurethane Injection Block" || originalName == "Xypex")
-                    return "# RISERS (3.5-4 FT WIDE)";
+                    return "# RISERS (3.5-4 Ft Wide)";
                 else if (originalName == "Paraseal LG")
-                    return "TIE BACKS (block outs must be priced separately)";
+                    return "Tie Backs (block outs must be priced separately)";
                 else if (originalName == "Dual Flex")
-                    return "#  RISERS INCLUDES METAL (3.5-4 FT WIDE)";
+                    return "#  Risers Includes Metal (3.5-4 Ft Wide)";
                 else
                     return "Stair Risers - Confirm stair width";
             }
@@ -833,11 +833,11 @@ namespace WICR_Estimator.Models
             {
                 if (originalName == "Paraseal")
                 {
-                    return "SQ FT OF BETWEEN SLAB MEMBRANE (CONCRETE)";
+                    return "Sqft of Between Slab Membrane (Concrete)";
                 }
                 else if (originalName == "Paraseal LG")
                 {
-                    return "ADDITIONAL SUPER STOP FOR COLD JOINTS IN FIELD OR EXTRA LIFTS(LF)";
+                    return "Additional Super Stop for Cold Joints in Field or Extra Lifts(LF)";
                 }
                 else
                     return "# Decks";
@@ -984,14 +984,14 @@ namespace WICR_Estimator.Models
             {
                 if (originalName == "Paraseal")
                 {
-                    return "LINEAR FOOTAGE OF UV PROTECTION AT WALL (801)";
+                    return "Linear Footage of UV Protection at Wall (801)";
                 }
                 else if (originalName == "860 Carlisle")
-                    return "LINEAR FOOTAGE OF FOOTING";
+                    return "Linear Footage of Footing";
                 else if (originalName == "Dual Flex")
-                    return "LINEAR FOOTAGE OF DECK TO WALL";
+                    return "Linera Footage of Deck to Wall";
                 else
-                    return "LINEAR FOOTAGE OF COPING";
+                    return "Linear Footage of Coping";
             }
         }
         private double linearCopingFootage;

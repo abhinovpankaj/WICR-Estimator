@@ -7,20 +7,21 @@
       xmlns:conv="clr-namespace:WICR_Estimator.Converters"
       mc:Ignorable="d" 
       xmlns:b="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-      x:Name="selectedprojectControl"
+             xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
+             x:Name="selectedprojectControl"
       d:DesignHeight="600" d:DesignWidth="700"
       >
     <UserControl.Resources>
                
         <conv:NullToVisibilityConverter x:Key="nullToVisibilityConverter"/>
         <DataTemplate x:Key="DefaultContent">
-            <Grid Margin="0,0,0,0" Background="LightBlue"
+            <Grid Margin="0,0,0,0" 
                   DataContext="{Binding MaterialViewModel}">
                 <local:SystemMaterialPage/>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="IndependentContent">
-            <Grid Margin="0,0,0,0" Background="LightBlue"
+            <Grid Margin="0,0,0,0" 
                   DataContext="{Binding MaterialViewModel}">
                 <local:IndependentSystemMaterialPage/>
             </Grid>
@@ -34,13 +35,13 @@
             </Style.Triggers>
         </Style>
         <DataTemplate x:Key="DefaultContentLabor">
-            <Grid Margin="0,0,0,0" Background="LightBlue"
+            <Grid Margin="0,0,0,0" 
                   DataContext="{Binding MaterialViewModel}">
                 <local:LaborPage/>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="IndependentContentLabor">
-            <Grid Margin="0,0,0,0" Background="LightBlue"
+            <Grid Margin="0,0,0,0"
                   DataContext="{Binding MaterialViewModel}">
                 <local:IndependentLaborPage/>
             </Grid>
@@ -55,27 +56,41 @@
         </Style>
     </UserControl.Resources>
     <Grid>
-        <TabControl ItemsSource="{Binding EnabledProjects}" SelectedIndex="{Binding ActiveTabIndex}">
-            <TabControl.Resources>
+        <dragablz:TabablzControl ItemsSource="{Binding EnabledProjects}"
+                                 SelectedIndex="{Binding ActiveTabIndex}"
+                                 >
+            <dragablz:TabablzControl.InterTabController>
+                <dragablz:InterTabController />
+            </dragablz:TabablzControl.InterTabController>
+
+
+            <dragablz:TabablzControl.Resources>
                 <Style TargetType="TabItem">
                     <Setter Property="AllowDrop" Value="True"/>
                     <EventSetter Event="PreviewMouseMove" Handler="TabItem_PreviewMouseMove"/>
                     <EventSetter Event="Drop" Handler="TabItem_Drop"/>
                 </Style>
-            </TabControl.Resources>
-            <TabControl.ItemTemplate>
+            </dragablz:TabablzControl.Resources>
+            <dragablz:TabablzControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Name, Mode=OneWay}" />
+                        <TextBlock Text="{Binding Name}" />
                     </StackPanel>
                 </DataTemplate>
-            </TabControl.ItemTemplate>
-            <TabControl.ContentTemplate>
+            </dragablz:TabablzControl.ItemTemplate>
+            <dragablz:TabablzControl.ContentTemplate>
                 <DataTemplate>
                     <DockPanel>
-                        <TabControl SelectedIndex="{Binding ActiveTabIndex}"
-                            TabStripPlacement="Left" SelectionChanged="TabControl_SelectionChanged">
-                            <TabItem Header="Job Setup" Background="LightBlue"
+                        <dragablz:TabablzControl TabStripPlacement="Left" 
+                                                 SelectionChanged="TabControl_SelectionChanged"
+                                                 SelectedIndex="{Binding ActiveTabIndex}"
+                                 >
+                            <dragablz:TabablzControl.InterTabController>
+                                <dragablz:InterTabController />
+                            </dragablz:TabablzControl.InterTabController>
+                            <!--<TabControl SelectedIndex="{Binding ActiveTabIndex}"
+                            TabStripPlacement="Left" SelectionChanged="TabControl_SelectionChanged">-->
+                            <TabItem Header="Job Setup" 
                                      
                                      x:Name="JobSetupTab">
                                 <!--<b:Interaction.Triggers>
@@ -86,7 +101,7 @@
                                     </b:EventTrigger>
                                 </b:Interaction.Triggers>-->
                                 <TabItem.Content>
-                                    <Grid Margin="0,0,0,0" Background="LightBlue"
+                                    <Grid Margin="0,0,0,0" 
                                           DataContext="{Binding ProjectJobSetUp}">
                                         <local:JobSetupPage/>
                                     </Grid>
@@ -98,7 +113,7 @@
                                  VerticalAlignment="Bottom">
                                 <TabItem.Content>
                                     <Grid Margin="0,0,0,0" 
-                                      Background="LightBlue"
+                                      
                                           DataContext="{Binding MetalViewModel}">
                                         <local:MetalPage/>
                                     </Grid>
@@ -109,7 +124,7 @@
                                  VerticalAlignment="Bottom">
                                 <TabItem.Content>
                                     <Grid Margin="0,0,0,0" 
-                                      Background="LightBlue" 
+                                      
                                           DataContext="{Binding SlopeViewModel}">
                                         <local:URISlopePage/>
                                     </Grid>
@@ -128,7 +143,7 @@
                                         Content="{Binding}"/>
                                 </TabItem.Content>
                             </TabItem>
-                            
+
                             <TabItem Header="Labor" 
                                  VerticalAlignment="Bottom">
                                 <TabItem.Content>
@@ -140,7 +155,7 @@
                                     <ContentPresenter 
                                         Style="{StaticResource  LaborTabStyle}" 
                                         Content="{Binding}"/>
-                                    
+
                                 </TabItem.Content>
                             </TabItem>
                             <TabItem Header="Calculation Details"                        
@@ -148,21 +163,22 @@
                                      IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor,
                                      AncestorLevel = 1,
                                      AncestorType={x:Type UserControl}}, Path=DataContext.IsAdminloggedIn}">
-                                
+
                                 <TabItem.Content >
                                     <Grid Margin="0,0,0,0" 
                                           
-                                      Background="LightBlue" 
+                                      
                                           DataContext="{Binding MaterialViewModel}">
                                         <local:CalculationDetailsPage/>
                                     </Grid>
                                 </TabItem.Content>
                             </TabItem>
-                        </TabControl>
+                            <!--</TabControl>-->
+                        </dragablz:TabablzControl>
                     </DockPanel>
                 </DataTemplate>
-            </TabControl.ContentTemplate>
-        </TabControl>
+            </dragablz:TabablzControl.ContentTemplate>
+           </dragablz:TabablzControl>
     </Grid>
  
 </UserControl>
