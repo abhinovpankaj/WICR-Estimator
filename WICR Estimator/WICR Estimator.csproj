@@ -186,6 +186,7 @@
     <Compile Include="Converters\RoundUpConverter.cs" />
     <Compile Include="Converters\UnitTextboxConverter.cs" />
     <Compile Include="DataSerializer.cs" />
+    <Compile Include="DBModels\MaterialDB.cs" />
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="ExpanderStateBehavior.cs" />
     <Compile Include="GoogleUtility\SpreadSheetConnect.cs" />
@@ -210,7 +211,7 @@
     <Compile Include="Models\Totals.cs" />
     <Compile Include="NativeClass.cs" />
     <Compile Include="ObjectExtension.cs" />
-    <Compile Include="SysMaterial.cs" />
+    <Compile Include="Services\HTTPHelper.cs" />
     <Compile Include="ViewModelInstanceFactory.cs" />
     <Compile Include="ViewModels\250MaterialViewModel.cs" />
     <Compile Include="ViewModels\201MaterialViewModel.cs" />

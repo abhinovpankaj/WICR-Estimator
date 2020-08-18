@@ -23,6 +23,9 @@
         <DataTemplate DataType="{x:Type myVM:ProjectViewModel}">
             <myViews:SelectedProjectsPage />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type local:MaterialDetailsPageViewModel}">
+            <local:MaterialDetailsPage />
+        </DataTemplate>
         <Storyboard x:Key="CloseMenu">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" 
                                            Storyboard.TargetName="GridMenu">
@@ -203,6 +206,12 @@
                 <ImageBrush ImageSource="Images/WICR Logo.ico" TileMode="Tile" Opacity="0.1"/>
             </Grid.Background>
             <DockPanel LastChildFill="True">
+                <!--<DockPanel.Triggers>
+                    <EventTrigger  RoutedEvent ="ButtonBase.Click" SourceName="ButtonClose">
+                        <BeginStoryboard x:Name="CloseMenu" Storyboard="{StaticResource CloseMenu}"/>
+                    </EventTrigger>
+                </DockPanel.Triggers>-->
+                
                 <ContentControl Content="{Binding CurrentPageViewModel}" 
                         DockPanel.Dock="Top"/>
             </DockPanel>

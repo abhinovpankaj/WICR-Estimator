@@ -16,67 +16,110 @@
      TextOptions.TextFormattingMode="Ideal"
      TextOptions.TextRenderingMode="Auto"
      >
-    
+
     <StackPanel>
-        <!--<TextBox Margin="10,30,10,10"
-		Width="300" Text="test"
-                 FontSize="25"
-		HorizontalAlignment="Left"	 
-		behaviors:AutoCompleteBehavior.AutoCompleteItemsSource="{Binding TestItems}" 
-		behaviors:AutoCompleteBehavior.AutoCompleteStringComparison="InvariantCultureIgnoreCase"/>-->
-	
-        <!--<Grid Margin="10,5">
-            <materialDesign:Card Padding="20"
-                             UniformCornerRadius="5"
-                             Height="80"
-                             Width="300"
-                                 HorizontalAlignment="Left"
-                             VerticalContentAlignment="Center">
-                <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center">My First Material Design App</TextBlock>
-            </materialDesign:Card>
-        </Grid>-->
-        <!--<ComboBox HorizontalAlignment="Left"   
-                  Margin="10,20"  
-                  IsEditable="True"
-                  VerticalAlignment="Top"   
-                  Width="600"   
-                  ItemsSource="{Binding Path=Materials}"    
-                  SelectedItem="{Binding Path=SelectedMaterial}"  
-                  DisplayMemberPath="MaterialName"/>-->
-        <TextBox Width="450"
-                 HorizontalAlignment="Left"
-                 Margin="10" Name="txtFilter" TextChanged="txtFilter_TextChanged" />
-        
-            <ListView Name="materials" Width="450" HorizontalAlignment="Left"                    
-                  SelectedItem="{Binding Path=SelectedMaterial}" ScrollViewer.VerticalScrollBarVisibility="Visible"
-                  ScrollViewer.CanContentScroll="False">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
+        <Expander Header="Material Prices" Background="{StaticResource AccentSelectedColorBrush}"
+                  Margin="10,10">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBox Text="{Binding SearchText}"
+                          materialDesign:HintAssist.Hint="Material Name"
+                         
+                         Width="300"
+                         Margin="10"
+                         HorizontalAlignment="Left"/>
+                    <Button Margin="-30,10" Command="{Binding SearchCommand}">
+                        <Button.Content>
+                            <materialDesign:PackIcon Kind="Search"
+                                             VerticalAlignment="Center"/>
+                        </Button.Content>
+                    </Button>
+                    
+                </StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <DataGrid AutoGenerateColumns="False" 
+                          HorizontalAlignment="Left"
+                          Name="MaterialGrid" 
+                          CanUserSortColumns="True"
+                          Margin="10"                  
+                          VerticalAlignment="Top" 
+                          CanUserAddRows="False"
+                          FrozenColumnCount ="1" 
+                          SelectedItem="{Binding SelectedMaterial}"
+                          ItemsSource="{Binding FilteredSystemMaterials,UpdateSourceTrigger=PropertyChanged}" >
+                        <DataGrid.Columns>
+                            <materialDesign:DataGridTextColumn Header="Material Name"
+                                                          Binding="{ Binding MaterialName}"/>
+                            <materialDesign:DataGridTextColumn Header="Price"
+                                                          Binding="{ Binding MaterialPrice}"/>
+                            <materialDesign:DataGridTextColumn Header="Coverage"
+                                                          Binding="{ Binding Coverage}"/>
+                            <materialDesign:DataGridTextColumn Header="Weight"
+                                                          Binding="{ Binding Weight}"/>
+                            <materialDesign:DataGridTextColumn Header="Horizontal Rate"
+                                                          Binding="{ Binding ProdRateHorizontal}"/>
+                            <materialDesign:DataGridTextColumn Header="Vertical Rate"
+                                                          Binding="{ Binding ProdRateVertical}"/>
+                            <materialDesign:DataGridTextColumn Header="Stair Rate"
+                                                          Binding="{ Binding ProdRateStair}"/>
+                            <materialDesign:DataGridTextColumn Header="Min Labor Charge"
+                                                          Binding="{ Binding LaborMinCharge}"/>
+                        </DataGrid.Columns>
 
-                        <!--<materialDesign:Card
-                                 UniformCornerRadius="5"
-                                 Height="40"
-                                 Width="320"
-                                 HorizontalAlignment="Left"-->
-                        <!--VerticalContentAlignment="Center">-->
-                        <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}"
-                                       VerticalAlignment="Center"
-                                       
-                                       Height="50"
-                                   TextWrapping="Wrap"
-                                       Text="{Binding MaterialName}"
+                    </DataGrid>
+                    <StackPanel Background="{StaticResource AccentColorBrush4}"
+                                Grid.Column="1" HorizontalAlignment="Left"
+                                Margin="10,0,100,0">
+                        <Label Content="{Binding SelectedMaterial.MaterialName}"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"/>
+                        <Grid HorizontalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel HorizontalAlignment="Left" Margin="20">
+                                <Label Content="Price"
                                        HorizontalAlignment="Center"/>
-                        <!--</materialDesign:Card>-->
-
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        
-        
+                                <Label Content="Coverage"
+                                       HorizontalAlignment="Center"/>
+                                <Label Content="Weight"
+                                       HorizontalAlignment="Center"/>
+                                <Label Content="Horizontal Rate"
+                                       HorizontalAlignment="Center"/>
+                                <Label Content="Vertical Rate"
+                                       HorizontalAlignment="Center"/>
+                                <Label Content="Stair Rate"
+                                       HorizontalAlignment="Center"/>
+                                <Label Content="Min Labor Charge"
+                                       HorizontalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="20">
+                                <Label Content="{Binding SelectedMaterial.MaterialPrice}"
+                                       HorizontalAlignment="Center"/>
+                                <Label Content="{Binding SelectedMaterial.Covergae}"
+                                       HorizontalAlignment="Center"/>
+                                <Label Content="{Binding SelectedMaterial.Weight}"
+                                       HorizontalAlignment="Center"/>
+                                <Label Content="{ Binding SelectedMaterial.ProdRateHorizontal}"
+                                       HorizontalAlignment="Center"/>
+                                <Label Content="{ Binding SelectedMaterial.ProdRateVertical}"
+                                       HorizontalAlignment="Center"/>
+                                <Label Content="{ Binding SelectedMaterial.ProdRateStair}"
+                                       HorizontalAlignment="Center"/>
+                                <Label Content="{ Binding SelectedMaterial.LaborMinCharge}"
+                                       HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+                
+            </StackPanel>
+           
+        </Expander>
     </StackPanel>
-    
-    
-    
 </UserControl>

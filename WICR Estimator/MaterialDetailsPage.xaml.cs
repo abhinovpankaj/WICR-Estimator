@@ -25,23 +25,12 @@ namespace WICR_Estimator
             InitializeComponent();
             MaterialDetailsPageViewModel vm= new MaterialDetailsPageViewModel();
             this.DataContext = vm;
-            materials.ItemsSource = vm.Materials;
-            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(materials.ItemsSource);
+            //materials.ItemsSource = vm.Materials;
+            //CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(materials.ItemsSource);
             
-            view.Filter = UserFilter;
+            //view.Filter = UserFilter;
         }
-        private bool UserFilter(object item)
-        {
-            if (String.IsNullOrEmpty(txtFilter.Text))
-                return true;
-            else
-                return ((item as SysMaterial).MaterialName.IndexOf(txtFilter.Text, StringComparison.OrdinalIgnoreCase) >= 0);
-        }
-
-        private void txtFilter_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            CollectionViewSource.GetDefaultView(materials.ItemsSource).Refresh();
-        }
+        
 
     }
 }
