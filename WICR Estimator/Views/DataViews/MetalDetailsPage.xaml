@@ -1,0 +1,237 @@
+﻿<UserControl x:Class="WICR_Estimator.Views.DataViews.MetalDetailsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WICR_Estimator.Views.DataViews"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="1300"
+             Background="{DynamicResource MaterialDesignPaper}"
+              FontFamily="{DynamicResource MaterialDesignFont}"
+              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+              TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="13"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto">
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <materialDesign:ColorZone Margin="10"
+                      Mode="PrimaryLight"
+                      Padding="16">
+            <StackPanel
+                            Orientation="Horizontal">
+                <materialDesign:PackIcon Kind="Update"
+                                             VerticalAlignment="Center"/>
+                <TextBlock VerticalAlignment="Center"
+                          Margin="16 0 0 0">
+                       Manage Metal Prices
+                </TextBlock>
+              
+            </StackPanel>
+        </materialDesign:ColorZone>
+        <StackPanel Orientation="Horizontal"
+                         Grid.Row="1" Margin="10">
+            <!--<materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth4"
+                  Padding="0"
+                  UniformCornerRadius="6" Margin="10">
+          
+            <StackPanel>
+                    <TextBlock Text="Select the Vendor"
+                       Opacity=".68"
+                       Margin="10,10,10,10"/>
+                    <ListBox Style="{StaticResource MaterialDesignFilterChipListBox}"
+                         ItemsSource="{Binding Vendors}" 
+                             SelectionMode="Multiple">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding VendorName}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}"
+                                   BasedOn="{StaticResource MaterialDesignFilterChipListBoxItem}">
+                                <Setter Property="IsSelected" Value="{Binding Mode=TwoWay, Path=IsSelected}"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+                </StackPanel>
+            </materialDesign:Card>
+            <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth4"
+                              
+                  Padding="0"
+                   Margin="10"
+                  UniformCornerRadius="6">
+
+                <StackPanel>
+                    <TextBlock Text="Select the Metal Type"
+                       Opacity=".68"
+                       Margin="10,10,10,10"/>
+                    <ListBox Style="{DynamicResource MaterialDesignFilterChipListBox}"
+                         ItemsSource="{Binding MetalTypes}" SelectionMode="Multiple">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding MetalType}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}"
+                                   BasedOn="{StaticResource MaterialDesignFilterChipListBoxItem}">
+                                <Setter Property="IsSelected" Value="{Binding Mode=TwoWay, Path=IsSelected}"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                            
+                    </ListBox>
+                </StackPanel>
+            </materialDesign:Card>-->
+            
+            <TextBox Text="{Binding   SearchText,UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                                 VerticalContentAlignment="Center"
+                          materialDesign:HintAssist.Hint="Metal Name"
+                                 materialDesign:TextFieldAssist.HasClearButton="True"
+                         Width="350"
+                         Margin="100,10,10,10"
+                         HorizontalAlignment="Left"/>
+            
+            <Button Margin="30,10" HorizontalAlignment="Right"
+                                Command="{Binding SearchCommand}">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Check"
+                                             VerticalAlignment="Center"/>
+                        <TextBlock Text=" Apply" Margin="10,0"/>
+                    </StackPanel>
+
+                </Button.Content>
+            </Button>
+
+
+        </StackPanel>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width=".35*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  Height="500">
+                    <DataGrid AutoGenerateColumns="False" 
+                        HorizontalAlignment="Left"
+                        Name="MaterialGrid" 
+                        CanUserSortColumns="True"
+                        Margin="10"        
+                          
+                        VerticalAlignment="Top" 
+                        CanUserAddRows="False"
+                        FrozenColumnCount ="1" 
+                        SelectedItem="{Binding SelectedMetal}"
+                        ItemsSource="{Binding FilteredSystemMetals,UpdateSourceTrigger=PropertyChanged}" >
+                        <DataGrid.Columns>
+                            <DataGridCheckBoxColumn Binding="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridCheckBoxColumn.ElementStyle>
+                                    <Style TargetType="CheckBox"/>
+                                </DataGridCheckBoxColumn.ElementStyle>
+                            </DataGridCheckBoxColumn>
+                            <materialDesign:DataGridTextColumn Header="Metal Name"
+                                                        Binding="{ Binding MetalName}"/>
+                            <materialDesign:DataGridTextColumn Header="Units"
+                                                        Binding="{ Binding Units}"/>
+                            <materialDesign:DataGridTextColumn Header="Metal Price"
+                                                        Binding="{ Binding MetalPrice}"/>
+                            <materialDesign:DataGridTextColumn Header="Prouction Rate"
+                                                        Binding="{ Binding ProductionRate}"/>
+                            <materialDesign:DataGridTextColumn Header="Metal Type"
+                                                        Binding="{ Binding MetalType}"/>
+                            <materialDesign:DataGridTextColumn Header="Vendor"
+                                                        Binding="{ Binding Vendor}"/>
+                            
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+                </ScrollViewer>
+
+                <Button Grid.Row="1"
+                        Margin="10" Command="{Binding UpdateMetalsCommand}"
+                                HorizontalAlignment="Right" Width="150">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Update"
+                                                VerticalAlignment="Center"/>
+                            <TextBlock Text="Update All" Margin="5,0"/>
+                        </StackPanel>
+
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" HorizontalAlignment="Center"
+                            Margin="10,0,10,0">
+                <TextBlock Text="{Binding SelectedMetal.MetalName}"
+                            FontWeight="Bold" TextWrapping="Wrap"
+                                HorizontalAlignment="Center"/>
+                <Grid HorizontalAlignment="Center">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width=".6*"/>
+                        <ColumnDefinition Width=".4*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Content="Metal Price" Margin="2" VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"/>
+                    <Label Content="Units"  Margin="2" VerticalAlignment="Center"
+                                    Grid.Row="1"
+                                    HorizontalAlignment="Center"/>
+                    <Label Content="Production Rate"  Margin="2" VerticalAlignment="Center"
+                                    Grid.Row="2"
+                                    HorizontalAlignment="Center"/>
+                    <Label Content="Metal Type"  Margin="2" VerticalAlignment="Center" Grid.Row="3"
+                                    HorizontalAlignment="Center"/>
+                    <Label Content="Vendor"  Margin="2" VerticalAlignment="Center" Grid.Row="4"
+                                    HorizontalAlignment="Center"/>
+                    
+
+                    <TextBox Text="{Binding SelectedMetal.MetalPrice}"
+                                        Margin="2" VerticalAlignment="Center"
+                                        Grid.Column="1"  
+                                    HorizontalAlignment="Center" Width="100"/>
+                    <TextBox Text="{Binding SelectedMetal.Units}" Width="100"
+                                        VerticalAlignment="Center" Grid.Column="1" Grid.Row="1"
+                                    HorizontalAlignment="Center"/>
+                    <TextBox Text="{Binding SelectedMetal.ProductionRate}" Width="100"
+                                        VerticalAlignment="Center"  Grid.Column="1" Grid.Row="2"
+                                    HorizontalAlignment="Center"/>
+                    <TextBox Text="{ Binding SelectedMetal.MetalType}" Width="100" VerticalAlignment="Center"  Grid.Column="1" Grid.Row="3"
+                                    HorizontalAlignment="Center"/>
+                    <TextBox Text="{ Binding SelectedMetal.Vendor}" Width="100" VerticalAlignment="Center"  Grid.Column="1" Grid.Row="4"
+                                    HorizontalAlignment="Center"/>
+                   
+
+                </Grid>
+                <Button Margin="10" Command="{Binding UpdateMetalCommand}"
+                            HorizontalAlignment="Right" Width="100">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Update"
+                                            VerticalAlignment="Center"/>
+                            <TextBlock Text="Update" Margin="5,0"/>
+                        </StackPanel>
+
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+    </Grid>
+</UserControl>

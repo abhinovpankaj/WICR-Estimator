@@ -147,7 +147,7 @@ namespace WICR_Estimator.ViewModels
                     //}
                     //else
                     //    originalProjectname = prj.Name;
-                        #region Google
+             #region Google
                     var values = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, originalProjectname);
                     if (values == null)
                     {

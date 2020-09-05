@@ -6,6 +6,12 @@
              xmlns:local="clr-namespace:WICR_Estimator.Views"
               xmlns:conv="clr-namespace:WICR_Estimator.Converters"
              mc:Ignorable="d" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+     TextElement.FontWeight="Regular"
+     TextElement.FontSize="13"
+     TextOptions.TextFormattingMode="Ideal"
+     TextOptions.TextRenderingMode="Auto"
              d:DesignHeight="700" d:DesignWidth="1200">
     <UserControl.Resources>
         <conv:CheckBoxVisibilityConverter x:Key="checkBoxConv"/>

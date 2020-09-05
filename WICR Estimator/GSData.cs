@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WICR_Estimator.DBModels;
 
 namespace WICR_Estimator
 {
@@ -24,5 +25,18 @@ namespace WICR_Estimator
         Labor,
         Rate,
         Freight
+    }
+
+    [Serializable]
+    public class DBData
+    {
+        public IList<IDbData> SlopeDBData { get; set; }
+        public IList<IDbData> MetalDBData { get; set; }
+        public IList<IDbData> MaterialDBData { get; set; }
+
+        public IList<IDbData> LaborDBData { get; set; }
+        public IList<IDbData> FreightDBData { get; set; }
+        public DBData()
+        { }
     }
 }

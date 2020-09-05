@@ -6,7 +6,13 @@
       xmlns:local="clr-namespace:WICR_Estimator.Views"
              xmlns:conv="clr-namespace:WICR_Estimator.Converters"
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="700">
+      d:DesignHeight="300" d:DesignWidth="700"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+     TextElement.FontWeight="Regular"
+     TextElement.FontSize="13"
+     TextOptions.TextFormattingMode="Ideal"
+     TextOptions.TextRenderingMode="Auto">
     <UserControl.Resources>
         <conv:CheckBoxVisibilityConverter x:Key="checkBoxConv"/>
         <conv:EnableTextboxConverter x:Key="textboxConv"/>
@@ -86,6 +92,7 @@
                   Name="MetalGrid" VerticalAlignment="Top"
                   CanUserSortColumns="False"
                   Margin="10" IsTabStop="False"
+                  materialDesign:DataGridAssist.CellPadding="4 2 2 2"
                   CanUserAddRows="false"
                   ItemsSource="{Binding Metals}">
                 <!--<DataGrid.RowStyle>
@@ -175,6 +182,7 @@
                       Name="MiscMetalGrid" VerticalAlignment="Top"
                   CanUserSortColumns="False"
                       Margin="10"
+                  materialDesign:DataGridAssist.CellPadding="4 2 2 2"
                       Grid.Row="1"
                       CanUserAddRows="false"
                       
@@ -291,6 +299,7 @@
             </Grid.RowDefinitions>
             <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Left"
                       CanUserSortColumns="False"
+                      materialDesign:DataGridAssist.CellPadding="4 2 2 2"
                   Name="AddOnMetalGrid" VerticalAlignment="Top"
                   Margin="10" IsTabStop="False"
                   Grid.Column="1"

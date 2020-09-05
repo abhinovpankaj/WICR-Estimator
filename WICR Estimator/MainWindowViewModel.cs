@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Xml;
 using WICR_Estimator.Models;
 using WICR_Estimator.ViewModels;
+using WICR_Estimator.ViewModels.DataViewModels;
 using WICR_Estimator.Views;
 
 namespace WICR_Estimator
@@ -38,6 +39,9 @@ namespace WICR_Estimator
             PageViewModels.Add(new ProjectViewModel(HomeViewModel.MyselectedProjects));
             PageViewModels.Add(new MaterialDetailsPageViewModel());
             PageViewModels.Add(new LoginPageViewModel());
+            PageViewModels.Add(new SlopeDetailsPageViewModel());
+            PageViewModels.Add(new MetalDetailsPageViewModel());
+            PageViewModels.Add(new LaborFactorDetailsPageViewModel());
             // Set starting page
             CurrentPageViewModel = PageViewModels[0];
             CurWindowState = WindowState.Maximized;
@@ -314,8 +318,17 @@ namespace WICR_Estimator
                 case "Login":
                     ChangeViewModel(PageViewModels[3]);
                     break;
-                case "Prices":
+                case "Materials":
                     ChangeViewModel(PageViewModels[2]);
+                    break;
+                case "Slopes":
+                    ChangeViewModel(PageViewModels[4]);
+                    break;
+                case "Metals":
+                    ChangeViewModel(PageViewModels[5]);
+                    break;
+                case "Laborfactors":
+                    ChangeViewModel(PageViewModels[6]);
                     break;
                 default:
                     break;

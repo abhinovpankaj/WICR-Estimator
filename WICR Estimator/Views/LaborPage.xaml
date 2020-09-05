@@ -6,7 +6,13 @@
              xmlns:local="clr-namespace:WICR_Estimator.Views"
               xmlns:conv="clr-namespace:WICR_Estimator.Converters"
              mc:Ignorable="d" 
-              d:DesignHeight="700" d:DesignWidth="1200">
+              d:DesignHeight="700" d:DesignWidth="1200"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+     TextElement.FontWeight="Regular"
+     TextElement.FontSize="13"
+     TextOptions.TextFormattingMode="Ideal"
+     TextOptions.TextRenderingMode="Auto">
     <UserControl.Resources>
 
         <conv:CheckBoxVisibilityConverter x:Key="checkBoxConv"/>
@@ -86,6 +92,7 @@
                   Name="MaterialGrid" 
                   FrozenColumnCount ="2"
                   Margin="10,0,0,0"
+                      materialDesign:DataGridAssist.CellPadding="4 2 2 2"
                   VerticalAlignment="Top" 
                   CanUserAddRows="False"
                   ItemsSource="{Binding SystemMaterials,UpdateSourceTrigger=PropertyChanged}"  >
@@ -208,7 +215,7 @@
 
                         </StackPanel>
                         <DataGrid AutoGenerateColumns="False"
-                                  CanUserSortColumns="False"
+                              materialDesign:DataGridAssist.CellPadding="4 2 2 2"    CanUserSortColumns="False"
                           HorizontalAlignment="Left"
                       Name="OtherCostGrid" 
                           VerticalAlignment="Top"

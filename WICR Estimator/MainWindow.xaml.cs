@@ -127,8 +127,9 @@ namespace WICR_Estimator
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (DataContext is ICloseWindow vm)
+            if (DataContext is ICloseWindow )
             {
+                var vm = DataContext as ICloseWindow;
                 vm.Close += () =>
                   {
                       this.Close();

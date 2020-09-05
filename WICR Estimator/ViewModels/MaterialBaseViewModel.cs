@@ -7,7 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml.Serialization;
+using WICR_Estimator.DBModels;
 using WICR_Estimator.Models;
+using WICR_Estimator.Services;
 
 namespace WICR_Estimator.ViewModels
 {
@@ -66,6 +68,9 @@ namespace WICR_Estimator.ViewModels
         public IList<IList<object>> materialDetails { get; set; }
         [DataMember]
         public IList<IList<object>> freightData { get; set; }
+
+        //[DataMember]
+        //public MaterialDB materialDBPrices { get; set; }
 
         #region privatefields
         private ObservableCollection<CostBreakup> lCostBreakUp;
@@ -188,6 +193,17 @@ namespace WICR_Estimator.ViewModels
                 else
                     prPerc = 0;
 
+                //Get Material Data from DB
+                ////MaterialDB matdb =  HTTPHelper.GetMaterialByName(matName);
+                ////vprRate = matdb.ProdRateVertical;
+                ////cov = matdb.Coverage;
+                ////mp = matdb.MaterialPrice;
+                ////w = matdb.Weight;
+                ////setUpMin = matdb.LaborMinCharge;
+                ////pRateStairs = matdb.ProdRateStair;
+                ////hprRate = matdb.ProdRateHorizontal;
+                //
+
                 double.TryParse(materialDetails[seq][1].ToString(), out vprRate);
                 double.TryParse(materialDetails[seq][2].ToString(), out cov);
                 double.TryParse(materialDetails[seq][0].ToString(), out mp);
@@ -196,6 +212,7 @@ namespace WICR_Estimator.ViewModels
                 double.TryParse(materialDetails[seq][6].ToString(), out setUpMin);
                 double.TryParse(materialDetails[seq][5].ToString(), out pRateStairs);
                 double.TryParse(materialDetails[seq][4].ToString(), out hprRate);
+
                 pRateStairs = pRateStairs * (1 + prPerc);
                 hprRate = hprRate * (1 + prPerc);
                 vprRate = vprRate * (1 + prPerc);
@@ -1155,7 +1172,7 @@ namespace WICR_Estimator.ViewModels
             if (materialDetails == null)
             {
                 //materialDetails = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "H33:K59");
-
+                
                 GSData gData = DataSerializer.DSInstance.deserializeGoogleData(prjName);
                 laborDetails = gData.LaborData;
                 materialDetails = gData.MaterialData;

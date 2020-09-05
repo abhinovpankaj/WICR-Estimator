@@ -186,7 +186,12 @@
     <Compile Include="Converters\RoundUpConverter.cs" />
     <Compile Include="Converters\UnitTextboxConverter.cs" />
     <Compile Include="DataSerializer.cs" />
+    <Compile Include="DBModels\IDbData.cs" />
+    <Compile Include="DBModels\LaborFactorDB.cs" />
     <Compile Include="DBModels\MaterialDB.cs" />
+    <Compile Include="DBModels\MetalDB.cs" />
+    <Compile Include="DBModels\ProjectDB.cs" />
+    <Compile Include="DBModels\SlopeDB.cs" />
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="ExpanderStateBehavior.cs" />
     <Compile Include="GoogleUtility\SpreadSheetConnect.cs" />
@@ -197,10 +202,17 @@
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindowViewModel.cs" />
-    <Compile Include="MaterialDetailsPage.xaml.cs">
+    <Compile Include="Services\DataSerializerService.cs" />
+    <Compile Include="ViewModels\DataViewModels\LaborFactorDetailsPageViewModel.cs" />
+    <Compile Include="ViewModels\DataViewModels\MetalDetailsPageViewModel.cs" />
+    <Compile Include="ViewModels\DataViewModels\SlopeDetailsPageViewModel.cs" />
+    <Compile Include="Views\DataViews\LaborFactorsDetailsPage.xaml.cs">
+      <DependentUpon>LaborFactorsDetailsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataViews\MaterialDetailsPage.xaml.cs">
       <DependentUpon>MaterialDetailsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MaterialDetailsPageViewModel.cs" />
+    <Compile Include="ViewModels\DataViewModels\MaterialDetailsPageViewModel.cs" />
     <Compile Include="Models\AddOnMetal.cs" />
     <Compile Include="Models\CostBreakup.cs" />
     <Compile Include="Models\Labor.cs" />
@@ -259,6 +271,12 @@
     <Compile Include="Views\CalculationDetailsPage.xaml.cs">
       <DependentUpon>CalculationDetailsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\DataViews\MetalDetailsPage.xaml.cs">
+      <DependentUpon>MetalDetailsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataViews\SlopeDetailsPage.xaml.cs">
+      <DependentUpon>SlopeDetailsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
@@ -308,7 +326,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="MaterialDetailsPage.xaml">
+    <Page Include="Views\DataViews\LaborFactorsDetailsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DataViews\MaterialDetailsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -317,6 +339,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CalculationDetailsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DataViews\MetalDetailsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DataViews\SlopeDetailsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -7,7 +7,12 @@
       xmlns:local="clr-namespace:WICR_Estimator.Views"
       xmlns:conv="clr-namespace:WICR_Estimator.Converters"
       xmlns:System="clr-namespace:System;assembly=mscorlib"
-      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+     TextElement.FontWeight="Regular"
+     TextElement.FontSize="13"
+     TextOptions.TextFormattingMode="Ideal"
+     TextOptions.TextRenderingMode="Auto"
              
       xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
       mc:Ignorable="d" d:DesignWidth="1550" d:DesignHeight="800"

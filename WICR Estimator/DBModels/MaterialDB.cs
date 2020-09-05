@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WICR_Estimator.DBModels
 {
-    public class MaterialDB
+    public class MaterialDB:IDbData
     {
         public int ProjectId { get; set; }
 
@@ -23,5 +23,6 @@ namespace WICR_Estimator.DBModels
         public double LaborMinCharge { get; set; }
 
         public bool IsDeleted { get; set; }
+        public bool IsChecked { get; set; }
     }
 }

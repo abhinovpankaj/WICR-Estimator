@@ -1,0 +1,197 @@
+﻿<UserControl x:Class="WICR_Estimator.Views.DataViews.SlopeDetailsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WICR_Estimator.Views.DataViews"
+             mc:Ignorable="d" 
+              d:DesignHeight="450" d:DesignWidth="1000"
+             Background="{DynamicResource MaterialDesignPaper}"
+              FontFamily="{DynamicResource MaterialDesignFont}"
+              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+              TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="13"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto">
+    <Grid>
+       
+            <!--<Expander Header="Manage Material Prices"
+                  IsExpanded="True" materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                  Background="{StaticResource AccentSelectedColorBrush}"
+                  Margin="10,10" BorderBrush="Black"
+                  BorderThickness="1" ScrollViewer.VerticalScrollBarVisibility="Auto">-->
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <materialDesign:ColorZone Margin="10"
+                      Mode="PrimaryLight"
+                      Padding="16">
+                    <StackPanel
+                            Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Update"
+                                             VerticalAlignment="Center"/>
+                        <TextBlock
+      VerticalAlignment="Center"
+      Margin="16 0 0 0">
+   Manage Slope Prices
+                        </TextBlock>
+                    </StackPanel>
+                </materialDesign:ColorZone>
+                <StackPanel Orientation="Horizontal"
+                         Grid.Row="1"       Margin="10">
+
+                    <StackPanel>
+                        <TextBlock Text="Select the project"
+                       Opacity=".68"
+                       Margin="10,10,10,0"/>
+                        <ComboBox ItemsSource="{Binding Projects}"
+                                      
+                          DisplayMemberPath="Name"
+                          SelectedItem="{Binding SelectedProject}"
+                 Margin="10,0,10,10"  Width="250"
+                  HorizontalAlignment="Left"/>
+                    </StackPanel>
+                    <TextBox Text="{Binding       SearchText,UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                                 VerticalContentAlignment="Center"
+                          materialDesign:HintAssist.Hint="Slope Name"
+                                 materialDesign:TextFieldAssist.HasClearButton="True"
+                         Width="350"
+                         Margin="10"
+                         HorizontalAlignment="Left"/>
+
+                    <Button Margin="30,10" 
+                                Command="{Binding SearchCommand}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Check"
+                                             VerticalAlignment="Center"/>
+                                <TextBlock Text=" Apply" Margin="10,0"/>
+                            </StackPanel>
+
+                        </Button.Content>
+                    </Button>
+
+
+                </StackPanel>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width=".25*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  Height="500">
+                            <DataGrid AutoGenerateColumns="False" 
+                        HorizontalAlignment="Left"
+                        Name="MaterialGrid" 
+                        CanUserSortColumns="True"
+                        Margin="10"        
+                          
+                        VerticalAlignment="Top" 
+                        CanUserAddRows="False"
+                        FrozenColumnCount ="1" 
+                        SelectedItem="{Binding SelectedSlope}"
+                        ItemsSource="{Binding FilteredSystemSlopes,UpdateSourceTrigger=PropertyChanged}" >
+                                <DataGrid.Columns>
+                                    <DataGridCheckBoxColumn Binding="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}">
+                                        <DataGridCheckBoxColumn.ElementStyle>
+                                            <Style TargetType="CheckBox"/>
+                                        </DataGridCheckBoxColumn.ElementStyle>
+                                    </DataGridCheckBoxColumn>
+                                    <materialDesign:DataGridTextColumn Header="Slope Name"
+                                                                       Width="400"
+                                                        Binding="{ Binding SlopeName}"/>
+                                    <materialDesign:DataGridTextColumn Header="Labor Rate"
+                                                        Binding="{ Binding LaborRate}"/>
+                                    <materialDesign:DataGridTextColumn Header="Cost Per Mix"
+                                                        Binding="{ Binding PerMixCost}"/>
+                                    
+                                </DataGrid.Columns>
+
+                            </DataGrid>
+                        </ScrollViewer>
+
+                        <Button Grid.Row="1"
+                        Margin="10" Command="{Binding UpdateSlopesCommand}"
+                                HorizontalAlignment="Right" Width="150">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Update"
+                                                VerticalAlignment="Center"/>
+                                    <TextBlock Text="Update All" Margin="5,0"/>
+                                </StackPanel>
+
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" HorizontalAlignment="Left"
+                            Margin="10,0,10,0">
+                        <TextBlock Text="{Binding SelectedSlope.SlopeName}"
+                            FontWeight="Bold" TextWrapping="Wrap"
+                                HorizontalAlignment="Center"/>
+                        <Grid HorizontalAlignment="Center">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width=".6*"/>
+                                <ColumnDefinition Width=".4*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                                                
+                            </Grid.RowDefinitions>
+
+                            <Label Content="Labor Rate" Margin="2" VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"/>
+                            <Label Content="Cost per Mix"  Margin="2" VerticalAlignment="Center"
+                                    Grid.Row="1"
+                                    HorizontalAlignment="Center"/>
+                            <TextBox Text="{Binding SelectedSlope.LaborRate}"
+                                        Margin="2" VerticalAlignment="Center"
+                                        Grid.Column="1"  
+                                    HorizontalAlignment="Center" Width="100"/>
+                            <TextBox Text="{Binding SelectedSlope.PerMixCost}" Width="100"
+                                        VerticalAlignment="Center" Grid.Column="1" Grid.Row="1"
+                                    HorizontalAlignment="Center"/>
+                        </Grid>
+                        <Button Margin="10" Command="{Binding UpdateSlopeCommand}"
+                            HorizontalAlignment="Right" Width="100">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Update"
+                                            VerticalAlignment="Center"/>
+                                    <TextBlock Text="Update" Margin="5,0"/>
+                                </StackPanel>
+
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+            </Grid>
+
+            <!--</Expander>-->
+
+            <!--<Expander Header="Slope Prices" FontWeight="Bold"
+                  IsExpanded="True"
+                  Background="{StaticResource AccentSelectedColorBrush}"
+                  Margin="10,10" BorderBrush="Black"
+                  BorderThickness="1"/>
+        <Expander Header="Metal Prices" FontWeight="Bold"
+                  Background="{StaticResource AccentSelectedColorBrush}"
+                  Margin="10,10" BorderBrush="Black"
+                  BorderThickness="1"/>
+        <Expander Header="Labor Cost Factors" FontWeight="Bold"
+                  Background="{StaticResource AccentSelectedColorBrush}"
+                  Margin="10,10" BorderBrush="Black"
+                  BorderThickness="1"/>-->
+        
+    </Grid>
+</UserControl>

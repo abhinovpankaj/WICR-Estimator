@@ -1258,7 +1258,7 @@ namespace WICR_Estimator.ViewModels
             
             Projects = new ObservableCollection<Project>();
             //SelectedProjects = new List<Project>();
-            Projects.Add(new Project { Name = "Weather Wear", OriginalProjectName= "Weather Wear",GrpName= "Dexotex" ,MainGroup="Deck Coatings",ProductVersion="2.4"});
+            Projects.Add(new Project { Name = "Weather Wear", OriginalProjectName= "Weather Wear", GrpName= "Dexotex" ,MainGroup="Deck Coatings",ProductVersion="2.4"});
             Projects.Add(new Project { Name = "Weather Wear Rehab", OriginalProjectName = "Weather Wear Rehab", GrpName = "Dexotex", MainGroup = "Deck Coatings", ProductVersion = "2.4" });
             Projects.Add(new Project { Name = "Barrier Guard", OriginalProjectName = "Barrier Guard", GrpName = "Dexotex", MainGroup = "Deck Coatings", ProductVersion = "2.4" });
             Projects.Add(new Project { Name = "Endurokote", OriginalProjectName = "Endurokote",GrpName= "Endurokote", MainGroup = "Deck Coatings", ProductVersion = "2.4" });
