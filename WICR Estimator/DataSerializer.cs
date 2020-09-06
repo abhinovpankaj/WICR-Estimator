@@ -149,7 +149,10 @@ namespace WICR_Estimator
             {
                 return null;
             }
-            
+            catch( Exception ex)
+            {
+                return null;
+            }
            
         }
 

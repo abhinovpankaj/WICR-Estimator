@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace WICR_Estimator.DBModels
 {
-    public class MaterialDB:IDbData
+    //[Serializable]
+    public class MaterialDB
     {
+        
         public int ProjectId { get; set; }
 
         public int MaterialId { get; set; }

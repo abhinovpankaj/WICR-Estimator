@@ -119,7 +119,7 @@
             </Grid.ColumnDefinitions>
             <StackPanel>
                 <ScrollViewer VerticalScrollBarVisibility="Auto"
-                                  Height="500">
+                                  Height="450">
                     <DataGrid AutoGenerateColumns="False" 
                         HorizontalAlignment="Left"
                         Name="MaterialGrid" 

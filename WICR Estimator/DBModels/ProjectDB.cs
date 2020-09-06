@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace WICR_Estimator.DBModels
 {
-    public class ProjectDB:IDbData
+
+    
+    public class ProjectDB
     {
         public string Name { get; set; }
         public string GroupName { get; set; }

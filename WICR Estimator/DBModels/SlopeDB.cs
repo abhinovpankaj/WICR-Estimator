@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace WICR_Estimator.DBModels
 {
-    public class SlopeDB:IDbData
+    //[Serializable]
+    public class SlopeDB
     {
         public int SlopeId { get; set; }
         public string SlopeName { get; set; }

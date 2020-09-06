@@ -89,7 +89,7 @@ namespace WICR_Estimator.Services
 
         }
 
-        internal async static Task<IEnumerable<MaterialDB>> GetMaterialsAsyncByID(int id)
+        internal async static Task<IList<MaterialDB>> GetMaterialsAsyncByID(int id)
         {
             using (var client = new HttpClient())
             {
@@ -99,7 +99,7 @@ namespace WICR_Estimator.Services
                 HttpResponseMessage response = await client.GetAsync("materials/project/" + id);
                 if (response.IsSuccessStatusCode)
                 {
-                    return await response.Content.ReadAsAsync<IEnumerable<MaterialDB>>();
+                    return await response.Content.ReadAsAsync<IList<MaterialDB>>();
                 }
                 else
                 {
@@ -187,6 +187,44 @@ namespace WICR_Estimator.Services
             }
         }
 
+        internal async static Task<IList<SlopeDB>> GetSlopesByProjectIDAsync(int id)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BASEURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await client.GetAsync("slopes/project/" + id);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<IList<SlopeDB>>();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        internal async static Task<IList<LaborFactorDB>> GetLaborFactorsAsyncByProjectID(int id)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BASEURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await client.GetAsync("labors/project/" + id);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<IList<LaborFactorDB>>();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
         #endregion
 
         #region LaborFactor
@@ -201,6 +239,25 @@ namespace WICR_Estimator.Services
                 if (response.IsSuccessStatusCode)
                 {
                     return await response.Content.ReadAsAsync<IEnumerable<LaborFactorDB>>();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        internal async static Task<LaborFactorDB> GetLaborFactorByProjectName(int id)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BASEURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response =await client.GetAsync("labors/project/" + id);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<LaborFactorDB>();
                 }
                 else
                 {
@@ -246,7 +303,9 @@ namespace WICR_Estimator.Services
                 }
             }
         }
+
         #endregion
+
         #region Project
         internal async static Task<IEnumerable<ProjectDB>> GetProjectsAsync()
         {
@@ -259,6 +318,25 @@ namespace WICR_Estimator.Services
                 if (response.IsSuccessStatusCode)
                 {
                     return await response.Content.ReadAsAsync<IEnumerable<ProjectDB>>();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        internal async static Task<ProjectDB> GetProjectByNameAsync(string projName)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BASEURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await client.GetAsync("projects/name/"+projName);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<ProjectDB>();
                 }
                 else
                 {
@@ -308,7 +386,7 @@ namespace WICR_Estimator.Services
             }
         }
 
-        internal async static Task<IEnumerable<MetalDB>> GetMetalsAsync()
+        internal async static Task<IList<MetalDB>> GetMetalsAsync()
         {
             using (var client = new HttpClient())
             {
@@ -318,7 +396,7 @@ namespace WICR_Estimator.Services
                 HttpResponseMessage response = await client.GetAsync("metals");
                 if (response.IsSuccessStatusCode)
                 {
-                    return await response.Content.ReadAsAsync<IEnumerable<MetalDB>>();
+                    return await response.Content.ReadAsAsync<IList<MetalDB>>();
                 }
                 else
                 {
@@ -329,6 +407,64 @@ namespace WICR_Estimator.Services
 
         #endregion
 
+        #region Freight
+        internal async static Task<string> PutFreightsAsync(IEnumerable<FreightDB> freights)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BASEURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await client.PutAsJsonAsync<IEnumerable<FreightDB>>("freights", freights);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<string>();
+                }
+                else
+                {
+                    return "Post Failed,Failed to Save Data.";
+                }
+            }
+        }
+
+        internal async static Task<FreightDB> PutFreightAsync(int freightId, MetalDB selectedFreight)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BASEURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await client.PutAsJsonAsync<MetalDB>("freights/" + freightId, selectedFreight);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<FreightDB>();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        internal async static Task<IList<FreightDB>> GetFreightsAsync()
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BASEURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await client.GetAsync("freights");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<IList<FreightDB>>();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+        #endregion
 
     }
 }

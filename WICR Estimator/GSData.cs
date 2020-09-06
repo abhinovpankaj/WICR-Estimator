@@ -30,12 +30,12 @@ namespace WICR_Estimator
     [Serializable]
     public class DBData
     {
-        public IList<IDbData> SlopeDBData { get; set; }
-        public IList<IDbData> MetalDBData { get; set; }
-        public IList<IDbData> MaterialDBData { get; set; }
+        public IList<SlopeDB> SlopeDBData { get; set; }
+        public IList<MetalDB> MetalDBData { get; set; }
+        public IList<MaterialDB> MaterialDBData { get; set; }
 
-        public IList<IDbData> LaborDBData { get; set; }
-        public IList<IDbData> FreightDBData { get; set; }
+        public IList<LaborFactorDB> LaborDBData { get; set; }
+        public IList<FreightDB> FreightDBData { get; set; }
         public DBData()
         { }
     }

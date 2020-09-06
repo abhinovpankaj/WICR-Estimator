@@ -14,10 +14,16 @@
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"    
         Icon="Images\WICR Logo.ico"
-        
-        Loaded="Window_Loaded" Closing="Window_Closing"
-        WindowState="{Binding CurWindowState,Mode=TwoWay}" WindowStartupLocation="CenterScreen" 
-        Visibility="Visible" WindowStyle="None">
+        Title="WICR Estimator"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{materialDesign:MaterialDesignFont}"
+        Loaded="Window_Loaded" Closing="Window_Closing" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
+       >
     <Window.Resources>
         <DataTemplate DataType="{x:Type myVM:HomeViewModel}">
             <myViews:HomePage />
@@ -374,7 +380,7 @@
                                                    CommandParameter="{Binding ElementName=MenuList, Path=SelectedItem}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
-                    <ListViewItem Height="55" Padding="0" x:Name="Estimates">
+                    <ListViewItem Height="45" Padding="0" x:Name="Estimates">
                        
                             <StackPanel Orientation="Horizontal" Margin="10,0">
                                 <materialDesign:PackIcon Foreground="{StaticResource AccentColorBrush}"

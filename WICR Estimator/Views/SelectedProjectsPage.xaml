@@ -62,38 +62,38 @@
         </Style>
     </UserControl.Resources>
     <Grid>
-        <dragablz:TabablzControl ItemsSource="{Binding EnabledProjects}"
+        <TabControl ItemsSource="{Binding EnabledProjects}"
                                  SelectedIndex="{Binding ActiveTabIndex}"
                                  >
-            <dragablz:TabablzControl.InterTabController>
+            <!--<dragablz:TabablzControl.InterTabController>
                 <dragablz:InterTabController />
-            </dragablz:TabablzControl.InterTabController>
+            </dragablz:TabablzControl.InterTabController>-->
 
 
-            <dragablz:TabablzControl.Resources>
+            <TabControl.Resources>
                 <Style TargetType="TabItem">
                     <Setter Property="AllowDrop" Value="True"/>
                     <EventSetter Event="PreviewMouseMove" Handler="TabItem_PreviewMouseMove"/>
                     <EventSetter Event="Drop" Handler="TabItem_Drop"/>
                 </Style>
-            </dragablz:TabablzControl.Resources>
-            <dragablz:TabablzControl.ItemTemplate>
+            </TabControl.Resources>
+            <TabControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Name}" />
                     </StackPanel>
                 </DataTemplate>
-            </dragablz:TabablzControl.ItemTemplate>
-            <dragablz:TabablzControl.ContentTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
                 <DataTemplate>
                     <DockPanel>
-                        <dragablz:TabablzControl TabStripPlacement="Left" 
+                        <TabControl TabStripPlacement="Left" 
                                                  SelectionChanged="TabControl_SelectionChanged"
                                                  SelectedIndex="{Binding ActiveTabIndex}"
                                  >
-                            <dragablz:TabablzControl.InterTabController>
+                            <!--<dragablz:TabablzControl.InterTabController>
                                 <dragablz:InterTabController />
-                            </dragablz:TabablzControl.InterTabController>
+                            </dragablz:TabablzControl.InterTabController>-->
                             <!--<TabControl SelectedIndex="{Binding ActiveTabIndex}"
                             TabStripPlacement="Left" SelectionChanged="TabControl_SelectionChanged">-->
                             <TabItem Header="Job Setup" 
@@ -180,11 +180,11 @@
                                 </TabItem.Content>
                             </TabItem>
                             <!--</TabControl>-->
-                        </dragablz:TabablzControl>
+                        </TabControl>
                     </DockPanel>
                 </DataTemplate>
-            </dragablz:TabablzControl.ContentTemplate>
-           </dragablz:TabablzControl>
+            </TabControl.ContentTemplate>
+           </TabControl>
     </Grid>
  
 </UserControl>

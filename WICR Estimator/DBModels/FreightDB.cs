@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 namespace WICR_Estimator.DBModels
 {
     //[Serializable]
-    public class LaborFactorDB
+    public class FreightDB 
     {
         
-        public int ProjectId { get; set; }
-        public string Name { get; set; }
-        public double Value { get; set; }
-        public bool IsChecked { get; set; }
-        public int LaborId { get; set; }
+        public string FactorName { get; set; }
+        public double FactorValue { get; set; }
+
         public bool IsDeleted { get; set; }
+
+        public int FreightID { get; set; }
     }
 }

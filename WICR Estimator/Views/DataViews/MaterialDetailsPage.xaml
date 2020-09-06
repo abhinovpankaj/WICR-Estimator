@@ -35,6 +35,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
+                
             </Grid.RowDefinitions>
             <materialDesign:ColorZone Margin="10"
                       Mode="PrimaryLight"
@@ -94,7 +95,7 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel>
                     <ScrollViewer VerticalScrollBarVisibility="Auto"
-                                  Height="500">
+                                  Height="450">
                         <DataGrid AutoGenerateColumns="False" 
                         HorizontalAlignment="Left"
                         Name="MaterialGrid" 
@@ -133,8 +134,7 @@
                         </DataGrid>
                     </ScrollViewer>
 
-                    <Button Grid.Row="1"
-                        Margin="10" Command="{Binding UpdateMaterialsCommand}"
+                    <Button Margin="10" Command="{Binding UpdateMaterialsCommand}"
                                 HorizontalAlignment="Right" Width="150">
                         <Button.Content>
                             <StackPanel Orientation="Horizontal">

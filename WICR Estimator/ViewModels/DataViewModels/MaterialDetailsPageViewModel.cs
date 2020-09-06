@@ -95,12 +95,22 @@ namespace WICR_Estimator
 
         private void SearchMaterial(object obj)
         {
-            if (MaterialsFilterByProject!=null)
+            try
             {
-                FilteredSystemMaterials = MaterialsFilterByProject.Where(x => x.MaterialName.ToUpper().Contains(SearchText.ToUpper())).ToObservableCollection();
+                if (MaterialsFilterByProject != null)
+                {
+                    FilteredSystemMaterials = MaterialsFilterByProject.Where(x => x.MaterialName.ToUpper().Contains(SearchText.ToUpper())).ToObservableCollection();
+                }
+                else
+                    FilteredSystemMaterials = Materials.Where(x => x.MaterialName.ToUpper().Contains(SearchText.ToUpper())).ToObservableCollection();
             }
-            else
-                FilteredSystemMaterials = Materials.Where(x => x.MaterialName.ToUpper().Contains(SearchText.ToUpper())).ToObservableCollection();
+            catch (Exception)
+            {
+                FilteredSystemMaterials = null;
+
+            }
+            
+                
         }
 
         private bool CanSearch(object obj)

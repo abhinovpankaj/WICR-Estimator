@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WICR_Estimator.Models;
+using WICR_Estimator.Services;
 
 namespace WICR_Estimator.ViewModels
 {
@@ -171,6 +172,36 @@ namespace WICR_Estimator.ViewModels
                         DataSerializer.DSInstance.serializeGoogleData(DataSerializer.DSInstance.googleData, originalProjectname);
 
                     }
+
+                    #endregion
+
+                    #region DBConnectAndSaveDataLocally
+
+                    //var dbValues = DataSerializerService.DSInstance.deserializeDbData(DataType.Rate, originalProjectname);
+                    //if (dbValues == null)
+                    //{
+                        DataSerializerService.DSInstance.dbData = new  DBData();
+                        //IList<IList<object>> LaborRate=await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Rate);
+                        var project = await HTTPHelper.GetProjectByNameAsync(originalProjectname);
+
+                        DataSerializerService.DSInstance.dbData.LaborDBData = await HTTPHelper.GetLaborFactorsAsyncByProjectID(project.ProjectId);
+                        
+
+                        DataSerializerService.DSInstance.dbData.MetalDBData = await HTTPHelper.GetMetalsAsync();
+
+
+                        DataSerializerService.DSInstance.dbData.SlopeDBData = await HTTPHelper.GetSlopesByProjectIDAsync(project.ProjectId);
+
+
+                        DataSerializerService.DSInstance.dbData.MaterialDBData = await HTTPHelper.GetMaterialsAsyncByID(project.ProjectId);
+
+
+                        DataSerializerService.DSInstance.dbData.FreightDBData = await HTTPHelper.GetFreightsAsync();
+
+
+                        DataSerializerService.DSInstance.serializeDbData(DataSerializerService.DSInstance.dbData, originalProjectname);
+
+                    //}
 
                     #endregion
 

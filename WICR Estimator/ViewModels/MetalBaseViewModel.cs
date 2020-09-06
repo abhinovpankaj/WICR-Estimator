@@ -8,6 +8,8 @@ using System.Windows.Input;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
 using WICR_Estimator.Models;
+using WICR_Estimator.Services;
+using WICR_Estimator.DBModels;
 
 namespace WICR_Estimator.ViewModels
 {
@@ -38,6 +40,9 @@ namespace WICR_Estimator.ViewModels
 
         public IList<IList<object>> freightDetails { get; set; }
         public IList<IList<object>> metalDetails { get; set; }
+
+        public IList<FreightDB> freightDBDetails { get; set; }
+        public IList<MetalDB> metalDBDetails { get; set; }
 
         public double laborRate { get; set; }
         protected double riserCount;
@@ -186,6 +191,9 @@ namespace WICR_Estimator.ViewModels
             }
         }
         //[XmlIgnore]
+        #endregion
+
+        #region Commands
         [IgnoreDataMember]
         public ICommand AddRowCommand
         {
@@ -282,6 +290,8 @@ namespace WICR_Estimator.ViewModels
             double.TryParse(freightDetails[5][0].ToString(), out prPerc);
             return isPrevailingWage? val*(1+prPerc):val;
         }
+
+        
         protected double getMetalMP(int rowN)
         {
             int colN ;
@@ -317,6 +327,7 @@ namespace WICR_Estimator.ViewModels
             
             return val;
         }
+
         public virtual double getUnits(int unitNo)
         {
             double unit = 0;
@@ -703,6 +714,110 @@ namespace WICR_Estimator.ViewModels
             }
 
         }
+
+        #region DBData
+
+        protected int getUnitPrice(string metalName)
+        {
+            return (int)metalDBDetails.FirstOrDefault(x => x.MetalName == metalName).Units;
+        }
+
+        public void GetMetalDetailsFromDB(string projectName)
+        {
+            if (projectName.Contains('.'))
+            {
+                projectName = projectName.Split('.')[0];
+            }
+
+            if (pWage == null)
+            {
+                DBData dbData = DataSerializerService.DSInstance.deserializeDbData(projectName);
+                deductionOnLargeJob = dbData.LaborDBData.First(x=>x.LaborId==2).Value;
+                //pWage = gsData.LaborData.ToArray<object>();
+                
+                laborRate = dbData.FreightDBData.First(x=>x.FreightID==8).FactorValue;
+                
+                Nails = dbData.MetalDBData.FirstOrDefault(x=>x.MetalId==163).ProductionRate; //production rate for Nails, caulk + overage on metal
+                metalDBDetails = dbData.MetalDBData;
+                freightDBDetails = dbData.FreightDBData;
+            }          
+        }
+
+        protected double getMetalPR(string metalName)
+        {
+            double val = metalDBDetails.FirstOrDefault(x => x.MetalName == metalName).ProductionRate;
+            double prPerc = freightDBDetails.FirstOrDefault(x => x.FactorName == "SlopeProdRate").FactorValue;
+
+            return isPrevailingWage ? val * (1 + prPerc) : val;
+        }
+        protected double getMetalMP(string metalName)
+        {
+            return metalDBDetails.Where(x => x.MetalName == metalName).Where(x => x.MetalType == MetalName).Where(x => x.Vendor == vendorName)
+                .Select(s => s.MetalPrice).First();
+        }
+
+        public virtual ObservableCollection<Metal> GetMetalsDB()
+        {
+            ObservableCollection<Metal> met = new ObservableCollection<Metal>();
+            met.Add(new Metal("L - METAL / FLASHING", "4X6", getMetalPR("L-Metal/Flashing 4'X6''"), laborRate, 0, getMetalMP("L-Metal/Flashing 4'X6\""), false));
+            met.Add(new Metal("DRIP EDGE METAL", "2X4", getMetalPR("Drip Edge Metal 2\" x 4\""), laborRate, 0, getMetalMP("Drip Edge Metal 2\" x 4\""), false));
+            met.Add(new Metal("STAIR METAL", "4X6", getMetalPR("Stair Metal 4X6"), laborRate, getUnits(0), getMetalMP("Stair Metal 4X6"), true));
+            met.Add(new Metal("STAIR METAL", "3X3", getMetalPR("Stair Metal 3X3"), laborRate, getUnits(1), getMetalMP("Stair Metal 3X3"), true));
+            met.Add(new Metal("DOOR SADDLES", "(4 ft.)", getMetalPR("Door Saddles (4 Ft.)"), laborRate, 0, getMetalMP("Door Saddles (4 Ft.)"), false));
+            met.Add(new Metal("DOOR SADDLES", "(6 ft.)", getMetalPR("Door Saddles (6Ft)"), laborRate, 0, getMetalMP("Door Saddles (6Ft)"), false));
+            met.Add(new Metal("DOOR SADDLES", "(8 ft.)", getMetalPR("Door Saddles (8Ft)"), laborRate, 0, getMetalMP("Door Saddles (8Ft)"), false));
+            met.Add(new Metal("DOOR SADDLES", "(10 ft.)", getMetalPR("Door Saddles (10 Ft)"), laborRate, 0, getMetalMP("Door Saddles (10 Ft)"), false));
+            met.Add(new Metal("INSIDE CORNER", "", getMetalPR("Inside Corner"), laborRate, 0, getMetalMP("Inside Corner"), false));
+            met.Add(new Metal("OUTSIDE CORNER", "", getMetalPR("Outside Corner"), laborRate, 0, getMetalMP("Outside Corner"), false));
+            met.Add(new Metal("INSIDE EDGE CORNER", "", getMetalPR("Inside Edge Corner"), laborRate, 0, getMetalMP("Inside Edge Corner"), false));
+            met.Add(new Metal("OUTSIDE EDGE CORNER", "", getMetalPR("Outside Edge Corner"), laborRate, 0, getMetalMP("Outside Edge Corner"), false));
+            met.Add(new Metal("DOOR CORNERS SET OF 2 (L&R)", "", getMetalPR("Door Corners Set Of 2 (L&R)"), laborRate, 0, getMetalMP("Door Corners Set Of 2 (L&R)"), false));
+            met.Add(new Metal("STRINGER TRANSITION CAP", "", getMetalPR("Stringer Transition Cap"), laborRate, 0, getMetalMP("Stringer Transition Cap"), false));
+            met.Add(new Metal("DRIP TERMINATION", "", getMetalPR("Drip Termination"), laborRate, 0, getMetalMP("Drip Termination"), false));
+            met.Add(new Metal("2 inch DRAINS", "", getMetalPR("2 Inch Chivon Drains"), laborRate, 0, getMetalMP("2 Inch Chivon Drains"), false));//changed name ,removed Chivon as per mail on 12th Sept 2019.
+            met.Add(new Metal("STANDARD SCUPPER", "4x4x9", getMetalPR("4\" x 4\" x 9\" standard scupper"), laborRate, 0, getMetalMP("4\" x 4\" x 9\" standard scupper"), false));
+            met.Add(new Metal("SCUPPER WITH A COLLAR", "4x4x9", getMetalPR("Scupper With A Collar 4X4X9"), laborRate, 0, getMetalMP("Scupper With A Collar 4X4X9"), false));
+            met.Add(new Metal("POST COLLARS w/  KERF", "4x4", getMetalPR("Post Collars 4X4 W/ Kerf"), laborRate, 0, getMetalMP("Post Collars 4X4 W/ Kerf"), false));
+
+            return met;
+        }
+        public virtual ObservableCollection<AddOnMetal> GetAddOnMetalsDB()
+        {
+            ObservableCollection<AddOnMetal> met = new ObservableCollection<AddOnMetal>();
+            met.Add(new AddOnMetal("L - METAL / FLASHING", "4X10", getMetalPR("L-Metal/Flashing 4'X10''"), laborRate, 0, getMetalMP("L-Metal/Flashing 4'X10''"), false));
+            met.Add(new AddOnMetal("L - METAL / FLASHING", "4X8", getMetalPR("L-Metal/Flashing 4'X8''"), laborRate, 0, getMetalMP("L-Metal/Flashing 4'X8''"), false));
+            met.Add(new AddOnMetal("DRIP EDGE METAL", "4X4", getMetalPR("Drip Edge Metal 4\" x 4\""), laborRate, 0, getMetalMP("Drip Edge Metal 4\" x 4\""), false));
+            met.Add(new AddOnMetal("DRIP EDGE METAL", "3X4", getMetalPR("Drip Edge Metal 3\" x 4\""), laborRate, 0, getMetalMP("Drip Edge Metal 3\" x 4\""), false));
+            met.Add(new AddOnMetal("STAIR METAL", "4X10", getMetalPR("Stair Metal 4\" x 10\""), laborRate, getUnits(0), getMetalMP("Stair Metal 4\" x 10\""), true));
+            met.Add(new AddOnMetal("STAIR METAL", "4X8", getMetalPR("Stair Metal 4\" x 8\""), laborRate, getUnits(0), getMetalMP("Stair Metal 4\" x 8\""), true));
+            met.Add(new AddOnMetal("Open End Stair Metal", "(Set of 2 L&R)", getMetalPR("Open End Stair Metal (Set of 2 L&R)"), laborRate, 0, getMetalMP("Open End Stair Metal (Set of 2 L&R)"), false));//Added missed metal ,as per mail on 12th Sept 2019.
+            met.Add(new AddOnMetal("Door Pan", "10' - 12'", getMetalPR("Door Pan 10' - 12'"), laborRate, 0, getMetalMP("Door Pan 10' - 12'"), false));
+            met.Add(new AddOnMetal("Door Pan", "8'", getMetalPR("Door Pan 8'"), laborRate, 0, getMetalMP("Door Pan 8'"), false));
+            met.Add(new AddOnMetal("Door Pan", "6'", getMetalPR("Door Pan 6'"), laborRate, 0, getMetalMP("Door Pan 6'"), false));
+            met.Add(new AddOnMetal("Door Pan", "4'", getMetalPR("Door Pan 4'"), laborRate, 0, getMetalMP("Door Pan 4'"), false));
+            met.Add(new AddOnMetal("Door Pan", "3'", getMetalPR("Door Pan 3'"), laborRate, 0, getMetalMP("Door Pan 3'"), false));
+            met.Add(new AddOnMetal("CORNER DRIP TERMINATION", "", getMetalPR("Corner Drip Termination"), laborRate, 0, getMetalMP("Corner Drip Termination"), false));
+            met.Add(new AddOnMetal("OFFSET DRIP TERMINATION", "", getMetalPR("Offset Drip Termination"), laborRate, 0, getMetalMP("Offset Drip Termination"), false));
+            met.Add(new AddOnMetal("SRAIGHT DRIP TERMINATION", "", getMetalPR(28), laborRate, 0, getMetalMP(28), false));
+            met.Add(new AddOnMetal("STANDARD SCUPPER", "2x4x9", getMetalPR("2\" x 4\" x 9\" Standard Scupper"), laborRate, 0, getMetalMP("2\" x 4\" x 9\" Standard Scupper"), false));
+            met.Add(new AddOnMetal("STANDARD SCUPPER", "3x4x9", getMetalPR("3\" x 4\" x 9\" standard scupper"), laborRate, 0, getMetalMP("3\" x 4\" x 9\" standard scupper"), false));
+            met.Add(new AddOnMetal("OVERFLOW SCUPPER", "", getMetalPR("Overflow Scupper"), laborRate, 0, getMetalMP("Overflow Scupper"), false));
+            met.Add(new AddOnMetal("TWO STAGE SCUPPER", "", getMetalPR("Two Stage Scupper"), laborRate, 0, getMetalMP("Two Stage Scupper"), false));
+            return met;
+        }
+
+        public virtual ObservableCollection<MiscMetal> GetMiscMetalsDB()
+        {
+            ObservableCollection<MiscMetal> misc = new ObservableCollection<MiscMetal>();
+            misc.Add(new MiscMetal { Name = "Pins & Loads for metal over concrete", Units = getUnits(2), 
+UnitPrice = getUnitPrice("Pins & Loads for metal over concrete"), MaterialPrice = getMetalMP("Pins & Loads for metal over concrete"), IsEditable = false });
+            misc.Add(new MiscMetal { Name = "Nosing for Concrete risers", Units = getUnits(3), UnitPrice = getUnitPrice("Nosing for Concrete risers"), MaterialPrice = getMetalMP("Nosing for Concrete risers"), IsEditable = false });
+            misc.Add(new MiscMetal { Name = "OTHER DRAINS TO BE ITEMIZED", Units = 0, UnitPrice = 0, MaterialPrice = 0, IsEditable = true });
+            return misc;
+        }
+        #endregion
+
+
         #region  Temporary
         private ICommand fillValues;
         //[XmlIgnore]

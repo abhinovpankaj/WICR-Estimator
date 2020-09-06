@@ -186,6 +186,7 @@
     <Compile Include="Converters\RoundUpConverter.cs" />
     <Compile Include="Converters\UnitTextboxConverter.cs" />
     <Compile Include="DataSerializer.cs" />
+    <Compile Include="DBModels\FreightDB.cs" />
     <Compile Include="DBModels\IDbData.cs" />
     <Compile Include="DBModels\LaborFactorDB.cs" />
     <Compile Include="DBModels\MaterialDB.cs" />

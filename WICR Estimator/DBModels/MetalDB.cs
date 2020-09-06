@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace WICR_Estimator.DBModels
 {
-    public class MetalDB:IDbData
+    //[Serializable]
+    public class MetalDB
     {
+       
         public bool IsChecked { get; set; }
 
         public int MetalId { get; set; }
