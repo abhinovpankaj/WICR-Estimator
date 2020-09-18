@@ -11,8 +11,19 @@ namespace WICR_Estimator.Services
 {
     public class HTTPHelper
     {
-        //const string BASEURL = "http://wicrwebapi-test.us-east-1.elasticbeanstalk.com/api/";
+        //const string BASEURL = "http://wicrwebapi-dev.us-east-1.elasticbeanstalk.com/api/";
+
+        //public static object ConfigurationManager { get; private set; }
+        //ConfigurationManager.AppSettings["apiUrl"]
         const string BASEURL = "http://localhost:5000/api/";
+
+        static HttpClient GetApiClient()
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(BASEURL);
+            return client;
+        }
+
         #region Material
         public static async Task<IEnumerable<MaterialDB>> GetMaterialsAsync()
         {

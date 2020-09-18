@@ -759,7 +759,7 @@ namespace WICR_Estimator.ViewModels
         public virtual ObservableCollection<Metal> GetMetalsDB()
         {
             ObservableCollection<Metal> met = new ObservableCollection<Metal>();
-            met.Add(new Metal("L - METAL / FLASHING", "4X6", getMetalPR("L-Metal/Flashing 4'X6''"), laborRate, 0, getMetalMP("L-Metal/Flashing 4'X6\""), false));
+            met.Add(new Metal("L - METAL / FLASHING", "4X6", getMetalPR("L-Metal/Flashing 4'X6''"), laborRate, 0, getMetalMP("L-Metal/Flashing 4'X6''"), false));
             met.Add(new Metal("DRIP EDGE METAL", "2X4", getMetalPR("Drip Edge Metal 2\" x 4\""), laborRate, 0, getMetalMP("Drip Edge Metal 2\" x 4\""), false));
             met.Add(new Metal("STAIR METAL", "4X6", getMetalPR("Stair Metal 4X6"), laborRate, getUnits(0), getMetalMP("Stair Metal 4X6"), true));
             met.Add(new Metal("STAIR METAL", "3X3", getMetalPR("Stair Metal 3X3"), laborRate, getUnits(1), getMetalMP("Stair Metal 3X3"), true));
@@ -798,7 +798,7 @@ namespace WICR_Estimator.ViewModels
             met.Add(new AddOnMetal("Door Pan", "3'", getMetalPR("Door Pan 3'"), laborRate, 0, getMetalMP("Door Pan 3'"), false));
             met.Add(new AddOnMetal("CORNER DRIP TERMINATION", "", getMetalPR("Corner Drip Termination"), laborRate, 0, getMetalMP("Corner Drip Termination"), false));
             met.Add(new AddOnMetal("OFFSET DRIP TERMINATION", "", getMetalPR("Offset Drip Termination"), laborRate, 0, getMetalMP("Offset Drip Termination"), false));
-            met.Add(new AddOnMetal("SRAIGHT DRIP TERMINATION", "", getMetalPR(28), laborRate, 0, getMetalMP(28), false));
+            met.Add(new AddOnMetal("STRAIGHT DRIP TERMINATION", "", getMetalPR("Straight Drip Termination"), laborRate, 0, getMetalMP("Straight Drip Termination"), false));
             met.Add(new AddOnMetal("STANDARD SCUPPER", "2x4x9", getMetalPR("2\" x 4\" x 9\" Standard Scupper"), laborRate, 0, getMetalMP("2\" x 4\" x 9\" Standard Scupper"), false));
             met.Add(new AddOnMetal("STANDARD SCUPPER", "3x4x9", getMetalPR("3\" x 4\" x 9\" standard scupper"), laborRate, 0, getMetalMP("3\" x 4\" x 9\" standard scupper"), false));
             met.Add(new AddOnMetal("OVERFLOW SCUPPER", "", getMetalPR("Overflow Scupper"), laborRate, 0, getMetalMP("Overflow Scupper"), false));

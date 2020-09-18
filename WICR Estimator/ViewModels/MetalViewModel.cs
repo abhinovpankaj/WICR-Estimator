@@ -19,7 +19,8 @@ namespace WICR_Estimator.ViewModels
         public MetalViewModel(JobSetup js)
         {
             prevailingWage = js.ActualPrevailingWage==0?0:(js.ActualPrevailingWage - laborRate) / laborRate;
-            GetMetalDetailsFromGoogle(js.ProjectName);
+            //GetMetalDetailsFromGoogle(js.ProjectName);
+            GetMetalDetailsFromDB(js.ProjectName);
             if (js.ProjectName== "Paraseal LG")
             {
                 Metals = GetMetalsLG();
@@ -27,11 +28,13 @@ namespace WICR_Estimator.ViewModels
             }
             else
             {
-                Metals = GetMetals();
-                AddOnMetals = GetAddOnMetals();
+                //Metals = GetMetals();
+                //AddOnMetals = GetAddOnMetals();
+                Metals = GetMetalsDB();
+                AddOnMetals = GetAddOnMetalsDB();
             }
-                
-            MiscMetals =GetMiscMetals();
+
+            MiscMetals = GetMiscMetalsDB();//GetMiscMetals();
             if (js.ProjectName=="Multicoat")
             {
                 MiscMetals.Where(x => x.Name == "Nosing for Concrete risers").FirstOrDefault().Units = 0;

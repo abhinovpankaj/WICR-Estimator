@@ -138,16 +138,25 @@
                                 </DataGridCheckBoxColumn.ElementStyle>
                             </DataGridCheckBoxColumn>
                             <materialDesign:DataGridTextColumn Header="Metal Name"
+                                                               IsReadOnly="True"
                                                         Binding="{ Binding MetalName}"/>
                             <materialDesign:DataGridTextColumn Header="Units"
+                                                               ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
                                                         Binding="{ Binding Units}"/>
                             <materialDesign:DataGridTextColumn Header="Metal Price"
+                                                               ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
                                                         Binding="{ Binding MetalPrice}"/>
                             <materialDesign:DataGridTextColumn Header="Prouction Rate"
+                                                               ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
                                                         Binding="{ Binding ProductionRate}"/>
                             <materialDesign:DataGridTextColumn Header="Metal Type"
+                                                               IsReadOnly="True"
                                                         Binding="{ Binding MetalType}"/>
                             <materialDesign:DataGridTextColumn Header="Vendor"
+                                                               IsReadOnly="True"
                                                         Binding="{ Binding Vendor}"/>
                             
                         </DataGrid.Columns>

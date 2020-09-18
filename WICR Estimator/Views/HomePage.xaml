@@ -248,7 +248,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateIndependentProject
                   IsReadOnly="True"
                   CanUserAddRows="False"
                   AutoGenerateColumns="False"
-                  Background="#BFBFBF"
+                  Background="{StaticResource AccentColorBrush4}"
                   Margin="10,5,10,0"
                   >
                     <DataGrid.Resources>
@@ -261,10 +261,12 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateIndependentProject
                     </DataGrid.Resources>
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Name" IsReadOnly="True"
+                                            Width="200"
                                     Binding="{Binding Converter={ StaticResource  projectNameConv}}">
 
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Work Area" IsReadOnly="True"
+                                             Width="150"
                                     Binding="{Binding WorkArea}">
 
                         </DataGridTextColumn>

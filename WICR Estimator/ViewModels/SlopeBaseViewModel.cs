@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml.Serialization;
 using WICR_Estimator.Models;
+using WICR_Estimator.Services;
 
 namespace WICR_Estimator.ViewModels
 {
@@ -430,10 +431,7 @@ namespace WICR_Estimator.ViewModels
             {
                 double.TryParse(pWage[1][0].ToString(), out deductionOnLargeJob);
             }
-            
-
-            
-
+ 
         }
         
         public virtual void JobSetup_OnJobSetupChange(object sender, EventArgs e)
@@ -782,6 +780,48 @@ namespace WICR_Estimator.ViewModels
                 
             }
 
+        }
+        #endregion
+
+        #region DBData
+        public DBData dbData;
+        public void GetSlopeDetailsDB(string projectName)
+        {
+            if (projectName.Contains('.'))
+            {
+                projectName = projectName.Split('.')[0];
+            }
+
+            if (perMixRates == null)
+            {
+                //perMixRates = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "P25:Q30");
+                dbData = DataSerializerService.DSInstance.deserializeDbData(projectName);
+                laborRate = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "LaborRate").FactorValue;
+                manualAvgMixPrice = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Manul Override Avg Labor/mix").PerMixCost;
+                deductionOnLargeJob = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Deduct on Labor for large jobs").Value;
+            }
+            
+        }
+        public virtual double getGSLaborRateDB(string thickness,string slopeType)
+        {
+            double result;
+            result = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == thickness && x.SlopeType==slopeType).LaborRate;
+            return result * (1 - productionRate);           
+        }
+
+        public virtual double getPricePerMixDB(string thickness, bool isApproved, string slopeType)
+        {
+            double result;
+            
+            if (isApproved)
+            {
+                result = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == thickness && x.SlopeType == slopeType).PerMixCost;
+            }
+            else
+            {
+                result = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Default" && x.SlopeType == slopeType).PerMixCost;               
+            }
+            return result;
         }
         #endregion
 

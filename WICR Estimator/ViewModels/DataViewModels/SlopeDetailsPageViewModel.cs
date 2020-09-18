@@ -229,7 +229,11 @@ namespace WICR_Estimator.ViewModels.DataViewModels
         private async Task GetSlopes()
         {
             Slopes = await HTTPHelper.GetSlopesAsync();
-            FilteredSystemSlopes = Slopes.Where(x=>x.ProjectId==1).ToObservableCollection();
+            if (Slopes!=null)
+            {
+                FilteredSystemSlopes = Slopes.Where(x => x.ProjectId == 1).ToObservableCollection();
+            }
+            
         }
         private void GetSlopesById(int id)
         {

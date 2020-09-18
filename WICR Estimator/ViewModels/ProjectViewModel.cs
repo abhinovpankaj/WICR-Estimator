@@ -177,15 +177,15 @@ namespace WICR_Estimator.ViewModels
 
                     #region DBConnectAndSaveDataLocally
 
-                    //var dbValues = DataSerializerService.DSInstance.deserializeDbData(DataType.Rate, originalProjectname);
+                    //var dbValues = DataSerializerService.DSInstance.deserializeDbData( originalProjectname);
                     //if (dbValues == null)
                     //{
-                        DataSerializerService.DSInstance.dbData = new  DBData();
-                        //IList<IList<object>> LaborRate=await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Rate);
+                        DataSerializerService.DSInstance.dbData = new DBData();
+
                         var project = await HTTPHelper.GetProjectByNameAsync(originalProjectname);
 
                         DataSerializerService.DSInstance.dbData.LaborDBData = await HTTPHelper.GetLaborFactorsAsyncByProjectID(project.ProjectId);
-                        
+
 
                         DataSerializerService.DSInstance.dbData.MetalDBData = await HTTPHelper.GetMetalsAsync();
 

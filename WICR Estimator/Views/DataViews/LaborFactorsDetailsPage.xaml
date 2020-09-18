@@ -99,8 +99,11 @@
                                 </DataGridCheckBoxColumn>
                                 <materialDesign:DataGridTextColumn Header="Labor Factor Name"
                                                                        Width="400"
+                                                                   IsReadOnly="True"
                                                         Binding="{ Binding Name}"/>
                                 <materialDesign:DataGridTextColumn Header="Factor Value"
+                                                                                 ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
                                                         Binding="{ Binding Value}"/>
                                 
 

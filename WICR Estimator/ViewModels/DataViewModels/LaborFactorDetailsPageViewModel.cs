@@ -230,7 +230,11 @@ namespace WICR_Estimator.ViewModels.DataViewModels
         private async Task GetLaborFactors()
         {
             LaborFactors = await HTTPHelper.GetLaborFactorsAsync();
-            FilteredLaborFactors = LaborFactors.Where(x => x.ProjectId == 1).ToObservableCollection();
+            if (LaborFactors!=null)
+            {
+                FilteredLaborFactors = LaborFactors.Where(x => x.ProjectId == 1).ToObservableCollection();
+            }
+            
         }
         private void GetLaborFactorsById(int id)
         {

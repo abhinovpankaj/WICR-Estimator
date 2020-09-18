@@ -19,7 +19,7 @@
         <conv:EnableTextboxConverter x:Key="textboxConv"/>
         <conv:QtyTextboxConverter x:Key="qtyTextboxConv"/>
         <conv:HasFieldEdited x:Key="HasFieldEdited"/>
-        <Style TargetType="Label" x:Key="LabelStyle1">
+        <!--<Style TargetType="Label" x:Key="LabelStyle1">
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="FontFamily" Value="Arial"/>
             <Setter Property="FontSize" Value="11"/>
@@ -44,9 +44,9 @@
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="HorizontalContentAlignment"  Value="Center"/>
-            <!--<Setter Property="BorderBrush" Value="Black"/>
-            <Setter Property="BorderThickness"  Value="1"/>-->
-        </Style>
+            --><!--<Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness"  Value="1"/>--><!--
+        </Style>-->
         <Style x:Key="cbTB" TargetType="{x:Type CheckBox}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding ElementName=qtyTb, Path=IsEnabled}" Value="True">
@@ -73,6 +73,11 @@
                     <Setter Property="Background" Value="LightYellow" />
                 </Trigger>
             </Style.Triggers>
+        </Style>
+        <Style BasedOn="{StaticResource {x:Type  DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="Background" Value="{StaticResource AccentColorBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource  IdealForegroundColorBrush}" />
+            <Setter Property="Padding" Value="6" />
         </Style>
     </UserControl.Resources>
     <Grid>
@@ -182,55 +187,55 @@
             </DataGrid>
         </ScrollViewer>
         
-        <Grid Grid.Column="1" Grid.RowSpan="2">
+        <Grid Grid.Column="1" Grid.RowSpan="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
         
-        <GroupBox x:Name="OtherCost" Grid.Column="1"
-                  Header="Other Cost" Foreground="Maroon"
-                  FontFamily="Arial"
-                  FontSize="12"
-                  FontWeight="Bold"
-                  BorderBrush="DarkBlue"
-                  BorderThickness="0.5" >
-                <ScrollViewer>
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal"
-                            Background="FloralWhite" >
-                            <Label Content="Total ($) :"                         
-                       Margin="5"
-                       Style="{StaticResource LabelStyle1}"
-                           FontSize="12"
-                           Background="FloralWhite"/>
+        <GroupBox x:Name="OtherCost" Grid.Column="1">
+                <GroupBox.Header>
+                    <StackPanel Orientation="Horizontal">
+                        
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Foreground="White"
+                            Margin="2,0,0,0"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
+                            Text="Sub Contract Labor" />
+                            <TextBlock x:Name="TotalSCExtension" Foreground="White"
+                            IsEnabled="False"                        
+                            Margin="15,0,0,0"    
+                            VerticalAlignment="Center"
+                            Style="{StaticResource  MaterialDesignSubtitle1TextBlock}"                
+                            Text="{Binding TotalOCLaborExtension, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
 
-                            <TextBox x:Name="TotalOCExtension"
-                             IsEnabled="False"
-                             VerticalContentAlignment="Center"
-                             Margin="5"                       
-                             Height="25"  Width="100"  Style="{StaticResource TextBoxStyle}"                
-                             Text="{Binding TotalOCLaborExtension, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
 
                         </StackPanel>
+                    </StackPanel>
+                </GroupBox.Header>
+            <ScrollViewer>
+                    
                         <DataGrid AutoGenerateColumns="False"
-                              materialDesign:DataGridAssist.CellPadding="4 2 2 2"    CanUserSortColumns="False"
+                              materialDesign:DataGridAssist.CellPadding="4 2 2 2"  
+                                  CanUserSortColumns="False"
                           HorizontalAlignment="Left"
                       Name="OtherCostGrid" 
                           VerticalAlignment="Top"
-                      Margin="5,10,10,10"
+                      
                       Grid.Column="1"
                           CellStyle="{StaticResource editableCell}"
                       CanUserAddRows="false"                      
                   ItemsSource="{Binding OtherLaborMaterials,UpdateSourceTrigger=PropertyChanged}">
+                           
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Header="Items" IsReadOnly="True">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBox BorderThickness="0"
                                                 Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}"
-                                     IsReadOnly="True">
+                                                        IsReadOnly="True">
 
                                             </TextBox>
                                         </DataTemplate>
@@ -281,193 +286,192 @@
                             </DataGrid.Columns>
 
                         </DataGrid>
-                    </StackPanel>
+                   
                 </ScrollViewer>
             
         </GroupBox>
-        <Grid Grid.Row="1" x:Name="TotalHrsSection">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <!--<RowDefinition Height="*"/>-->
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                    <!--<RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>-->
-                </Grid.RowDefinitions>
-                <Label Content="Total hours"
-                       Style="{StaticResource LabelStyle1}"/>
-                <Label Content="System hours" Grid.Row="1"
-                       Style="{StaticResource LabelStyle1}"/>
-                <Label Content="Metal hours" Grid.Row="2"
-                       Style="{StaticResource LabelStyle1}"/>
-                <Label Content="Sloping hours" Grid.Row="3"
-                       Style="{StaticResource LabelStyle1}"/>
-                <!--<Label Content="Freight hours" Grid.Row="4"
-                       Style="{StaticResource LabelStyle1}"/>-->
-                <StackPanel Grid.Row="5" Orientation="Horizontal"
-                            VerticalAlignment="Center"
+            <Grid Grid.Row="1" x:Name="TotalHrsSection">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <!--<RowDefinition Height="*"/>-->
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <!--<RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>-->
+                    </Grid.RowDefinitions>
+                    <Label Content="Total hours"
+                           Style="{StaticResource  MaterialDesignLabel}"/>
+                    <Label Content="System hours" Grid.Row="1"
+                           Style="{StaticResource  MaterialDesignLabel}"/>
+                    <Label Content="Metal hours" Grid.Row="2"
+                           Style="{StaticResource  MaterialDesignLabel}"/>
+                    <Label Content="Sloping hours" Grid.Row="3"
+                           Style="{StaticResource  MaterialDesignLabel}"/>
+                    <!--<Label Content="Freight hours" Grid.Row="4"
+                           Style="{StaticResource LabelStyle1}"/>-->
+                    <StackPanel Grid.Row="5" Orientation="Horizontal"
+                                VerticalAlignment="Center"
                            
-                            HorizontalAlignment="Right">
-                    <CheckBox IsChecked="{Binding IncludeDriveHours}"
-                              Margin="5"></CheckBox>
-                    <Label Content="Drive hours"  
-                           Style="{StaticResource LabelStyle1}"/>
+                                HorizontalAlignment="Right">
+                        <CheckBox IsChecked="{Binding IncludeDriveHours}"
+                                  Margin="5"></CheckBox>
+                        <Label Content="Drive hours"  
+                               Style="{StaticResource  MaterialDesignLabel}"/>
                 
-                </StackPanel>
+                    </StackPanel>
                 
-                <Border BorderThickness="0,2,0,0" Margin="2,10,2,10"
-                        BorderBrush="Black" Grid.Row="6"
-                        Grid.ColumnSpan="2"/>
-                <!--<Label Content="Total Setup Time" Grid.Row="7"
-                   Style="{StaticResource LabelStyle1}"/>-->
-                <Label Content="Labor Cost per SQ. FT." Grid.Row="7"
-                   Style="{StaticResource LabelStyle1}"/>
-                <Label Content="Total Labor Cost" Grid.Row="8"
-                   Style="{StaticResource LabelStyle1}"/>
-                <Border Grid.Column="1" BorderBrush="Black"
-                        BorderThickness="0,0,0,1">
-                    <TextBlock IsEnabled="False"                        
-                         Margin="5"                
-                         Width="100"
-                         FontSize="14"               
-                         Text="{Binding TotalHrsLabor,  StringFormat={}{0:n2},
-                    UpdateSourceTrigger=PropertyChanged}"/>
-                </Border>
-                <Border Grid.Column="1" Grid.Row="1" BorderBrush="Black"
-                        BorderThickness="0,0,0,1">
-                    <TextBlock IsEnabled="False"                        
-                         Margin="5"                       
-                         Width="100"
-                          FontSize="14"              
-                         Text="{Binding TotalHrsSystemLabor,
-                    UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
-                </Border>
-                <Border Grid.Column="1"  Grid.Row="2" BorderBrush="Black"
-                        BorderThickness="0,0,0,1">
-                    <TextBlock IsEnabled="False"                        
-                         Margin="5"                     
-                         Width="100"
-                           FontSize="14"              
-                         Text="{Binding TotalHrsMetalLabor,
-                    UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
-                </Border>
-                <Border Grid.Column="1"  Grid.Row="3" BorderBrush="Black"
-                        BorderThickness="0,0,0,1">
-                    <TextBlock IsEnabled="False"                        
-                         Margin="5"                      
-                         Width="100"
-                         FontSize="14"              
-                         Text="{Binding TotalHrsSlopeLabor, UpdateSourceTrigger=PropertyChanged,
-                        StringFormat={}{0:n2}}"/>
-                </Border>
-                <!--<Border Grid.Column="1"  Grid.Row="4" BorderBrush="Black"
-                        BorderThickness="0,0,0,1">
-                    <TextBlock IsEnabled="False"                      
-                         Width="100" 
-                         FontSize="14"                
-                         Text="{Binding TotalHrsFreightLabor, 
+                    <Border BorderThickness="0,2,0,0" Margin="2,10,2,10"
+                            BorderBrush="Black" Grid.Row="6"
+                            Grid.ColumnSpan="2"/>
+                    <!--<Label Content="Total Setup Time" Grid.Row="7"
+                       Style="{StaticResource LabelStyle1}"/>-->
+                    <Label Content="Labor Cost per SQ. FT." Grid.Row="7"
+                       Style="{StaticResource  MaterialDesignLabel}"/>
+                    <Label Content="Total Labor Cost" Grid.Row="8"
+                       Style="{StaticResource  MaterialDesignLabel}"/>
+                    <Border Grid.Column="1" BorderBrush="Black"
+                            BorderThickness="0,0,0,1">
+                        <TextBlock IsEnabled="False"                        
+                             Margin="5"                
+                             Width="100"
+                             FontSize="14"               
+                             Text="{Binding TotalHrsLabor,  StringFormat={}{0:n2},
+                        UpdateSourceTrigger=PropertyChanged}"/>
+                    </Border>
+                    <Border Grid.Column="1" Grid.Row="1" BorderBrush="Black"
+                            BorderThickness="0,0,0,1">
+                        <TextBlock IsEnabled="False"                        
+                             Margin="5"                       
+                             Width="100"
+                              FontSize="14"              
+                             Text="{Binding TotalHrsSystemLabor,
                         UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
-                </Border>-->
-                <Border Grid.Column="1"  Grid.Row="5" BorderBrush="Black"
-                        BorderThickness="0,0,0,1">
-                    <TextBlock IsEnabled="False" 
-                               Background="Yellow"
-                          Grid.Column="1"                      
-                         Width="100"
-                         FontSize="14"                
-                         Text="{Binding TotalHrsDriveLabor, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
-                </Border>
+                    </Border>
+                    <Border Grid.Column="1"  Grid.Row="2" BorderBrush="Black"
+                            BorderThickness="0,0,0,1">
+                        <TextBlock IsEnabled="False"                        
+                             Margin="5"                     
+                             Width="100"
+                               FontSize="14"              
+                             Text="{Binding TotalHrsMetalLabor,
+                        UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
+                    </Border>
+                    <Border Grid.Column="1"  Grid.Row="3" BorderBrush="Black"
+                            BorderThickness="0,0,0,1">
+                        <TextBlock IsEnabled="False"                        
+                             Margin="5"                      
+                             Width="100"
+                             FontSize="14"              
+                             Text="{Binding TotalHrsSlopeLabor, UpdateSourceTrigger=PropertyChanged,
+                            StringFormat={}{0:n2}}"/>
+                    </Border>
+                    <!--<Border Grid.Column="1"  Grid.Row="4" BorderBrush="Black"
+                            BorderThickness="0,0,0,1">
+                        <TextBlock IsEnabled="False"                      
+                             Width="100" 
+                             FontSize="14"                
+                             Text="{Binding TotalHrsFreightLabor, 
+                            UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
+                    </Border>-->
+                    <Border Grid.Column="1"  Grid.Row="5" BorderBrush="Black"
+                            BorderThickness="0,0,0,1">
+                        <TextBlock IsEnabled="False" 
+                                   Background="{StaticResource SecondaryAccentBrush}"
+                              Grid.Column="1"                      
+                             Width="100"
+                             FontSize="14"                
+                             Text="{Binding TotalHrsDriveLabor, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
+                    </Border>
                 
-                <Border Grid.Column="1"  Grid.Row="7" 
-                        BorderBrush="Black"
-                        BorderThickness="0,0,0,1">
-                    <TextBlock IsEnabled="False"                        
-                         Margin="5"                       
-                         Width="100"
-                         FontSize="14"              
-                         Text="{Binding TotalLaborUnitPrice, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
-                </Border>
-                <Border Grid.Column="1"  Grid.Row="8" BorderBrush="Black"
-                        BorderThickness="0,0,0,1">
-                    <TextBlock IsEnabled="False"                        
-                               Margin="5"                      
-                               Width="100"
-                               FontSize="14"             
-                               Text="{Binding TotalLaborWithoutDrive, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
-                </Border>
+                    <Border Grid.Column="1"  Grid.Row="7" 
+                            BorderBrush="Black"
+                            BorderThickness="0,0,0,1">
+                        <TextBlock IsEnabled="False"                        
+                             Margin="5"                       
+                             Width="100"
+                             FontSize="14"              
+                             Text="{Binding TotalLaborUnitPrice, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
+                    </Border>
+                    <Border Grid.Column="1"  Grid.Row="8" BorderBrush="Black"
+                            BorderThickness="0,0,0,1">
+                        <TextBlock IsEnabled="False"                        
+                                   Margin="5"                      
+                                   Width="100"
+                                   FontSize="14"             
+                                   Text="{Binding TotalLaborWithoutDrive, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
+                    </Border>
 
-                <StackPanel Grid.ColumnSpan="2" Grid.Row="9"
-                            Margin="0,15,0,0">
-                    <CheckBox Content="ADD LABOR FOR MINIMUM CHARGE" 
-                              Margin="20,5,0,5"
-                              IsChecked="{Binding ZAddLaborMinCharge}"
-                              FontSize="15"/>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <!--<ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>-->
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <!--<TextBlock Text="#Hours"/>
-                        <TextBlock Text="{Binding LaborMinChargeHrs,StringFormat=N2}"
-                               Grid.Row="1"/>
-                        <TextBlock Text="SetupMinCharge" Grid.Column="1"/>
-                        <TextBlock Text="{Binding LaborMinChargeMinSetup,StringFormat=N2}" 
-                                   Grid.Column="1"
-                                   Grid.Row="1"/>-->
-                        <TextBlock Text="Min Labor Hrs" Grid.Column="0" Margin="0,0,15,0"/>
-                        <TextBlock Text="{Binding LaborMinChargeLaborUnitPrice,StringFormat=N2}" 
-                               Grid.Row="1" Grid.Column="0"  Margin="0,0,15,0"/>
-                        <TextBlock Text="Min Labor Extension" Grid.Column="1"/>
-                        <TextBlock Text="{Binding LaborMinChargeLaborExtension,StringFormat=N2}" Grid.Column="1"
-                               Grid.Row="1"/>
-                    </Grid>
+                    <StackPanel Grid.ColumnSpan="2" Grid.Row="9"
+                                Margin="0,15,0,0">
+                        <CheckBox Content="ADD LABOR FOR MINIMUM CHARGE" 
+                                  Margin="20,5,0,5"
+                                  IsChecked="{Binding ZAddLaborMinCharge}"
+                                  FontSize="15"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <!--<ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>-->
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <!--<TextBlock Text="#Hours"/>
+                            <TextBlock Text="{Binding LaborMinChargeHrs,StringFormat=N2}"
+                                   Grid.Row="1"/>
+                            <TextBlock Text="SetupMinCharge" Grid.Column="1"/>
+                            <TextBlock Text="{Binding LaborMinChargeMinSetup,StringFormat=N2}" 
+                                       Grid.Column="1"
+                                       Grid.Row="1"/>-->
+                            <TextBlock Text="Min Labor Hrs" Grid.Column="0" Margin="0,0,15,0"/>
+                            <TextBlock Text="{Binding LaborMinChargeLaborUnitPrice,StringFormat=N2}" 
+                                   Grid.Row="1" Grid.Column="0"  Margin="0,0,15,0"/>
+                            <TextBlock Text="Min Labor Extension" Grid.Column="1"/>
+                            <TextBlock Text="{Binding LaborMinChargeLaborExtension,StringFormat=N2}" Grid.Column="1"
+                                   Grid.Row="1"/>
+                        </Grid>
                     
-                </StackPanel>
+                    </StackPanel>
                     
                 
                
-            </Grid>
-        <Button Command="{Binding CalculateCostCommand}"                   
-                    Height="35"
-                    Margin="0,10,22,5"
-                    Background="White"
-                    Grid.Row="2"
-                    VerticalAlignment="Bottom"
-                    HorizontalAlignment="right">
+                </Grid>
+            <Button Command="{Binding CalculateCostCommand}"                   
+                        Height="35"
+                        Margin="0,15,5,5"
+                        Grid.Row="2"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="right">
 
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="&#xE1D0;" FontFamily="Segoe UI Symbol" FontSize="16"
-                                       VerticalAlignment="Center"/>
+                        <materialDesign:PackIcon Kind="Calculator"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"/>
                         <TextBlock Text="Calculate" VerticalAlignment="Center"
-                                   HorizontalAlignment="Left"
-                                   Margin="5,0,5,0" FontSize="12" FontWeight="bold"/>
-                        <!--<Image Source="../Images/Calculator.png"
-                               Height="25" Width="36"/>-->
+                                    HorizontalAlignment="Left"
+                                    Margin="5" FontWeight="bold"/>
+
                     </StackPanel>
                 </Button.Content>
             </Button>
-          
-            
+
+
         </Grid>
         <ScrollViewer Grid.Row="1">
         <Grid Margin="10,2,2,2"
@@ -646,7 +650,7 @@
                 </ListBoxItem>
                 <ListBoxItem HorizontalAlignment="Center">
                     <Border BorderBrush="Black" HorizontalAlignment="Stretch"
-                            Background="Yellow"
+                            Background="{StaticResource SecondaryAccentBrush}"
                             BorderThickness="0,0,0,2">
                         <TextBlock HorizontalAlignment="Stretch" Width="100"
                         Text="{Binding DriveLaborValue}"/>
@@ -858,7 +862,7 @@
             </ListBox>
         </Grid>
         </ScrollViewer>
-        <Grid Grid.Row="2" Background="Aquamarine">
+        <Grid Grid.Row="2" Background="{StaticResource AccentColorBrush4}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -885,7 +889,7 @@
                             FontWeight="SemiBold"/>
                 <TextBlock Margin="20,0,0,0" Text="{Binding LaborPerc}"/>
             </StackPanel>
-            <TextBlock Background="Yellow" Grid.Column="3"
+            <TextBlock Background="{StaticResource SecondaryAccentBrush}" Grid.Column="3"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Text="Drive Labor"/>

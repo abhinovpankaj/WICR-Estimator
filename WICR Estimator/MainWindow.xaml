@@ -22,7 +22,7 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{materialDesign:MaterialDesignFont}"
-        Loaded="Window_Loaded" Closing="Window_Closing" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
+        Loaded="Window_Loaded" Closing="Window_Closing" WindowStartupLocation="CenterOwner"
        >
     <Window.Resources>
         <DataTemplate DataType="{x:Type myVM:HomeViewModel}">
@@ -71,228 +71,226 @@
         </Storyboard>
 
     </Window.Resources>
-    <Window.Triggers>
+    <!--<Window.Triggers>
         <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonClose">
             <BeginStoryboard x:Name="CloseMenu_BeginStoryBoard" Storyboard="{StaticResource CloseMenu}"/>
         </EventTrigger>
         <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonMenu">
             <BeginStoryboard x:Name="OpenMenu_BeginStoryBoard" Storyboard="{StaticResource OpenMenu}"/>
         </EventTrigger>
-    </Window.Triggers>
-    <!--<dragablz:TabablzControl>
-        <dragablz:TabablzControl.InterTabController>
-            <dragablz:InterTabController />
-        </dragablz:TabablzControl.InterTabController>
-        
-        
-        <TabItem Header="Create Estimates">
-            <Grid>
-                -->
-    <!--<Grid.Background>
-            <VisualBrush>
-                <VisualBrush.Visual>
-                    <Image Source="Images/wicr_bg.png" Margin="0,220,0,0" Width="50">
-                        <Image.BitmapEffect>
-                            <BlurBitmapEffect KernelType="Gaussian" Radius="2" />
-                        </Image.BitmapEffect>
-                    </Image>
-                </VisualBrush.Visual>
-            </VisualBrush>
-        </Grid.Background>-->
-    <!--
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
+    </Window.Triggers>-->
+    <materialDesign:DrawerHost                           
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          BorderThickness="2"
+                          BorderBrush="{DynamicResource MaterialDesignDivider}">
+        <materialDesign:DrawerHost.Style>
+            <Style  TargetType="materialDesign:DrawerHost"
+                          BasedOn="{StaticResource {x:Type materialDesign:DrawerHost}}">
+                <Style.Triggers>
+                    <DataTrigger   Binding="{Binding IsChecked, ElementName=BackgroundToggle}"  Value="True">
+                        <Setter  Property="OverlayBackground"  Value="{DynamicResource PrimaryHueMidBrush}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </materialDesign:DrawerHost.Style>
+        <materialDesign:DrawerHost.LeftDrawerContent>
+            <StackPanel>
+                <!--<Button x:Name="ButtonClose"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Right"
+                        Width="30"
+                        Padding="0"
+                        Height="30"                      
+                        Background="{x:Null}"
+                        BorderBrush="{x:Null}">
+                        <materialDesign:PackIcon Kind="Close" 
+                                             Foreground="{StaticResource AccentColorBrush}"/>
+                    </Button>-->
+                <Image Height="140" Source="Images/WICR Logo.ico" Stretch="Uniform">
 
-                </Grid.RowDefinitions>
+                </Image>
+                <ListView x:Name="MenuList" FontSize="18" Margin="0,10,0,0"
+                           >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonUp">
+                            <i:InvokeCommandAction Command="{Binding NavigationCommand}"
+                                                   CommandParameter="{Binding ElementName=MenuList, Path=SelectedItem}"/>
+                            <i:InvokeCommandAction Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
+                    CommandParameter="{x:Static Dock.Left}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <ListViewItem Height="45" Padding="0" x:Name="Estimates">
+
+                        <StackPanel Orientation="Horizontal" Margin="10,0">
+                            <materialDesign:PackIcon Foreground="{StaticResource AccentColorBrush}"
+                                                     
+                                                     VerticalAlignment="Center"
+                                                     Margin="5"
+                                Kind="CreateOutline"/>
+                            <TextBlock Text="Create Estimate" Margin="10"/>
+                        </StackPanel>
+
+
+                    </ListViewItem>
+                    <ListViewItem Height="45" Padding="0" x:Name="ProjectList">
+                        <StackPanel Orientation="Horizontal" Margin="10,0">
+                            <materialDesign:PackIcon Width="20" Foreground="{StaticResource AccentColorBrush}"
+                                                     Height="20"
+                                                     VerticalAlignment="Center"
+                                                     Margin="5"
+                                Kind="OfficeBuilding"/>
+                            <TextBlock Text="Projects" Margin="10"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem Height="45" Padding="0" x:Name="Login">
+                        <StackPanel Orientation="Horizontal" Margin="10,0">
+                            <materialDesign:PackIcon Width="20" Foreground="{StaticResource HighlightBrush}"
+                                                     Height="20"
+                                                     VerticalAlignment="Center"
+                                                     Margin="5"
+                                Kind="Login"/>
+                            <TextBlock Text="Login" Margin="10"/>
+                        </StackPanel>
+                    </ListViewItem>
+
+                    <ListViewItem Height="45" Padding="0"  x:Name="Prices" IsEnabled="False">
+                        <StackPanel Orientation="Horizontal" Margin="10,0">
+                            <materialDesign:PackIcon Width="20" Foreground="Gold"
+                                                     Height="20"
+                                                     VerticalAlignment="Center"
+                                                     Margin="5"
+                                Kind="Dollar"/>
+                            <TextBlock Text="Manage Prices" Margin="10"/>
+                        </StackPanel>
+                    </ListViewItem>
+
+                    <ListViewItem Height="45" Padding="0"  x:Name="Materials">
+                        <StackPanel Orientation="Horizontal" Margin="25,0">
+                            <materialDesign:PackIcon Width="20" Foreground="Gold"
+                                                     Height="20"
+                                                     VerticalAlignment="Center"
+                                                     Margin="5"
+                                Kind="MaterialDesign"/>
+                            <TextBlock Text="Material Prices" Margin="10"
+                                       FontSize="16"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem Height="45" Padding="0" x:Name="Slopes">
+                        <StackPanel Orientation="Horizontal" Margin="25,0">
+                            <materialDesign:PackIcon Width="20" Foreground="Gold"
+                                                     Height="20"
+                                                     VerticalAlignment="Center"
+                                                     Margin="5"
+                                Kind="SlopeDownhill"/>
+                            <TextBlock Text="Slope Prices" Margin="10" FontSize="16"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem Height="45" Padding="0" x:Name="Metals">
+                        <StackPanel Orientation="Horizontal" Margin="25,0">
+                            <materialDesign:PackIcon Width="20" Foreground="Gold"
+                                                     Height="20"
+                                                     VerticalAlignment="Center"
+                                                     Margin="5"
+                                Kind="Delta"/>
+                            <TextBlock Text="Metal Prices" Margin="10" FontSize="16"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem Height="45" Padding="0" x:Name="Laborfactors">
+                        <StackPanel Orientation="Horizontal" Margin="25,0">
+                            <materialDesign:PackIcon Width="20" Foreground="Gold"
+                                                     Height="20"
+                                                     VerticalAlignment="Center"
+                                                     Margin="5"
+                                Kind="Xamarin"/>
+                            <TextBlock Text="Labor Factors" Margin="10" FontSize="16"/>
+                        </StackPanel>
+                    </ListViewItem>
+                </ListView>
+            </StackPanel>
+        </materialDesign:DrawerHost.LeftDrawerContent>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid x:Name="GridBackground" Opacity="1" Grid.Row="1">
+                <Grid.Background>
+                    <ImageBrush ImageSource="Images/WICR Logo.ico" TileMode="Tile" Opacity="0.1"/>
+                </Grid.Background>
                 <DockPanel LastChildFill="True">
+                    <!--<DockPanel.Triggers>
+                    <EventTrigger  RoutedEvent ="ButtonBase.Click" SourceName="ButtonClose">
+                        <BeginStoryboard x:Name="CloseMenu" Storyboard="{StaticResource CloseMenu}"/>
+                    </EventTrigger>
+                </DockPanel.Triggers>-->
+
                     <ContentControl Content="{Binding CurrentPageViewModel}" 
                         DockPanel.Dock="Top"/>
                 </DockPanel>
-                <Border BorderBrush="Black"
-                 Grid.Row="1"
-                BorderThickness="0,0,0,0">
-                    <Border.Effect>
-                        <DropShadowEffect BlurRadius="10" Color="#82000000" />
-                    </Border.Effect>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <ItemsControl ItemsSource="{Binding PageViewModels}" 
-                          >
-                            <ItemsControl.ItemTemplate>
+            </Grid>
+            <Grid Background="{StaticResource ProgressBrush}">
+                <Button x:Name="ButtonMenu"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Left"
+                        Background="{x:Null}"
+                        Height="30"
+                        Width="30"
+                        Padding="0"
+                    Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
+                    CommandParameter="{x:Static Dock.Left}"
+                        BorderBrush="{x:Null}">
+                    <materialDesign:PackIcon Kind="Menu" 
+                                     Foreground="{StaticResource SecondaryAccentForegroundBrush}"/>
+                </Button>
+                <materialDesign:PopupBox HorizontalAlignment="Right" Margin="0,0,80,0"
+                                     Content="Actions">
+                    <StackPanel Width="150">
+                        <Button x:Name="Home"
+                        Command="{Binding DataContext.ChangePageCommand,
+                        RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                        CommandParameter="{Binding PageViewModels[0]}">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Home" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Home" Margin="10,0,0,0"
+                                       VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
 
-                                <DataTemplate>
-                                    <WrapPanel Orientation="Horizontal"
-                                    HorizontalAlignment="Center">
-                                        <Button
-                                Command="{Binding DataContext.ChangePageCommand,
-                                RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                                CommandParameter="{Binding }"
-                                Margin="2,5"
-                                Width="100"
-                                Height="30">
-                                            <Button.Content>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock FontFamily="Segoe UI Symbol" FontSize="16"
-                                                       VerticalAlignment="Center">
-                                                        <TextBlock.Style>
-                                                            <Style TargetType="{x:Type TextBlock}">
-                                                                <Setter Property="Text" Value="test"/>
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding Name}" Value="Home" >
-                                                                        <Setter Property="Text" Value="&#xE10F;"/>
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding Name}" Value="Projects" >
-                                                                        <Setter Property="Text" Value="&#xE12A;"/>
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </TextBlock.Style>
-                                                    </TextBlock>
-                                                    -->
-    <!--<materialDesign:PackIcon VerticalAlignment="Center">
-                                                        <materialDesign:PackIcon.Style>
-                                                            <Style TargetType="{x:Type materialDesign:PackIcon}">
-                                                                <Setter Property="Kind" Value="BatterySaver"/>
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding Name}" Value="Home" >
-                                                                        <Setter Property="Kind" Value="Home"/>
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding Name}" Value="Projects" >
-                                                                        <Setter Property="Kind" Value="Domain"/>
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </materialDesign:PackIcon.Style>
-                                                        
-                                                    </materialDesign:PackIcon>-->
-    <!--
-                                                    <TextBlock Text="{Binding Name}" Margin="5,0,0,0"
-                                                       VerticalAlignment="Center"/>
-                                                </StackPanel>
-                                            </Button.Content>
-                                        </Button>
-                                    </WrapPanel>
-
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <VirtualizingStackPanel HorizontalAlignment="Center"
-                            Orientation="Horizontal" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                        <Button x:Name="Save" Width="100"
-                        HorizontalAlignment="Right"
-                        Margin="2,5"
-                        
+                        <Button x:Name="Projects"
+                        Command="{Binding DataContext.ChangePageCommand,
+                        RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                        CommandParameter="{Binding PageViewModels[1]}">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="OfficeBuilding" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Projects" Margin="10,0,0,0"
+                                       VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                        <Separator/>
+                        <Button x:Name="Save"
                         Command="{Binding DataContext.SaveEstimateCommand,
                         RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                         CommandParameter="{Binding }">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    -->
-    <!--<TextBlock Text="&#xE105;" FontFamily="Segoe UI Symbol" FontSize="16"
-                                       VerticalAlignment="Center"/>-->
-    <!--
                                     <materialDesign:PackIcon Kind="ContentSaveAll" VerticalAlignment="Center"/>
                                     <TextBlock Text="Save" Margin="10,0,0,0"
                                        VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button.Content>
                         </Button>
+
                     </StackPanel>
 
-                </Border>
-
-            </Grid>
-        </TabItem>
-        <TabItem Header="Update Cost">
-            <TabItem.Content>
-                <local:MaterialDetailsPage/>
-            </TabItem.Content>
-        </TabItem>
-    </dragablz:TabablzControl>-->
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid x:Name="GridBackground" Opacity="1" Grid.Row="1">
-            <Grid.Background>
-                <ImageBrush ImageSource="Images/WICR Logo.ico" TileMode="Tile" Opacity="0.1"/>
-            </Grid.Background>
-            <DockPanel LastChildFill="True">
-                <!--<DockPanel.Triggers>
-                    <EventTrigger  RoutedEvent ="ButtonBase.Click" SourceName="ButtonClose">
-                        <BeginStoryboard x:Name="CloseMenu" Storyboard="{StaticResource CloseMenu}"/>
-                    </EventTrigger>
-                </DockPanel.Triggers>-->
-                
-                <ContentControl Content="{Binding CurrentPageViewModel}" 
-                        DockPanel.Dock="Top"/>
-            </DockPanel>
-        </Grid>
-        <Grid Background="{StaticResource ProgressBrush}">
-            <Button x:Name="ButtonMenu"
-                        VerticalAlignment="Top"
-                        HorizontalAlignment="Left"
-                        Background="{x:Null}"
-                        Height="30"
-                        Width="30"
-                Padding="0"
-                        BorderBrush="{x:Null}">
-                <materialDesign:PackIcon Kind="Menu" 
-                                     Foreground="{StaticResource SecondaryAccentForegroundBrush}"/>
-            </Button>
-            <materialDesign:PopupBox HorizontalAlignment="Right" Margin="0,0,80,0"
-                                     Content="Actions">
-                <StackPanel Width="150">
-                    <Button x:Name="Home"
-                        Command="{Binding DataContext.ChangePageCommand,
-                        RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                        CommandParameter="{Binding PageViewModels[0]}">
-                        <Button.Content>
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Home" VerticalAlignment="Center"/>
-                                <TextBlock Text="Home" Margin="10,0,0,0"
-                                       VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Button.Content>
-                    </Button>
-
-                    <Button x:Name="Projects"
-                        Command="{Binding DataContext.ChangePageCommand,
-                        RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                        CommandParameter="{Binding PageViewModels[1]}">
-                        <Button.Content>
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="OfficeBuilding" VerticalAlignment="Center"/>
-                                <TextBlock Text="Projects" Margin="10,0,0,0"
-                                       VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Button.Content>
-                    </Button>
-                    <Separator/>
-                    <Button x:Name="Save"
-                        Command="{Binding DataContext.SaveEstimateCommand,
-                        RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                        CommandParameter="{Binding }">
-                        <Button.Content>
-                            <StackPanel Orientation="Horizontal">
-                                  <materialDesign:PackIcon Kind="ContentSaveAll" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Save" Margin="10,0,0,0"
-                                       VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
-                    
-                </StackPanel>
-                
-            </materialDesign:PopupBox>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                </materialDesign:PopupBox>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
                     >
-                <Button x:Name="ButtonMin"
+                    <Button x:Name="ButtonMin"
                         VerticalAlignment="Top"
                         HorizontalAlignment="Right"
                         Background="{x:Null}"
@@ -303,9 +301,9 @@
                                 RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                                 CommandParameter="{Binding }"
                         BorderBrush="{x:Null}">
-                    <materialDesign:PackIcon Kind="WindowMinimize" Foreground="{StaticResource SecondaryAccentForegroundBrush}"/>
-                </Button>
-                <Button x:Name="ButtonExit"
+                        <materialDesign:PackIcon Kind="WindowMinimize" Foreground="{StaticResource SecondaryAccentForegroundBrush}"/>
+                    </Button>
+                    <Button x:Name="ButtonExit"
                         VerticalAlignment="Top"
                         HorizontalAlignment="Right"
                         Background="{x:Null}"
@@ -316,13 +314,13 @@
                                 RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                                 CommandParameter="{Binding }"
                         BorderBrush="{x:Null}">
-                    <materialDesign:PackIcon Kind="Close" Foreground="Red"/>
-                </Button>
-            </StackPanel>
-        </Grid>
-        
+                        <materialDesign:PackIcon Kind="Close" Foreground="Red"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
 
-        <Grid x:Name="GridMenu" Width="250" 
+
+            <!--<Grid x:Name="GridMenu" Width="250" 
               Grid.RowSpan="2" 
               RenderTransformOrigin="0.5,0.5"
               HorizontalAlignment="Left" Margin="-250,0,0,0">
@@ -468,6 +466,11 @@
                     </ListViewItem>
                 </ListView>
             </StackPanel>
+        </Grid>-->
+
+
         </Grid>
-    </Grid>
+
+    </materialDesign:DrawerHost>
+    
 </Window>

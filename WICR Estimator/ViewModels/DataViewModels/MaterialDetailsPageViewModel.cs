@@ -254,7 +254,11 @@ namespace WICR_Estimator
         private async Task GetMaterials()
         {
             Materials =await HTTPHelper.GetMaterialsAsync();
-            FilteredSystemMaterials = Materials.Where(x=>x.ProjectId==1).ToObservableCollection();
+            if (Materials!=null)
+            {
+                FilteredSystemMaterials = Materials.Where(x => x.ProjectId == 1).ToObservableCollection();
+            }
+            
         }
         private void GetMaterialsById(int id)
         {

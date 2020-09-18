@@ -19,7 +19,7 @@
         <conv:CheckBoxVisibilityConverter x:Key="checkBoxConv"/>
         <conv:EnableTextboxConverter x:Key="textboxConv"/>
         <conv:HasFieldEdited x:Key="HasFieldEdited"/>
-        <Style TargetType="Label" x:Key="LabelStyle1">
+        <!--<Style TargetType="Label" x:Key="LabelStyle1">
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="FontFamily" Value="Arial"/>
             <Setter Property="FontSize" Value="14"/>
@@ -34,8 +34,8 @@
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="HorizontalAlignment"  Value="Right"/>
 
-        </Style>
-        <Style TargetType="{x:Type TextBox}" x:Key="editableTextbox">
+        </Style>-->
+        <Style TargetType="{x:Type TextBox}" x:Key="editableTextbox" BasedOn="{StaticResource MaterialDesignTextBox }">
 
             <Style.Triggers >
                 <Trigger Property="IsEnabled" Value="True">
@@ -45,7 +45,7 @@
                                         }" 
                              Value="True">
                     <Setter Property="FontWeight" Value="Bold" />
-                    <Setter Property="Background" Value="Green" />
+                    <Setter Property="Background" Value="{StaticResource AccentColorBrush}" />
                     <Setter Property="Foreground" Value="White" />
                 </DataTrigger>
             </Style.Triggers>
@@ -59,13 +59,13 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="auto"/>
             
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
 
         </Grid.RowDefinitions>
         <StackPanel>
@@ -77,11 +77,16 @@
                   HorizontalAlignment="Left"
                   CanUserSortColumns="False"
                   Name="SlopeGrid" 
-                      materialDesign:DataGridAssist.CellPadding="4 2 2 2"
                   Margin="10,0,0,0"
                   VerticalAlignment="Top" 
                   CanUserAddRows="False"
                   ItemsSource="{Binding Slopes,UpdateSourceTrigger=PropertyChanged}">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style BasedOn="{StaticResource {x:Type  DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Background" Value="{StaticResource AccentColorBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource  IdealForegroundColorBrush}" />
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
                 <DataGrid.Columns>
 
                     <DataGridTemplateColumn Header="Thickness"
@@ -157,7 +162,8 @@
         
         <GroupBox x:Name="grp1" 
                   Grid.Row="1" 
-                  Margin="10"
+                  Margin="10,20,10,10"
+                  Style="{StaticResource   MaterialDesignCardGroupBox}"
                   Header="Total ($)"
                   BorderBrush="Black" 
                   BorderThickness="1" >
@@ -232,12 +238,18 @@
                   HorizontalAlignment="Left"
                   CanUserSortColumns="False"
                   Name="SlopeGrid1" 
-                      materialDesign:DataGridAssist.CellPadding="4 2 2 2"
+                  
                   Margin="10,0,0,0"
                   VerticalAlignment="Top" 
                   CanUserAddRows="False"
                   ItemsSource="{Binding UrethaneSlopes,
             UpdateSourceTrigger=PropertyChanged}">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style BasedOn="{StaticResource {x:Type  DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Background" Value="{StaticResource AccentColorBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource  IdealForegroundColorBrush}" />
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
                 <DataGrid.Columns>
 
                     <DataGridTemplateColumn Header="Thickness"
@@ -314,13 +326,13 @@
         <GroupBox x:Name="grp2" 
                   Visibility="{Binding IsUrethaneVisible}"
                   Grid.Row="1" 
-                  Margin="10"
+                  Margin="10,20,10,10"
                   Grid.Column="1"
                   Header="Total ($)"
                   BorderBrush="Black" 
                   BorderThickness="1" >
             <GroupBox.Style>
-                <Style TargetType="GroupBox" >
+                <Style TargetType="GroupBox" BasedOn="{StaticResource   MaterialDesignCardGroupBox}">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsChecked,ElementName=OverrideCheckbox}" Value="True">
                             <Setter Property="Visibility" Value="Hidden"/>
@@ -389,242 +401,243 @@
                 </StackPanel>
             </Grid>
         </GroupBox>
-        <StackPanel Grid.Row="2" Margin="10">
-            <CheckBox x:Name="OverrideCheckbox"
-                      Content="Manually Overwrite Total Mixes"
-                      FontWeight="Bold"
-                      IsChecked="{Binding OverrideManually}"/>
-        </StackPanel>
-        <StackPanel Grid.Row="2" Margin="10" Grid.Column="1"
-                    Visibility="{Binding IsUrethaneVisible}">
-            <CheckBox x:Name="OverrideCheckboxUrethan"
-                      Content="Manually Overwrite Total Mixes"
-                      FontWeight="Bold"
-                      IsEnabled="{Binding IsOverrridable}"
-                      IsChecked="{Binding UrethaneOverrideManually}"/>
-        </StackPanel>
-        <GroupBox x:Name="groupBox2"
-                  IsEnabled="{Binding ElementName=OverrideCheckbox,
-            Path=IsChecked}"
-                  Grid.Row="3" 
+        
+        <Grid Grid.Row="3" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <GroupBox x:Name="groupBox2"
+                      
+                  Margin="10"
+                  Style="{StaticResource   MaterialDesignCardGroupBox}"
                   Grid.Column="0" 
                   BorderBrush="Blue"
                   BorderThickness="0,0.5,0,0"  >
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                <GroupBox.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Override Manually" Foreground="White"/>
+                        <ToggleButton x:Name="OverrideCheckbox"
+                              Margin="10,0,0,0"
+                              Style="{StaticResource MaterialDesignSwitchAccentToggleButton}"
+                          ToolTip="MaterialDesignSwitchToggleButton"
+                          IsChecked="{Binding OverrideManually}" />
+                    </StackPanel>
+                    
+                </GroupBox.Header>
+                <Grid IsEnabled="{Binding ElementName=OverrideCheckbox,
+                      Path=IsChecked}"
+                   >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                <Label Content="Total Mixes : "
-                       Style="{StaticResource LabelStyle1}"
+                    <Label Content="Total Mixes : "
+                       Style="{StaticResource MaterialDesignLabel}"
                        HorizontalAlignment="Right"/>
 
-                <Label Content="Average Mixes Price ($) : " 
+                    <Label Content="Average Mixes Price ($) : " 
                        Grid.Column="0" Grid.Row="1"
-                       Style="{StaticResource LabelStyle1}" 
+                       Style="{StaticResource MaterialDesignLabel}" 
                        HorizontalAlignment="Right"/>
 
-                <TextBox x:Name="TotalMixesMan"
+                    <TextBox x:Name="TotalMixesMan"
                          Grid.Column="2"
                          Margin="5"
                          Tag="{Binding TotalMixesMan,Converter={StaticResource HasFieldEdited}}"
                          Style="{StaticResource editableTextbox}"
                          VerticalContentAlignment="Center"
-                         Height="25" Width="150"  
+                         Height="25" Width="100"  
                          Text="{Binding TotalMixesMan,UpdateSourceTrigger=LostFocus}">
 
-                </TextBox>
-                <!--07-10-18-->
-                <TextBox x:Name="AverageMixesPrice"
+                    </TextBox>
+                    <!--07-10-18-->
+                    <TextBox x:Name="AverageMixesPrice"
                          Grid.Row="1" 
                          Grid.Column="2"
                           Style="{StaticResource editableTextbox}"
                          VerticalContentAlignment="Center"
                          Height="25"
                          Margin="5,0,5,5"
-                         Width="150"
+                         Width="100"
                          Tag="{Binding AverageMixesPrice,Converter={StaticResource HasFieldEdited}}"
                          Text="{Binding AverageMixesPrice,UpdateSourceTrigger=LostFocus}">
-                </TextBox>
+                    </TextBox>
 
-            </Grid>
-        </GroupBox>
-        <GroupBox x:Name="groupBox3" Grid.Column="1"
-                  Visibility="{Binding IsUrethaneVisible}"
-                  IsEnabled="{Binding ElementName=OverrideCheckboxUrethan,
-            Path=IsChecked}"
-                  Grid.Row="3" 
-                  BorderBrush="Blue"
-                  BorderThickness="0,0.5,0,0"  >
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <Label Content="Total Mixes : "
-                       Style="{StaticResource LabelStyle1}"
-                       HorizontalAlignment="Right"/>
-
-                <Label Content="Average Mixes Price ($) : " 
-                       Grid.Column="0" Grid.Row="1"
-                       Style="{StaticResource LabelStyle1}" 
-                       HorizontalAlignment="Right"/>
-
-                <TextBox x:Name="TotalMixesMan1"
-                         Grid.Column="2"
-                         Margin="5"
-                         Style="{StaticResource editableTextbox}"
-                         VerticalContentAlignment="Center"
-                         Height="25" Width="150"  
-                         Tag="{Binding UrethaneTotalMixesMan,Converter={StaticResource HasFieldEdited} }"
-                         Text="{Binding UrethaneTotalMixesMan,UpdateSourceTrigger=LostFocus}">
-
-                </TextBox>
-                <!--07-10-18-->
-                <TextBox x:Name="AverageMixesPrice1"
-                         Grid.Row="1" 
-                         Grid.Column="2"
-                          Style="{StaticResource editableTextbox}"
-                         VerticalContentAlignment="Center"
-                         Height="25"
-                         Margin="5,0,5,5"
-                         Width="150"
-                         Tag="{Binding UrethaneAverageMixesPrice,Converter={StaticResource HasFieldEdited} }"
-                         Text="{Binding UrethaneAverageMixesPrice,UpdateSourceTrigger=LostFocus}">
-                </TextBox>
-
-            </Grid>
-        </GroupBox>
-        <StackPanel Grid.Column="0" Background="LightGray"
-                    Margin="10,0,0,0"
-                    Grid.Row="5" Orientation="Horizontal">
-            <TextBlock Text="Slope Material" FontSize="14"
-                       VerticalAlignment="Center"
-                       Margin="10"/>
-            <TextBlock Text="{ Binding SlopeMaterialName}" FontSize="14"
-                       VerticalAlignment="Center"
-                       Margin="10" Width="220"/>
-        </StackPanel>
-        <GroupBox x:Name="groupBoxMisc" 
-                  HorizontalAlignment="Center"
-                  Grid.ColumnSpan="2"
-                  Grid.Column="0"
-                  Grid.Row="4"
-                  Header="Total Section"
+                </Grid>
+            </GroupBox>
+            <GroupBox x:Name="groupBoxMisc" 
+                  HorizontalAlignment="Left"
+                  Margin="10"
+                      Style="{StaticResource   MaterialDesignCardGroupBox}"
+                  Grid.Column="1"
+                  Grid.Row="3"
+                  
+                  Header="Slope Totals"
                   Foreground="Blue"
                   FontFamily="Arial"
                   FontSize="14"
                   FontWeight="Bold"
                   BorderBrush="DarkBlue"
                   BorderThickness="1" >
-            
-            <Grid x:Name="grid5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <!--<RowDefinition Height="Auto"/>
+
+                <Grid x:Name="grid5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <!--<RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>-->
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Label Content="Total Weight"
-                       Style="{StaticResource LabelStyle1}"
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Label Content="Total Weight"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource MaterialDesignLabel}"
                        />
-                <Label Content="Total Freight Cost ($)" 
+                    <Label Content="Total Freight Cost ($)" 
                        Grid.Row="1"
-                       Style="{StaticResource LabelStyle1}"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource  MaterialDesignLabel}"
                        />
-                <!--07-10-18-->
-                <TextBox x:Name="TotalWeight" IsEnabled="False"
-                         Margin="5"
-                         Grid.Column="2" 
-                         VerticalContentAlignment="Center"
-                         Height="25" Width="150" 
+                    <!--07-10-18-->
+                    <TextBox x:Name="TotalWeight" IsEnabled="False"
+                         Grid.Column="1"
+                         
+                         Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                         Height="25" Width="100" 
                          Text="{Binding TotalWeight,UpdateSourceTrigger=PropertyChanged }"/>
-                <TextBox x:Name="TotalFrightCost" 
+                    <TextBox x:Name="TotalFrightCost" 
                          IsEnabled="False"
                          Grid.Row="1"
-                         Margin="5,0,5,5"
+                         
+                         Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                         Margin="5,10,5,5"
                          VerticalContentAlignment="Center"
-                         Grid.Column="2"
-                         Text="{Binding TotalFrightCost,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C}}" Height="25" Width="150" />
-                <Border Grid.Row="2" Grid.ColumnSpan="2"
-                        Margin="0,5" BorderBrush="Blue"
-                        BorderThickness="0,1,0,1">
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Total Material Cost ($)"
-                       Grid.Row="2"
-                       Margin="5,20,5,20"
-                       Style="{StaticResource LabelStyle1}"
-                       />
-                        <!--07-10-18-->
-                        <TextBox x:Name="TotalMaterialCost"
-                         IsEnabled="False"
-                         Grid.Row="2"
-                         Margin="5,20,5,20"
-                                 VerticalContentAlignment="Center"
                          Grid.Column="1"
-                         Height="25" Width="150"
-                         Text="{Binding TotalMaterialCost,UpdateSourceTrigger=PropertyChanged ,StringFormat={} {0:C}}"/>
-                        <!--////{}{0:C}-->
-                    </StackPanel>
-                </Border>
-                <!--<Label Content="Labor Cost ($) " Grid.Row="3"
-                       Margin="5,15,5,5"
-                       Style="{StaticResource LabelStyle1}"
-                       />
-                <Label Content="Minimum Labor Cost ($)"
-                       Grid.Row="4"
-                       Style="{StaticResource LabelStyle1}"
-                       />-->
-                <Label Content="Total Labor Cost ($)"
-                       Grid.Row="5"
-                       Margin="0,20,0,0"
-                       Style="{StaticResource LabelStyle1}" 
-                       />
-                <!--07-10-18-->
-                <!--<TextBox x:Name="LaborCost"
-                         IsEnabled="False"
-                         Grid.Row="3"
-                         VerticalContentAlignment="Center"
-                         Margin="5,15,5,5"
-                         Grid.Column="1"
-                         Height="25" Width="150"
-                         Text="{Binding LaborCost,UpdateSourceTrigger=PropertyChanged ,StringFormat={} {0:C}}"/>
-                --><!--07-10-18--><!--
-                <TextBox x:Name="MinimumLaborCost"
-                         IsEnabled="False" Grid.Row="4" 
-                         Grid.Column="1"
-                         VerticalContentAlignment="Center"
-                         Margin="5,0,5,5"
-                         Text="{Binding MinimumLaborCost,UpdateSourceTrigger=PropertyChanged  ,StringFormat={}{0:C}}" Height="25" Width="150" />
-                --><!--07-10-18-->
-                <TextBox x:Name="TotalLaborCost"
-                         IsEnabled="False"
-                         Grid.Row="5"
-                         VerticalContentAlignment="Center"
-                         Margin="5,20,5,5"
-                         Grid.Column="1"
-                         Text="{Binding TotalLaborCost,UpdateSourceTrigger=PropertyChanged  ,StringFormat={}{0:C}}" Height="25" Width="150" />
+                         Text="{Binding TotalFrightCost,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C}}" Height="25" Width="100" />
 
-            </Grid>
-        </GroupBox>
+
+                    <Label Content="Total Material Cost ($)"
+                               Grid.Column="2"
+                              VerticalAlignment="Center"
+                               Style="{StaticResource MaterialDesignLabel}"
+                       />
+                    <Label Content="Total Labor Cost ($)"
+                           VerticalAlignment="Center" Grid.Column="2" Grid.Row="1"
+                           Margin="0,0,0,0"
+                           Style="{StaticResource MaterialDesignLabel}" 
+                           />
+
+                    <TextBox x:Name="TotalMaterialCost"
+                         IsEnabled="False" 
+                         Style="{StaticResource MaterialDesignTextBox}"
+                                 VerticalContentAlignment="Center"
+                         Grid.Column="3"
+                         Height="25" Width="120"
+                         Text="{Binding TotalMaterialCost,UpdateSourceTrigger=PropertyChanged ,StringFormat={} {0:C}}"/>
+                    <TextBox x:Name="TotalLaborCost"
+                             IsEnabled="False"
+                             Grid.Column="3" Grid.Row="1"
+                             Style="{StaticResource MaterialDesignTextBox}"
+                             VerticalContentAlignment="Center"
+                             Margin="5,10,5,5"
+                             Text="{Binding TotalLaborCost,UpdateSourceTrigger=PropertyChanged  ,StringFormat={}{0:C}}" Height="25" Width="120" />
+
+                </Grid>
+            </GroupBox>
+            <GroupBox x:Name="groupBox3"  Visibility="{Binding IsUrethaneVisible}"
+                   Style="{StaticResource   MaterialDesignCardGroupBox}"
+                  Margin="10"
+                  
+                 
+                  Grid.Column="2" 
+                  BorderBrush="Blue"
+                  BorderThickness="0,0.5,0,0"  >
+                <GroupBox.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Override Manually" Foreground="White"/>
+                        <ToggleButton x:Name="OverrideCheckboxUrethan"
+                              Margin="10,0,0,0"
+                              Style="{StaticResource MaterialDesignSwitchAccentToggleButton}"
+                          ToolTip="Override manually"
+                          IsChecked="{Binding UrethaneOverrideManually}" />
+                    </StackPanel>
+
+                </GroupBox.Header>
+                <Grid  IsEnabled="{Binding ElementName=OverrideCheckboxUrethan,
+            Path=IsChecked}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Content="Total Mixes : "
+                       Style="{StaticResource MaterialDesignLabel}"
+                       HorizontalAlignment="Right"/>
+
+                    <Label Content="Average Mixes Price ($) : " 
+                       Grid.Column="0" Grid.Row="1"
+                       Style="{StaticResource MaterialDesignLabel}" 
+                       HorizontalAlignment="Right"/>
+
+                    <TextBox x:Name="TotalMixesMan1"
+                         Grid.Column="2"
+                         Margin="5"
+                         Style="{StaticResource editableTextbox}"
+                         VerticalContentAlignment="Center"
+                         Height="25" Width="100"  
+                         Tag="{Binding UrethaneTotalMixesMan,Converter={StaticResource HasFieldEdited} }"
+                         Text="{Binding UrethaneTotalMixesMan,UpdateSourceTrigger=LostFocus}">
+
+                    </TextBox>
+                    <!--07-10-18-->
+                    <TextBox x:Name="AverageMixesPrice1"
+                         Grid.Row="1" 
+                         Grid.Column="2"
+                          Style="{StaticResource editableTextbox}"
+                         VerticalContentAlignment="Center"
+                         Height="25"
+                         Margin="5,0,5,5"
+                         Width="100"
+                         Tag="{Binding UrethaneAverageMixesPrice,Converter={StaticResource HasFieldEdited} }"
+                         Text="{Binding UrethaneAverageMixesPrice,UpdateSourceTrigger=LostFocus}">
+                    </TextBox>
+
+                </Grid>
+            </GroupBox>
+            
+        </Grid>
+        
+        <StackPanel Grid.Column="0" Background="{StaticResource MaterialDesignSelection}"
+                    Margin="10,5,10,5" VerticalAlignment="Bottom"
+                    Grid.Row="5" Orientation="Horizontal">
+            <TextBlock Text="Slope Material" FontSize="14"
+                       VerticalAlignment="Center" Style="{StaticResource MaterialDesignTextBlock}"
+                       Margin="10"/>
+            <TextBlock Text="{ Binding SlopeMaterialName}" FontSize="14" Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                       VerticalAlignment="Center"
+                       Margin="10" Width="220"/>
+        </StackPanel>
+        
 
         <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal"
+                    VerticalAlignment="Bottom"
                     HorizontalAlignment="Right">
             <!--<Button Content="Fill Grid" Command="{Binding FillValues}"
                     Height="30" 
@@ -633,22 +646,20 @@
                     HorizontalAlignment="Right"
                     Width="100" Background="LightGreen"/>-->
             <Button Command="{Binding CalculateCostCommand}" 
-                    VerticalAlignment="Bottom"
-                    Height="30"
+                    VerticalAlignment="Bottom"                  
                     Margin="10,5,10,5"
-                    Background="White"
                     HorizontalAlignment="Right"
                    
-                IsEnabled="{Binding AddRowCommand}">
+                    IsEnabled="{Binding AddRowCommand}">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="&#xE1D0;" FontFamily="Segoe UI Symbol" FontSize="16"
-                                       VerticalAlignment="Center"/>
+                        <materialDesign:PackIcon Kind="Calculator"
+                                             HorizontalAlignment="Left"
+                                             VerticalAlignment="Center"/>
                         <TextBlock Text="Calculate" VerticalAlignment="Center"
                                    HorizontalAlignment="Left"
-                                   Margin="5,0,5,0" FontSize="12" FontWeight="bold"/>
-                        <!--<Image Source="../Images/Calculator.png"
-                               Height="25" Width="36"/>-->
+                                   Margin="5" FontWeight="bold"/>
+
                     </StackPanel>
                 </Button.Content>
             </Button>

@@ -327,7 +327,11 @@ namespace WICR_Estimator.ViewModels.DataViewModels
         private async Task GetMetals()
         {
             Metals = await HTTPHelper.GetMetalsAsync();
-            FilteredSystemMetals = Metals.Where(x=>x.MetalId<20).ToObservableCollection();
+            if (Metals!=null)
+            {
+                FilteredSystemMetals = Metals.Where(x => x.MetalId < 20).ToObservableCollection();
+            }
+            
         }
         //private void GetMetalsById(int id)
         //{

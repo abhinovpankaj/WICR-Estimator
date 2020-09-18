@@ -3084,9 +3084,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         public double DriveLaborValue { get; set; }
-        #region LaborSheet TotalProperties
-
-        #endregion
+        
         public virtual double getSqftAreaVertical(string materialName)
         {
             return 0;
@@ -3765,6 +3763,138 @@ namespace WICR_Estimator.ViewModels
             OnPropertyChanged("CostperSqftSubContract");
             OnPropertyChanged("TotalCostperSqft");
         }
+
+        #region DBData
+        public DBData dbData { get; set; }
+        private void getDatafromDB(string prjName)
+        {
+            if (prjName.Contains('.'))
+            {
+                prjName = prjName.Split('.')[0];
+            }
+
+           
+            isDataAvailable = true;
+            if (materialDetails == null)
+            {
+                //materialDetails = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "H33:K59");
+
+                dbData = DataSerializerService.DSInstance.deserializeDbData(prjName);
+               
+                laborRate = dbData.FreightDBData.First(x => x.FreightID == 8).FactorValue;
+                double facVal = 0;
+                double.TryParse(laborDetails[7][0].ToString(), out facVal);
+                SubContractMarkup =  dbData.LaborDBData.First(x => x.Name == "Profit Margin on subcontract labor").Value; 
+               
+                MetalMarkup = 1 - dbData.LaborDBData.First(x => x.Name == "Profit Margin Metal").Value; ;
+
+                SlopeMarkup = 1 - dbData.LaborDBData.First(x => x.Name == "Profit Margin Slope").Value; ;
+
+                MaterialMarkup = 1 - dbData.LaborDBData.First(x => x.Name == "Profit Margin Material").Value; ;
+
+                SubContractProfitMargin = dbData.LaborDBData.First(x => x.Name == "Profit Margin SubContract").Value; ;
+
+            }
+        }
+
+        public virtual SystemMaterial createSMObjectDB(string matName,string units)
+        {
+            double cov;
+            double mp;
+            double w;
+            double lfArea = 0;
+            double setUpMin = 0; // Setup minimum charges from google sheet, col 6
+            double pRateStairs = 0; ///Production rate stairs from google sheet, col 5
+            double hprRate = 0;///Horizontal Production rate  from google sheet, col 4
+            double vprRate = 0;///Vertical Production rate  from google sheet, col 1
+            double sqh = 0;
+            double sqv = 0;
+            double labrExt = 0;
+            double calcHrs = 0;
+            double sqStairs = 0;
+            double qty = 0;
+            string operation = "";
+            try
+            {
+                if (isPrevailingWage)
+                {                    
+                    prPerc = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "SlopeProdRate").FactorValue;
+                }
+                else
+                    prPerc = 0;
+
+                //Get Material Data from DB
+                MaterialDB matdb = dbData.MaterialDBData.First(x=>x.MaterialName.ToLower()==matName.ToLower());
+                vprRate = matdb.ProdRateVertical;
+                cov = matdb.Coverage;
+                mp = matdb.MaterialPrice;
+                w = matdb.Weight;
+                setUpMin = matdb.LaborMinCharge;
+                pRateStairs = matdb.ProdRateStair;
+                hprRate = matdb.ProdRateHorizontal;
+                
+                pRateStairs = pRateStairs * (1 + prPerc);
+                hprRate = hprRate * (1 + prPerc);
+                vprRate = vprRate * (1 + prPerc);
+
+                sqv = getSqftAreaVertical(matName);
+                sqh = getSqFtAreaH(matName);
+                sqStairs = getSqFtStairs(matName);
+                lfArea = getlfArea(matName);
+
+                calcHrs = CalculateHrs(sqh, hprRate, sqStairs, pRateStairs, sqv, vprRate);
+
+                labrExt = CalculateLabrExtn(calcHrs, setUpMin, matName);
+
+                qty = getQuantity(matName, cov, lfArea);
+                if (lfArea == -1)
+                {
+                    lfArea = qty;
+                }
+                if (sqh == -1)
+                {
+                    sqh = qty;
+                }
+                if (sqStairs == -1)
+                {
+                    sqStairs = qty;
+                }
+                operation = GetOperation(matName);
+                return (new SystemMaterial
+                {
+                    Name = matName,
+                    SMUnits = units,
+                    SMSqft = lfArea,
+                    Coverage = cov,
+                    MaterialPrice = mp,
+                    Weight = w,
+                    Qty = qty,
+                    SMSqftH = sqh,
+                    Operation = operation,
+                    HorizontalProductionRate = hprRate,
+                    StairsProductionRate = pRateStairs,
+                    StairSqft = sqStairs,
+                    SetupMinCharge = setUpMin,
+                    Hours = calcHrs,
+                    LaborExtension = labrExt,
+                    VerticalProductionRate = vprRate,
+                    LaborUnitPrice = getLaborUnitPrice(labrExt, riserCount, totalSqft, sqv, sqh, sqStairs, matName),//labrExt / (riserCount + totalSqft),
+                    FreightExtension = w * qty,
+                    MaterialExtension = mp * qty,  //chnage for independent projects
+                    IsMaterialChecked = getCheckboxCheckStatus(matName),
+                    IsMaterialEnabled = getCheckboxEnabledStatus(matName),
+                    IncludeInLaborMinCharge = IncludedInLaborMin(matName),
+                    AllEditable = getEditable()
+                });
+            }
+            catch (Exception e)
+            {
+                return null;
+
+            }
+
+        }
+        #endregion
 
         #region  Temporary
         private ICommand fillValues;

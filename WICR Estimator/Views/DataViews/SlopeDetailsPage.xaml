@@ -106,10 +106,15 @@
                                     </DataGridCheckBoxColumn>
                                     <materialDesign:DataGridTextColumn Header="Slope Name"
                                                                        Width="400"
+                                                                       IsReadOnly="True"
                                                         Binding="{ Binding SlopeName}"/>
                                     <materialDesign:DataGridTextColumn Header="Labor Rate"
+                                                                       ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
                                                         Binding="{ Binding LaborRate}"/>
                                     <materialDesign:DataGridTextColumn Header="Cost Per Mix"
+                                                                       ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
                                                         Binding="{ Binding PerMixCost}"/>
                                     
                                 </DataGrid.Columns>

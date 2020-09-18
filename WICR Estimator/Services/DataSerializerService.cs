@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -78,14 +79,17 @@ namespace WICR_Estimator.Services
                 var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\" + ProjectName + "_DbData.dat";
                 if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\"))
                     Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\");
-                IFormatter formatter = new BinaryFormatter();
-                Stream stream = new FileStream(path, FileMode.Create, FileAccess.Write);
 
 
-                formatter.Serialize(stream, gData);
-                stream.Close();
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.NullValueHandling = NullValueHandling.Ignore;
+
+                using (StreamWriter sw = new StreamWriter(path))
+                using (JsonWriter writer = new JsonTextWriter(sw))
+                {
+                    serializer.Serialize(writer, gData);
+                }
             }
-
         }
         public DBData deserializeDbData(string ProjectName)
         {
@@ -95,9 +99,13 @@ namespace WICR_Estimator.Services
                 IFormatter formatter = new BinaryFormatter();
                 try
                 {
-                    Stream stream = new FileStream(path, FileMode.Open, FileAccess.Read);
-                    DBData objnew = (DBData)formatter.Deserialize(stream);
-                    return objnew;
+                    DBData dbData;
+                    using (StreamReader file = File.OpenText(path))
+                    {
+                        JsonSerializer serializer = new JsonSerializer();
+                        dbData = (DBData)serializer.Deserialize(file, typeof(DBData));
+                    }
+                    return dbData;
                 }
                 catch (FileNotFoundException ex)
                 {
