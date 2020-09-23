@@ -414,10 +414,11 @@ namespace WICR_Estimator.ViewModels
             ObservableCollection<Metal> met=new ObservableCollection<Metal>();
             if (Js.ProjectName== "Paraseal LG")
             {
-                met = GetMetalsLG();
+               
+                met = GetMetalsDB("LG");
             }
             else
-               met = GetMetals();
+               met = GetMetalsDB();
 
                for (int i = 0; i < Metals.Count; i++)
                {
@@ -442,10 +443,10 @@ namespace WICR_Estimator.ViewModels
             ObservableCollection<AddOnMetal> addOnMet = new ObservableCollection<AddOnMetal>();
             if (Js.ProjectName == "Paraseal LG")
             {
-                addOnMet = GetAddOnMetalsLG();
+                addOnMet = GetAddOnMetalsDB("LG");
             }
             else
-                addOnMet = GetAddOnMetals();
+                addOnMet = GetAddOnMetalsDB();
              
                for (int i = 0; i < AddOnMetals.Count; i++)
                {
@@ -471,9 +472,7 @@ namespace WICR_Estimator.ViewModels
                     MiscMetals[1].Units = getUnits(3);
             }
             
-            CalculateCost(null);
-           
-            
+            CalculateCost(null);                      
         }
 
         public virtual ObservableCollection<Metal> GetMetals()
@@ -732,12 +731,12 @@ namespace WICR_Estimator.ViewModels
             if (pWage == null)
             {
                 DBData dbData = DataSerializerService.DSInstance.deserializeDbData(projectName);
-                deductionOnLargeJob = dbData.LaborDBData.First(x=>x.LaborId==2).Value;
+                deductionOnLargeJob = dbData.LaborDBData.First(x=>x.Name== "Deduct on Labor for large jobs").Value;
                 //pWage = gsData.LaborData.ToArray<object>();
-                
+
                 laborRate = dbData.FreightDBData.First(x=>x.FreightID==8).FactorValue;
                 
-                Nails = dbData.MetalDBData.FirstOrDefault(x=>x.MetalId==163).ProductionRate; //production rate for Nails, caulk + overage on metal
+                Nails = dbData.MetalDBData.FirstOrDefault(x=>x.MetalName== "Nails, caulk + overage on metal").ProductionRate; //production rate for Nails, caulk + overage on metal
                 metalDBDetails = dbData.MetalDBData;
                 freightDBDetails = dbData.FreightDBData;
             }          
@@ -756,7 +755,7 @@ namespace WICR_Estimator.ViewModels
                 .Select(s => s.MetalPrice).First();
         }
 
-        public virtual ObservableCollection<Metal> GetMetalsDB()
+        public virtual ObservableCollection<Metal> GetMetalsDB(string type="")
         {
             ObservableCollection<Metal> met = new ObservableCollection<Metal>();
             met.Add(new Metal("L - METAL / FLASHING", "4X6", getMetalPR("L-Metal/Flashing 4'X6''"), laborRate, 0, getMetalMP("L-Metal/Flashing 4'X6''"), false));
@@ -781,7 +780,7 @@ namespace WICR_Estimator.ViewModels
 
             return met;
         }
-        public virtual ObservableCollection<AddOnMetal> GetAddOnMetalsDB()
+        public virtual ObservableCollection<AddOnMetal> GetAddOnMetalsDB(string type="")
         {
             ObservableCollection<AddOnMetal> met = new ObservableCollection<AddOnMetal>();
             met.Add(new AddOnMetal("L - METAL / FLASHING", "4X10", getMetalPR("L-Metal/Flashing 4'X10''"), laborRate, 0, getMetalMP("L-Metal/Flashing 4'X10''"), false));
@@ -790,7 +789,9 @@ namespace WICR_Estimator.ViewModels
             met.Add(new AddOnMetal("DRIP EDGE METAL", "3X4", getMetalPR("Drip Edge Metal 3\" x 4\""), laborRate, 0, getMetalMP("Drip Edge Metal 3\" x 4\""), false));
             met.Add(new AddOnMetal("STAIR METAL", "4X10", getMetalPR("Stair Metal 4\" x 10\""), laborRate, getUnits(0), getMetalMP("Stair Metal 4\" x 10\""), true));
             met.Add(new AddOnMetal("STAIR METAL", "4X8", getMetalPR("Stair Metal 4\" x 8\""), laborRate, getUnits(0), getMetalMP("Stair Metal 4\" x 8\""), true));
-            met.Add(new AddOnMetal("Open End Stair Metal", "(Set of 2 L&R)", getMetalPR("Open End Stair Metal (Set of 2 L&R)"), laborRate, 0, getMetalMP("Open End Stair Metal (Set of 2 L&R)"), false));//Added missed metal ,as per mail on 12th Sept 2019.
+            if(type=="")
+                met.Add(new AddOnMetal("Open End Stair Metal", "(Set of 2 L&R)", getMetalPR("Open End Stair Metal (Set of 2 L&R)"), laborRate, 0, getMetalMP("Open End Stair Metal (Set of 2 L&R)"), false));//Added missed metal ,as per mail on 12th Sept 2019.
+            
             met.Add(new AddOnMetal("Door Pan", "10' - 12'", getMetalPR("Door Pan 10' - 12'"), laborRate, 0, getMetalMP("Door Pan 10' - 12'"), false));
             met.Add(new AddOnMetal("Door Pan", "8'", getMetalPR("Door Pan 8'"), laborRate, 0, getMetalMP("Door Pan 8'"), false));
             met.Add(new AddOnMetal("Door Pan", "6'", getMetalPR("Door Pan 6'"), laborRate, 0, getMetalMP("Door Pan 6'"), false));

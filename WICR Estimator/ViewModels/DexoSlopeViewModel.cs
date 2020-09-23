@@ -13,7 +13,8 @@ namespace WICR_Estimator.ViewModels
         public DexoSlopeViewModel(JobSetup  Js)
         {
             GetSlopeDetailsFromGoogle(Js.ProjectName);
-            Slopes = CreateSlopes();
+            //Slopes = CreateSlopes();
+            Slopes = CreateSlopesDB("Cement");
             CalculateAll();
             Js.JobSetupChange += JobSetup_OnJobSetupChange;
         }

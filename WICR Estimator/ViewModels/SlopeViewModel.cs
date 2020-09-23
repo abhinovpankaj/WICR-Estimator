@@ -16,11 +16,13 @@ namespace WICR_Estimator.ViewModels
         { }
         public SlopeViewModel(JobSetup js)
         {
-            prevailingWage = js.ActualPrevailingWage == 0 ? 0 : (js.ActualPrevailingWage - laborRate) / laborRate; 
-            GetSlopeDetailsFromGoogle(js.ProjectName);
+            prevailingWage = js.ActualPrevailingWage == 0 ? 0 : (js.ActualPrevailingWage - laborRate) / laborRate;
+            //GetSlopeDetailsFromGoogle(js.ProjectName);
+            GetSlopeDetailsDB(js.ProjectName);
             SlopeMaterialName = js.IsApprovedForSandCement ? "Sand and Cement" : "Dexotex A-81 Underlayment";
             isApprovedForCement = js.IsApprovedForSandCement;
-            Slopes = CreateSlopes();
+           // Slopes = CreateSlopes():
+            Slopes = CreateSlopesDB("Cement");
             js.SlopeMaterialName = "Dexotex A-81 Underlayment";
             
             CalculateAll();        

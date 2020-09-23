@@ -382,7 +382,8 @@ namespace WICR_Estimator.ViewModels
             TotalWeight = Math.Round(50 * TotalMixesMan, 2);
             TotalFrightCost = Math.Round(FreightCalculator(TotalWeight), 2);
             SumTotalLaborExt = Math.Round(TotalMixesMan * manualAvgMixPrice, 2);
-            double.TryParse(perMixRates[8][0].ToString(), out minLabVal);
+            //double.TryParse(perMixRates[8][0].ToString(), out minLabVal);
+            minLabVal = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Minimum Slope Labor" && x.SlopeType == "Cement").LaborRate;
             MinimumLaborCost = minLabVal * laborRate;
             TotalLaborCost = SumTotalLaborExt==0?0:MinimumLaborCost > SumTotalLaborExt ? MinimumLaborCost : SumTotalLaborExt;
 
@@ -449,7 +450,8 @@ namespace WICR_Estimator.ViewModels
                 isPrevailingWage = js.IsPrevalingWage;
                 if (isPrevailingWage)
                 {
-                    double.TryParse(freightData[5][0].ToString(), out productionRate);
+                    //double.TryParse(freightData[5][0].ToString(), out productionRate);
+                    productionRate = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "SlopeProdRate").FactorValue;
 
                 }
                 else
@@ -554,8 +556,8 @@ namespace WICR_Estimator.ViewModels
         {
             foreach (Slope slp in Slopes)
             {
-                slp.PricePerMix = getPricePerMix(slp.Thickness, isApprovedForCement);
-                slp.GSLaborRate = getGSLaborRate(slp.Thickness, 0);
+                slp.PricePerMix = getPricePerMixDB(slp.Thickness, isApprovedForCement,"Cement");
+                slp.GSLaborRate = getGSLaborRateDB(slp.Thickness,"Cement");
             }
             
             CalculateGridTotal();
@@ -572,8 +574,8 @@ namespace WICR_Estimator.ViewModels
             if (Slopes.Count > 0)
             {
                 LaborCost = Math.Round(SumTotalLaborExt, 2);
-               double.TryParse(perMixRates[8][0].ToString(), out minLabVal);
-                
+               //double.TryParse(perMixRates[8][0].ToString(), out minLabVal);
+                minLabVal = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Minimum Slope Labor" && x.SlopeType == "Cement").LaborRate;
                 MinimumLaborCost = minLabVal * laborRate;
 
                 double lCost = SumTotalLaborExt == 0 ? 0 : LaborCost > MinimumLaborCost ? LaborCost : MinimumLaborCost;
@@ -711,7 +713,8 @@ namespace WICR_Estimator.ViewModels
                 {
                     if (weight > 10000)
                     {
-                        double.TryParse(freightData[0][1].ToString(), out factor);
+                        //double.TryParse(freightData[0][1].ToString(), out factor);
+                        factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight10000").FactorValue;
                         frCalc =  factor* weight; /*0.03*/
                     }
 
@@ -719,28 +722,32 @@ namespace WICR_Estimator.ViewModels
                     {
                         if (weight > 5000)
                         {
-                            double.TryParse(freightData[1][1].ToString(), out factor);
+                            //double.TryParse(freightData[1][1].ToString(), out factor);
+                            factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight5000").FactorValue;
                             frCalc = factor * weight; /*0.04*/
                         }
                         else
                         {
                             if (weight > 2000)
                             {
-                                double.TryParse(freightData[2][1].ToString(), out factor);
+                                //double.TryParse(freightData[2][1].ToString(), out factor);
+                                factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight2000").FactorValue;
                                 frCalc = factor * weight; /*0.09*/
                             }
                             else
                             {
                                 if (weight > 1000)
                                 {
-                                    double.TryParse(freightData[3][1].ToString(), out factor);
+                                    //double.TryParse(freightData[3][1].ToString(), out factor);
+                                    factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight1000").FactorValue;
                                     frCalc = factor * weight; /*0.12*/
                                 }
                                 else
                                 {
                                     if (weight > 400)
                                     {
-                                        double.TryParse(freightData[4][1].ToString(), out factor);
+                                        //double.TryParse(freightData[4][1].ToString(), out factor);
+                                        factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight400").FactorValue;
                                         frCalc = factor;/*75*/
                                     }
                                     else
@@ -792,12 +799,12 @@ namespace WICR_Estimator.ViewModels
                 projectName = projectName.Split('.')[0];
             }
 
-            if (perMixRates == null)
+            if (dbData == null)
             {
                 //perMixRates = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "P25:Q30");
                 dbData = DataSerializerService.DSInstance.deserializeDbData(projectName);
                 laborRate = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "LaborRate").FactorValue;
-                manualAvgMixPrice = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Manul Override Avg Labor/mix").PerMixCost;
+                manualAvgMixPrice = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Manul Override Avg Labor/mix" && x.SlopeType=="Cement").PerMixCost;
                 deductionOnLargeJob = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Deduct on Labor for large jobs").Value;
             }
             
@@ -819,9 +826,68 @@ namespace WICR_Estimator.ViewModels
             }
             else
             {
-                result = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Default" && x.SlopeType == slopeType).PerMixCost;               
+                result = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Default " && x.SlopeType == slopeType).PerMixCost;               
             }
             return result;
+        }
+
+        public virtual ObservableCollection<Slope> CreateSlopesDB(string slopeType)
+        {
+            ObservableCollection<Slope> slopes = new ObservableCollection<Slope>();
+
+            slopes.Add(new Slope
+            {
+                Thickness = "1/4 inch Average",
+                DeckCount = 0,
+                Sqft = 0,
+                GSLaborRate = getGSLaborRateDB("1/4 inch Average", slopeType),
+                LaborRate = laborRate,
+                PricePerMix = getPricePerMixDB("1/4 inch Average", isApprovedForCement, slopeType),
+                SlopeType = slopeType == "Cement" ? "" : "URI"
+            });
+            slopes.Add(new Slope
+            {
+                Thickness = "1/2 inch Average",
+                DeckCount = 0,
+                Sqft = 0,
+                GSLaborRate = getGSLaborRateDB("1/2 inch Average", slopeType),
+                LaborRate = laborRate,
+                PricePerMix = getPricePerMixDB("1/2 inch Average", isApprovedForCement, slopeType),
+                SlopeType = slopeType == "Cement" ? "" : "URI"
+            });
+
+            slopes.Add(new Slope
+            {
+                Thickness = "3/4 inch Average",
+                DeckCount = 0,
+                Sqft = 0,
+                GSLaborRate = getGSLaborRateDB("3/4 inch Average", slopeType),
+                LaborRate = laborRate,
+                PricePerMix = getPricePerMixDB("3/4 inch Average", isApprovedForCement, slopeType),
+                SlopeType = slopeType == "Cement" ? "" : "URI"
+            });
+            slopes.Add(new Slope
+            {
+                Thickness = "1 inch Average",
+                DeckCount = 0,
+                Sqft = 0,
+                GSLaborRate = getGSLaborRateDB("1 inch Average", slopeType),
+                LaborRate = laborRate,
+                PricePerMix = getPricePerMixDB("1 inch Average", isApprovedForCement, slopeType),
+                SlopeType = slopeType == "Cement" ? "" : "URI"
+            });
+            slopes.Add(new Slope
+            {
+                Thickness = "1 1/4 inch Average",
+                DeckCount = 0,
+                Sqft = 0,
+                GSLaborRate = getGSLaborRateDB("1 1/4 inch Average", slopeType),
+                LaborRate = laborRate,
+                PricePerMix = getPricePerMixDB("1 1/4 inch Average", isApprovedForCement, slopeType),
+                SlopeType = slopeType == "Cement" ? "" : "URI"
+            });
+
+            return slopes;
         }
         #endregion
 

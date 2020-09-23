@@ -61,10 +61,10 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS", "5 GAL PAIL");
             materialNames.Add("Vulkem Tremproof 250 GC L 30 MILS(Additional)", "5 GAL PAIL");
             materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS(Additional)", "5 GAL PAIL");
-            materialNames.Add("Vulkem Tremproof 201 L 30 MILS", "5 GAL PAIL");
-            materialNames.Add("Vulkem Tremproof 201 R 30 MILS", "5 GAL PAIL");
-            materialNames.Add("Vulkem Tremproof 201 L 30 MILS(Additional)", "5 GAL PAIL");
-            materialNames.Add("Vulkem Tremproof 201 R 30 MILS(Additional)", "5 GAL PAIL");
+            //materialNames.Add("Vulkem Tremproof 201 L 30 MILS", "5 GAL PAIL");
+            //materialNames.Add("Vulkem Tremproof 201 R 30 MILS", "5 GAL PAIL");
+            //materialNames.Add("Vulkem Tremproof 201 L 30 MILS(Additional)", "5 GAL PAIL");
+            //materialNames.Add("Vulkem Tremproof 201 R 30 MILS(Additional)", "5 GAL PAIL");
             materialNames.Add("Plywood 3/4 & blocking (# of 4x8 sheets)", "4x8 sheets");
             materialNames.Add("Stucco Material Remove and replace (LF)", "LF");
             materialNames.Add("PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL WITH SAND BROADCAST", "LF");
@@ -101,8 +101,8 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS", "5 GAL PAIL");
             //materialNames.Add("Vulkem Tremproof 250 GC L 30 MILS(Additional)", "5 GAL PAIL");
             //materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS(Additional)", "5 GAL PAIL");
-            materialNames.Add("Vulkem Tremproof 201 L 30 MILS", "5 GAL PAIL");
-            materialNames.Add("Vulkem Tremproof 201 R 30 MILS", "5 GAL PAIL");
+            //materialNames.Add("Vulkem Tremproof 201 L 30 MILS", "5 GAL PAIL");
+            //materialNames.Add("Vulkem Tremproof 201 R 30 MILS", "5 GAL PAIL");
             //materialNames.Add("Vulkem Tremproof 201 L 30 MILS(Additional)", "5 GAL PAIL");
             //materialNames.Add("Vulkem Tremproof 201 R 30 MILS(Additional)", "5 GAL PAIL");
             materialNames.Add("Plywood 3/4 & blocking (# of 4x8 sheets)", "4x8 sheets");

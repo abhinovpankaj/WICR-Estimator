@@ -64,13 +64,14 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("PENETRATIONS", "EACH");
             materialNames.Add("UNIVERSAL OUTLET", "EACH");
             materialNames.Add("TOTAL DRAIN MINUS BOTTOM TD 1000(IN LIEU OF ROCK & PIPE)", "LINEAR FEET");
-            materialNames.Add("Vulkem Tremproof 250 GC L 30 MILS", "5 GAL PAIL");
-            materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS", "5 GAL PAIL");
+            //db change
+            //materialNames.Add("Vulkem Tremproof 250 GC L 30 MILS", "5 GAL PAIL");
+            //materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS", "5 GAL PAIL");
 
             //additional
-            materialNames.Add("Vulkem Tremproof 250 GC L 30 MILS(Additional)", "5 GAL PAIL");
-            materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS(Additional)", "5 GAL PAIL");
-
+            //materialNames.Add("Vulkem Tremproof 250 GC L 30 MILS(Additional)", "5 GAL PAIL");
+            //materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS(Additional)", "5 GAL PAIL");
+            //end
             materialNames.Add("Vulkem Tremproof 201 L 30 MILS", "5 GAL PAIL");
             materialNames.Add("Vulkem Tremproof 201 R 30 MILS", "5 GAL PAIL");
 
@@ -109,8 +110,9 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("PENETRATIONS", "EACH");
             materialNames.Add("UNIVERSAL OUTLET", "EACH");
             materialNames.Add("TOTAL DRAIN MINUS BOTTOM TD 1000(IN LIEU OF ROCK & PIPE)", "LINEAR FEET");
-            materialNames.Add("Vulkem Tremproof 250 GC L 30 MILS", "5 GAL PAIL");
-            materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS", "5 GAL PAIL");
+
+            //materialNames.Add("Vulkem Tremproof 250 GC L 30 MILS", "5 GAL PAIL");
+            //materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS", "5 GAL PAIL");
 
             //additional
             //materialNames.Add("Vulkem Tremproof 250 GC L 30 MILS(Additional)", "5 GAL PAIL");
@@ -236,12 +238,12 @@ namespace WICR_Estimator.ViewModels
             }
             var sysMat = GetSystemMaterial(materialNames);
 
-            //remove GC 250 System Material
-            List<SystemMaterial> mat250 = sysMat.Where(x => x.Name.Contains("250")).ToList();
-            foreach (SystemMaterial item in mat250)
-            {
-                sysMat.Remove(item);
-            }
+            //remove GC 250 System Material // Not required for DB
+            //List<SystemMaterial> mat250 = sysMat.Where(x => x.Name.Contains("250")).ToList();
+            //foreach (SystemMaterial item in mat250)
+            //{
+            //    sysMat.Remove(item);
+            //}
 
             #region  Update Special Material Pricing and QTY on JobSetup change
             if (hasSetupChanged)
@@ -652,7 +654,7 @@ namespace WICR_Estimator.ViewModels
                     item.LaborExtension = item.Hours==0?0:item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
                     item.LaborUnitPrice = item.LaborExtension / item.Qty;
                 }
-                item = SystemMaterials.Where(x => x.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)").FirstOrDefault();
+                item = SystemMaterials.FirstOrDefault(x => x.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)");
                 if (item != null)
                 {
                     item.SMSqftH = item.Qty*32;

@@ -23,8 +23,8 @@ namespace WICR_Estimator.ViewModels
             GetMetalDetailsFromDB(js.ProjectName);
             if (js.ProjectName== "Paraseal LG")
             {
-                Metals = GetMetalsLG();
-                AddOnMetals = GetAddOnMetalsLG();
+                Metals = GetMetalsDB("LG");
+                AddOnMetals = GetAddOnMetalsDB("LG");
             }
             else
             {

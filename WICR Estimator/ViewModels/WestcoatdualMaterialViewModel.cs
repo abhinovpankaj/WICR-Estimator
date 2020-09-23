@@ -262,7 +262,7 @@ namespace WICR_Estimator.ViewModels
             if (SystemMaterials.Count != 0)
             {
 
-                SystemMaterial item = SystemMaterials.Where(x => x.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)").FirstOrDefault();
+                SystemMaterial item = SystemMaterials.FirstOrDefault(x => x.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)");
                 if (item != null)
                 {
                     item.SMSqftH = item.Qty * 32;

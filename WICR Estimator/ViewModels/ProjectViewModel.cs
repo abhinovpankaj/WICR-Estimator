@@ -195,12 +195,10 @@ namespace WICR_Estimator.ViewModels
 
                         DataSerializerService.DSInstance.dbData.MaterialDBData = await HTTPHelper.GetMaterialsAsyncByID(project.ProjectId);
 
-
-                        DataSerializerService.DSInstance.dbData.FreightDBData = await HTTPHelper.GetFreightsAsync();
-
+                        
+                        DataSerializerService.DSInstance.dbData.FreightDBData = await HTTPHelper.GetFreightsAsync();                      
 
                         DataSerializerService.DSInstance.serializeDbData(DataSerializerService.DSInstance.dbData, originalProjectname);
-
                     //}
 
                     #endregion

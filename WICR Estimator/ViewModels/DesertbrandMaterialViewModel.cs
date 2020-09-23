@@ -44,7 +44,7 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("3/4 oz.Fiberglass Matt", "2000 SQFT ROLL");
             materialNames.Add("BASE COAT 50 lb Desert Crete Level Max 20/30", "50 LB BAG");
             materialNames.Add("BASE COAT Desert Crete poly base mixed with water", "50 LB BAG");
-            materialNames.Add("SKIM COAT  Desert Crete poly Base Underlayment mixed with water", "50 LB BAG");
+            materialNames.Add("SKIM COAT Desert Crete poly Base Underlayment mixed with water", "50 LB BAG");
             materialNames.Add("TEXTURE Desert Crete poly base texture mixed Polymer #550 (1-1/4GAL per BAG)", "50 LB BAG");
             materialNames.Add("Desert Crete Liquid Polymer #550 mixed 50/50 with water", "5 GAL PAIL");
             materialNames.Add("Concrete Masonry Floor paint", "5 GAL PAIL");

@@ -10,7 +10,7 @@ using WICR_Estimator.Models;
 namespace WICR_Estimator.ViewModels
 {
     [DataContract]
-    class PedestrianSlopeViewModel:SlopeBaseViewModel
+    public class PedestrianSlopeViewModel: SlopeBaseViewModel
     {
         private double urethaneManualAvgMixPrice;
         private ObservableCollection<Slope> urethaneSlopes;
@@ -167,8 +167,8 @@ namespace WICR_Estimator.ViewModels
         {
             foreach (Slope slp in UrethaneSlopes)
             {
-                slp.PricePerMix = getPricePerMix(slp.Thickness, isApprovedForCement,9);
-                slp.GSLaborRate = getGSLaborRate(slp.Thickness, 9);
+                slp.PricePerMix = getPricePerMixDB(slp.Thickness, isApprovedForCement,"Urethane");
+                slp.GSLaborRate = getGSLaborRateDB(slp.Thickness, "Urethane");
             }
             base.reCalculate();
         }
@@ -176,12 +176,17 @@ namespace WICR_Estimator.ViewModels
         public PedestrianSlopeViewModel(JobSetup Js)
         {
             IsUrethaneVisible = System.Windows.Visibility.Visible;
-            GetSlopeDetailsFromGoogle(Js.ProjectName);
-            double.TryParse(perMixRates[15][1].ToString(), out urethaneManualAvgMixPrice);
-            isApprovedForCement = Js.IsApprovedForSandCement;
+            //GetSlopeDetailsFromGoogle(Js.ProjectName);
+            GetSlopeDetailsDB(Js.ProjectName);
+            urethaneManualAvgMixPrice = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Manul Override Avg Labor/mix" && x.SlopeType == "Urethane").PerMixCost;
+            //double.TryParse(perMixRates[15][1].ToString(), out urethaneManualAvgMixPrice);
             
-            Slopes = CreateSlopes(0);
-            UrethaneSlopes = CreateSlopes(9);
+            isApprovedForCement = Js.IsApprovedForSandCement;
+
+            //Slopes = CreateSlopes(0);
+            //UrethaneSlopes = CreateSlopes(9);
+            Slopes = CreateSlopesDB("Cement");
+            UrethaneSlopes = CreateSlopesDB("Urethane");
             CalculateAll();
             Js.JobSetupChange += JobSetup_OnJobSetupChange;
         }
@@ -216,7 +221,9 @@ namespace WICR_Estimator.ViewModels
 
 
             UrethaneSumTotalLaborExt = Math.Round(UrethaneTotalMixesMan * urethaneManualAvgMixPrice, 2);
-            double.TryParse(perMixRates[17][0].ToString(), out minLabVal);
+            //double.TryParse(perMixRates[17][0].ToString(), out minLabVal);
+            minLabVal = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Minimum Slope Labor" && x.SlopeType == "Cement").LaborRate;
+
             UrethaneMinimumLaborCost = minLabVal * laborRate;
             TotalLaborCost = (UrethaneSumTotalLaborExt == 0 ? 0 : UrethaneMinimumLaborCost > UrethaneSumTotalLaborExt ? UrethaneMinimumLaborCost : UrethaneSumTotalLaborExt);
 
@@ -274,8 +281,8 @@ namespace WICR_Estimator.ViewModels
                 if (UrethaneOverrideManually == false)
                 {
                     lCost = Math.Round(UrethaneSumTotalLaborExt, 2);
-                    double.TryParse(perMixRates[17][0].ToString(), out minLabVal);
-
+                    //double.TryParse(perMixRates[17][0].ToString(), out minLabVal);
+                    minLabVal = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Minimum Slope Labor" && x.SlopeType == "Urethane").LaborRate;
                     UrethaneMinimumLaborCost = minLabVal * laborRate;
 
                     lCost = UrethaneSumTotalLaborExt == 0 ? 0 : lCost > UrethaneMinimumLaborCost ? lCost : UrethaneMinimumLaborCost;

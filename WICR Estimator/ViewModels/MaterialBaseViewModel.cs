@@ -147,10 +147,9 @@ namespace WICR_Estimator.ViewModels
             {
                 SlopeTotals.OnTotalsChange += MetalTotals_OnTotalsChange;
             }
-            
-            getDatafromGoogle(Js.ProjectName);          
-            
-            //calculateLaborHrs();
+
+            //getDatafromGoogle(Js.ProjectName);          
+            getDatafromDB(Js.ProjectName);
         }
 
         public virtual void setUnitChangeValues()
@@ -1697,12 +1696,13 @@ namespace WICR_Estimator.ViewModels
             foreach (string key in materialNames.Keys)
             {
 
-                smCollection.Add(getSMObject(k, key, materialNames[key]));
+                //smCollection.Add(getSMObject(k, key, materialNames[key]));
+                smCollection.Add(createSMObjectDB(key, materialNames[key]));
                 k++;
             }
-            double minLCharge = 0;
-            double.TryParse(materialDetails[k][6].ToString(), out minLCharge);
-            LaborMinChargeMinSetup = minLCharge;
+            //double minLCharge = 0;
+            //double.TryParse(materialDetails[k][6].ToString(), out minLCharge);
+            LaborMinChargeMinSetup = dbData.LaborDBData.FirstOrDefault(x=>x.Name== "Minimum Labor charge").Value;
 
             return smCollection;
 
@@ -2963,8 +2963,10 @@ namespace WICR_Estimator.ViewModels
             }
         }
         public double TotalMaterialCost { get; set; }
-        private double FreightCalculator(double weight)
+
+        public double FreightCalculator(double weight)
         {
+            //double result;
             double frCalc = 0;
             double factor = 0;
             if (weight != 0)
@@ -2979,7 +2981,8 @@ namespace WICR_Estimator.ViewModels
                 {
                     if (weight > 10000)
                     {
-                        double.TryParse(freightData[0][1].ToString(), out factor);
+                        //double.TryParse(freightData[0][1].ToString(), out factor);
+                        factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight10000").FactorValue;
                         frCalc = factor * weight; /*0.03*/
                     }
 
@@ -2987,28 +2990,32 @@ namespace WICR_Estimator.ViewModels
                     {
                         if (weight > 5000)
                         {
-                            double.TryParse(freightData[1][1].ToString(), out factor);
+                            //double.TryParse(freightData[1][1].ToString(), out factor);
+                            factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight5000").FactorValue;
                             frCalc = factor * weight; /*0.04*/
                         }
                         else
                         {
                             if (weight > 2000)
                             {
-                                double.TryParse(freightData[2][1].ToString(), out factor);
+                                //double.TryParse(freightData[2][1].ToString(), out factor);
+                                factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight2000").FactorValue;
                                 frCalc = factor * weight; /*0.09*/
                             }
                             else
                             {
                                 if (weight > 1000)
                                 {
-                                    double.TryParse(freightData[3][1].ToString(), out factor);
+                                    //double.TryParse(freightData[3][1].ToString(), out factor);
+                                    factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight1000").FactorValue;
                                     frCalc = factor * weight; /*0.12*/
                                 }
                                 else
                                 {
                                     if (weight > 400)
                                     {
-                                        double.TryParse(freightData[4][1].ToString(), out factor);
+                                        //double.TryParse(freightData[4][1].ToString(), out factor);
+                                        factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight400").FactorValue;
                                         frCalc = factor;/*75*/
                                     }
                                     else
@@ -3024,6 +3031,67 @@ namespace WICR_Estimator.ViewModels
 
             return frCalc;
         }
+        //private double FreightCalculator(double weight)
+        //{
+        //    double frCalc = 0;
+        //    double factor = 0;
+        //    if (weight != 0)
+        //    {
+
+        //        if (weight == 0)
+        //        {
+        //            frCalc = 0;
+        //        }
+
+        //        else
+        //        {
+        //            if (weight > 10000)
+        //            {
+        //                double.TryParse(freightData[0][1].ToString(), out factor);
+        //                frCalc = factor * weight; /*0.03*/
+        //            }
+
+        //            else
+        //            {
+        //                if (weight > 5000)
+        //                {
+        //                    double.TryParse(freightData[1][1].ToString(), out factor);
+        //                    frCalc = factor * weight; /*0.04*/
+        //                }
+        //                else
+        //                {
+        //                    if (weight > 2000)
+        //                    {
+        //                        double.TryParse(freightData[2][1].ToString(), out factor);
+        //                        frCalc = factor * weight; /*0.09*/
+        //                    }
+        //                    else
+        //                    {
+        //                        if (weight > 1000)
+        //                        {
+        //                            double.TryParse(freightData[3][1].ToString(), out factor);
+        //                            frCalc = factor * weight; /*0.12*/
+        //                        }
+        //                        else
+        //                        {
+        //                            if (weight > 400)
+        //                            {
+        //                                double.TryParse(freightData[4][1].ToString(), out factor);
+        //                                frCalc = factor;/*75*/
+        //                            }
+        //                            else
+        //                            {
+        //                                frCalc = 0;
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    return frCalc;
+        //}
         //this is Material total
         private void CalculateCostBreakup()
         {
@@ -3186,7 +3254,8 @@ namespace WICR_Estimator.ViewModels
             }
             if (isDiscounted)
             {
-                double.TryParse(laborDetails[1][0].ToString(), out laborDeduction);
+                //double.TryParse(laborDetails[1][0].ToString(), out laborDeduction);
+                laborDeduction = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Deduct on Labor for large jobs").Value;
             }
             IEnumerable<SystemMaterial> selectedLabors = SystemMaterials.Where(x => x.IsMaterialChecked == true).ToList();
 
@@ -3254,7 +3323,8 @@ namespace WICR_Estimator.ViewModels
             double laborDeduction = 0;
             if (isDiscounted)
             {
-                double.TryParse(laborDetails[1][0].ToString(), out laborDeduction);
+                //double.TryParse(laborDetails[1][0].ToString(), out laborDeduction);
+                laborDeduction = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Deduct on Labor for large jobs").Value;
             }
             if (ZAddLaborMinCharge)
             {
@@ -3782,17 +3852,16 @@ namespace WICR_Estimator.ViewModels
                 dbData = DataSerializerService.DSInstance.deserializeDbData(prjName);
                
                 laborRate = dbData.FreightDBData.First(x => x.FreightID == 8).FactorValue;
-                double facVal = 0;
-                double.TryParse(laborDetails[7][0].ToString(), out facVal);
+                
                 SubContractMarkup =  dbData.LaborDBData.First(x => x.Name == "Profit Margin on subcontract labor").Value; 
                
                 MetalMarkup = 1 - dbData.LaborDBData.First(x => x.Name == "Profit Margin Metal").Value; ;
 
                 SlopeMarkup = 1 - dbData.LaborDBData.First(x => x.Name == "Profit Margin Slope").Value; ;
 
-                MaterialMarkup = 1 - dbData.LaborDBData.First(x => x.Name == "Profit Margin Material").Value; ;
+                MaterialMarkup = 1 - dbData.LaborDBData.First(x => x.Name == "Profit Margin Material").Value; 
 
-                SubContractProfitMargin = dbData.LaborDBData.First(x => x.Name == "Profit Margin SubContract").Value; ;
+                SubContractProfitMargin = dbData.LaborDBData.First(x => x.Name == "Profit Margin SubContract").Value; 
 
             }
         }

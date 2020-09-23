@@ -11,10 +11,11 @@ namespace WICR_Estimator.ViewModels
     {
         public EnduroKoteSlopeViewModel(JobSetup Js)
         {
-            GetSlopeDetailsFromGoogle(Js.ProjectName);
+            // GetSlopeDetailsFromGoogle(Js.ProjectName);
+            GetSlopeDetailsDB(Js.ProjectName);
             Js.SlopeMaterialName = "ECC Enduro-Crete";
             SlopeMaterialName = Js.IsApprovedForSandCement ? "Sand and Cement" : "ECC Enduro-Crete";
-            Slopes = CreateSlopes();
+            Slopes = CreateSlopesDB("Cement");
             CalculateAll();
             Js.JobSetupChange += JobSetup_OnJobSetupChange;
         }

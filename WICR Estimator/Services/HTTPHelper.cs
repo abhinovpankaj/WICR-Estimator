@@ -475,6 +475,24 @@ namespace WICR_Estimator.Services
                 }
             }
         }
+        internal async static Task<IList<FreightDB>> GetFreights()
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BASEURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await client.GetAsync("freights");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<IList<FreightDB>>();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
         #endregion
 
     }
