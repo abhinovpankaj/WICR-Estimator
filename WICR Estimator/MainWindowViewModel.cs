@@ -215,7 +215,7 @@ namespace WICR_Estimator
                                 hm.UpdateProjectTotals();
 
                             item.CreationDetails = JobName + ":;" + PreparedBy + ":;" + JobCreationDate.ToString();
-                            item.ProductVersion = "2.4";
+                            item.ProductVersion = "3.0";
                         }
                         serializer.WriteObject(writer, SelectedProjects);
 
@@ -307,6 +307,8 @@ namespace WICR_Estimator
         private void NavigatePage(object obj)
         {
             System.Windows.Controls.ListViewItem listItem = obj as System.Windows.Controls.ListViewItem;
+            if (listItem == null)
+                return;
             switch (listItem.Name)
             {
                 case "Estimates":

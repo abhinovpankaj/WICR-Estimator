@@ -9,7 +9,7 @@ namespace WICR_Estimator.ViewModels
 {
     public class EnduroKoteSlopeViewModel:SlopeBaseViewModel
     {
-        public EnduroKoteSlopeViewModel(JobSetup Js)
+        public EnduroKoteSlopeViewModel(JobSetup Js):base(Js.dbData)
         {
             // GetSlopeDetailsFromGoogle(Js.ProjectName);
             GetSlopeDetailsDB(Js.ProjectName);

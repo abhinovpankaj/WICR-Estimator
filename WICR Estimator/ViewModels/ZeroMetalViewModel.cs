@@ -15,19 +15,20 @@ namespace WICR_Estimator.ViewModels
         public ZeroMetalViewModel(JobSetup js)
         {
             prevailingWage = js.ActualPrevailingWage == 0 ? 0 : (js.ActualPrevailingWage - laborRate) / laborRate;
-            GetMetalDetailsFromGoogle(js.ProjectName);
+            GetMetalDetailsFromDB(js.ProjectName);
             if (js.ProjectName == "Paraseal LG")
             {
-                Metals = GetMetalsLG();
-                AddOnMetals = GetAddOnMetalsLG();
+                Metals = GetMetalsDB("LG");
+                AddOnMetals = GetAddOnMetalsDB("LG");
             }
             else
             {
-                Metals = GetMetals();
-                AddOnMetals = GetAddOnMetals();
+                Metals = GetMetalsDB();
+                AddOnMetals = GetAddOnMetalsDB();
             }
 
-            MiscMetals = GetMiscMetals();
+            MiscMetals = GetMiscMetalsDB();
+            
             if (js.ProjectName == "Multicoat")
             {
                 MiscMetals.Where(x => x.Name == "Nosing for Concrete risers").FirstOrDefault().Units = 0;
@@ -46,28 +47,29 @@ namespace WICR_Estimator.ViewModels
             }
             
         }
-        public override ObservableCollection<Metal> GetMetals()
+        public override ObservableCollection<Metal> GetMetalsDB(string type="")
         {
             ObservableCollection<Metal> met = new ObservableCollection<Metal>();
-            met.Add(new Metal("L - METAL / FLASHING", "4X6", getMetalPR(2), laborRate, 0, getMetalMP(2), false));
-            met.Add(new Metal("DRIP EDGE METAL", "2X4", getMetalPR(5), laborRate, 0, getMetalMP(5), false));
-            met.Add(new Metal("STAIR METAL", "4X6", getMetalPR(8), laborRate, getUnits(0), getMetalMP(8), false));
-            met.Add(new Metal("STAIR METAL", "3X3", getMetalPR(9), laborRate, getUnits(1), getMetalMP(9), false));
-            met.Add(new Metal("DOOR SADDLES", "(4 ft.)", getMetalPR(16), laborRate, 0, getMetalMP(16), false));
-            met.Add(new Metal("DOOR SADDLES", "(6 ft.)", getMetalPR(17), laborRate, 0, getMetalMP(17), false));
-            met.Add(new Metal("DOOR SADDLES", "(8 ft.)", getMetalPR(18), laborRate, 0, getMetalMP(18), false));
-            met.Add(new Metal("DOOR SADDLES", "(10 ft.)", getMetalPR(19), laborRate, 0, getMetalMP(19), false));
-            met.Add(new Metal("INSIDE CORNER", "", getMetalPR(20), laborRate, 0, getMetalMP(20), false));
-            met.Add(new Metal("OUTSIDE CORNER", "", getMetalPR(21), laborRate, 0, getMetalMP(21), false));
-            met.Add(new Metal("INSIDE EDGE CORNER", "", getMetalPR(22), laborRate, 0, getMetalMP(22), false));
-            met.Add(new Metal("OUTSIDE EDGE CORNER", "", getMetalPR(23), laborRate, 0, getMetalMP(23), false));
-            met.Add(new Metal("DOOR CORNERS SET OF 2 (L&R)", "", getMetalPR(24), laborRate, 0, getMetalMP(24), false));
-            met.Add(new Metal("STRINGER TRANSITION CAP", "", getMetalPR(25), laborRate, 0, getMetalMP(25), false));
-            met.Add(new Metal("DRIP TERMINATION", "", getMetalPR(40), laborRate, 0, getMetalMP(40), false));
-            met.Add(new Metal("2 inch DRAINS", "", getMetalPR(29), laborRate, 0, getMetalMP(29), false));//changed name ,removed Chivon as per mail on 12th Sept 2019.
-            met.Add(new Metal("STANDARD SCUPPER", "4x4x9", getMetalPR(32), laborRate, 0, getMetalMP(32), false));
-            met.Add(new Metal("SCUPPER WITH A COLLAR", "4x4x9", getMetalPR(33), laborRate, 0, getMetalMP(33), false));
-            met.Add(new Metal("POST COLLARS w/  KERF", "4x4", getMetalPR(36), laborRate, 0, getMetalMP(36), false));
+            met.Add(new Metal("L - METAL / FLASHING", "4X6", getMetalPR("L-Metal/Flashing 4'X6''"), laborRate, 0, getMetalMP("L-Metal/Flashing 4'X6''"), false));
+            met.Add(new Metal("DRIP EDGE METAL", "2X4", getMetalPR("Drip Edge Metal 2\" x 4\""), laborRate, 0, getMetalMP("Drip Edge Metal 2\" x 4\""), false));
+            met.Add(new Metal("STAIR METAL", "4X6", getMetalPR("Stair Metal 4X6"), laborRate, getUnits(0), getMetalMP("Stair Metal 4X6"), true));
+            met.Add(new Metal("STAIR METAL", "3X3", getMetalPR("Stair Metal 3X3"), laborRate, getUnits(1), getMetalMP("Stair Metal 3X3"), true));
+            met.Add(new Metal("DOOR SADDLES", "(4 ft.)", getMetalPR("Door Saddles (4 Ft.)"), laborRate, 0, getMetalMP("Door Saddles (4 Ft.)"), false));
+            met.Add(new Metal("DOOR SADDLES", "(6 ft.)", getMetalPR("Door Saddles (6Ft)"), laborRate, 0, getMetalMP("Door Saddles (6Ft)"), false));
+            met.Add(new Metal("DOOR SADDLES", "(8 ft.)", getMetalPR("Door Saddles (8Ft)"), laborRate, 0, getMetalMP("Door Saddles (8Ft)"), false));
+            met.Add(new Metal("DOOR SADDLES", "(10 ft.)", getMetalPR("Door Saddles (10 Ft)"), laborRate, 0, getMetalMP("Door Saddles (10 Ft)"), false));
+            met.Add(new Metal("INSIDE CORNER", "", getMetalPR("Inside Corner"), laborRate, 0, getMetalMP("Inside Corner"), false));
+            met.Add(new Metal("OUTSIDE CORNER", "", getMetalPR("Outside Corner"), laborRate, 0, getMetalMP("Outside Corner"), false));
+            met.Add(new Metal("INSIDE EDGE CORNER", "", getMetalPR("Inside Edge Corner"), laborRate, 0, getMetalMP("Inside Edge Corner"), false));
+            met.Add(new Metal("OUTSIDE EDGE CORNER", "", getMetalPR("Outside Edge Corner"), laborRate, 0, getMetalMP("Outside Edge Corner"), false));
+            met.Add(new Metal("DOOR CORNERS SET OF 2 (L&R)", "", getMetalPR("Door Corners Set Of 2 (L&R)"), laborRate, 0, getMetalMP("Door Corners Set Of 2 (L&R)"), false));
+            met.Add(new Metal("STRINGER TRANSITION CAP", "", getMetalPR("Stringer Transition Cap"), laborRate, 0, getMetalMP("Stringer Transition Cap"), false));
+            met.Add(new Metal("DRIP TERMINATION", "", getMetalPR("Drip Termination"), laborRate, 0, getMetalMP("Drip Termination"), false));
+            met.Add(new Metal("2 inch DRAINS", "", getMetalPR("2 Inch Chivon Drains"), laborRate, 0, getMetalMP("2 Inch Chivon Drains"), false));//changed name ,removed Chivon as per mail on 12th Sept 2019.
+            met.Add(new Metal("STANDARD SCUPPER", "4x4x9", getMetalPR("4\" x 4\" x 9\" standard scupper"), laborRate, 0, getMetalMP("4\" x 4\" x 9\" standard scupper"), false));
+            met.Add(new Metal("SCUPPER WITH A COLLAR", "4x4x9", getMetalPR("Scupper With A Collar 4X4X9"), laborRate, 0, getMetalMP("Scupper With A Collar 4X4X9"), false));
+            met.Add(new Metal("POST COLLARS w/  KERF", "4x4", getMetalPR("Post Collars 4X4 W/ Kerf"), laborRate, 0, getMetalMP("Post Collars 4X4 W/ Kerf"), false));
+
             foreach (Metal metal in met)
             {
                 metal.IsStairMetal = System.Windows.Visibility.Visible;
@@ -76,11 +78,18 @@ namespace WICR_Estimator.ViewModels
             return met;
         }
 
-        public override ObservableCollection<MiscMetal> GetMiscMetals()
+        public override ObservableCollection<MiscMetal> GetMiscMetalsDB()
         {
             ObservableCollection<MiscMetal> misc = new ObservableCollection<MiscMetal>();
-            misc.Add(new MiscMetal { Name = "Pins & Loads for metal over concrete", Units = 0, UnitPrice = getUnitPrice(0), MaterialPrice = getMetalMP(37), IsEditable = true });
-            misc.Add(new MiscMetal { Name = "Nosing for Concrete risers", Units = 0, UnitPrice = getUnitPrice(1), MaterialPrice = getMetalMP(38), IsEditable = true });
+            misc.Add(new MiscMetal
+            {
+                Name = "Pins & Loads for metal over concrete",
+                Units = getUnits(2),
+                UnitPrice = getUnitPrice("Pins & Loads for metal over concrete"),
+                MaterialPrice = getMetalMP("Pins & Loads for metal over concrete"),
+                IsEditable = false
+            });
+            misc.Add(new MiscMetal { Name = "Nosing for Concrete risers", Units = getUnits(3), UnitPrice = getUnitPrice("Nosing for Concrete risers"), MaterialPrice = getMetalMP("Nosing for Concrete risers"), IsEditable = false });
             misc.Add(new MiscMetal { Name = "OTHER DRAINS TO BE ITEMIZED", Units = 0, UnitPrice = 0, MaterialPrice = 0, IsEditable = true });
             return misc;
         }

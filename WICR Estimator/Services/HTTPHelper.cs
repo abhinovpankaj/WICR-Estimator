@@ -495,5 +495,29 @@ namespace WICR_Estimator.Services
         }
         #endregion
 
+        public  async static Task<DBData> FetchFromDbAndSave(string originalProjectname)
+        {
+            DBData dbData=new DBData();
+
+            var project = await HTTPHelper.GetProjectByNameAsync(originalProjectname);
+            //var task = HTTPHelper.GetMetalsAsync();
+            //task.Wait();
+            //DataSerializerService.DSInstance.dbData.MetalDBData = task.Result;
+
+            dbData.MetalDBData = await HTTPHelper.GetMetalsAsync();
+
+            dbData.LaborDBData = await HTTPHelper.GetLaborFactorsAsyncByProjectID(project.ProjectId);
+
+            dbData.SlopeDBData = await HTTPHelper.GetSlopesByProjectIDAsync(project.ProjectId);
+
+
+            dbData.MaterialDBData = await HTTPHelper.GetMaterialsAsyncByID(project.ProjectId);
+
+
+            dbData.FreightDBData = await HTTPHelper.GetFreightsAsync();
+
+            DataSerializerService.DSInstance.serializeDbData(dbData, originalProjectname);
+            return dbData;
+        }
     }
 }

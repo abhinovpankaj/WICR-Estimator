@@ -52,19 +52,9 @@
                 </StackPanel>
             </materialDesign:ColorZone>
             <StackPanel Orientation="Horizontal"
-                         Grid.Row="1"       Margin="10">
+                         Grid.Row="1"  Margin="10">
 
-                <StackPanel>
-                    <TextBlock Text="Select the project"
-                       Opacity=".68"
-                       Margin="10,10,10,0"/>
-                    <ComboBox ItemsSource="{Binding Projects}"
-                                      
-                          DisplayMemberPath="Name"
-                          SelectedItem="{Binding SelectedProject}"
-                 Margin="10,0,10,10"  Width="250"
-                  HorizontalAlignment="Left"/>
-                </StackPanel>
+              
                 <TextBox Text="{Binding       SearchText,UpdateSourceTrigger=PropertyChanged}"
                                  Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
                                  VerticalContentAlignment="Center"
@@ -73,7 +63,34 @@
                          Width="350"
                          Margin="10"
                          HorizontalAlignment="Left"/>
+                <StackPanel Margin="0,0,40,0">
+                    <TextBlock Text="Select the project"
+                       Opacity=".68"
+                       Margin="10,10,10,0"/>
+                    <!--<ComboBox ItemsSource="{Binding Projects}"
+                                   
+                          DisplayMemberPath="Name"
+                          SelectedItem="{Binding SelectedProject}"
+                 Margin="10,0,10,10"  Width="250"
+                  HorizontalAlignment="Left">
 
+                    </ComboBox>-->
+                    <ComboBox ItemsSource="{Binding Projects}"                          
+                          
+                 Margin="10,0,10,10"  Width="300"
+                  HorizontalAlignment="Left">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox  Width="220"   
+                                           
+                                           Content="{Binding Name}" 
+                                           IsChecked="{Binding IsSelected}" 
+                                           >
+                                </CheckBox>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
                 <Button Margin="30,10" 
                                 Command="{Binding SearchCommand}">
                     <Button.Content>

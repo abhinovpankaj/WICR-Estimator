@@ -13,7 +13,7 @@ namespace WICR_Estimator.Models
     
     public class JobSetup : BaseViewModel
     {
-
+        public DBData dbData { get; set; }
         public bool HasTabSwitched { get; set; }
         private double actualPrevailingWage;
         public double ActualPrevailingWage
@@ -75,13 +75,16 @@ namespace WICR_Estimator.Models
         { 
             
         }
-        public void UpdateJobSetup()
+        //public string toolVersion;
+        public void UpdateJobSetup(string version = "")
         {
             if (JobSetupChange != null)
             {
+                //toolVersion = version;
                 JobSetupChange(this, EventArgs.Empty);
             }
         }
+
         public bool canAdd(object obj)
         {
             return true;

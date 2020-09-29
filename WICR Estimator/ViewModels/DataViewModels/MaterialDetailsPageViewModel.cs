@@ -16,6 +16,49 @@ namespace WICR_Estimator
     {
         private IEnumerable<MaterialDB> MaterialsFilterByProject;
         public string SearchText { get; set; } = "";
+        
+
+        private DelegateCommand _selectProjectCommand;
+        public DelegateCommand SelectProjectCommand
+        {
+            get
+            {
+                if (_selectProjectCommand == null)
+                {
+                    _selectProjectCommand = new DelegateCommand(UpdateSelectedProjectMaterials, Canselect);
+                }
+
+                return _selectProjectCommand;
+            }
+
+        }
+       
+        private void UpdateSelectedProjectMaterials(object obj)
+        {
+            List<int> selectedIDs=new List<int>() ;
+            foreach (var item in Projects)
+            {
+                
+                if (item.IsSelected)
+                {
+                    selectedIDs.Add(item.ProjectId);
+                }
+               
+            }
+            if (selectedIDs.Count==0)
+            {
+                MaterialsFilterByProject = Materials.Where(x => x.ProjectId == 1);
+               
+            }
+            else
+                MaterialsFilterByProject = Materials.Join(selectedIDs,x=>x.ProjectId,id=>id,(x,id)=>x);
+        }
+
+        private bool Canselect(object obj)
+        {
+            return true;
+        }
+
         private DelegateCommand _searchCommand ;
         public DelegateCommand SearchCommand
         {
@@ -47,7 +90,7 @@ namespace WICR_Estimator
 
         private bool CanUpdate(object obj)
         {
-            if (FilteredSystemMaterials.Count>0)
+            if (FilteredSystemMaterials.Count > 0)
             {
                 return true;
             }
@@ -95,6 +138,7 @@ namespace WICR_Estimator
 
         private void SearchMaterial(object obj)
         {
+            UpdateSelectedProjectMaterials(null);
             try
             {
                 if (MaterialsFilterByProject != null)
@@ -128,7 +172,7 @@ namespace WICR_Estimator
                 
             }
 
-            return false;
+            return true;
 
         }
 
@@ -208,8 +252,9 @@ namespace WICR_Estimator
                 if (_selectedProject != value)
                 {
                     _selectedProject = value;
-                    GetMaterialsById(SelectedProject.ProjectId);
                     OnPropertyChanged("SelectedProject");
+                    GetMaterialsById(SelectedProject.ProjectId);
+                    
                 }
             }
         }

@@ -142,82 +142,57 @@ namespace WICR_Estimator.ViewModels
                         prj.ProjectJobSetUp.UpdateJobSetup();
                     }
                     string originalProjectname=prj.OriginalProjectName;
+
+                    #region Google
                     //if (prj.Name.Contains('.'))
                     //{
                     //    originalProjectname = prj.Name.Split('.')[0];
                     //}
                     //else
                     //    originalProjectname = prj.Name;
-             #region Google
-                    var values = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, originalProjectname);
-                    if (values == null)
-                    {
-                        DataSerializer.DSInstance.googleData = new GSData();
-                        //IList<IList<object>> LaborRate=await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Rate);
-                        DataSerializer.DSInstance.googleData.LaborRate = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Rate);
+                    //       var values = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, originalProjectname);
+                    //       if (values == null)
+                    //       {
+                    //           DataSerializer.DSInstance.googleData = new GSData();
+                    //           //IList<IList<object>> LaborRate=await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Rate);
+                    //           DataSerializer.DSInstance.googleData.LaborRate = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Rate);
 
-                        DataSerializer.DSInstance.googleData.MetalData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Metal);
+                    //           DataSerializer.DSInstance.googleData.MetalData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Metal);
 
-                        Thread.Sleep(1000);
-                        DataSerializer.DSInstance.googleData.SlopeData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(originalProjectname, DataType.Slope);
+                    //           Thread.Sleep(1000);
+                    //           DataSerializer.DSInstance.googleData.SlopeData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(originalProjectname, DataType.Slope);
 
-                        
-                        DataSerializer.DSInstance.googleData.MaterialData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(originalProjectname, DataType.Material);
 
-                        Thread.Sleep(1000);
-                        DataSerializer.DSInstance.googleData.LaborData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(originalProjectname, DataType.Labor);
-                        DataSerializer.DSInstance.googleData.FreightData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Freight);
+                    //           DataSerializer.DSInstance.googleData.MaterialData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(originalProjectname, DataType.Material);
 
-                        Thread.Sleep(2000);
-                        DataSerializer.DSInstance.serializeGoogleData(DataSerializer.DSInstance.googleData, originalProjectname);
+                    //           Thread.Sleep(1000);
+                    //           DataSerializer.DSInstance.googleData.LaborData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(originalProjectname, DataType.Labor);
+                    //           DataSerializer.DSInstance.googleData.FreightData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Freight);
 
-                    }
+                    //           Thread.Sleep(2000);
+                    //           DataSerializer.DSInstance.serializeGoogleData(DataSerializer.DSInstance.googleData, originalProjectname);
+
+                    //       }
 
                     #endregion
 
                     #region DBConnectAndSaveDataLocally
 
-                    //var dbValues = DataSerializerService.DSInstance.deserializeDbData( originalProjectname);
-                    //if (dbValues == null)
-                    //{
-                        DataSerializerService.DSInstance.dbData = new DBData();
-
-                        var project = await HTTPHelper.GetProjectByNameAsync(originalProjectname);
-
-                        DataSerializerService.DSInstance.dbData.LaborDBData = await HTTPHelper.GetLaborFactorsAsyncByProjectID(project.ProjectId);
-
-
-                        DataSerializerService.DSInstance.dbData.MetalDBData = await HTTPHelper.GetMetalsAsync();
-
-
-                        DataSerializerService.DSInstance.dbData.SlopeDBData = await HTTPHelper.GetSlopesByProjectIDAsync(project.ProjectId);
-
-
-                        DataSerializerService.DSInstance.dbData.MaterialDBData = await HTTPHelper.GetMaterialsAsyncByID(project.ProjectId);
-
-                        
-                        DataSerializerService.DSInstance.dbData.FreightDBData = await HTTPHelper.GetFreightsAsync();                      
-
-                        DataSerializerService.DSInstance.serializeDbData(DataSerializerService.DSInstance.dbData, originalProjectname);
-                    //}
+                    var dbValues = DataSerializerService.DSInstance.deserializeDbData(originalProjectname);
+                    if (dbValues == null)
+                    {
+                        //Create dat file locally
+                        prj.ProjectJobSetUp.dbData = await HTTPHelper.FetchFromDbAndSave(originalProjectname);
+                    }
+                    else
+                        prj.ProjectJobSetUp.dbData = dbValues;
 
                     #endregion
-
-                    double laborRate = 0;
-                    var rate = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, originalProjectname);
-                    if (rate!=null)
-                    {
-                        double.TryParse(rate[0][0].ToString(), out laborRate);
-                        prj.ProjectJobSetUp.LaborRate = laborRate;
-
-                    }
-                    
 
                     if (originalProjectname == "Paraseal")
                     {
                         if (prj.MaterialViewModel == null)
                         {
-
                             prj.MaterialViewModel = ViewModelInstanceFactory.GetMaterialViewModelInstance(originalProjectname, null,
                                 null, prj.ProjectJobSetUp);
                         }
@@ -232,7 +207,7 @@ namespace WICR_Estimator.ViewModels
                         if (prj.MaterialViewModel == null)
                         {
                             prj.MaterialViewModel = ViewModelInstanceFactory.GetMaterialViewModelInstance(originalProjectname, null,
-                                  prj.SlopeViewModel.SlopeTotals, prj.ProjectJobSetUp);
+                                  prj.SlopeViewModel.SlopeTotals,prj.ProjectJobSetUp);
                         }
                     }
                     else if (originalProjectname=="Paraseal LG"|| originalProjectname == "Westcoat Epoxy"||originalProjectname== "Polyurethane Injection Block" || originalProjectname == "Block Wall")
@@ -278,6 +253,8 @@ namespace WICR_Estimator.ViewModels
             }          
 
         }
+
+        
 
         private void ProjectJobSetUp_OnProjectNameChange(object sender, EventArgs e)
         {

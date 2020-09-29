@@ -14,10 +14,11 @@ namespace WICR_Estimator.ViewModels
     {
         public DexoMetalViewModel(JobSetup js)
         {
-            GetMetalDetailsFromGoogle("Dexotex Barrier Gaurd");
-            Metals = this.GetMetals();
-            MiscMetals = this.GetMiscMetals();
-            AddOnMetals = this.GetAddOnMetals();
+            //GetMetalDetailsFromGoogle("Dexotex Barrier Gaurd");
+            GetMetalDetailsFromDB(js.ProjectName);
+            Metals = this.GetMetalsDB();
+            MiscMetals = this.GetMiscMetalsDB();
+            AddOnMetals = this.GetAddOnMetalsDB();
             CalculateCost(null);
             js.JobSetupChange += Js_OnJobSetupChange;
         }

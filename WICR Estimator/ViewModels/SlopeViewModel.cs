@@ -14,7 +14,7 @@ namespace WICR_Estimator.ViewModels
     {
         public SlopeViewModel()
         { }
-        public SlopeViewModel(JobSetup js)
+        public SlopeViewModel(JobSetup js):base(js.dbData)
         {
             prevailingWage = js.ActualPrevailingWage == 0 ? 0 : (js.ActualPrevailingWage - laborRate) / laborRate;
             //GetSlopeDetailsFromGoogle(js.ProjectName);

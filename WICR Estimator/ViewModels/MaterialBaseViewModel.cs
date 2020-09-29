@@ -69,8 +69,6 @@ namespace WICR_Estimator.ViewModels
         [DataMember]
         public IList<IList<object>> freightData { get; set; }
 
-        //[DataMember]
-        //public MaterialDB materialDBPrices { get; set; }
 
         #region privatefields
         private ObservableCollection<CostBreakup> lCostBreakUp;
@@ -129,7 +127,7 @@ namespace WICR_Estimator.ViewModels
                 SystemMaterial.OnQTyChanged += (s, e) => { setExceptionValues(s); };
                 CheckboxCommand = new DelegateCommand(ApplyCheckUnchecks, canApply);
             }
-            
+            dbData = Js.dbData;
         }
 
 
@@ -1528,9 +1526,13 @@ namespace WICR_Estimator.ViewModels
                     actualPreWage = js.ActualPrevailingWage;
                     MaterialPerc = getMaterialDiscount(js.ProjectDelayFactor);
                 }
-                FetchMaterialValuesAsync(true);
-                CalculateCost(null);
-                js.TotalSalesCostTemp = TotalSale;
+            if (dbData == null)
+            {
+                dbData = js.dbData;
+            }
+            FetchMaterialValuesAsync(true);
+            CalculateCost(null);
+            js.TotalSalesCostTemp = TotalSale;           
             //});
                     
         }
@@ -1695,14 +1697,23 @@ namespace WICR_Estimator.ViewModels
             int k = 0;
             foreach (string key in materialNames.Keys)
             {
-
-                //smCollection.Add(getSMObject(k, key, materialNames[key]));
-                smCollection.Add(createSMObjectDB(key, materialNames[key]));
+                if (dbData==null)
+                {
+                    smCollection.Add(getSMObject(k, key, materialNames[key]));
+                    double minLCharge = 0;
+                    double.TryParse(materialDetails[k][6].ToString(), out minLCharge);
+                    LaborMinChargeMinSetup = minLCharge;
+                }
+                else
+                {
+                    smCollection.Add(createSMObjectDB(key, materialNames[key]));
+                    LaborMinChargeMinSetup = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Minimum Labor charge").Value;
+                }
+                    
                 k++;
             }
-            //double minLCharge = 0;
-            //double.TryParse(materialDetails[k][6].ToString(), out minLCharge);
-            LaborMinChargeMinSetup = dbData.LaborDBData.FirstOrDefault(x=>x.Name== "Minimum Labor charge").Value;
+            
+            
 
             return smCollection;
 
@@ -2981,8 +2992,12 @@ namespace WICR_Estimator.ViewModels
                 {
                     if (weight > 10000)
                     {
-                        //double.TryParse(freightData[0][1].ToString(), out factor);
-                        factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight10000").FactorValue;
+                        if (dbData==null)
+                        {
+                            double.TryParse(freightData[0][1].ToString(), out factor);
+                        }
+                        else
+                            factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight10000").FactorValue;
                         frCalc = factor * weight; /*0.03*/
                     }
 
@@ -2990,32 +3005,48 @@ namespace WICR_Estimator.ViewModels
                     {
                         if (weight > 5000)
                         {
-                            //double.TryParse(freightData[1][1].ToString(), out factor);
-                            factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight5000").FactorValue;
+                            if (dbData == null)
+                            {
+                                double.TryParse(freightData[1][1].ToString(), out factor);
+                            }
+                            else
+                                factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight5000").FactorValue;
                             frCalc = factor * weight; /*0.04*/
                         }
                         else
                         {
                             if (weight > 2000)
                             {
-                                //double.TryParse(freightData[2][1].ToString(), out factor);
-                                factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight2000").FactorValue;
+                                if (dbData == null)
+                                {
+                                    double.TryParse(freightData[2][1].ToString(), out factor);
+                                }
+                                else
+                                    factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight2000").FactorValue;
                                 frCalc = factor * weight; /*0.09*/
                             }
                             else
                             {
                                 if (weight > 1000)
                                 {
-                                    //double.TryParse(freightData[3][1].ToString(), out factor);
-                                    factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight1000").FactorValue;
+                                    if (dbData == null)
+                                    {
+                                        double.TryParse(freightData[3][1].ToString(), out factor);
+                                    }
+                                    else
+                                        factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight1000").FactorValue;
                                     frCalc = factor * weight; /*0.12*/
                                 }
                                 else
                                 {
                                     if (weight > 400)
                                     {
-                                        //double.TryParse(freightData[4][1].ToString(), out factor);
-                                        factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight400").FactorValue;
+                                        if (dbData == null)
+                                        {
+                                            double.TryParse(freightData[4][1].ToString(), out factor);
+                                        }
+                                        else
+                                            factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight400").FactorValue;
                                         frCalc = factor;/*75*/
                                     }
                                     else
@@ -3835,7 +3866,7 @@ namespace WICR_Estimator.ViewModels
         }
 
         #region DBData
-        public DBData dbData { get; set; }
+        private DBData dbData;
         private void getDatafromDB(string prjName)
         {
             if (prjName.Contains('.'))
@@ -3845,7 +3876,7 @@ namespace WICR_Estimator.ViewModels
 
            
             isDataAvailable = true;
-            if (materialDetails == null)
+            if (dbData == null)
             {
                 //materialDetails = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "H33:K59");
 
@@ -3959,7 +3990,6 @@ namespace WICR_Estimator.ViewModels
             catch (Exception e)
             {
                 return null;
-
             }
 
         }

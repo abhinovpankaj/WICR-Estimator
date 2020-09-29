@@ -54,6 +54,16 @@ namespace WICR_Estimator.ViewModels
             SlopeHeaderText = "Slope Sand Cement Scrim";
         }
 
+        public SlopeBaseViewModel(DBData dbData)
+        {
+            this.dbData = dbData;
+            Slopes = new ObservableCollection<Slope>();
+            SlopeTotals = new Totals { TabName = "Slope" };
+            IsOverrridable = true;
+            UrethaneText = "Slope Sand and Urethane Fill";
+            SlopeHeaderText = "Slope Sand Cement Scrim";
+        }
+
         #region public properties
         [DataMember]
         public Totals SlopeTotals;
@@ -382,8 +392,13 @@ namespace WICR_Estimator.ViewModels
             TotalWeight = Math.Round(50 * TotalMixesMan, 2);
             TotalFrightCost = Math.Round(FreightCalculator(TotalWeight), 2);
             SumTotalLaborExt = Math.Round(TotalMixesMan * manualAvgMixPrice, 2);
-            //double.TryParse(perMixRates[8][0].ToString(), out minLabVal);
-            minLabVal = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Minimum Slope Labor" && x.SlopeType == "Cement").LaborRate;
+            if (dbData==null)
+            {
+                double.TryParse(perMixRates[8][0].ToString(), out minLabVal);
+            }
+            else
+                minLabVal = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Minimum Slope Labor" && x.SlopeType == "Cement").LaborRate;
+            
             MinimumLaborCost = minLabVal * laborRate;
             TotalLaborCost = SumTotalLaborExt==0?0:MinimumLaborCost > SumTotalLaborExt ? MinimumLaborCost : SumTotalLaborExt;
 
@@ -574,8 +589,13 @@ namespace WICR_Estimator.ViewModels
             if (Slopes.Count > 0)
             {
                 LaborCost = Math.Round(SumTotalLaborExt, 2);
-               //double.TryParse(perMixRates[8][0].ToString(), out minLabVal);
-                minLabVal = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Minimum Slope Labor" && x.SlopeType == "Cement").LaborRate;
+                if (dbData==null)
+                {
+                    double.TryParse(perMixRates[8][0].ToString(), out minLabVal);
+                }
+                else
+                    minLabVal = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Minimum Slope Labor" && x.SlopeType == "Cement").LaborRate;
+               
                 MinimumLaborCost = minLabVal * laborRate;
 
                 double lCost = SumTotalLaborExt == 0 ? 0 : LaborCost > MinimumLaborCost ? LaborCost : MinimumLaborCost;
@@ -713,8 +733,12 @@ namespace WICR_Estimator.ViewModels
                 {
                     if (weight > 10000)
                     {
-                        //double.TryParse(freightData[0][1].ToString(), out factor);
-                        factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight10000").FactorValue;
+                        if (dbData==null)
+                        {
+                            double.TryParse(freightData[0][1].ToString(), out factor);
+                        }
+                        else
+                            factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight10000").FactorValue;
                         frCalc =  factor* weight; /*0.03*/
                     }
 
@@ -722,32 +746,49 @@ namespace WICR_Estimator.ViewModels
                     {
                         if (weight > 5000)
                         {
-                            //double.TryParse(freightData[1][1].ToString(), out factor);
-                            factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight5000").FactorValue;
+                            if (dbData == null)
+                            {
+                                double.TryParse(freightData[1][1].ToString(), out factor);
+                            }
+                            else
+                                factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight5000").FactorValue;
+                            
                             frCalc = factor * weight; /*0.04*/
                         }
                         else
                         {
                             if (weight > 2000)
                             {
-                                //double.TryParse(freightData[2][1].ToString(), out factor);
-                                factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight2000").FactorValue;
+                                if (dbData == null)
+                                {
+                                    double.TryParse(freightData[2][1].ToString(), out factor);
+                                }
+                                else
+                                    factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight2000").FactorValue;
                                 frCalc = factor * weight; /*0.09*/
                             }
                             else
                             {
                                 if (weight > 1000)
                                 {
-                                    //double.TryParse(freightData[3][1].ToString(), out factor);
-                                    factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight1000").FactorValue;
+                                    if (dbData == null)
+                                    {
+                                        double.TryParse(freightData[3][1].ToString(), out factor);
+                                    }
+                                    else
+                                        factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight1000").FactorValue;
                                     frCalc = factor * weight; /*0.12*/
                                 }
                                 else
                                 {
                                     if (weight > 400)
                                     {
-                                        //double.TryParse(freightData[4][1].ToString(), out factor);
-                                        factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight400").FactorValue;
+                                        if (dbData == null)
+                                        {
+                                            double.TryParse(freightData[4][1].ToString(), out factor);
+                                        }
+                                        else
+                                            factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight400").FactorValue;
                                         frCalc = factor;/*75*/
                                     }
                                     else
@@ -791,7 +832,7 @@ namespace WICR_Estimator.ViewModels
         #endregion
 
         #region DBData
-        public DBData dbData;
+        private DBData dbData;
         public void GetSlopeDetailsDB(string projectName)
         {
             if (projectName.Contains('.'))
@@ -801,7 +842,6 @@ namespace WICR_Estimator.ViewModels
 
             if (dbData == null)
             {
-                //perMixRates = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "P25:Q30");
                 dbData = DataSerializerService.DSInstance.deserializeDbData(projectName);
                 laborRate = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "LaborRate").FactorValue;
                 manualAvgMixPrice = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Manul Override Avg Labor/mix" && x.SlopeType=="Cement").PerMixCost;

@@ -45,17 +45,7 @@
                 <StackPanel Orientation="Horizontal"
                          Grid.Row="1"       Margin="10">
 
-                    <StackPanel>
-                        <TextBlock Text="Select the project"
-                       Opacity=".68"
-                       Margin="10,10,10,0"/>
-                        <ComboBox ItemsSource="{Binding Projects}"
-                                      
-                          DisplayMemberPath="Name"
-                          SelectedItem="{Binding SelectedProject}"
-                 Margin="10,0,10,10"  Width="250"
-                  HorizontalAlignment="Left"/>
-                    </StackPanel>
+                    
                     <TextBox Text="{Binding       SearchText,UpdateSourceTrigger=PropertyChanged}"
                                  Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
                                  VerticalContentAlignment="Center"
@@ -64,8 +54,18 @@
                          Width="350"
                          Margin="10"
                          HorizontalAlignment="Left"/>
-
-                    <Button Margin="30,10" 
+                <StackPanel>
+                    <TextBlock Text="Select the project"
+                       Opacity=".68"
+                       Margin="10,10,10,0"/>
+                    <ComboBox ItemsSource="{Binding Projects}"
+                                      
+                          DisplayMemberPath="Name"
+                          SelectedItem="{Binding SelectedProject}"
+                 Margin="10,0,10,10"  Width="250"
+                  HorizontalAlignment="Left"/>
+                </StackPanel>
+                <Button Margin="30,10" 
                                 Command="{Binding SearchCommand}">
                         <Button.Content>
                             <StackPanel Orientation="Horizontal">

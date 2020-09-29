@@ -110,10 +110,11 @@ namespace WICR_Estimator.ViewModels
         private double riserCount;
         private bool hasMortarBed;
         private bool hasQuarterMortarBed;
-        
-        public DualFlexSlopeViewModel(JobSetup Js)
+        private DBData dbData;
+        public DualFlexSlopeViewModel(JobSetup Js) : base(Js.dbData)
         {
             IsUrethaneVisible = System.Windows.Visibility.Visible;
+            dbData = Js.dbData;
             if (Js.ProjectName=="Dual Flex")
             {
                 IsOverrridable = false;
@@ -160,10 +161,17 @@ namespace WICR_Estimator.ViewModels
         private void UpdateSpecialSlope()
         {
             double val1, val2;
-            //double.TryParse(perMixRates[13][0].ToString(), out val1);
-            //double.TryParse(perMixRates[14][0].ToString(), out val2);
-            val1 = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeId == 269).LaborRate;
-            val2 = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeId == 270).LaborRate;
+            if (dbData==null)
+            {
+                double.TryParse(perMixRates[13][0].ToString(), out val1);
+                double.TryParse(perMixRates[14][0].ToString(), out val2);
+            }
+            else
+            {
+                val1 = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeId == 269).LaborRate;
+                val2 = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeId == 270).LaborRate;
+            }
+           
             double latherate = hasMortarBed ?val1: val2;
 
             Slope slp = UrethaneSlopes.FirstOrDefault(x => x.Thickness == "1 1/4 inch Mortar Bed with 2x2 or diamond metal lathe");

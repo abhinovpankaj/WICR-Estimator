@@ -38,6 +38,15 @@
             <StackPanel Orientation="Horizontal"
                          Grid.Row="1"       Margin="10">
 
+                
+                <TextBox Text="{Binding       SearchText,UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                                 VerticalContentAlignment="Center"
+                          materialDesign:HintAssist.Hint="Labor Factor Name"
+                                 materialDesign:TextFieldAssist.HasClearButton="True"
+                         Width="350"
+                         Margin="10"
+                         HorizontalAlignment="Left"/>
                 <StackPanel>
                     <TextBlock Text="Select the project"
                        Opacity=".68"
@@ -49,15 +58,6 @@
                  Margin="10,0,10,10"  Width="250"
                   HorizontalAlignment="Left"/>
                 </StackPanel>
-                <TextBox Text="{Binding       SearchText,UpdateSourceTrigger=PropertyChanged}"
-                                 Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                                 VerticalContentAlignment="Center"
-                          materialDesign:HintAssist.Hint="Labor Factor Name"
-                                 materialDesign:TextFieldAssist.HasClearButton="True"
-                         Width="350"
-                         Margin="10"
-                         HorizontalAlignment="Left"/>
-
                 <Button Margin="30,10" 
                                 Command="{Binding SearchCommand}">
                     <Button.Content>

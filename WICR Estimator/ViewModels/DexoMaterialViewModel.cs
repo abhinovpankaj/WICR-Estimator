@@ -72,7 +72,7 @@ namespace WICR_Estimator.ViewModels
                 materialNames = new Dictionary<string, string>();
                 FillMaterialList();
             }
-            var sysMat = GetSystemMaterial();
+            var sysMat = GetSystemMaterial(materialNames);
 
             #region  Update Special Material Pricing and QTY
             if (hasSetupChanged)
@@ -151,6 +151,7 @@ namespace WICR_Estimator.ViewModels
             foreach (string key in materialNames.Keys)
             {
                 SystemMaterial sm = getSMObject(k, key, materialNames[key]);
+                
                 smCollection.Add(sm);
                 if (key == "Resistite textured knockdown finish (smooth or regular per customer)Gray"||
                     key== "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)")

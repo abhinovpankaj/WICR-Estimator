@@ -572,7 +572,5 @@ namespace WICR_Estimator.Models
         {
             return "Selected Project:"+ Name;
         }
-
-        
     }
 }

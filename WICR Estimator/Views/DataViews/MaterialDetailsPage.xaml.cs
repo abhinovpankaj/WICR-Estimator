@@ -23,8 +23,8 @@ namespace WICR_Estimator
         public MaterialDetailsPage()
         {
             InitializeComponent();
-            MaterialDetailsPageViewModel vm= new MaterialDetailsPageViewModel();
-            this.DataContext = vm;
+            //MaterialDetailsPageViewModel vm= new MaterialDetailsPageViewModel();
+            //this.DataContext = vm;
             //materials.ItemsSource = vm.Materials;
             //CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(materials.ItemsSource);
             

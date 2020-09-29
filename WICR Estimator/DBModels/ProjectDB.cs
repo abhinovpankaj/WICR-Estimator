@@ -16,5 +16,7 @@ namespace WICR_Estimator.DBModels
         public int Rank { get; set; }
         public int ProjectId { get; set; }
         public bool IsDeleted { get; set; }
+
+        public bool IsSelected { get; set; }
     }
 }

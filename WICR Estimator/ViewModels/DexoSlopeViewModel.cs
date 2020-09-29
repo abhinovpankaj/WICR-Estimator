@@ -10,9 +10,10 @@ namespace WICR_Estimator.ViewModels
 
     public class DexoSlopeViewModel:SlopeBaseViewModel
     {
-        public DexoSlopeViewModel(JobSetup  Js)
+        public DexoSlopeViewModel(JobSetup  Js):base(Js.dbData)
         {
-            GetSlopeDetailsFromGoogle(Js.ProjectName);
+            //GetSlopeDetailsFromGoogle(Js.ProjectName);
+            GetSlopeDetailsDB(Js.ProjectName);
             //Slopes = CreateSlopes();
             Slopes = CreateSlopesDB("Cement");
             CalculateAll();
