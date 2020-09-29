@@ -192,6 +192,7 @@
     <Compile Include="DBModels\MaterialDB.cs" />
     <Compile Include="DBModels\MetalDB.cs" />
     <Compile Include="DBModels\ProjectDB.cs" />
+    <Compile Include="DBModels\ProjectDetailsDB.cs" />
     <Compile Include="DBModels\SlopeDB.cs" />
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="ExpanderStateBehavior.cs" />

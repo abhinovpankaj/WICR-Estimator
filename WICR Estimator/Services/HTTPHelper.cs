@@ -519,5 +519,26 @@ namespace WICR_Estimator.Services
             DataSerializerService.DSInstance.serializeDbData(dbData, originalProjectname);
             return dbData;
         }
+
+        #region Projectdetails
+        internal async static Task<string> PostProjectDetails(IEnumerable<ProjectDetailsDB> prjDetails)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BASEURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await client.PostAsJsonAsync<IEnumerable<ProjectDetailsDB>>("projectdetails", prjDetails);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<string>();
+                }
+                else
+                {
+                    return "Post Failed,Failed to Save Data.";
+                }
+            }
+        }
+        #endregion
     }
 }

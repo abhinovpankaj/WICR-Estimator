@@ -134,6 +134,7 @@ namespace WICR_Estimator.ViewModels
         public MaterialBaseViewModel(Totals metalTotals, Totals slopeTotals,JobSetup Js)
             :this(Js)
         {
+
             MetalTotals = metalTotals;
             SlopeTotals = slopeTotals;
             if (MetalTotals!=null)
@@ -145,7 +146,7 @@ namespace WICR_Estimator.ViewModels
             {
                 SlopeTotals.OnTotalsChange += MetalTotals_OnTotalsChange;
             }
-
+            
             //getDatafromGoogle(Js.ProjectName);          
             getDatafromDB(Js.ProjectName);
         }
@@ -1718,6 +1719,35 @@ namespace WICR_Estimator.ViewModels
             return smCollection;
 
         }
+        
+        private void FillMaterialList()
+        {
+            Dictionary<string, string> materialNames = new Dictionary<string, string>();
+            materialNames.Add("Resistite Regular Over Texture(#55 Bag)", "55 LB BAG");
+            materialNames.Add("30# Divorcing Felt (200 Sq Ft) From Ford Wholesale", "ROLL");
+            materialNames.Add("Rp Fabric 10 Inch Wide X (300 Lf) From Acme", "ROLL");
+            materialNames.Add("Glasmat #4 (1200 Sq Ft) From Acme", "ROLL");
+            materialNames.Add("Cpc Membrane", "5 GAL PAIL");
+            materialNames.Add("Neotex-38 Paste", "5 GAL PAIL");
+            materialNames.Add("Neotex Standard Powder(Body Coat)", "45 LB BAG");
+            materialNames.Add("Neotex Standard Powder(Body Coat) 1", "45 LB BAG");
+            materialNames.Add("Resistite Liquid", "5 GAL PAIL");
+            materialNames.Add("Resistite Regular White", "55 LB BAG");
+
+            materialNames.Add("Resistite Regular Or Smooth White(Knock Down Or Smooth)", "40 LB BAG");
+            materialNames.Add("Aj-44A Dressing(Sealer)", "5 GAL PAIL");
+            materialNames.Add("Vista Paint Acripoxy", "5 GAL PAIL");
+            materialNames.Add("Lip Color", "ROLL 2 COATS");
+            materialNames.Add("Resistite Universal Primer(Add 50% Water)", "Sq Ft");
+            materialNames.Add("Custom Texture Skip Trowel(Resistite Smooth White)", "Sq Ft");
+            materialNames.Add("Weather Seal XL two Coats", "Sq Ft");
+            materialNames.Add("Stair Nosing From Dexotex", "Sq Ft");
+            materialNames.Add("Extra Stair Nosing Lf", "Sq Ft");
+            materialNames.Add("Plywood 3/4 & Blocking(# Of 4X8 Sheets)", "Sq Ft");
+            materialNames.Add("Stucco Material Remove And Replace (Lf)", "Sq Ft");
+
+        }
+
         public  virtual ObservableCollection<SystemMaterial> GetSystemMaterial()
         {
 
@@ -1739,6 +1769,7 @@ namespace WICR_Estimator.ViewModels
             if (isPrevailingWage) { double.TryParse(freightData[5][0].ToString(), out prPerc); }
             else
                 prPerc = 0;
+            
             #region rehab
             if (weatherWearType == "Weather Wear Rehab")
             {
