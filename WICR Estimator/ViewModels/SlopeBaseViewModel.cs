@@ -62,6 +62,7 @@ namespace WICR_Estimator.ViewModels
             IsOverrridable = true;
             UrethaneText = "Slope Sand and Urethane Fill";
             SlopeHeaderText = "Slope Sand Cement Scrim";
+            laborRate = dbData.FreightDBData.First(x => x.FactorName == "LaborRate").FactorValue;
         }
 
         #region public properties
@@ -463,6 +464,10 @@ namespace WICR_Estimator.ViewModels
                 }
 
                 isPrevailingWage = js.IsPrevalingWage;
+                if (dbData == null)
+                {
+                    dbData = js.dbData;
+                }
                 if (isPrevailingWage)
                 {
                     //double.TryParse(freightData[5][0].ToString(), out productionRate);
@@ -471,7 +476,7 @@ namespace WICR_Estimator.ViewModels
                 }
                 else
                     productionRate = 0;
-                laborRate = js.LaborRate;
+                //laborRate = js.dbData.FreightDBData.First(x=>x.FactorName== "LaborRate").FactorValue;
                 hasDiscount = js.HasDiscount;
                 materialPerc = getMaterialDiscount(js.ProjectDelayFactor);
                 prevailingWage= js.ActualPrevailingWage == 0 ? 0 : (js.ActualPrevailingWage - laborRate) / laborRate;
@@ -843,10 +848,11 @@ namespace WICR_Estimator.ViewModels
             if (dbData == null)
             {
                 dbData = DataSerializerService.DSInstance.deserializeDbData(projectName);
-                laborRate = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "LaborRate").FactorValue;
-                manualAvgMixPrice = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Manul Override Avg Labor/mix" && x.SlopeType=="Cement").PerMixCost;
-                deductionOnLargeJob = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Deduct on Labor for large jobs").Value;
             }
+            laborRate = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "LaborRate").FactorValue;
+            manualAvgMixPrice = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Manul Override Avg Labor/mix" && x.SlopeType=="Cement").PerMixCost;
+            deductionOnLargeJob = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Deduct on Labor for large jobs").Value;
+            
             
         }
         public virtual double getGSLaborRateDB(string thickness,string slopeType)

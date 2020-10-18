@@ -158,9 +158,9 @@
                          VerticalContentAlignment="Center"/>
                     </StackPanel>
                 </materialDesign:Card>
-                <materialDesign:Card UniformCornerRadius="5" Padding="10"
+                <materialDesign:Card UniformCornerRadius="5" Padding="10,5,10,10"
                                      Background="{StaticResource PrimaryHueDarkBrush}"
-                             Margin="10,20" materialDesign:ShadowAssist.ShadowDepth="Depth1">
+                             Margin="10,10" materialDesign:ShadowAssist.ShadowDepth="Depth1">
                     <StackPanel HorizontalAlignment="Center" >
                         <TextBlock Text="Total Sale"  HorizontalAlignment="Left"
                                    FontSize="18"
@@ -189,7 +189,7 @@
                         </StackPanel>
                     </Button.Content>
                     </Button>-->
-                    <StackPanel Orientation="Horizontal" Background="LightGray"
+                    <!--<StackPanel Orientation="Horizontal" Background="LightGray"
                             Margin="0,30,0,0" Visibility="Hidden"
                             >
                         <TextBlock Text="Labor Rate" 
@@ -201,7 +201,7 @@
                               >
                         </TextBlock>
 
-                    </StackPanel>
+                    </StackPanel>-->
                 </StackPanel>
 
 
@@ -601,13 +601,13 @@
                 <DropShadowEffect BlurRadius="10" Color="#82000000" />
             </Border.Effect>-->
             <Grid Grid.ColumnSpan="2" Grid.Row="1"
-                        Margin="10,0,10,10">
+                        Margin="10,-10,10,10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <TextBlock Text="NOTES TO FIELD:" FontSize="14" FontWeight="SemiBold"/>
-                <TextBox Height="50" TextWrapping="Wrap" FontSize="13"
+                <TextBox Height="30" TextWrapping="Wrap" FontSize="13"
                          Grid.Row="1"
                          Text="{Binding NotesToBill,UpdateSourceTrigger=PropertyChanged}"
                          Width="450" HorizontalAlignment="Left">

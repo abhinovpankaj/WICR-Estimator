@@ -12,7 +12,7 @@ namespace WICR_Estimator.Services
     public class HTTPHelper
     {
         //const string BASEURL = "http://wicrwebapi-dev.us-east-1.elasticbeanstalk.com/api/";
-
+        
         //public static object ConfigurationManager { get; private set; }
         //ConfigurationManager.AppSettings["apiUrl"]
         const string BASEURL = "http://localhost:5000/api/";
@@ -179,6 +179,7 @@ namespace WICR_Estimator.Services
         }
 
        
+
         internal async static Task<IEnumerable<SlopeDB>> GetSlopesAsync()
         {
             using (var client = new HttpClient())
@@ -438,14 +439,14 @@ namespace WICR_Estimator.Services
             }
         }
 
-        internal async static Task<FreightDB> PutFreightAsync(int freightId, MetalDB selectedFreight)
+        internal async static Task<FreightDB> PutFreightAsync(int freightId, FreightDB selectedFreight)
         {
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(BASEURL);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage response = await client.PutAsJsonAsync<MetalDB>("freights/" + freightId, selectedFreight);
+                HttpResponseMessage response = await client.PutAsJsonAsync<FreightDB>("freights/" + freightId, selectedFreight);
                 if (response.IsSuccessStatusCode)
                 {
                     return await response.Content.ReadAsAsync<FreightDB>();
@@ -521,14 +522,35 @@ namespace WICR_Estimator.Services
         }
 
         #region Projectdetails
-        internal async static Task<string> PostProjectDetails(IEnumerable<ProjectDetailsDB> prjDetails)
+        internal async static Task<ProjectDetailsDB> PostProjectDetails(ProjectDetailsDB prjDetails)
         {
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(BASEURL);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage response = await client.PostAsJsonAsync<IEnumerable<ProjectDetailsDB>>("projectdetails", prjDetails);
+                HttpResponseMessage response = await client.PostAsJsonAsync<ProjectDetailsDB>("projectdetails", prjDetails);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<ProjectDetailsDB>();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        
+
+        internal async static Task<string> PutProjectDetails(int id ,ProjectDetailsDB prjDetails)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BASEURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await client.PutAsJsonAsync<ProjectDetailsDB>("projectdetails/" + id, prjDetails);
                 if (response.IsSuccessStatusCode)
                 {
                     return await response.Content.ReadAsAsync<string>();
@@ -540,5 +562,47 @@ namespace WICR_Estimator.Services
             }
         }
         #endregion
+
+
+        #region estimate
+        internal async static Task<EstimateDB> PostEstimate(EstimateDB est)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BASEURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await client.PostAsJsonAsync<EstimateDB>("estimates", est);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<EstimateDB>();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        internal async static Task<string> PutEstimate(int id, EstimateDB est)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BASEURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await client.PutAsJsonAsync<EstimateDB>("estimates/" + id, est);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<string>();
+                }
+                else
+                {
+                    return "Post Failed,Failed to Save Data.";
+                }
+            }
+        }
+        #endregion
+
     }
 }

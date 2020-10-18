@@ -159,6 +159,8 @@ namespace WICR_Estimator.Models
                 return productVersion;//"2.1";
             }
         }
+        public int ProjectID { get; set; }
+        public int EstimateID { get; set; }
         public string CreationDetails { get; set; }
 
         public int ActiveTabIndex { get; set; }

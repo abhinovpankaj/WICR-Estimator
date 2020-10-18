@@ -16,8 +16,44 @@ namespace WICR_Estimator
     {
         private IEnumerable<MaterialDB> MaterialsFilterByProject;
         public string SearchText { get; set; } = "";
-        
+        public string SelectedFactor { get; set; }
+        public double UpdateFactor { get; set; }
 
+        private bool allSelected;
+        public int SelectedProjectCount { get; set; }
+        public bool AllSelected
+        {
+            get
+            {
+                return this.allSelected;
+            }
+            set
+            {
+                if (value != allSelected)
+                {
+                    allSelected = value;
+                    foreach (var frt in this.FilteredSystemMaterials)
+                        frt.IsChecked = value;
+                    OnPropertyChanged("AllSelected");
+                }
+
+            }
+        }
+        private bool _checkAllProjects;
+        public bool CheckAllProjects
+        {
+            get { return _checkAllProjects; }
+            set
+            {
+                _checkAllProjects = value;
+                foreach (var item in Projects)
+                {
+                    item.IsSelected = value;
+                }
+                OnPropertyChanged("CheckAllProjects");
+                OnPropertyChanged("Projects");
+            }
+        }
         private DelegateCommand _selectProjectCommand;
         public DelegateCommand SelectProjectCommand
         {
@@ -32,7 +68,36 @@ namespace WICR_Estimator
             }
 
         }
-       
+
+        private void OnSelectionChanged(bool value)
+        {
+            if (allSelected && !value)
+            { // all are selected, and one gets turned off
+                allSelected = false;
+                OnPropertyChanged("AllSelected");
+            }
+            else if (!allSelected && this.FilteredSystemMaterials.All(c => c.IsChecked))
+            { // last one off one gets turned on, resulting in all being selected
+                allSelected = true;
+                OnPropertyChanged("AllSelected");
+            }
+        }
+
+        private void OnProjectSelectionChanged(bool value)
+        {
+            if (_checkAllProjects && !value)
+            { // all are selected, and one gets turned off
+                _checkAllProjects = false;
+                OnPropertyChanged("CheckAllProjects");
+            }
+            else if (!_checkAllProjects && this.Projects.All(c => c.IsSelected))
+            { // last one off one gets turned on, resulting in all being selected
+                _checkAllProjects = true;
+                OnPropertyChanged("CheckAllProjects");
+            }
+            SelectedProjectCount = Projects.Where(c => c.IsSelected).Count();
+            OnPropertyChanged("SelectedProjectCount");
+        }
         private void UpdateSelectedProjectMaterials(object obj)
         {
             List<int> selectedIDs=new List<int>() ;
@@ -101,7 +166,37 @@ namespace WICR_Estimator
         private async void UpdateMaterials(object obj)
         {
             LastActionResponse = "";
-            string result=await HTTPHelper.PutMaterialsAsync(FilteredSystemMaterials.Where(x=>x.IsChecked==true));
+            var filteredSysMaterials = FilteredSystemMaterials.Where(x => x.IsChecked == true);
+            foreach (var item in filteredSysMaterials)
+            {
+                switch (SelectedFactor.Split(':')[1].Trim())
+                {
+                    case "Price":
+                        item.MaterialPrice = item.MaterialPrice * (1 + UpdateFactor);
+                        break;
+                    case "Coverage":
+                        item.Coverage = item.Coverage * (1 + UpdateFactor);
+                        break;
+                    case "Weight":
+                        item.Weight = item.Weight * (1 + UpdateFactor);
+                        break;
+                    case "Horizontal Prod. Rate":
+                        item.ProdRateHorizontal = item.ProdRateHorizontal * (1 + UpdateFactor);
+                        break;
+                    case "Vertical Prod. Rate":
+                        item.ProdRateVertical = item.ProdRateVertical * (1 + UpdateFactor);
+                        break;
+                    case "Stair Prod. Rate":
+                        item.ProdRateStair = item.ProdRateStair * (1 + UpdateFactor);
+                        break;
+                    case "Min. Labor Charge":
+                        item.LaborMinCharge = item.LaborMinCharge * (1 + UpdateFactor);
+
+                        break;
+                }
+            }
+            
+            string result=await HTTPHelper.PutMaterialsAsync(filteredSysMaterials);
             LastActionResponse = result;
         }
 
@@ -143,17 +238,38 @@ namespace WICR_Estimator
             {
                 if (MaterialsFilterByProject != null)
                 {
-                    FilteredSystemMaterials = MaterialsFilterByProject.Where(x => x.MaterialName.ToUpper().Contains(SearchText.ToUpper())).ToObservableCollection();
+                    if (SearchText != null)
+                    {
+                        FilteredSystemMaterials = MaterialsFilterByProject.Where(x => x.MaterialName.ToUpper().Contains(SearchText.ToUpper())).ToObservableCollection();
+                    }
+                    else
+                        FilteredSystemMaterials = MaterialsFilterByProject.ToObservableCollection();
+
+
                 }
                 else
-                    FilteredSystemMaterials = Materials.Where(x => x.MaterialName.ToUpper().Contains(SearchText.ToUpper())).ToObservableCollection();
+                {
+                    if (SearchText!=null)
+                    {
+                        FilteredSystemMaterials = Materials.Where(x => x.MaterialName.ToUpper().Contains(SearchText.ToUpper())).ToObservableCollection();
+                    }
+                    else
+                    {
+                        FilteredSystemMaterials = Materials.ToObservableCollection();
+                    }
+                }
+                    
             }
             catch (Exception)
             {
                 FilteredSystemMaterials = null;
 
             }
-            
+
+            foreach (var item in FilteredSystemMaterials)
+            {
+                item.HookCheckBoxAction(OnSelectionChanged);
+            }
                 
         }
 
@@ -294,6 +410,10 @@ namespace WICR_Estimator
         private async Task GetProjects()
         {
             Projects= await HTTPHelper.GetProjectsAsync();
+            foreach (var item in Projects)
+            {
+                item.HookCheckBoxAction(OnProjectSelectionChanged);
+            }
             
         }
         private async Task GetMaterials()
@@ -303,7 +423,11 @@ namespace WICR_Estimator
             {
                 FilteredSystemMaterials = Materials.Where(x => x.ProjectId == 1).ToObservableCollection();
             }
-            
+            foreach (var item in FilteredSystemMaterials)
+            {
+                item.HookCheckBoxAction(OnSelectionChanged);
+            }
+
         }
         private void GetMaterialsById(int id)
         {

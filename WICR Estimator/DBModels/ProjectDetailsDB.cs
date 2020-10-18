@@ -18,7 +18,7 @@ namespace WICR_Estimator.DBModels
         public double LaborCost { get; set; }
 
         public double TotalCost { get; set; }
-
-        public double LaborPercentage { get; set; }
+        public double CostPerSqFoot { get; set; }
+        public string LaborPercentage { get; set; }
     }
 }

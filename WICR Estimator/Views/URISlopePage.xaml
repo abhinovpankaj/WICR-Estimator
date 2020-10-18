@@ -515,14 +515,14 @@
                     <TextBox x:Name="TotalWeight" IsEnabled="False"
                          Grid.Column="1"
                          
-                         Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                         Style="{StaticResource MaterialDesignTextBox}"
                          Height="25" Width="100" 
                          Text="{Binding TotalWeight,UpdateSourceTrigger=PropertyChanged }"/>
                     <TextBox x:Name="TotalFrightCost" 
                          IsEnabled="False"
                          Grid.Row="1"
                          
-                         Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                         Style="{StaticResource MaterialDesignTextBox}"
                          Margin="5,10,5,5"
                          VerticalContentAlignment="Center"
                          Grid.Column="1"

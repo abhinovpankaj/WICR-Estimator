@@ -243,42 +243,50 @@
                     <materialDesign:PackIcon Kind="Menu" 
                                      Foreground="{StaticResource SecondaryAccentForegroundBrush}"/>
                 </Button>
-                <materialDesign:PopupBox HorizontalAlignment="Right" Margin="0,0,80,0"
-                                     Content="Actions">
-                    <StackPanel Width="150">
-                        <Button x:Name="Home"
+                <!--<materialDesign:PopupBox HorizontalAlignment="Right" Margin="0,0,80,0"
+                                     Content="Actions">-->
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,2,150,2"
+                                HorizontalAlignment="Right">
+                    <Button x:Name="Home" Margin="2" Width="100"
                         Command="{Binding DataContext.ChangePageCommand,
                         RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                         CommandParameter="{Binding PageViewModels[0]}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="Home" VerticalAlignment="Center"/>
+                                    <materialDesign:PackIcon Kind="Home" Foreground="{StaticResource SecondaryAccentBrush}"
+                                                             VerticalAlignment="Center"/>
                                     <TextBlock Text="Home" Margin="10,0,0,0"
                                        VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button.Content>
                         </Button>
 
-                        <Button x:Name="Projects"
+                        <Button x:Name="Projects" Margin="2"
+                                Width="100"
                         Command="{Binding DataContext.ChangePageCommand,
                         RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                         CommandParameter="{Binding PageViewModels[1]}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="OfficeBuilding" VerticalAlignment="Center"/>
+                                    <materialDesign:PackIcon Kind="OfficeBuilding" 
+                                                             Foreground="{StaticResource SecondaryAccentBrush}"
+                                                             VerticalAlignment="Center"/>
                                     <TextBlock Text="Projects" Margin="10,0,0,0"
                                        VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button.Content>
                         </Button>
                         <Separator/>
-                        <Button x:Name="Save"
+                    <Button x:Name="Save" Margin="2" Width="100"
                         Command="{Binding DataContext.SaveEstimateCommand,
                         RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                         CommandParameter="{Binding }">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="ContentSaveAll" VerticalAlignment="Center"/>
+                                    <materialDesign:PackIcon Kind="ContentSaveAll"
+                                                             Foreground="{StaticResource SecondaryAccentBrush}"
+                                                             VerticalAlignment="Center"/>
                                     <TextBlock Text="Save" Margin="10,0,0,0"
                                        VerticalAlignment="Center"/>
                                 </StackPanel>
@@ -287,7 +295,7 @@
 
                     </StackPanel>
 
-                </materialDesign:PopupBox>
+                <!--</materialDesign:PopupBox>-->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
                     >
                     <Button x:Name="ButtonMin"

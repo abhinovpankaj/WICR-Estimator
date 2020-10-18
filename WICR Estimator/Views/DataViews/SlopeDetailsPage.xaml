@@ -14,8 +14,19 @@
              TextElement.FontSize="13"
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto">
-    <Grid>
-       
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="projectSource" Source="{Binding Projects}"/>
+    </UserControl.Resources>
+    <DockPanel>
+        <StatusBar DockPanel.Dock="Bottom"
+                   Background="{StaticResource ProgressBrush}">
+            <StatusBarItem>
+                <TextBlock Text="{Binding LastActionResponse }" />
+            </StatusBarItem>
+        </StatusBar>
+
+        <Grid>
+
             <!--<Expander Header="Manage Material Prices"
                   IsExpanded="True" materialDesign:ShadowAssist.ShadowDepth="Depth3"
                   Background="{StaticResource AccentSelectedColorBrush}"
@@ -45,7 +56,7 @@
                 <StackPanel Orientation="Horizontal"
                          Grid.Row="1"       Margin="10">
 
-                    
+
                     <TextBox Text="{Binding       SearchText,UpdateSourceTrigger=PropertyChanged}"
                                  Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
                                  VerticalContentAlignment="Center"
@@ -54,18 +65,39 @@
                          Width="350"
                          Margin="10"
                          HorizontalAlignment="Left"/>
-                <StackPanel>
-                    <TextBlock Text="Select the project"
+                    <StackPanel>
+                        <TextBlock Text="Select the project"
                        Opacity=".68"
                        Margin="10,10,10,0"/>
-                    <ComboBox ItemsSource="{Binding Projects}"
-                                      
-                          DisplayMemberPath="Name"
-                          SelectedItem="{Binding SelectedProject}"
-                 Margin="10,0,10,10"  Width="250"
-                  HorizontalAlignment="Left"/>
-                </StackPanel>
-                <Button Margin="30,10" 
+                        <ComboBox Margin="10,0,10,10"  Width="300"
+                              Text="Select Project" IsReadOnly="True"
+                               TextSearch.TextPath ="Name"
+                              HorizontalAlignment="Left">
+                            <ComboBox.ItemsSource>
+                                <CompositeCollection>
+                                    <ComboBoxItem >
+                                        <CheckBox  Name="all" IsChecked="{Binding CheckAllProjects}">Select All</CheckBox>
+                                    </ComboBoxItem>
+                                    <CollectionContainer Collection="{Binding Source={StaticResource projectSource}}"/>
+                                </CompositeCollection>
+                            </ComboBox.ItemsSource>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox  Width="220"                                             
+                                           Content="{Binding Name}" 
+                                           IsChecked="{Binding IsSelected}" 
+                                           >
+                                    </CheckBox>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                    <ToggleButton     Content="{Binding SelectedProjectCount}" 
+                                  IsChecked="{Binding CheckAllProjects}"
+                                  Style="{StaticResource MaterialDesignActionAccentToggleButton}"
+                                  ToolTip="Count of All Selected Projects"
+                                  materialDesign:ShadowAssist.ShadowDepth="Depth3" />
+                    <Button Margin="30,10" 
                                 Command="{Binding SearchCommand}">
                         <Button.Content>
                             <StackPanel Orientation="Horizontal">
@@ -100,6 +132,12 @@
                         ItemsSource="{Binding FilteredSystemSlopes,UpdateSourceTrigger=PropertyChanged}" >
                                 <DataGrid.Columns>
                                     <DataGridCheckBoxColumn Binding="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}">
+                                        <DataGridCheckBoxColumn.Header>
+                                            <CheckBox IsChecked="{Binding Path=DataContext.AllSelected,
+                                                           UpdateSourceTrigger=PropertyChanged,
+                                                           RelativeSource={RelativeSource FindAncestor,
+                                                               AncestorType={x:Type DataGrid}}}" />
+                                        </DataGridCheckBoxColumn.Header>
                                         <DataGridCheckBoxColumn.ElementStyle>
                                             <Style TargetType="CheckBox"/>
                                         </DataGridCheckBoxColumn.ElementStyle>
@@ -116,7 +154,7 @@
                                                                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
                                                         Binding="{ Binding PerMixCost}"/>
-                                    
+
                                 </DataGrid.Columns>
 
                             </DataGrid>
@@ -150,7 +188,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
-                                                                
+
                             </Grid.RowDefinitions>
 
                             <Label Content="Labor Rate" Margin="2" VerticalAlignment="Center"
@@ -197,6 +235,7 @@
                   Background="{StaticResource AccentSelectedColorBrush}"
                   Margin="10,10" BorderBrush="Black"
                   BorderThickness="1"/>-->
-        
-    </Grid>
+
+        </Grid>
+    </DockPanel>
 </UserControl>

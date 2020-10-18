@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WICR_Estimator.Views.DataViews"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="500"
+             d:DesignHeight="1000" d:DesignWidth="1000"
              Background="{DynamicResource MaterialDesignPaper}"
               FontFamily="{DynamicResource MaterialDesignFont}"
               xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -14,16 +14,34 @@
              TextElement.FontSize="13"
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto">
-    <Grid>
+    <DockPanel>
+        <StatusBar DockPanel.Dock="Bottom"
+                   Background="{StaticResource ProgressBrush}">
+            <StatusBarItem>
+                <TextBlock Text="{Binding LastActionResponse }" />
+            </StatusBarItem>
+        </StatusBar>
+        <!--<materialDesign:Snackbar
+                HorizontalAlignment="Stretch"
+                x:Name="SnackbarFive">
+                    <materialDesign:SnackbarMessage
+                Content="{Binding LastActionResponse }"
+                ActionContent="OK" />   
+        </materialDesign:Snackbar>-->
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
             <materialDesign:ColorZone Margin="10"
                       Mode="PrimaryLight"
-                      Padding="16">
+                      Padding="16" Grid.ColumnSpan="2">
                 <StackPanel
                             Orientation="Horizontal">
                     <materialDesign:PackIcon Kind="Update"
@@ -31,18 +49,18 @@
                     <TextBlock
       VerticalAlignment="Center"
       Margin="16 0 0 0">
-   Manage Labor Factors
+   Manage Freight or Labor Factors
                     </TextBlock>
                 </StackPanel>
             </materialDesign:ColorZone>
-            <StackPanel Orientation="Horizontal"
-                         Grid.Row="1"       Margin="10">
-
+            <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2"
+                        HorizontalAlignment="Center"
+                        Margin="10" Grid.Row="1">
                 
                 <TextBox Text="{Binding       SearchText,UpdateSourceTrigger=PropertyChanged}"
                                  Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
                                  VerticalContentAlignment="Center"
-                          materialDesign:HintAssist.Hint="Labor Factor Name"
+                          materialDesign:HintAssist.Hint="Factor Name"
                                  materialDesign:TextFieldAssist.HasClearButton="True"
                          Width="350"
                          Margin="10"
@@ -72,95 +90,216 @@
 
 
             </StackPanel>
-            <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <StackPanel>
-                    <ScrollViewer VerticalScrollBarVisibility="Auto"
-                                  Height="450">
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Auto">
+                <Grid>
+                    <Grid.RowDefinitions>
+
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height=".45*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+
                         <DataGrid AutoGenerateColumns="False" 
-                        HorizontalAlignment="Left"
-                        Name="MaterialGrid" 
-                        CanUserSortColumns="True"
-                        Margin="10"        
+                    HorizontalAlignment="Left"
+                    Name="frieghtGrid" 
+                    CanUserSortColumns="True"
+                    Margin="10"        
                           
-                        VerticalAlignment="Top" 
-                        CanUserAddRows="False"
-                        FrozenColumnCount ="1" 
-                        SelectedItem="{Binding SelectedLaborFactor}"
-                        ItemsSource="{Binding FilteredLaborFactors,UpdateSourceTrigger=PropertyChanged}" >
-                            <DataGrid.Columns>
-                                <DataGridCheckBoxColumn Binding="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}">
-                                    <DataGridCheckBoxColumn.ElementStyle>
-                                        <Style TargetType="CheckBox"/>
-                                    </DataGridCheckBoxColumn.ElementStyle>
-                                </DataGridCheckBoxColumn>
-                                <materialDesign:DataGridTextColumn Header="Labor Factor Name"
-                                                                       Width="400"
-                                                                   IsReadOnly="True"
-                                                        Binding="{ Binding Name}"/>
-                                <materialDesign:DataGridTextColumn Header="Factor Value"
-                                                                                 ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
-      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
-                                                        Binding="{ Binding Value}"/>
-                                
+                    VerticalAlignment="Top" 
+                    CanUserAddRows="False"
+                    FrozenColumnCount ="1" 
+                    SelectedItem="{Binding SelectedFreightFactor}"
+                    ItemsSource="{Binding FreightFactors,UpdateSourceTrigger=PropertyChanged}" >
+                                <DataGrid.Columns>
+                                    <DataGridCheckBoxColumn Binding="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}">
+                                        <DataGridCheckBoxColumn.Header>
+                                            <CheckBox IsChecked="{Binding Path=DataContext.AllFreightSelected,
+                                                        UpdateSourceTrigger=PropertyChanged,
+                                                       RelativeSource={RelativeSource FindAncestor,
+                                                               AncestorType={x:Type DataGrid}}}" />
+                                        </DataGridCheckBoxColumn.Header>
+                                        <!--<DataGridCheckBoxColumn.ElementStyle>
+                                            <Style TargetType="CheckBox"/>
+                                        </DataGridCheckBoxColumn.ElementStyle>-->
+                                    </DataGridCheckBoxColumn>
+                                    <materialDesign:DataGridTextColumn Header="Freight Factor Name"
+                                                                    Width="250"
+                                                                IsReadOnly="True"
+                                                    Binding="{ Binding FactorName}"/>
+                                    <materialDesign:DataGridTextColumn Header="Factor Value"
+                                                                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+    EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                                                    Binding="{ Binding FactorValue}"/>
 
-                            </DataGrid.Columns>
 
-                        </DataGrid>
-                    </ScrollViewer>
+                                </DataGrid.Columns>
 
-                    <Button Grid.Row="1"
-                        Margin="10" Command="{Binding UpdateLaborFactorsCommand}"
+                            </DataGrid>
+                        <Button Grid.Row="1"
+                        Margin="10" Command="{Binding UpdateFreightFactorsCommand}"
                                 HorizontalAlignment="Right" Width="150">
-                        <Button.Content>
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Update"
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Update"
                                                 VerticalAlignment="Center"/>
-                                <TextBlock Text="Update All" Margin="5,0"/>
-                            </StackPanel>
+                                        <TextBlock Text="Update All" Margin="5,0"/>
+                                    </StackPanel>
 
-                        </Button.Content>
-                    </Button>
-                </StackPanel>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
 
-                <StackPanel Grid.Column="1" HorizontalAlignment="Left"
+                        <StackPanel Grid.Column="1" HorizontalAlignment="Left"
                             Margin="10,0,10,0">
-                    <TextBlock Text="{Binding SelectedLaborFactor.Name}"
+                            <TextBlock Text="{Binding SelectedFreightFactor.FactorName}"
                             FontWeight="Bold" TextWrapping="Wrap"
                                 HorizontalAlignment="Center"/>
-                    <Grid HorizontalAlignment="Center">
+                            <Grid HorizontalAlignment="Center">
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width=".6*"/>
-                            <ColumnDefinition Width=".4*"/>
-                        </Grid.ColumnDefinitions>
-                        
-                        <Label Content="Labor Rate" Margin="2" VerticalAlignment="Center"
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width=".6*"/>
+                                    <ColumnDefinition Width=".4*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label Content="Factor Value" Margin="2" VerticalAlignment="Center"
                                     HorizontalAlignment="Center"/>
-                       
-                        <TextBox Text="{Binding SelectedLaborFactor.Value}"
+
+                                <TextBox Text="{Binding SelectedFreightFactor.FactorValue}"
                                         Margin="2" VerticalAlignment="Center"
                                         Grid.Column="1"  
                                     HorizontalAlignment="Center" Width="100"/>
-                        
-                    </Grid>
-                    <Button Margin="10" Command="{Binding UpdateLaborFactorCommand}"
+
+                            </Grid>
+                            <Button Margin="10" Command="{Binding UpdateFreightFactorCommand}"
                             HorizontalAlignment="Right" Width="100">
-                        <Button.Content>
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Update"
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Update"
                                             VerticalAlignment="Center"/>
-                                <TextBlock Text="Update" Margin="5,0"/>
-                            </StackPanel>
+                                        <TextBlock Text="Update" Margin="5,0"/>
+                                    </StackPanel>
 
-                        </Button.Content>
-                    </Button>
-                </StackPanel>
-            </Grid>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
 
+                </Grid>
+            </ScrollViewer>
+            <ScrollViewer Grid.Row="3" Grid.Column="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                  
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width=".45*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  Height="450">
+                                <DataGrid AutoGenerateColumns="False" 
+                                            HorizontalAlignment="Left"
+                                            Name="LaborGrid" 
+                                            CanUserSortColumns="True"
+                                            Margin="10"        
+                          
+                                            VerticalAlignment="Top" 
+                                            CanUserAddRows="False"
+                                            FrozenColumnCount ="1" 
+                                          AreRowDetailsFrozen="True"
+                                            SelectedItem="{Binding SelectedLaborFactor}"
+                                            ItemsSource="{Binding FilteredLaborFactors,UpdateSourceTrigger=PropertyChanged}" >
+                                    <DataGrid.Columns>
+                                        <DataGridCheckBoxColumn Binding="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}">
+                                            <DataGridCheckBoxColumn.Header>
+                                                <CheckBox IsChecked="{Binding Path=DataContext.AllLaborSelected,
+                                                           UpdateSourceTrigger=PropertyChanged,
+                                                           RelativeSource={RelativeSource FindAncestor,
+                                                               AncestorType={x:Type DataGrid}}}" />
+                                            </DataGridCheckBoxColumn.Header>
+                                            <!--<DataGridCheckBoxColumn.ElementStyle>
+                                                <Style TargetType="CheckBox"/>
+                                            </DataGridCheckBoxColumn.ElementStyle>-->
+                                        </DataGridCheckBoxColumn>
+                                        <materialDesign:DataGridTextColumn Header="Labor Factor Name"
+                                                                       Width="250"
+                                                                   IsReadOnly="True"
+                                                        Binding="{ Binding Name}"/>
+                                        <materialDesign:DataGridTextColumn Header="Factor Value"
+                                                                                 ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                                                        Binding="{ Binding Value}"/>
+                                    </DataGrid.Columns>
+
+                                </DataGrid>
+                            </ScrollViewer>
+
+                            <Button Grid.Row="1"
+                        Margin="10" Command="{Binding UpdateLaborFactorsCommand}"
+                                HorizontalAlignment="Right" Width="150">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Update"
+                                                VerticalAlignment="Center"/>
+                                        <TextBlock Text="Update All" Margin="5,0"/>
+                                    </StackPanel>
+
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" HorizontalAlignment="Left"
+                            Margin="10,0,10,0">
+                            <TextBlock Text="{Binding SelectedLaborFactor.Name}"
+                            FontWeight="Bold" TextWrapping="Wrap"
+                                HorizontalAlignment="Center"/>
+                            <Grid HorizontalAlignment="Center">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width=".6*"/>
+                                    <ColumnDefinition Width=".4*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label Content="Factor Value" Margin="2" VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"/>
+
+                                <TextBox Text="{Binding SelectedLaborFactor.Value}"
+                                        Margin="2" VerticalAlignment="Center"
+                                        Grid.Column="1"  
+                                    HorizontalAlignment="Left" Width="100"/>
+
+                            </Grid>
+                            <Button Margin="10" Command="{Binding UpdateLaborFactorCommand}"
+                            HorizontalAlignment="Right" Width="100">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Update"
+                                            VerticalAlignment="Center"/>
+                                        <TextBlock Text="Update" Margin="5,0"/>
+                                    </StackPanel>
+
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+
+                </Grid>
+            </ScrollViewer>
+            
         </Grid>
-    </Grid>
+    </DockPanel>
+    
 </UserControl>

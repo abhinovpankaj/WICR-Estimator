@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WICR_Estimator.Views.DataViews"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="1300"
+             d:DesignHeight="1000" d:DesignWidth="1300"
              Background="{DynamicResource MaterialDesignPaper}"
               FontFamily="{DynamicResource MaterialDesignFont}"
               xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -36,58 +36,6 @@
         </materialDesign:ColorZone>
         <StackPanel Orientation="Horizontal"
                          Grid.Row="1" Margin="10">
-            <!--<materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth4"
-                  Padding="0"
-                  UniformCornerRadius="6" Margin="10">
-          
-            <StackPanel>
-                    <TextBlock Text="Select the Vendor"
-                       Opacity=".68"
-                       Margin="10,10,10,10"/>
-                    <ListBox Style="{StaticResource MaterialDesignFilterChipListBox}"
-                         ItemsSource="{Binding Vendors}" 
-                             SelectionMode="Multiple">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding VendorName}"/>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListBoxItem}"
-                                   BasedOn="{StaticResource MaterialDesignFilterChipListBoxItem}">
-                                <Setter Property="IsSelected" Value="{Binding Mode=TwoWay, Path=IsSelected}"/>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                    </ListBox>
-                </StackPanel>
-            </materialDesign:Card>
-            <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth4"
-                              
-                  Padding="0"
-                   Margin="10"
-                  UniformCornerRadius="6">
-
-                <StackPanel>
-                    <TextBlock Text="Select the Metal Type"
-                       Opacity=".68"
-                       Margin="10,10,10,10"/>
-                    <ListBox Style="{DynamicResource MaterialDesignFilterChipListBox}"
-                         ItemsSource="{Binding MetalTypes}" SelectionMode="Multiple">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding MetalType}"/>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListBoxItem}"
-                                   BasedOn="{StaticResource MaterialDesignFilterChipListBoxItem}">
-                                <Setter Property="IsSelected" Value="{Binding Mode=TwoWay, Path=IsSelected}"/>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                            
-                    </ListBox>
-                </StackPanel>
-            </materialDesign:Card>-->
             
             <TextBox Text="{Binding   SearchText,UpdateSourceTrigger=PropertyChanged}"
                                  Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"

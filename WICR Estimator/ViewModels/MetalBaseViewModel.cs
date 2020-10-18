@@ -395,8 +395,13 @@ namespace WICR_Estimator.ViewModels
         public virtual void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {
             JobSetup js = sender as JobSetup;
+            if (dbData == null)
+            {
+                dbData = js.dbData;
+            }
             OnJobSetupChange(js);
             
+
         }
 
         public void OnJobSetupChange(JobSetup Js)
@@ -728,9 +733,9 @@ namespace WICR_Estimator.ViewModels
 
         #region DBData
 
-        protected int getUnitPrice(string metalName)
+        protected double getUnitPrice(string metalName)
         {
-            return (int)metalDBDetails.FirstOrDefault(x => x.MetalName == metalName).Units;
+            return (double)metalDBDetails.FirstOrDefault(x => x.MetalName == metalName).ProductionRate;
         }
 
         public void GetMetalDetailsFromDB(string projectName)

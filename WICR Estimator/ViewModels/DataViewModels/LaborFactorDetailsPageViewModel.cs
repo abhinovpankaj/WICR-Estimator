@@ -11,21 +11,27 @@ namespace WICR_Estimator.ViewModels.DataViewModels
 {
     public class LaborFactorDetailsPageViewModel : BaseViewModel, IPageViewModel
     {
+        #region Laborfactors
         private IEnumerable<LaborFactorDB> LaborFactorsFilterByProject;
-        public string SearchText { get; set; } = "";
-        private DelegateCommand _searchCommand;
-        public DelegateCommand SearchCommand
+        private bool allLaborSelected;
+
+        public bool AllLaborSelected
         {
             get
             {
-                if (_searchCommand == null)
+                return this.allLaborSelected;
+            }
+            set
+            {
+                if (value != allLaborSelected)
                 {
-                    _searchCommand = new DelegateCommand(SearchLaborFactor, CanSearch);
+                    allLaborSelected = value;
+                    foreach (var frt in this.FilteredLaborFactors)
+                        frt.IsChecked = value;
+                    OnPropertyChanged("AllLaborSelected");
                 }
 
-                return _searchCommand;
             }
-
         }
         private DelegateCommand _updateLaborFactorsCommand;
         public DelegateCommand UpdateLaborFactorsCommand
@@ -87,7 +93,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             }
             else
                 FilteredLaborFactors = LaborFactors.Where(x => x.Name.ToUpper().Contains(SearchText.ToUpper())).ToObservableCollection();
-           
+
         }
 
         private bool CanSearch(object obj)
@@ -141,6 +147,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
                 }
             }
         }
+
         private LaborFactorDB _selectedLaborFactor;
         public LaborFactorDB SelectedLaborFactor
         {
@@ -157,6 +164,176 @@ namespace WICR_Estimator.ViewModels.DataViewModels
                 }
             }
         }
+
+        private async Task GetLaborFactors()
+        {
+            LaborFactors = await HTTPHelper.GetLaborFactorsAsync();
+            if (LaborFactors != null)
+            {
+                FilteredLaborFactors = LaborFactors.Where(x => x.ProjectId == 1).ToObservableCollection();
+            }
+            foreach (var item in FilteredLaborFactors)
+            {
+                item.HookCheckBoxAction(OnLaborSelectionChanged);
+            }
+        }
+        private void GetLaborFactorsById(int id)
+        {
+            //LaborFactors = HTTPHelper.getLaborFactors().ToObservableCollection();
+            //var filtered =await HTTPHelper.GetLaborFactorsAsyncByID(id);
+            LaborFactorsFilterByProject = LaborFactors.Where(x => x.ProjectId == id);
+            FilteredLaborFactors = LaborFactorsFilterByProject.ToObservableCollection();
+        }
+
+        private void OnLaborSelectionChanged(bool value)
+        {
+            if (allLaborSelected && !value)
+            { // all are selected, and one gets turned off
+                allLaborSelected = false;
+                OnPropertyChanged("AllLaborSelected");
+            }
+            else if (!allFreightSelected && this.FilteredLaborFactors.All(c => c.IsChecked))
+            { // last one off one gets turned on, resulting in all being selected
+                allLaborSelected = true;
+                OnPropertyChanged("AllLaborSelected");
+            }
+        }
+        #endregion
+
+        #region freight
+
+        public ObservableCollection<FreightDB> FreightFactors { get; set; }
+
+        private bool allFreightSelected;
+
+        public bool AllFreightSelected
+        {
+            get
+            {
+                return this.allFreightSelected;
+            }
+            set
+            {
+                if (value!= allFreightSelected)
+                {
+                    allFreightSelected = value;
+                    foreach (var frt in this.FreightFactors)
+                        frt.IsChecked = value;
+                    OnPropertyChanged("AllFreightSelected");
+                }
+                
+            }
+        }
+
+        private DelegateCommand _updateFreightFactorCommand;
+        public DelegateCommand UpdateFreightFactorCommand
+        {
+            get
+            {
+                if (_updateFreightFactorCommand == null)
+                {
+                    _updateFreightFactorCommand = new DelegateCommand(UpdateFreightFactor, CanUpdate);
+                }
+
+                return _updateFreightFactorCommand;
+            }
+
+        }
+
+        private async void UpdateFreightFactor(object obj)
+        {
+            SelectedFreightFactor = await HTTPHelper.PutFreightAsync(SelectedFreightFactor.FreightID, SelectedFreightFactor);
+        }
+        private DelegateCommand _updateFreightFactorsCommand;
+        public DelegateCommand UpdateFreightFactorsCommand
+        {
+            get
+            {
+                if (_updateFreightFactorsCommand == null)
+                {
+                    _updateFreightFactorsCommand = new DelegateCommand(UpdateFreightFactors, CanUpdate);
+                }
+
+                return _updateFreightFactorsCommand;
+            }
+
+        }
+
+        private async void UpdateFreightFactors(object obj)
+        {
+            var result = await HTTPHelper.PutFreightsAsync(FreightFactors.Where(x => x.IsChecked == true));
+            if (result == null)
+            {
+                LastActionResponse = "Failed to save the data";
+            }
+            else
+                LastActionResponse = "Changes Saved Successfully.";
+
+        }
+        private async Task GetFreightFactors()
+        {
+
+            var freightFactors = await HTTPHelper.GetFreightsAsync();
+            FreightFactors = freightFactors.ToObservableCollection();
+            foreach (var item in FreightFactors)
+            {
+                item.HookCheckBoxAction(OnFreightSelectionChanged);
+            }
+            OnPropertyChanged("FreightFactors");
+        }
+
+        private FreightDB _selectedFreightFactor;
+        public FreightDB SelectedFreightFactor
+        {
+            get
+            {
+                return _selectedFreightFactor;
+            }
+            set
+            {
+                if (_selectedFreightFactor != value)
+                {
+                    _selectedFreightFactor = value;
+                    OnPropertyChanged("SelectedFreightFactor");
+                }
+            }
+        }
+
+        private void OnFreightSelectionChanged(bool value)
+        {
+            if (allFreightSelected && !value)
+            { // all are selected, and one gets turned off
+                allFreightSelected = false;
+                OnPropertyChanged("AllFreightSelected");
+            }
+            else if (!allFreightSelected && this.FreightFactors.All(c => c.IsChecked))
+            { // last one off one gets turned on, resulting in all being selected
+                allFreightSelected = true;
+                OnPropertyChanged("AllFreightSelected");
+            }
+        }
+        #endregion
+
+        public string SearchText { get; set; } = "";
+        private DelegateCommand _searchCommand;
+        public DelegateCommand SearchCommand
+        {
+            get
+            {
+                if (_searchCommand == null)
+                {
+                    _searchCommand = new DelegateCommand(SearchLaborFactor, CanSearch);
+                }
+
+                return _searchCommand;
+            }
+
+        }
+
+        
+
+        
+        
         private IEnumerable<ProjectDB> _projects;
         public IEnumerable<ProjectDB> Projects
         {
@@ -220,6 +397,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             {
                 await GetProjects();
                 await GetLaborFactors();
+                await GetFreightFactors();
             }
 
         }
@@ -227,21 +405,6 @@ namespace WICR_Estimator.ViewModels.DataViewModels
         {
             Projects = await HTTPHelper.GetProjectsAsync();
         }
-        private async Task GetLaborFactors()
-        {
-            LaborFactors = await HTTPHelper.GetLaborFactorsAsync();
-            if (LaborFactors!=null)
-            {
-                FilteredLaborFactors = LaborFactors.Where(x => x.ProjectId == 1).ToObservableCollection();
-            }
-            
-        }
-        private void GetLaborFactorsById(int id)
-        {
-            //LaborFactors = HTTPHelper.getLaborFactors().ToObservableCollection();
-            //var filtered =await HTTPHelper.GetLaborFactorsAsyncByID(id);
-            LaborFactorsFilterByProject = LaborFactors.Where(x => x.ProjectId == id);
-            FilteredLaborFactors = LaborFactorsFilterByProject.ToObservableCollection();
-        }
+       
     }
 }

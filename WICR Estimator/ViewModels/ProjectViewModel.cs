@@ -183,6 +183,7 @@ namespace WICR_Estimator.ViewModels
                     {
                         //Create dat file locally
                         prj.ProjectJobSetUp.dbData = await HTTPHelper.FetchFromDbAndSave(originalProjectname);
+
                     }
                     else
                         prj.ProjectJobSetUp.dbData = dbValues;

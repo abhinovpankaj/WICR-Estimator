@@ -262,6 +262,7 @@ namespace WICR_Estimator.ViewModels
                     IsMaterialChecked = getCheckboxCheckStatus(matName),
                     IsMaterialEnabled = getCheckboxEnabledStatus(matName),
                     IncludeInLaborMinCharge = IncludedInLaborMin(matName),
+                    IsCheckboxDependent= GetCheckBoxDependency(matName),
                     AllEditable = getEditable()
                 });
             }
@@ -777,10 +778,12 @@ namespace WICR_Estimator.ViewModels
                 TotalHrsDriveLabor = 4;
             }
             double DHLR = 0;
-            if (freightData!=null)
+            if (freightData != null)
             {
                 double.TryParse(freightData[6][0].ToString(), out DHLR);
             }
+            else
+                DHLR=dbData.FreightDBData.First(x => x.FactorName == "DriveHourLaborRate").FactorValue;
             
 
             DriveLaborValue =IncludeDriveHours ? TotalHrsDriveLabor * DHLR:0;
@@ -843,61 +846,127 @@ namespace WICR_Estimator.ViewModels
 
                     if (mat.Name == "Resistite Regular Gray" ||mat.Name== "Resistite Regular White")
                     {
-                        mat.Name = "Resistite Regular White";
-                        double matVal = 0;
-                        double.TryParse(materialDetails[13][0].ToString(), out matVal);
-                        mat.MaterialPrice = matVal;
-                        double.TryParse(materialDetails[13][3].ToString(), out matVal);
-                        mat.Weight = matVal;
-                        double.TryParse(materialDetails[13][4].ToString(), out matVal);
-                        mat.HorizontalProductionRate = matVal*(1+prPerc);
-                        double.TryParse(materialDetails[13][5].ToString(), out matVal);
-                        mat.StairsProductionRate = matVal * (1 + prPerc);
-                        double.TryParse(materialDetails[13][6].ToString(), out matVal);
-                        mat.SetupMinCharge = matVal;
-                        OnPropertyChanged("SetupMinCharge");
-                        mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
-                        mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
-                        mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        if (dbData == null)
+                        {
+                            mat.Name = "Resistite Regular White";
+                            double matVal = 0;
+                            double.TryParse(materialDetails[13][0].ToString(), out matVal);
+                            mat.MaterialPrice = matVal;
+                            double.TryParse(materialDetails[13][3].ToString(), out matVal);
+                            mat.Weight = matVal;
+                            double.TryParse(materialDetails[13][4].ToString(), out matVal);
+                            mat.HorizontalProductionRate = matVal * (1 + prPerc);
+                            double.TryParse(materialDetails[13][5].ToString(), out matVal);
+                            mat.StairsProductionRate = matVal * (1 + prPerc);
+                            double.TryParse(materialDetails[13][6].ToString(), out matVal);
+                            mat.SetupMinCharge = matVal;
+                            OnPropertyChanged("SetupMinCharge");
+                            mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
+                            mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
+                            mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        }
+                        else
+                        {
+                            mat.Name = "Resistite Regular White";
+                            mat.MaterialPrice = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).MaterialPrice;
+
+                            mat.Weight = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).Weight;
+                            double matVal = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).ProdRateHorizontal;
+                            mat.HorizontalProductionRate = matVal * (1 + prPerc);
+                            matVal = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).ProdRateStair;
+
+                            mat.StairsProductionRate = matVal * (1 + prPerc);
+
+                            mat.SetupMinCharge = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).LaborMinCharge;
+                            OnPropertyChanged("SetupMinCharge");
+                            mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
+                            mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
+                            mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        }
+                        
 
                     }
                     if (mat.Name == "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)"|| mat.Name == "Resistite Regular Or Smooth White(Knock Down Or Smooth)")
                     {
-                        mat.Name = "Resistite Regular Or Smooth White(Knock Down Or Smooth)";
-                        double matVal = 0;
-                        double.TryParse(materialDetails[15][0].ToString(), out matVal);
-                        mat.MaterialPrice = matVal;
-                        double.TryParse(materialDetails[15][3].ToString(), out matVal);
-                        mat.Weight = matVal;
-                        double.TryParse(materialDetails[15][4].ToString(), out matVal);
-                        mat.HorizontalProductionRate = matVal * (1 + prPerc);
-                        double.TryParse(materialDetails[15][5].ToString(), out matVal);
-                        mat.StairsProductionRate = matVal * (1 + prPerc);
-                        double.TryParse(materialDetails[15][6].ToString(), out matVal);
-                        mat.SetupMinCharge = matVal;
-                        OnPropertyChanged("SetupMinCharge");
-                        mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
-                        mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
-                        mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        if (dbData==null)
+                        {
+                            mat.Name = "Resistite Regular Or Smooth White(Knock Down Or Smooth)";
+                            double matVal = 0;
+                            double.TryParse(materialDetails[15][0].ToString(), out matVal);
+                            mat.MaterialPrice = matVal;
+                            double.TryParse(materialDetails[15][3].ToString(), out matVal);
+                            mat.Weight = matVal;
+                            double.TryParse(materialDetails[15][4].ToString(), out matVal);
+                            mat.HorizontalProductionRate = matVal * (1 + prPerc);
+                            double.TryParse(materialDetails[15][5].ToString(), out matVal);
+                            mat.StairsProductionRate = matVal * (1 + prPerc);
+                            double.TryParse(materialDetails[15][6].ToString(), out matVal);
+                            mat.SetupMinCharge = matVal;
+                            OnPropertyChanged("SetupMinCharge");
+                            mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
+                            mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
+                            mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        }
+                        else
+                        {
+                            mat.Name = "Resistite Regular Or Smooth White(Knock Down Or Smooth)";
+                            mat.MaterialPrice = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).MaterialPrice;
+
+                            mat.Weight = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).Weight;
+                            double matVal = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).ProdRateHorizontal;
+                            mat.HorizontalProductionRate = matVal * (1 + prPerc);
+                            matVal = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).ProdRateStair;
+
+                            mat.StairsProductionRate = matVal * (1 + prPerc);
+
+                            mat.SetupMinCharge = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).LaborMinCharge;
+                            OnPropertyChanged("SetupMinCharge");
+                            mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
+                            mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
+                            mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        }
+                        
                     }
                     if (mat.Name == "Custom Texture Skip Trowel(Resistite Smooth Gray)"|| mat.Name == "Custom Texture Skip Trowel(Resistite Smooth White)")
                     {
-                        mat.Name = "Custom Texture Skip Trowel(Resistite Smooth White)";
-                        double matVal = 0;
-                        double.TryParse(materialDetails[21][0].ToString(), out matVal);
-                        mat.MaterialPrice = matVal;
-                        double.TryParse(materialDetails[21][3].ToString(), out matVal);
-                        mat.Weight = matVal;
-                        double.TryParse(materialDetails[21][4].ToString(), out matVal);
-                        mat.HorizontalProductionRate = matVal * (1 + prPerc);
-                        double.TryParse(materialDetails[21][5].ToString(), out matVal);
-                        mat.StairsProductionRate = matVal * (1 + prPerc);
-                        double.TryParse(materialDetails[21][6].ToString(), out matVal);
-                        mat.SetupMinCharge = matVal;
-                        OnPropertyChanged("SetupMinCharge");
-                        mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
-                        mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
-                        mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        if (dbData==null)
+                        {
+                            mat.Name = "Custom Texture Skip Trowel(Resistite Smooth White)";
+                            double matVal = 0;
+                            double.TryParse(materialDetails[21][0].ToString(), out matVal);
+                            mat.MaterialPrice = matVal;
+                            double.TryParse(materialDetails[21][3].ToString(), out matVal);
+                            mat.Weight = matVal;
+                            double.TryParse(materialDetails[21][4].ToString(), out matVal);
+                            mat.HorizontalProductionRate = matVal * (1 + prPerc);
+                            double.TryParse(materialDetails[21][5].ToString(), out matVal);
+                            mat.StairsProductionRate = matVal * (1 + prPerc);
+                            double.TryParse(materialDetails[21][6].ToString(), out matVal);
+                            mat.SetupMinCharge = matVal;
+                            OnPropertyChanged("SetupMinCharge");
+                            mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
+                            mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
+                            mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        }
+                        else
+                        {
+                            mat.Name = "Custom Texture Skip Trowel(Resistite Smooth White)";
+                            mat.MaterialPrice = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).MaterialPrice;
+
+                            mat.Weight = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).Weight;
+                            double matVal = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).ProdRateHorizontal;
+                            mat.HorizontalProductionRate = matVal * (1 + prPerc);
+                            matVal = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).ProdRateStair;
+
+                            mat.StairsProductionRate = matVal * (1 + prPerc);
+
+                            mat.SetupMinCharge = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).LaborMinCharge;
+                            OnPropertyChanged("SetupMinCharge");
+                            mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
+                            mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
+                            mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        }
+                        
                     }
 
                 }
@@ -922,60 +991,126 @@ namespace WICR_Estimator.ViewModels
 
                     if (mat.Name == "Resistite Regular White")
                     {
-                        mat.Name = "Resistite Regular Gray";
-                        double matVal = 0;
-                        double.TryParse(materialDetails[12][0].ToString(), out matVal);
-                        mat.MaterialPrice = matVal;
-                        double.TryParse(materialDetails[12][3].ToString(), out matVal);
-                        mat.Weight = matVal;
-                        double.TryParse(materialDetails[12][4].ToString(), out matVal);
-                        mat.HorizontalProductionRate = matVal * (1 + prPerc);
-                        double.TryParse(materialDetails[12][5].ToString(), out matVal);
-                        mat.StairsProductionRate = matVal * (1 + prPerc);
-                        double.TryParse(materialDetails[12][6].ToString(), out matVal);
-                        mat.SetupMinCharge = matVal;
-                        OnPropertyChanged("SetupMinCharge");
-                        mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
-                        mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
-                        mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        if (dbData==null)
+                        {
+                            mat.Name = "Resistite Regular Gray";
+                            double matVal = 0;
+                            double.TryParse(materialDetails[12][0].ToString(), out matVal);
+                            mat.MaterialPrice = matVal;
+                            double.TryParse(materialDetails[12][3].ToString(), out matVal);
+                            mat.Weight = matVal;
+                            double.TryParse(materialDetails[12][4].ToString(), out matVal);
+                            mat.HorizontalProductionRate = matVal * (1 + prPerc);
+                            double.TryParse(materialDetails[12][5].ToString(), out matVal);
+                            mat.StairsProductionRate = matVal * (1 + prPerc);
+                            double.TryParse(materialDetails[12][6].ToString(), out matVal);
+                            mat.SetupMinCharge = matVal;
+                            OnPropertyChanged("SetupMinCharge");
+                            mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
+                            mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
+                            mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        }
+                        else
+                        {
+
+                            mat.Name = "Resistite Regular Gray";
+                            mat.MaterialPrice = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).MaterialPrice;
+
+                            mat.Weight = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).Weight;
+                            double matVal = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).ProdRateHorizontal;
+                            mat.HorizontalProductionRate = matVal * (1 + prPerc);
+                            matVal = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).ProdRateStair;
+
+                            mat.StairsProductionRate = matVal * (1 + prPerc);
+
+                            mat.SetupMinCharge = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).LaborMinCharge;
+                            OnPropertyChanged("SetupMinCharge");
+                            mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
+                            mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
+                            mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        }
+                        
                     }
                     if (mat.Name == "Resistite Regular Or Smooth White(Knock Down Or Smooth)")
                     {
-                        mat.Name = "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)";
-                        double matVal = 0;
-                        double.TryParse(materialDetails[14][0].ToString(), out matVal);
-                        mat.MaterialPrice = matVal;
-                        double.TryParse(materialDetails[14][3].ToString(), out matVal);
-                        mat.Weight = matVal;
-                        double.TryParse(materialDetails[14][4].ToString(), out matVal);
-                        mat.HorizontalProductionRate = matVal * (1 + prPerc);
-                        double.TryParse(materialDetails[14][5].ToString(), out matVal);
-                        mat.StairsProductionRate = matVal * (1 + prPerc);
-                        double.TryParse(materialDetails[14][6].ToString(), out matVal);
-                        mat.SetupMinCharge = matVal;
-                        OnPropertyChanged("SetupMinCharge");
-                        mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
-                        mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
-                        mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        if (dbData==null)
+                        {
+                            mat.Name = "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)";
+                            double matVal = 0;
+                            double.TryParse(materialDetails[14][0].ToString(), out matVal);
+                            mat.MaterialPrice = matVal;
+                            double.TryParse(materialDetails[14][3].ToString(), out matVal);
+                            mat.Weight = matVal;
+                            double.TryParse(materialDetails[14][4].ToString(), out matVal);
+                            mat.HorizontalProductionRate = matVal * (1 + prPerc);
+                            double.TryParse(materialDetails[14][5].ToString(), out matVal);
+                            mat.StairsProductionRate = matVal * (1 + prPerc);
+                            double.TryParse(materialDetails[14][6].ToString(), out matVal);
+                            mat.SetupMinCharge = matVal;
+                            OnPropertyChanged("SetupMinCharge");
+                            mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
+                            mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
+                            mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        }
+                        else
+                        {
+                            mat.Name = "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)";
+                            mat.MaterialPrice = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).MaterialPrice;
+
+                            mat.Weight = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).Weight;
+                            double matVal = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).ProdRateHorizontal;
+                            mat.HorizontalProductionRate = matVal * (1 + prPerc);
+                            matVal = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).ProdRateStair;
+
+                            mat.StairsProductionRate = matVal * (1 + prPerc);
+
+                            mat.SetupMinCharge = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).LaborMinCharge;
+                            OnPropertyChanged("SetupMinCharge");
+                            mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
+                            mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
+                            mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        }
+                        
                     }
                     if (mat.Name == "Custom Texture Skip Trowel(Resistite Smooth White)")
                     {
-                        mat.Name = "Custom Texture Skip Trowel(Resistite Smooth Gray)";
-                        double matVal = 0;
-                        double.TryParse(materialDetails[20][0].ToString(), out matVal);
-                        mat.MaterialPrice = matVal;
-                        double.TryParse(materialDetails[20][3].ToString(), out matVal);
-                        mat.Weight = matVal;
-                        double.TryParse(materialDetails[20][4].ToString(), out matVal);
-                        mat.HorizontalProductionRate = matVal * (1 + prPerc);
-                        double.TryParse(materialDetails[20][5].ToString(), out matVal);
-                        mat.StairsProductionRate = matVal * (1 + prPerc);
-                        double.TryParse(materialDetails[20][6].ToString(), out matVal);
-                        mat.SetupMinCharge = matVal;
-                        OnPropertyChanged("SetupMinCharge");
-                        mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
-                        mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
-                        mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        if (dbData==null)
+                        {
+                            mat.Name = "Custom Texture Skip Trowel(Resistite Smooth Gray)";
+                            double matVal = 0;
+                            double.TryParse(materialDetails[20][0].ToString(), out matVal);
+                            mat.MaterialPrice = matVal;
+                            double.TryParse(materialDetails[20][3].ToString(), out matVal);
+                            mat.Weight = matVal;
+                            double.TryParse(materialDetails[20][4].ToString(), out matVal);
+                            mat.HorizontalProductionRate = matVal * (1 + prPerc);
+                            double.TryParse(materialDetails[20][5].ToString(), out matVal);
+                            mat.StairsProductionRate = matVal * (1 + prPerc);
+                            double.TryParse(materialDetails[20][6].ToString(), out matVal);
+                            mat.SetupMinCharge = matVal;
+                            OnPropertyChanged("SetupMinCharge");
+                            mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
+                            mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
+                            mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        }
+                        else
+                        {
+                            mat.Name = "Custom Texture Skip Trowel(Resistite Smooth Gray)";
+                            mat.MaterialPrice = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).MaterialPrice;
+
+                            mat.Weight = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).Weight;
+                            double matVal = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).ProdRateHorizontal;
+                            mat.HorizontalProductionRate = matVal * (1 + prPerc);
+                            matVal = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).ProdRateStair;
+
+                            mat.StairsProductionRate = matVal * (1 + prPerc);
+
+                            mat.SetupMinCharge = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).LaborMinCharge;
+                            OnPropertyChanged("SetupMinCharge");
+                            mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
+                            mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
+                            mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        }
                     }
                 }
                 #endregion
@@ -1000,61 +1135,127 @@ namespace WICR_Estimator.ViewModels
 
                     if (mat.Name == "Resistite Regular White")
                     {
-                        mat.Name = "Resistite Regular Gray";
-                        double matVal = 0;
-                        double.TryParse(materialDetails[12][0].ToString(), out matVal);
-                        mat.MaterialPrice = matVal;
-                        double.TryParse(materialDetails[12][3].ToString(), out matVal);
-                        mat.Weight = matVal;
-                        double.TryParse(materialDetails[12][4].ToString(), out matVal);
-                        mat.HorizontalProductionRate = matVal * (1 + prPerc);
-                        double.TryParse(materialDetails[12][5].ToString(), out matVal);
-                        mat.StairsProductionRate = matVal * (1 + prPerc);
-                        double.TryParse(materialDetails[12][6].ToString(), out matVal);
-                        mat.SetupMinCharge = matVal;
-                        OnPropertyChanged("SetupMinCharge");
-                        mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
-                        mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
-                        mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        if (dbData==null)
+                        {
+                            mat.Name = "Resistite Regular Gray";
+                            double matVal = 0;
+                            double.TryParse(materialDetails[12][0].ToString(), out matVal);
+                            mat.MaterialPrice = matVal;
+                            double.TryParse(materialDetails[12][3].ToString(), out matVal);
+                            mat.Weight = matVal;
+                            double.TryParse(materialDetails[12][4].ToString(), out matVal);
+                            mat.HorizontalProductionRate = matVal * (1 + prPerc);
+                            double.TryParse(materialDetails[12][5].ToString(), out matVal);
+                            mat.StairsProductionRate = matVal * (1 + prPerc);
+                            double.TryParse(materialDetails[12][6].ToString(), out matVal);
+                            mat.SetupMinCharge = matVal;
+                            OnPropertyChanged("SetupMinCharge");
+                            mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
+                            mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
+                            mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        }
+                        else
+                        {
+                            mat.Name = "Resistite Regular Gray";
+                            mat.MaterialPrice = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "RESISTITE REGULAR GRAY").MaterialPrice; 
+                            
+                            mat.Weight = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "RESISTITE REGULAR GRAY").Weight; 
+                            double matVal= dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "RESISTITE REGULAR GRAY").ProdRateHorizontal;
+                            mat.HorizontalProductionRate = matVal * (1 + prPerc);
+                            matVal = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "RESISTITE REGULAR GRAY").ProdRateStair;
+                            
+                            mat.StairsProductionRate = matVal * (1 + prPerc);
+                            
+                            mat.SetupMinCharge = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "RESISTITE REGULAR GRAY").LaborMinCharge ;
+                            OnPropertyChanged("SetupMinCharge");
+                            mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
+                            mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
+                            mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        }
                     }
                     if (mat.Name == "Resistite Regular Or Smooth White(Knock Down Or Smooth)")
                     {
-                        mat.Name = "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)";
-                        double matVal = 0;
-                        double.TryParse(materialDetails[14][0].ToString(), out matVal);
-                        mat.MaterialPrice = matVal;
-                        double.TryParse(materialDetails[14][3].ToString(), out matVal);
-                        mat.Weight = matVal;
-                        double.TryParse(materialDetails[14][4].ToString(), out matVal);
-                        mat.HorizontalProductionRate = matVal * (1 + prPerc);
-                        double.TryParse(materialDetails[14][5].ToString(), out matVal);
-                        mat.StairsProductionRate = matVal * (1 + prPerc);
-                        double.TryParse(materialDetails[14][6].ToString(), out matVal);
-                        mat.SetupMinCharge = matVal;
-                        OnPropertyChanged("SetupMinCharge");
-                        mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
-                        mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
-                        mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        if (dbData==null)
+                        {
+                            mat.Name = "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)";
+                            double matVal = 0;
+                            double.TryParse(materialDetails[14][0].ToString(), out matVal);
+                            mat.MaterialPrice = matVal;
+                            double.TryParse(materialDetails[14][3].ToString(), out matVal);
+                            mat.Weight = matVal;
+                            double.TryParse(materialDetails[14][4].ToString(), out matVal);
+                            mat.HorizontalProductionRate = matVal * (1 + prPerc);
+                            double.TryParse(materialDetails[14][5].ToString(), out matVal);
+                            mat.StairsProductionRate = matVal * (1 + prPerc);
+                            double.TryParse(materialDetails[14][6].ToString(), out matVal);
+                            mat.SetupMinCharge = matVal;
+                            OnPropertyChanged("SetupMinCharge");
+                            mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
+                            mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
+                            mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        }
+                        else
+                        {
+                            mat.Name = "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)";
+                            mat.MaterialPrice = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).MaterialPrice;
+
+                            mat.Weight = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).Weight;
+                            double matVal = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).ProdRateHorizontal;
+                            mat.HorizontalProductionRate = matVal * (1 + prPerc);
+                            matVal = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).ProdRateStair;
+
+                            mat.StairsProductionRate = matVal * (1 + prPerc);
+
+                            mat.SetupMinCharge = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).LaborMinCharge;
+                            OnPropertyChanged("SetupMinCharge");
+                            mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
+                            mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
+                            mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                        }
+                        
                     }
                     if (mat.Name == "Custom Texture Skip Trowel(Resistite Smooth White)")
                     {
-                        mat.Name = "Custom Texture Skip Trowel(Resistite Smooth Gray)";
-                        double matVal = 0;
-                        double.TryParse(materialDetails[20][0].ToString(), out matVal);
-                        mat.MaterialPrice = matVal;
-                        double.TryParse(materialDetails[20][3].ToString(), out matVal);
-                        mat.Weight = matVal;
-                        double.TryParse(materialDetails[20][4].ToString(), out matVal);
-                        mat.HorizontalProductionRate = matVal * (1 + prPerc);
-                        double.TryParse(materialDetails[20][5].ToString(), out matVal);
-                        mat.StairsProductionRate = matVal * (1 + prPerc);
-                        double.TryParse(materialDetails[20][6].ToString(), out matVal);
-                        mat.SetupMinCharge = matVal;
-                        OnPropertyChanged("SetupMinCharge");
-                        mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
-                        mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
-                        mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
-                        mat.StairSqft = getSqFtStairs(mat.Name);
+                        if (dbData==null)
+                        {
+                            mat.Name = "Custom Texture Skip Trowel(Resistite Smooth Gray)";
+                            double matVal = 0;
+                            double.TryParse(materialDetails[20][0].ToString(), out matVal);
+                            mat.MaterialPrice = matVal;
+                            double.TryParse(materialDetails[20][3].ToString(), out matVal);
+                            mat.Weight = matVal;
+                            double.TryParse(materialDetails[20][4].ToString(), out matVal);
+                            mat.HorizontalProductionRate = matVal * (1 + prPerc);
+                            double.TryParse(materialDetails[20][5].ToString(), out matVal);
+                            mat.StairsProductionRate = matVal * (1 + prPerc);
+                            double.TryParse(materialDetails[20][6].ToString(), out matVal);
+                            mat.SetupMinCharge = matVal;
+                            OnPropertyChanged("SetupMinCharge");
+                            mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
+                            mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
+                            mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                            mat.StairSqft = getSqFtStairs(mat.Name);
+                        }
+                        else
+                        {
+                            mat.Name = "Custom Texture Skip Trowel(Resistite Smooth Gray)";
+                            mat.MaterialPrice = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).MaterialPrice;
+
+                            mat.Weight = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).Weight;
+                            double matVal = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).ProdRateHorizontal;
+                            mat.HorizontalProductionRate = matVal * (1 + prPerc);
+                            matVal = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).ProdRateStair;
+
+                            mat.StairsProductionRate = matVal * (1 + prPerc);
+
+                            mat.SetupMinCharge = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).LaborMinCharge;
+                            OnPropertyChanged("SetupMinCharge");
+                            mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
+                            mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
+                            mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
+                            mat.StairSqft = getSqFtStairs(mat.Name);
+                        }
+                        
                     }
 
                 }
@@ -1132,28 +1333,7 @@ namespace WICR_Estimator.ViewModels
                 obj.ToString()== "Resistite Regular Gray")
             {
                 calculateRLqty();
-            }
-            //CalculateLaborMinCharge(false);
-            ////update Add labor for minimum cost
-            //LaborMinChargeHrs = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false && x.IsMaterialChecked&&x.LaborExtension!=0).ToList().Select(x => x.Hours).Sum();
-            ////New Change Min Labor
-            //LaborMinChargeMinSetup = SystemMaterials.Where(x => x.IncludeInLaborMinCharge == false && x.IsMaterialChecked&&x.LaborExtension!=0).ToList().Select(x => x.SetupMinCharge).Sum();
-            ////
-            //LaborMinChargeLaborExtension = LaborMinChargeMinSetup + LaborMinChargeHrs > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs)) * laborRate;
-            //LaborMinChargeLaborUnitPrice = (riserCount + totalSqft) == 0 ? 0 : LaborMinChargeLaborExtension / (riserCount + totalSqft);
-
-            //if (LaborMinChargeMinSetup + LaborMinChargeHrs < 20)
-            //{
-            //    AddLaborMinCharge = true;
-            //}
-            //else
-            //    AddLaborMinCharge = false;
-
-            //OnPropertyChanged("AddLaborMinCharge");
-            //OnPropertyChanged("LaborMinChargeHrs");
-            //OnPropertyChanged("LaborMinChargeLaborExtension");
-            //OnPropertyChanged("LaborMinChargeLaborUnitPrice");
-
+            }           
         }
 
         #endregion
@@ -1194,6 +1374,8 @@ namespace WICR_Estimator.ViewModels
 
             }
         }
+
+
         public virtual void FetchMaterialValuesAsync(bool hasSetupChanged)
         {
             Dictionary<string, double> qtyList = new Dictionary<string, double>();
@@ -1747,7 +1929,30 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("Stucco Material Remove And Replace (Lf)", "Sq Ft");
 
         }
+        public bool GetCheckBoxDependency(string matName)
+        {
+            switch (matName.ToUpper())
+            {
+                case "NEOTEX-38 PASTE":
+                case "NEOTEX STANDARD POWDER(BODY COAT)":
+                case "NEOTEX STANDARD POWDER(BODY COAT) 1":
+                case "RESISTITE LIQUIDE":
 
+                case "RESISTITE REGULAR GRAY":
+                case "RESISTITE REGULAR WHITE":
+                case "RESISTITE REGULAR OR SMOOTH GRAY(KNOCK DOWN OR SMOOTH)":
+                case "RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)":
+
+                case "AJ-44A DRESSING(SEALER)":
+                case "VISTA PAINT ACRIPOXY":
+                case "LIP COLOR":
+                case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
+                case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
+                    return true;
+                default:
+                    return false;
+            }
+        }
         public  virtual ObservableCollection<SystemMaterial> GetSystemMaterial()
         {
 
@@ -2831,47 +3036,53 @@ namespace WICR_Estimator.ViewModels
             double val1=0, val2=0, val3 = 0, val4 = 0;
             double qty = 0;
             SystemMaterial skipMat;
-            
+            if (dbData==null)
+            {
                 double.TryParse(materialDetails[13][2].ToString(), out val1);
                 double.TryParse(materialDetails[15][2].ToString(), out val2);
-                //double.TryParse(materialDetails[21][2].ToString(), out val3);
-                //double.TryParse(materialDetails[3][2].ToString(), out val4);
-                val1 = getQuantity("RESISTITE REGULAR WHITE", val1, getlfArea("RESISTITE REGULAR WHITE"));
-                val2 = getQuantity("RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)", val2, getlfArea("RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)"));
+            }
+            else
+            {
+                val1 = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "RESISTITE REGULAR WHITE").Coverage;
+                val2 = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)").Coverage;
+            }
+                
+            val1 = getQuantity("RESISTITE REGULAR WHITE", val1, getlfArea("RESISTITE REGULAR WHITE"));
+            val2 = getQuantity("RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)", val2, getlfArea("RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)"));
 
-                skipMat = SystemMaterials.Where(x => x.Name.ToUpper() == "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)").FirstOrDefault();
-                if (skipMat != null)
+            skipMat = SystemMaterials.Where(x => x.Name.ToUpper() == "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)").FirstOrDefault();
+            if (skipMat != null)
+            {
+                if (skipMat.IsMaterialChecked)
                 {
-                    if (skipMat.IsMaterialChecked)
-                    {
-                        val3 = skipMat.Qty;
-                    }
-                    else
-                        val3 = 0;
+                    val3 = skipMat.Qty;
                 }
-                skipMat = SystemMaterials.Where(x => x.Name.ToUpper() == "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)").FirstOrDefault();
-                if (skipMat != null)
+                else
+                    val3 = 0;
+            }
+            skipMat = SystemMaterials.Where(x => x.Name.ToUpper() == "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)").FirstOrDefault();
+            if (skipMat != null)
+            {
+                if (skipMat.IsMaterialChecked)
                 {
-                    if (skipMat.IsMaterialChecked)
-                    {
-                        val3 = skipMat.Qty;
-                    }
-                    else
-                        val3 = 0;
+                    val3 = skipMat.Qty;
                 }
+                else
+                    val3 = 0;
+            }
 
-                skipMat = SystemMaterials.Where(x => x.Name.ToUpper() == "RESISTITE REGULAR OVER TEXTURE(#55 BAG)").FirstOrDefault();
-                if (skipMat != null)
+            skipMat = SystemMaterials.Where(x => x.Name.ToUpper() == "RESISTITE REGULAR OVER TEXTURE(#55 BAG)").FirstOrDefault();
+            if (skipMat != null)
+            {
+                if (skipMat.IsMaterialChecked)
                 {
-                    if (skipMat.IsMaterialChecked)
-                    {
-                        val4 = skipMat.Qty;
-                    }
-                    else
-                        val4 = 0;
+                    val4 = skipMat.Qty;
                 }
+                else
+                    val4 = 0;
+            }
 
-                qty = (val1 + val2 + val3) * 0.33 + val4 / 5;
+            qty = (val1 + val2 + val3) * 0.33 + val4 / 5;
 
            
             skipMat = SystemMaterials.Where(x => x.Name == "Resistite Liquid").FirstOrDefault();
@@ -2896,11 +3107,20 @@ namespace WICR_Estimator.ViewModels
             {
                 return 0;
             }
-            double.TryParse(materialDetails[9][2].ToString(), out val1);
-            double.TryParse(materialDetails[10][2].ToString(), out val2);
+            if (dbData==null)
+            {
+                double.TryParse(materialDetails[9][2].ToString(), out val1);
+                double.TryParse(materialDetails[10][2].ToString(), out val2);
+               
+            }
+            else
+            {
+                val1= dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "NEOTEX STANDARD POWDER(BODY COAT)").Coverage;
+                val2 = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "NEOTEX STANDARD POWDER(BODY COAT) 1").Coverage;
+            }
             val1 = getQuantity("NEOTEX STANDARD POWDER(BODY COAT)", val1, getlfArea("NEOTEX STANDARD POWDER(BODY COAT)"));
             val2 = getQuantity("NEOTEX STANDARD POWDER(BODY COAT) 1", val2, getlfArea("NEOTEX STANDARD POWDER(BODY COAT) 1"));
-            val1=SystemMaterials.Where(x => x.Name == "Neotex Standard Powder(Body Coat)").FirstOrDefault().IsMaterialChecked ? val1 : 0;
+            val1 = SystemMaterials.Where(x => x.Name == "Neotex Standard Powder(Body Coat)").FirstOrDefault().IsMaterialChecked ? val1 : 0;
             val2 = SystemMaterials.Where(x => x.Name == "Neotex Standard Powder(Body Coat) 1").FirstOrDefault().IsMaterialChecked ? val2 : 0;
             return (val2 * 1.5 + val1 * 1.25) / 5;
         }
@@ -3093,68 +3313,7 @@ namespace WICR_Estimator.ViewModels
 
             return frCalc;
         }
-        //private double FreightCalculator(double weight)
-        //{
-        //    double frCalc = 0;
-        //    double factor = 0;
-        //    if (weight != 0)
-        //    {
-
-        //        if (weight == 0)
-        //        {
-        //            frCalc = 0;
-        //        }
-
-        //        else
-        //        {
-        //            if (weight > 10000)
-        //            {
-        //                double.TryParse(freightData[0][1].ToString(), out factor);
-        //                frCalc = factor * weight; /*0.03*/
-        //            }
-
-        //            else
-        //            {
-        //                if (weight > 5000)
-        //                {
-        //                    double.TryParse(freightData[1][1].ToString(), out factor);
-        //                    frCalc = factor * weight; /*0.04*/
-        //                }
-        //                else
-        //                {
-        //                    if (weight > 2000)
-        //                    {
-        //                        double.TryParse(freightData[2][1].ToString(), out factor);
-        //                        frCalc = factor * weight; /*0.09*/
-        //                    }
-        //                    else
-        //                    {
-        //                        if (weight > 1000)
-        //                        {
-        //                            double.TryParse(freightData[3][1].ToString(), out factor);
-        //                            frCalc = factor * weight; /*0.12*/
-        //                        }
-        //                        else
-        //                        {
-        //                            if (weight > 400)
-        //                            {
-        //                                double.TryParse(freightData[4][1].ToString(), out factor);
-        //                                frCalc = factor;/*75*/
-        //                            }
-        //                            else
-        //                            {
-        //                                frCalc = 0;
-        //                            }
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    return frCalc;
-        //}
-        //this is Material total
+        
         private void CalculateCostBreakup()
         {
             if (SystemMaterials==null)
@@ -3432,65 +3591,147 @@ namespace WICR_Estimator.ViewModels
         }
         private double getTotals(double laborCost, double materialCost, double freightCost, double subcontractLabor)
         {
-            if (laborDetails==null)
+            if (dbData==null)
             {
-                return 0;
-            }
-            double res = 0;
-            double slopeTotal = laborCost;
+                if (laborDetails == null)
+                {
+                    return 0;
+                }
+                double res = 0;
+                double slopeTotal = laborCost;
 
-            if (isPrevailingWage)
-            {
-                double.TryParse(laborDetails[4][0].ToString(), out res);
+                if (isPrevailingWage)
+                {
+                    double.TryParse(laborDetails[4][0].ToString(), out res);
+                    slopeTotal = slopeTotal + laborCost * res;
+                }
+                else
+                {
+                    double.TryParse(laborDetails[2][0].ToString(), out res);
+                    slopeTotal = slopeTotal + laborCost * res;
+                    double.TryParse(laborDetails[3][0].ToString(), out res);
+                    slopeTotal = slopeTotal + laborCost * res;
+                }
+
+                double.TryParse(laborDetails[5][0].ToString(), out res);
                 slopeTotal = slopeTotal + laborCost * res;
+                double.TryParse(laborDetails[6][0].ToString(), out res);
+                double tax = res * (freightCost + materialCost) + materialCost + freightCost;//freight+material including tax
+
+                slopeTotal = slopeTotal + tax;
+                //subcontrctlabor
+                double.TryParse(laborDetails[8][0].ToString(), out res);
+                double subCLabor = subcontractLabor * res;
+                //profitMargin
+                double pmAdd;
+                double.TryParse(laborDetails[8][0].ToString(), out pmAdd);
+                double profitMarginAdd = (slopeTotal * pmAdd) * (1 + pmAdd);
+                //profit margin
+                double pm;
+                double.TryParse(laborDetails[10][0].ToString(), out pm);
+                double specialMetalDeduction = 0;
+                if (isSpecialMetal)
+                {
+                    //Profit deduct for special metal
+                    double.TryParse(laborDetails[9][0].ToString(), out res);
+                    specialMetalDeduction = materialCost * res;
+                }
+                double TotalCost = (slopeTotal / pm) + profitMarginAdd + specialMetalDeduction + subCLabor;
+
+                double.TryParse(laborDetails[11][0].ToString(), out res);
+                double generalLiability = TotalCost * res / pm;
+                double.TryParse(laborDetails[12][0].ToString(), out res);
+                double directExpense = TotalCost * res / pm;
+                double.TryParse(laborDetails[13][0].ToString(), out res);
+                double contigency = TotalCost * res / pm;
+                double ins, fuel, addup;
+                double.TryParse(laborDetails[14][0].ToString(), out ins);
+                double.TryParse(laborDetails[15][0].ToString(), out fuel);
+                double.TryParse(laborDetails[16][0].ToString(), out addup);
+                double restTotal = TotalCost * (ins + fuel + addup);
+                //calculated Profit Margin,currently not being used.
+                double ProfitMargin = TotalCost - slopeTotal;
+                return TotalCost + generalLiability + directExpense + contigency + restTotal;
             }
             else
             {
-                double.TryParse(laborDetails[2][0].ToString(), out res);
+                double res = 0;
+                double slopeTotal = laborCost;
+
+                if (isPrevailingWage)
+                {
+                    // double.TryParse(laborDetails[4][0].ToString(), out res);
+                    res = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Workers Comp Prevailing Wage").Value;
+                    slopeTotal = slopeTotal + laborCost * res;
+                }
+                else
+                {
+                    //double.TryParse(laborDetails[2][0].ToString(), out res);
+                    res = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Workers Comp TL > $24.00").Value;
+                    slopeTotal = slopeTotal + laborCost * res;
+                    //double.TryParse(laborDetails[3][0].ToString(), out res);
+                    res = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Workers Comp All < $23.99").Value;
+                    slopeTotal = slopeTotal + laborCost * res;
+                }
+
+                //double.TryParse(laborDetails[5][0].ToString(), out res);
+                res = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Payroll Expense (SS, ET, Uemp, Dis, Medicare)").Value;
                 slopeTotal = slopeTotal + laborCost * res;
-                double.TryParse(laborDetails[3][0].ToString(), out res);
-                slopeTotal = slopeTotal + laborCost * res;
+                //double.TryParse(laborDetails[6][0].ToString(), out res);
+                res = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Tax").Value;
+                double tax = res * (freightCost + materialCost) + materialCost + freightCost;//freight+material including tax
+
+                slopeTotal = slopeTotal + tax;
+                //subcontrctlabor
+                //double.TryParse(laborDetails[8][0].ToString(), out res);
+                res = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Profit Margin on subcontract labor").Value;
+                double subCLabor = subcontractLabor * res;
+                //profitMargin
+                double pmAdd = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Profit Margin add").Value; 
+                //double.TryParse(laborDetails[8][0].ToString(), out pmAdd);
+
+                double profitMarginAdd = (slopeTotal * pmAdd) * (1 + pmAdd);
+                //profit margin
+                double pm=dbData.LaborDBData.FirstOrDefault(x => x.Name == "Profit Margin").Value; ;
+
+                //double.TryParse(laborDetails[10][0].ToString(), out pm);
+
+                double specialMetalDeduction = 0;
+                if (isSpecialMetal)
+                {
+                    //Profit deduct for special metal
+                    //double.TryParse(laborDetails[9][0].ToString(), out res);
+                    res = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Profit deduct for special metal").Value;
+                    specialMetalDeduction = materialCost * res;
+                }
+                double TotalCost = (slopeTotal / pm) + profitMarginAdd + specialMetalDeduction + subCLabor;
+
+                //double.TryParse(laborDetails[11][0].ToString(), out res);
+                res = dbData.LaborDBData.FirstOrDefault(x => x.Name == "General Liability (total based on revenue)").Value;
+                double generalLiability = TotalCost * res / pm;
+
+                //double.TryParse(laborDetails[12][0].ToString(), out res);
+                res = dbData.LaborDBData.FirstOrDefault(x => x.Name == "DirectExpense").Value;
+                double directExpense = TotalCost * res / pm;
+
+                //double.TryParse(laborDetails[13][0].ToString(), out res);
+                res = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Contingency").Value;
+
+                double contigency = TotalCost * res / pm;
+                double ins, fuel, addup;
+
+                //double.TryParse(laborDetails[14][0].ToString(), out ins);
+
+                ins = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Insurance Increase Fund (5 % on total sale)").Value;
+                //double.TryParse(laborDetails[15][0].ToString(), out fuel);
+                fuel = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Fuel/Sur Chg (1-PRICE OF GAS) /-40").Value;
+                //double.TryParse(laborDetails[16][0].ToString(), out addup);
+                addup = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Add mark up to total job price").Value;
+                double restTotal = TotalCost * (ins + fuel + addup);
+                //calculated Profit Margin,currently not being used.
+                double ProfitMargin = TotalCost - slopeTotal;
+                return TotalCost + generalLiability + directExpense + contigency + restTotal;
             }
-
-            double.TryParse(laborDetails[5][0].ToString(), out res);
-            slopeTotal = slopeTotal + laborCost * res;
-            double.TryParse(laborDetails[6][0].ToString(), out res);
-            double tax = res * (freightCost + materialCost) + materialCost + freightCost;//freight+material including tax
-
-            slopeTotal = slopeTotal + tax;
-            //subcontrctlabor
-            double.TryParse(laborDetails[8][0].ToString(), out res);
-            double subCLabor = subcontractLabor * res;
-            //profitMargin
-            double pmAdd;
-            double.TryParse(laborDetails[8][0].ToString(), out pmAdd);
-            double profitMarginAdd = (slopeTotal * pmAdd) * (1 + pmAdd);
-            //profit margin
-            double pm;
-            double.TryParse(laborDetails[10][0].ToString(), out pm);
-            double specialMetalDeduction = 0;
-            if (isSpecialMetal)
-            {
-                //Profit deduct for special metal
-                double.TryParse(laborDetails[9][0].ToString(), out res);
-                specialMetalDeduction = materialCost * res;
-            }
-            double TotalCost = (slopeTotal / pm) + profitMarginAdd + specialMetalDeduction + subCLabor;
-
-            double.TryParse(laborDetails[11][0].ToString(), out res);
-            double generalLiability = TotalCost * res / pm;
-            double.TryParse(laborDetails[12][0].ToString(), out res);
-            double directExpense = TotalCost * res / pm;
-            double.TryParse(laborDetails[13][0].ToString(), out res);
-            double contigency = TotalCost * res / pm;
-            double ins, fuel, addup;
-            double.TryParse(laborDetails[14][0].ToString(), out ins);
-            double.TryParse(laborDetails[15][0].ToString(), out fuel);
-            double.TryParse(laborDetails[16][0].ToString(), out addup);
-            double restTotal = TotalCost * (ins + fuel + addup);
-            //calculated Profit Margin,currently not being used.
-            double ProfitMargin = TotalCost - slopeTotal;
-            return TotalCost + generalLiability + directExpense + contigency + restTotal;
         }
         #endregion
         #endregion
@@ -3498,7 +3739,7 @@ namespace WICR_Estimator.ViewModels
 
         public virtual void populateCalculation()
         {
-            if (laborDetails == null)
+            if (dbData == null)
                 return;
 
             LCostBreakUp = new ObservableCollection<CostBreakup>();
@@ -3511,7 +3752,12 @@ namespace WICR_Estimator.ViewModels
             //double.TryParse(laborDetails[0][0].ToString(), out facValue);
             facValue = Math.Round(preWage,4);
             double fac1 = isPrevailingWage ? facValue : 0;
-            double.TryParse(laborDetails[1][0].ToString(), out facValue);
+            if (dbData==null)
+            {
+                double.TryParse(laborDetails[1][0].ToString(), out facValue);
+            }
+            else
+                facValue = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Deduct on Labor for large jobs").Value;
             double fac2 = isDiscounted ? facValue : 0;
             double calbackfactor = 1 + fac1 + fac2;
 
@@ -3553,8 +3799,15 @@ namespace WICR_Estimator.ViewModels
                 SystemCost = (TotalLaborExtension+DriveLaborValue),
                 HideCalFactor = System.Windows.Visibility.Hidden
             });
+            
+            if (dbData == null)
+            {
+                double.TryParse(laborDetails[2][0].ToString(), out facValue);
+            }
+            else
+                facValue = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Workers Comp TL > $24.00").Value;
+            
 
-            double.TryParse(laborDetails[2][0].ToString(), out facValue);
             double actVal = isPrevailingWage ? 0 : facValue;
             double metalLabor = MetalTotals != null ? (MetalTotals.LaborExtTotal / calbackfactor + (MetalTotals.LaborExtTotal / calbackfactor * fac2)):0;
             double slopeLabor = SlopeTotals != null ? (SlopeTotals.LaborExtTotal / calbackfactor + (SlopeTotals.LaborExtTotal / calbackfactor * fac2)):0;
@@ -3569,7 +3822,13 @@ namespace WICR_Estimator.ViewModels
                 SystemCost = actVal * systemLabor
             });
 
-            double.TryParse(laborDetails[3][0].ToString(), out facValue);
+            if (dbData == null)
+            {
+                double.TryParse(laborDetails[3][0].ToString(), out facValue);
+            }
+            else
+                facValue = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Workers Comp All < $23.99").Value;
+
             actVal = isPrevailingWage ? 0 : facValue;
             LCostBreakUp.Add(new CostBreakup
             {
@@ -3580,7 +3839,12 @@ namespace WICR_Estimator.ViewModels
                 SystemCost = actVal * systemLabor
             });
 
-            double.TryParse(laborDetails[4][0].ToString(), out facValue);
+            if (dbData == null)
+            {
+                double.TryParse(laborDetails[4][0].ToString(), out facValue);
+            }
+            else
+                facValue = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Workers Comp Prevailing Wage").Value;
 
             LCostBreakUp.Add(new CostBreakup
             {
@@ -3590,7 +3854,12 @@ namespace WICR_Estimator.ViewModels
                 SlopeCost = isPrevailingWage&& SlopeTotals != null ?  facValue * SlopeTotals.LaborExtTotal : 0,
                 SystemCost = isPrevailingWage ? facValue * (TotalLaborExtension+DriveLaborValue) : 0
             });
-            double.TryParse(laborDetails[5][0].ToString(), out facValue);
+            if (dbData == null)
+            {
+                double.TryParse(laborDetails[5][0].ToString(), out facValue);
+            }
+            else
+                facValue = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Payroll Expense (SS, ET, Uemp, Dis, Medicare)").Value;
 
             LCostBreakUp.Add(new CostBreakup
             {
@@ -3619,7 +3888,12 @@ namespace WICR_Estimator.ViewModels
                 SystemCost = TotalFreightCostBrkp,
                 HideCalFactor = System.Windows.Visibility.Hidden
             });
-            double.TryParse(laborDetails[6][0].ToString(), out facValue);
+            if (dbData == null)
+            {
+                double.TryParse(laborDetails[6][0].ToString(), out facValue);
+            }
+            else
+                facValue = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Tax").Value;
 
             LCostBreakUp.Add(new CostBreakup
             {
@@ -3694,7 +3968,13 @@ namespace WICR_Estimator.ViewModels
             });
 
 
-            double.TryParse(laborDetails[8][0].ToString(), out facValue);
+            if (dbData == null)
+            {
+                double.TryParse(laborDetails[8][0].ToString(), out facValue);
+            }
+            else
+                facValue = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Profit Margin add").Value;
+            
             double pm2, ps2, psy2;
             pm2 = totalJobCostM * facValue * (1 + facValue);
             ps2 = totalJobCostS * facValue * (1 + facValue);
@@ -3708,7 +3988,12 @@ namespace WICR_Estimator.ViewModels
                 SystemCost = psy2
             });
 
-            double.TryParse(laborDetails[9][0].ToString(), out facValue);
+            if (dbData == null)
+            {
+                double.TryParse(laborDetails[9][0].ToString(), out facValue);
+            }
+            else
+                facValue = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Profit deduct for special metal").Value;
 
             double pm3 = hasSpecialPricing && MetalTotals != null  ? facValue * MetalTotals.MaterialExtTotal : 0;
             LCostBreakUp.Add(new CostBreakup
@@ -3747,7 +4032,12 @@ namespace WICR_Estimator.ViewModels
             });
 
 
-            double.TryParse(laborDetails[11][0].ToString(), out facValue);
+            if (dbData == null)
+            {
+                double.TryParse(laborDetails[11][0].ToString(), out facValue);
+            }
+            else
+                facValue = dbData.LaborDBData.FirstOrDefault(x => x.Name == "General Liability (total based on revenue)").Value;
 
             LCostBreakUp.Add(new CostBreakup
             {
@@ -3763,7 +4053,13 @@ namespace WICR_Estimator.ViewModels
             double finalSCost = totalCostS + (totalCostS * facValue / SlopeMarkup);
             double finalSyCost = totalCostSy + (totalCostSy * facValue / MaterialMarkup);
             double finalSubLabCost = totalCostSbLabor + (totalCostSbLabor * facValue / SubContractProfitMargin);
-            double.TryParse(laborDetails[12][0].ToString(), out facValue);
+
+            if (dbData == null)
+            {
+                double.TryParse(laborDetails[12][0].ToString(), out facValue);
+            }
+            else
+                facValue = dbData.LaborDBData.FirstOrDefault(x => x.Name == "DirectExpense").Value;
 
             LCostBreakUp.Add(new CostBreakup
             {
@@ -3780,7 +4076,12 @@ namespace WICR_Estimator.ViewModels
             finalSyCost = finalSyCost + (totalCostSy * facValue / MaterialMarkup);
             finalSubLabCost = finalSubLabCost + (totalCostSbLabor * facValue / SubContractProfitMargin);
             if (!hasContingencyDisc)
-                double.TryParse(laborDetails[13][0].ToString(), out facValue);
+                if (dbData == null)
+                {
+                    double.TryParse(laborDetails[13][0].ToString(), out facValue);
+                }
+                else
+                    facValue = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Contingency").Value;
 
             else
                 facValue = 0;
@@ -3798,7 +4099,12 @@ namespace WICR_Estimator.ViewModels
             finalSCost = finalSCost + (totalCostS * facValue / SlopeMarkup);
             finalSyCost = finalSyCost + (totalCostSy * facValue / MaterialMarkup);
             finalSubLabCost = finalSubLabCost + (totalCostSbLabor * facValue / SubContractProfitMargin);
-            double.TryParse(laborDetails[14][0].ToString(), out facValue);
+            if (dbData == null)
+            {
+                double.TryParse(laborDetails[14][0].ToString(), out facValue);
+            }
+            else
+                facValue = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Insurance Increase Fund (5 % on total sale)").Value;
 
             LCostBreakUp.Add(new CostBreakup
             {
@@ -3812,7 +4118,12 @@ namespace WICR_Estimator.ViewModels
             finalMCost = finalMCost + (totalCostM * facValue);
             finalSCost = finalSCost + (totalCostS * facValue);
             finalSyCost = finalSyCost + (totalCostSy * facValue);
-            double.TryParse(laborDetails[15][0].ToString(), out facValue);
+            if (dbData == null)
+            {
+                double.TryParse(laborDetails[15][0].ToString(), out facValue);
+            }
+            else
+                facValue = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Fuel/Sur Chg (1-PRICE OF GAS) /-40").Value;
 
             LCostBreakUp.Add(new CostBreakup
             {
@@ -3828,7 +4139,13 @@ namespace WICR_Estimator.ViewModels
             finalSubLabCost = finalSubLabCost + (totalCostSbLabor * facValue);
 
 
-            double.TryParse(laborDetails[16][0].ToString(), out facValue);
+            if (dbData == null)
+            {
+                double.TryParse(laborDetails[16][0].ToString(), out facValue);
+            }
+            else
+                facValue = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Add mark up to total job price").Value;
+
             if (MarkUpPerc != 0)
             {
                 facValue = MarkUpPerc / 100;
@@ -3912,7 +4229,7 @@ namespace WICR_Estimator.ViewModels
                 //materialDetails = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "H33:K59");
 
                 dbData = DataSerializerService.DSInstance.deserializeDbData(prjName);
-               
+            }   
                 laborRate = dbData.FreightDBData.First(x => x.FreightID == 8).FactorValue;
                 
                 SubContractMarkup =  dbData.LaborDBData.First(x => x.Name == "Profit Margin on subcontract labor").Value; 
@@ -3925,7 +4242,7 @@ namespace WICR_Estimator.ViewModels
 
                 SubContractProfitMargin = dbData.LaborDBData.First(x => x.Name == "Profit Margin SubContract").Value; 
 
-            }
+            
         }
 
         public virtual SystemMaterial createSMObjectDB(string matName,string units)
@@ -4015,6 +4332,7 @@ namespace WICR_Estimator.ViewModels
                     IsMaterialChecked = getCheckboxCheckStatus(matName),
                     IsMaterialEnabled = getCheckboxEnabledStatus(matName),
                     IncludeInLaborMinCharge = IncludedInLaborMin(matName),
+                    IsCheckboxDependent = GetCheckBoxDependency(matName),
                     AllEditable = getEditable()
                 });
             }

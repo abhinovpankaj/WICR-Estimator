@@ -24,6 +24,8 @@ using System.Threading;
 using System.Drawing;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
+using WICR_Estimator.DBModels;
+using WICR_Estimator.Services;
 
 namespace WICR_Estimator.ViewModels
 {
@@ -855,7 +857,7 @@ namespace WICR_Estimator.ViewModels
                 return false;
         }
 
-        private void SaveProjectEstimate(object obj)
+        private async void SaveProjectEstimate(object obj)
         {
             ////serialize Enabled Project Data and Save
 
@@ -872,13 +874,20 @@ namespace WICR_Estimator.ViewModels
 
             if (saveFileDialog1.FileName != "")
             {
-                //// Insert code to set properties and fields of the object.  
-                //XmlSerializer mySerializer = new XmlSerializer(typeof(ObservableCollection<Project>));
-                //// To write to a file, create a StreamWriter object.  
-                //StreamWriter myWriter = new StreamWriter(saveFileDialog1.FileName);
-                //mySerializer.Serialize(myWriter, SelectedProjects);
-                //myWriter.Close();
+                int myEstimateID;
                 var serializer = new DataContractSerializer(typeof(ObservableCollection<Project>));
+                if (SelectedProjects[0].EstimateID!=0)
+                {
+                    myEstimateID = SelectedProjects[0].EstimateID;
+                }
+                else
+                {
+                    //var createdOn = JobCreationDate == null ? DateTime.UtcNow : JobCreationDate;
+                    EstimateDB myEstimate = new EstimateDB(JobName, PreparedBy, JobCreationDate, ProjectTotals);
+                    //Add Estimate to DB, get EstimateID
+                    var estimate = await HTTPHelper.PostEstimate(myEstimate);
+                    myEstimateID = estimate.EstimateID;
+                }
                 
                 using (var sw = new StringWriter())
                 {
@@ -889,14 +898,67 @@ namespace WICR_Estimator.ViewModels
                         {
                             item.MaterialViewModel.CalculateCost(null);
                             item.UpdateMainTable();
-                            UpdateProjectTotals();
+                            
+                           
                             item.CreationDetails = JobName + ":;" + PreparedBy + ":;" + JobCreationDate.ToString();
                             item.ProductVersion = "3.0";
+                            //Update DB
+                            
+                            
+                            if (item.EstimateID!=0)
+                            {
+                                //Get the estimate from DB
+                                
+                                ProjectDetailsDB prjDB = new ProjectDetailsDB();
+                                prjDB.EstimateID = item.EstimateID;
+                                prjDB.LaborCost = item.LaborCost;
+                                prjDB.LaborPercentage = item.LaborPercentage;
+                                prjDB.MaterialCost = item.MaterialCost;
+                                prjDB.SlopeCost = item.SlopeCost;
+                                prjDB.MetalCost = item.MetalCost;
+                                prjDB.SystemCost = item.SystemNOther;
+                                prjDB.CostPerSqFoot = item.CostPerSqFoot;
+                                prjDB.TotalCost = item.TotalCost;
+                                prjDB.ProjectDetailID = item.ProjectID;
+                                await HTTPHelper.PutProjectDetails(item.ProjectID, prjDB);
+                            }
+                            else
+                            {                               
+                                ProjectDetailsDB prjDB = new ProjectDetailsDB();
+                                prjDB.EstimateID = myEstimateID;
+                                prjDB.LaborCost = item.LaborCost;
+                                prjDB.LaborPercentage = item.LaborPercentage;
+                                prjDB.MaterialCost = item.MaterialCost;
+                                prjDB.SlopeCost = item.SlopeCost;
+                                prjDB.MetalCost = item.MetalCost;
+                                prjDB.SystemCost = item.SystemNOther;
+                                prjDB.CostPerSqFoot = item.CostPerSqFoot;
+                                prjDB.TotalCost = item.TotalCost;
+                                
+                                ProjectDetailsDB prj= await HTTPHelper.PostProjectDetails(prjDB);
+                                if (prj!=null)
+                                {
+                                    item.ProjectID = prj.ProjectDetailID;
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Failed to Post the project to DB", "Failure");
+                                }
+                                
+                            }
+                            item.EstimateID = myEstimateID;
                         }
+                       
+                        UpdateProjectTotals();
+                        var updatedEstimate = new EstimateDB(JobName, PreparedBy, JobCreationDate, ProjectTotals);
+                        updatedEstimate.EstimateID = myEstimateID;
+                        await HTTPHelper.PutEstimate(myEstimateID,updatedEstimate );
+                        
                         serializer.WriteObject(writer,SelectedProjects );
                         
                         writer.Flush();
                         MessageBox.Show("Project Estimate Saved Succesfully","Success");
+                        
                     }
                 }
 

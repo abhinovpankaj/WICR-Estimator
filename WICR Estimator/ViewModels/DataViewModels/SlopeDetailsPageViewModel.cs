@@ -13,6 +13,8 @@ namespace WICR_Estimator.ViewModels.DataViewModels
     {
         private IEnumerable<SlopeDB> SlopesFilterByProject;
         public string SearchText { get; set; } = "";
+        public int SelectedProjectCount { get; set; }
+
         private DelegateCommand _searchCommand;
         public DelegateCommand SearchCommand
         {
@@ -27,6 +29,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             }
 
         }
+        
         private DelegateCommand _updateSlopesCommand;
         public DelegateCommand UpdateSlopesCommand
         {
@@ -41,7 +44,41 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             }
 
         }
+        
+        private bool allSelected;
+        public bool AllSelected
+        {
+            get
+            {
+                return this.allSelected;
+            }
+            set
+            {
+                if (value != allSelected)
+                {
+                    allSelected = value;
+                    foreach (var frt in this.FilteredSystemSlopes)
+                        frt.IsChecked = value;
+                    OnPropertyChanged("AllSelected");
+                }
 
+            }
+        }
+        private bool _checkAllProjects;
+        public bool CheckAllProjects
+        {
+            get { return _checkAllProjects; }
+            set
+            {
+                _checkAllProjects = value;
+                foreach (var item in Projects)
+                {
+                    item.IsSelected = value;
+                }
+                OnPropertyChanged("CheckAllProjects");
+                OnPropertyChanged("Projects");
+            }
+        }
         private bool CanUpdate(object obj)
         {
             return true;
@@ -55,7 +92,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
                 LastActionResponse = "Failed to save the data";
             }
             else
-                LastActionResponse = "Changes Saved Successfully.";
+                LastActionResponse = "Changes Saved Successfully." + FilteredSystemSlopes.Count + " Slopes updated.";
 
         }
 
@@ -81,14 +118,40 @@ namespace WICR_Estimator.ViewModels.DataViewModels
 
         private void SearchSlope(object obj)
         {
+            UpdateSelectedProjectMaterials();
             if (SlopesFilterByProject != null)
             {
                 FilteredSystemSlopes = SlopesFilterByProject.Where(x => x.SlopeName.ToUpper().Contains(SearchText.ToUpper())).ToObservableCollection();
             }
             else
                 FilteredSystemSlopes = Slopes.Where(x => x.SlopeName.ToUpper().Contains(SearchText.ToUpper())).ToObservableCollection();
+
+            foreach (var item in FilteredSystemSlopes)
+            {
+                item.HookCheckBoxAction(OnSelectionChanged);
+            }
         }
 
+        private void UpdateSelectedProjectMaterials()
+        {
+            List<int> selectedIDs = new List<int>();
+            foreach (var item in Projects)
+            {
+
+                if (item.IsSelected)
+                {
+                    selectedIDs.Add(item.ProjectId);
+                }
+
+            }
+            if (selectedIDs.Count == 0)
+            {
+                SlopesFilterByProject = Slopes.Where(x => x.ProjectId == 1);
+
+            }
+            else
+                SlopesFilterByProject = Slopes.Join(selectedIDs, x => x.ProjectId, id => id, (x, id) => x);
+        }
         private bool CanSearch(object obj)
         {
             if (SearchText != null)
@@ -104,7 +167,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
 
             }
 
-            return false;
+            return true;
 
         }
 
@@ -225,6 +288,10 @@ namespace WICR_Estimator.ViewModels.DataViewModels
         private async Task GetProjects()
         {
             Projects = await HTTPHelper.GetProjectsAsync();
+            foreach (var item in Projects)
+            {
+                item.HookCheckBoxAction(OnProjectSelectionChanged);
+            }
         }
         private async Task GetSlopes()
         {
@@ -233,8 +300,43 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             {
                 FilteredSystemSlopes = Slopes.Where(x => x.ProjectId == 1).ToObservableCollection();
             }
-            
+
+            foreach (var item in FilteredSystemSlopes)
+            {
+                item.HookCheckBoxAction(OnSelectionChanged);
+            }
         }
+
+        private void OnSelectionChanged(bool value)
+        {
+            if (allSelected && !value)
+            { 
+                allSelected = false;
+                OnPropertyChanged("AllSelected");
+            }
+            else if (!allSelected && this.FilteredSystemSlopes.All(c => c.IsChecked))
+            { 
+                allSelected = true;
+                OnPropertyChanged("AllSelected");
+            }
+        }
+
+        private void OnProjectSelectionChanged(bool value)
+        {
+            if (_checkAllProjects && !value)
+            { // all are selected, and one gets turned off
+                _checkAllProjects = false;
+                OnPropertyChanged("CheckAllProjects");
+            }
+            else if (!_checkAllProjects && this.Projects.All(c => c.IsSelected))
+            { // last one off one gets turned on, resulting in all being selected
+                _checkAllProjects = true;
+                OnPropertyChanged("CheckAllProjects");
+            }
+            SelectedProjectCount = Projects.Where(c => c.IsSelected).Count();
+            OnPropertyChanged("SelectedProjectCount");
+        }
+
         private void GetSlopesById(int id)
         {
             //Slopes = HTTPHelper.getSlopes().ToObservableCollection();

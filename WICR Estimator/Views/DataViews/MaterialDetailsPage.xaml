@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WICR_Estimator"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="1000"
+      d:DesignHeight="1050" d:DesignWidth="1000"
       Background="{DynamicResource MaterialDesignPaper}"
       FontFamily="{DynamicResource MaterialDesignFont}"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -15,9 +15,56 @@
      TextOptions.TextFormattingMode="Ideal"
      TextOptions.TextRenderingMode="Auto"
      >
-
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="projectSource" Source="{Binding Projects}"/>
+        <Style TargetType="{x:Type Slider}">
+            <Style.Resources>
+                <Style x:Key="RepeatButtonStyle" TargetType="{x:Type RepeatButton}">
+                    <Setter Property="Focusable" Value="false" />
+                    <Setter Property="IsTabStop" Value="false" />
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="Width" Value="20" />
+                </Style>
+            </Style.Resources>
+            <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
+            <Setter Property="SmallChange" Value=".05" />
+            <!--<Setter Property="TickFrequency" Value=".05" />-->
+            
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Slider}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.RowSpan="2"  Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                             Height="Auto" materialDesign:HintAssist.Hint="%" 
+                             Margin="0" Padding="0" VerticalAlignment="Stretch" VerticalContentAlignment="Center"
+                             Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Value,StringFormat=N2}" />
+                            <RepeatButton Grid.Row="0" Grid.Column="1" Command="{x:Static Slider.IncreaseSmall}" Style="{StaticResource RepeatButtonStyle}">
+                                <Path Data="M4,0 L0,4 8,4 Z" Fill="Black" />
+                            </RepeatButton>
+                            <RepeatButton Grid.Row="1" Grid.Column="1" Command="{x:Static Slider.DecreaseSmall}" Style="{StaticResource RepeatButtonStyle}">
+                                <Path Data="M0,0 L4,4 8,0 Z" Fill="Black" />
+                            </RepeatButton>
+                            <Border x:Name="TrackBackground" Visibility="Collapsed">
+                                <Rectangle x:Name="PART_SelectionRange" Visibility="Collapsed" />
+                            </Border>
+                            <Thumb x:Name="Thumb" Visibility="Collapsed" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     <DockPanel>
-        <StatusBar DockPanel.Dock="Bottom">
+        <StatusBar DockPanel.Dock="Bottom"
+                   Background="{StaticResource ProgressBrush}">
             <StatusBarItem>
                 <TextBlock Text="{Binding LastActionResponse }" />
             </StatusBarItem>
@@ -75,14 +122,22 @@
                   HorizontalAlignment="Left">
 
                     </ComboBox>-->
-                    <ComboBox ItemsSource="{Binding Projects}"                          
-                          
-                 Margin="10,0,10,10"  Width="300"
-                  HorizontalAlignment="Left">
+                   
+                    <ComboBox Margin="10,0,10,10"  Width="300"
+                              Text="Select Project" IsReadOnly="True"
+                               TextSearch.TextPath ="Name"
+                              HorizontalAlignment="Left">
+                        <ComboBox.ItemsSource>
+                            <CompositeCollection>
+                                <ComboBoxItem >
+                                    <CheckBox  Name="all" IsChecked="{Binding CheckAllProjects}">Select All</CheckBox>
+                                </ComboBoxItem>
+                                <CollectionContainer Collection="{Binding Source={StaticResource projectSource}}"/>
+                            </CompositeCollection>
+                        </ComboBox.ItemsSource>
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <CheckBox  Width="220"   
-                                           
+                                <CheckBox  Width="220"                                             
                                            Content="{Binding Name}" 
                                            IsChecked="{Binding IsSelected}" 
                                            >
@@ -91,6 +146,11 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                 </StackPanel>
+                <ToggleButton     Content="{Binding SelectedProjectCount}" 
+                                  IsChecked="{Binding CheckAllProjects}"
+                                  Style="{StaticResource MaterialDesignActionAccentToggleButton}"
+                                  ToolTip="Count of All Selected Projects"
+                                  materialDesign:ShadowAssist.ShadowDepth="Depth3" />
                 <Button Margin="30,10" 
                                 Command="{Binding SearchCommand}">
                     <Button.Content>
@@ -110,7 +170,11 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width=".25*"/>
                 </Grid.ColumnDefinitions>
-                <StackPanel>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
                     <ScrollViewer VerticalScrollBarVisibility="Auto"
                                   Height="450">
                         <DataGrid AutoGenerateColumns="False" 
@@ -126,6 +190,12 @@
                         ItemsSource="{Binding FilteredSystemMaterials,UpdateSourceTrigger=PropertyChanged}" >
                             <DataGrid.Columns>
                                 <DataGridCheckBoxColumn Binding="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridCheckBoxColumn.Header>
+                                        <CheckBox IsChecked="{Binding Path=DataContext.AllSelected,
+                                                           UpdateSourceTrigger=PropertyChanged,
+                                                           RelativeSource={RelativeSource FindAncestor,
+                                                               AncestorType={x:Type DataGrid}}}" />
+                                    </DataGridCheckBoxColumn.Header>
                                     <DataGridCheckBoxColumn.ElementStyle>
                                         <Style TargetType="CheckBox"/>
                                     </DataGridCheckBoxColumn.ElementStyle>
@@ -165,20 +235,56 @@
 
                         </DataGrid>
                     </ScrollViewer>
-
-                    <Button Margin="10" Command="{Binding UpdateMaterialsCommand}"
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                                Grid.Row="1">
+                        <ComboBox Width="200" Margin="10"
+                                  materialDesign:HintAssist.Hint="Select Factor"
+                                  materialDesign:HintAssist.HintOpacity=".5"
+                                  IsEditable="False"
+                                  SelectedItem="{Binding SelectedFactor}">
+                        <ComboBoxItem IsSelected="True" Opacity=".5">
+                            Select Factor
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                                Price
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                Coverage
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                Weight
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                Horizontal Prod. Rate
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                            Vertical Prod. Rate
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                Stair Prod. Rate
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                Min. Labor Charge
+                            </ComboBoxItem>
+                        </ComboBox>
+                        <Slider Maximum="100" Minimum="-50"
+                                Foreground="Black"  TickFrequency="0.05"
+                                Width="100" Value="{Binding UpdateFactor}"
+                                Margin="10"></Slider>
+                        <Button Margin="10" Command="{Binding UpdateMaterialsCommand}"
                                 HorizontalAlignment="Right" Width="150">
-                        <Button.Content>
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Update"
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Update"
                                                 VerticalAlignment="Center"/>
-                                <TextBlock Text="Update All" Margin="5,0"/>
-                            </StackPanel>
+                                    <TextBlock Text="Update All" Margin="5,0"/>
+                                </StackPanel>
 
-                        </Button.Content>
-                    </Button>
-                </StackPanel>
-
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                    
+               
                 <StackPanel Grid.Column="1" HorizontalAlignment="Right"
                             Margin="10,0,10,0">
                     <TextBlock Text="{Binding SelectedMaterial.MaterialName}"

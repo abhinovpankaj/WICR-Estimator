@@ -216,7 +216,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateIndependentProject
             </ListView.ItemContainerStyle>
             
         </ListView>
-        <Grid  Grid.Column="1" Grid.RowSpan="2">
+        <Grid  Grid.Column="1" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
@@ -351,7 +351,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateIndependentProject
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
                                         <materialDesign:PackIcon Kind="RefreshCircle" VerticalAlignment="Center"/>
-                                        <TextBlock Text="Refresh Google Data" Margin="10,0,0,0"
+                                        <TextBlock Text="Refresh Prices" Margin="10,0,0,0"
                                        VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button.Content>
@@ -380,10 +380,10 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateIndependentProject
                 
                 <TextBox materialDesign:HintAssist.Hint="Job Name" Text="{Binding JobName}"
                          Margin="10,10" Width="200"
-            Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}" VerticalAlignment="Top" />
+            Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}" VerticalAlignment="Bottom" />
 
                 <TextBox materialDesign:HintAssist.Hint="Prepared By"
-                         VerticalAlignment="Top" Margin="10,10" Width="200"
+                         VerticalAlignment="Bottom" Margin="10,10" Width="200"
                          Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
                      Text="{Binding PreparedBy}"
                      />
@@ -392,16 +392,18 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateIndependentProject
                         SelectedDate="{Binding JobCreationDate, Mode=TwoWay,
                         UpdateSourceTrigger=PropertyChanged,
                         TargetNullValue={x:Static System:DateTime.Now}}"
-                        VerticalAlignment="Top"
+                        VerticalAlignment="Bottom"
                         VerticalContentAlignment="Bottom"
                         HorizontalContentAlignment="Left"/>
-            <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" VerticalAlignment="Top"
-                                     Height="50" Width="50"
-                                     ToolTip="Project Totals"
-                                     UniformCornerRadius="20"
-                                     Margin="20,5,0,0" Background="{StaticResource   SecondaryAccentBrush }">
-                <materialDesign:PopupBox Name="Totals" PopupMode="MouseOverEager" HorizontalAlignment="Center">
-                    
+            <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" VerticalAlignment="Bottom"
+                                 HorizontalAlignment="Right"
+                                 HorizontalContentAlignment="Center"
+                                ToolTip="Project Totals"
+                                UniformCornerRadius="15"
+                                Margin="150,5,0,0" Background="{StaticResource   SecondaryAccentBrush }">
+                <materialDesign:Card Name="Totals" HorizontalAlignment="Center"
+                                     Padding="10">
+                     
                     <Grid DataContext="{Binding ProjectTotals,UpdateSourceTrigger=PropertyChanged}"
                       HorizontalAlignment="Stretch"
                       MinWidth="200"
@@ -459,7 +461,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateIndependentProject
 
                     </Grid>
                     <!--</GroupBox>-->
-                </materialDesign:PopupBox>
+                </materialDesign:Card>
             </materialDesign:Card>
         </StackPanel>
        
