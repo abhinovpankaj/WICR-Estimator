@@ -14,7 +14,8 @@ namespace WICR_Estimator.ViewModels.DataViewModels
         #region Laborfactors
         private IEnumerable<LaborFactorDB> LaborFactorsFilterByProject;
         private bool allLaborSelected;
-
+        public int SelectedProjectCount { get; set; }
+        public double UpdateFactor { get; set; }
         public bool AllLaborSelected
         {
             get
@@ -47,6 +48,21 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             }
 
         }
+        private bool _checkAllProjects;
+        public bool CheckAllProjects
+        {
+            get { return _checkAllProjects; }
+            set
+            {
+                _checkAllProjects = value;
+                foreach (var item in Projects)
+                {
+                    item.IsSelected = value;
+                }
+                OnPropertyChanged("CheckAllProjects");
+                OnPropertyChanged("Projects");
+            }
+        }
 
         private bool CanUpdate(object obj)
         {
@@ -55,13 +71,19 @@ namespace WICR_Estimator.ViewModels.DataViewModels
 
         private async void UpdateLaborFactors(object obj)
         {
-            var result = await HTTPHelper.PutLaborFactorsAsync(FilteredLaborFactors.Where(x => x.IsChecked == true));
+            LastActionResponse = "";
+            var filteredlabors = FilteredLaborFactors.Where(x => x.IsChecked == true);
+            foreach (var item in filteredlabors)
+            {
+                item.Value = item.Value * (1 + UpdateFactor);
+            }
+            var result = await HTTPHelper.PutLaborFactorsAsync(filteredlabors);
             if (result == null)
             {
                 LastActionResponse = "Failed to save the data";
             }
             else
-                LastActionResponse = "Changes Saved Successfully.";
+                LastActionResponse = "Changes Saved Successfully. " + filteredlabors.Count() + " factors updated successfully.";
 
         }
 
@@ -82,11 +104,21 @@ namespace WICR_Estimator.ViewModels.DataViewModels
 
         private async void UpdateLaborFactor(object obj)
         {
-            SelectedLaborFactor = await HTTPHelper.PutLaborFactorAsync(SelectedLaborFactor.LaborId, SelectedLaborFactor);
+            var result  = await HTTPHelper.PutLaborFactorAsync(SelectedLaborFactor.LaborId, SelectedLaborFactor);
+            if (result == null)
+            {
+                LastActionResponse = "Failed to Save data.";
+            }
+            else
+            {
+                LastActionResponse = "Changes Saved Successfully.";
+                SelectedLaborFactor = result;
+            }
         }
 
         private void SearchLaborFactor(object obj)
         {
+            UpdateSelectedProjectLaborFactors();
             if (LaborFactorsFilterByProject != null)
             {
                 FilteredLaborFactors = LaborFactorsFilterByProject.Where(x => x.Name.ToUpper().Contains(SearchText.ToUpper())).ToObservableCollection();
@@ -96,6 +128,26 @@ namespace WICR_Estimator.ViewModels.DataViewModels
 
         }
 
+        private void UpdateSelectedProjectLaborFactors()
+        {
+            List<int> selectedIDs = new List<int>();
+            foreach (var item in Projects)
+            {
+
+                if (item.IsSelected)
+                {
+                    selectedIDs.Add(item.ProjectId);
+                }
+
+            }
+            if (selectedIDs.Count == 0)
+            {
+                LaborFactorsFilterByProject = LaborFactors.Where(x => x.ProjectId == 1);
+
+            }
+            else
+                LaborFactorsFilterByProject = LaborFactors.Join(selectedIDs, x => x.ProjectId, id => id, (x, id) => x);
+        }
         private bool CanSearch(object obj)
         {
             if (SearchText != null)
@@ -111,7 +163,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
 
             }
 
-            return false;
+            return true;
 
         }
 
@@ -163,6 +215,22 @@ namespace WICR_Estimator.ViewModels.DataViewModels
                     OnPropertyChanged("SelectedLaborFactor");
                 }
             }
+        }
+
+        private void OnProjectSelectionChanged(bool value)
+        {
+            if (_checkAllProjects && !value)
+            { // all are selected, and one gets turned off
+                _checkAllProjects = false;
+                OnPropertyChanged("CheckAllProjects");
+            }
+            else if (!_checkAllProjects && this.Projects.All(c => c.IsSelected))
+            { // last one off one gets turned on, resulting in all being selected
+                _checkAllProjects = true;
+                OnPropertyChanged("CheckAllProjects");
+            }
+            SelectedProjectCount = Projects.Where(c => c.IsSelected).Count();
+            OnPropertyChanged("SelectedProjectCount");
         }
 
         private async Task GetLaborFactors()
@@ -398,6 +466,10 @@ namespace WICR_Estimator.ViewModels.DataViewModels
                 await GetProjects();
                 await GetLaborFactors();
                 await GetFreightFactors();
+            }
+            foreach (var item in Projects)
+            {
+                item.HookCheckBoxAction(OnProjectSelectionChanged);
             }
 
         }

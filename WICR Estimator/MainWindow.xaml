@@ -25,6 +25,9 @@
         Loaded="Window_Loaded" Closing="Window_Closing" WindowStartupLocation="CenterOwner"
        >
     <Window.Resources>
+        <DataTemplate DataType="{x:Type myVM:LoginPageViewModel}">
+            <myViews:LoginPage />
+        </DataTemplate>
         <DataTemplate DataType="{x:Type myVM:HomeViewModel}">
             <myViews:HomePage />
         </DataTemplate>
@@ -120,6 +123,19 @@
                     CommandParameter="{x:Static Dock.Left}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
+                    <ListViewItem Height="45" Padding="0" x:Name="Login">
+
+                        <StackPanel Orientation="Horizontal" Margin="10,0">
+                            <materialDesign:PackIcon Foreground="{StaticResource AccentColorBrush}"
+                                                     
+                                                     VerticalAlignment="Center"
+                                                     Margin="5"
+                                Kind="Login"/>
+                            <TextBlock Text="Login" Margin="10"/>
+                        </StackPanel>
+
+
+                    </ListViewItem>
                     <ListViewItem Height="45" Padding="0" x:Name="Estimates">
 
                         <StackPanel Orientation="Horizontal" Margin="10,0">
@@ -143,16 +159,7 @@
                             <TextBlock Text="Projects" Margin="10"/>
                         </StackPanel>
                     </ListViewItem>
-                    <ListViewItem Height="45" Padding="0" x:Name="Login">
-                        <StackPanel Orientation="Horizontal" Margin="10,0">
-                            <materialDesign:PackIcon Width="20" Foreground="{StaticResource HighlightBrush}"
-                                                     Height="20"
-                                                     VerticalAlignment="Center"
-                                                     Margin="5"
-                                Kind="Login"/>
-                            <TextBlock Text="Login" Margin="10"/>
-                        </StackPanel>
-                    </ListViewItem>
+                    
 
                     <ListViewItem Height="45" Padding="0"  x:Name="Prices" IsEnabled="False">
                         <StackPanel Orientation="Horizontal" Margin="10,0">

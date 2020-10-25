@@ -18,9 +18,9 @@ namespace WICR_Estimator
         public string SearchText { get; set; } = "";
         public string SelectedFactor { get; set; }
         public double UpdateFactor { get; set; }
-
-        private bool allSelected;
         public int SelectedProjectCount { get; set; }
+        private bool allSelected;
+        
         public bool AllSelected
         {
             get

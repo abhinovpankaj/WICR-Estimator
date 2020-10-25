@@ -14,6 +14,52 @@
              TextElement.FontSize="13"
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type Slider}">
+            <Style.Resources>
+                <Style x:Key="RepeatButtonStyle" TargetType="{x:Type RepeatButton}">
+                    <Setter Property="Focusable" Value="false" />
+                    <Setter Property="IsTabStop" Value="false" />
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="Width" Value="20" />
+                </Style>
+            </Style.Resources>
+            <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
+            <Setter Property="SmallChange" Value=".05" />
+            <!--<Setter Property="TickFrequency" Value=".05" />-->
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Slider}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.RowSpan="2"  Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                             Height="Auto" materialDesign:HintAssist.Hint="%" 
+                             Margin="0" Padding="0" VerticalAlignment="Stretch" VerticalContentAlignment="Center"
+                             Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Value,StringFormat=N2}" />
+                            <RepeatButton Grid.Row="0" Grid.Column="1" Command="{x:Static Slider.IncreaseSmall}" Style="{StaticResource RepeatButtonStyle}">
+                                <Path Data="M4,0 L0,4 8,4 Z" Fill="Black" />
+                            </RepeatButton>
+                            <RepeatButton Grid.Row="1" Grid.Column="1" Command="{x:Static Slider.DecreaseSmall}" Style="{StaticResource RepeatButtonStyle}">
+                                <Path Data="M0,0 L4,4 8,0 Z" Fill="Black" />
+                            </RepeatButton>
+                            <Border x:Name="TrackBackground" Visibility="Collapsed">
+                                <Rectangle x:Name="PART_SelectionRange" Visibility="Collapsed" />
+                            </Border>
+                            <Thumb x:Name="Thumb" Visibility="Collapsed" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -81,6 +127,17 @@
                         ItemsSource="{Binding FilteredSystemMetals,UpdateSourceTrigger=PropertyChanged}" >
                         <DataGrid.Columns>
                             <DataGridCheckBoxColumn Binding="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridCheckBoxColumn.Header>
+                                    <CheckBox IsChecked="{Binding Path=DataContext.AllSelected,
+                                                           UpdateSourceTrigger=PropertyChanged,
+                                                           RelativeSource={RelativeSource FindAncestor,
+                                                               AncestorType={x:Type DataGrid}}}" />
+                                </DataGridCheckBoxColumn.Header>
+                                <DataGridCheckBoxColumn.ElementStyle>
+                                    <Style TargetType="CheckBox"/>
+                                </DataGridCheckBoxColumn.ElementStyle>
+                            </DataGridCheckBoxColumn>
+                            <DataGridCheckBoxColumn Binding="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}">
                                 <DataGridCheckBoxColumn.ElementStyle>
                                     <Style TargetType="CheckBox"/>
                                 </DataGridCheckBoxColumn.ElementStyle>
@@ -111,19 +168,43 @@
 
                     </DataGrid>
                 </ScrollViewer>
-
-                <Button Grid.Row="1"
+                <StackPanel Orientation="Horizontal" Grid.Row="1"
+                            HorizontalAlignment="Right">
+                    <ComboBox Width="200" Margin="10"
+                              
+                                  materialDesign:HintAssist.Hint="Select Factor"
+                                  materialDesign:HintAssist.HintOpacity=".5"
+                                  IsEditable="False"
+                                  SelectedItem="{Binding SelectedFactor}">
+                        <ComboBoxItem IsSelected="True" Opacity=".5">
+                            Select Factor
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            Metal Price
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            Production Rate
+                        </ComboBoxItem>
+                        
+                    </ComboBox>
+                    <Slider Maximum="100" Minimum="-50"
+                                Foreground="Black"  TickFrequency="0.05"
+                                Width="100" Value="{Binding UpdateFactor}"
+                                Margin="10"></Slider>
+                    <Button 
                         Margin="10" Command="{Binding UpdateMetalsCommand}"
                                 HorizontalAlignment="Right" Width="150">
-                    <Button.Content>
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Update"
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Update"
                                                 VerticalAlignment="Center"/>
-                            <TextBlock Text="Update All" Margin="5,0"/>
-                        </StackPanel>
+                                <TextBlock Text="Update All" Margin="5,0"/>
+                            </StackPanel>
 
-                    </Button.Content>
-                </Button>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+                
             </StackPanel>
 
             <StackPanel Grid.Column="1" HorizontalAlignment="Center"

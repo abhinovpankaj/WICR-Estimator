@@ -35,6 +35,8 @@ namespace WICR_Estimator
         public MainWindowViewModel()
         {
             // Add available pages
+
+            
             PageViewModels.Add(new HomeViewModel());
             PageViewModels.Add(new ProjectViewModel(HomeViewModel.MyselectedProjects));
             PageViewModels.Add(new MaterialDetailsPageViewModel());
@@ -311,6 +313,7 @@ namespace WICR_Estimator
                 return;
             switch (listItem.Name)
             {
+                
                 case "Estimates":
                     ChangeViewModel(PageViewModels[0]);
                     break;

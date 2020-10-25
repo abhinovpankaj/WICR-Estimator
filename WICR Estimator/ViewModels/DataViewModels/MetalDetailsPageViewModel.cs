@@ -34,6 +34,9 @@ namespace WICR_Estimator.ViewModels.DataViewModels
         public List<MetalVendor> Vendors { get; set; }
         public List<MetalItemType  > MetalTypes { get; set; }
 
+        public string SelectedFactor { get; set; }
+        public double UpdateFactor { get; set; }
+
         public MetalVendor _selectedVendors;
         public MetalVendor SelectedVendors
         {
@@ -78,6 +81,27 @@ namespace WICR_Estimator.ViewModels.DataViewModels
         }
 
         //private IEnumerable<MetalDB> MetalsFilterByProject;
+
+        private bool allSelected;
+
+        public bool AllSelected
+        {
+            get
+            {
+                return this.allSelected;
+            }
+            set
+            {
+                if (value != allSelected)
+                {
+                    allSelected = value;
+                    foreach (var frt in this.FilteredSystemMetals)
+                        frt.IsChecked = value;
+                    OnPropertyChanged("AllSelected");
+                }
+
+            }
+        }
         public string SearchText { get; set; } = "";
         private DelegateCommand _searchCommand;
         public DelegateCommand SearchCommand
@@ -115,13 +139,29 @@ namespace WICR_Estimator.ViewModels.DataViewModels
 
         private async void UpdateMetals(object obj)
         {
-            var result = await HTTPHelper.PutMetalsAsync(FilteredSystemMetals.Where(x => x.IsChecked == true));
+            LastActionResponse = "";
+            var filteredMetals = FilteredSystemMetals.Where(x => x.IsChecked == true);
+            foreach (var item in filteredMetals)
+            {
+                switch (SelectedFactor.Split(':')[1].Trim())
+                {
+                    case "Metal Price":
+                        item.MetalPrice = item.MetalPrice * (1 + UpdateFactor);
+                        break;
+                    case "Production Rate":
+                        item.ProductionRate = item.ProductionRate * (1 + UpdateFactor);
+                        break;
+                    
+                }
+            }
+            
+            var result = await HTTPHelper.PutMetalsAsync(filteredMetals);
             if (result == null)
             {
                 LastActionResponse = "Failed to save the data";
             }
             else
-                LastActionResponse = "Changes Saved Successfully.";
+                LastActionResponse = "Changes Saved Successfully."+ filteredMetals.Count() +" metals updated.";
 
         }
 
@@ -301,13 +341,13 @@ namespace WICR_Estimator.ViewModels.DataViewModels
         }
         public MetalDetailsPageViewModel()
         {
-            Vendors = new List<MetalVendor>();
-            Vendors.Add(new MetalVendor { VendorName="Chivon", IsSelected=true });
-            Vendors.Add(new MetalVendor { VendorName = "Thunderbird", IsSelected = true });
-            MetalTypes = new List<MetalItemType>();
-            MetalTypes.Add(new MetalItemType { MetalType = "26 ga. Type 304 Stainless Steel", IsSelected = true });
-            MetalTypes.Add(new MetalItemType { MetalType = "16oz Copper", IsSelected = true });
-            MetalTypes.Add(new MetalItemType { MetalType = "24ga. Galvanized Primed Steel", IsSelected = true });
+            //Vendors = new List<MetalVendor>();
+            //Vendors.Add(new MetalVendor { VendorName="Chivon", IsSelected=true });
+            //Vendors.Add(new MetalVendor { VendorName = "Thunderbird", IsSelected = true });
+            //MetalTypes = new List<MetalItemType>();
+            //MetalTypes.Add(new MetalItemType { MetalType = "26 ga. Type 304 Stainless Steel", IsSelected = true });
+            //MetalTypes.Add(new MetalItemType { MetalType = "16oz Copper", IsSelected = true });
+            //MetalTypes.Add(new MetalItemType { MetalType = "24ga. Galvanized Primed Steel", IsSelected = true });
             getdata();
         }
         private async void getdata()
@@ -319,6 +359,21 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             }
             
         }
+
+        private void OnSelectionChanged(bool value)
+        {
+            if (allSelected && !value)
+            { // all are selected, and one gets turned off
+                allSelected = false;
+                OnPropertyChanged("AllSelected");
+            }
+            else if (!allSelected && this.FilteredSystemMetals.All(c => c.IsChecked))
+            { // last one off one gets turned on, resulting in all being selected
+                allSelected = true;
+                OnPropertyChanged("AllSelected");
+            }
+        }
+
         private async Task GetProjects()
         {
             Projects = await HTTPHelper.GetProjectsAsync();
@@ -332,6 +387,10 @@ namespace WICR_Estimator.ViewModels.DataViewModels
                 FilteredSystemMetals = Metals.Where(x => x.MetalId < 20).ToObservableCollection();
             }
             
+            foreach (var item in FilteredSystemMetals)
+            {
+                item.HookCheckBoxAction(OnSelectionChanged);
+            }
         }
         //private void GetMetalsById(int id)
         //{

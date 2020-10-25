@@ -14,7 +14,8 @@ namespace WICR_Estimator.ViewModels.DataViewModels
         private IEnumerable<SlopeDB> SlopesFilterByProject;
         public string SearchText { get; set; } = "";
         public int SelectedProjectCount { get; set; }
-
+        public string SelectedFactor { get; set; }
+        public double UpdateFactor { get; set; }
         private DelegateCommand _searchCommand;
         public DelegateCommand SearchCommand
         {
@@ -86,13 +87,29 @@ namespace WICR_Estimator.ViewModels.DataViewModels
 
         private async void UpdateSlopes(object obj)
         {
-            var result = await HTTPHelper.PutSlopesAsync(FilteredSystemSlopes.Where(x => x.IsChecked == true));
+            LastActionResponse = "";
+            var filteredSlopes = FilteredSystemSlopes.Where(x => x.IsChecked == true);
+            foreach (var item in filteredSlopes)
+            {
+                switch (SelectedFactor.Split(':')[1].Trim())
+                {
+                    case "Labor Rate":
+                        item.LaborRate = item.LaborRate * (1 + UpdateFactor);
+                        break;
+                    case "Cost per Mix":
+                        item.PerMixCost = item.PerMixCost * (1 + UpdateFactor);
+                        break;
+
+                }
+            }
+
+            var result = await HTTPHelper.PutSlopesAsync(filteredSlopes);
             if (result==null)
             {
                 LastActionResponse = "Failed to save the data";
             }
             else
-                LastActionResponse = "Changes Saved Successfully." + FilteredSystemSlopes.Count + " Slopes updated.";
+                LastActionResponse = "Changes Saved Successfully." + filteredSlopes.Count() + " Slopes updated.";
 
         }
 

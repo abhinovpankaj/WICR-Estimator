@@ -14,6 +14,53 @@
              TextElement.FontSize="13"
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto">
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="projectSource" Source="{Binding Projects}"/>
+        <Style TargetType="{x:Type Slider}">
+            <Style.Resources>
+                <Style x:Key="RepeatButtonStyle" TargetType="{x:Type RepeatButton}">
+                    <Setter Property="Focusable" Value="false" />
+                    <Setter Property="IsTabStop" Value="false" />
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="Width" Value="20" />
+                </Style>
+            </Style.Resources>
+            <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
+            <Setter Property="SmallChange" Value=".05" />
+            <!--<Setter Property="TickFrequency" Value=".05" />-->
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Slider}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.RowSpan="2"  Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                             Height="Auto" materialDesign:HintAssist.Hint="%" 
+                             Margin="0" Padding="0" VerticalAlignment="Stretch" VerticalContentAlignment="Center"
+                             Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Value,StringFormat=N2}" />
+                            <RepeatButton Grid.Row="0" Grid.Column="1" Command="{x:Static Slider.IncreaseSmall}" Style="{StaticResource RepeatButtonStyle}">
+                                <Path Data="M4,0 L0,4 8,4 Z" Fill="Black" />
+                            </RepeatButton>
+                            <RepeatButton Grid.Row="1" Grid.Column="1" Command="{x:Static Slider.DecreaseSmall}" Style="{StaticResource RepeatButtonStyle}">
+                                <Path Data="M0,0 L4,4 8,0 Z" Fill="Black" />
+                            </RepeatButton>
+                            <Border x:Name="TrackBackground" Visibility="Collapsed">
+                                <Rectangle x:Name="PART_SelectionRange" Visibility="Collapsed" />
+                            </Border>
+                            <Thumb x:Name="Thumb" Visibility="Collapsed" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     <DockPanel>
         <StatusBar DockPanel.Dock="Bottom"
                    Background="{StaticResource ProgressBrush}">
@@ -69,13 +116,34 @@
                     <TextBlock Text="Select the project"
                        Opacity=".68"
                        Margin="10,10,10,0"/>
-                    <ComboBox ItemsSource="{Binding Projects}"
-                                      
-                          DisplayMemberPath="Name"
-                          SelectedItem="{Binding SelectedProject}"
-                 Margin="10,0,10,10"  Width="250"
-                  HorizontalAlignment="Left"/>
+                    <ComboBox Margin="10,0,10,10"  Width="300"
+                              Text="Select Project" IsReadOnly="True"
+                               TextSearch.TextPath ="Name"
+                              HorizontalAlignment="Left">
+                        <ComboBox.ItemsSource>
+                            <CompositeCollection>
+                                <ComboBoxItem >
+                                    <CheckBox  Name="all" IsChecked="{Binding CheckAllProjects}">Select All</CheckBox>
+                                </ComboBoxItem>
+                                <CollectionContainer Collection="{Binding Source={StaticResource projectSource}}"/>
+                            </CompositeCollection>
+                        </ComboBox.ItemsSource>
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox  Width="220"                                             
+                                           Content="{Binding Name}" 
+                                           IsChecked="{Binding IsSelected}" 
+                                           >
+                                </CheckBox>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </StackPanel>
+                <ToggleButton     Content="{Binding SelectedProjectCount}" 
+                                  IsChecked="{Binding CheckAllProjects}"
+                                  Style="{StaticResource MaterialDesignActionAccentToggleButton}"
+                                  ToolTip="Count of All Selected Projects"
+                                  materialDesign:ShadowAssist.ShadowDepth="Depth3" />
                 <Button Margin="30,10" 
                                 Command="{Binding SearchCommand}">
                     <Button.Content>
@@ -207,9 +275,12 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width=".45*"/>
                         </Grid.ColumnDefinitions>
-                        <StackPanel>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
                             <ScrollViewer VerticalScrollBarVisibility="Auto"
-                                  Height="450">
+                                  Height="450" VerticalAlignment="Top">
                                 <DataGrid AutoGenerateColumns="False" 
                                             HorizontalAlignment="Left"
                                             Name="LaborGrid" 
@@ -246,8 +317,13 @@
 
                                 </DataGrid>
                             </ScrollViewer>
-
-                            <Button Grid.Row="1"
+                        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
+                            
+                            <Slider Maximum="100" Minimum="-50"
+                                Foreground="Black"  TickFrequency="0.05"
+                                Width="100" Value="{Binding UpdateFactor}"
+                                Margin="10"></Slider>
+                            <Button 
                         Margin="10" Command="{Binding UpdateLaborFactorsCommand}"
                                 HorizontalAlignment="Right" Width="150">
                                 <Button.Content>
@@ -259,7 +335,8 @@
 
                                 </Button.Content>
                             </Button>
-                        </StackPanel>
+                            </StackPanel>
+                        
 
                         <StackPanel Grid.Column="1" HorizontalAlignment="Left"
                             Margin="10,0,10,0">
