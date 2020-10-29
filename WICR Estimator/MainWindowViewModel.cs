@@ -12,7 +12,9 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Xml;
+using WICR_Estimator.DBModels;
 using WICR_Estimator.Models;
+using WICR_Estimator.Services;
 using WICR_Estimator.ViewModels;
 using WICR_Estimator.ViewModels.DataViewModels;
 using WICR_Estimator.Views;
@@ -31,12 +33,14 @@ namespace WICR_Estimator
         private DelegateCommand _closeWindowCommand;
         private DelegateCommand _navigationCommand;
         #endregion
+        public bool IsUserAdmin { get; set; }
+        public bool IsUserLoggedIn { get; set; }
 
+        public string Username { get; set; }
         public MainWindowViewModel()
         {
             // Add available pages
-
-            
+           
             PageViewModels.Add(new HomeViewModel());
             PageViewModels.Add(new ProjectViewModel(HomeViewModel.MyselectedProjects));
             PageViewModels.Add(new MaterialDetailsPageViewModel());
@@ -45,9 +49,21 @@ namespace WICR_Estimator
             PageViewModels.Add(new MetalDetailsPageViewModel());
             PageViewModels.Add(new LaborFactorDetailsPageViewModel());
             // Set starting page
-            CurrentPageViewModel = PageViewModels[0];
+            CurrentPageViewModel = PageViewModels[3];
             CurWindowState = WindowState.Maximized;
+            LoginPageViewModel.OnLoggedIn += LoginPage_OnLoggedIn;
             //WindowStyle = WindowStyle.SingleBorderWindow;
+        }
+
+        private void LoginPage_OnLoggedIn(object sender, EventArgs e)
+        {
+            IsUserLoggedIn = true;
+            OnPropertyChanged("IsUserLoggedIn");
+            var user=(UserDB)sender;
+            IsUserAdmin = user.IsAdmin;
+            Username = user.Username;
+            OnPropertyChanged("IsUserAdmin");
+            CurrentPageViewModel= PageViewModels[0];
         }
 
         #region Properties / Commands
@@ -162,9 +178,11 @@ namespace WICR_Estimator
             }
         }
 
-        public void SaveEstimate(ObservableCollection<Project> SelectedProjects)
+        public async void SaveEstimate(ObservableCollection<Project> SelectedProjects)
         {
-            string JobCreationDate = string.Empty, JobName = string.Empty, PreparedBy = string.Empty;
+            DateTime? JobCreationDate = DateTime.Now;
+            string JobName = string.Empty, PreparedBy = string.Empty;
+            ProjectsTotal ProjectTotals=null;
 
             if (HomeViewModel.filePath == null)
             {
@@ -199,11 +217,26 @@ namespace WICR_Estimator
                     {
                         JobName = hm.JobName;
                         PreparedBy = hm.PreparedBy;
-                        JobCreationDate = hm.JobCreationDate.ToString();
+                        JobCreationDate = hm.JobCreationDate;
+                        ProjectTotals = hm.ProjectTotals;
                     }
                 }
                 var serializer = new DataContractSerializer(typeof(ObservableCollection<Project>));
-
+                //Savee to DB  part
+                int myEstimateID;
+                if (SelectedProjects[0].EstimateID != 0)
+                {
+                    myEstimateID = SelectedProjects[0].EstimateID;
+                }
+                else
+                {
+                    
+                    EstimateDB myEstimate = new EstimateDB(JobName, PreparedBy, JobCreationDate, ProjectTotals);
+                    //Add Estimate to DB, get EstimateID
+                    var estimate = await HTTPHelper.PostEstimate(myEstimate);
+                    myEstimateID = estimate.EstimateID;
+                }
+                //save db ends 
                 using (var sw = new StringWriter())
                 {
                     using (var writer = new XmlTextWriter(HomeViewModel.filePath, null))
@@ -218,20 +251,69 @@ namespace WICR_Estimator
 
                             item.CreationDetails = JobName + ":;" + PreparedBy + ":;" + JobCreationDate.ToString();
                             item.ProductVersion = "3.0";
+                            //Update DB
+                            if (item.EstimateID != 0)
+                            {
+                                //Get the estimate from DB
+
+                                ProjectDetailsDB prjDB = new ProjectDetailsDB();
+                                prjDB.EstimateID = item.EstimateID;
+                                prjDB.LaborCost = item.LaborCost;
+                                prjDB.LaborPercentage = item.LaborPercentage;
+                                prjDB.MaterialCost = item.MaterialCost;
+                                prjDB.SlopeCost = item.SlopeCost;
+                                prjDB.MetalCost = item.MetalCost;
+                                prjDB.SystemCost = item.SystemNOther;
+                                prjDB.CostPerSqFoot = item.CostPerSqFoot;
+                                prjDB.TotalCost = item.TotalCost;
+                                prjDB.ProjectDetailID = item.ProjectID;
+                                await HTTPHelper.PutProjectDetails(item.ProjectID, prjDB);
+                            }
+                            else
+                            {
+                                ProjectDetailsDB prjDB = new ProjectDetailsDB();
+                                prjDB.EstimateID = myEstimateID;
+                                prjDB.LaborCost = item.LaborCost;
+                                prjDB.LaborPercentage = item.LaborPercentage;
+                                prjDB.MaterialCost = item.MaterialCost;
+                                prjDB.SlopeCost = item.SlopeCost;
+                                prjDB.MetalCost = item.MetalCost;
+                                prjDB.SystemCost = item.SystemNOther;
+                                prjDB.CostPerSqFoot = item.CostPerSqFoot;
+                                prjDB.TotalCost = item.TotalCost;
+
+                                ProjectDetailsDB prj = await HTTPHelper.PostProjectDetails(prjDB);
+                                if (prj != null)
+                                {
+                                    item.ProjectID = prj.ProjectDetailID;
+                                }
+                                else
+                                {
+                                    System.Windows.MessageBox.Show("Failed to Post the project to DB", "Failure");
+                                }
+
+                            }
+                            item.EstimateID = myEstimateID;
                         }
+                        if (hm != null)
+                            hm.UpdateProjectTotals();
+
+                        var updatedEstimate = new EstimateDB(JobName, PreparedBy, JobCreationDate, ProjectTotals);
+                        updatedEstimate.EstimateID = myEstimateID;
+                        await HTTPHelper.PutEstimate(myEstimateID, updatedEstimate);
+                        //Ends
+
                         serializer.WriteObject(writer, SelectedProjects);
 
                         writer.Flush();
                         //MessageBox.Show("Project Estimate Saved Succesfully", "Success");
                         SetBalloonTip("Project Estimate Saved Succesfully");
-
-                    }
+                    }                    
                 }
                 ViewModels.BaseViewModel.IsDirty = false;
             }
             catch (Exception)
             {
-
                 SetBalloonTip("Failed to Save the Project Estimate.");
             }
 

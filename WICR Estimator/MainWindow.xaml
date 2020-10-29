@@ -114,7 +114,7 @@
 
                 </Image>
                 <ListView x:Name="MenuList" FontSize="18" Margin="0,10,0,0"
-                           >
+                           IsEnabled="{Binding IsUserLoggedIn}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseLeftButtonUp">
                             <i:InvokeCommandAction Command="{Binding NavigationCommand}"
@@ -133,10 +133,9 @@
                                 Kind="Login"/>
                             <TextBlock Text="Login" Margin="10"/>
                         </StackPanel>
-
-
                     </ListViewItem>
-                    <ListViewItem Height="45" Padding="0" x:Name="Estimates">
+                    <ListViewItem Height="45" Padding="0" x:Name="Estimates"
+                                  >
 
                         <StackPanel Orientation="Horizontal" Margin="10,0">
                             <materialDesign:PackIcon Foreground="{StaticResource AccentColorBrush}"
@@ -172,7 +171,8 @@
                         </StackPanel>
                     </ListViewItem>
 
-                    <ListViewItem Height="45" Padding="0"  x:Name="Materials">
+                    <ListViewItem Height="45" Padding="0"  x:Name="Materials"
+                                  IsEnabled="{Binding IsUserAdmin}">
                         <StackPanel Orientation="Horizontal" Margin="25,0">
                             <materialDesign:PackIcon Width="20" Foreground="Gold"
                                                      Height="20"
@@ -183,7 +183,7 @@
                                        FontSize="16"/>
                         </StackPanel>
                     </ListViewItem>
-                    <ListViewItem Height="45" Padding="0" x:Name="Slopes">
+                    <ListViewItem Height="45" Padding="0" x:Name="Slopes" IsEnabled="{Binding IsUserAdmin}">
                         <StackPanel Orientation="Horizontal" Margin="25,0">
                             <materialDesign:PackIcon Width="20" Foreground="Gold"
                                                      Height="20"
@@ -193,7 +193,8 @@
                             <TextBlock Text="Slope Prices" Margin="10" FontSize="16"/>
                         </StackPanel>
                     </ListViewItem>
-                    <ListViewItem Height="45" Padding="0" x:Name="Metals">
+                    <ListViewItem Height="45" Padding="0" x:Name="Metals"
+                                  IsEnabled="{Binding IsUserAdmin}">
                         <StackPanel Orientation="Horizontal" Margin="25,0">
                             <materialDesign:PackIcon Width="20" Foreground="Gold"
                                                      Height="20"
@@ -203,7 +204,8 @@
                             <TextBlock Text="Metal Prices" Margin="10" FontSize="16"/>
                         </StackPanel>
                     </ListViewItem>
-                    <ListViewItem Height="45" Padding="0" x:Name="Laborfactors">
+                    <ListViewItem Height="45" Padding="0" x:Name="Laborfactors"
+                                  IsEnabled="{Binding IsUserAdmin}">
                         <StackPanel Orientation="Horizontal" Margin="25,0">
                             <materialDesign:PackIcon Width="20" Foreground="Gold"
                                                      Height="20"
@@ -252,9 +254,12 @@
                 </Button>
                 <!--<materialDesign:PopupBox HorizontalAlignment="Right" Margin="0,0,80,0"
                                      Content="Actions">-->
-                    <StackPanel Orientation="Horizontal"
+                <StackPanel Orientation="Horizontal" IsEnabled="{Binding IsUserLoggedIn}"
                                 Margin="0,2,150,2"
                                 HorizontalAlignment="Right">
+                    <TextBlock Text="{Binding Username}" Width="100" Margin="2"
+                               VerticalAlignment="Center"
+                               FontWeight="Bold"/>
                     <Button x:Name="Home" Margin="2" Width="100"
                         Command="{Binding DataContext.ChangePageCommand,
                         RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
@@ -270,7 +275,7 @@
                         </Button>
 
                         <Button x:Name="Projects" Margin="2"
-                                Width="100"
+                                Width="120"
                         Command="{Binding DataContext.ChangePageCommand,
                         RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                         CommandParameter="{Binding PageViewModels[1]}">

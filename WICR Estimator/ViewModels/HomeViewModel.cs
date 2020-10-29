@@ -33,7 +33,7 @@ namespace WICR_Estimator.ViewModels
     class HomeViewModel:BaseViewModel,IPageViewModel
     {
         
-        public static event EventHandler OnLoggedAsAdmin;
+        //public static event EventHandler OnLoggedAsAdmin;
         public static event EventHandler OnProjectSelectionChange;
         public static string filePath;
         public static bool isEstimateLoaded;
@@ -45,7 +45,7 @@ namespace WICR_Estimator.ViewModels
             //CheckPriceUpdate();
             Project.OnSelectedProjectChange += Project_OnSelectedProjectChange;
             HidePasswordSection = System.Windows.Visibility.Collapsed;
-            ShowCalculationDetails = new DelegateCommand(CanShowCalculationDetails, canShow);
+            //ShowCalculationDetails = new DelegateCommand(CanShowCalculationDetails, canShow);
             SaveEstimate = new DelegateCommand(SaveProjectEstimate, canSaveEstimate);
             LoadEstimate = new DelegateCommand(LoadProjectEstimate, canLoadEstimate);
             ReplicateProject = new DelegateCommand(Replicate, canReplicate);
@@ -54,8 +54,17 @@ namespace WICR_Estimator.ViewModels
             CreateSummary = new DelegateCommand(GenerateSummary, canCreateSummary);
             RefreshGoogleData = new DelegateCommand(DeleteGoogleData, canDelete);
             ProjectTotals = new ProjectsTotal();
+            LoginPageViewModel.OnLoggedIn += LoginPage_OnLoggedIn;
             //statusNotifier = new NotifyIcon();
+
+        }
+
+        private void LoginPage_OnLoggedIn(object sender, EventArgs e)
+        {
+            var user = (UserDB)sender;
             
+            PreparedBy = user.Username;
+            OnPropertyChanged("PreparedBy");
         }
 
         private async void CheckPriceUpdate()
@@ -217,7 +226,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
-        private DateTime? jobCreationdate;
+        private DateTime? jobCreationdate=DateTime.Now;
         public DateTime? JobCreationDate
         {
             get
@@ -235,33 +244,33 @@ namespace WICR_Estimator.ViewModels
             }
         }
         public string LoginMessage { get; set; }
-        private bool showLogin;
-        public bool ShowLogin
-        {
-            get { return showLogin; }
-            set
-            {
-                if (value!=showLogin)
-                {
-                    showLogin = value;                    
-                    if (!value)
-                    {                    
-                        LoginMessage = "";
-                        HidePasswordSection = System.Windows.Visibility.Collapsed;
-                        if (OnLoggedAsAdmin != null)
-                        {
-                            OnLoggedAsAdmin(false, EventArgs.Empty);
-                        }
-                    }
-                    else
-                        HidePasswordSection = System.Windows.Visibility.Visible;
+        //private bool showLogin;
+        //public bool ShowLogin
+        //{
+        //    get { return showLogin; }
+        //    set
+        //    {
+        //        if (value!=showLogin)
+        //        {
+        //            showLogin = value;                    
+        //            if (!value)
+        //            {                    
+        //                LoginMessage = "";
+        //                HidePasswordSection = System.Windows.Visibility.Collapsed;
+        //                if (OnLoggedAsAdmin != null)
+        //                {
+        //                    OnLoggedAsAdmin(false, EventArgs.Empty);
+        //                }
+        //            }
+        //            else
+        //                HidePasswordSection = System.Windows.Visibility.Visible;
 
-                    OnPropertyChanged("HidePasswordSection");
-                    OnPropertyChanged("LoginMessage");
-                    OnPropertyChanged("ShowLogin");
-                }
-            }
-        }
+        //            OnPropertyChanged("HidePasswordSection");
+        //            OnPropertyChanged("LoginMessage");
+        //            OnPropertyChanged("ShowLogin");
+        //        }
+        //    }
+        //}
         public System.Windows.Visibility HidePasswordSection { get; set; }
         public ICollectionView ProjectView { get; set; }
         private ObservableCollection<Project> projects;
@@ -1224,34 +1233,34 @@ namespace WICR_Estimator.ViewModels
         {
             return true;
         }
-        private void CanShowCalculationDetails(object obj)
-        {
-            var passwordBox = obj as PasswordBox;
-            var password = passwordBox.Password;
-            if (password == "737373")
-            {
-                passwordBox.Password = "";
-                LoginMessage = "Calculation Details Are Visible Now.";
+        //private void CanShowCalculationDetails(object obj)
+        //{
+        //    var passwordBox = obj as PasswordBox;
+        //    var password = passwordBox.Password;
+        //    if (password == "737373")
+        //    {
+        //        passwordBox.Password = "";
+        //        LoginMessage = "Calculation Details Are Visible Now.";
 
-                HidePasswordSection = System.Windows.Visibility.Collapsed;
-                OnPropertyChanged("HidePasswordSection");
-                if (OnLoggedAsAdmin!=null)
-                {
-                    OnLoggedAsAdmin(true, EventArgs.Empty);
-                }
+        //        HidePasswordSection = System.Windows.Visibility.Collapsed;
+        //        OnPropertyChanged("HidePasswordSection");
+        //        if (OnLoggedAsAdmin!=null)
+        //        {
+        //            OnLoggedAsAdmin(true, EventArgs.Empty);
+        //        }
                 
-            }
-            else
-            {
-                passwordBox.Password = "";
-                LoginMessage = "Incorrect Password.";
-                if (OnLoggedAsAdmin != null)
-                {
-                    OnLoggedAsAdmin(false, EventArgs.Empty);
-                }
-            }
-            OnPropertyChanged("LoginMessage");
-        }
+        //    }
+        //    else
+        //    {
+        //        passwordBox.Password = "";
+        //        LoginMessage = "Incorrect Password.";
+        //        if (OnLoggedAsAdmin != null)
+        //        {
+        //            OnLoggedAsAdmin(false, EventArgs.Empty);
+        //        }
+        //    }
+        //    OnPropertyChanged("LoginMessage");
+        //}
         #region GoogleDataUpdateCheck
         private string GetLastUpdateDate()
         {

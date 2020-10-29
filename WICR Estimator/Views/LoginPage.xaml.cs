@@ -24,5 +24,16 @@ namespace WICR_Estimator.Views
         {
             InitializeComponent();
         }
+
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            PasswordBox pBox = sender as PasswordBox;
+
+            //Set this "EncryptedPassword" dependency property to the "SecurePassword"
+            //of the PasswordBox.
+            PasswordBoxMVVMAttachedProperties.SetEncryptedPassword(pBox, pBox.SecurePassword);
+        }
+
     }
 }
+

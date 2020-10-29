@@ -208,11 +208,14 @@
     <Compile Include="DBModels\ProjectDB.cs" />
     <Compile Include="DBModels\ProjectDetailsDB.cs" />
     <Compile Include="DBModels\SlopeDB.cs" />
+    <Compile Include="DBModels\UserDB.cs" />
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="ExpanderStateBehavior.cs" />
     <Compile Include="GoogleUtility\SpreadSheetConnect.cs" />
     <Compile Include="GSData.cs" />
     <Compile Include="IPageViewModel.cs" />
+    <Compile Include="PasswordBoxMVVMAttachedProperties.cs" />
+    <Compile Include="PasswordHashing.cs" />
     <Compile Include="ViewModels\LoginPageViewModel.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Services\DataSerializerService.cs" />

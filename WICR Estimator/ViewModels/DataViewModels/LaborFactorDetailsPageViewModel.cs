@@ -397,11 +397,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             }
 
         }
-
-        
-
-        
-        
+     
         private IEnumerable<ProjectDB> _projects;
         public IEnumerable<ProjectDB> Projects
         {

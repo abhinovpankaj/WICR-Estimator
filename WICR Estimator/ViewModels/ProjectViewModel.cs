@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WICR_Estimator.DBModels;
 using WICR_Estimator.Models;
 using WICR_Estimator.Services;
 
@@ -27,7 +28,9 @@ namespace WICR_Estimator.ViewModels
         private void HomeViewModel_OnLoggedAsAdmin(object sender, EventArgs e)
         {
             //IsAdminloggedIn = (bool)sender ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden; 
-            IsAdminloggedIn = (bool)sender;
+            var user = (UserDB)sender;
+            IsAdminloggedIn = user.IsAdmin;
+        
         }
 
         public ProjectViewModel()
@@ -35,7 +38,7 @@ namespace WICR_Estimator.ViewModels
             EnabledProjects = new ObservableCollection<Project>();
             EnabledProjects = HomeViewModel.MyselectedProjects;
             
-            HomeViewModel.OnLoggedAsAdmin += HomeViewModel_OnLoggedAsAdmin;
+            LoginPageViewModel.OnLoggedIn += HomeViewModel_OnLoggedAsAdmin;
             HomeViewModel.OnProjectSelectionChange += HomeViewModel_OnProjectSelectionChange;
             
             
