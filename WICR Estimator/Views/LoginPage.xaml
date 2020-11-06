@@ -33,14 +33,14 @@
                          Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}"  />
                 <PasswordBox materialDesign:HintAssist.Hint="Password" Margin="5,20,5,5"
-                              local:PasswordBoxMVVMAttachedProperties.EncryptedPassword="{Binding PasswordSecureString,
-                    Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             x:Name="passwordbox"
                          PasswordChanged="PasswordBox_PasswordChanged"
                              Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" />
                 <TextBlock Text="{Binding ErrorMessage}"/>
             </StackPanel>
             <Button VerticalAlignment="Top" Content="Login"  Margin="40,270,40,0" 
                     Command="{Binding SignInCommand}"
+                    CommandParameter="{Binding ElementName=passwordbox}"
                     Height="37" Effect="{DynamicResource MaterialDesignShadowDepth2}" 
                      />
         </Grid>

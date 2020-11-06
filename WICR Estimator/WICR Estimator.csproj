@@ -203,6 +203,7 @@
     <Compile Include="DBModels\FreightDB.cs" />
     <Compile Include="DBModels\IDbData.cs" />
     <Compile Include="DBModels\LaborFactorDB.cs" />
+    <Compile Include="DBModels\LoginResponseDB.cs" />
     <Compile Include="DBModels\MaterialDB.cs" />
     <Compile Include="DBModels\MetalDB.cs" />
     <Compile Include="DBModels\ProjectDB.cs" />

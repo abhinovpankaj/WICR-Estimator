@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Security;
+using System.Windows.Controls;
 using WICR_Estimator.DBModels;
+using WICR_Estimator.Services;
 
 namespace WICR_Estimator.ViewModels
 {
@@ -77,36 +79,51 @@ namespace WICR_Estimator.ViewModels
 
         private bool CanSignin(object obj)
         {
-            if (!string.IsNullOrWhiteSpace(Username) && PasswordSecureString != null && PasswordSecureString.Length > 0)
+            if (!string.IsNullOrWhiteSpace(Username) )
                 return true;
             else
                 return false;
         }
 
-        private void SignIn(object obj)
+        private async void SignIn(object obj)
         {
             LoginFailed = false;
+            var passwordBox = obj as PasswordBox;
+             var password = passwordBox.Password;
             UserDB user = new UserDB();
             user.Username = Username;
             
-            if (Username.ToLower() == "admin")
+
+            //if (Username.ToLower() == "admin")
+            //{
+
+            //    if (OnLoggedIn != null)
+            //    {
+            //        user.IsAdmin = true;
+            //        OnLoggedIn(user, EventArgs.Empty);
+            //    }
+            //}
+            //else
+            //{
+            //    user.IsAdmin = false;
+        //    if (OnLoggedIn != null)
+        //    {
+        //        OnLoggedIn(user, EventArgs.Empty);
+        //    }
+        //}
+            var loginResponse = await HTTPHelper.LoginUser(new LoginModel { Password = password, Username = Username });
+            if (loginResponse==null)
             {
-                
-                if (OnLoggedIn != null)
-                {
-                    user.IsAdmin = true;
-                    OnLoggedIn(user, EventArgs.Empty);
-                }
+                LoginFailed = true;
             }
             else
             {
-                user.IsAdmin = false;
+                user.IsAdmin = loginResponse.Roles.Contains("Admin") ? true : false;
                 if (OnLoggedIn != null)
                 {
                     OnLoggedIn(user, EventArgs.Empty);
                 }
-            }         
- 
+            }
         }
     }
 

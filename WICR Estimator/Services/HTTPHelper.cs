@@ -604,5 +604,25 @@ namespace WICR_Estimator.Services
         }
         #endregion
 
+        #region login
+        public async static Task<LoginResponseDB> LoginUser(LoginModel user)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BASEURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await client.PostAsJsonAsync<LoginModel>("authenticate/login" , user);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<LoginResponseDB>();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+        #endregion
     }
 }
