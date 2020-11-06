@@ -267,6 +267,9 @@ namespace WICR_Estimator
                                 prjDB.CostPerSqFoot = item.CostPerSqFoot;
                                 prjDB.TotalCost = item.TotalCost;
                                 prjDB.ProjectDetailID = item.ProjectID;
+                                prjDB.HasContingencyDisc = item.ProjectJobSetUp.VHasContingencyDisc;
+                                prjDB.HasPrevailingWage = item.ProjectJobSetUp.IsPrevalingWage;
+                                prjDB.ProjectProfitMargin = item.MaterialViewModel.ProjectProfitMargin;
                                 await HTTPHelper.PutProjectDetails(item.ProjectID, prjDB);
                             }
                             else
@@ -281,7 +284,9 @@ namespace WICR_Estimator
                                 prjDB.SystemCost = item.SystemNOther;
                                 prjDB.CostPerSqFoot = item.CostPerSqFoot;
                                 prjDB.TotalCost = item.TotalCost;
-
+                                prjDB.HasContingencyDisc = item.ProjectJobSetUp.VHasContingencyDisc;
+                                prjDB.HasPrevailingWage = item.ProjectJobSetUp.IsPrevalingWage;
+                                prjDB.ProjectProfitMargin = item.MaterialViewModel.ProjectProfitMargin;
                                 ProjectDetailsDB prj = await HTTPHelper.PostProjectDetails(prjDB);
                                 if (prj != null)
                                 {

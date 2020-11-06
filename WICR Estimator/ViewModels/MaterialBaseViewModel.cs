@@ -3373,7 +3373,8 @@ namespace WICR_Estimator.ViewModels
             }
         }
         public double DriveLaborValue { get; set; }
-        
+        public double ProjectProfitMargin { get; set; }
+
         public virtual double getSqftAreaVertical(string materialName)
         {
             return 0;
@@ -3686,14 +3687,16 @@ namespace WICR_Estimator.ViewModels
                 //double.TryParse(laborDetails[8][0].ToString(), out res);
                 res = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Profit Margin on subcontract labor").Value;
                 double subCLabor = subcontractLabor * res;
-                //profitMargin
+                //profitMarginAdd
                 double pmAdd = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Profit Margin add").Value; 
+                
                 //double.TryParse(laborDetails[8][0].ToString(), out pmAdd);
 
                 double profitMarginAdd = (slopeTotal * pmAdd) * (1 + pmAdd);
+                
                 //profit margin
                 double pm=dbData.LaborDBData.FirstOrDefault(x => x.Name == "Profit Margin").Value; ;
-
+                ProjectProfitMargin = pm;
                 //double.TryParse(laborDetails[10][0].ToString(), out pm);
 
                 double specialMetalDeduction = 0;
@@ -3728,8 +3731,10 @@ namespace WICR_Estimator.ViewModels
                 //double.TryParse(laborDetails[16][0].ToString(), out addup);
                 addup = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Add mark up to total job price").Value;
                 double restTotal = TotalCost * (ins + fuel + addup);
+                
                 //calculated Profit Margin,currently not being used.
                 double ProfitMargin = TotalCost - slopeTotal;
+
                 return TotalCost + generalLiability + directExpense + contigency + restTotal;
             }
         }

@@ -929,6 +929,9 @@ namespace WICR_Estimator.ViewModels
                                 prjDB.CostPerSqFoot = item.CostPerSqFoot;
                                 prjDB.TotalCost = item.TotalCost;
                                 prjDB.ProjectDetailID = item.ProjectID;
+                                prjDB.HasContingencyDisc = item.ProjectJobSetUp.VHasContingencyDisc;
+                                prjDB.HasPrevailingWage = item.ProjectJobSetUp.IsPrevalingWage;
+                                prjDB.ProjectProfitMargin = item.MaterialViewModel.ProjectProfitMargin;
                                 await HTTPHelper.PutProjectDetails(item.ProjectID, prjDB);
                             }
                             else
@@ -943,7 +946,9 @@ namespace WICR_Estimator.ViewModels
                                 prjDB.SystemCost = item.SystemNOther;
                                 prjDB.CostPerSqFoot = item.CostPerSqFoot;
                                 prjDB.TotalCost = item.TotalCost;
-                                
+                                prjDB.HasContingencyDisc = item.ProjectJobSetUp.VHasContingencyDisc;
+                                prjDB.HasPrevailingWage = item.ProjectJobSetUp.IsPrevalingWage;
+                                prjDB.ProjectProfitMargin = item.MaterialViewModel.ProjectProfitMargin;
                                 ProjectDetailsDB prj= await HTTPHelper.PostProjectDetails(prjDB);
                                 if (prj!=null)
                                 {
@@ -1598,15 +1603,15 @@ namespace WICR_Estimator.ViewModels
             foreach (SystemMaterial item in MVM.SystemMaterials)
             {
                 dataRange.Offset[k, 0].Value = item.Name;
-                dataRange.Offset[k, 1].Value = item.SMUnits;
-                dataRange.Offset[k, 2].Value = item.IsMaterialChecked ? item.Qty:0;
+                dataRange.Offset[k, 1].Value = item.MaterialExtension!=0?item.SMUnits:"0";
+                dataRange.Offset[k, 2].Value = item.MaterialExtension != 0 ? (item.IsMaterialChecked ? item.Qty:0):0;
                 if (item.SpecialMaterialPricing!=0)
                 {
                     dataRange.Offset[k, 3].Value = item.SpecialMaterialPricing;
                     dataRange.Offset[k, 3].Interior.Color = Excel.XlRgbColor.rgbYellow;
                 }
                 else
-                    dataRange.Offset[k, 3].Value = item.MaterialPrice;
+                    dataRange.Offset[k, 3].Value = item.MaterialExtension != 0 ? item.MaterialPrice:0;
 
                 dataRange.Offset[k, 4].Value = item.MaterialExtension;
                 k = k + 1;

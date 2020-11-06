@@ -20,5 +20,10 @@ namespace WICR_Estimator.DBModels
         public double TotalCost { get; set; }
         public double CostPerSqFoot { get; set; }
         public string LaborPercentage { get; set; }
+
+        public bool HasPrevailingWage { get; set; }
+
+        public bool HasContingencyDisc { get; set; }
+        public double ProjectProfitMargin { get; set; }
     }
 }
