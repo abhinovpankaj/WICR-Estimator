@@ -15,7 +15,7 @@ namespace WICR_Estimator.Services
         
         //public static object ConfigurationManager { get; private set; }
         //ConfigurationManager.AppSettings["apiUrl"]
-        const string BASEURL = "http://localhost:5000/api/";
+        const string BASEURL = "http://localhost:61955/api/";
 
         static HttpClient GetApiClient()
         {
