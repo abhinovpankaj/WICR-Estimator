@@ -3476,7 +3476,7 @@ namespace WICR_Estimator.ViewModels
             }
             if (isDiscounted)
             {
-                //double.TryParse(laborDetails[1][0].ToString(), out laborDeduction);
+                double.TryParse(laborDetails[1][0].ToString(), out laborDeduction);
                 laborDeduction = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Deduct on Labor for large jobs").Value;
             }
             IEnumerable<SystemMaterial> selectedLabors = SystemMaterials.Where(x => x.IsMaterialChecked == true).ToList();
