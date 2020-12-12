@@ -39,14 +39,14 @@
 
             <Style.Triggers >
                 <Trigger Property="IsEnabled" Value="True">
-                    <Setter Property="Background" Value="LightYellow" />
+                    <Setter Property="Background" Value="{StaticResource AccentColorBrush4}" />
                 </Trigger>
                 <DataTrigger Binding="{Binding Tag,RelativeSource={RelativeSource Self}
                                         }" 
                              Value="True">
                     <Setter Property="FontWeight" Value="Bold" />
-                    <Setter Property="Background" Value="{StaticResource AccentColorBrush}" />
-                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
                 </DataTrigger>
             </Style.Triggers>
             

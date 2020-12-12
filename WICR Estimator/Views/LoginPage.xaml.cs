@@ -23,6 +23,7 @@ namespace WICR_Estimator.Views
         public LoginPage()
         {
             InitializeComponent();
+            passwordbox.Password= Properties.Settings.Default.Password;
         }
 
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)

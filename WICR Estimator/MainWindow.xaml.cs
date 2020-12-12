@@ -1,4 +1,6 @@
-﻿using Microsoft.Win32;
+﻿using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,7 +31,7 @@ namespace WICR_Estimator
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
         public MainWindow()
         {
@@ -41,7 +43,7 @@ namespace WICR_Estimator
             //}
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             //MaxWidth = SystemParameters.VirtualScreenWidth;
-            this.DataContext = new MainWindowViewModel();
+            this.DataContext = new MainWindowViewModel(DialogCoordinator.Instance);
             
         }
 

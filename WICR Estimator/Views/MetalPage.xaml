@@ -21,14 +21,17 @@
             <Setter Property="Padding" Value="0"/>
             <Style.Triggers >
                 <Trigger Property="IsEnabled" Value="True">
-                    <Setter Property="Background" Value="LightYellow" />
+                    <!--<Setter Property="Background" Value="LightYellow" />-->
+                    <Setter Property="Background" Value="{StaticResource AccentColorBrush4}" />
                 </Trigger>
                 <DataTrigger Binding="{Binding Tag,RelativeSource={RelativeSource Self}
                                         }" 
                              Value="True">
                     <Setter Property="FontWeight" Value="Bold" />
-                    <Setter Property="Background" Value="{StaticResource AccentColorBrush}" />
-                    <Setter Property="Foreground" Value="White" />
+                    <!--<Setter Property="Background" Value="{StaticResource AccentColorBrush}" />
+                    <Setter Property="Foreground" Value="White" />-->
+                    <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
                 </DataTrigger>
                 <Trigger Property="IsEnabled" Value="False">
                     <Setter Property="Background" Value="White" />
@@ -39,8 +42,10 @@
             
         </Style>
         <Style TargetType="{x:Type TextBox}" x:Key="addOnTextBox" BasedOn="{StaticResource MaterialDesignTextBox}">
-            <Setter Property="Background" Value="Gray" />
-            <Setter Property="Foreground" Value="Gray"/>
+            <!--<Setter Property="Background" Value="Gray" />
+            <Setter Property="Foreground" Value="Gray"/>-->
+            <!--<Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkBrush}" />-->
             <Style.Triggers>
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
@@ -48,16 +53,18 @@
                         <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled}" Value="True" />
                     </MultiDataTrigger.Conditions>
                     <MultiDataTrigger.Setters>
-                        <Setter Property="Background" Value="LightYellow" />
-                        <Setter Property="Foreground" Value="Black"/>
+                        <Setter Property="Background" Value="{StaticResource AccentColorBrush4}" />
+                        <Setter Property="Foreground" Value="{StaticResource  PrimaryHueDarkBrush}" />
                     </MultiDataTrigger.Setters>
                 </MultiDataTrigger>
                 <DataTrigger Binding="{Binding Tag,RelativeSource={RelativeSource Self}
                                         }" 
                              Value="True">
                     <Setter Property="FontWeight" Value="Bold" />
-                    <Setter Property="Background" Value="{StaticResource AccentColorBrush}"/>
-                    <Setter Property="Foreground" Value="White" />
+                    <!--<Setter Property="Background" Value="{StaticResource AccentColorBrush}"/>
+                    <Setter Property="Foreground" Value="White" />-->
+                    <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
                 </DataTrigger>
                 <Trigger Property="IsEnabled" Value="False">
                     <Setter Property="Background" Value="White" />
@@ -70,8 +77,10 @@
                         <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled}" Value="False" />
                     </MultiDataTrigger.Conditions>
                     <MultiDataTrigger.Setters>
-                        <Setter Property="Background" Value="White" />
-                        <Setter Property="Foreground" Value="Black"/>
+                        <!--<Setter Property="Background" Value="White" />
+                        <Setter Property="Foreground" Value="Black"/>-->
+                        <Setter Property="Background" Value="{StaticResource AccentColorBrush2}" />
+                        <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkBrush}" />
                     </MultiDataTrigger.Setters>
                 </MultiDataTrigger>
 
@@ -340,8 +349,10 @@
                             <Style TargetType="DataGridRow">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsMetalChecked}" Value="false">
-                                        <Setter Property="Background" Value="Gray"/>
-                                        <Setter Property="Foreground" Value="Gray"/>
+                                        <!--<Setter Property="Background" Value="Gray"/>
+                                        <Setter Property="Foreground" Value="Gray"/>-->
+                                        <Setter Property="Background" Value="{StaticResource AccentColorBrush2}" />
+                                        <Setter Property="Foreground" Value="{StaticResource AccentColorBrush2}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -367,7 +378,7 @@
                                        >
                                             <TextBlock.Style>
                                                 <Style TargetType="{x:Type TextBlock}">
-                                                    <Setter Property="Foreground" Value="White"/>
+                                                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}"/>
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding IsMetalChecked}" Value="True">
                                                             <Setter Property="Foreground" Value="Black"/>

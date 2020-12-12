@@ -72,7 +72,9 @@
                 </DataTrigger>
                 
                 <Trigger Property="IsEnabled" Value="True">
-                    <Setter Property="Background" Value="LightYellow" />
+                    <!--<Setter Property="Background" Value="LightYellow" />-->
+                    <Setter Property="Background" Value="{StaticResource   AccentColorBrush4}" />
+                    <Setter Property="Foreground" Value="{StaticResource   PrimaryHueDarkForegroundBrush}" />
                     <Setter Property="ToolTip" Value="Please enter a numeric value."/>
                 </Trigger>
                 
@@ -80,8 +82,10 @@
                                         }" 
                              Value="True">
                     <Setter Property="FontWeight" Value="Bold" />
-                    <Setter Property="Background" Value="Green" />
-                    <Setter Property="Foreground" Value="White" />
+                    <!--<Setter Property="Background" Value="Green" />
+                    <Setter Property="Foreground" Value="White" />-->
+                    <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
                 </DataTrigger>
                 <Trigger Property="IsEnabled" Value="false">
                     <Setter Property="Background" Value="White" />
@@ -95,8 +99,8 @@
         <Style TargetType="{x:Type DataGridCell}" x:Key="editableCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
             <Style.Triggers >
                 <Trigger Property="IsReadOnly" Value="False">
-                    <Setter Property="Background" Value="LightYellow" />
-                    
+                    <!--<Setter Property="Background" Value="LightYellow" />-->
+                    <Setter Property="Background" Value="{StaticResource   AccentColorBrush4}" />
                 </Trigger>
                 
             </Style.Triggers>
@@ -425,13 +429,16 @@
                                                         <Style TargetType="{x:Type TextBox}" >
                                                             <Style.Triggers >
                                                                 <Trigger Property="IsReadOnly" Value="False">
-                                                                    <Setter Property="Background" Value="LightYellow" />
+                                                                    <!--<Setter Property="Background" Value="LightYellow" />-->
+                                                                    <Setter Property="Background" Value="{StaticResource   AccentColorBrush4}" />
                                                                 </Trigger>
                                                                 <DataTrigger Binding="{Binding Quantity, 
                                             Converter={StaticResource HasFieldEdited}}" 
                                                         Value="True">
-                                                                    <Setter Property="Background" Value="Green" />
-                                                                    <Setter Property="Foreground" Value="White"/>
+                                                                    <!--<Setter Property="Background" Value="Green" />
+                                                                    <Setter Property="Foreground" Value="White"/>-->
+                                                                    <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+                                                                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
                                                                     <Setter Property="FontWeight" Value="Bold"/>
                                                                 </DataTrigger>
                                                             </Style.Triggers>
@@ -454,13 +461,16 @@
                                                         <Style TargetType="{x:Type TextBox}" >
                                                             <Style.Triggers >
                                                                 <Trigger Property="IsReadOnly" Value="False">
-                                                                    <Setter Property="Background" Value="LightYellow" />
+                                                                    <!--<Setter Property="Background" Value="LightYellow" />-->
+                                                                    <Setter Property="Background" Value="{StaticResource   AccentColorBrush4}" />
                                                                 </Trigger>
                                                                 <DataTrigger Binding="{Binding MaterialPrice, 
                                             Converter={StaticResource HasFieldEdited}}" 
                                                         Value="True">
-                                                                    <Setter Property="Background" Value="Green" />
-                                                                    <Setter Property="Foreground" Value="White"/>
+                                                                    <!--<Setter Property="Background" Value="Green" />
+                                                                    <Setter Property="Foreground" Value="White"/>-->
+                                                                    <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+                                                                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
                                                                     <Setter Property="FontWeight" Value="Bold"/>
                                                                 </DataTrigger>
                                                             </Style.Triggers>
@@ -590,13 +600,16 @@
                                                 <Style TargetType="{x:Type DataGridCell}">
                                                     <Style.Triggers >
                                                         <Trigger Property="IsReadOnly" Value="False">
-                                                            <Setter Property="Background" Value="LightYellow" />
+                                                            <!--<Setter Property="Background" Value="LightYellow" />-->
+                                                            <Setter Property="Background" Value="{StaticResource   AccentColorBrush4}" />
                                                         </Trigger>
                                                         <DataTrigger Binding="{Binding UnitConlbrcst, 
                                         Converter={StaticResource HasFieldEdited}}" 
                                                     Value="True">
-                                                            <Setter Property="Background" Value="Green" />
-                                                            <Setter Property="Foreground" Value="White"/>
+                                                            <!--<Setter Property="Background" Value="Green" />
+                                                            <Setter Property="Foreground" Value="White"/>-->
+                                                            <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+                                                            <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
                                                             <Setter Property="FontWeight" Value="Bold"/>
                                                         </DataTrigger>
                                                     </Style.Triggers>
@@ -610,13 +623,16 @@
                                                 <Style TargetType="{x:Type DataGridCell}">
                                                     <Style.Triggers >
                                                         <Trigger Property="IsReadOnly" Value="False">
-                                                            <Setter Property="Background" Value="LightYellow" />
+                                                            <!--<Setter Property="Background" Value="LightYellow" />-->
+                                                            <Setter Property="Background" Value="{StaticResource   AccentColorBrush4}" />
                                                         </Trigger>
                                                         <DataTrigger Binding="{Binding UnitPriceConlbrcst, 
                                         Converter={StaticResource HasFieldEdited}}" 
                                                     Value="True">
-                                                            <Setter Property="Background" Value="Green" />
-                                                            <Setter Property="Foreground" Value="White"/>
+                                                            <!--<Setter Property="Background" Value="Green" />
+                                                            <Setter Property="Foreground" Value="White"/>-->
+                                                            <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+                                                            <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
                                                             <Setter Property="FontWeight" Value="Bold"/>
                                                         </DataTrigger>
                                                     </Style.Triggers>

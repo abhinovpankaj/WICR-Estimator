@@ -766,14 +766,14 @@ namespace WICR_Estimator.ViewModels
 
         protected double getMetalPR(string metalName)
         {
-            double val = metalDBDetails.FirstOrDefault(x => x.MetalName == metalName).ProductionRate;
-            double prPerc = freightDBDetails.FirstOrDefault(x => x.FactorName == "SlopeProdRate").FactorValue;
+            double val = dbData.MetalDBData.FirstOrDefault(x => x.MetalName == metalName).ProductionRate;
+            double prPerc = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "SlopeProdRate").FactorValue;
 
             return isPrevailingWage ? val * (1 + prPerc) : val;
         }
         protected double getMetalMP(string metalName)
         {
-            return metalDBDetails.Where(x => x.MetalName == metalName).Where(x => x.MetalType == MetalName).Where(x => x.Vendor == vendorName)
+            return dbData.MetalDBData.Where(x => x.MetalName == metalName).Where(x => x.MetalType == MetalName).Where(x => x.Vendor == vendorName)
                 .Select(s => s.MetalPrice).First();
         }
 

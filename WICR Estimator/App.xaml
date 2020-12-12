@@ -2,14 +2,14 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:WICR_Estimator"
-             xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
+           
              StartupUri="MainWindow.xaml" Startup="Application_Startup"
              >
     <Application.Resources>
        
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.CheckBox.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ListBox.xaml" />
@@ -19,14 +19,14 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
-
+                
 
                 <!-- primary color -->
                 <ResourceDictionary>
                     <!-- include your primary palette -->
-                    <ResourceDictionary.MergedDictionaries>
+                    <!--<ResourceDictionary.MergedDictionaries>
                         <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Teal.xaml" />
-                    </ResourceDictionary.MergedDictionaries>
+                    </ResourceDictionary.MergedDictionaries>-->
                     <!--
 include three hues from the primary palette (and the associated forecolours).
 Do not rename, keep in sequence; light to dark.
@@ -66,17 +66,15 @@ Do not rename, keep in sequence; light to dark.
                     </ResourceDictionary.MergedDictionaries>
 
                     <!-- include a single secondary accent color (and the associated forecolour) -->
-                    <SolidColorBrush x:Key="SecondaryAccentBrush" Color="{StaticResource Accent200}"/>
+                    <SolidColorBrush x:Key="SecondaryAccentBrush" Color="{StaticResource  Accent200}"/>
                     <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="{StaticResource Accent200Foreground}"/>
                 </ResourceDictionary>
 
-                <!-- Include the Dragablz Material Design style -->
-                <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/materialdesign.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>
 
             <!-- tell Dragablz tab control to use the Material Design theme -->
-            <Style TargetType="{x:Type dragablz:TabablzControl}" BasedOn="{StaticResource MaterialDesignTabablzControlStyle}" />
+            
             <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
                 <Setter Property="Stylus.IsFlicksEnabled" Value="True" />
                 <Style.Triggers>

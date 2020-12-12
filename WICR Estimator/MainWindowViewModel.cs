@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using MahApps.Metro.Controls.Dialogs;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,6 +18,7 @@ using WICR_Estimator.Models;
 using WICR_Estimator.Services;
 using WICR_Estimator.ViewModels;
 using WICR_Estimator.ViewModels.DataViewModels;
+using WICR_Estimator.ViewModels.PaletteSpecifics;
 using WICR_Estimator.Views;
 
 namespace WICR_Estimator
@@ -34,7 +36,7 @@ namespace WICR_Estimator
         private DelegateCommand _navigationCommand;
         #endregion
         public bool IsUserAdmin { get; set; }
-        public bool IsUserLoggedIn { get; set; }
+        public bool IsUserLoggedIn { get; set; } 
 
         public string Username { get; set; }
         public MainWindowViewModel()
@@ -52,7 +54,29 @@ namespace WICR_Estimator
             CurrentPageViewModel = PageViewModels[3];
             CurWindowState = WindowState.Maximized;
             LoginPageViewModel.OnLoggedIn += LoginPage_OnLoggedIn;
+            IsUserLoggedIn = false;
             //WindowStyle = WindowStyle.SingleBorderWindow;
+        }
+        private IDialogCoordinator dialogCoordinator;
+
+        public MainWindowViewModel(IDialogCoordinator instance)
+        {
+            this.dialogCoordinator = instance;
+            // Add available pages
+
+            PageViewModels.Add(new HomeViewModel());
+            PageViewModels.Add(new ProjectViewModel(HomeViewModel.MyselectedProjects));
+            PageViewModels.Add(new MaterialDetailsPageViewModel());
+            PageViewModels.Add(new LoginPageViewModel());
+            PageViewModels.Add(new SlopeDetailsPageViewModel());
+            PageViewModels.Add(new MetalDetailsPageViewModel());
+            PageViewModels.Add(new LaborFactorDetailsPageViewModel());
+            PageViewModels.Add(new PaletteSelectorViewModel());
+            // Set starting page
+            CurrentPageViewModel = PageViewModels[3];
+            CurWindowState = WindowState.Maximized;
+            LoginPageViewModel.OnLoggedIn += LoginPage_OnLoggedIn;
+            IsUserLoggedIn = false;
         }
 
         private void LoginPage_OnLoggedIn(object sender, EventArgs e)
@@ -65,7 +89,28 @@ namespace WICR_Estimator
             OnPropertyChanged("IsUserAdmin");
             CurrentPageViewModel= PageViewModels[0];
         }
+        #region dialogs
+        // Simple method which can be used on a Button
+        public async void ShowMessage(string message)
+        {
+            await this.dialogCoordinator.ShowMessageAsync(this, "WICR", message);
+        }
 
+        public async void ShowProgress(string msg)
+        {
+            // Show...
+            ProgressDialogController controller = await this.dialogCoordinator.ShowProgressAsync(this, "Wait",
+                msg);
+
+            controller.SetIndeterminate();
+
+            // Do your work... 
+            //var result = await Task.Run(...);
+
+            // Close...
+            await controller.CloseAsync();
+        }
+        #endregion
         #region Properties / Commands
         //private static WindowStyle windowStyle;
         public static WindowStyle WindowStyle
@@ -206,8 +251,14 @@ namespace WICR_Estimator
                 else
                     return;
             }
+            ProgressDialogController controller = await this.dialogCoordinator.ShowProgressAsync(this, "Wait",
+               "Saving Estimate...");
             try
             {
+               
+
+                controller.SetIndeterminate();
+
                 MainWindowViewModel vm = this;
                 HomeViewModel hm = null;
                 if (vm != null)
@@ -223,6 +274,7 @@ namespace WICR_Estimator
                 }
                 var serializer = new DataContractSerializer(typeof(ObservableCollection<Project>));
                 //Savee to DB  part
+                controller.SetMessage("Saving estimate to Database...");
                 int myEstimateID;
                 if (SelectedProjects[0].EstimateID != 0)
                 {
@@ -237,8 +289,11 @@ namespace WICR_Estimator
                     myEstimateID = estimate.EstimateID;
                 }
                 //save db ends 
+                controller.SetMessage("Estimate Saved to Database Successfully.");
+                
                 using (var sw = new StringWriter())
                 {
+                    controller.SetMessage("Saving Estimate Locally...");
                     using (var writer = new XmlTextWriter(HomeViewModel.filePath, null))
                     {
                         writer.Formatting = Formatting.Indented; // indent the Xml so it's human readable
@@ -255,7 +310,7 @@ namespace WICR_Estimator
                             if (item.EstimateID != 0)
                             {
                                 //Get the estimate from DB
-
+                                controller.SetMessage("Updating exiting estimate to DB...");
                                 ProjectDetailsDB prjDB = new ProjectDetailsDB();
                                 prjDB.EstimateID = item.EstimateID;
                                 prjDB.LaborCost = item.LaborCost;
@@ -294,12 +349,15 @@ namespace WICR_Estimator
                                 }
                                 else
                                 {
-                                    System.Windows.MessageBox.Show("Failed to Post the project to DB", "Failure");
+                                    //System.Windows.MessageBox.Show("Failed to Post the project to DB", "Failure");
+                                    controller.SetMessage("Failed to Post the project to DB.");
+                                    //ShowMessage("Failed to Post the project to DB.");
                                 }
 
                             }
                             item.EstimateID = myEstimateID;
                         }
+                        
                         if (hm != null)
                             hm.UpdateProjectTotals();
 
@@ -309,18 +367,25 @@ namespace WICR_Estimator
                         //Ends
 
                         serializer.WriteObject(writer, SelectedProjects);
-
+                        
                         writer.Flush();
                         //MessageBox.Show("Project Estimate Saved Succesfully", "Success");
-                        SetBalloonTip("Project Estimate Saved Succesfully");
+                        //ShowMessage("Project Estimate Saved Succesfully");
+                        controller.SetMessage("Project Estimate Saved locally.");
+                        //SetBalloonTip("Project Estimate Saved Succesfully");
                     }                    
                 }
                 ViewModels.BaseViewModel.IsDirty = false;
+                
             }
             catch (Exception)
             {
-                SetBalloonTip("Failed to Save the Project Estimate.");
+                // SetBalloonTip("Failed to Save the Project Estimate.");
+                //ShowMessage("Failed to Save the Project Estimate.");
+                controller.SetMessage("Failed to Save the Project Estimate.");
             }
+           
+            await controller.CloseAsync();
 
         }
         #endregion
@@ -421,6 +486,9 @@ namespace WICR_Estimator
                     break;
                 case "Laborfactors":
                     ChangeViewModel(PageViewModels[6]);
+                    break;
+                case "ChangePalette":
+                    ChangeViewModel(PageViewModels[7]);
                     break;
                 default:
                     break;

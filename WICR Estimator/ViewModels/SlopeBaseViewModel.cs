@@ -872,7 +872,7 @@ namespace WICR_Estimator.ViewModels
             }
             else
             {
-                result = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Default " && x.SlopeType == slopeType).PerMixCost;               
+                result = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName.Trim() == "Default" && x.SlopeType == slopeType).PerMixCost;               
             }
             return result;
         }

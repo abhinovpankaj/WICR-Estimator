@@ -768,7 +768,12 @@ namespace WICR_Estimator.ViewModels
                    
                     //keep other material and other labor materials in sync
                     var ot= item.MaterialViewModel.OtherLaborMaterials;
-                    item.MaterialViewModel.OtherLaborMaterials= item.MaterialViewModel.OtherMaterials;
+                    if (item.OriginalProjectName=="Blank")
+                    {
+                        item.MaterialViewModel.OtherLaborMaterials = item.MaterialViewModel.OtherMaterials.Where(x => x.Name != "").ToObservableCollection();
+                    }
+                    else
+                        item.MaterialViewModel.OtherLaborMaterials= item.MaterialViewModel.OtherMaterials;
                     int k = 0;
                     foreach (OtherItem olm in item.MaterialViewModel.OtherLaborMaterials)
                     {

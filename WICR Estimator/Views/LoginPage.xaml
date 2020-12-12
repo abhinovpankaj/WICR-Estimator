@@ -14,15 +14,15 @@
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="{StaticResource AccentColorBrush}">
+    <Grid Background="{StaticResource  AccentColorBrush}">
         
         <Rectangle Width="380" Height="400" Fill="White"
                    Effect="{DynamicResource MaterialDesignShadowDepth5}"
                    RadiusX="13.667" RadiusY="13.667" >
 
         </Rectangle>
-        <Image Source="/Images/wicr_bg.png" Width="90"
-               Height="90" Margin="0,0,0,405"
+        <Image Source="/Images/wicr_bg.png" Width="100"
+               Height="100"  Margin="0,0,0,405"
                Effect="{DynamicResource MaterialDesignShadowDepth5}"/>
         <Grid Width="280" Height="350" VerticalAlignment="Top" Margin="35,144,35,0">
             <TextBlock Text="LOGIN" VerticalAlignment="top" 
@@ -33,12 +33,12 @@
                          Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}"  />
                 <PasswordBox materialDesign:HintAssist.Hint="Password" Margin="5,20,5,5"
-                             x:Name="passwordbox"
-                         PasswordChanged="PasswordBox_PasswordChanged"
+                             x:Name="passwordbox" 
+                         
                              Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" />
                 <TextBlock Text="{Binding ErrorMessage}"/>
             </StackPanel>
-            <Button VerticalAlignment="Top" Content="Login"  Margin="40,270,40,0" 
+            <Button VerticalAlignment="Top" Content="Login"  Margin="40,260,40,0" 
                     Command="{Binding SignInCommand}"
                     CommandParameter="{Binding ElementName=passwordbox}"
                     Height="37" Effect="{DynamicResource MaterialDesignShadowDepth2}" 

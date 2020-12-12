@@ -9,6 +9,12 @@ namespace WICR_Estimator.ViewModels
     internal class LoginPageViewModel :BaseViewModel, IPageViewModel
     {
 
+        public LoginPageViewModel()
+        {
+            Username = Properties.Settings.Default.Username;
+            Password= Properties.Settings.Default.Password;
+        }
+        private string Password { get; set; }
         public static event EventHandler OnLoggedIn;
         public string Name => "Login Page";
         private bool _loginFailed;
@@ -89,32 +95,16 @@ namespace WICR_Estimator.ViewModels
         {
             LoginFailed = false;
             var passwordBox = obj as PasswordBox;
-             var password = passwordBox.Password;
+            Password = passwordBox.Password;
             UserDB user = new UserDB();
             user.Username = Username;
             
 
-            //if (Username.ToLower() == "admin")
-            //{
-
-            //    if (OnLoggedIn != null)
-            //    {
-            //        user.IsAdmin = true;
-            //        OnLoggedIn(user, EventArgs.Empty);
-            //    }
-            //}
-            //else
-            //{
-            //    user.IsAdmin = false;
-        //    if (OnLoggedIn != null)
-        //    {
-        //        OnLoggedIn(user, EventArgs.Empty);
-        //    }
-        //}
-            var loginResponse = await HTTPHelper.LoginUser(new LoginModel { Password = password, Username = Username });
+            var loginResponse = await HTTPHelper.LoginUser(new LoginModel { Password = Password, Username = Username });
             if (loginResponse==null)
             {
                 LoginFailed = true;
+                ErrorMessage = "Failed to Login,please contact administrator.";
             }
             else
             {
@@ -122,7 +112,12 @@ namespace WICR_Estimator.ViewModels
                 if (OnLoggedIn != null)
                 {
                     OnLoggedIn(user, EventArgs.Empty);
+
                 }
+                Properties.Settings.Default.Username=Username;
+                Properties.Settings.Default.Password=Password;
+
+                Properties.Settings.Default.Save();
             }
         }
     }

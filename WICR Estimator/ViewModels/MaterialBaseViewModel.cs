@@ -3476,22 +3476,16 @@ namespace WICR_Estimator.ViewModels
             }
             if (isDiscounted)
             {
-                double.TryParse(laborDetails[1][0].ToString(), out laborDeduction);
-                laborDeduction = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Deduct on Labor for large jobs").Value;
+                if (dbData==null)
+                {
+                    double.TryParse(laborDetails[1][0].ToString(), out laborDeduction);
+                }
+                else
+                    laborDeduction = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Deduct on Labor for large jobs").Value;
             }
             IEnumerable<SystemMaterial> selectedLabors = SystemMaterials.Where(x => x.IsMaterialChecked == true).ToList();
 
-            //TotalSetupTimeLabor = ZAddLaborMinCharge ? selectedLabors.Select(x => x.Hours).Sum() + LaborMinChargeMinSetup : selectedLabors.Select(x => x.Hours).Sum();
-
-            //TotalLaborUnitPrice = ZAddLaborMinCharge ? (selectedLabors.Select(x => x.LaborUnitPrice).Sum() +
-            //    OtherLaborMaterials.Sum(x => x.LMaterialPrice)+
-            //    LaborMinChargeLaborUnitPrice) * (1 + preWage + laborDeduction) :
-            //    (selectedLabors.Select(x => x.LaborUnitPrice).Sum() + OtherLaborMaterials.Sum(x => x.LMaterialPrice)) * (1 + preWage + laborDeduction);
-            
-            //new min labor logic 
-            //TotalLaborExtension = ZAddLaborMinCharge ? (selectedLabors.Select(x => x.LaborExtension).Sum() + LaborMinChargeLaborExtension) * 
-            //    (1 + preWage + laborDeduction) :
-            //    selectedLabors.Select(x => x.LaborExtension).Sum() * (1 + preWage + laborDeduction);
+          
             TotalLaborExtension = selectedLabors.Select(x => x.LaborExtension).Sum() * (1 + preWage + laborDeduction);
             //Ends
             
@@ -3545,8 +3539,12 @@ namespace WICR_Estimator.ViewModels
             double laborDeduction = 0;
             if (isDiscounted)
             {
-                //double.TryParse(laborDetails[1][0].ToString(), out laborDeduction);
-                laborDeduction = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Deduct on Labor for large jobs").Value;
+                if (dbData==null)
+                {
+                    double.TryParse(laborDetails[1][0].ToString(), out laborDeduction);
+                }
+                else
+                    laborDeduction = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Deduct on Labor for large jobs").Value;
             }
             if (ZAddLaborMinCharge)
             {
