@@ -60,10 +60,43 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <Style TargetType="TabItem" x:Key="styledTab">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="BorderBrush" Value="{StaticResource SecondaryAccentBrush}"/>
+            <Setter Property="BorderThickness" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabItem}">
+                        <Border x:Name="PART_Border" Background="{TemplateBinding Background}" BorderThickness="1,1,1,0"
+BorderBrush="Black" Margin="0,0,0,3" CornerRadius="3,3,0,0" >
+                            <ContentPresenter ContentSource="Header" Margin="5" HorizontalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{StaticResource SecondaryHueMidBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource SecondaryHueMidForegroundBrush}"/>
+                                <Setter Property="FontSize" Value="12"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                
+                            </Trigger>
+
+                            <Trigger Property="IsSelected" Value="false">
+                                <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}"/>
+
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
     </UserControl.Resources>
     <Grid>
         <TabControl ItemsSource="{Binding EnabledProjects}"
-                                 SelectedIndex="{Binding ActiveTabIndex}"
+                    SelectedIndex="{Binding ActiveTabIndex}"
                                  >
             <!--<dragablz:TabablzControl.InterTabController>
                 <dragablz:InterTabController />
@@ -71,8 +104,9 @@
 
 
             <TabControl.Resources>
-                <Style TargetType="TabItem">
+                <Style TargetType="TabItem" BasedOn="{StaticResource styledTab}">
                     <Setter Property="AllowDrop" Value="True"/>
+                    <Setter Property="Padding" Value="10"/>
                     <EventSetter Event="PreviewMouseMove" Handler="TabItem_PreviewMouseMove"/>
                     <EventSetter Event="Drop" Handler="TabItem_Drop"/>
                 </Style>
@@ -92,7 +126,7 @@
                                     SelectedIndex="{Binding ActiveTabIndex}">
 
                             <TabItem Header="Job Setup" 
-                                     
+                                     Style="{StaticResource styledTab}"
                                      x:Name="JobSetupTab">
                                 <!--<b:Interaction.Triggers>
                                     <b:EventTrigger EventName="LostFocus">
@@ -110,7 +144,7 @@
                             </TabItem>
                             <TabItem Header="Metal" Visibility="{Binding Converter={StaticResource nullToVisibilityConverter}, 
                               Path=MetalViewModel}"
-                                    
+                                    Style="{StaticResource styledTab}"
                                  VerticalAlignment="Bottom">
                                 <TabItem.Content>
                                     <Grid Margin="0,0,0,0" 
@@ -121,7 +155,7 @@
                                 </TabItem.Content>
                             </TabItem>
                             <TabItem Header="Slope" Visibility="{Binding Converter={StaticResource nullToVisibilityConverter}, 
-                              Path=SlopeViewModel}"
+                              Path=SlopeViewModel}" Style="{StaticResource  styledTab}"
                                  VerticalAlignment="Bottom">
                                 <TabItem.Content>
                                     <Grid Margin="0,0,0,0" 
@@ -132,7 +166,7 @@
                                 </TabItem.Content>
                             </TabItem>
                             <TabItem Header="Material" Name="materialTab"
-                                 VerticalAlignment="Bottom">
+                                 VerticalAlignment="Bottom" Style="{StaticResource styledTab}">
                                 <TabItem.Content>
                                     <!--<Grid Margin="0,0,0,0" 
                                       Background="LightBlue" 
@@ -145,7 +179,7 @@
                                 </TabItem.Content>
                             </TabItem>
 
-                            <TabItem Header="Labor" 
+                            <TabItem Header="Labor" Style="{StaticResource styledTab}"
                                  VerticalAlignment="Bottom">
                                 <TabItem.Content>
                                     <!--<Grid Margin="0,0,0,0" 
@@ -160,7 +194,7 @@
                                 </TabItem.Content>
                             </TabItem>
                             <TabItem Header="Calculation Details"                        
-                                     VerticalAlignment="Bottom"
+                                     VerticalAlignment="Bottom" Style="{StaticResource styledTab}"
                                      IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor,
                                      AncestorLevel = 1,
                                      AncestorType={x:Type UserControl}}, Path=DataContext.IsAdminloggedIn}">

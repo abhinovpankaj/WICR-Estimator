@@ -58,10 +58,16 @@
         <Style TargetType="{x:Type TextBox}" x:Key="editableTextbox" BasedOn="{StaticResource  MaterialDesignTextBox}">
 
             <Style.Triggers >
-                
+
+                <Trigger Property="IsEnabled" Value="false">
+
+                    <Setter Property="Background" Value="White" />
+                    <Setter Property="Foreground" Value="Gray"/>
+                    <Setter Property="FontWeight" Value="Normal" />
+                </Trigger>
                 <DataTrigger Binding="{Binding IsMaterialChecked}" Value="False">
-                        <Setter Property="Background" Value="Gray"/>
-                        <Setter Property="Foreground" Value="Gray"/>
+                    <Setter Property="Background" Value="{StaticResource AccentColorBrush2}" />
+                    <Setter Property="Foreground" Value="{StaticResource AccentColorBrush2}" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding AllEditable}" Value="True">
                     <Setter Property="IsEnabled" Value="True"/>
@@ -87,11 +93,7 @@
                     <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
                     <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
                 </DataTrigger>
-                <Trigger Property="IsEnabled" Value="false">
-                    <Setter Property="Background" Value="White" />
-                    <Setter Property="Foreground" Value="Gray"/>
-                    <Setter Property="FontWeight" Value="Normal" />
-                </Trigger>
+               
                
                 
             </Style.Triggers>
@@ -139,8 +141,8 @@
 
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsMaterialChecked}" Value="False">
-                                <Setter Property="Background" Value="Gray"/>
-                                <Setter Property="Foreground" Value="Gray"/>
+                                <Setter Property="Background" Value="{StaticResource AccentColorBrush2}" />
+                                <Setter Property="Foreground" Value="{StaticResource AccentColorBrush2}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -198,24 +200,36 @@
                                         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBox}">
                                             <Setter Property="IsEnabled" Value="False"/>
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Name}" 
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding Name}" Value="SUPERSTOP (FOUNDATIONS AND WALLS) 1/2&quot; X 1&quot;X 20 FT"/>
+                                                        <Condition Binding="{Binding Tag,RelativeSource={RelativeSource Self}}" Value="True"/>
+                                                    </MultiDataTrigger.Conditions>
+                                                    <MultiDataTrigger.Setters>
+                                                        <Setter Property="FontWeight" Value="Bold" />
+                                                        <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+                                                        <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
+                                                    </MultiDataTrigger.Setters>
+                                                </MultiDataTrigger>
+                                                
+                                                <!--<DataTrigger Binding="{Binding Name}" 
                                              Value="SUPERSTOP (FOUNDATIONS AND WALLS) 1/2&quot; X 1&quot;X 20 FT">
                                                     <Setter Property="IsEnabled" Value="True"/>
-                                                    <Setter Property="Background" Value="LightYellow"/>
-                                                    <Setter Property="Foreground" Value="Black"/>
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding Tag,
+                                                    <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}"/>
+                                                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightForegroundBrush}"/>
+                                                </DataTrigger>-->
+                                                <!--<DataTrigger Binding="{Binding Tag,
                                                 RelativeSource={RelativeSource Self}}" 
                                                 Value="True">
                                                     <Setter Property="FontWeight" Value="Bold" />
                                                     <Setter Property="Background" Value="Green" />
                                                     <Setter Property="Foreground" Value="White" />
-                                                </DataTrigger>
-                                                <Trigger Property="IsEnabled" Value="false">
+                                                </DataTrigger>-->
+                                                <!--<Trigger Property="IsEnabled" Value="false">
                                                     <Setter Property="Background" Value="White" />
                                                     <Setter Property="Foreground" Value="Gray"/>
                                                     <Setter Property="FontWeight" Value="Normal" />
-                                                </Trigger>
+                                                </Trigger>-->
                                             </Style.Triggers>
                                         </Style>
                                     </TextBox.Style>

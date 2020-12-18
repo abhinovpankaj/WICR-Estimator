@@ -39,7 +39,7 @@
 
             <Style.Triggers >
                 <Trigger Property="IsEnabled" Value="True">
-                    <Setter Property="Background" Value="{StaticResource AccentColorBrush4}" />
+                    <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
                 </Trigger>
                 <DataTrigger Binding="{Binding Tag,RelativeSource={RelativeSource Self}
                                         }" 
@@ -51,6 +51,7 @@
             </Style.Triggers>
             
         </Style>
+        
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -69,10 +70,10 @@
 
         </Grid.RowDefinitions>
         <StackPanel>
-            <Label Content="{Binding SlopeHeaderText}"
+            <Label Content="{Binding SlopeHeaderText}" Style="{StaticResource MaterialDesignLabel}"
                    FontSize="14"
                    FontWeight="Bold"
-                   Margin="10,0,0,0"/>
+                   Margin="10,0,0,10"/>
             <DataGrid AutoGenerateColumns="False" 
                   HorizontalAlignment="Left"
                   CanUserSortColumns="False"
@@ -230,10 +231,12 @@
         </GroupBox>
         <StackPanel Grid.Column="1"
                     Visibility="{Binding IsUrethaneVisible}">
-            <Label Content="{Binding UrethaneText}"
+            <Label Content="{Binding UrethaneText}" 
+                   
+                   Style="{StaticResource MaterialDesignLabel}"
                    FontSize="14"
                    FontWeight="Bold"
-                   Margin="10,0,0,0"/>
+                   Margin="10,0,0,10"/>
             <DataGrid AutoGenerateColumns="False" 
                   HorizontalAlignment="Left"
                   CanUserSortColumns="False"
@@ -404,8 +407,8 @@
         
         <Grid Grid.Row="3" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <GroupBox x:Name="groupBox2"
@@ -624,14 +627,15 @@
             
         </Grid>
         
-        <StackPanel Grid.Column="0" Background="{StaticResource MaterialDesignSelection}"
+        <StackPanel Grid.Column="0" Background="{StaticResource PrimaryHueDarkBrush}"
+                    
                     Margin="10,5,10,5" VerticalAlignment="Bottom"
                     Grid.Row="5" Orientation="Horizontal">
-            <TextBlock Text="Slope Material" FontSize="14"
-                       VerticalAlignment="Center" Style="{StaticResource MaterialDesignTextBlock}"
-                       Margin="10"/>
-            <TextBlock Text="{ Binding SlopeMaterialName}" FontSize="14" Style="{StaticResource MaterialDesignHeadline6TextBlock}"
-                       VerticalAlignment="Center"
+            <TextBlock Text="Slope Material" 
+                       VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
+                       Margin="10" Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"/>
+            <TextBlock Text="{ Binding SlopeMaterialName}"  Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
+                       VerticalAlignment="Center" Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
                        Margin="10" Width="220"/>
         </StackPanel>
         

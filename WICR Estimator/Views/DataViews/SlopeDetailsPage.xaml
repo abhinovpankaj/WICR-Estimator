@@ -63,7 +63,7 @@
     </UserControl.Resources>
     <DockPanel>
         <StatusBar DockPanel.Dock="Bottom"
-                   Background="{StaticResource ProgressBrush}">
+                   Background="{StaticResource SecondaryAccentBrush}">
             <StatusBarItem>
                 <TextBlock Text="{Binding LastActionResponse }" />
             </StatusBarItem>

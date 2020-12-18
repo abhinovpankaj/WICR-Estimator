@@ -47,7 +47,7 @@
             <Style.Triggers>
                 
                     <Trigger Property="IsEnabled" Value="True">
-                        <Setter Property="Background" Value="{StaticResource   AccentColorBrush4}" />
+                    <Setter Property="Background" Value="{StaticResource   SecondaryHueMidBrush}" />
                     <Setter Property="ToolTip" Value="Please enter a numeric value."/>
                 </Trigger>
                 <DataTrigger Binding="{Binding Text,RelativeSource={RelativeSource Self},
@@ -104,7 +104,7 @@
                        Text="Project Start Date"/>
                         <ComboBox Text="{Binding ProjectDelayFactor,UpdateSourceTrigger=PropertyChanged}" 
                           Width="180" HorizontalAlignment="Left"
-                          Margin="5,0,0,0">
+                          Margin="5,0,0,0" >
                             <ComboBoxItem Content="0-3 Months" IsSelected="True"/>
                             <ComboBoxItem Content="3-6 Months"/>
                             <ComboBoxItem Content="6-12 Months"/>
@@ -175,36 +175,7 @@
                                    HorizontalAlignment="Center"/>
                     </StackPanel>
                 </materialDesign:Card>
-                <!--<Button Background="White"
-                            Margin="15,40,15,15"
-                            Height="35"
-                            FontSize="15"                        
-                            ToolTip="Apply Changes"                            
-                            Command="{Binding ApplyChangesCommnad}" >
-                    <Button.Content>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock FontFamily="Segoe UI Symbol"
-                                       VerticalAlignment="Center"
-                                       Text="&#xE10B;"/>
-                            <TextBlock Text="Apply Changes"
-                                       Margin="5,0,0,0"
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button.Content>
-                    </Button>-->
-                    <!--<StackPanel Orientation="Horizontal" Background="LightGray"
-                            Margin="0,30,0,0" Visibility="Hidden"
-                            >
-                        <TextBlock Text="Labor Rate" 
-                           >
-                        </TextBlock>
-                        <TextBlock Text="{Binding LaborRate}" 
-                               IsEnabled="False"
-                               FontWeight="SemiBold"                             
-                              >
-                        </TextBlock>
-
-                    </StackPanel>-->
+               
                 </StackPanel>
 
 
@@ -214,15 +185,7 @@
         <materialDesign:Card UniformCornerRadius="5" Width="350"
                              Grid.Column="1"
                              Margin="10" materialDesign:ShadowAssist.ShadowDepth="Depth1">
-            <!--<Border BorderThickness="0" BorderBrush="Black"
-                Grid.Column="1"
-                Background="AliceBlue"
-                Margin="10"
-                Width="350"
-                Padding="0,0,0,15">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="10" Color="#82000000" />
-            </Border.Effect>-->
+           
             <ScrollViewer VerticalScrollBarVisibility="Auto" >
                 <StackPanel>
                     <materialDesign:Card UniformCornerRadius="5" Padding="10"

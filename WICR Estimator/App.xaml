@@ -79,7 +79,7 @@ Do not rename, keep in sequence; light to dark.
                 <Setter Property="Stylus.IsFlicksEnabled" Value="True" />
                 <Style.Triggers>
                     <Trigger Property="Orientation" Value="Horizontal">
-                        <Setter Property="Height" Value="15" />
+                        <Setter Property="Height" Value="10" />
                         <Setter Property="MinHeight" Value="5" />
                     </Trigger>
                     <Trigger Property="Orientation" Value="Vertical">
@@ -88,7 +88,37 @@ Do not rename, keep in sequence; light to dark.
                     </Trigger>
                 </Style.Triggers>
             </Style>
+            
 
+            <Style TargetType="TabItem">
+                <Setter Property="FontSize" Value="10"/>
+                <Setter Property="BorderBrush" Value="{StaticResource SecondaryAccentBrush}"/>
+                <Setter Property="BorderThickness" Value="10"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TabItem}">
+                            <Border x:Name="PART_Border" Background="{TemplateBinding Background}" BorderThickness="1,1,1,0"
+BorderBrush="Black" Margin="0,0,0,0" CornerRadius="2,2,0,0" Padding="50,0,50,0">
+                                <ContentPresenter ContentSource="Header" Margin="5" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource SecondaryHueMidBrush}"/>
+                                    <Setter Property="Foreground" Value="{StaticResource SecondaryHueMidForegroundBrush}"/>
+                                </Trigger>
+
+                                <Trigger Property="IsSelected" Value="false">
+                                    <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}"/>
+                                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}"/>
+
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            
         </ResourceDictionary>
         
         

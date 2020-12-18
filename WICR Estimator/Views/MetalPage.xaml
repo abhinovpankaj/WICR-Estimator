@@ -22,7 +22,8 @@
             <Style.Triggers >
                 <Trigger Property="IsEnabled" Value="True">
                     <!--<Setter Property="Background" Value="LightYellow" />-->
-                    <Setter Property="Background" Value="{StaticResource AccentColorBrush4}" />
+                    <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" ></Setter>
+                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightForegroundBrush}" />
                 </Trigger>
                 <DataTrigger Binding="{Binding Tag,RelativeSource={RelativeSource Self}
                                         }" 
@@ -53,8 +54,8 @@
                         <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled}" Value="True" />
                     </MultiDataTrigger.Conditions>
                     <MultiDataTrigger.Setters>
-                        <Setter Property="Background" Value="{StaticResource AccentColorBrush4}" />
-                        <Setter Property="Foreground" Value="{StaticResource  PrimaryHueDarkBrush}" />
+                        <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource  PrimaryHueLightForegroundBrush}" />
                     </MultiDataTrigger.Setters>
                 </MultiDataTrigger>
                 <DataTrigger Binding="{Binding Tag,RelativeSource={RelativeSource Self}
@@ -79,36 +80,38 @@
                     <MultiDataTrigger.Setters>
                         <!--<Setter Property="Background" Value="White" />
                         <Setter Property="Foreground" Value="Black"/>-->
-                        <Setter Property="Background" Value="{StaticResource AccentColorBrush2}" />
-                        <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkBrush}" />
+                        <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
                     </MultiDataTrigger.Setters>
                 </MultiDataTrigger>
 
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    
-    <Grid >
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <!--<Grid.RowDefinitions>
+   
+        
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <!--<Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>-->
-        <ScrollViewer VerticalScrollBarVisibility="Auto" 
+            <ScrollViewer VerticalScrollBarVisibility="Auto" 
                       
                       HorizontalScrollBarVisibility="Auto"
                                   >
-            <StackPanel>
-                <GroupBox Header="Metals"
+                <StackPanel>
+                    <GroupBox Header="Metals"
                           Style="{DynamicResource MaterialDesignGroupBox}"
                           Margin="10"
+                          
                           materialDesign:ShadowAssist.ShadowDepth="Depth2"
                           BorderThickness="1">
-                    <DataGrid AutoGenerateColumns="False" 
+                        <DataGrid AutoGenerateColumns="False" 
                       HorizontalScrollBarVisibility="Auto"
                   VerticalScrollBarVisibility="Auto" 
                       HorizontalAlignment="Left"
@@ -118,100 +121,118 @@
                   
                   CanUserAddRows="false"
                   ItemsSource="{Binding Metals}">
-                        <DataGrid.ColumnHeaderStyle>
-                            <Style BasedOn="{StaticResource {x:Type  DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
-                                <Setter Property="Background" Value="{StaticResource AccentColorBrush3}" />
-                                <Setter Property="Foreground" Value="{StaticResource  IdealForegroundColorBrush}" />
+                            <DataGrid.ColumnHeaderStyle>
+                                <Style BasedOn="{StaticResource {x:Type  DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                    <Setter Property="Background" Value="{StaticResource  PrimaryHueDarkBrush}" />
+                                    <Setter Property="Foreground" Value="{StaticResource  PrimaryHueDarkForegroundBrush}" />
+                                </Style>
+                            </DataGrid.ColumnHeaderStyle>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Style.Triggers>
+                                   
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsStairMetal}" Value="true"/>
+                                            <Condition Binding="{Binding IsStairMetalChecked}" Value="false"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+
+                                            <Setter Property="Background" Value="{StaticResource AccentColorBrush2}" />
+                                            <Setter Property="Foreground" Value="{StaticResource AccentColorBrush2}" />
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
                             </Style>
-                        </DataGrid.ColumnHeaderStyle>
+                        </DataGrid.RowStyle>
                         <DataGrid.Columns>
 
-                            <DataGridTemplateColumn FocusManager.IsFocusScope="False"
+                                <DataGridTemplateColumn FocusManager.IsFocusScope="False"
                                             Header="Material Name">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <CheckBox x:Name="includeMe" Visibility="{Binding IsStairMetal}"
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <CheckBox x:Name="includeMe" Visibility="{Binding IsStairMetal}"
                                           IsChecked="{Binding IsStairMetalChecked,
                                     UpdateSourceTrigger=PropertyChanged}"></CheckBox>
-                                            <!--<CheckBox x:Name="includeMe" Visibility="{Binding Name,
+                                                <!--<CheckBox x:Name="includeMe" Visibility="{Binding Name,
                                     Converter={StaticResource checkBoxConv}}"
                                           IsChecked="{Binding IsStairMetalChecked,UpdateSourceTrigger=PropertyChanged}"></CheckBox>-->
-                                            <TextBlock Text="{Binding Name}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Size">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBox 
+                                                <TextBlock Text="{Binding Name}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Size">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox 
                                     Text="{Binding Size,UpdateSourceTrigger=LostFocus}"
                                          HorizontalAlignment="Stretch"
                                     IsEnabled="True" Style="{StaticResource  editableTextbox}"
                                          />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
 
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Units">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBox Tag="{Binding Units, Converter={StaticResource HasFieldEdited }}"
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Units">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Tag="{Binding Units, Converter={StaticResource HasFieldEdited }}"
                                 Text="{Binding Units,UpdateSourceTrigger=LostFocus}"
                                      IsEnabled="{Binding Name,Converter={StaticResource textboxConv}}"
                                          Style="{StaticResource editableTextbox }">
 
-                                        </TextBox>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Metal Price"
+                                            </TextBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Metal Price"
                                         IsReadOnly="True" 
                                         Binding="{Binding MaterialPrice ,StringFormat={}{0:C}}"/>
-                            <DataGridTemplateColumn 
+                                <DataGridTemplateColumn 
                                         Header="Special Material Pricing($)">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBox Tag="{Binding SpecialMetalPricing, 
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Tag="{Binding SpecialMetalPricing, 
                                 Converter={StaticResource HasFieldEdited }}"
                                     Text="{Binding SpecialMetalPricing ,StringFormat={}{0:C},
                                 UpdateSourceTrigger=LostFocus}"
                                     IsEnabled="True" Style="{StaticResource  editableTextbox}"
                                          >
 
-                                        </TextBox>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
+                                            </TextBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
 
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Labor Extension($)"
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Labor Extension($)"
                                         IsReadOnly="True" 
                                         Binding="{Binding LaborExtension  ,StringFormat={}{0:C}}"/>
-                            <DataGridTextColumn Header="Material Extension($)"
+                                <DataGridTextColumn Header="Material Extension($)"
                                     IsReadOnly="True"
                                     Binding="{Binding MaterialExtension ,StringFormat={}{0:C}}"/>
 
-                        </DataGrid.Columns>
+                            </DataGrid.Columns>
 
-                    </DataGrid>
-                </GroupBox>
-                <GroupBox Header="Miscelleneous Metals"
+                        </DataGrid>
+                    </GroupBox>
+                    <GroupBox Header="Miscelleneous Metals"
                           Style="{DynamicResource MaterialDesignGroupBox}"
                           Margin="10"
                           materialDesign:ShadowAssist.ShadowDepth="Depth2"
                           BorderThickness="1">
-                    <StackPanel>
-                        
-                    
-                    <StackPanel Orientation="Horizontal" Grid.Row="2"
+                        <StackPanel>
+
+
+                            <StackPanel Orientation="Horizontal" Grid.Row="2"
                     VerticalAlignment="Bottom"
                     HorizontalAlignment="Stretch">
-                        <Label Content="Add Miscelleneous Metals"
+                                <Label Content="Add Miscelleneous Metals"
                            FontWeight="SemiBold"
                            VerticalAlignment="Center"
                        />
-                        <Button HorizontalAlignment="Right"
+                                <Button HorizontalAlignment="Right"
                     Margin="5"
                     Width="30" Height="30"
                      FontWeight="Bold"
@@ -219,13 +240,13 @@
                      ToolTip="Add New Misc Metal"
                     
                     Command="{Binding AddRowCommand}" >
-                            <Button.Content>
-                                <materialDesign:PackIcon Kind="Add"
+                                    <Button.Content>
+                                        <materialDesign:PackIcon Kind="Add"
                                              HorizontalAlignment="Center"
                                              VerticalAlignment="Center"/>
-                            </Button.Content>
-                        </Button>
-                        <Button Command="{Binding RemoveCommand}"
+                                    </Button.Content>
+                                </Button>
+                                <Button Command="{Binding RemoveCommand}"
                     ToolTip="Remove last added Misc Metal"
                     Height="30"
                     FontWeight="Bold"
@@ -233,15 +254,15 @@
                     Padding="0"
                     HorizontalAlignment="Right"
                     Margin="5">
-                            <Button.Content>
-                                <materialDesign:PackIcon Kind="Remove"
+                                    <Button.Content>
+                                        <materialDesign:PackIcon Kind="Remove"
                                              HorizontalAlignment="Center"
                                              VerticalAlignment="Center"/>
-                            </Button.Content>
-                        </Button>
-                    </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                            </StackPanel>
 
-                    <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Left"
+                            <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Left"
                       Name="MiscMetalGrid" VerticalAlignment="Top"
                   HorizontalScrollBarVisibility="Auto"
                   CanUserSortColumns="False"
@@ -252,86 +273,88 @@
                       CanUserAddRows="false"
                       
                   ItemsSource="{Binding MiscMetals,UpdateSourceTrigger=PropertyChanged}">
-                            <DataGrid.ColumnHeaderStyle>
-                                <Style BasedOn="{StaticResource {x:Type  DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
-                                    <Setter Property="Background" Value="{StaticResource AccentColorBrush3}" />
-                                    <Setter Property="Foreground" Value="{StaticResource  IdealForegroundColorBrush}" />
-                                </Style>
-                            </DataGrid.ColumnHeaderStyle>
-                            <DataGrid.Columns>
+                                <DataGrid.ColumnHeaderStyle>
+                                    
+                                    <Style BasedOn="{StaticResource {x:Type  DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                        <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+                                        <Setter Property="Foreground" Value="{StaticResource  PrimaryHueDarkForegroundBrush}" />
+                                    </Style>
+                               
+                                </DataGrid.ColumnHeaderStyle>
+                                <DataGrid.Columns>
 
-                            <DataGridTemplateColumn Header="Description Of Misc Metal">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBox Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}"
+                                    <DataGridTemplateColumn Header="Description Of Misc Metal">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}"
                                      IsEnabled="{Binding IsEditable}"
                                          Style="{StaticResource editableTextbox}">
-                                        </TextBox>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Units">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBox Tag="{Binding Units, 
+                                                </TextBox>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Units">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox Tag="{Binding Units, 
                                 Converter={StaticResource HasFieldEdited }}" 
                                      Text="{Binding Units,UpdateSourceTrigger=LostFocus}"
                                      IsEnabled="{Binding IsEditable}"
                                          Style="{StaticResource editableTextbox}">
 
-                                        </TextBox>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <!--<DataGridTextColumn Header="Unit Price"
+                                                </TextBox>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <!--<DataGridTextColumn Header="Unit Price"
                                     IsReadOnly="{Binding IsReadOnly}"
                                     Binding="{Binding UnitPrice}"/>-->
-                            <DataGridTemplateColumn Header="Unit Labor Price">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBox Tag="{Binding UnitPrice, Converter={StaticResource HasFieldEdited }}"
+                                    <DataGridTemplateColumn Header="Unit Labor Price">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox Tag="{Binding UnitPrice, Converter={StaticResource HasFieldEdited }}"
                                      Text="{Binding UnitPrice,UpdateSourceTrigger=LostFocus}"
                                      IsEnabled="{Binding IsEditable}"
                                          Style="{StaticResource editableTextbox}">
 
-                                        </TextBox>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Material Price($)">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBox Text="{Binding MaterialPrice,
+                                                </TextBox>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Material Price($)">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox Text="{Binding MaterialPrice,
                                     UpdateSourceTrigger=LostFocus,
                                     StringFormat={}{0:C}}"
                                      IsEnabled="{Binding IsEditable}"
                                       Tag="{Binding MaterialPrice, Converter={StaticResource HasFieldEdited }}"   
                                          Style="{StaticResource editableTextbox}">
 
-                                        </TextBox>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
+                                                </TextBox>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
 
-                            <DataGridTextColumn Header="Labor Extension($)" 
+                                    <DataGridTextColumn Header="Labor Extension($)" 
                                         IsReadOnly="True"
                                         Binding="{Binding LaborExtension,Mode=OneWay ,StringFormat={}{0:C}}"/>
 
-                            <DataGridTextColumn Header="Material Extension($)"
+                                    <DataGridTextColumn Header="Material Extension($)"
                                     IsReadOnly="True"
                                     Binding="{Binding MaterialExtension,Mode=OneWay,StringFormat={}{0:C}}"/>
-                        </DataGrid.Columns>
+                                </DataGrid.Columns>
 
-                    </DataGrid>
-                    </StackPanel>
-                </GroupBox>
-                <GroupBox Header="Add-on Metals"
+                            </DataGrid>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox Header="Add-on Metals"
                           Style="{DynamicResource MaterialDesignGroupBox}"
                           Margin="10"
                           BorderBrush="{StaticResource AccentColorBrush}"
                           materialDesign:ShadowAssist.ShadowDepth="Depth2"
                           BorderThickness="1">
-                    <DataGrid AutoGenerateColumns="False" CanUserSortColumns="False"
+                        <DataGrid AutoGenerateColumns="False" CanUserSortColumns="False"
                           HorizontalScrollBarVisibility="Auto"
                           HorizontalAlignment="Left"
                           VerticalScrollBarVisibility="Auto"    
@@ -339,209 +362,211 @@
                           IsTabStop="False"
                           CanUserAddRows="false"
                           ItemsSource="{Binding AddOnMetals}">
-                        <DataGrid.ColumnHeaderStyle>
-                            <Style BasedOn="{StaticResource {x:Type  DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
-                                <Setter Property="Background" Value="{StaticResource AccentColorBrush2}" />
-                                <Setter Property="Foreground" Value="{StaticResource  IdealForegroundColorBrush}" />
-                            </Style>
-                        </DataGrid.ColumnHeaderStyle>
-                        <DataGrid.RowStyle>
-                            <Style TargetType="DataGridRow">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsMetalChecked}" Value="false">
-                                        <!--<Setter Property="Background" Value="Gray"/>
+                            <DataGrid.ColumnHeaderStyle>
+                                <Style BasedOn="{StaticResource {x:Type  DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                    <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+                                    <Setter Property="Foreground" Value="{StaticResource  PrimaryHueDarkForegroundBrush}" />
+                                </Style>
+                            </DataGrid.ColumnHeaderStyle>
+                            <DataGrid.RowStyle>
+                                <Style TargetType="DataGridRow">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsMetalChecked}" Value="false">
+                                            <!--<Setter Property="Background" Value="Gray"/>
                                         <Setter Property="Foreground" Value="Gray"/>-->
-                                        <Setter Property="Background" Value="{StaticResource AccentColorBrush2}" />
-                                        <Setter Property="Foreground" Value="{StaticResource AccentColorBrush2}" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGrid.RowStyle>
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <CheckBox x:Name="mChbox"
+                                            <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
+                                            <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightForegroundBrush}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.RowStyle>
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox x:Name="mChbox"
                                           Command="{Binding DataContext.CheckboxCommand,
                                 ElementName=AddOnMetalGrid}"
                                           IsChecked="{Binding IsMetalChecked,
                                 UpdateSourceTrigger=PropertyChanged}"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn FocusManager.IsFocusScope="False"
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn FocusManager.IsFocusScope="False"
                                             Header="Material Name">
 
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Name}"
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name}"
                                        >
-                                            <TextBlock.Style>
-                                                <Style TargetType="{x:Type TextBlock}">
-                                                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsMetalChecked}" Value="True">
-                                                            <Setter Property="Foreground" Value="Black"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
+                                                <TextBlock.Style>
+                                                    <Style TargetType="{x:Type TextBlock}">
+                                                        <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsMetalChecked}" Value="True">
+                                                                <Setter Property="Foreground" Value="Black"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
 
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
 
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Size">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBox x:Name="txtSize" Text="{Binding Size,
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Size">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox x:Name="txtSize" Text="{Binding Size,
                                     UpdateSourceTrigger=LostFocus}"
                                          HorizontalAlignment="Stretch"
                                     IsEnabled="True" >
-                                            <TextBox.Style>
-                                                <Style TargetType="{x:Type TextBox}">
-                                                    <Setter Property="Foreground" Value="White"/>
-                                                    <Setter Property="Background" Value="Gray"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsMetalChecked}" Value="True">
-                                                            <Setter Property="Foreground" Value="Black"/>
-                                                            <Setter Property="Background" Value="White"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBox.Style>
-                                        </TextBox>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
+                                                <TextBox.Style>
+                                                    <Style TargetType="{x:Type TextBox}">
+                                                        <Setter Property="Foreground" Value="White"/>
+                                                        <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsMetalChecked}" Value="True">
+                                                                <Setter Property="Foreground" Value="Black"/>
+                                                                <Setter Property="Background" Value="White"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBox.Style>
+                                            </TextBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
 
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Units">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBox Tag="{Binding Units, Converter={StaticResource HasFieldEdited }}"
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Units">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Tag="{Binding Units, Converter={StaticResource HasFieldEdited }}"
                                     Text="{Binding Units,UpdateSourceTrigger=LostFocus}"
                                      IsEnabled="{Binding Name,Converter={StaticResource textboxConv}}"
                                          Style="{StaticResource addOnTextBox }">
 
-                                        </TextBox>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Metal Price"
+                                            </TextBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Metal Price"
                                         IsReadOnly="True" 
                                         Binding="{Binding MaterialPrice ,StringFormat={}{0:C}}"/>
-                            <DataGridTemplateColumn 
+                                <DataGridTemplateColumn 
                                         Header="Special Material Pricing($)">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBox Tag="{Binding SpecialMetalPricing, 
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Tag="{Binding SpecialMetalPricing, 
                                     Converter={StaticResource HasFieldEdited}}"
                                          Text="{Binding SpecialMetalPricing,StringFormat={}{0:C},
                                     UpdateSourceTrigger=LostFocus}"
                                     IsEnabled="True" Style="{StaticResource  addOnTextBox}"
                                          >
 
-                                        </TextBox>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
+                                            </TextBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
 
-                            </DataGridTemplateColumn>
+                                </DataGridTemplateColumn>
 
-                            <DataGridTextColumn Header="Labor Extension($)"
+                                <DataGridTextColumn Header="Labor Extension($)"
                                         IsReadOnly="True" 
                                         Binding="{Binding LaborExtension  ,StringFormat={}{0:C}}"/>
 
-                            <DataGridTextColumn Header="Material Extension($)"
+                                <DataGridTextColumn Header="Material Extension($)"
                                     IsReadOnly="True"
                                     Binding="{Binding MaterialExtension ,StringFormat={}{0:C}}"/>
-                        </DataGrid.Columns>
+                            </DataGrid.Columns>
 
-                    </DataGrid>
-                </GroupBox>
-            </StackPanel>
-            
-        </ScrollViewer>
-        
-        
-       
-        
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+                        </DataGrid>
+                    </GroupBox>
+                </StackPanel>
 
-            <GroupBox Header="Total All Metals" 
+            </ScrollViewer>
+
+
+
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <GroupBox Header="Total All Metals" 
                       Style="{DynamicResource MaterialDesignCardGroupBox}"
                   Grid.Row="0" 
                   BorderBrush="Black" Margin="10,10,0,0"
                   HorizontalAlignment="Right">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Metal Type" Grid.Row="0" Margin="5"/>
-                    <TextBlock Text="Nails, caulk + overage on metal"
+                        <TextBlock Text="Metal Type" Grid.Row="0" Margin="5" Style="{StaticResource MaterialDesignSubtitle2TextBlock}"/>
+                    <TextBlock Text="Nails, caulk + overage on metal" Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
                                    VerticalAlignment="Center" Grid.Row="1"
                                    Margin="5"/>
-                    <TextBlock Text="Labor Total Cost" Grid.Row="2"
+                    <TextBlock Text="Labor Total Cost" Grid.Row="2" Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
                                    VerticalAlignment="Center"
                                    Margin="5"/>
-                    <TextBlock Text="Material Total Cost" Grid.Row="3"
+                    <TextBlock Text="Material Total Cost" Grid.Row="3" Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
                                    VerticalAlignment="Center"
-                                   Margin="5"/>
-                    
-                    
-                        <TextBox Text="{Binding MetalName}" Background="LightGray"
+                                   Margin="5,5,5,50"/>
+
+
+                        <TextBox Text="{Binding MetalName}" Background="{StaticResource PrimaryHueLightBrush}"
                        Margin="5" IsReadOnly="True" Grid.Column="1" Width="200"
                                 />
-                        <TextBox Text="{Binding Nails, StringFormat='\{0\}%'}" Background="LightGray"
+                        <TextBox Text="{Binding Nails, StringFormat='\{0\}%'}" Background="{StaticResource PrimaryHueLightBrush}"
                        Margin="5" IsReadOnly="True" Grid.Column="1" Grid.Row="1"/>
 
-                    <TextBox IsReadOnly="True"  Margin="5" Grid.Row="2" Grid.Column="1"
+                        <TextBox IsReadOnly="True"  Margin="5" Grid.Row="2" Grid.Column="1"
                              Text="{Binding TotalLaborCost,UpdateSourceTrigger=PropertyChanged ,StringFormat={}{0:C}}"/>
-                    <TextBox IsReadOnly="True"  Margin="5" Grid.Row="3" Grid.Column="1"
+                        <TextBox IsReadOnly="True"  Margin="5,5,5,50" Grid.Row="3" Grid.Column="1"
                             Text="{Binding TotalMaterialCost,UpdateSourceTrigger=PropertyChanged  ,StringFormat={}{0:C}}" />
 
-                </Grid>
-            </GroupBox>
-            <StackPanel Grid.Row="1" 
+                    </Grid>
+                </GroupBox>
+                <StackPanel Grid.Row="1" 
                     Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom">
-                <!--<Button Content="Fill Grid" Command="{Binding FillValues}"
+                    <!--<Button Content="Fill Grid" Command="{Binding FillValues}"
                         Height="30" 
                     Width="100" Background="LightGreen"/>-->
-                <Button Command="{Binding CalculateCostCommand}"
+                    <Button Command="{Binding CalculateCostCommand}"
                         ToolTip="Calculate Labor and Material Costs"
                         Height="30"
                         HorizontalAlignment="Right"
                         Margin="5" 
                          IsEnabled="{Binding AddRowCommand}">
-                    <Button.Content>
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Calculator"
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Calculator"
                                              HorizontalAlignment="Left"
                                              VerticalAlignment="Center"/>
-                            <TextBlock Text="Calculate" VerticalAlignment="Center"
+                                <TextBlock Text="Calculate" VerticalAlignment="Center"
                                    HorizontalAlignment="Left"
                                    Margin="5" FontWeight="bold"/>
-                            
-                        </StackPanel>
-                    </Button.Content>
-                </Button>
-            </StackPanel>
+
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+
         </Grid>
-        
-       
-    </Grid>
+   
+   
 </UserControl>
