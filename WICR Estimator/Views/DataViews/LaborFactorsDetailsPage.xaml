@@ -60,15 +60,20 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource MaterialDesignCheckBox}">
+            <Setter Property="Height" Value="20"/>
+        </Style>
+
+        
     </UserControl.Resources>
     <DockPanel>
-        <StatusBar DockPanel.Dock="Bottom"
+        <!--<StatusBar DockPanel.Dock="Bottom"
                    Background="{StaticResource SecondaryAccentBrush}">
             <StatusBarItem>
                 <TextBlock Text="{Binding LastActionResponse }" />
             </StatusBarItem>
         </StatusBar>
-        <!--<materialDesign:Snackbar
+        <materialDesign:Snackbar
                 HorizontalAlignment="Stretch"
                 x:Name="SnackbarFive">
                     <materialDesign:SnackbarMessage
@@ -186,16 +191,19 @@
                     SelectedItem="{Binding SelectedFreightFactor}"
                     ItemsSource="{Binding FreightFactors,UpdateSourceTrigger=PropertyChanged}" >
                                 <DataGrid.Columns>
-                                    <DataGridCheckBoxColumn Binding="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridCheckBoxColumn
+                                        Binding="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}">
                                         <DataGridCheckBoxColumn.Header>
                                             <CheckBox IsChecked="{Binding Path=DataContext.AllFreightSelected,
                                                         UpdateSourceTrigger=PropertyChanged,
                                                        RelativeSource={RelativeSource FindAncestor,
                                                                AncestorType={x:Type DataGrid}}}" />
                                         </DataGridCheckBoxColumn.Header>
-                                        <!--<DataGridCheckBoxColumn.ElementStyle>
-                                            <Style TargetType="CheckBox"/>
-                                        </DataGridCheckBoxColumn.ElementStyle>-->
+                                        <DataGridCheckBoxColumn.ElementStyle>
+                                            <Style TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}">
+                                                
+                                            </Style>
+                                        </DataGridCheckBoxColumn.ElementStyle>
                                     </DataGridCheckBoxColumn>
                                     <materialDesign:DataGridTextColumn Header="Freight Factor Name"
                                                                     Width="250"
@@ -294,17 +302,20 @@
                                             SelectedItem="{Binding SelectedLaborFactor}"
                                             ItemsSource="{Binding FilteredLaborFactors,UpdateSourceTrigger=PropertyChanged}" >
                                     <DataGrid.Columns>
-                                        <DataGridCheckBoxColumn Binding="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}">
+                                        <DataGridCheckBoxColumn  
+                                            Binding="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}">
                                             <DataGridCheckBoxColumn.Header>
                                                 <CheckBox IsChecked="{Binding Path=DataContext.AllLaborSelected,
                                                            UpdateSourceTrigger=PropertyChanged,
                                                            RelativeSource={RelativeSource FindAncestor,
                                                                AncestorType={x:Type DataGrid}}}" />
                                             </DataGridCheckBoxColumn.Header>
-                                            <!--<DataGridCheckBoxColumn.ElementStyle>
-                                                <Style TargetType="CheckBox"/>
-                                            </DataGridCheckBoxColumn.ElementStyle>-->
-                                        </DataGridCheckBoxColumn>
+                                        <DataGridCheckBoxColumn.ElementStyle>
+                                            <Style TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}">
+
+                                            </Style>
+                                        </DataGridCheckBoxColumn.ElementStyle>
+                                    </DataGridCheckBoxColumn>
                                         <materialDesign:DataGridTextColumn Header="Labor Factor Name"
                                                                        Width="250"
                                                                    IsReadOnly="True"

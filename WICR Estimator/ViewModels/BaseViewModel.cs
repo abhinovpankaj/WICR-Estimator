@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MahApps.Metro.Controls.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -16,6 +17,9 @@ namespace WICR_Estimator.ViewModels
     public class BaseViewModel : INotifyPropertyChanged
     {
         public static bool IsDirty;
+
+        
+
         public BaseViewModel()
         { }
         
@@ -58,6 +62,27 @@ namespace WICR_Estimator.ViewModels
                 //        break;
                 //}
             }
-        }      
+        }
+
+        public static event EventHandler TaskStarted;
+        public static event EventHandler TaskCompleted;
+        public static event EventHandler UpdateTask;
+
+        
+        public void OnTaskStarted(string msg)
+        {
+            TaskStarted?.Invoke(msg, EventArgs.Empty);
+        }
+        public void OnTaskCompleted(string msg)
+        {
+            TaskCompleted?.Invoke(msg, EventArgs.Empty);
+        }
+
+        public void UpdateTaskStatus(string msg)
+        {
+            UpdateTask?.Invoke(msg, EventArgs.Empty);
+        }
+
+       
     }
 }

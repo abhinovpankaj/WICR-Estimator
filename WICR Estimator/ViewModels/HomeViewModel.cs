@@ -44,8 +44,7 @@ namespace WICR_Estimator.ViewModels
             FillProjects();
             //CheckPriceUpdate();
             Project.OnSelectedProjectChange += Project_OnSelectedProjectChange;
-            HidePasswordSection = System.Windows.Visibility.Collapsed;
-            //ShowCalculationDetails = new DelegateCommand(CanShowCalculationDetails, canShow);
+            
             SaveEstimate = new DelegateCommand(SaveProjectEstimate, canSaveEstimate);
             LoadEstimate = new DelegateCommand(LoadProjectEstimate, canLoadEstimate);
             ReplicateProject = new DelegateCommand(Replicate, canReplicate);
@@ -244,34 +243,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         public string LoginMessage { get; set; }
-        //private bool showLogin;
-        //public bool ShowLogin
-        //{
-        //    get { return showLogin; }
-        //    set
-        //    {
-        //        if (value!=showLogin)
-        //        {
-        //            showLogin = value;                    
-        //            if (!value)
-        //            {                    
-        //                LoginMessage = "";
-        //                HidePasswordSection = System.Windows.Visibility.Collapsed;
-        //                if (OnLoggedAsAdmin != null)
-        //                {
-        //                    OnLoggedAsAdmin(false, EventArgs.Empty);
-        //                }
-        //            }
-        //            else
-        //                HidePasswordSection = System.Windows.Visibility.Visible;
-
-        //            OnPropertyChanged("HidePasswordSection");
-        //            OnPropertyChanged("LoginMessage");
-        //            OnPropertyChanged("ShowLogin");
-        //        }
-        //    }
-        //}
-        public System.Windows.Visibility HidePasswordSection { get; set; }
+       
         public ICollectionView ProjectView { get; set; }
         private ObservableCollection<Project> projects;
         public ObservableCollection<Project> Projects
@@ -660,7 +632,7 @@ namespace WICR_Estimator.ViewModels
             {
                 return;
             }
-            
+            //OnTaskStarted("Please wait, Loading Estimate File.");
             DataContractSerializer deserializer = new DataContractSerializer(typeof(ObservableCollection<Project>));
                 
             FileStream fs = new FileStream(filePath, FileMode.Open);
@@ -842,12 +814,13 @@ namespace WICR_Estimator.ViewModels
                 OnPropertyChanged("Projects");
                 OnPropertyChanged("SelectedProjects");
 
-
+               // OnTaskCompleted("Estimate Loaded");
             }
             catch(Exception ex)
             {
-                MessageBox.Show("Your estimate seems to be created in Older version of WICR Estimator. \n\nPlease re-create the estimates, Or Contact the manufacturer."
-                    +ex.Message);
+                //MessageBox.Show("Your estimate seems to be created in Older version of WICR Estimator. \n\nPlease re-create the estimates, Or Contact the manufacturer."
+                //    +ex.Message);
+                OnTaskCompleted("Your estimate seems to be created in Older version of WICR Estimator. \n\nPlease re-create the estimates, Or Contact the manufacturer.\n" + ex.Message);
             }  
             finally
             {
@@ -886,102 +859,117 @@ namespace WICR_Estimator.ViewModels
             saveFileDialog1.RestoreDirectory = true;
             saveFileDialog1.ShowDialog();
 
-            if (saveFileDialog1.FileName != "")
+            try
             {
-                int myEstimateID;
-                var serializer = new DataContractSerializer(typeof(ObservableCollection<Project>));
-                if (SelectedProjects[0].EstimateID!=0)
+                if (saveFileDialog1.FileName != "")
                 {
-                    myEstimateID = SelectedProjects[0].EstimateID;
-                }
-                else
-                {
-                    //var createdOn = JobCreationDate == null ? DateTime.UtcNow : JobCreationDate;
-                    EstimateDB myEstimate = new EstimateDB(JobName, PreparedBy, JobCreationDate, ProjectTotals);
-                    //Add Estimate to DB, get EstimateID
-                    var estimate = await HTTPHelper.PostEstimate(myEstimate);
-                    myEstimateID = estimate.EstimateID;
-                }
-                
-                using (var sw = new StringWriter())
-                {
-                    using (var writer = new XmlTextWriter(saveFileDialog1.FileName,null))
+                    OnTaskStarted("Wait! Saving Estimate...");
+
+                    int myEstimateID;
+                    var serializer = new DataContractSerializer(typeof(ObservableCollection<Project>));
+                    if (SelectedProjects[0].EstimateID != 0)
                     {
-                        writer.Formatting = Formatting.Indented; // indent the Xml so it's human readable
-                        foreach (Project item in SelectedProjects)
+                        myEstimateID = SelectedProjects[0].EstimateID;
+                    }
+                    else
+                    {
+                        //var createdOn = JobCreationDate == null ? DateTime.UtcNow : JobCreationDate;
+                        EstimateDB myEstimate = new EstimateDB(JobName, PreparedBy, JobCreationDate, ProjectTotals);
+                        //Add Estimate to DB, get EstimateID
+                        var estimate = await HTTPHelper.PostEstimate(myEstimate);
+                        myEstimateID = estimate.EstimateID;
+                        UpdateTaskStatus("Saving Estimate to DB");
+                    }
+
+                    using (var sw = new StringWriter())
+                    {
+                        using (var writer = new XmlTextWriter(saveFileDialog1.FileName, null))
                         {
-                            item.MaterialViewModel.CalculateCost(null);
-                            item.UpdateMainTable();
-                            
-                           
-                            item.CreationDetails = JobName + ":;" + PreparedBy + ":;" + JobCreationDate.ToString();
-                            item.ProductVersion = "3.0";
-                            //Update DB
-                            
-                            
-                            if (item.EstimateID!=0)
+                            writer.Formatting = Formatting.Indented; // indent the Xml so it's human readable
+                            foreach (Project item in SelectedProjects)
                             {
-                                //Get the estimate from DB
-                                
-                                ProjectDetailsDB prjDB = new ProjectDetailsDB();
-                                prjDB.EstimateID = item.EstimateID;
-                                prjDB.LaborCost = item.LaborCost;
-                                prjDB.LaborPercentage = item.LaborPercentage;
-                                prjDB.MaterialCost = item.MaterialCost;
-                                prjDB.SlopeCost = item.SlopeCost;
-                                prjDB.MetalCost = item.MetalCost;
-                                prjDB.SystemCost = item.SystemNOther;
-                                prjDB.CostPerSqFoot = item.CostPerSqFoot;
-                                prjDB.TotalCost = item.TotalCost;
-                                prjDB.ProjectDetailID = item.ProjectID;
-                                prjDB.HasContingencyDisc = item.ProjectJobSetUp.VHasContingencyDisc;
-                                prjDB.HasPrevailingWage = item.ProjectJobSetUp.IsPrevalingWage;
-                                prjDB.ProjectProfitMargin = item.MaterialViewModel.ProjectProfitMargin;
-                                await HTTPHelper.PutProjectDetails(item.ProjectID, prjDB);
-                            }
-                            else
-                            {                               
-                                ProjectDetailsDB prjDB = new ProjectDetailsDB();
-                                prjDB.EstimateID = myEstimateID;
-                                prjDB.LaborCost = item.LaborCost;
-                                prjDB.LaborPercentage = item.LaborPercentage;
-                                prjDB.MaterialCost = item.MaterialCost;
-                                prjDB.SlopeCost = item.SlopeCost;
-                                prjDB.MetalCost = item.MetalCost;
-                                prjDB.SystemCost = item.SystemNOther;
-                                prjDB.CostPerSqFoot = item.CostPerSqFoot;
-                                prjDB.TotalCost = item.TotalCost;
-                                prjDB.HasContingencyDisc = item.ProjectJobSetUp.VHasContingencyDisc;
-                                prjDB.HasPrevailingWage = item.ProjectJobSetUp.IsPrevalingWage;
-                                prjDB.ProjectProfitMargin = item.MaterialViewModel.ProjectProfitMargin;
-                                ProjectDetailsDB prj= await HTTPHelper.PostProjectDetails(prjDB);
-                                if (prj!=null)
+                                item.MaterialViewModel.CalculateCost(null);
+                                item.UpdateMainTable();
+
+
+                                item.CreationDetails = JobName + ":;" + PreparedBy + ":;" + JobCreationDate.ToString();
+                                item.ProductVersion = "3.0";
+                                //Update DB
+
+
+                                if (item.EstimateID != 0)
                                 {
-                                    item.ProjectID = prj.ProjectDetailID;
+                                    //Get the estimate from DB
+
+                                    ProjectDetailsDB prjDB = new ProjectDetailsDB();
+                                    prjDB.EstimateID = item.EstimateID;
+                                    prjDB.LaborCost = item.LaborCost;
+                                    prjDB.LaborPercentage = item.LaborPercentage;
+                                    prjDB.MaterialCost = item.MaterialCost;
+                                    prjDB.SlopeCost = item.SlopeCost;
+                                    prjDB.MetalCost = item.MetalCost;
+                                    prjDB.SystemCost = item.SystemNOther;
+                                    prjDB.CostPerSqFoot = item.CostPerSqFoot;
+                                    prjDB.TotalCost = item.TotalCost;
+                                    prjDB.ProjectDetailID = item.ProjectID;
+                                    prjDB.HasContingencyDisc = item.ProjectJobSetUp.VHasContingencyDisc;
+                                    prjDB.HasPrevailingWage = item.ProjectJobSetUp.IsPrevalingWage;
+                                    prjDB.ProjectProfitMargin = item.MaterialViewModel.ProjectProfitMargin;
+                                    await HTTPHelper.PutProjectDetails(item.ProjectID, prjDB);
+                                    UpdateTaskStatus("Updating project details for Project :" + item.Name);
                                 }
                                 else
                                 {
-                                    MessageBox.Show("Failed to Post the project to DB", "Failure");
-                                }
-                                
-                            }
-                            item.EstimateID = myEstimateID;
-                        }
-                       
-                        UpdateProjectTotals();
-                        var updatedEstimate = new EstimateDB(JobName, PreparedBy, JobCreationDate, ProjectTotals);
-                        updatedEstimate.EstimateID = myEstimateID;
-                        await HTTPHelper.PutEstimate(myEstimateID,updatedEstimate );
-                        
-                        serializer.WriteObject(writer,SelectedProjects );
-                        
-                        writer.Flush();
-                        MessageBox.Show("Project Estimate Saved Succesfully","Success");
-                        
-                    }
-                }
+                                    ProjectDetailsDB prjDB = new ProjectDetailsDB();
+                                    prjDB.EstimateID = myEstimateID;
+                                    prjDB.LaborCost = item.LaborCost;
+                                    prjDB.LaborPercentage = item.LaborPercentage;
+                                    prjDB.MaterialCost = item.MaterialCost;
+                                    prjDB.SlopeCost = item.SlopeCost;
+                                    prjDB.MetalCost = item.MetalCost;
+                                    prjDB.SystemCost = item.SystemNOther;
+                                    prjDB.CostPerSqFoot = item.CostPerSqFoot;
+                                    prjDB.TotalCost = item.TotalCost;
+                                    prjDB.HasContingencyDisc = item.ProjectJobSetUp.VHasContingencyDisc;
+                                    prjDB.HasPrevailingWage = item.ProjectJobSetUp.IsPrevalingWage;
+                                    prjDB.ProjectProfitMargin = item.MaterialViewModel.ProjectProfitMargin;
+                                    ProjectDetailsDB prj = await HTTPHelper.PostProjectDetails(prjDB);
+                                    UpdateTaskStatus("Adding project details for Project: " + item.Name);
+                                    if (prj != null)
+                                    {
+                                        item.ProjectID = prj.ProjectDetailID;
+                                    }
+                                    else
+                                    {
+                                        //MessageBox.Show("Failed to Post the project to DB", "Failure");
+                                        UpdateTaskStatus("Failed to Add the project: " + item.Name);
+                                    }
 
+                                }
+                                item.EstimateID = myEstimateID;
+                            }
+                            UpdateTaskStatus("Saving Estimate locally.");
+                            UpdateProjectTotals();
+                            var updatedEstimate = new EstimateDB(JobName, PreparedBy, JobCreationDate, ProjectTotals);
+                            updatedEstimate.EstimateID = myEstimateID;
+                            await HTTPHelper.PutEstimate(myEstimateID, updatedEstimate);
+
+                            serializer.WriteObject(writer, SelectedProjects);
+
+                            writer.Flush();
+                            //UpdateTaskStatus("Project Estimate Saved Succesfully");
+
+                        }
+                    }
+                    OnTaskCompleted("Project Estimate Saved Succesfully");
+                }
             }
+            catch (Exception ex)
+            {
+
+                OnTaskCompleted("Project Estimate failed to Save.\n"+ ex.Message);
+            }
+            
 
         }
         public DelegateCommand ClearProjects { get; set; }
@@ -1047,52 +1035,6 @@ namespace WICR_Estimator.ViewModels
             }
         }
 
-        //private  void ApplyLatestGoogleData(Project item)
-        //{
-        //    //await DownloadGoogleData(item);
-        //    double laborRate;
-        //    var rate = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, item.OriginalProjectName);
-        //    var freightData = DataSerializer.DSInstance.deserializeGoogleData(DataType.Freight, item.OriginalProjectName);
-        //    var laborData = DataSerializer.DSInstance.deserializeGoogleData(DataType.Labor, item.OriginalProjectName);
-
-        //    if (rate != null)
-        //    {
-        //        double.TryParse(rate[0][0].ToString(), out laborRate);
-        //        item.ProjectJobSetUp.LaborRate = laborRate;
-        //    }
-        //    else
-        //    {
-        //        MessageBox.Show("Latest Price data for this Project is not Available,Please refresh Data or generate new estimate for this project.");
-        //        return;
-        //    }
-            
-        //    if (item.MetalViewModel != null)
-        //    {
-        //        item.MetalViewModel.laborRate = laborRate;
-        //        item.MetalViewModel.metalDetails = DataSerializer.DSInstance.deserializeGoogleData(DataType.Metal, item.OriginalProjectName);
-        //        item.MetalViewModel.freightDetails =freightData ;
-        //        item.MetalViewModel.pWage = laborData;
-        //        item.MetalViewModel.OnJobSetupChange(item.ProjectJobSetUp);
-        //    }
-        //    if (item.SlopeViewModel != null)
-        //    {
-        //        item.SlopeViewModel.pWage =laborData ;
-        //        item.SlopeViewModel.freightData = freightData;
-        //        item.SlopeViewModel.perMixRates = DataSerializer.DSInstance.deserializeGoogleData(DataType.Slope, item.OriginalProjectName);
-        //        item.SlopeViewModel.JobSetup_OnJobSetupChange(item.ProjectJobSetUp, null);
-        //        item.SlopeViewModel.CalculateAll();
-        //    }
-        //    if (item.MaterialViewModel!=null)
-        //    {
-        //        item.MaterialViewModel.freightData = freightData;
-        //        item.MaterialViewModel.laborDetails= laborData;
-        //        item.MaterialViewModel.laborRate = laborRate;
-        //        item.MaterialViewModel.materialDetails= DataSerializer.DSInstance.deserializeGoogleData(DataType.Material, item.OriginalProjectName);
-        //        item.MaterialViewModel.JobSetup_OnJobSetupChange(item.ProjectJobSetUp, null);
-        //        item.MaterialViewModel.CalculateCost(null);
-        //    }
-        //    item.UpdateMainTable();
-        //}
         private void ProjectJobSetUp_OnProjectNameChange(object sender, EventArgs e)
         {
             JobSetup js = sender as JobSetup;
@@ -1243,34 +1185,7 @@ namespace WICR_Estimator.ViewModels
         {
             return true;
         }
-        //private void CanShowCalculationDetails(object obj)
-        //{
-        //    var passwordBox = obj as PasswordBox;
-        //    var password = passwordBox.Password;
-        //    if (password == "737373")
-        //    {
-        //        passwordBox.Password = "";
-        //        LoginMessage = "Calculation Details Are Visible Now.";
-
-        //        HidePasswordSection = System.Windows.Visibility.Collapsed;
-        //        OnPropertyChanged("HidePasswordSection");
-        //        if (OnLoggedAsAdmin!=null)
-        //        {
-        //            OnLoggedAsAdmin(true, EventArgs.Empty);
-        //        }
-                
-        //    }
-        //    else
-        //    {
-        //        passwordBox.Password = "";
-        //        LoginMessage = "Incorrect Password.";
-        //        if (OnLoggedAsAdmin != null)
-        //        {
-        //            OnLoggedAsAdmin(false, EventArgs.Empty);
-        //        }
-        //    }
-        //    OnPropertyChanged("LoginMessage");
-        //}
+        
         #region GoogleDataUpdateCheck
         private string GetLastUpdateDate()
         {
@@ -1413,12 +1328,15 @@ namespace WICR_Estimator.ViewModels
         
         private int writeMetals(MetalBaseViewModel MVM)
         {
+            UpdateTaskStatus("Writing Metal costs to Estimate summary file.");
             int k = 2;
             string startRange = getStartRange("Metals");
             Excel.Range dataRange = exlWs.Range[startRange].Offset[k, 0];
             k = 0;
+           
             foreach (Metal item in MVM.Metals)
             {
+                
                 dataRange.Offset[k,0].Value = item.Name;
                 dataRange.Offset[k, 1].Value = item.Size;
                 if (item.Name.Equals("STAIR METAL"))
@@ -1441,9 +1359,10 @@ namespace WICR_Estimator.ViewModels
             //k = 0;
             //startRange = getStartRange("AddonMetals");
             //dataRange = exlWs.Range[startRange].Offset[2, 0];
-
+            UpdateTaskStatus("Writing Add-on Metal");
             foreach (AddOnMetal item in MVM.AddOnMetals)
             {
+                
                 dataRange.Offset[k, 0].Value = item.Name;
                 dataRange.Offset[k, 1].Value = item.Size;
                 dataRange.Offset[k, 2].Value = item.IsMetalChecked ? item.Units : 0;
@@ -1459,10 +1378,13 @@ namespace WICR_Estimator.ViewModels
                 k = k + 1;
             }
             k = 0;
+            UpdateTaskStatus("Writing Misc Metal.");
+
             startRange = getStartRange("MiscMetals");
             dataRange = exlWs.Range[startRange].Offset[2, 0];
             foreach (MiscMetal item in MVM.MiscMetals)
             {
+                
                 dataRange.Offset[k, 0].Value = item.Name + " " + item.Size;
                 
                 dataRange.Offset[k, 1].Value = item.Units;
@@ -1478,7 +1400,8 @@ namespace WICR_Estimator.ViewModels
         }
         private int writeSlope(SlopeBaseViewModel SVM)
         {
-            
+
+            UpdateTaskStatus("Writing Slope costs to Estimate Summary file.");
             int k = 2;
             string startRange;
             Excel.Range dataRange;
@@ -1499,6 +1422,7 @@ namespace WICR_Estimator.ViewModels
                 k = 0;
                 foreach (Slope item in SVM.Slopes)
                 {
+                    
                     dataRange.Offset[k,0].Value = item.Thickness;
                     dataRange.Offset[k, 1].Value = item.Sqft;
                     dataRange.Offset[k, 2].Value = item.DeckCount;
@@ -1584,6 +1508,7 @@ namespace WICR_Estimator.ViewModels
         }
         private string WriteMaterials(MaterialBaseViewModel MVM)
         {
+            UpdateTaskStatus("Writing Material Costs to Estimate Summary File");
             string rowString;
             int k = 2;
             string startRange = getStartRange("OtherSystemMaterials");
@@ -1645,6 +1570,7 @@ namespace WICR_Estimator.ViewModels
         private string currentProjectName;
         private int WriteJobSetup(JobSetup Js)
         {
+            UpdateTaskStatus("Writing Jobsetup details to Estimate Summary File");
             int k = 2;
             currentProjectName = Js.ProjectName;
             string jobSetupRange = getStartRange("JobSetup");
@@ -1886,6 +1812,7 @@ namespace WICR_Estimator.ViewModels
 
         private void writeCalculationDetails(MaterialBaseViewModel MVM)
         {
+            UpdateTaskStatus("Writing Calculation factors to Estimate Summary File");
             int k = 2;
             string startRange = getStartRange("CostCalculationDetails");
 
@@ -1930,6 +1857,7 @@ namespace WICR_Estimator.ViewModels
         }
         private int WriteLabor(MaterialBaseViewModel MVM)
         {
+            UpdateTaskStatus("Writing Labor Costs to Estimate Summary File");
             int rowN;
             int k = 2;
             string startRange = getStartRange("LaborOtherCosts");
@@ -2234,8 +2162,9 @@ namespace WICR_Estimator.ViewModels
         }
         private void WriteToSummary()
         {
-            WaitWindow ww = new WaitWindow();
-            ww.Show();
+            //WaitWindow ww = new WaitWindow();
+            //ww.Show();
+            OnTaskStarted("Creating WICR Estimate Summary File.");
             Excel.Workbook summaryWb;
             Excel.Worksheet ws;
             try
@@ -2318,16 +2247,19 @@ namespace WICR_Estimator.ViewModels
                 {
                     //Save. The selected path can be got with saveFileDialog.FileName.ToString()
                     summaryWb.SaveAs(saveFileDialog.FileName.ToString());
+                    OnTaskCompleted("Estimate Summary file created successfully.");
                 }
                 else
                 {
-                    System.Windows.MessageBox.Show("Summary Sheet won't be saved now", "Save Cancelled",
-                        System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                    //System.Windows.MessageBox.Show("Summary Sheet won't be saved now", "Save Cancelled",
+                    //    System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                    OnTaskCompleted("User canceled file save,Summary Sheet won't be saved now.");
                 }
             }
             catch (Exception ex)
             {
                 System.Windows.Forms.MessageBox.Show(ex.Message +"\n\n"+ "Please SaveAs different name or close the file before Saving the Summary File.", "Summary File Save", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                OnTaskCompleted("Please SaveAs different name or close the file before Saving the Summary File.\n" + ex.Message);
             }
             finally
             {
@@ -2343,7 +2275,8 @@ namespace WICR_Estimator.ViewModels
                     GC.WaitForPendingFinalizers();
                     
                 }
-                ww.Close();
+                
+                //ww.Close();
             }
             
         }

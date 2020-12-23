@@ -8,8 +8,8 @@ using System.Windows.Data;
 
 namespace WICR_Estimator.Converters
 {
-    
-    class UnitTextboxConverter : IValueConverter
+
+    public class UnitTextboxConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

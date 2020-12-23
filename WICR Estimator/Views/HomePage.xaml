@@ -7,13 +7,14 @@
       xmlns:local="clr-namespace:WICR_Estimator.Views"
       xmlns:conv="clr-namespace:WICR_Estimator.Converters"
       xmlns:System="clr-namespace:System;assembly=mscorlib"
-     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-     TextElement.FontWeight="Regular"
-     TextElement.FontSize="13"
-     TextOptions.TextFormattingMode="Ideal"
-     TextOptions.TextRenderingMode="Auto"
-             
+      TextElement.FontWeight="Regular"
+      TextElement.FontSize="13"
+      TextOptions.TextFormattingMode="Ideal"
+      TextOptions.TextRenderingMode="Auto"
+      xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+      Dialog:DialogParticipation.Register="{Binding}"       
       xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
       mc:Ignorable="d" d:DesignWidth="1550" d:DesignHeight="800"
       xmlns:behaviors="clr-namespace:WICR_Estimator"
@@ -33,7 +34,7 @@
                 <TextBlock Text="{Binding Converter={ StaticResource projectNameConv}}"
                            FontWeight="SemiBold"
                            VerticalAlignment="Center"
-                           FontSize="15" />
+                           FontSize="13" />
                 <Button                       
                                                 
                         BorderThickness="0"
@@ -56,7 +57,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
         </DataTemplate>
         <Style x:Key="ButtonTemplate" TargetType="Button">
             <Setter Property="Margin" Value="5"/>
-            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontSize" Value="13"/>
             <Setter Property="Height" Value="35"/>
             <Setter Property="Width" Value="170"/>
         </Style>
@@ -65,7 +66,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
             <Setter Property="Template">
                 <Setter.Value>
                      <ControlTemplate>
-                        <Expander Style="{StaticResource   MaterialDesignExpander}" Margin="10,5,0,0" IsExpanded="{Binding Mode=TwoWay,
+                        <Expander Style="{StaticResource   MaterialDesignExpander}" Margin="-10,5,0,0" IsExpanded="{Binding Mode=TwoWay,
                                   UpdateSourceTrigger=Explicit,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Expander},AncestorLevel=1}, Path=IsExpanded}">
                             <!--<i:Interaction.Behaviors>
                                 <behaviors:PersistGroupExpandedStateBehavior GroupName="{Binding Name}" />
@@ -76,43 +77,43 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                                     <TextBlock.Style>
                                         <Style>
                                             <Setter Property="TextBlock.FontWeight" Value="Bold"/>
-                                            <Setter Property="TextBlock.FontSize" Value="16"/>
+                                            <Setter Property="TextBlock.FontSize" Value="15"/>
                                             <Setter Property="TextBlock.Foreground" Value="{StaticResource PrimaryHueDarkBrush}"/>
                                             
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding Name}" Value="Deck Coatings">
                                                     <Setter Property="TextBlock.FontWeight" Value="Bold"/>
-                                                    <Setter Property="TextBlock.FontSize" Value="18"/>
+                                                    <Setter Property="TextBlock.FontSize" Value="16"/>
                                                     <!--<Setter Property="TextBlock.Foreground" Value="BurlyWood"/>-->
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Name}" Value="Blank Template">
                                                     <Setter Property="TextBlock.FontWeight" Value="Bold"/>
-                                                    <Setter Property="TextBlock.FontSize" Value="18"/>
+                                                    <Setter Property="TextBlock.FontSize" Value="16"/>
                                                     <!--<Setter Property="TextBlock.Foreground" Value="BurlyWood"/>-->
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Name}" Value="Concrete On Grade">
                                                     <Setter Property="TextBlock.FontWeight" Value="Bold"/>
-                                                    <Setter Property="TextBlock.FontSize" Value="18"/>
+                                                    <Setter Property="TextBlock.FontSize" Value="16"/>
                                                     <!--<Setter Property="TextBlock.Foreground" Value="BurlyWood"/>-->
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Name}" Value="Below Grade">
                                                     <Setter Property="TextBlock.FontWeight" Value="Bold"/>
-                                                    <Setter Property="TextBlock.FontSize" Value="18"/>
+                                                    <Setter Property="TextBlock.FontSize" Value="16"/>
                                                     <!--<Setter Property="TextBlock.Foreground" Value="BurlyWood"/>-->
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Name}" Value="Replicated Projects">
                                                     <Setter Property="TextBlock.FontWeight" Value="Bold"/>
-                                                    <Setter Property="TextBlock.FontSize" Value="18"/>
+                                                    <Setter Property="TextBlock.FontSize" Value="16"/>
                                                     <!--<Setter Property="TextBlock.Foreground" Value="BurlyWood"/>-->
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Name}" Value="Below Tile">
                                                     <Setter Property="TextBlock.FontWeight" Value="Bold"/>
-                                                    <Setter Property="TextBlock.FontSize" Value="18"/>
+                                                    <Setter Property="TextBlock.FontSize" Value="16"/>
                                                     <!--<Setter Property="TextBlock.Foreground" Value="BurlyWood"/>-->
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Name}" Value="Epoxy Coatings">
                                                     <Setter Property="TextBlock.FontWeight" Value="Bold"/>
-                                                    <Setter Property="TextBlock.FontSize" Value="18"/>
+                                                    <Setter Property="TextBlock.FontSize" Value="16"/>
                                                     <!--<Setter Property="TextBlock.Foreground" Value="BurlyWood"/>-->
                                                 </DataTrigger>
                                             </Style.Triggers> 
@@ -130,8 +131,8 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
     <Grid>
         
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width=".25*"/>
+            <ColumnDefinition Width="*"/>
             
         </Grid.ColumnDefinitions>
         <!--<Grid.RowDefinitions>
@@ -151,57 +152,54 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                      Text="{Binding FilterString,UpdateSourceTrigger=PropertyChanged}"
                      FontSize="14"></TextBox>--><!--
         </StackPanel>-->
-
-        <ListView HorizontalContentAlignment="Stretch" 
-                  Margin="5,0,0,5"                 
+        <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth4"
+                             materialDesign:ShadowAssist.ShadowEdges="All"
+                             materialDesign:ShadowAssist.Darken="True"
+                             Margin="5,0,-5,0" 
+                             UniformCornerRadius="5">
+            <ListView HorizontalContentAlignment="Stretch" 
+                  
+                 Margin="5,0,0,5"                 
                  x:Name="ProjectList"
                  SelectionMode="Multiple"
                  ItemsSource="{Binding ProjectView}"
                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
                  
                  ItemTemplate="{StaticResource ProjectTemplate}">
-                   
-                 <!--<i:Interaction.Triggers>
-                    <i:EventTrigger EventName="SelectionChanged">
-                        <ei:ChangePropertyAction 
-                            TargetObject="{Binding Mode=OneWay}"
-                            PropertyName="SelectedItems"
-                            Value="{Binding Path=SelectedItems, 
-                            ElementName=ProjectList}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>-->
-            <!--<ListView.Effect>
-                <DropShadowEffect BlurRadius="10" Color="{StaticResource Accent700}" />
-            </ListView.Effect>-->
-            <ListView.GroupStyle>
-                <GroupStyle ContainerStyle="{StaticResource ContainerStyle}"/>
-            </ListView.GroupStyle>
-            
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Style.Triggers>
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsSelected" Value="True" />
-                            </MultiTrigger.Conditions>
-                            <MultiTrigger.Setters>
-                                <Setter Property="Background" Value="#1F4E78" />
-                                <Setter Property="BorderBrush" Value="#1F4E78" />
-                                <Setter Property="Foreground" Value="White"/>
-                            </MultiTrigger.Setters>
-                        </MultiTrigger>
-                    </Style.Triggers>
-                    <Setter Property="IsSelected" Value="{Binding IsSelectedProject}" />
-                </Style>
-            </ListView.ItemContainerStyle>
-            
-        </ListView>
-        <Grid  Grid.Column="1" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Popup  HorizontalAlignment="Stretch"
+
+                <ListView.GroupStyle>
+                    <GroupStyle ContainerStyle="{StaticResource ContainerStyle}"/>
+                </ListView.GroupStyle>
+
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Style.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsSelected" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <MultiTrigger.Setters>
+                                    <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+                                    <Setter Property="BorderBrush" Value="{StaticResource SecondaryHueMidBrush}" />
+                                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}"/>
+                                </MultiTrigger.Setters>
+                            </MultiTrigger>
+                        </Style.Triggers>
+                        <Setter Property="IsSelected" Value="{Binding IsSelectedProject}" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+
+            </ListView>
+        </materialDesign:Card>
+        
+        <ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Auto" Grid.Column="1">
+            <Grid  
+               >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Popup  HorizontalAlignment="Stretch"
                    IsOpen="{Binding IsProcessing}"
                    Height="100"
                      
@@ -209,19 +207,19 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                     Placement="Center"
                     Width="500"
                    VerticalAlignment="Center">
-                <StackPanel Background="{StaticResource PrimaryHueDarkBrush}">
-                    <TextBlock Background="{StaticResource PrimaryHueDarkForegroundBrush}" FontSize="15"
+                    <StackPanel Background="{StaticResource PrimaryHueDarkBrush}">
+                        <TextBlock Background="{StaticResource PrimaryHueDarkForegroundBrush}" FontSize="15"
                                Margin="10"                              
                            Text="{Binding StatusMessage}">
 
-                    </TextBlock>
-                    <ProgressBar  Height="10" Margin="10"
+                        </TextBlock>
+                        <ProgressBar  Height="10" Margin="10"
                         Minimum="1" Maximum="28" Value="{Binding CompletedProjects}" />
-                </StackPanel>
+                    </StackPanel>
 
-            </Popup>
-            <StackPanel Orientation="Horizontal" >
-                <DataGrid ItemsSource="{Binding SelectedProjects,UpdateSourceTrigger=PropertyChanged}"
+                </Popup>
+                <StackPanel Orientation="Horizontal" >
+                    <DataGrid ItemsSource="{Binding SelectedProjects,UpdateSourceTrigger=PropertyChanged}"
                   VerticalAlignment="Top"
                           Style="{StaticResource MaterialDesignDataGrid}"
                           ColumnHeaderHeight="50"
@@ -229,144 +227,148 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                   IsReadOnly="True"
                   CanUserAddRows="False"
                   AutoGenerateColumns="False"
-                  Background="{StaticResource PrimaryHueLightBrush}"
+                              Background="{StaticResource PrimaryHueDarkBrush}"
+                  
                   Margin="10,5,10,0"
                   >
-                    <DataGrid.Resources>
-                        
-                        <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="{x:Type DataGridRow}">
-                            <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
-                        </Style>
-                    </DataGrid.Resources>
-                    <DataGrid.ColumnHeaderStyle>
-                        <Style BasedOn="{StaticResource {x:Type  DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
-                            <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
-                            <Setter Property="Foreground" Value="{StaticResource  PrimaryHueDarkForegroundBrush}" />
-                        </Style>
-                    </DataGrid.ColumnHeaderStyle>
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Name" IsReadOnly="True"
+                        <DataGrid.Resources>
+
+                            <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="{x:Type DataGridRow}">
+                                <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style BasedOn="{StaticResource {x:Type  DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource  PrimaryHueDarkForegroundBrush}" />
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Name" IsReadOnly="True"
                                             Width="200"
                                     Binding="{Binding Converter={ StaticResource  projectNameConv}}">
 
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Header="Work Area" IsReadOnly="True"
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Work Area" IsReadOnly="True"
                                              Width="150"
                                     Binding="{Binding WorkArea}">
 
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Header="Metal Cost" 
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Metal Cost" 
                                     Binding="{Binding MetalCost,StringFormat='c'}"/>
-                        <DataGridTextColumn Header ="Slope Cost"
+                            <DataGridTextColumn Header ="Slope Cost"
                                     Binding="{Binding SlopeCost,StringFormat='c'}"
                                     IsReadOnly="False"/>
-                        <DataGridTextColumn Header ="System Cost"
+                            <DataGridTextColumn Header ="System Cost"
                                     Binding="{Binding SystemNOther,StringFormat='c'}"
                                     IsReadOnly="False"/>
-                        <DataGridTextColumn Header ="Material Cost" 
+                            <DataGridTextColumn Header ="Material Cost" 
                                     Binding="{Binding MaterialCost,StringFormat='c'}"
                                     IsReadOnly="False"/>
-                        <DataGridTextColumn Header ="Labor Cost" 
+                            <DataGridTextColumn Header ="Labor Cost" 
                                     Binding="{Binding LaborCost,StringFormat='c'}"
                                     IsReadOnly="False"/>
 
-                        <DataGridTextColumn Header ="Labor %" 
+                            <DataGridTextColumn Header ="Labor %" 
                                     Binding="{Binding LaborPercentage}"
                                     IsReadOnly="False"/>
-                        <DataGridTextColumn Header ="Total Cost" 
+                            <DataGridTextColumn Header ="Total Cost" 
                                     Binding="{Binding TotalCost,StringFormat='c'}"
                                     IsReadOnly="False"/>
-                        <DataGridTextColumn Header ="Total Cost/Sqft" 
+                            <DataGridTextColumn Header ="Total Cost/Sqft" 
                                     Binding="{Binding CostPerSqFoot,StringFormat='c'}"
                                     IsReadOnly="False"/>
-                    </DataGrid.Columns>
+                        </DataGrid.Columns>
 
-                </DataGrid>
-                <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" VerticalAlignment="Top"
+                    </DataGrid>
+                    <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" VerticalAlignment="Top"
                                      Height="50" Width="50"
                                      ToolTip="Click to Perform Actions"
                                      UniformCornerRadius="20"
+                                     Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
                                      Margin="0,5,0,0" Background="{StaticResource  PrimaryHueDarkBrush }">
-                    <materialDesign:PopupBox HorizontalContentAlignment="Center" HorizontalAlignment="Center" >
-                        <StackPanel>
-                            <Button Command="{Binding LoadEstimate}">
-                                <Button.Content>
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="FileDocumentEdit" VerticalAlignment="Center"
+                        <materialDesign:PopupBox HorizontalContentAlignment="Center" HorizontalAlignment="Center" >
+                            <StackPanel>
+                                <Button Command="{Binding LoadEstimate}">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="FileDocumentEdit" VerticalAlignment="Center"
                                                                  Foreground="{StaticResource PrimaryHueDarkBrush}"/>
-                                        <TextBlock Text="Load Estimate" Margin="10,0,0,0" VerticalAlignment="Center" />
-                                        <Label Content="{Binding SelectedProjects[0].ProductVersion}"
+                                            <TextBlock Text="Load Estimate" Margin="10,0,0,0" VerticalAlignment="Center" />
+                                            <Label Content="{Binding SelectedProjects[0].ProductVersion}"
                                HorizontalAlignment="Right"
                                FontSize="8"
                                Foreground="Blue"                              
                                Margin="20,0,0,0"
                                VerticalAlignment="Bottom"/>
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
-                            <Button Command="{Binding SaveEstimate}" >
-                                <Button.Content>
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="ContentSaveEdit" VerticalAlignment="Center"
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                                <Button Command="{Binding SaveEstimate}" >
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="ContentSaveEdit" VerticalAlignment="Center"
                                                                  Foreground="{StaticResource PrimaryHueDarkBrush}"/>
-                                        <TextBlock Text="SaveAs Estimate" Margin="10,0,0,0"
+                                            <TextBlock Text="SaveAs Estimate" Margin="10,0,0,0"
                                        VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
-                            <Button Command="{Binding ClearProjects}">
-                                <Button.Content>
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="Refresh" VerticalAlignment="Center"
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                                <Button Command="{Binding ClearProjects}">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="Refresh" VerticalAlignment="Center"
                                                                  Foreground="{StaticResource PrimaryHueDarkBrush}"/>
-                                        <TextBlock Text="Refresh" Margin="10,0,0,0"
+                                            <TextBlock Text="Refresh" Margin="10,0,0,0"
                                        VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
-                            <Button Command="{Binding CreateSummary}">
-                                <Button.Content>
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="MicrosoftExcel" VerticalAlignment="Center"
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                                <Button Command="{Binding CreateSummary}">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="MicrosoftExcel" VerticalAlignment="Center"
                                                                  Foreground="{StaticResource PrimaryHueDarkBrush}"/>
-                                        <TextBlock Text="Create Summary" Margin="10,0,0,0"
+                                            <TextBlock Text="Create Summary" Margin="10,0,0,0"
                                        VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
 
-                            <Button x:Name="refreshGData"
+                                <Button x:Name="refreshGData"
                                 Command="{Binding RefreshGoogleData}">
-                                <Button.Content>
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="RefreshCircle" VerticalAlignment="Center"
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="RefreshCircle" VerticalAlignment="Center"
                                                                  Foreground="{StaticResource PrimaryHueDarkBrush}"/>
-                                        <TextBlock Text="Refresh Prices" Margin="10,0,0,0"
+                                            <TextBlock Text="Refresh Prices" Margin="10,0,0,0"
                                        VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
-                            <Separator/>
-                            <CheckBox Content="Apply Latest Google Price"
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                                <Separator/>
+                                <CheckBox Content="Apply Latest Google Price"
                                       Style="{StaticResource MaterialDesignFilterChipCheckBox}"
                                       ToolTip="Please check if you want to apply the latest prices. To revert to old price reload the estimate file."
                                       x:Name="applynewPrice"
                                       IsChecked="{Binding ApplyLatestPrice}"
                                       IsEnabled="{Binding CanApplyLatestPrice}"
                                       />
-                        </StackPanel>
+                            </StackPanel>
 
-                    </materialDesign:PopupBox>
+                        </materialDesign:PopupBox>
 
-                </materialDesign:Card>
-                
-            </StackPanel>
-            
-            
-        </Grid>
+                    </materialDesign:Card>
+
+                </StackPanel>
+
+
+            </Grid>
+        </ScrollViewer>
+       
         
         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1"
-                        VerticalAlignment="Bottom">
+                        VerticalAlignment="Bottom" Margin="0,0,0,15">
                 
                 <TextBox materialDesign:HintAssist.Hint="Job Name" Text="{Binding JobName}"
                          Margin="10,10" Width="200"
@@ -404,49 +406,50 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel>
-                            <TextBlock FontSize="13" Margin="0,0,5,5" 
+                            <TextBlock  Margin="0,0,5,5" 
                                    FontWeight="SemiBold" Text="Metal Cost"/>
-                            <TextBlock FontSize="13" FontWeight="SemiBold"
+                            <TextBlock  FontWeight="SemiBold"
                                     Margin="0,0,5,5" Text="Slope Cost"/>
-                            <TextBlock FontSize="13"   Margin="0,0,5,5"
+                            <TextBlock    Margin="0,0,5,5"
                                    FontWeight="SemiBold" Text="System Cost"/>
-                            <TextBlock FontSize="13"  Margin="0,0,5,5"
+                            <TextBlock   Margin="0,0,5,5"
                                    FontWeight="SemiBold" Text="Material Cost"/>
-                            <TextBlock FontSize="13"  Margin="0,0,5,5"
+                            <TextBlock   Margin="0,0,5,5"
                                    FontWeight="SemiBold" Text="Labor Cost"/>
-                            <TextBlock FontSize="13"  Margin="0,0,5,5"
+                            <TextBlock   Margin="0,0,5,5"
                                    FontWeight="SemiBold" Text="Labor %"/>
-                            <TextBlock FontSize="13"  Margin="0,0,5,5"
-                                   FontWeight="SemiBold" Text="Total Cost"/>
+                            <TextBlock   Margin="0,5,5,5" FontSize="15"
+                                         
+                                   FontWeight="Bold" Text="Total Cost"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1">
-                            <TextBlock FontSize="13" FontWeight="SemiBold"
+                            <TextBlock  FontWeight="SemiBold"
                        Text="{Binding MetalCost}"
                        Margin="5,0,5,5"/>
 
-                            <TextBlock FontSize="13" FontWeight="SemiBold"
+                            <TextBlock  FontWeight="SemiBold"
                        Text="{Binding SlopeCost}"
                        Margin="5,0,5,5"/>
 
-                            <TextBlock FontSize="13" FontWeight="SemiBold"
+                            <TextBlock FontWeight="SemiBold"
                        Text="{Binding SystemCost}"
                        Margin="5,0,5,5"/>
 
-                            <TextBlock FontSize="13" FontWeight="SemiBold"
+                            <TextBlock  FontWeight="SemiBold"
                        Text="{Binding MaterialCost}"
                        Margin="5,0,5,5"/>
 
-                            <TextBlock FontSize="13" FontWeight="SemiBold"
+                            <TextBlock  FontWeight="SemiBold"
                        Text="{Binding LaborCost}"
                        Margin="5,0,5,5"/>
 
-                            <TextBlock FontSize="13" FontWeight="SemiBold"
+                            <TextBlock  FontWeight="SemiBold"
                        Text="{Binding LaborPercentage}"
                        Margin="5,0,5,5"/>
 
-                            <TextBlock FontSize="14" FontWeight="Bold" Background="{StaticResource SecondaryHueMidBrush}"
+                            <TextBlock FontSize="15" FontWeight="Bold" Background="{StaticResource SecondaryHueMidBrush}"
                        Text="{Binding TotalCost}"
-                       Margin="5,0,5,5"/>
+                       Margin="5,5,5,5"/>
                         </StackPanel>
 
                     </Grid>

@@ -14,7 +14,21 @@ namespace WICR_Estimator.DBModels
         
         public int ProjectId { get; set; }
         public string Name { get; set; }
-        public double Value { get; set; }
+        private double _value;
+        public double Value
+        {
+            get
+            {
+                return _value;
+            }
+            set
+            {
+                _value = value;
+
+                OnPropertyChanged("Value");
+            }
+
+        }
         private bool _isChecked;
         public bool IsChecked
         {

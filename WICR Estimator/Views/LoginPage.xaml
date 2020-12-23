@@ -14,21 +14,34 @@
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="{StaticResource  AccentColorBrush}">
+    <Grid Background="{StaticResource  PrimaryHueDarkBrush}">
         
-        <Rectangle Width="380" Height="400" Fill="White"
+        <Rectangle Width="380" Height="400" 
+                   Fill="{StaticResource   PrimaryHueLightBrush}"
                    Effect="{DynamicResource MaterialDesignShadowDepth5}"
-                   RadiusX="13.667" RadiusY="13.667" >
-
+                   RadiusX="13.66" RadiusY="13.66" >
+           
         </Rectangle>
-        <Image Source="/Images/wicr_bg.png" Width="100"
-               Height="100"  Margin="0,0,0,405"
-               Effect="{DynamicResource MaterialDesignShadowDepth5}"/>
-        <Grid Width="280" Height="350" VerticalAlignment="Top" Margin="35,144,35,0">
+        <Ellipse Width="140" Height="140" Margin="0,0,0,400"
+                 Effect="{DynamicResource MaterialDesignShadowDepth5}">
+            <Ellipse.Fill>
+                <ImageBrush ImageSource="/Images/wicr_bg.png" />
+            </Ellipse.Fill>
+        </Ellipse>
+        
+        
+        <Grid Width="280" Height="350" VerticalAlignment="Center" 
+              Margin="0,150,0,0" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
             <TextBlock Text="LOGIN" VerticalAlignment="top" 
                        HorizontalAlignment="Center" 
-                       Margin="50,50,50,0" FontWeight="Bold" FontSize="20" Foreground="{StaticResource SecondaryAccentBrush}" />
-            <StackPanel VerticalAlignment="Center" Margin="15,-40,15,0" Height="150">
+                        FontWeight="Bold" FontSize="20"
+                       Foreground="{StaticResource PrimaryHueDarkBrush}" />
+            <StackPanel VerticalAlignment="Center"  Height="170" Grid.Row="1">
                 <TextBox materialDesign:HintAssist.Hint="Username" Margin="5,10,5,5"
                          Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}"  />
@@ -36,9 +49,16 @@
                              x:Name="passwordbox" 
                          
                              Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" />
-                <TextBlock Text="{Binding ErrorMessage}"/>
+                <TextBlock Text="{Binding ErrorMessage}" TextWrapping="Wrap" HorizontalAlignment="Center"
+                           Margin="0,5,0,0"/>
+                <CheckBox Content="Save credentials" 
+                          HorizontalAlignment="Left"
+                          Style="{StaticResource MaterialDesignAccentCheckBox}"
+                          IsChecked="{Binding SaveCredentials}"/>
             </StackPanel>
-            <Button VerticalAlignment="Top" Content="Login"  Margin="40,260,40,0" 
+            <Button VerticalAlignment="Center" Content="Login"  Grid.Row="2" 
+                    Width="120"
+                    Margin="0,10"
                     Command="{Binding SignInCommand}"
                     CommandParameter="{Binding ElementName=passwordbox}"
                     Height="37" Effect="{DynamicResource MaterialDesignShadowDepth2}" 

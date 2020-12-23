@@ -25,12 +25,17 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{materialDesign:MaterialDesignFont}"
-        GlowBrush="{DynamicResource  SecondaryAccentBrush }"
+        WindowTitleBrush="{StaticResource PrimaryHueMidBrush}"
         ResizeMode="CanResizeWithGrip"
         xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
-        Dialog:DialogParticipation.Register="{Binding}"
-        Loaded="Window_Loaded" Closing="Window_Closing" WindowStartupLocation="CenterOwner"
+        Dialog:DialogParticipation.Register="{Binding}" LeftWindowCommandsOverlayBehavior="Never"
+        Loaded="Window_Loaded"  Closing="Window_Closing" WindowStartupLocation="CenterOwner" WindowState="Maximized"
        >
+    <!--<i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding WindowClosingCommand}"  CommandParameter="{Binding}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>-->
     <mah:MetroWindow.Resources>
         <DataTemplate DataType="{x:Type myVM:LoginPageViewModel}">
             <myViews:LoginPage />
@@ -41,8 +46,8 @@
         <DataTemplate DataType="{x:Type myVM:ProjectViewModel}">
             <myViews:SelectedProjectsPage />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type local:MaterialDetailsPageViewModel}">
-            <local:MaterialDetailsPage />
+        <DataTemplate DataType="{x:Type dbVMs:MaterialDetailsPageViewModel}">
+            <dbViews:MaterialDetailsPage />
         </DataTemplate>
         <DataTemplate DataType="{x:Type dbVMs:SlopeDetailsPageViewModel}">
             <dbViews:SlopeDetailsPage />
@@ -56,7 +61,7 @@
         <DataTemplate DataType="{x:Type colorVMs:PaletteSelectorViewModel}">
             <colorViews:PaletteSelector />
         </DataTemplate>
-        <Storyboard x:Key="CloseMenu">
+        <!--<Storyboard x:Key="CloseMenu">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" 
                                            Storyboard.TargetName="GridMenu">
                 <EasingDoubleKeyFrame KeyTime="0" Value="250"/>
@@ -81,40 +86,200 @@
                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
                 
             </DoubleAnimationUsingKeyFrames>
-        </Storyboard>
-
+        </Storyboard>-->
+        
     </mah:MetroWindow.Resources>
-   
-    <mah:MetroWindow.LeftWindowCommands>
-        <mah:WindowCommands>
-           
-                <Button Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
-                    CommandParameter="{x:Static Dock.Left}" ToolTip="Open Menu">
-                    <materialDesign:PackIcon Width="22"
-                                  Height="22"
-                                  Kind="Menu" />
-                </Button>
-            
-            
-        </mah:WindowCommands>
-    </mah:MetroWindow.LeftWindowCommands>
 
+   
+        <materialDesign:DrawerHost                        
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          BorderThickness="2"
+                          BorderBrush="{DynamicResource MaterialDesignDivider}">
+            <materialDesign:DrawerHost.Style>
+                <Style  TargetType="materialDesign:DrawerHost"
+                          BasedOn="{StaticResource {x:Type materialDesign:DrawerHost}}">
+                    <!--<Style.Triggers>
+                        <DataTrigger   Binding="{Binding IsChecked, ElementName=BackgroundToggle}"  Value="True">
+                            <Setter  Property="OverlayBackground"  Value="{DynamicResource PrimaryHueLightBrush}" />
+                        </DataTrigger>
+                    </Style.Triggers>-->
+                </Style>
+            </materialDesign:DrawerHost.Style>
+            <materialDesign:DrawerHost.LeftDrawerContent>
+                <StackPanel Width="250" Background="{StaticResource PrimaryHueLightBrush}"
+                        >
+
+                    <Image Height="140"
+                       Source="Images/WICR Logo.ico" Stretch="Uniform">
+
+                    </Image>
+                    <ListView x:Name="MenuList" FontSize="18" Margin="10,20,0,0"
+                           IsEnabled="{Binding IsUserLoggedIn}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonUp">
+                                <i:InvokeCommandAction Command="{Binding NavigationCommand}"
+                                                   CommandParameter="{Binding ElementName=MenuList, Path=SelectedItem}"/>
+                                <i:InvokeCommandAction Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
+                    CommandParameter="{x:Static Dock.Left}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <ListViewItem Height="45" Padding="0" x:Name="Login"
+                                  IsEnabled="{Binding LoginEnabled}">
+
+                            <StackPanel Orientation="Horizontal" Margin="10,0">
+                                <materialDesign:PackIcon Foreground="{StaticResource PrimaryHueDarkBrush}"
+                                                     
+                                                     VerticalAlignment="Center"
+                                                     Margin="5"
+                                Kind="Login"/>
+                                <TextBlock Text="Login" Margin="10"/>
+                            </StackPanel>
+                        </ListViewItem>
+                        <ListViewItem Height="45" Padding="0" x:Name="Estimates"
+                                  >
+
+                            <StackPanel Orientation="Horizontal" Margin="10,0">
+                                <materialDesign:PackIcon Foreground="{StaticResource PrimaryHueDarkBrush}"
+                                                     
+                                                     VerticalAlignment="Center"
+                                                     Margin="5"
+                                Kind="CreateOutline"/>
+                                <TextBlock Text="Create Estimate" Margin="10"/>
+                            </StackPanel>
+
+
+                        </ListViewItem>
+                        <ListViewItem Height="45" Padding="0" x:Name="ProjectList">
+                            <StackPanel Orientation="Horizontal" Margin="10,0">
+                                <materialDesign:PackIcon Width="20" Foreground="{StaticResource PrimaryHueDarkBrush}"
+                                                     Height="20"
+                                                     VerticalAlignment="Center"
+                                                     Margin="5"
+                                Kind="OfficeBuilding"/>
+                                <TextBlock Text="Projects" Margin="10"/>
+                            </StackPanel>
+                        </ListViewItem>
+
+
+                        <ListViewItem Height="45" Padding="0"  x:Name="Prices" IsEnabled="False">
+                            <StackPanel Orientation="Horizontal" Margin="10,0">
+                                <materialDesign:PackIcon Width="20" Foreground="{StaticResource PrimaryHueDarkBrush}"
+                                                     Height="20"
+                                                     VerticalAlignment="Center"
+                                                     Margin="5"
+                                Kind="Dollar"/>
+                                <TextBlock Text="Manage Prices" Margin="10"/>
+                            </StackPanel>
+                        </ListViewItem>
+
+                        <ListViewItem Height="45" Padding="0"  x:Name="Materials"
+                                  IsEnabled="{Binding IsUserAdmin}">
+                            <StackPanel Orientation="Horizontal" Margin="25,0">
+                                <materialDesign:PackIcon Width="20" Foreground="{StaticResource SecondaryHueMidBrush}"
+                                                     Height="20"
+                                                     VerticalAlignment="Center"
+                                                     Margin="5"
+                                Kind="MaterialDesign"/>
+                                <TextBlock Text="Material Prices" Margin="10"
+                                       FontSize="16"/>
+                            </StackPanel>
+                        </ListViewItem>
+                        <ListViewItem Height="45" Padding="0" x:Name="Slopes" IsEnabled="{Binding IsUserAdmin}">
+                            <StackPanel Orientation="Horizontal" Margin="25,0">
+                                <materialDesign:PackIcon Width="20" Foreground="{StaticResource SecondaryHueMidBrush}"
+                                                     Height="20"
+                                                     VerticalAlignment="Center"
+                                                     Margin="5"
+                                Kind="SlopeDownhill"/>
+                                <TextBlock Text="Slope Prices" Margin="10" FontSize="16"/>
+                            </StackPanel>
+                        </ListViewItem>
+                        <ListViewItem Height="45" Padding="0" x:Name="Metals"
+                                  IsEnabled="{Binding IsUserAdmin}">
+                            <StackPanel Orientation="Horizontal" Margin="25,0">
+                                <materialDesign:PackIcon Width="20" Foreground="{StaticResource SecondaryHueMidBrush}"
+                                                     Height="20"
+                                                     VerticalAlignment="Center"
+                                                     Margin="5"
+                                Kind="Delta"/>
+                                <TextBlock Text="Metal Prices" Margin="10" FontSize="16"/>
+                            </StackPanel>
+                        </ListViewItem>
+                        <ListViewItem Height="45" Padding="0" x:Name="Laborfactors"
+                                  IsEnabled="{Binding IsUserAdmin}">
+                            <StackPanel Orientation="Horizontal" Margin="25,0">
+                                <materialDesign:PackIcon Width="20" Foreground="{StaticResource SecondaryHueMidBrush}"
+                                                     Height="20"
+                                                     VerticalAlignment="Center"
+                                                     Margin="5"
+                                Kind="Xamarin"/>
+                                <TextBlock Text="Labor Factors" Margin="10" FontSize="16"/>
+                            </StackPanel>
+                        </ListViewItem>
+                        <!--<ListViewItem Height="45" Padding="0" x:Name="nothing">
+                        <StackPanel>
+                            <materialDesign:ColorZone Background="{StaticResource PrimaryHueDarkBrush}"/>
+                        </StackPanel>
+                    </ListViewItem>-->
+                        <ListViewItem Height="45" Padding="0" x:Name="ChangePalette"
+                                  >
+                            <StackPanel Orientation="Horizontal" Margin="10,0">
+                                <materialDesign:PackIcon Width="20" Foreground="{StaticResource PrimaryHueDarkBrush}"
+                                                     Height="20"
+                                                     VerticalAlignment="Center"
+                                                     Margin="5"
+                                Kind="PaletteAdvanced"/>
+                                <TextBlock Text="Change Palette" Margin="10" FontSize="16"/>
+                            </StackPanel>
+                        </ListViewItem>
+                    </ListView>
+                </StackPanel>
+            </materialDesign:DrawerHost.LeftDrawerContent>
+
+
+        <Grid x:Name="GridBackground" Opacity="1" >
+            <!--<Grid.Background>
+                    <ImageBrush ImageSource="Images/WICR Logo.ico" TileMode="Tile" Opacity="0.15"/>
+                </Grid.Background>-->
+            <DockPanel LastChildFill="True">
+                <ContentControl Content="{Binding CurrentPageViewModel}" 
+                    DockPanel.Dock="Top"/>
+            </DockPanel>
+            <Button Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
+                    Margin="20"
+                    Opacity="0.8"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="Left"
+                    Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}">
+                
+                <Button.Content>
+                    <materialDesign:PackIcon Width="30" Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
+                                                     Height="30"
+                                                     VerticalAlignment="Center"
+                                                     Margin="5"
+                                Kind="Menu"/>
+                </Button.Content>
+            </Button>
+        </Grid>
+
+    </materialDesign:DrawerHost>
+
+    
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
             <StackPanel Orientation="Horizontal" IsEnabled="{Binding IsUserLoggedIn}"
-                                Margin="0,0,150,0"
-                                HorizontalAlignment="Right">
-                <TextBlock Text="{Binding Username}" Width="100" Margin="2"
-                               VerticalAlignment="Center"
-                               Foreground="Black"
-                               FontWeight="Bold"/>
-                <Button x:Name="Home" Margin="2" Width="100"
+                                Margin="0,0,30,0" >
+                
+
+                <Button x:Name="Home" ToolTip="Go to Home" VerticalContentAlignment="Top"
+                        Margin="2" Width="120" Style="{StaticResource MaterialDesignRaisedDarkButton}"
                         Command="{Binding DataContext.ChangePageCommand,
                         RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                         CommandParameter="{Binding PageViewModels[0]}">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Home" Foreground="{StaticResource AccentColorBrush}"
+                            <materialDesign:PackIcon Kind="Home" Foreground="{StaticResource SecondaryHueMidBrush}"
                                                       Width="22" Height="22"
                                                              VerticalAlignment="Center"/>
                             <TextBlock Text="Home" Margin="10,0,0,0"
@@ -123,32 +288,67 @@
                     </Button.Content>
                 </Button>
 
-                <Button x:Name="Projects" Margin="2"
-                                Width="120"
+                <Button x:Name="Projects" Margin="2" Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                                Width="120" ToolTip="ProjectEstimate Details" VerticalContentAlignment="Top"
                         Command="{Binding DataContext.ChangePageCommand,
                         RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                         CommandParameter="{Binding PageViewModels[1]}">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="OfficeBuilding" Width="22" Height="22"
-                                                             Foreground="{StaticResource AccentColorBrush}"
+                                                             Foreground="{StaticResource SecondaryHueMidBrush}"
                                                              VerticalAlignment="Center"/>
                             <TextBlock Text="Projects" Margin="10,0,0,0"
                                        VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button.Content>
                 </Button>
-                <Separator/>
-                <Button x:Name="Save" Margin="2" Width="100"
+                
+                <Button x:Name="Save" Margin="2" Width="120" Style="{StaticResource MaterialDesignRaisedDarkButton}"
                         Command="{Binding DataContext.SaveEstimateCommand,
                         RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                        CommandParameter="{Binding }">
+                        CommandParameter="{Binding }" ToolTip="Save Estimate" VerticalContentAlignment="Top">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="ContentSaveAll" Width="22" Height="22"
-                                                             Foreground="{StaticResource AccentColorBrush}"
+                                                             Foreground="{StaticResource SecondaryHueMidBrush}"
                                                              VerticalAlignment="Center"/>
                             <TextBlock Text="Save" Margin="10,0,0,0"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <!--<Separator Style="{StaticResource MaterialDesignLightSeparator}"/>-->
+                <Button Margin="10,2,2,2" Width="130" Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                        VerticalContentAlignment="Top"
+                        Command="{Binding DataContext.LogoutCommand,
+                        RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                        CommandParameter="{Binding PageViewModels[0]}" ToolTip="Logout">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal" >
+
+                            <materialDesign:PackIcon Kind="User" Foreground="{StaticResource SecondaryHueMidBrush}"
+                                                      Width="20" Height="20"  
+                                                             VerticalAlignment="Center"/>
+
+                            <TextBlock Text="{Binding Username}"
+                                      Margin="10,0,0,0"
+                                      VerticalAlignment="Center"/>
+
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <Button x:Name="Refresh" ToolTip="Restart App" VerticalContentAlignment="Top"
+                        Margin="2" Width="120" Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                        Command="{Binding DataContext.RestartAppCommand,
+                        RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                        >
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Refresh" Foreground="{StaticResource SecondaryHueMidBrush}"
+                                                      Width="22" Height="22"
+                                                             VerticalAlignment="Center"/>
+                            <TextBlock Text="Restart" Margin="10,0,0,0"
                                        VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button.Content>
@@ -157,168 +357,30 @@
             </StackPanel>
         </mah:WindowCommands>
     </mah:MetroWindow.RightWindowCommands>
-    <materialDesign:DrawerHost                           
-                          HorizontalAlignment="Stretch"
-                          VerticalAlignment="Stretch"
-                          BorderThickness="2"
-                          BorderBrush="{DynamicResource MaterialDesignDivider}">
-        <materialDesign:DrawerHost.Style>
-            <Style  TargetType="materialDesign:DrawerHost"
-                          BasedOn="{StaticResource {x:Type materialDesign:DrawerHost}}">
-                <Style.Triggers>
-                    <DataTrigger   Binding="{Binding IsChecked, ElementName=BackgroundToggle}"  Value="True">
-                        <Setter  Property="OverlayBackground"  Value="{DynamicResource PrimaryHueMidBrush}" />
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </materialDesign:DrawerHost.Style>
-        <materialDesign:DrawerHost.LeftDrawerContent>
-            <StackPanel>
-                
-                <Image Height="140"
-                       Source="Images/WICR Logo.ico" Stretch="Uniform">
+    <!--<mah:MetroWindow.LeftWindowCommands>
+        <mah:WindowCommands>
+            <StackPanel Orientation="Horizontal" 
+                                Margin="0,0,0,0" >
+                <Button Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
+                        VerticalContentAlignment="Center"
+                        IsEnabled="True"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        CommandParameter="{x:Static Dock.Left}" ToolTip="Open Menu">
 
-                </Image>
-                <ListView x:Name="MenuList" FontSize="18" Margin="0,10,0,0"
-                           IsEnabled="{Binding IsUserLoggedIn}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="MouseLeftButtonUp">
-                            <i:InvokeCommandAction Command="{Binding NavigationCommand}"
-                                                   CommandParameter="{Binding ElementName=MenuList, Path=SelectedItem}"/>
-                            <i:InvokeCommandAction Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
-                    CommandParameter="{x:Static Dock.Left}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                    <ListViewItem Height="45" Padding="0" x:Name="Login">
-
-                        <StackPanel Orientation="Horizontal" Margin="10,0">
-                            <materialDesign:PackIcon Foreground="{StaticResource AccentColorBrush}"
-                                                     
-                                                     VerticalAlignment="Center"
-                                                     Margin="5"
-                                Kind="Login"/>
-                            <TextBlock Text="Login" Margin="10"/>
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Menu" 
+                                                      Width="22" Height="22"
+                                                             VerticalAlignment="Center"/>
+                            --><!--<TextBlock Text="Menu" Margin="10,0,0,0"
+                                       VerticalAlignment="Center"/>--><!--
                         </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem Height="45" Padding="0" x:Name="Estimates"
-                                  >
-
-                        <StackPanel Orientation="Horizontal" Margin="10,0">
-                            <materialDesign:PackIcon Foreground="{StaticResource AccentColorBrush}"
-                                                     
-                                                     VerticalAlignment="Center"
-                                                     Margin="5"
-                                Kind="CreateOutline"/>
-                            <TextBlock Text="Create Estimate" Margin="10"/>
-                        </StackPanel>
-
-
-                    </ListViewItem>
-                    <ListViewItem Height="45" Padding="0" x:Name="ProjectList">
-                        <StackPanel Orientation="Horizontal" Margin="10,0">
-                            <materialDesign:PackIcon Width="20" Foreground="{StaticResource AccentColorBrush}"
-                                                     Height="20"
-                                                     VerticalAlignment="Center"
-                                                     Margin="5"
-                                Kind="OfficeBuilding"/>
-                            <TextBlock Text="Projects" Margin="10"/>
-                        </StackPanel>
-                    </ListViewItem>
-                    
-
-                    <ListViewItem Height="45" Padding="0"  x:Name="Prices" IsEnabled="False">
-                        <StackPanel Orientation="Horizontal" Margin="10,0">
-                            <materialDesign:PackIcon Width="20" Foreground="Gold"
-                                                     Height="20"
-                                                     VerticalAlignment="Center"
-                                                     Margin="5"
-                                Kind="Dollar"/>
-                            <TextBlock Text="Manage Prices" Margin="10"/>
-                        </StackPanel>
-                    </ListViewItem>
-
-                    <ListViewItem Height="45" Padding="0"  x:Name="Materials"
-                                  IsEnabled="{Binding IsUserAdmin}">
-                        <StackPanel Orientation="Horizontal" Margin="25,0">
-                            <materialDesign:PackIcon Width="20" Foreground="Gold"
-                                                     Height="20"
-                                                     VerticalAlignment="Center"
-                                                     Margin="5"
-                                Kind="MaterialDesign"/>
-                            <TextBlock Text="Material Prices" Margin="10"
-                                       FontSize="16"/>
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem Height="45" Padding="0" x:Name="Slopes" IsEnabled="{Binding IsUserAdmin}">
-                        <StackPanel Orientation="Horizontal" Margin="25,0">
-                            <materialDesign:PackIcon Width="20" Foreground="Gold"
-                                                     Height="20"
-                                                     VerticalAlignment="Center"
-                                                     Margin="5"
-                                Kind="SlopeDownhill"/>
-                            <TextBlock Text="Slope Prices" Margin="10" FontSize="16"/>
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem Height="45" Padding="0" x:Name="Metals"
-                                  IsEnabled="{Binding IsUserAdmin}">
-                        <StackPanel Orientation="Horizontal" Margin="25,0">
-                            <materialDesign:PackIcon Width="20" Foreground="Gold"
-                                                     Height="20"
-                                                     VerticalAlignment="Center"
-                                                     Margin="5"
-                                Kind="Delta"/>
-                            <TextBlock Text="Metal Prices" Margin="10" FontSize="16"/>
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem Height="45" Padding="0" x:Name="Laborfactors"
-                                  IsEnabled="{Binding IsUserAdmin}">
-                        <StackPanel Orientation="Horizontal" Margin="25,0">
-                            <materialDesign:PackIcon Width="20" Foreground="Gold"
-                                                     Height="20"
-                                                     VerticalAlignment="Center"
-                                                     Margin="5"
-                                Kind="Xamarin"/>
-                            <TextBlock Text="Labor Factors" Margin="10" FontSize="16"/>
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem Height="45" Padding="0" x:Name="nothing">
-                        <StackPanel>
-                            <materialDesign:ColorZone Background="{StaticResource AccentColorBrush}"/>
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem Height="45" Padding="0" x:Name="ChangePalette"
-                                  >
-                        <StackPanel Orientation="Horizontal" Margin="25,0">
-                            <materialDesign:PackIcon Width="20" Foreground="Gold"
-                                                     Height="20"
-                                                     VerticalAlignment="Center"
-                                                     Margin="5"
-                                Kind="PaletteAdvanced"/>
-                            <TextBlock Text="Change Palette" Margin="10" FontSize="16"/>
-                        </StackPanel>
-                    </ListViewItem>
-                </ListView>
+                    </Button.Content>
+                </Button>
             </StackPanel>
-        </materialDesign:DrawerHost.LeftDrawerContent>
-        
-            
-          
-            <Grid x:Name="GridBackground" Opacity="1" >
-                <Grid.Background>
-                    <ImageBrush ImageSource="Images/WICR Logo.ico" TileMode="Tile" Opacity="0.15"/>
-                </Grid.Background>
-                <DockPanel LastChildFill="True">
-                  
 
-                    <ContentControl Content="{Binding CurrentPageViewModel}" 
-                    DockPanel.Dock="Top"/>
-                </DockPanel>
-            </Grid>
-
-            
-       
-        
-
-    </materialDesign:DrawerHost>
+        </mah:WindowCommands>
+    </mah:MetroWindow.LeftWindowCommands>-->
+    
     
 </mah:MetroWindow>

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="WICR_Estimator.MaterialDetailsPage"
+﻿<UserControl x:Class="WICR_Estimator.Views.DataViews.MaterialDetailsPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -196,10 +196,12 @@
                                                            RelativeSource={RelativeSource FindAncestor,
                                                                AncestorType={x:Type DataGrid}}}" />
                                     </DataGridCheckBoxColumn.Header>
-                                    <DataGridCheckBoxColumn.ElementStyle>
-                                        <Style TargetType="CheckBox"/>
-                                    </DataGridCheckBoxColumn.ElementStyle>
-                                </DataGridCheckBoxColumn>
+                                <DataGridCheckBoxColumn.ElementStyle>
+                                    <Style TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}">
+
+                                    </Style>
+                                </DataGridCheckBoxColumn.ElementStyle>
+                            </DataGridCheckBoxColumn>
                                 <materialDesign:DataGridTextColumn Header="Material Name"
                                                                    IsReadOnly="True"
                                                         Binding="{ Binding MaterialName}"/>

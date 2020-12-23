@@ -14,8 +14,42 @@ namespace WICR_Estimator.DBModels
 
         public int SlopeId { get; set; }
         public string SlopeName { get; set; }
-        public double LaborRate { get; set; }
-        public double PerMixCost { get; set; }
+        
+        
+        private double _laborRate;
+        public double LaborRate
+        {
+            get
+            {
+                return _laborRate;
+            }
+            set
+            {
+                if (_laborRate != value)
+                {
+                    _laborRate = value;
+                    OnPropertyChanged("LaborRate");
+                }
+            }
+        }
+        
+        private double _perMixCost;
+        public double PerMixCost
+        {
+            get
+            {
+                return _perMixCost;
+            }
+            set
+            {
+                if (_perMixCost != value)
+                {
+                    _perMixCost = value;
+                    OnPropertyChanged("PerMixCost");
+                }
+            }
+        }
+
         public string SlopeType { get; set; }
         public int ProjectId { get; set; }
         public bool IsDeleted { get; set; }

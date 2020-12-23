@@ -4,49 +4,22 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WICR_Estimator.Views"
-              xmlns:conv="clr-namespace:WICR_Estimator.Converters"
+             xmlns:conv="clr-namespace:WICR_Estimator.Converters"
              mc:Ignorable="d" 
-              d:DesignHeight="700" d:DesignWidth="1200"
+             d:DesignHeight="700" d:DesignWidth="1200"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-     TextElement.FontWeight="Regular"
-     TextElement.FontSize="13"
-     TextOptions.TextFormattingMode="Ideal"
-     TextOptions.TextRenderingMode="Auto">
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="13"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto">
     <UserControl.Resources>
 
         <conv:CheckBoxVisibilityConverter x:Key="checkBoxConv"/>
         <conv:EnableTextboxConverter x:Key="textboxConv"/>
         <conv:QtyTextboxConverter x:Key="qtyTextboxConv"/>
         <conv:HasFieldEdited x:Key="HasFieldEdited"/>
-        <!--<Style TargetType="Label" x:Key="LabelStyle1">
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="FontFamily" Value="Arial"/>
-            <Setter Property="FontSize" Value="11"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            <Setter Property="HorizontalAlignment" Value="Right"/>
-            <Setter Property="BorderThickness" Value="0,0,0,1"/>
-            <Setter Property="BorderBrush" Value="Black"/>
-        </Style>
-        <Style TargetType="TextBlock" x:Key="TextBlockStyle1">
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="FontFamily" Value="Arial"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="HorizontalAlignment"  Value="Right"/>
-        </Style>
-        <Style TargetType="TextBox" x:Key="TextBoxStyle">
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="FontFamily" Value="Arial"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="HorizontalContentAlignment"  Value="Center"/>
-            --><!--<Setter Property="BorderBrush" Value="Black"/>
-            <Setter Property="BorderThickness"  Value="1"/>--><!--
-        </Style>-->
+       
         <Style x:Key="cbTB" TargetType="{x:Type CheckBox}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding ElementName=qtyTb, Path=IsEnabled}" Value="True">
@@ -59,13 +32,13 @@
             <Style.Triggers >
                 <Trigger Property="IsEnabled" Value="True">
                     <!--<Setter Property="Background" Value="LightYellow" />-->
-                    <Setter Property="Background" Value="{StaticResource   AccentColorBrush4}" />
+                    <Setter Property="Background" Value="{StaticResource   PrimaryHueLightBrush}" />
                 </Trigger>
                 <DataTrigger Binding="{Binding IsMaterialChecked}" Value="False">
                     <!--<Setter Property="Background" Value="Gray"/>
                     <Setter Property="Foreground" Value="Gray"/>-->
-                    <Setter Property="Background" Value="{StaticResource AccentColorBrush2}" />
-                    <Setter Property="Foreground" Value="{StaticResource AccentColorBrush2}" />
+                    <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
+                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightBrush}" />
                 </DataTrigger>
                 
             </Style.Triggers>
@@ -74,13 +47,13 @@
             <Style.Triggers >
                 <Trigger Property="IsReadOnly" Value="False">
                     <!--<Setter Property="Background" Value="LightYellow" />-->
-                    <Setter Property="Background" Value="{StaticResource   AccentColorBrush4}" />
+                    <Setter Property="Background" Value="{StaticResource   PrimaryHueLightBrush}" />
                 </Trigger>
             </Style.Triggers>
         </Style>
         <Style BasedOn="{StaticResource {x:Type  DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
-            <Setter Property="Background" Value="{StaticResource AccentColorBrush}" />
-            <Setter Property="Foreground" Value="{StaticResource  IdealForegroundColorBrush}" />
+            <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource  PrimaryHueDarkForegroundBrush}" />
             <Setter Property="Padding" Value="6" />
         </Style>
     </UserControl.Resources>
@@ -112,8 +85,8 @@
                             <DataTrigger Binding="{Binding IsMaterialChecked}" Value="False">
                                 <!--<Setter Property="Background" Value="Gray"/>
                                 <Setter Property="Foreground" Value="Gray"/>-->
-                                <Setter Property="Background" Value="{StaticResource AccentColorBrush2}" />
-                                <Setter Property="Foreground" Value="{StaticResource AccentColorBrush2}" />
+                                <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightBrush}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -181,12 +154,12 @@
                     <StackPanel Orientation="Horizontal">
                         
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Foreground="White"
+                            <TextBlock 
                             Margin="2,0,0,0"
                             VerticalAlignment="Center"
                             Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
                             Text="Sub Contract Labor" />
-                            <TextBlock x:Name="TotalSCExtension" Foreground="White"
+                            <TextBlock x:Name="TotalSCExtension" 
                             IsEnabled="False"                        
                             Margin="15,0,0,0"    
                             VerticalAlignment="Center"
@@ -230,7 +203,7 @@
                                             <Style.Triggers >
                                                 <Trigger Property="IsReadOnly" Value="False">
                                                     <!--<Setter Property="Background" Value="LightYellow" />-->
-                                                <Setter Property="Background" Value="{StaticResource   AccentColorBrush4}" />
+                                                <Setter Property="Background" Value="{StaticResource   PrimaryHueLightBrush}" />
                                             </Trigger>
                                                 <DataTrigger Binding="{Binding LQuantity, 
                                             Converter={StaticResource HasFieldEdited}}" 
@@ -252,7 +225,7 @@
                                             <Style.Triggers >
                                                 <Trigger Property="IsReadOnly" Value="False">
                                                     <!--<Setter Property="Background" Value="LightYellow" />-->
-                                                <Setter Property="Background" Value="{StaticResource   AccentColorBrush4}" />
+                                                <Setter Property="Background" Value="{StaticResource   PrimaryHueLightBrush}" />
                                             </Trigger>
                                                 <DataTrigger Binding="{Binding LMaterialPrice, 
                                             Converter={StaticResource HasFieldEdited}}" 
@@ -383,7 +356,7 @@
                             BorderThickness="0,0,0,0"
                             Margin="50,0">
                         <Label  HorizontalAlignment="Right"
-                                   Background="{StaticResource SecondaryAccentBrush}"
+                                   Background="{StaticResource SecondaryHueMidBrush}"
                               Grid.Column="1"                      
                              Width="100"
                             Margin="3"
@@ -393,7 +366,7 @@
 
                     <Border Grid.ColumnSpan="2"   Grid.Row="6" BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                             BorderThickness="0,0,0,1" Margin="50,0">
-                        <Label    VerticalAlignment="Center"                  
+                        <Label    HorizontalAlignment="Right"                  
                              Margin="3"                       
                              Width="100"
                              FontSize="14"              
@@ -487,7 +460,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <materialDesign:ColorZone  CornerRadius="5" Background="{StaticResource AccentColorBrush}"
+                        <materialDesign:ColorZone  CornerRadius="5" Background="{StaticResource PrimaryHueDarkBrush}"
                                                    
                                                    Grid.ColumnSpan="2"
                                       Padding="5">
@@ -502,9 +475,10 @@
                              FontWeight="Bold">
                                 <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                                    <TextBlock Text="Items" Width="120" 
-                               HorizontalAlignment="Stretch"
-                               FontWeight="Bold"/>
+                                    <TextBlock Text="Items" Width="120"
+                                               
+                                               HorizontalAlignment="Stretch"
+                                               FontWeight="Bold"/>  
                                 </Border>
                             </ListBoxItem>
                             <ListBoxItem HorizontalAlignment="Center">
@@ -595,7 +569,7 @@
                                 <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,0">
                                     <TextBlock HorizontalAlignment="Stretch" Width="100"
-                                   FontWeight="Bold" Background="{StaticResource SecondaryAccentBrush}" FontSize="14"
+                                   FontWeight="Bold" Background="{StaticResource SecondaryHueMidBrush}" FontSize="14"
                         Text="{Binding TotalSale,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
                                 </Border>
                             </ListBoxItem>
@@ -620,7 +594,7 @@
                             <ColumnDefinition Width="*"/>
                             
                         </Grid.ColumnDefinitions>
-                        <materialDesign:ColorZone Margin="5"  Background="{StaticResource AccentColorBrush}"
+                        <materialDesign:ColorZone Margin="5"  Background="{StaticResource PrimaryHueDarkBrush}"
                                                   CornerRadius="5" Grid.ColumnSpan="5"
                                           Padding="5" >
                             <TextBlock Text="TOTAL WICR JOB COST" 
@@ -669,7 +643,7 @@
                             </ListBoxItem>
                             <ListBoxItem HorizontalAlignment="Center">
                                 <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
-                            Background="{StaticResource SecondaryAccentBrush}"
+                            Background="{StaticResource SecondaryHueMidBrush}"
                             BorderThickness="0,0,0,2">
                                     <TextBlock HorizontalAlignment="Stretch" Width="100"
                                                Text="{Binding DriveLaborValue}"/>
@@ -890,7 +864,7 @@
             
         </Grid>
         </ScrollViewer>
-        <Grid Grid.Row="2" Margin="5,0,5,0" Background="{StaticResource AccentColorBrush4}">
+        <Grid Grid.Row="2" Margin="5,0,5,0" Background="{StaticResource PrimaryHueLightBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -917,7 +891,7 @@
                             FontWeight="SemiBold"/>
                 <TextBlock Margin="20,0,0,0" Text="{Binding LaborPerc}"/>
             </StackPanel>
-            <TextBlock Background="{StaticResource SecondaryAccentBrush}" Grid.Column="3"
+            <TextBlock Background="{StaticResource SecondaryHueMidBrush}" Grid.Column="3"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Text="Drive Labor"/>

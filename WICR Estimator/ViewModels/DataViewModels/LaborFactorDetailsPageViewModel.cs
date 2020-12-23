@@ -12,6 +12,10 @@ namespace WICR_Estimator.ViewModels.DataViewModels
     public class LaborFactorDetailsPageViewModel : BaseViewModel, IPageViewModel
     {
         #region Laborfactors
+
+        //public static event EventHandler TaskStarted;
+        //public static event EventHandler TaskCompleted;
+
         private IEnumerable<LaborFactorDB> LaborFactorsFilterByProject;
         private bool allLaborSelected;
         public int SelectedProjectCount { get; set; }
@@ -69,21 +73,34 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             return true;
         }
 
+       
         private async void UpdateLaborFactors(object obj)
         {
+
+            OnTaskStarted("Updating Labor Factors");
+            
             LastActionResponse = "";
             var filteredlabors = FilteredLaborFactors.Where(x => x.IsChecked == true);
             foreach (var item in filteredlabors)
             {
                 item.Value = item.Value * (1 + UpdateFactor);
             }
+
             var result = await HTTPHelper.PutLaborFactorsAsync(filteredlabors);
+
+            
+           
             if (result == null)
             {
-                LastActionResponse = "Failed to save the data";
+
+                LastActionResponse = "Failed to save the data to DB";              
+
             }
             else
+            {
                 LastActionResponse = "Changes Saved Successfully. " + filteredlabors.Count() + " factors updated successfully.";
+            }
+            OnTaskCompleted(LastActionResponse);    
 
         }
 
@@ -104,20 +121,26 @@ namespace WICR_Estimator.ViewModels.DataViewModels
 
         private async void UpdateLaborFactor(object obj)
         {
+            OnTaskStarted("Updating Labor Factor for:" + SelectedLaborFactor.Name);
+
             var result  = await HTTPHelper.PutLaborFactorAsync(SelectedLaborFactor.LaborId, SelectedLaborFactor);
             if (result == null)
             {
                 LastActionResponse = "Failed to Save data.";
+                OnTaskCompleted(LastActionResponse);
             }
             else
             {
                 LastActionResponse = "Changes Saved Successfully.";
                 SelectedLaborFactor = result;
+                OnTaskCompleted(LastActionResponse);
             }
+            
         }
 
         private void SearchLaborFactor(object obj)
         {
+           // OnTaskStarted("Applying Filters.");
             UpdateSelectedProjectLaborFactors();
             if (LaborFactorsFilterByProject != null)
             {
@@ -126,6 +149,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             else
                 FilteredLaborFactors = LaborFactors.Where(x => x.Name.ToUpper().Contains(SearchText.ToUpper())).ToObservableCollection();
 
+            //OnTaskCompleted("");
         }
 
         private void UpdateSelectedProjectLaborFactors()
@@ -310,7 +334,17 @@ namespace WICR_Estimator.ViewModels.DataViewModels
 
         private async void UpdateFreightFactor(object obj)
         {
+            OnTaskStarted("Updating selected Freight factor");
             SelectedFreightFactor = await HTTPHelper.PutFreightAsync(SelectedFreightFactor.FreightID, SelectedFreightFactor);
+            if (SelectedFreightFactor!=null)
+            {
+                LastActionResponse = "Saved data successfully.";
+            }
+            else
+            {
+                LastActionResponse = "Failed to Saved data.";
+            }
+            OnTaskCompleted(LastActionResponse);
         }
         private DelegateCommand _updateFreightFactorsCommand;
         public DelegateCommand UpdateFreightFactorsCommand
@@ -329,6 +363,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
 
         private async void UpdateFreightFactors(object obj)
         {
+            OnTaskStarted("Updating Freight factors");
             var result = await HTTPHelper.PutFreightsAsync(FreightFactors.Where(x => x.IsChecked == true));
             if (result == null)
             {
@@ -336,7 +371,8 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             }
             else
                 LastActionResponse = "Changes Saved Successfully.";
-
+            
+            OnTaskCompleted(LastActionResponse);
         }
         private async Task GetFreightFactors()
         {
@@ -457,6 +493,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
         }
         private async void getdata()
         {
+            //OnTaskStarted("Fetching Labor and freight factors for all the Projects.");
             if (Projects == null)
             {
                 await GetProjects();
@@ -467,7 +504,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             {
                 item.HookCheckBoxAction(OnProjectSelectionChanged);
             }
-
+            //OnTaskCompleted("");
         }
         private async Task GetProjects()
         {

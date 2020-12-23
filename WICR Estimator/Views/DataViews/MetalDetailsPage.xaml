@@ -134,7 +134,9 @@
                                                                AncestorType={x:Type DataGrid}}}" />
                                 </DataGridCheckBoxColumn.Header>
                                 <DataGridCheckBoxColumn.ElementStyle>
-                                    <Style TargetType="CheckBox"/>
+                                    <Style TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}">
+
+                                    </Style>
                                 </DataGridCheckBoxColumn.ElementStyle>
                             </DataGridCheckBoxColumn>
                             

@@ -30,9 +30,57 @@ namespace WICR_Estimator.DBModels
 
         public int MetalId { get; set; }
         public string MetalName { get; set; }
-        public int? Units { get; set; }
-        public double MetalPrice { get; set; }
-        public double ProductionRate { get; set; }
+        
+
+        private int? _units;
+        public int? Units
+        {
+            get
+            {
+                return _units;
+            }
+            set
+            {
+                if (_units != value)
+                {
+                    _units = value;
+                    OnPropertyChanged("Units");
+                }
+            }
+        }
+        private double _metalPrice;
+        public double MetalPrice
+        {
+            get
+            {
+                return _metalPrice;
+            }
+            set
+            {
+                if (_metalPrice != value)
+                {
+                    _metalPrice = value;
+                    OnPropertyChanged("MetalPrice");
+                }
+            }
+        }
+
+        private double _productionRate;
+        public double ProductionRate
+        {
+            get
+            {
+                return _productionRate;
+            }
+            set
+            {
+                if (_productionRate != value)
+                {
+                    _productionRate = value;
+                    OnPropertyChanged("ProductionRate");
+                }
+            }
+        }
         public string MetalType { get; set; }
 
         public string Vendor { get; set; }

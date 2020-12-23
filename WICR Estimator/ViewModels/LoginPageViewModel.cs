@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MahApps.Metro.Controls.Dialogs;
+using System;
 using System.Security;
 using System.Windows.Controls;
 using WICR_Estimator.DBModels;
@@ -8,14 +9,33 @@ namespace WICR_Estimator.ViewModels
 {
     internal class LoginPageViewModel :BaseViewModel, IPageViewModel
     {
+        public bool SaveCredentials { get; set; }
 
+       
+        public LoginPageViewModel(IDialogCoordinator instance)
+        {
+            
+            if (Properties.Settings.Default.SaveCredentials)
+            {
+                Username = Properties.Settings.Default.Username;
+                Password = Properties.Settings.Default.Password;
+            }
+                
+        }
         public LoginPageViewModel()
         {
-            Username = Properties.Settings.Default.Username;
-            Password= Properties.Settings.Default.Password;
+            if (Properties.Settings.Default.SaveCredentials)
+            {
+                Username = Properties.Settings.Default.Username;
+                Password = Properties.Settings.Default.Password;
+                SaveCredentials = Properties.Settings.Default.SaveCredentials;
+                OnPropertyChanged("SaveCredentials");
+            }
+
         }
         private string Password { get; set; }
         public static event EventHandler OnLoggedIn;
+        public static event EventHandler ProgressStarted;
         public string Name => "Login Page";
         private bool _loginFailed;
         public bool LoginFailed
@@ -93,13 +113,19 @@ namespace WICR_Estimator.ViewModels
 
         private async void SignIn(object obj)
         {
+             
+            if (ProgressStarted != null)
+            {
+                ProgressStarted("Signing In...", EventArgs.Empty);
+
+            }
             LoginFailed = false;
             var passwordBox = obj as PasswordBox;
             Password = passwordBox.Password;
             UserDB user = new UserDB();
             user.Username = Username;
-            
 
+            
             var loginResponse = await HTTPHelper.LoginUser(new LoginModel { Password = Password, Username = Username });
             if (loginResponse==null)
             {
@@ -116,9 +142,10 @@ namespace WICR_Estimator.ViewModels
                 }
                 Properties.Settings.Default.Username=Username;
                 Properties.Settings.Default.Password=Password;
-
+                Properties.Settings.Default.SaveCredentials = SaveCredentials;
                 Properties.Settings.Default.Save();
             }
+            
         }
     }
 

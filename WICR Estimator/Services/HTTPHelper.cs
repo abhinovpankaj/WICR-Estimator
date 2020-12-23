@@ -11,11 +11,11 @@ namespace WICR_Estimator.Services
 {
     public class HTTPHelper
     {
-        //const string BASEURL = "http://wicrwebapi-dev.us-east-1.elasticbeanstalk.com/api/";
-        
+        const string BASEURL = "http://wicrwebapi-dev.us-east-1.elasticbeanstalk.com/api/";
+
         //public static object ConfigurationManager { get; private set; }
         //ConfigurationManager.AppSettings["apiUrl"]
-        const string BASEURL = "http://localhost:61955/api/";
+        //const string BASEURL = "http://localhost:61955/api/";
 
         static HttpClient GetApiClient()
         {
@@ -504,12 +504,12 @@ namespace WICR_Estimator.Services
             //var task = HTTPHelper.GetMetalsAsync();
             //task.Wait();
             //DataSerializerService.DSInstance.dbData.MetalDBData = task.Result;
-
+            
             dbData.MetalDBData = await HTTPHelper.GetMetalsAsync();
 
-            dbData.LaborDBData = await HTTPHelper.GetLaborFactorsAsyncByProjectID(project.ProjectId);
+            dbData.LaborDBData = await HTTPHelper.GetLaborFactorsAsyncByProjectID(project.ProjectId==28?1:project.ProjectId);
 
-            dbData.SlopeDBData = await HTTPHelper.GetSlopesByProjectIDAsync(project.ProjectId);
+            dbData.SlopeDBData = await HTTPHelper.GetSlopesByProjectIDAsync(project.ProjectId==28?1:project.ProjectId);
 
 
             dbData.MaterialDBData = await HTTPHelper.GetMaterialsAsyncByID(project.ProjectId);

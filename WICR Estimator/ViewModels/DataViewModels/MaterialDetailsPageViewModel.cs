@@ -10,10 +10,11 @@ using WICR_Estimator.Services;
 using WICR_Estimator.ViewModels;
 
 
-namespace WICR_Estimator
+namespace WICR_Estimator.ViewModels.DataViewModels
 {
     public class MaterialDetailsPageViewModel : BaseViewModel,IPageViewModel
     {
+
         private IEnumerable<MaterialDB> MaterialsFilterByProject;
         public string SearchText { get; set; } = "";
         public string SelectedFactor { get; set; }
@@ -100,6 +101,7 @@ namespace WICR_Estimator
         }
         private void UpdateSelectedProjectMaterials(object obj)
         {
+                     
             List<int> selectedIDs=new List<int>() ;
             foreach (var item in Projects)
             {
@@ -117,6 +119,8 @@ namespace WICR_Estimator
             }
             else
                 MaterialsFilterByProject = Materials.Join(selectedIDs,x=>x.ProjectId,id=>id,(x,id)=>x);
+
+
         }
 
         private bool Canselect(object obj)
@@ -165,10 +169,13 @@ namespace WICR_Estimator
 
         private async void UpdateMaterials(object obj)
         {
+            OnTaskStarted("Updating Selected Materials: ");
             LastActionResponse = "";
             var filteredSysMaterials = FilteredSystemMaterials.Where(x => x.IsChecked == true);
+
             foreach (var item in filteredSysMaterials)
             {
+
                 switch (SelectedFactor.Split(':')[1].Trim())
                 {
                     case "Price":
@@ -198,6 +205,8 @@ namespace WICR_Estimator
             
             string result=await HTTPHelper.PutMaterialsAsync(filteredSysMaterials);
             LastActionResponse = result;
+
+            OnTaskCompleted(LastActionResponse);
         }
 
         private DelegateCommand _updateMaterialCommand;
@@ -217,7 +226,8 @@ namespace WICR_Estimator
 
         private async void UpdateMaterial(object obj)
         {
-            //LastActionResponse =await HTTPHelper.PutMaterialAsync(SelectedMaterial.MaterialId, SelectedMaterial); ;
+
+            OnTaskStarted("Updating Selected Material: " + SelectedMaterial.MaterialName); 
             var result = await HTTPHelper.PutMaterialAsync(SelectedMaterial.MaterialId,SelectedMaterial);
             if (result==null)
             {
@@ -228,7 +238,7 @@ namespace WICR_Estimator
                 LastActionResponse = "Changes Saved Successfully.";
                 SelectedMaterial = result;
             }
-                     
+            OnTaskCompleted(LastActionResponse);         
         }
 
         private void SearchMaterial(object obj)
@@ -437,6 +447,8 @@ namespace WICR_Estimator
             MaterialsFilterByProject = Materials.Where(x=>x.ProjectId==id);
             FilteredSystemMaterials = MaterialsFilterByProject.ToObservableCollection();
         }
+
+        
     }
 
 }

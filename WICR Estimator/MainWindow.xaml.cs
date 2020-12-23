@@ -41,42 +41,39 @@ namespace WICR_Estimator
             //{
             //    Environment.Exit(-1);
             //}
-            this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+            //this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             //MaxWidth = SystemParameters.VirtualScreenWidth;
             this.DataContext = new MainWindowViewModel(DialogCoordinator.Instance);
             
         }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private bool isClosingConfirmed;
+        private async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (ViewModels.BaseViewModel.IsDirty)
-            {
-                MessageBoxResult res = MessageBox.Show("Do you want to Save the Estimate.", "Save State", MessageBoxButton.YesNoCancel);
-                switch (res)
-                {
-                    case MessageBoxResult.Yes:
-                        //Save the state.
-                        //SaveEstimate(ViewModels.HomeViewModel.MyselectedProjects);
-                        MainWindowViewModel vm = this.DataContext as MainWindowViewModel;
-                        if (vm!=null)
-                        {
-                            vm.SaveEstimateCommand.Execute(null);
-                        }
-                        break;
-                    case MessageBoxResult.Cancel:
-                        e.Cancel = true;
-                        break;
-                    case MessageBoxResult.No:
-                        ViewModels.BaseViewModel.IsDirty = false;
-                        break;
-                    default:
-                        break;
-                }                
-            }
-            else
-            {
 
+            if (this.isClosingConfirmed)
+            {
+                // window will close, if e.Cancel is passed in as "false"
+                return;
             }
+            e.Cancel = true;
+            MainWindowViewModel vm = this.DataContext as MainWindowViewModel;
+            var res= await vm.ShowActionMessage("Do you want to Save the Estimate.", "WICR");
+            
+            switch (res)
+            {
+                case MessageDialogResult.Affirmative:
+                    await vm.SaveEstimates(ViewModels.HomeViewModel.MyselectedProjects);
+                    isClosingConfirmed = true;
+                    this.Close();
+                    break;
+                case MessageDialogResult.Negative:
+                    isClosingConfirmed = true;
+                    this.Close();
+                    break;
+                default:
+                    break;
+            }
+            //MessageBoxResult res = MessageBox.Show("Do you want to Save the Estimate.", "Save State", MessageBoxButton.YesNoCancel);   
         }
 
         public void SaveEstimate(ObservableCollection<Project> SelectedProjects)
@@ -129,6 +126,7 @@ namespace WICR_Estimator
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            
             if (DataContext is ICloseWindow )
             {
                 var vm = DataContext as ICloseWindow;

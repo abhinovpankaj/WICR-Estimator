@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WICR_Estimator
+namespace WICR_Estimator.Views.DataViews
 {
     /// <summary>
     /// Interaction logic for MaterialDetailsPage.xaml

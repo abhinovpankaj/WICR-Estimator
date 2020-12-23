@@ -31,6 +31,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
     }
     public class MetalDetailsPageViewModel : BaseViewModel, IPageViewModel
     {
+        
         public List<MetalVendor> Vendors { get; set; }
         public List<MetalItemType  > MetalTypes { get; set; }
 
@@ -136,9 +137,10 @@ namespace WICR_Estimator.ViewModels.DataViewModels
         {
             return true;
         }
-
+       
         private async void UpdateMetals(object obj)
         {
+            OnTaskStarted("Updating Metal factors.");
             LastActionResponse = "";
             var filteredMetals = FilteredSystemMetals.Where(x => x.IsChecked == true);
             foreach (var item in filteredMetals)
@@ -162,7 +164,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             }
             else
                 LastActionResponse = "Changes Saved Successfully."+ filteredMetals.Count() +" metals updated.";
-
+            OnTaskCompleted(LastActionResponse);
         }
 
         private DelegateCommand _updateMetalCommand;
@@ -182,7 +184,15 @@ namespace WICR_Estimator.ViewModels.DataViewModels
 
         private async void UpdateMetal(object obj)
         {
+            OnTaskStarted("Updating Selected Metal factors.");
             SelectedMetal = await HTTPHelper.PutMetalAsync(SelectedMetal.MetalId, SelectedMetal);
+            if (SelectedMetal!=null)
+            {
+                LastActionResponse= "Failed to save the data";
+            }
+            else
+                LastActionResponse = "Changes saved successfully.";
+            OnTaskCompleted(LastActionResponse);
         }
 
         private void SearchMetal(object obj)
@@ -302,24 +312,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
                 }
             }
         }
-        //private ProjectDB _selectedProject;
-        //public ProjectDB SelectedProject
-        //{
-        //    get
-        //    {
-        //        return _selectedProject;
-        //    }
-        //    set
-        //    {
-        //        if (_selectedProject != value)
-        //        {
-        //            _selectedProject = value;
-        //            GetMetalsById(SelectedProject.ProjectId);
-        //            OnPropertyChanged("SelectedProject");
-        //        }
-        //    }
-        //}
-
+        
         public string Name => "Metal Details";
 
 

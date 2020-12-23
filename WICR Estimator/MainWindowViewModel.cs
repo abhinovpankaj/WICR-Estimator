@@ -3,11 +3,13 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
@@ -23,21 +25,23 @@ using WICR_Estimator.Views;
 
 namespace WICR_Estimator
 {
-    class MainWindowViewModel : BaseViewModel, ICloseWindow
+    class MainWindowViewModel : BaseViewModel
     {
         #region Fields
 
         private ICommand _changePageCommand;
+        private DelegateCommand _restartAppCommand;
         private DelegateCommand _saveEstimateCommand;
         private IPageViewModel _currentPageViewModel;
         private List<IPageViewModel> _pageViewModels;
         private DelegateCommand _minimizeCommand;
-        private DelegateCommand _closeWindowCommand;
+        
         private DelegateCommand _navigationCommand;
+        private DelegateCommand _logoutCommand;
         #endregion
         public bool IsUserAdmin { get; set; }
-        public bool IsUserLoggedIn { get; set; } 
-
+        public bool IsUserLoggedIn { get; set; }
+        public bool LoginEnabled { get; set; }
         public string Username { get; set; }
         public MainWindowViewModel()
         {
@@ -54,14 +58,28 @@ namespace WICR_Estimator
             CurrentPageViewModel = PageViewModels[3];
             CurWindowState = WindowState.Maximized;
             LoginPageViewModel.OnLoggedIn += LoginPage_OnLoggedIn;
+
             IsUserLoggedIn = false;
             //WindowStyle = WindowStyle.SingleBorderWindow;
         }
-        private IDialogCoordinator dialogCoordinator;
-
+        public IDialogCoordinator dialogCoordinator;
+        private MetroDialogSettings dialogSettings;
+        ProgressDialogController controller;
         public MainWindowViewModel(IDialogCoordinator instance)
         {
-            this.dialogCoordinator = instance;
+
+            IsUserLoggedIn = false;
+            dialogCoordinator = instance;
+            dialogSettings = new MetroDialogSettings();
+            //dialogSettings.ColorScheme = MetroDialogColorScheme.Inverted;
+            dialogSettings.AnimateHide = true;
+            dialogSettings.AnimateShow = true;
+            dialogSettings.CustomResourceDictionary =
+                    new ResourceDictionary
+                    {
+                        Source = new Uri("pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Dialogs.xaml")
+                    };
+
             // Add available pages
 
             PageViewModels.Add(new HomeViewModel());
@@ -75,31 +93,116 @@ namespace WICR_Estimator
             // Set starting page
             CurrentPageViewModel = PageViewModels[3];
             CurWindowState = WindowState.Maximized;
+
             LoginPageViewModel.OnLoggedIn += LoginPage_OnLoggedIn;
-            IsUserLoggedIn = false;
+            LoginPageViewModel.ProgressStarted += LoginPageViewModel_ProgressStarted;
+            BaseViewModel.TaskStarted+= PageViewModel_TaskStarted;
+            BaseViewModel.TaskCompleted += PageViewModel_TaskCompleted;
+            BaseViewModel.UpdateTask += PageViewModel_UpdateTaskStatus;
+
+        }
+
+
+
+
+        #region EVENTS
+
+       
+        private async void PageViewModel_TaskStarted(object sender, EventArgs e)
+        {
+            
+            controller = await dialogCoordinator.ShowProgressAsync(this, "Wait",
+             sender.ToString(), false, dialogSettings);
+            controller.SetIndeterminate();
+        }
+
+        private void PageViewModel_UpdateTaskStatus(object sender, EventArgs e)
+        {
+
+           controller.SetMessage(sender.ToString());
+        }
+        private async void PageViewModel_TaskCompleted(object sender, EventArgs e)
+        {
+            if (controller.IsOpen)
+            {
+                await controller.CloseAsync();
+
+            } 
+            if (sender.ToString().Length>0)
+            {
+                ShowMessage(sender.ToString());
+            }
+            
+            if (controller.IsOpen)
+            {
+                await controller.CloseAsync();
+
+            }
+        }
+        private async void LoginPageViewModel_ProgressStarted(object sender, EventArgs e)
+        {
+            controller = await dialogCoordinator.ShowProgressAsync(this, "Wait",
+              sender.ToString(), false, dialogSettings);
+            controller.SetIndeterminate();
+            
         }
 
         private void LoginPage_OnLoggedIn(object sender, EventArgs e)
         {
+            CloseAsync();
             IsUserLoggedIn = true;
+            LoginEnabled = false;
+            OnPropertyChanged("LoginEnabled");
             OnPropertyChanged("IsUserLoggedIn");
             var user=(UserDB)sender;
             IsUserAdmin = user.IsAdmin;
             Username = user.Username;
+            OnPropertyChanged("Username");
             OnPropertyChanged("IsUserAdmin");
             CurrentPageViewModel= PageViewModels[0];
+
+            
         }
+        #endregion
         #region dialogs
-        // Simple method which can be used on a Button
+        public async Task<MessageDialogResult> ShowActionMessage(string msg,string header)
+        {
+            var metroDialogSettings = new MetroDialogSettings
+            {
+                CustomResourceDictionary =
+                    new ResourceDictionary
+                    {
+                        Source = new Uri("pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Dialogs.xaml")
+                    },
+                NegativeButtonText = "No",
+                AffirmativeButtonText="Yes",
+                AnimateHide = true,
+                AnimateShow = true,
+                FirstAuxiliaryButtonText = "Cancel"
+                //ColorScheme= MetroDialogColorScheme.Inverted   
+            };
+
+           return await dialogCoordinator.ShowMessageAsync(this, header, msg,MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary, metroDialogSettings);
+           
+        }
+
+        public async Task<MessageDialogResult> ShowActionMessage(string msg, string header,MetroDialogSettings dialogsettings)
+        {
+            
+
+            return await dialogCoordinator.ShowMessageAsync(this, header, msg, MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary, dialogsettings);
+
+        }
         public async void ShowMessage(string message)
         {
-            await this.dialogCoordinator.ShowMessageAsync(this, "WICR", message);
+            
+            await dialogCoordinator.ShowMessageAsync(this, "WICR", message,MessageDialogStyle.Affirmative,dialogSettings);
         }
 
         public async void ShowProgress(string msg)
         {
             // Show...
-            ProgressDialogController controller = await this.dialogCoordinator.ShowProgressAsync(this, "Wait",
+            controller = await dialogCoordinator.ShowProgressAsync(this, "Wait",
                 msg);
 
             controller.SetIndeterminate();
@@ -108,28 +211,36 @@ namespace WICR_Estimator
             //var result = await Task.Run(...);
 
             // Close...
-            await controller.CloseAsync();
+           
+        }
+        public async void CloseAsync()
+        {
+            if (controller==null)
+            {
+                Thread.Sleep(500);
+            }
+            await controller?.CloseAsync();
         }
         #endregion
-        #region Properties / Commands
-        //private static WindowStyle windowStyle;
+
+            #region Properties / Commands
+            //private static WindowStyle windowStyle;
         public static WindowStyle WindowStyle
         { get; set;
-            //get
-            //{
-            //    return windowStyle;
-            //}
+         
+        }
 
-            //set
-            //{
-            //    if (value!=windowStyle)
-            //    {
-            //        WindowStyle = value;
-            //        if (PropertyChanged != null)
-            //        {
-            //            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            //        }
-            //}
+        public DelegateCommand RestartAppCommand
+        {
+            get
+            {
+                if (_restartAppCommand == null)
+                {
+                    _restartAppCommand = new DelegateCommand(RestartApp, canRestart);
+                }
+
+                return _restartAppCommand;
+            }
         }
         public DelegateCommand SaveEstimateCommand
         {
@@ -143,6 +254,88 @@ namespace WICR_Estimator
                 return _saveEstimateCommand;
             }
         }
+        public DelegateCommand LogoutCommand
+        {
+            get
+            {
+                if (_logoutCommand == null)
+                {
+                    _logoutCommand = new DelegateCommand(Logout, canlogOut);
+                }
+
+                return _logoutCommand;
+            }
+        }
+
+
+        private async void RestartApp(object obj)
+        {
+
+            var metroDialogSettings = new MetroDialogSettings
+            {
+                CustomResourceDictionary =
+                    new ResourceDictionary
+                    {
+                        Source = new Uri("pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Dialogs.xaml")
+                    },
+                NegativeButtonText = "No",
+                AffirmativeButtonText = "Yes",
+                AnimateHide = true,
+                AnimateShow = true
+                
+                //ColorScheme= MetroDialogColorScheme.Inverted   
+            };
+            // Displays the MessageBox.
+            var res = await ShowActionMessage("All the Project selection and values will be cleared. \nDo you want to proceed?", "WICR", metroDialogSettings);
+
+            switch (res)
+            {
+                case MessageDialogResult.Affirmative:
+                    Process.Start(System.Windows.Forms.Application.ExecutablePath);
+                    Thread.Sleep(1000);
+                    Environment.Exit(-1);
+                    break;
+               
+                default:
+                    break;
+            }
+            
+
+        }
+        private bool canRestart(object obj)
+        {
+            return IsUserLoggedIn;
+        }
+        private bool canlogOut(object obj)
+        {
+            return IsUserLoggedIn;
+        }
+
+        private async void Logout(object obj)
+        {
+            var metroDialogSettings = new MetroDialogSettings
+            {
+                CustomResourceDictionary =
+                    new ResourceDictionary
+                    {
+                        Source = new Uri("pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Dialogs.xaml")
+                    },
+                NegativeButtonText = "No",
+                AffirmativeButtonText = "Yes",
+                AnimateHide = true,
+                AnimateShow = true
+
+                //ColorScheme= MetroDialogColorScheme.Inverted   
+            };
+            var res= await ShowActionMessage("Do you want to logout from App?", "WICR - Logged-in As " + Username,metroDialogSettings);
+            if (res==MessageDialogResult.Affirmative)
+            {
+                IsUserLoggedIn = false;
+                OnPropertyChanged("IsUserLoggedIn");
+                ChangeViewModel(PageViewModels[3]);
+            }
+            
+        }
 
         private bool canSave(object obj)
         {
@@ -153,9 +346,9 @@ namespace WICR_Estimator
             else
                 return false;
         }
-        private void SaveEstimate(object obj)
+        private async void SaveEstimate(object obj)
         {
-            SaveEstimate(ViewModels.HomeViewModel.MyselectedProjects);
+           await SaveEstimates(ViewModels.HomeViewModel.MyselectedProjects);
         }
 
         public ICommand ChangePageCommand
@@ -223,7 +416,7 @@ namespace WICR_Estimator
             }
         }
 
-        public async void SaveEstimate(ObservableCollection<Project> SelectedProjects)
+        public async Task SaveEstimates(ObservableCollection<Project> SelectedProjects)
         {
             DateTime? JobCreationDate = DateTime.Now;
             string JobName = string.Empty, PreparedBy = string.Empty;
@@ -251,8 +444,8 @@ namespace WICR_Estimator
                 else
                     return;
             }
-            ProgressDialogController controller = await this.dialogCoordinator.ShowProgressAsync(this, "Wait",
-               "Saving Estimate...");
+            controller = await dialogCoordinator.ShowProgressAsync(this, "WICR",
+               "Wait! Saving Estimate...",false,dialogSettings);
             try
             {
                
@@ -273,7 +466,7 @@ namespace WICR_Estimator
                     }
                 }
                 var serializer = new DataContractSerializer(typeof(ObservableCollection<Project>));
-                //Savee to DB  part
+                //Save to DB  part
                 controller.SetMessage("Saving estimate to Database...");
                 int myEstimateID;
                 if (SelectedProjects[0].EstimateID != 0)
@@ -369,20 +562,19 @@ namespace WICR_Estimator
                         serializer.WriteObject(writer, SelectedProjects);
                         
                         writer.Flush();
-                        //MessageBox.Show("Project Estimate Saved Succesfully", "Success");
-                        //ShowMessage("Project Estimate Saved Succesfully");
+                        
                         controller.SetMessage("Project Estimate Saved locally.");
-                        //SetBalloonTip("Project Estimate Saved Succesfully");
+                        
                     }                    
                 }
                 ViewModels.BaseViewModel.IsDirty = false;
                 
             }
-            catch (Exception)
+            catch (Exception ex )
             {
                 // SetBalloonTip("Failed to Save the Project Estimate.");
                 //ShowMessage("Failed to Save the Project Estimate.");
-                controller.SetMessage("Failed to Save the Project Estimate.");
+                controller.SetMessage("Failed to Save the Project Estimate."+ ex.Message);
             }
            
             await controller.CloseAsync();
@@ -496,30 +688,62 @@ namespace WICR_Estimator
             
             
         }
+        public ICommand WindowClosingCommand { get; private set; }
 
-        public DelegateCommand CloseCommand
+        public bool cancelClose;
+        public async void OnWindowClosing()
         {
-            get
+            string result="";
+            if (ViewModels.BaseViewModel.IsDirty)
             {
-                if (_closeWindowCommand == null)
-                {
-                    _closeWindowCommand = new DelegateCommand(CloseWindow, canClose);
+                try {
+                    //result =await InputDialog("Do you want to Save the Estimate.", "WICR");
+                    var metroDialogSettings = new MetroDialogSettings
+                    {
+                        CustomResourceDictionary =
+                    new ResourceDictionary
+                    {
+                        Source = new Uri("pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Dialogs.xaml")
+                    },
+                        //NegativeButtonText = "No",
+                        ////AnimateHide = true,
+                        ////AnimateShow = true,
+                        ////FirstAuxiliaryButtonText = "Cancel"
+
+
+                    };
+
+                    result= await dialogCoordinator.ShowInputAsync(this, "Do you want to Save the Estimate.", "WICR",
+                        metroDialogSettings);
+                    
                 }
 
-                return _closeWindowCommand;
+                
+                catch(Exception ex)
+                {
+
+                }
+
+                switch (result)
+
+                {
+                    case "Yes":
+                        SaveEstimateCommand.Execute(null);
+                       
+                        break;
+                    case "Cancel":
+                        cancelClose = true;
+                        break;
+                    case "No":
+                        ViewModels.BaseViewModel.IsDirty = false;
+                        break;
+                    default:
+                        break;
+                }
             }
+            
         }
-
-        private bool canClose(object obj)
-        {
-            return true;
-        }
-
-        private void CloseWindow(object obj)
-        {
-            Close?.Invoke();
-        }
-        public Action Close {get;set;}
+        
         #endregion
 
     }

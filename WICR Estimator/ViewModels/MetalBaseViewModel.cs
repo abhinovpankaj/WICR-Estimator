@@ -750,10 +750,13 @@ namespace WICR_Estimator.ViewModels
             {
                 dbData = DataSerializerService.DSInstance.deserializeDbData(projectName);
             }
-            else
+
+            //dbData = DataSerializerService.DSInstance.dbData;
+            if (dbData.LaborDBData.Count!=0)
             {
-                //dbData = DataSerializerService.DSInstance.dbData;
-                deductionOnLargeJob = dbData.LaborDBData.First(x=>x.Name== "Deduct on Labor for large jobs").Value;
+                deductionOnLargeJob = dbData.LaborDBData.First(x => x.Name == "Deduct on Labor for large jobs").Value;
+            }
+               
                 //pWage = gsData.LaborData.ToArray<object>();
 
                 laborRate = dbData.FreightDBData.First(x=>x.FreightID==8).FactorValue;
@@ -761,7 +764,7 @@ namespace WICR_Estimator.ViewModels
                 Nails = dbData.MetalDBData.FirstOrDefault(x=>x.MetalName== "Nails, caulk + overage on metal").ProductionRate; //production rate for Nails, caulk + overage on metal
                 metalDBDetails = dbData.MetalDBData;
                 freightDBDetails = dbData.FreightDBData;
-            }          
+                     
         }
 
         protected double getMetalPR(string metalName)

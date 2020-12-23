@@ -11,6 +11,8 @@ namespace WICR_Estimator.ViewModels.DataViewModels
 {
     public class SlopeDetailsPageViewModel : BaseViewModel, IPageViewModel
     {
+        
+
         private IEnumerable<SlopeDB> SlopesFilterByProject;
         public string SearchText { get; set; } = "";
         public int SelectedProjectCount { get; set; }
@@ -88,6 +90,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
         private async void UpdateSlopes(object obj)
         {
             LastActionResponse = "";
+            OnTaskStarted("Updating Slope details: ");
             var filteredSlopes = FilteredSystemSlopes.Where(x => x.IsChecked == true);
             foreach (var item in filteredSlopes)
             {
@@ -110,7 +113,8 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             }
             else
                 LastActionResponse = "Changes Saved Successfully." + filteredSlopes.Count() + " Slopes updated.";
-
+            
+            OnTaskCompleted(LastActionResponse);
         }
 
         private DelegateCommand _updateSlopeCommand;
@@ -130,7 +134,15 @@ namespace WICR_Estimator.ViewModels.DataViewModels
 
         private async void UpdateSlope(object obj)
         {
+            OnTaskStarted("Updating Selected Slope.");
             SelectedSlope = await HTTPHelper.PutSlopeAsync(SelectedSlope.SlopeId, SelectedSlope);
+            if (SelectedSlope != null)
+            {
+                LastActionResponse = "Failed to save the data";
+            }
+            else
+                LastActionResponse = "Changes saved successfully.";
+            OnTaskCompleted(LastActionResponse);
         }
 
         private void SearchSlope(object obj)
