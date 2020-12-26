@@ -121,7 +121,7 @@
                   
                   CanUserAddRows="false"
                   ItemsSource="{Binding Metals}">
-                            <DataGrid.ColumnHeaderStyle>
+                            <DataGrid.ColumnHeaderStyle >
                                 <Style BasedOn="{StaticResource {x:Type  DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
                                     <Setter Property="Background" Value="{StaticResource  PrimaryHueDarkBrush}" />
                                     <Setter Property="Foreground" Value="{StaticResource  PrimaryHueDarkForegroundBrush}" />
@@ -404,7 +404,7 @@
                                                         <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}"/>
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding IsMetalChecked}" Value="True">
-                                                                <Setter Property="Foreground" Value="Black"/>
+                                                                <Setter Property="Foreground" Value="{Binding}"/>
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
@@ -421,19 +421,19 @@
                                             <TextBox x:Name="txtSize" Text="{Binding Size,
                                     UpdateSourceTrigger=LostFocus}"
                                          HorizontalAlignment="Stretch"
-                                    IsEnabled="True" >
-                                                <TextBox.Style>
-                                                    <Style TargetType="{x:Type TextBox}">
-                                                        <Setter Property="Foreground" Value="White"/>
-                                                        <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}"/>
+                                    IsEnabled="True" Style="{StaticResource editableTextbox}">
+                                                <!--<TextBox.Style>
+                                                    <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBox}">
+                                                        <Setter Property="Foreground" Value="{ StaticResource IdealForegroundDisabledBrush}"/>
+                                                        <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}"/>
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding IsMetalChecked}" Value="True">
-                                                                <Setter Property="Foreground" Value="Black"/>
-                                                                <Setter Property="Background" Value="White"/>
+                                                                <Setter Property="Foreground" Value="{Binding}"/>
+                                                                <Setter Property="Background" Value="{Binding}"/>
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
-                                                </TextBox.Style>
+                                                </TextBox.Style>-->
                                             </TextBox>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -512,27 +512,28 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="Metal Type" Grid.Row="0" Margin="5" Style="{StaticResource MaterialDesignSubtitle2TextBlock}"/>
-                    <TextBlock Text="Nails, caulk + overage on metal" Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
+                    <TextBlock Text="Metal Type" Grid.Row="0" Margin="5" Style="{StaticResource MaterialDesignBody2TextBlock}"/>
+                    <TextBlock Text="Nails, caulk + overage on metal" Style="{StaticResource MaterialDesignBody2TextBlock}"
                                    VerticalAlignment="Center" Grid.Row="1"
                                    Margin="5"/>
-                    <TextBlock Text="Labor Total Cost" Grid.Row="2" Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
+                    <TextBlock Text="Labor Total Cost" Grid.Row="2" Style="{StaticResource MaterialDesignBody2TextBlock}"
                                    VerticalAlignment="Center"
                                    Margin="5"/>
-                    <TextBlock Text="Material Total Cost" Grid.Row="3" Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
+                    <TextBlock Text="Material Total Cost" Grid.Row="3" Style="{StaticResource MaterialDesignBody2TextBlock}"
                                    VerticalAlignment="Center"
                                    Margin="5,5,5,50"/>
 
 
-                        <TextBox Text="{Binding MetalName}" Background="{StaticResource PrimaryHueLightBrush}"
-                       Margin="5" IsReadOnly="True" Grid.Column="1" Width="200"
+                    <TextBlock Text="{Binding MetalName}" Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
+                               
+                       Margin="5"  Grid.Column="1" Width="200"
                                 />
-                        <TextBox Text="{Binding Nails, StringFormat='\{0\}%'}" Background="{StaticResource PrimaryHueLightBrush}"
-                       Margin="5" IsReadOnly="True" Grid.Column="1" Grid.Row="1"/>
+                    <TextBlock Text="{Binding Nails, StringFormat='\{0\}%'}" Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
+                       Margin="5"  Grid.Column="1" Grid.Row="1"/>
 
-                        <TextBox IsReadOnly="True"  Margin="5" Grid.Row="2" Grid.Column="1"
+                    <TextBlock   Margin="5" Grid.Row="2" Grid.Column="1"  Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
                              Text="{Binding TotalLaborCost,UpdateSourceTrigger=PropertyChanged ,StringFormat={}{0:C}}"/>
-                        <TextBox IsReadOnly="True"  Margin="5,5,5,50" Grid.Row="3" Grid.Column="1"
+                    <TextBlock   Margin="5,5,5,50" Grid.Row="3" Grid.Column="1"  Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
                             Text="{Binding TotalMaterialCost,UpdateSourceTrigger=PropertyChanged  ,StringFormat={}{0:C}}" />
 
                     </Grid>
@@ -549,7 +550,7 @@
                         Height="30"
                         HorizontalAlignment="Right"
                         Margin="5" 
-                         IsEnabled="{Binding AddRowCommand}">
+                        >
                         <Button.Content>
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon Kind="Calculator"

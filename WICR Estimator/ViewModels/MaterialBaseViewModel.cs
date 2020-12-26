@@ -3742,7 +3742,7 @@ namespace WICR_Estimator.ViewModels
 
         public virtual void populateCalculation()
         {
-            if (dbData == null)
+            if (dbData == null&& laborDetails==null)
                 return;
 
             LCostBreakUp = new ObservableCollection<CostBreakup>();

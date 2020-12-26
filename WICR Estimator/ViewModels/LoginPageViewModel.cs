@@ -135,17 +135,17 @@ namespace WICR_Estimator.ViewModels
             else
             {
                 user.IsAdmin = loginResponse.Roles.Contains("Admin") ? true : false;
-                if (OnLoggedIn != null)
-                {
-                    OnLoggedIn(user, EventArgs.Empty);
-
-                }
+                
                 Properties.Settings.Default.Username=Username;
                 Properties.Settings.Default.Password=Password;
                 Properties.Settings.Default.SaveCredentials = SaveCredentials;
                 Properties.Settings.Default.Save();
             }
-            
+            if (OnLoggedIn != null)
+            {
+                OnLoggedIn(user, EventArgs.Empty);
+
+            }
         }
     }
 

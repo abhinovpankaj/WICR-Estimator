@@ -49,7 +49,7 @@ namespace WICR_Estimator.ViewModels
             LoadEstimate = new DelegateCommand(LoadProjectEstimate, canLoadEstimate);
             ReplicateProject = new DelegateCommand(Replicate, canReplicate);
             ReplicateIndependentProject = new DelegateCommand(ReplicateIndependent, canReplicate);
-            ClearProjects = new DelegateCommand(Clear, canClear);
+            
             CreateSummary = new DelegateCommand(GenerateSummary, canCreateSummary);
             RefreshGoogleData = new DelegateCommand(DeleteGoogleData, canDelete);
             ProjectTotals = new ProjectsTotal();
@@ -352,43 +352,9 @@ namespace WICR_Estimator.ViewModels
         {
             WriteToSummary();
         }
-        private bool canClear(object obj)
-        {
-            if (SelectedProjects.Count > 0)
-            {
-                return true;
-            }
-            else
-                return false;
-        }
        
-       private void Clear(object obj)
-        {
-            if (obj!=null)
-            {
-                Process.Start(Application.ExecutablePath);
-                Thread.Sleep(1000);
-                Environment.Exit(-1);
-            }
-
-            string message = "All the Project selection and values will be cleared. \nDo you want to proceed?";
-            string caption = "Refresh WICR Tool";
-            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-            DialogResult result;
-
-            // Displays the MessageBox.
-            
-            result = MessageBox.Show(message, caption, buttons);
-            if (result == System.Windows.Forms.DialogResult.Yes)
-            {
-
-                Process.Start(Application.ExecutablePath);
-                Thread.Sleep(1000);
-                Environment.Exit(-1);
-            }
-            
-
-        }
+       
+       
         
         private bool canReplicate(object obj)
         {
@@ -591,7 +557,7 @@ namespace WICR_Estimator.ViewModels
                 }
                 Project_OnSelectedProjectChange(Projects[0], null);
                 reader.Close();
-                ClearProjects.RaiseCanExecuteChanged();
+               
                 CreateSummary.RaiseCanExecuteChanged();
                 CanApplyLatestPrice = true;
                 OnPropertyChanged("CanApplyLatestPrice");
@@ -806,7 +772,7 @@ namespace WICR_Estimator.ViewModels
 
                 Project_OnSelectedProjectChange(Projects[0], null);
                 reader.Close();
-                ClearProjects.RaiseCanExecuteChanged();
+                
                 CreateSummary.RaiseCanExecuteChanged();
                 CanApplyLatestPrice = true;
                 OnPropertyChanged("CanApplyLatestPrice");
@@ -972,7 +938,7 @@ namespace WICR_Estimator.ViewModels
             
 
         }
-        public DelegateCommand ClearProjects { get; set; }
+        
         public DelegateCommand CreateSummary { get; set; }
         public DelegateCommand RefreshGoogleData { get; set; }
         public DelegateCommand ReplicateProject { get; set; }
@@ -1179,7 +1145,7 @@ namespace WICR_Estimator.ViewModels
             IsProcessing = false;
             //MainWindowViewModel.WindowStyle = System.Windows.WindowStyle.SingleBorderWindow;
             CompletedProjects = 0;
-            Clear(true);                      
+                             
         }
         private bool canShow(object obj)
         {

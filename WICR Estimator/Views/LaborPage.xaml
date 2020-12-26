@@ -308,7 +308,8 @@
                     <Label Content="Labor Cost per SQ. FT." Grid.Row="6" VerticalAlignment="Center"
                            HorizontalAlignment="Center"
                        Style="{StaticResource  MaterialDesignLabel}"/>
-                    <Label Content="Total Labor Cost" Grid.Row="7" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    <Label Content="Total Labor Cost" Grid.Row="7" HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
                        Style="{StaticResource  MaterialDesignLabel}"/>
                     <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                             Margin="50,0"
@@ -317,8 +318,9 @@
                         <Label HorizontalAlignment="Right" Style="{StaticResource  MaterialDesignLabel}"               
                              Width="100"
                              Margin="3"
-                             FontSize="14"               
-                             Content="{Binding TotalHrsLabor,  StringFormat={}{0:n2},
+                             FontSize="14"  
+                             ContentStringFormat="{}{0:n2}"
+                             Content="{Binding TotalHrsLabor, 
                         UpdateSourceTrigger=PropertyChanged}"/>
                     </Border>
                     <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="{StaticResource PrimaryHueDarkBrush}"
@@ -327,6 +329,7 @@
                         <Label    HorizontalAlignment="Right"                   
                              Margin="3"                       
                              Width="100"
+                                  ContentStringFormat="{}{0:n2}"
                               FontSize="14"              
                              Content="{Binding TotalHrsSystemLabor,
                         UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
@@ -337,6 +340,7 @@
                         <Label      HorizontalAlignment="Right"                 
                              Margin="3"                     
                              Width="100"
+                                    ContentStringFormat="{}{0:n2}"
                                FontSize="14"              
                              Content="{Binding TotalHrsMetalLabor,
                         UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
@@ -369,6 +373,7 @@
                         <Label    HorizontalAlignment="Right"                  
                              Margin="3"                       
                              Width="100"
+                                  ContentStringFormat="c"
                              FontSize="14"              
                              Content="{Binding TotalLaborUnitPrice, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
                     </Border>
@@ -377,7 +382,8 @@
                         <Label        VerticalAlignment="Center"  HorizontalAlignment="Right"                 
                                    Margin="3"                      
                                    Width="100"
-                                   FontSize="14"             
+                                   FontSize="14" 
+                                      ContentStringFormat="c"
                                    Content="{Binding TotalLaborWithoutDrive, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
                     </Border>
 
@@ -403,7 +409,7 @@
                             <TextBlock Text="{Binding LaborMinChargeLaborUnitPrice,StringFormat=N2}"  HorizontalAlignment="Center"
                                    Grid.Row="1" Grid.Column="0"  Margin="0,0,15,0"/>
                             <TextBlock Text="Min Labor Extension" Grid.Column="1"/>
-                            <TextBlock Text="{Binding LaborMinChargeLaborExtension,StringFormat=N2}" Grid.Column="1"  HorizontalAlignment="Center"
+                            <TextBlock Text="{Binding LaborMinChargeLaborExtension,StringFormat=c}" Grid.Column="1"  HorizontalAlignment="Center"
                                    Grid.Row="1"/>
                         </Grid>
 

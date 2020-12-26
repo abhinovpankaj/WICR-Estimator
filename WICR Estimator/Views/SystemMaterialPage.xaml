@@ -35,12 +35,7 @@
 
             <Style.Triggers >
 
-                <!--<Trigger Property="IsEnabled" Value="false">
-
-                    <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
-                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightForegroundBrush}"/>
-                    <Setter Property="FontWeight" Value="Normal" />
-                </Trigger>-->
+                
                 <DataTrigger Binding="{Binding IsMaterialChecked}" Value="False">
                     <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
                     <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightForegroundBrush}" />
@@ -59,19 +54,30 @@
                     <Setter Property="Foreground" Value="{StaticResource   PrimaryHueLightForegroundBrush}" />
                     <Setter Property="ToolTip" Value="Please enter a numeric value."/>
                 </Trigger>
-                
-                <DataTrigger Binding="{Binding Tag,RelativeSource={RelativeSource Self}
-                                        }" 
-                             Value="True">
-                    <Setter Property="FontWeight" Value="Bold" />
-                    <!--<Setter Property="Background" Value="Green" />
+
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding ="{Binding Tag,RelativeSource={RelativeSource Self}}" 
+                             Value="True"/>
+                        
+                    </MultiDataTrigger.Conditions>
+                    <MultiDataTrigger.Setters>
+                        <Setter Property="FontWeight" Value="Bold" />
+                        <!--<Setter Property="Background" Value="Green" />
                     <Setter Property="Foreground" Value="White" />-->
-                    <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
-                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
-                </DataTrigger>
-               
-               
-                
+                        <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
+                    </MultiDataTrigger.Setters>
+                    
+                </MultiDataTrigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <!--<Setter Property="Background" Value="LightYellow" />-->
+                    <Setter Property="Background" Value="{Binding}" />
+                    <Setter Property="Foreground" Value="{Binding}" />
+
+                </Trigger>
+
+
             </Style.Triggers>
         </Style>
         <Style TargetType="{x:Type DataGridCell}" x:Key="editableCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
@@ -83,10 +89,11 @@
                 
             </Style.Triggers>
         </Style>
-        <Style BasedOn="{StaticResource {x:Type  DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+        <Style BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}" TargetType="{x:Type DataGridColumnHeader}">
             <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
             <Setter Property="Foreground" Value="{StaticResource  PrimaryHueDarkForegroundBrush}" />
-            <Setter Property="Padding" Value="6" />
+            <Setter Property="Padding" Value="10" />
+            
         </Style>
     </UserControl.Resources>
     <Grid>
@@ -118,7 +125,7 @@
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsMaterialChecked}" Value="False">
                                 <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
-                                <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -140,7 +147,7 @@
 
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Select Project for Estimate" KeyboardNavigation.IsTabStop="False">
+                    <DataGridTemplateColumn Header="Select Material for Estimate" KeyboardNavigation.IsTabStop="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Name}" VerticalAlignment="Center"

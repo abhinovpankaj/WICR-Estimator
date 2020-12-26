@@ -46,7 +46,7 @@ namespace WICR_Estimator
 
         #region ICommand Members
 
-        [DebuggerStepThrough]
+        
         public bool CanExecute(object parameters)
         {
             return _canExecute == null ? true : _canExecute(parameters);
@@ -61,11 +61,16 @@ namespace WICR_Estimator
             //}
             CommandManager.InvalidateRequerySuggested();
         }
-
+       
         public event EventHandler CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
+            remove { 
+
+                CommandManager.RequerySuggested -= value;
+               
+
+            }
         }
 
         public void Execute(object parameters)

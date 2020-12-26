@@ -66,8 +66,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
             <Setter Property="Template">
                 <Setter.Value>
                      <ControlTemplate>
-                        <Expander Style="{StaticResource   MaterialDesignExpander}" Margin="-10,5,0,0" IsExpanded="{Binding Mode=TwoWay,
-                                  UpdateSourceTrigger=Explicit,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Expander},AncestorLevel=1}, Path=IsExpanded}">
+                        <Expander Style="{StaticResource   MaterialDesignExpander}" Margin="-10,5,0,0" >
                             <!--<i:Interaction.Behaviors>
                                 <behaviors:PersistGroupExpandedStateBehavior GroupName="{Binding Name}" />
                             </i:Interaction.Behaviors>-->
@@ -314,7 +313,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
-                                <Button Command="{Binding ClearProjects}">
+                                <!--<Button Command="{Binding ClearProjects}">
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
                                             <materialDesign:PackIcon Kind="Refresh" VerticalAlignment="Center"
@@ -323,7 +322,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                                        VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Button.Content>
-                                </Button>
+                                </Button>-->
                                 <Button Command="{Binding CreateSummary}">
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
