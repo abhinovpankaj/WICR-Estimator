@@ -346,7 +346,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                                     </Button.Content>
                                 </Button>
                                 <Separator/>
-                                <CheckBox Content="Apply Latest Google Price"
+                                <CheckBox Content="Apply Latest Prices"
                                       Style="{StaticResource MaterialDesignFilterChipCheckBox}"
                                       ToolTip="Please check if you want to apply the latest prices. To revert to old price reload the estimate file."
                                       x:Name="applynewPrice"

@@ -7,13 +7,13 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="WICREstimatorApp"
-    Publisher="CN=abhin"
-    Version="1.0.0.0" />
+    Name="45966Point5Nyble.WICREstimator"
+    Publisher="CN=20716BBD-5712-4FF8-94FA-2BE5B4CD92FA"
+    Version="1.0.8.0" />
 
   <Properties>
-    <DisplayName>WICREstimator.Package</DisplayName>
-    <PublisherDisplayName>abhin</PublisherDisplayName>
+    <DisplayName>WICREstimator</DisplayName>
+    <PublisherDisplayName>Point5Nyble</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
 
@@ -42,7 +42,7 @@
           </uap:ShowNameOnTiles>
         </uap:DefaultTile >
         <uap:SplashScreen Image="Images\SplashScreen.png" />
-        <uap:LockScreen BadgeLogo="Images\24.png" Notification="badgeAndTileText"/>
+        <uap:LockScreen Notification="badgeAndTileText" BadgeLogo="Images\BadgeLogo.png"/>
       </uap:VisualElements>
       <Extensions>
         <uap:Extension Category="windows.fileTypeAssociation">
@@ -52,7 +52,7 @@
             </uap:SupportedFileTypes>
             <uap:Logo>Images\Wicr_logo.jpg</uap:Logo>
             <uap:DisplayName>WICR Estimator App</uap:DisplayName>
-            <uap:InfoTip>WICR Estimate file </uap:InfoTip>
+            <uap:InfoTip>EstimateFile</uap:InfoTip>
           </uap:FileTypeAssociation>
         </uap:Extension>
       </Extensions>

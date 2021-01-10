@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WICR_Estimator.Views.DataViews"
              mc:Ignorable="d" 
+             xmlns:conv="clr-namespace:WICR_Estimator.Converters"
               d:DesignHeight="1050" d:DesignWidth="1000"
              Background="{DynamicResource MaterialDesignPaper}"
               FontFamily="{DynamicResource MaterialDesignFont}"
@@ -60,6 +61,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <conv:ProjectIDConverter x:Key="nameConv"/>
     </UserControl.Resources>
     <DockPanel>
         <StatusBar DockPanel.Dock="Bottom"
@@ -192,6 +194,10 @@
                                                                        Width="400"
                                                                        IsReadOnly="True"
                                                         Binding="{ Binding SlopeName}"/>
+                                    <materialDesign:DataGridTextColumn Header="Project Name"
+                                                                       Width="200"
+                                                                       IsReadOnly="True"
+                                                        Binding="{ Binding ProjectId, Converter={StaticResource nameConv}}"/>
                                     <materialDesign:DataGridTextColumn Header="Labor Rate"
                                                                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"

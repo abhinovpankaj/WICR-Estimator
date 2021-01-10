@@ -1,5 +1,7 @@
 ﻿using MahApps.Metro.Controls.Dialogs;
+using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Security;
 using System.Windows.Controls;
 using WICR_Estimator.DBModels;
@@ -140,6 +142,11 @@ namespace WICR_Estimator.ViewModels
                 Properties.Settings.Default.Password=Password;
                 Properties.Settings.Default.SaveCredentials = SaveCredentials;
                 Properties.Settings.Default.Save();
+
+                //save a file to show user is logged in.
+                string res = Path.GetTempPath();
+                string json = JsonConvert.SerializeObject(user);
+                File.WriteAllText(res+"wicrlogin.json", json);
             }
             if (OnLoggedIn != null)
             {

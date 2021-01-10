@@ -11,11 +11,11 @@ namespace WICR_Estimator.Services
 {
     public class HTTPHelper
     {
-        const string BASEURL = "http://wicrwebapi-dev.us-east-1.elasticbeanstalk.com/api/";
+        //const string BASEURL = "http://wicrwebapi-dev.us-east-1.elasticbeanstalk.com/api/";
 
         //public static object ConfigurationManager { get; private set; }
         //ConfigurationManager.AppSettings["apiUrl"]
-        //const string BASEURL = "http://localhost:61955/api/";
+        const string BASEURL = "http://localhost:61955/api/";
 
         static HttpClient GetApiClient()
         {

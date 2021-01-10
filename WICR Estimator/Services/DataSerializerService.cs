@@ -97,6 +97,10 @@ namespace WICR_Estimator.Services
             {
                 var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\" + ProjectName + "_DbData.dat";
                 IFormatter formatter = new BinaryFormatter();
+                if (!File.Exists(path))
+                {
+                    return null;
+                }
                 try
                 {
                     DBData dbData;

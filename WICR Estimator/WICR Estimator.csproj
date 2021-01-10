@@ -203,6 +203,7 @@
     <Compile Include="Converters\IsNull.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\OriginalProjectnameConverter.cs" />
+    <Compile Include="Converters\ProjectIDConverter.cs" />
     <Compile Include="Converters\QtyTextboxConv.cs" />
     <Compile Include="Converters\RoundUpConverter.cs" />
     <Compile Include="Converters\UnitTextboxConverter.cs" />

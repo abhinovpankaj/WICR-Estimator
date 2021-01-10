@@ -1,5 +1,6 @@
 ﻿using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -91,7 +92,25 @@ namespace WICR_Estimator
             PageViewModels.Add(new LaborFactorDetailsPageViewModel());
             PageViewModels.Add(new PaletteSelectorViewModel());
             // Set starting page
-            CurrentPageViewModel = PageViewModels[3];
+            var filePath = Path.GetTempPath() + "wicrlogin.json";
+            if (File.Exists(filePath))
+            {
+                
+                string json = File.ReadAllText(filePath);
+                UserDB myObj = JsonConvert.DeserializeObject<UserDB>(json);
+                IsUserLoggedIn = true;
+                LoginEnabled = false;
+                OnPropertyChanged("LoginEnabled");
+                OnPropertyChanged("IsUserLoggedIn");
+                
+                IsUserAdmin = myObj.IsAdmin;
+                Username = myObj.Username;
+                OnPropertyChanged("Username");
+                OnPropertyChanged("IsUserAdmin");
+                CurrentPageViewModel = PageViewModels[0];
+            }
+            else
+                CurrentPageViewModel = PageViewModels[3];
             CurWindowState = WindowState.Maximized;
 
             LoginPageViewModel.OnLoggedIn += LoginPage_OnLoggedIn;
@@ -123,11 +142,11 @@ namespace WICR_Estimator
         }
         private async void PageViewModel_TaskCompleted(object sender, EventArgs e)
         {
-            if (controller.IsOpen)
-            {
-                await controller.CloseAsync();
+            //if (controller.IsOpen)
+            //{
+            //    await controller.CloseAsync();
 
-            } 
+            //} 
             if (sender.ToString().Length>0)
             {
                 ShowMessage(sender.ToString());
@@ -139,6 +158,8 @@ namespace WICR_Estimator
 
             }
         }
+
+       
         private async void LoginPageViewModel_ProgressStarted(object sender, EventArgs e)
         {
             controller = await dialogCoordinator.ShowProgressAsync(this, "Wait",
@@ -333,6 +354,8 @@ namespace WICR_Estimator
                 IsUserLoggedIn = false;
                 OnPropertyChanged("IsUserLoggedIn");
                 ChangeViewModel(PageViewModels[3]);
+                //delete login file
+                File.Delete(Path.GetTempPath() + "wicrlogin.json");
             }
             
         }
@@ -489,7 +512,7 @@ namespace WICR_Estimator
                     controller.SetMessage("Saving Estimate Locally...");
                     using (var writer = new XmlTextWriter(HomeViewModel.filePath, null))
                     {
-                        writer.Formatting = Formatting.Indented; // indent the Xml so it's human readable
+                        writer.Formatting = System.Xml.Formatting.Indented; // indent the Xml so it's human readable
                         foreach (Project item in SelectedProjects)
                         {
                             item.MaterialViewModel.CalculateCost(null);
@@ -498,7 +521,7 @@ namespace WICR_Estimator
                                 hm.UpdateProjectTotals();
 
                             item.CreationDetails = JobName + ":;" + PreparedBy + ":;" + JobCreationDate.ToString();
-                            item.ProductVersion = "3.0";
+                            item.ProductVersion = "4.0";
                             //Update DB
                             if (item.EstimateID != 0)
                             {

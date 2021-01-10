@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WICR_Estimator"
+             xmlns:conv="clr-namespace:WICR_Estimator.Converters"
       mc:Ignorable="d" 
       d:DesignHeight="1050" d:DesignWidth="1000"
       Background="{DynamicResource MaterialDesignPaper}"
@@ -61,6 +62,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <conv:ProjectIDConverter x:Key="nameConv"/>
     </UserControl.Resources>
     <DockPanel>
         <StatusBar DockPanel.Dock="Bottom"
@@ -202,10 +204,13 @@
                                     </Style>
                                 </DataGridCheckBoxColumn.ElementStyle>
                             </DataGridCheckBoxColumn>
-                                <materialDesign:DataGridTextColumn Header="Material Name"
+                                <materialDesign:DataGridTextColumn Header="Material Name" Width="150"
                                                                    IsReadOnly="True"
                                                         Binding="{ Binding MaterialName}"/>
-                                <materialDesign:DataGridTextColumn Header="Price"
+                            <materialDesign:DataGridTextColumn Header="Project Name"
+                                                                   IsReadOnly="True"
+                                                        Binding="{ Binding ProjectId,Converter={StaticResource nameConv}}"/>
+                            <materialDesign:DataGridTextColumn Header="Price"
                                                                    ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
                                                         Binding="{ Binding MaterialPrice}"/>
