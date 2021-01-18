@@ -7,13 +7,13 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="45966Point5Nyble.WICREstimator"
-    Publisher="CN=20716BBD-5712-4FF8-94FA-2BE5B4CD92FA"
-    Version="1.0.8.0" />
+    Name="45966WICR.WICREstimator"
+    Publisher="CN=WICR"
+    Version="1.0.25.0" />
 
   <Properties>
     <DisplayName>WICREstimator</DisplayName>
-    <PublisherDisplayName>Point5Nyble</PublisherDisplayName>
+    <PublisherDisplayName>WICR</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
 

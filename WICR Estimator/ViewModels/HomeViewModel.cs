@@ -121,6 +121,7 @@ namespace WICR_Estimator.ViewModels
                 {
                     applylatestPrice = value;
                     OnPropertyChanged("ApplyLatestPrice");
+                    //OnTaskStarted("Fetching latest prices for selected projects.");
                     if (SelectedProjects != null)
                     {
                         foreach (Project item in SelectedProjects)
@@ -129,7 +130,7 @@ namespace WICR_Estimator.ViewModels
                             //ApplyLatestGoogleData(item);
                             ApplyLatestPrices(item);
                         }
-                        OnTaskCompleted("Prices Refresh for all selected projects.");
+                        //OnTaskCompleted("Prices Refreshed for all selected projects.");
                     }
                     CanApplyLatestPrice = false;
                     OnPropertyChanged("CanApplyLatestPrice");

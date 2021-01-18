@@ -55,20 +55,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
                 OnPropertyChanged("Projects");
             }
         }
-        private DelegateCommand _selectProjectCommand;
-        public DelegateCommand SelectProjectCommand
-        {
-            get
-            {
-                if (_selectProjectCommand == null)
-                {
-                    _selectProjectCommand = new DelegateCommand(UpdateSelectedProjectMaterials, Canselect);
-                }
-
-                return _selectProjectCommand;
-            }
-
-        }
+        
 
         private void OnSelectionChanged(bool value)
         {
@@ -99,34 +86,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             SelectedProjectCount = Projects.Where(c => c.IsSelected).Count();
             OnPropertyChanged("SelectedProjectCount");
         }
-        private void UpdateSelectedProjectMaterials(object obj)
-        {
-                     
-            List<int> selectedIDs=new List<int>() ;
-            foreach (var item in Projects)
-            {
-                
-                if (item.IsSelected)
-                {
-                    selectedIDs.Add(item.ProjectId);
-                }
-               
-            }
-            if (selectedIDs.Count==0)
-            {
-                MaterialsFilterByProject = Materials.Where(x => x.ProjectId == 1);
-               
-            }
-            else
-                MaterialsFilterByProject = Materials.Join(selectedIDs,x=>x.ProjectId,id=>id,(x,id)=>x);
-
-
-        }
-
-        private bool Canselect(object obj)
-        {
-            return true;
-        }
+       
 
         private DelegateCommand _searchCommand ;
         public DelegateCommand SearchCommand
@@ -237,13 +197,40 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             {
                 LastActionResponse = "Changes Saved Successfully.";
                 SelectedMaterial = result;
+                OnPropertyChanged("SelectedMaterial");
+                MaterialDB mat= FilteredSystemMaterials.FirstOrDefault(x => x.MaterialId == SelectedMaterial.MaterialId);
+                mat.Coverage = SelectedMaterial.Coverage;
+                mat.Weight = SelectedMaterial.Weight;
+                mat.ProdRateHorizontal = SelectedMaterial.ProdRateHorizontal;
+                mat.ProdRateVertical = SelectedMaterial.ProdRateVertical;
+                mat.ProdRateStair = SelectedMaterial.ProdRateStair;
+                mat.LaborMinCharge = SelectedMaterial.LaborMinCharge;
+               
+                OnPropertyChanged("FilteredSystemMaterials");
             }
             OnTaskCompleted(LastActionResponse);         
         }
 
-        private void SearchMaterial(object obj)
+        private async void SearchMaterial(object obj)
         {
-            UpdateSelectedProjectMaterials(null);
+            OnTaskStarted("Applying Filter, Please wait...");
+
+            List<MaterialDB> selectedMaterials = new List<MaterialDB>();
+            foreach (var item in Projects)
+            {
+
+                if (item.IsSelected)
+                {
+                    var filtered = await HTTPHelper.GetMaterialsAsyncByID(item.ProjectId);
+                    if (filtered!=null)
+                    {
+                        selectedMaterials.AddRange(filtered);
+                    }
+                   
+                }
+
+            }
+            MaterialsFilterByProject = selectedMaterials;
             try
             {
                 if (MaterialsFilterByProject != null)
@@ -259,16 +246,16 @@ namespace WICR_Estimator.ViewModels.DataViewModels
                 }
                 else
                 {
-                    if (SearchText!=null)
-                    {
-                        FilteredSystemMaterials = Materials.Where(x => x.MaterialName.ToUpper().Contains(SearchText.ToUpper())).ToObservableCollection();
-                    }
-                    else
-                    {
-                        FilteredSystemMaterials = Materials.ToObservableCollection();
-                    }
+                    //if (SearchText != null)
+                    //{
+                    //    FilteredSystemMaterials = Materials.Where(x => x.MaterialName.ToUpper().Contains(SearchText.ToUpper())).ToObservableCollection();
+                    //}
+                    //else
+                    //{
+                    //    FilteredSystemMaterials = Materials.ToObservableCollection();
+                    //}
                 }
-                    
+
             }
             catch (Exception)
             {
@@ -280,23 +267,24 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             {
                 item.HookCheckBoxAction(OnSelectionChanged);
             }
-                
+            OnTaskCompleted("");
         }
 
+        
         private bool CanSearch(object obj)
         {
-            if (SearchText!=null)
-            {
-                if (SearchText.Length > 0)
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                FilteredSystemMaterials = MaterialsFilterByProject.ToObservableCollection();
+            //if (SearchText!=null)
+            //{
+            //    if (SearchText.Length > 0)
+            //    {
+            //        return true;
+            //    }
+            //}
+            //else
+            //{
+            //    FilteredSystemMaterials = MaterialsFilterByProject.ToObservableCollection();
                 
-            }
+            //}
 
             return true;
 
@@ -379,7 +367,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
                 {
                     _selectedProject = value;
                     OnPropertyChanged("SelectedProject");
-                    GetMaterialsById(SelectedProject.ProjectId);
+                    //GetMaterialsById(SelectedProject.ProjectId);
                     
                 }
             }
@@ -432,6 +420,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             if (Materials!=null)
             {
                 FilteredSystemMaterials = Materials.Where(x => x.ProjectId == 1).ToObservableCollection();
+                Projects.FirstOrDefault(x => x.ProjectId == 1).IsSelected = true;
             }
             foreach (var item in FilteredSystemMaterials)
             {

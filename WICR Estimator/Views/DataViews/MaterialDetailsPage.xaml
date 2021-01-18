@@ -64,13 +64,13 @@
         </Style>
         <conv:ProjectIDConverter x:Key="nameConv"/>
     </UserControl.Resources>
-    <DockPanel>
-        <StatusBar DockPanel.Dock="Bottom"
+    <!--<DockPanel>-->
+        <!--<StatusBar DockPanel.Dock="Bottom"
                    Background="{StaticResource SecondaryAccentBrush}">
             <StatusBarItem>
                 <TextBlock Text="{Binding LastActionResponse }" />
             </StatusBarItem>
-        </StatusBar>
+        </StatusBar>-->
 
 
         <!--<Expander Header="Manage Material Prices"
@@ -211,32 +211,25 @@
                                                                    IsReadOnly="True"
                                                         Binding="{ Binding ProjectId,Converter={StaticResource nameConv}}"/>
                             <materialDesign:DataGridTextColumn Header="Price"
-                                                                   ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
-      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                                                                   
                                                         Binding="{ Binding MaterialPrice}"/>
                                 <materialDesign:DataGridTextColumn Header="Coverage"
-                                                                   ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
-      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                                                                   
                                                         Binding="{ Binding Coverage}"/>
                                 <materialDesign:DataGridTextColumn Header="Weight"
-                                                                   ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
-      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                                                                  
                                                         Binding="{ Binding Weight}"/>
                                 <materialDesign:DataGridTextColumn Header="Horizontal Rate"
-                                                                   ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
-      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                                                                   
                                                         Binding="{ Binding ProdRateHorizontal}"/>
                                 <materialDesign:DataGridTextColumn Header="Vertical Rate"
-                                                                   ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
-      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                                                                  
                                                         Binding="{ Binding ProdRateVertical}"/>
                                 <materialDesign:DataGridTextColumn Header="Stair Rate"
-                                                                   ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
-      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                                                                   
                                                         Binding="{ Binding ProdRateStair}"/>
                                 <materialDesign:DataGridTextColumn Header="Min Labor Charge"
-                                                                   ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
-      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                                                                   
                                                         Binding="{ Binding LaborMinCharge}"/>
                             </DataGrid.Columns>
 
@@ -383,5 +376,5 @@
                   Background="{StaticResource AccentSelectedColorBrush}"
                   Margin="10,10" BorderBrush="Black"
                   BorderThickness="1"/>-->
-    </DockPanel>
+    <!--</DockPanel>-->
 </UserControl>

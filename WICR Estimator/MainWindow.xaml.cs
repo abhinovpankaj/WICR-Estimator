@@ -49,30 +49,33 @@ namespace WICR_Estimator
         private bool isClosingConfirmed;
         private async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (ViewModels.HomeViewModel.MyselectedProjects!=null)
+            {
+                if (this.isClosingConfirmed)
+                {
+                    // window will close, if e.Cancel is passed in as "false"
+                    return;
+                }
+                e.Cancel = true;
+                MainWindowViewModel vm = this.DataContext as MainWindowViewModel;
+                var res = await vm.ShowActionMessage("Do you want to Save the Estimate.", "WICR");
 
-            if (this.isClosingConfirmed)
-            {
-                // window will close, if e.Cancel is passed in as "false"
-                return;
+                switch (res)
+                {
+                    case MessageDialogResult.Affirmative:
+                        await vm.SaveEstimates(ViewModels.HomeViewModel.MyselectedProjects);
+                        isClosingConfirmed = true;
+                        this.Close();
+                        break;
+                    case MessageDialogResult.Negative:
+                        isClosingConfirmed = true;
+                        this.Close();
+                        break;
+                    default:
+                        break;
+                }
             }
-            e.Cancel = true;
-            MainWindowViewModel vm = this.DataContext as MainWindowViewModel;
-            var res= await vm.ShowActionMessage("Do you want to Save the Estimate.", "WICR");
-            
-            switch (res)
-            {
-                case MessageDialogResult.Affirmative:
-                    await vm.SaveEstimates(ViewModels.HomeViewModel.MyselectedProjects);
-                    isClosingConfirmed = true;
-                    this.Close();
-                    break;
-                case MessageDialogResult.Negative:
-                    isClosingConfirmed = true;
-                    this.Close();
-                    break;
-                default:
-                    break;
-            }
+           
             //MessageBoxResult res = MessageBox.Show("Do you want to Save the Estimate.", "Save State", MessageBoxButton.YesNoCancel);   
         }
 

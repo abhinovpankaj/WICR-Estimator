@@ -56,13 +56,14 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
     <EntryPointProjectUniqueName>..\WICR Estimator\WICR Estimator.csproj</EntryPointProjectUniqueName>
-    <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
+    <GenerateAppInstallerFile>True</GenerateAppInstallerFile>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
     <AppxBundlePlatforms>neutral</AppxBundlePlatforms>
-    <PackageCertificateThumbprint>29D07D13006DFD3312E5BB5451985666B74B0A04</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>5DF8FC4E68F958AAB98B2AB93E25DFC4965B6E41</PackageCertificateThumbprint>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+    <AppInstallerUri>http://estimator.wicr.net/installer</AppInstallerUri>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <AppxBundle>Always</AppxBundle>
@@ -117,6 +118,7 @@
     <Content Include="Images\StoreLogo.png" />
     <Content Include="Images\Wicr_logo.jpg" />
     <Content Include="Images\Wide310x150Logo.scale-200.png" />
+    <None Include="WICREstimator.Package_TemporaryKey.pfx" />
     <None Include="Package.StoreAssociation.xml" />
   </ItemGroup>
   <ItemGroup>

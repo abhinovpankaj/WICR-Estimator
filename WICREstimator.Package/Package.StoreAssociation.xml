@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <StoreAssociation xmlns="http://schemas.microsoft.com/appx/2010/storeassociation">
   <Publisher>CN=20716BBD-5712-4FF8-94FA-2BE5B4CD92FA</Publisher>
-  <PublisherDisplayName>Point5Nyble</PublisherDisplayName>
+  <PublisherDisplayName>WICR</PublisherDisplayName>
   <DeveloperAccountType>MSA</DeveloperAccountType>
   <GeneratePackageHash>http://www.w3.org/2001/04/xmlenc#sha256</GeneratePackageHash>
   <SupportedLocales>

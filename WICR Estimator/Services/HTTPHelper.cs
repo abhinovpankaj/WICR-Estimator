@@ -12,10 +12,10 @@ namespace WICR_Estimator.Services
     public class HTTPHelper
     {
         //const string BASEURL = "http://wicrwebapi-dev.us-east-1.elasticbeanstalk.com/api/";
-
+        const string BASEURL = "http://estimator.wicr.net/api/";
         //public static object ConfigurationManager { get; private set; }
         //ConfigurationManager.AppSettings["apiUrl"]
-        const string BASEURL = "http://localhost:61955/api/";
+        //const string BASEURL = "http://localhost:61955/api/";
 
         static HttpClient GetApiClient()
         {
@@ -49,12 +49,14 @@ namespace WICR_Estimator.Services
 
             using (var client = new HttpClient())
             {
+
                 client.BaseAddress = new Uri(BASEURL);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 HttpResponseMessage response = await client.PutAsJsonAsync<MaterialDB>("materials/"+id,material);
                 if (response.IsSuccessStatusCode)
                 {
+                    System.Threading.Thread.Sleep(1000);
                     return await response.Content.ReadAsAsync<MaterialDB>();
                 }
                 else

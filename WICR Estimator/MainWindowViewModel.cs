@@ -140,6 +140,7 @@ namespace WICR_Estimator
 
            controller.SetMessage(sender.ToString());
         }
+        private bool loginFailed;
         private async void PageViewModel_TaskCompleted(object sender, EventArgs e)
         {
             //if (controller.IsOpen)
@@ -150,16 +151,44 @@ namespace WICR_Estimator
             if (sender.ToString().Length>0)
             {
                 ShowMessage(sender.ToString());
+                if (sender.ToString().Contains("Failed to Login"))
+                {
+                    loginFailed = true;
+                }
             }
             
-            if (controller.IsOpen)
+            if (controller?.IsOpen==true)
             {
                 await controller.CloseAsync();
 
             }
+            else
+                tmr=SetInterval(isControllerOpen, 2000);
         }
 
-       
+        private async void isControllerOpen()
+        {
+            if (controller?.IsOpen == true)
+            {
+                tmr.Stop();
+                await controller.CloseAsync();
+                
+            }
+        }
+        #region Timer to close processing Window
+        private System.Timers.Timer tmr;
+        public  System.Timers.Timer SetInterval(Action Act, int Interval)
+        {
+            System.Timers.Timer tmr = new System.Timers.Timer();
+            tmr.Elapsed += (sender, args) => Act();
+            tmr.AutoReset = true;
+            tmr.Interval = Interval;
+            tmr.Start();
+
+            return tmr;
+        }
+        #endregion
+
         private async void LoginPageViewModel_ProgressStarted(object sender, EventArgs e)
         {
             controller = await dialogCoordinator.ShowProgressAsync(this, "Wait",
@@ -170,19 +199,24 @@ namespace WICR_Estimator
 
         private void LoginPage_OnLoggedIn(object sender, EventArgs e)
         {
-            CloseAsync();
-            IsUserLoggedIn = true;
-            LoginEnabled = false;
-            OnPropertyChanged("LoginEnabled");
-            OnPropertyChanged("IsUserLoggedIn");
-            var user=(UserDB)sender;
-            IsUserAdmin = user.IsAdmin;
-            Username = user.Username;
-            OnPropertyChanged("Username");
-            OnPropertyChanged("IsUserAdmin");
-            CurrentPageViewModel= PageViewModels[0];
+            if (!loginFailed)
+            {
+                var user = (UserDB)sender;
 
+
+                IsUserLoggedIn = true;
+                LoginEnabled = false;
+                OnPropertyChanged("LoginEnabled");
+                OnPropertyChanged("IsUserLoggedIn");
+
+                IsUserAdmin = user.IsAdmin;
+                Username = user.Username;
+                OnPropertyChanged("Username");
+                OnPropertyChanged("IsUserAdmin");
+                CurrentPageViewModel = PageViewModels[0];
+            }
             
+            CloseAsync();
         }
         #endregion
         #region dialogs

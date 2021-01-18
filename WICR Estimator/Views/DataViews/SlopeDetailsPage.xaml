@@ -63,13 +63,13 @@
         </Style>
         <conv:ProjectIDConverter x:Key="nameConv"/>
     </UserControl.Resources>
-    <DockPanel>
-        <StatusBar DockPanel.Dock="Bottom"
+    <!--<DockPanel>-->
+        <!--<StatusBar DockPanel.Dock="Bottom"
                    Background="{StaticResource SecondaryAccentBrush}">
             <StatusBarItem>
                 <TextBlock Text="{Binding LastActionResponse }" />
             </StatusBarItem>
-        </StatusBar>
+        </StatusBar>-->
 
         <Grid>
 
@@ -313,5 +313,5 @@
                   BorderThickness="1"/>-->
 
         </Grid>
-    </DockPanel>
+    <!--</DockPanel>-->
 </UserControl>

@@ -115,12 +115,13 @@ namespace WICR_Estimator.ViewModels
 
         private async void SignIn(object obj)
         {
-             
-            if (ProgressStarted != null)
-            {
-                ProgressStarted("Signing In...", EventArgs.Empty);
 
-            }
+            //if (ProgressStarted != null)
+            //{
+            //    ProgressStarted("Signing In...", EventArgs.Empty);
+
+            //}
+            OnTaskStarted("Signing In...");
             LoginFailed = false;
             var passwordBox = obj as PasswordBox;
             Password = passwordBox.Password;
@@ -133,6 +134,7 @@ namespace WICR_Estimator.ViewModels
             {
                 LoginFailed = true;
                 ErrorMessage = "Failed to Login,please contact administrator.";
+                OnTaskCompleted("Failed to Login, please contact administrator.");
             }
             else
             {
@@ -147,6 +149,7 @@ namespace WICR_Estimator.ViewModels
                 string res = Path.GetTempPath();
                 string json = JsonConvert.SerializeObject(user);
                 File.WriteAllText(res+"wicrlogin.json", json);
+                
             }
             if (OnLoggedIn != null)
             {
