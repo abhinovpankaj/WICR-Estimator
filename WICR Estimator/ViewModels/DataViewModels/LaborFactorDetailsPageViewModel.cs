@@ -137,18 +137,50 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             }
             
         }
-
-        private void SearchLaborFactor(object obj)
+        private bool lastSearchProjectChanged;
+        private async void SearchLaborFactor(object obj)
         {
-           // OnTaskStarted("Applying Filters.");
-            UpdateSelectedProjectLaborFactors();
+            // OnTaskStarted("Applying Filters.");
+            //UpdateSelectedProjectLaborFactors();
+
+            List<LaborFactorDB> selectedLabors = new List<LaborFactorDB>();
+            if (lastSearchProjectChanged)
+            {
+                lastSearchProjectChanged = false;
+                OnTaskStarted("Applying Filter, Please wait...");
+
+
+                foreach (var item in Projects)
+                {
+
+                    if (item.IsSelected)
+                    {
+                        var filtered = await HTTPHelper.GetLaborFactorsAsyncByProjectID(item.ProjectId);
+                        if (filtered != null)
+                        {
+                            selectedLabors.AddRange(filtered);
+                            foreach (var mat in filtered)
+                            {
+                                mat.HookCheckBoxAction(OnLaborSelectionChanged);
+                            }
+                        }
+
+                    }
+
+                }
+                LaborFactorsFilterByProject = selectedLabors;
+                OnTaskCompleted("");
+            }
             if (LaborFactorsFilterByProject != null)
             {
-                FilteredLaborFactors = LaborFactorsFilterByProject.Where(x => x.Name.ToUpper().Contains(SearchText.ToUpper())).ToObservableCollection();
+                if (SearchText != null)
+                {
+                    FilteredLaborFactors = LaborFactorsFilterByProject.Where(x => x.Name.ToUpper().Contains(SearchText.ToUpper())).ToObservableCollection();
+                }
+                else
+                    FilteredLaborFactors = LaborFactorsFilterByProject.ToObservableCollection();
             }
-            else
-                FilteredLaborFactors = LaborFactors.Where(x => x.Name.ToUpper().Contains(SearchText.ToUpper())).ToObservableCollection();
-
+            
             //OnTaskCompleted("");
         }
 
@@ -255,6 +287,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             }
             SelectedProjectCount = Projects.Where(c => c.IsSelected).Count();
             OnPropertyChanged("SelectedProjectCount");
+            lastSearchProjectChanged = true;
         }
 
         private async Task GetLaborFactors()

@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:WICR_Estimator"
              xmlns:conv="clr-namespace:WICR_Estimator.Converters"
       mc:Ignorable="d" 
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       d:DesignHeight="1050" d:DesignWidth="1000"
       Background="{DynamicResource MaterialDesignPaper}"
       FontFamily="{DynamicResource MaterialDesignFont}"
@@ -14,7 +15,7 @@
      TextElement.FontWeight="Regular"
      TextElement.FontSize="13"
      TextOptions.TextFormattingMode="Ideal"
-     TextOptions.TextRenderingMode="Auto"
+     TextOptions.TextRenderingMode="Auto" PreviewMouseDown="UserControl_PreviewMouseDown"
      >
     <UserControl.Resources>
         <CollectionViewSource x:Key="projectSource" Source="{Binding Projects}"/>
@@ -78,7 +79,7 @@
                   Background="{StaticResource AccentSelectedColorBrush}"
                   Margin="10,10" BorderBrush="Black"
                   BorderThickness="1" ScrollViewer.VerticalScrollBarVisibility="Auto">-->
-
+   
         <Grid >
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
@@ -112,10 +113,10 @@
                          Width="350"
                          Margin="10"
                          HorizontalAlignment="Left"/>
-                <StackPanel Margin="0,0,40,0">
-                    <TextBlock Text="Select the project"
+                <!--<StackPanel Margin="0,0,40,0">-->
+                    <!--<TextBlock Text="Select the project"
                        Opacity=".68"
-                       Margin="10,10,10,0"/>
+                       Margin="10,10,10,0"/>-->
                     <!--<ComboBox ItemsSource="{Binding Projects}"
                                    
                           DisplayMemberPath="Name"
@@ -125,9 +126,9 @@
 
                     </ComboBox>-->
                    
-                    <ComboBox Margin="10,0,10,10"  Width="300"
+                    <!--<ComboBox Margin="10,0,10,10"  Width="300"
                               Text="Select Project" IsReadOnly="True"
-                               TextSearch.TextPath ="Name"
+                               TextSearch.TextPath ="Name" IsEditable="False"
                               HorizontalAlignment="Left">
                         <ComboBox.ItemsSource>
                             <CompositeCollection>
@@ -139,15 +140,51 @@
                         </ComboBox.ItemsSource>
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
+                            <Grid>
                                 <CheckBox  Width="220"                                             
                                            Content="{Binding Name}" 
                                            IsChecked="{Binding IsSelected}" 
                                            >
                                 </CheckBox>
+                            </Grid>
+                                
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </StackPanel>
+                    </ComboBox>-->
+                <Expander Header="Select The Project" Style="{StaticResource  MaterialDesignExpander}" materialDesign:FlyoutAssist.HeaderColorMode="PrimaryDark"
+                          VerticalAlignment="Center"
+                          x:Name="expander" 
+                          >
+                <!--<Popup PlacementTarget="{Binding ElementName=expander}" x:Name="popup"
+                   Placement="Bottom"
+                   IsOpen="{Binding IsExpanded, ElementName=expander}">-->
+                    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" Height="400" HorizontalAlignment="Stretch"
+                              Background="{StaticResource PrimaryHueLightBrush}">
+                        <ListView SelectionMode="Multiple">
+                            <ListView.ItemsSource>
+                                <CompositeCollection>
+                                    <!--<ComboBoxItem >
+                                    <CheckBox  Name="all" IsChecked="{Binding DataContext.CheckAllProjects}" Content="Select All"/>
+                                </ComboBoxItem>-->
+                                    <CollectionContainer Collection="{Binding Source={StaticResource projectSource}}"/>
+                                </CompositeCollection>
+                            </ListView.ItemsSource>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <CheckBox  Width="220"                                             
+                                           Content="{Binding Name}" 
+                                           IsChecked="{Binding IsSelected}" >
+                                        </CheckBox>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </ScrollViewer>
+                <!--</Popup>-->
+            </Expander>
+            
+            <!--/StackPanel>-->
                 <ToggleButton     Content="{Binding SelectedProjectCount}" 
                                   IsChecked="{Binding CheckAllProjects}"
                                   Style="{StaticResource MaterialDesignActionAccentToggleButton}"
@@ -177,14 +214,14 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 
-                    <ScrollViewer VerticalScrollBarVisibility="Auto"
-                                  Height="450">
+                    <!--<ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  Height="450">-->
                         <DataGrid AutoGenerateColumns="False" 
                         HorizontalAlignment="Left"
                         Name="MaterialGrid" 
                         CanUserSortColumns="True"
                         Margin="10"        
-                          
+                        VirtualizingStackPanel.VirtualizationMode="Recycling"  
                         VerticalAlignment="Top" 
                         CanUserAddRows="False"
                         FrozenColumnCount ="1" 
@@ -211,30 +248,30 @@
                                                                    IsReadOnly="True"
                                                         Binding="{ Binding ProjectId,Converter={StaticResource nameConv}}"/>
                             <materialDesign:DataGridTextColumn Header="Price"
-                                                                   
+                                                                   IsReadOnly="True"
                                                         Binding="{ Binding MaterialPrice}"/>
                                 <materialDesign:DataGridTextColumn Header="Coverage"
-                                                                   
+                                                                  IsReadOnly="True" 
                                                         Binding="{ Binding Coverage}"/>
                                 <materialDesign:DataGridTextColumn Header="Weight"
-                                                                  
+                                                                  IsReadOnly="True"
                                                         Binding="{ Binding Weight}"/>
                                 <materialDesign:DataGridTextColumn Header="Horizontal Rate"
-                                                                   
+                                                                IsReadOnly="True"   
                                                         Binding="{ Binding ProdRateHorizontal}"/>
                                 <materialDesign:DataGridTextColumn Header="Vertical Rate"
-                                                                  
+                                                                  IsReadOnly="True"
                                                         Binding="{ Binding ProdRateVertical}"/>
                                 <materialDesign:DataGridTextColumn Header="Stair Rate"
-                                                                   
+                                                                   IsReadOnly="True"
                                                         Binding="{ Binding ProdRateStair}"/>
                                 <materialDesign:DataGridTextColumn Header="Min Labor Charge"
-                                                                   
+                                                                   IsReadOnly="True"
                                                         Binding="{ Binding LaborMinCharge}"/>
                             </DataGrid.Columns>
 
                         </DataGrid>
-                    </ScrollViewer>
+                    <!--</ScrollViewer>-->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
                                 Grid.Row="1">
                         <ComboBox Width="200" Margin="10"
@@ -360,8 +397,8 @@
             </Grid>
 
         </Grid>
-
-        <!--</Expander>-->
+   
+    <!--</Expander>-->
 
         <!--<Expander Header="Slope Prices" FontWeight="Bold"
                   IsExpanded="True"

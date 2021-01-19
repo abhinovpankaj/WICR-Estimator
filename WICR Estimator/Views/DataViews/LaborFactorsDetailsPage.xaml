@@ -12,7 +12,7 @@
               xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
               TextElement.Foreground="{DynamicResource MaterialDesignBody}"
              TextElement.FontWeight="Regular"
-             TextElement.FontSize="13"
+             TextElement.FontSize="13" PreviewMouseDown="UserControl_PreviewMouseDown"
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto">
     <UserControl.Resources>
@@ -119,7 +119,7 @@
                          Margin="10"
                          HorizontalAlignment="Left"/>
                 <StackPanel>
-                    <TextBlock Text="Select the project"
+                    <!--<TextBlock Text="Select the project"
                        Opacity=".68"
                        Margin="10,10,10,0"/>
                     <ComboBox Margin="10,0,10,10"  Width="250"
@@ -143,7 +143,40 @@
                                 </CheckBox>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
-                    </ComboBox>
+                    </ComboBox>-->
+                    <Expander Header="Select The Project" Style="{StaticResource  MaterialDesignExpander}"
+                         
+                          VerticalAlignment="Center"
+                          x:Name="expander" 
+                          >
+                        <!--<Popup PlacementTarget="{Binding ElementName=expander}" x:Name="popup"
+                   Placement="Bottom"
+                   IsOpen="{Binding IsExpanded, ElementName=expander}">-->
+                        <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" Height="400" HorizontalAlignment="Stretch"
+                              Background="{StaticResource PrimaryHueLightBrush}">
+                            <ListView SelectionMode="Multiple">
+                                <ListView.ItemsSource>
+                                    <CompositeCollection>
+                                        <!--<ComboBoxItem >
+                                    <CheckBox  Name="all" IsChecked="{Binding DataContext.CheckAllProjects}" Content="Select All"/>
+                                </ComboBoxItem>-->
+                                        <CollectionContainer Collection="{Binding Source={StaticResource projectSource}}"/>
+                                    </CompositeCollection>
+                                </ListView.ItemsSource>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <CheckBox  Width="220"                                             
+                                           Content="{Binding Name}" 
+                                           IsChecked="{Binding IsSelected}" >
+                                            </CheckBox>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </ScrollViewer>
+                        <!--</Popup>-->
+                    </Expander>
                 </StackPanel>
                 <ToggleButton     Content="{Binding SelectedProjectCount}" 
                                   IsChecked="{Binding CheckAllProjects}"
@@ -185,7 +218,7 @@
                         Name="frieghtGrid" 
                         CanUserSortColumns="True"
                         Margin="10"        
-                        
+                        VirtualizingStackPanel.VirtualizationMode="Recycling"
                         VerticalAlignment="Top" 
                         CanUserAddRows="False"
                         FrozenColumnCount ="1" 
@@ -292,14 +325,14 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                            <ScrollViewer VerticalScrollBarVisibility="Auto"
-                                  Height="450" VerticalAlignment="Top">
+                            <!--<ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  Height="450" VerticalAlignment="Top">-->
                                 <DataGrid AutoGenerateColumns="False" 
                                             HorizontalAlignment="Left"
                                             Name="LaborGrid" 
                                             CanUserSortColumns="True"
                                             Margin="10"        
-                          
+                          VirtualizingStackPanel.VirtualizationMode="Recycling"  
                                             VerticalAlignment="Top" 
                                             CanUserAddRows="False"
                                             FrozenColumnCount ="1" 
@@ -336,7 +369,7 @@
                                 </DataGrid.Columns>
 
                                 </DataGrid>
-                            </ScrollViewer>
+                            <!--</ScrollViewer>-->
                         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
                             
                             <Slider Maximum="100" Minimum="-50"

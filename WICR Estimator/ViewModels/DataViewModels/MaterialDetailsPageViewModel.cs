@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using WICR_Estimator.DBModels;
 using WICR_Estimator.Services;
 using WICR_Estimator.ViewModels;
@@ -85,6 +86,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             }
             SelectedProjectCount = Projects.Where(c => c.IsSelected).Count();
             OnPropertyChanged("SelectedProjectCount");
+            lastSearchProjectChanged = true;
         }
        
 
@@ -205,32 +207,46 @@ namespace WICR_Estimator.ViewModels.DataViewModels
                 mat.ProdRateVertical = SelectedMaterial.ProdRateVertical;
                 mat.ProdRateStair = SelectedMaterial.ProdRateStair;
                 mat.LaborMinCharge = SelectedMaterial.LaborMinCharge;
-               
+                mat.MaterialPrice = SelectedMaterial.MaterialPrice;
                 OnPropertyChanged("FilteredSystemMaterials");
             }
             OnTaskCompleted(LastActionResponse);         
         }
-
+        bool lastSearchProjectChanged;
         private async void SearchMaterial(object obj)
         {
-            OnTaskStarted("Applying Filter, Please wait...");
+            
 
             List<MaterialDB> selectedMaterials = new List<MaterialDB>();
-            foreach (var item in Projects)
+            if (lastSearchProjectChanged)
             {
-
-                if (item.IsSelected)
+                lastSearchProjectChanged = false;
+                OnTaskStarted("Applying Filter, Please wait...");
+                
+           
+                foreach (var item in Projects)
                 {
-                    var filtered = await HTTPHelper.GetMaterialsAsyncByID(item.ProjectId);
-                    if (filtered!=null)
-                    {
-                        selectedMaterials.AddRange(filtered);
-                    }
-                   
-                }
 
+                    if (item.IsSelected)
+                    {
+                        var filtered = await HTTPHelper.GetMaterialsAsyncByID(item.ProjectId);
+                        if (filtered != null)
+                        {
+                            selectedMaterials.AddRange(filtered);
+                            foreach (var mat in filtered)
+                            {
+                                mat.HookCheckBoxAction(OnSelectionChanged);
+                            }
+                        }
+
+                    }
+
+                }
+                MaterialsFilterByProject = selectedMaterials;
+                OnTaskCompleted("");
             }
-            MaterialsFilterByProject = selectedMaterials;
+
+           
             try
             {
                 if (MaterialsFilterByProject != null)
@@ -263,11 +279,6 @@ namespace WICR_Estimator.ViewModels.DataViewModels
 
             }
 
-            foreach (var item in FilteredSystemMaterials)
-            {
-                item.HookCheckBoxAction(OnSelectionChanged);
-            }
-            OnTaskCompleted("");
         }
 
         
@@ -437,7 +448,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             FilteredSystemMaterials = MaterialsFilterByProject.ToObservableCollection();
         }
 
-        
+
     }
 
 }

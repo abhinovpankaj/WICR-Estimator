@@ -13,7 +13,7 @@
               TextElement.Foreground="{DynamicResource MaterialDesignBody}"
              TextElement.FontWeight="Regular"
              TextElement.FontSize="13"
-             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextFormattingMode="Ideal" PreviewMouseDown="UserControl_PreviewMouseDown"
              TextOptions.TextRenderingMode="Auto">
     <UserControl.Resources>
         <CollectionViewSource x:Key="projectSource" Source="{Binding Projects}"/>
@@ -111,7 +111,7 @@
                          Width="350"
                          Margin="10"
                          HorizontalAlignment="Left"/>
-                    <StackPanel>
+                    <!--<StackPanel>
                         <TextBlock Text="Select the project"
                        Opacity=".68"
                        Margin="10,10,10,0"/>
@@ -137,8 +137,42 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                    </StackPanel>
-                    <ToggleButton     Content="{Binding SelectedProjectCount}" 
+                    </StackPanel>-->
+
+                <Expander Header="Select The Project" Style="{StaticResource  MaterialDesignExpander}"
+                         
+                          VerticalAlignment="Center"
+                          x:Name="expander" 
+                          >
+                    <!--<Popup PlacementTarget="{Binding ElementName=expander}" x:Name="popup"
+                   Placement="Bottom"
+                   IsOpen="{Binding IsExpanded, ElementName=expander}">-->
+                        <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" Height="400" HorizontalAlignment="Stretch"
+                              Background="{StaticResource PrimaryHueLightBrush}">
+                            <ListView SelectionMode="Multiple">
+                                <ListView.ItemsSource>
+                                    <CompositeCollection>
+                                        <!--<ComboBoxItem >
+                                    <CheckBox  Name="all" IsChecked="{Binding DataContext.CheckAllProjects}" Content="Select All"/>
+                                </ComboBoxItem>-->
+                                        <CollectionContainer Collection="{Binding Source={StaticResource projectSource}}"/>
+                                    </CompositeCollection>
+                                </ListView.ItemsSource>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <CheckBox  Width="220"                                             
+                                           Content="{Binding Name}" 
+                                           IsChecked="{Binding IsSelected}" >
+                                            </CheckBox>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </ScrollViewer>
+                    <!--</Popup>-->
+                </Expander>
+                <ToggleButton     Content="{Binding SelectedProjectCount}" 
                                   IsChecked="{Binding CheckAllProjects}"
                                   Style="{StaticResource MaterialDesignActionAccentToggleButton}"
                                   ToolTip="Count of All Selected Projects"
@@ -162,15 +196,18 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width=".25*"/>
                     </Grid.ColumnDefinitions>
-                    <StackPanel>
-                        <ScrollViewer VerticalScrollBarVisibility="Auto"
-                                  Height="450">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                        <!--<ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  Height="450">-->
                             <DataGrid AutoGenerateColumns="False" 
                         HorizontalAlignment="Left"
                         Name="MaterialGrid" 
                         CanUserSortColumns="True"
                         Margin="10"        
-                          
+                         VirtualizingStackPanel.VirtualizationMode="Recycling" 
                         VerticalAlignment="Top" 
                         CanUserAddRows="False"
                         FrozenColumnCount ="1" 
@@ -210,7 +247,7 @@
                                 </DataGrid.Columns>
 
                             </DataGrid>
-                        </ScrollViewer>
+                        <!--</ScrollViewer>-->
                         <StackPanel Orientation="Horizontal" Grid.Row="1"
                             HorizontalAlignment="Right">
                             <ComboBox Width="200" Margin="10"
@@ -248,7 +285,7 @@
                             </Button>
                         </StackPanel>
                        
-                    </StackPanel>
+                   
 
                     <StackPanel Grid.Column="1" HorizontalAlignment="Left"
                             Margin="10,0,10,0">

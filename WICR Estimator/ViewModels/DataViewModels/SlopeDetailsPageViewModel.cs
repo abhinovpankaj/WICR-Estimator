@@ -136,29 +136,63 @@ namespace WICR_Estimator.ViewModels.DataViewModels
         {
             OnTaskStarted("Updating Selected Slope.");
             SelectedSlope = await HTTPHelper.PutSlopeAsync(SelectedSlope.SlopeId, SelectedSlope);
-            if (SelectedSlope != null)
+            if (SelectedSlope == null)
             {
                 LastActionResponse = "Failed to save the data";
             }
             else
+            {
+                SlopeDB slp = FilteredSystemSlopes.FirstOrDefault(x => x.SlopeId == SelectedSlope.SlopeId);
+                slp.LaborRate = SelectedSlope.LaborRate;
+                slp.PerMixCost = SelectedSlope.PerMixCost;
+                
                 LastActionResponse = "Changes saved successfully.";
+            }
+                
             OnTaskCompleted(LastActionResponse);
         }
-
-        private void SearchSlope(object obj)
+        bool lastSearchProjectChanged;
+        private async void SearchSlope(object obj)
         {
-            UpdateSelectedProjectMaterials();
+            List<SlopeDB> selectedSlopes = new List<SlopeDB>();
+            if (lastSearchProjectChanged)
+            {
+                lastSearchProjectChanged = false;
+                OnTaskStarted("Applying Filter, Please wait...");
+
+
+                foreach (var item in Projects)
+                {
+
+                    if (item.IsSelected)
+                    {
+                        var filtered = await HTTPHelper.GetSlopesByProjectIDAsync(item.ProjectId);
+                        if (filtered != null)
+                        {
+                            selectedSlopes.AddRange(filtered);
+                            foreach (var mat in filtered)
+                            {
+                                mat.HookCheckBoxAction(OnSelectionChanged);
+                            }
+                        }
+
+                    }
+
+                }
+                SlopesFilterByProject = selectedSlopes;
+                OnTaskCompleted("");
+            }
             if (SlopesFilterByProject != null)
             {
-                FilteredSystemSlopes = SlopesFilterByProject.Where(x => x.SlopeName.ToUpper().Contains(SearchText.ToUpper())).ToObservableCollection();
-            }
-            else
-                FilteredSystemSlopes = Slopes.Where(x => x.SlopeName.ToUpper().Contains(SearchText.ToUpper())).ToObservableCollection();
+                if (SearchText != null)
+                {
+                    FilteredSystemSlopes = SlopesFilterByProject.Where(x => x.SlopeName.ToUpper().Contains(SearchText.ToUpper())).ToObservableCollection();
+                }
+                else
+                    FilteredSystemSlopes = SlopesFilterByProject.ToObservableCollection();
 
-            foreach (var item in FilteredSystemSlopes)
-            {
-                item.HookCheckBoxAction(OnSelectionChanged);
             }
+      
         }
 
         private void UpdateSelectedProjectMaterials()
@@ -364,6 +398,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             }
             SelectedProjectCount = Projects.Where(c => c.IsSelected).Count();
             OnPropertyChanged("SelectedProjectCount");
+            lastSearchProjectChanged= true;
         }
 
         private void GetSlopesById(int id)

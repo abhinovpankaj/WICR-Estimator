@@ -24,5 +24,20 @@ namespace WICR_Estimator.Views.DataViews
         {
             InitializeComponent();
         }
+        private void UserControl_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Visual visual = e.OriginalSource as Visual;
+
+            if (!visual.IsDescendantOf(expander))
+            {
+
+                expander.IsExpanded = false;
+            }
+        }
+
+        private void UserControl_PreviewMouseDown_1(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }
