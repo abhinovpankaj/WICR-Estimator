@@ -13,7 +13,19 @@ namespace WICR_Estimator.Models
     
     public class JobSetup : BaseViewModel
     {
-        public DBData dbData { get; set; }
+        private DBData _dbdata;
+        public DBData dbData 
+        { get { return _dbdata; }
+            set
+            {
+                if (value != _dbdata)
+                {
+                    _dbdata = value;
+                    OnPropertyChanged("dbData");
+                    UpdateJobSetup();
+                }
+            }
+        }
         public bool HasTabSwitched { get; set; }
         private double actualPrevailingWage;
         public double ActualPrevailingWage

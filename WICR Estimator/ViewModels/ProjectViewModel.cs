@@ -63,7 +63,7 @@ namespace WICR_Estimator.ViewModels
             //}
         }
 
-        private void HomeViewModel_OnProjectSelectionChange(object sender, EventArgs e)
+        private void HomeViewModel_OnProjectSelectionChange(object sender, ProjectLoadEventArgs e)
         {
 
 
@@ -73,7 +73,11 @@ namespace WICR_Estimator.ViewModels
             //{
             //    EnabledProjects.CollectionChanged += EnabledProjects_CollectionChanged;
             //}
-            initializeApp();
+            if (!e.IsProjectLoadedfromEstimate)
+            {
+                initializeApp();
+            }
+            
         }
 
 

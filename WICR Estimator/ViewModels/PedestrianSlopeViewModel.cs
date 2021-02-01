@@ -172,7 +172,7 @@ namespace WICR_Estimator.ViewModels
             }
             base.reCalculate();
         }
-        private DBData dbData;
+        //private DBData dbData;
         public PedestrianSlopeViewModel(JobSetup Js):base(Js.dbData)
         {
 

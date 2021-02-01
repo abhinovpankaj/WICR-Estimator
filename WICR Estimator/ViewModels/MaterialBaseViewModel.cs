@@ -1689,6 +1689,7 @@ namespace WICR_Estimator.ViewModels
                 if (js != null)
                 {
                     //weatherWearType = js.WeatherWearType;
+                    projectname = js.ProjectName;
                     totalSqft = js.TotalSqft;
                     stairWidth = js.StairWidth;
                     riserCount = js.RiserCount;
@@ -1878,26 +1879,33 @@ namespace WICR_Estimator.ViewModels
         {
             ObservableCollection<SystemMaterial> smCollection = new ObservableCollection<SystemMaterial>();
             int k = 0;
-            foreach (string key in materialNames.Keys)
+            if (projectname=="Weather Wear")
             {
-                if (dbData==null)
+                k = 3;
+                smCollection = GetSystemMaterial();
+            }
+            else
+            {
+                foreach (string key in materialNames.Keys)
                 {
-                    smCollection.Add(getSMObject(k, key, materialNames[key]));
-                    double minLCharge = 0;
-                    double.TryParse(materialDetails[k][6].ToString(), out minLCharge);
-                    LaborMinChargeMinSetup = minLCharge;
+                    if (dbData == null)
+                    {
+                        smCollection.Add(getSMObject(k, key, materialNames[key]));
+                        double minLCharge = 0;
+                        double.TryParse(materialDetails[k][6].ToString(), out minLCharge);
+                        LaborMinChargeMinSetup = minLCharge;
+                    }
+                    else
+                    {
+                        smCollection.Add(createSMObjectDB(key, materialNames[key]));
+                        LaborMinChargeMinSetup = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Minimum Labor charge").Value;
+                    }
+
+                    k++;
                 }
-                else
-                {
-                    smCollection.Add(createSMObjectDB(key, materialNames[key]));
-                    LaborMinChargeMinSetup = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Minimum Labor charge").Value;
-                }
-                    
-                k++;
             }
             
             
-
             return smCollection;
 
         }

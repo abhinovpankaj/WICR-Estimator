@@ -837,7 +837,7 @@ namespace WICR_Estimator.ViewModels
         #endregion
 
         #region DBData
-        private DBData dbData;
+        public DBData dbData;
         public void GetSlopeDetailsDB(string projectName)
         {
             if (projectName.Contains('.'))

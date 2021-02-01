@@ -254,28 +254,28 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
 
                             </DataGridTextColumn>
                             <DataGridTextColumn Header="Metal Cost" 
-                                    Binding="{Binding MetalCost,StringFormat='c'}"/>
+                                    Binding="{Binding MaterialViewModel.TotalMetalPrice,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
                             <DataGridTextColumn Header ="Slope Cost"
-                                    Binding="{Binding SlopeCost,StringFormat='c'}"
+                                    Binding="{Binding MaterialViewModel.TotalSlopingPrice,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"
                                     IsReadOnly="False"/>
                             <DataGridTextColumn Header ="System Cost"
-                                    Binding="{Binding SystemNOther,StringFormat='c'}"
+                                    Binding="{Binding MaterialViewModel.TotalSystemPrice,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"
                                     IsReadOnly="False"/>
                             <DataGridTextColumn Header ="Material Cost" 
-                                    Binding="{Binding MaterialCost,StringFormat='c'}"
+                                    Binding="{Binding MaterialViewModel.AllTabsMaterialTotal,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"
                                     IsReadOnly="False"/>
                             <DataGridTextColumn Header ="Labor Cost" 
-                                    Binding="{Binding LaborCost,StringFormat='c'}"
+                                    Binding="{Binding MaterialViewModel.AllTabsLaborTotal,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"
                                     IsReadOnly="False"/>
 
                             <DataGridTextColumn Header ="Labor %" 
-                                    Binding="{Binding LaborPercentage}"
+                                    Binding="{Binding LaborPercentage,UpdateSourceTrigger=PropertyChanged}"
                                     IsReadOnly="False"/>
                             <DataGridTextColumn Header ="Total Cost" 
-                                    Binding="{Binding TotalCost,StringFormat='c'}"
+                                    Binding="{Binding MaterialViewModel.TotalSale,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"
                                     IsReadOnly="False"/>
                             <DataGridTextColumn Header ="Total Cost/Sqft" 
-                                    Binding="{Binding CostPerSqFoot,StringFormat='c'}"
+                                    Binding="{Binding MaterialViewModel.TotalCostperSqft,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"
                                     IsReadOnly="False"/>
                         </DataGrid.Columns>
 

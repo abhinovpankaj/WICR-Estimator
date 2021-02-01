@@ -297,10 +297,12 @@ namespace WICR_Estimator.Models
             {
                 if (MaterialViewModel != null)
                 {
+                    
                     return MaterialViewModel.TotalSystemPrice;
                 }
                 else
                     return 0;
+                
             }
         }
         //private string workArea;

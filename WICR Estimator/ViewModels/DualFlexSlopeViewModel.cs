@@ -110,7 +110,7 @@ namespace WICR_Estimator.ViewModels
         private double riserCount;
         private bool hasMortarBed;
         private bool hasQuarterMortarBed;
-        private DBData dbData;
+        //private DBData dbData;
         public DualFlexSlopeViewModel(JobSetup Js) : base(Js.dbData)
         {
             IsUrethaneVisible = System.Windows.Visibility.Visible;

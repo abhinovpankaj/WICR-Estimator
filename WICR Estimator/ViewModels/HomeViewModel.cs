@@ -34,7 +34,7 @@ namespace WICR_Estimator.ViewModels
     {
         
         //public static event EventHandler OnLoggedAsAdmin;
-        public static event EventHandler OnProjectSelectionChange;
+        public static event EventHandler<ProjectLoadEventArgs> OnProjectSelectionChange;
         public static string filePath;
         public static bool isEstimateLoaded;
         //private static NotifyIcon statusNotifier;
@@ -121,37 +121,47 @@ namespace WICR_Estimator.ViewModels
                 {
                     applylatestPrice = value;
                     OnPropertyChanged("ApplyLatestPrice");
-                    //OnTaskStarted("Fetching latest prices for selected projects.");
-                    if (SelectedProjects != null)
+                    
+                    if (applylatestPrice==true)
                     {
-                        foreach (Project item in SelectedProjects)
-                        {
-                            item.ApplyLatestPrices = applylatestPrice;
-                            //ApplyLatestGoogleData(item);
-                            ApplyLatestPrices(item);
-                        }
-                        //OnTaskCompleted("Prices Refreshed for all selected projects.");
+                        ApplyLatestPrices();
                     }
+                    
                     CanApplyLatestPrice = false;
                     OnPropertyChanged("CanApplyLatestPrice");
+                   
                 }
             }
         }
 
-        private async void ApplyLatestPrices(Project item)
+        private async void ApplyLatestPrices()
         {
+            OnTaskStarted("Fetching latest prices for selected projects.");
             try
             {
-                    //Create dat file locally
-                    item.ProjectJobSetUp.dbData=await HTTPHelper.FetchFromDbAndSave(item.OriginalProjectName);
-
-                    //UpdateTaskStatus("Wait! Refreshing data for Project : " + prj.OriginalProjectName);
+                if (SelectedProjects != null)
+                {
+                    foreach (Project item in SelectedProjects)
+                    {
+                        item.ApplyLatestPrices = applylatestPrice;
+                        //ApplyLatestGoogleData(item);
+                        item.ProjectJobSetUp.dbData = await HTTPHelper.FetchFromDbAndSave(item.OriginalProjectName);
+                    }
+                    //OnTaskCompleted("Prices Refreshed for all selected projects.");
+                }
+                //Create dat file locally
+               
+                //item.ProjectJobSetUp.UpdateJobSetup();
+                //UpdateProjectTotals();
+               
+               // OnTaskCompleted("Prices Refreshed for all selected projects.");
             }
             catch (Exception ex)
             {
 
-               OnTaskCompleted("Prices Refresh Failed, project :" + item.OriginalProjectName + "\n" + ex.Message);
+               OnTaskCompleted("Prices Refresh Failed"+ "\n" + ex.Message);
             }
+            OnTaskCompleted("Prices Refreshed for all selected projects.");
         }
 
         private string _filterString = string.Empty;
@@ -572,7 +582,7 @@ namespace WICR_Estimator.ViewModels
                         item.MaterialViewModel.CalculateCost(null);
                     }
                 }
-                Project_OnSelectedProjectChange(Projects[0], null);
+                Project_OnSelectedProjectChange(null, null);
                 reader.Close();
                
                 CreateSummary.RaiseCanExecuteChanged();
@@ -620,7 +630,7 @@ namespace WICR_Estimator.ViewModels
                 
             FileStream fs = new FileStream(filePath, FileMode.Open);
             XmlDictionaryReader reader = XmlDictionaryReader.CreateTextReader(fs, new XmlDictionaryReaderQuotas());
-
+            
             try
             {
                 ObservableCollection<Project> est = (ObservableCollection<Project>)deserializer.ReadObject(reader);
@@ -787,7 +797,7 @@ namespace WICR_Estimator.ViewModels
                 }
                 
 
-                Project_OnSelectedProjectChange(Projects[0], null);
+                Project_OnSelectedProjectChange(null, null);
                 reader.Close();
                 
                 CreateSummary.RaiseCanExecuteChanged();
@@ -1005,15 +1015,39 @@ namespace WICR_Estimator.ViewModels
         #region Private Methods
         private void Project_OnSelectedProjectChange(object sender, EventArgs e)
         {
-            if (OnProjectSelectionChange != null)
-            {
-                OnProjectSelectionChange(SelectedProjects, EventArgs.Empty);
-            }
+            
+               
+                if (OnProjectSelectionChange != null)
+                {
+                    ProjectLoadEventArgs args = new ProjectLoadEventArgs();
+                    if (sender!=null)
+                    {
+                        args.IsProjectLoadedfromEstimate = false;
+                    }
+                    else
+                    {
+                        args.IsProjectLoadedfromEstimate = true;
+                    //foreach (var item in SelectedProjects)
+                    //{
+                    //    //item.ProjectJobSetUp?.UpdateJobSetup();
+                    //    item.SlopeViewModel?.CalculateAll();
+                    //    item.MetalViewModel?.CalculateCost(null);
+                    //    item.MaterialViewModel?.CalculateCost(null);
+                    //    item.UpdateMainTable();
+
+                    //}
+                }    
+                    OnProjectSelectionChange(SelectedProjects, args);
+                }
+            
+           
+            
 
             MyselectedProjects = SelectedProjects;
             OnPropertyChanged("SelectedProjects");
             if (SelectedProjects != null)
             {
+                
                 UpdateProjectTotals();
             }
         }
@@ -1118,13 +1152,13 @@ namespace WICR_Estimator.ViewModels
                 
                 try
                 {
-                    var dbValues = DataSerializerService.DSInstance.deserializeDbData(prj.OriginalProjectName);
-                    if (dbValues == null)
-                    {
+                    //var dbValues = DataSerializerService.DSInstance.deserializeDbData(prj.OriginalProjectName);
+                    //if (dbValues == null)
+                    //{
                         //Create dat file locally
                         await HTTPHelper.FetchFromDbAndSave(prj.OriginalProjectName);
 
-                    }
+                    //}
                     UpdateTaskStatus("Wait! Refreshing data for Project : " + prj.OriginalProjectName);
                 }
                 catch (Exception ex)
@@ -2346,5 +2380,10 @@ namespace WICR_Estimator.ViewModels
 
        
 
+    }
+
+    public class ProjectLoadEventArgs:EventArgs
+    {
+        public bool IsProjectLoadedfromEstimate { get; set; }
     }
 }

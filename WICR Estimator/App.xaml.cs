@@ -63,16 +63,38 @@ namespace WICR_Estimator
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            //MessageBox.Show(e.Args[0]);
-            if (e.Args.Length == 1) //make sure an argument is passed
+            //MessageBox.Show("On Application Launched");
+            try
             {
-                //MessageBox.Show(e.Args[0]);
-                FileInfo file = new FileInfo(e.Args[0]);
-                if (file.Exists) //make sure it's actually a file
+                if (AppDomain.CurrentDomain.SetupInformation.ActivationArguments != null)
                 {
-                    ViewModels.HomeViewModel.LoadedFile = file.FullName;
+                    var path = AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData[0];
+                    path = new Uri(path).LocalPath;
+                    System.IO.File.WriteAllText(@"C:\Users\Public\WriteText.txt", path);
+                    FileInfo file = new FileInfo(path);
+                    if (file.Exists) //make sure it's actually a file
+                    {
+                        ViewModels.HomeViewModel.LoadedFile = file.FullName;
+                    }
                 }
             }
+            catch (Exception)
+            {
+
+               
+            }
+            
+            
+            
+            //if (e.Args.Length == 1) //make sure an argument is passed
+            //{
+            //    //MessageBox.Show(e.Args[0]);
+            //    FileInfo file = new FileInfo(e.Args[0]);
+            //    if (file.Exists) //make sure it's actually a file
+            //    {
+            //        ViewModels.HomeViewModel.LoadedFile = file.FullName;
+            //    }
+            //}
         }
 
         
