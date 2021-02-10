@@ -33,6 +33,7 @@ namespace WICR_Estimator
         private ICommand _changePageCommand;
         private DelegateCommand _restartAppCommand;
         private DelegateCommand _saveEstimateCommand;
+        private DelegateCommand _updatePriceVersionCommand;
         private IPageViewModel _currentPageViewModel;
         private List<IPageViewModel> _pageViewModels;
         private DelegateCommand _minimizeCommand;
@@ -62,6 +63,9 @@ namespace WICR_Estimator
 
             IsUserLoggedIn = false;
             //WindowStyle = WindowStyle.SingleBorderWindow;
+
+            
+
         }
         public IDialogCoordinator dialogCoordinator;
         private MetroDialogSettings dialogSettings;
@@ -108,6 +112,7 @@ namespace WICR_Estimator
                 OnPropertyChanged("Username");
                 OnPropertyChanged("IsUserAdmin");
                 CurrentPageViewModel = PageViewModels[0];
+                ProjectViewModel.IsAdminloggedIn = IsUserAdmin;
             }
             else
                 CurrentPageViewModel = PageViewModels[3];
@@ -119,6 +124,7 @@ namespace WICR_Estimator
             BaseViewModel.TaskCompleted += PageViewModel_TaskCompleted;
             BaseViewModel.UpdateTask += PageViewModel_UpdateTaskStatus;
 
+            GetPriceVersion();
         }
 
 
@@ -210,6 +216,8 @@ namespace WICR_Estimator
                 OnPropertyChanged("IsUserLoggedIn");
 
                 IsUserAdmin = user.IsAdmin;
+
+                              
                 Username = user.Username;
                 OnPropertyChanged("Username");
                 OnPropertyChanged("IsUserAdmin");
@@ -284,6 +292,27 @@ namespace WICR_Estimator
         { get; set;
          
         }
+        
+
+        public DelegateCommand UpdatePriceVersionCommand
+        {
+            get
+            {
+                if (_updatePriceVersionCommand == null)
+                {
+                    _updatePriceVersionCommand = new DelegateCommand(UpdateDBPriceVersion,canUpdatePriceVersion);
+                }
+
+                return _updatePriceVersionCommand;
+            }
+        }
+
+        private bool canUpdatePriceVersion(object obj)
+        {
+            return true;
+        }
+
+        
 
         public DelegateCommand RestartAppCommand
         {
@@ -800,10 +829,50 @@ namespace WICR_Estimator
             }
             
         }
-        
-        #endregion
 
+        #endregion
+        
+        public bool _applyLatestPrice;
+        public bool ApplyLatestPrice 
+        {
+            get { return _applyLatestPrice; }
+            set
+            {
+                if (value!=_applyLatestPrice)
+                {
+                    _applyLatestPrice = value;
+                    OnPropertyChanged("ApplyLatestPrice");
+                    PriceVersion.ApplyPrice = value;
+                   
+                }
+            }
+        }
+
+        public PriceVersion PriceVersion { get; set; }
+        
+        private async void UpdateDBPriceVersion(object obj)
+        {
+            
+            PriceVersion.LastUpdatedOn = DateTime.Now;
+            
+            PriceVersion.Version = PriceVersion.Version+.1;
+            PriceVersion = await HTTPHelper.PutPriceVersionAsync(1, PriceVersion);
+            OnPropertyChanged("PriceVersion");
+        }
+
+        private async  void GetPriceVersion()
+        {
+           var price= await HTTPHelper.GetPriceVersionsAsync();
+            PriceVersion = price.FirstOrDefault();
+            
+            OnPropertyChanged("PriceVersion");
+            if (PriceVersion != null)
+            {
+                ApplyLatestPrice = PriceVersion.ApplyPrice;
+            }
+        }
     }
+    
 
     internal interface ICloseWindow
     {

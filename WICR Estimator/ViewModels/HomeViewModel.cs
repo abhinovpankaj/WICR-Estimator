@@ -42,7 +42,7 @@ namespace WICR_Estimator.ViewModels
         public HomeViewModel()
         {
             FillProjects();
-            //CheckPriceUpdate();
+            CheckPriceUpdate();
             Project.OnSelectedProjectChange += Project_OnSelectedProjectChange;
             
             SaveEstimate = new DelegateCommand(SaveProjectEstimate, canSaveEstimate);
@@ -71,11 +71,12 @@ namespace WICR_Estimator.ViewModels
             //Check If GoogleSheet has been Updated
             try
             {
-                if (await IsGoogleSheetUpated())
+                if (await IsDBUpated())
                 {
-                    MessageBox.Show("Material prices and values for materials/metals have been changed,Tool will restart once google data is refreshed.");
+                    //MessageBox.Show("Material prices and values for materials/metals have been changed,Tool will restart once google data is refreshed.");
                     DeleteGoogleData(null);
                 }
+
             }
             catch (Exception)
             {
@@ -505,12 +506,7 @@ namespace WICR_Estimator.ViewModels
 
                     item.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
                     SelectedProjects.Add(item);
-                    if (item.ProjectJobSetUp != null)
-                    {
-                        item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
-                        item.ProjectJobSetUp.GetOriginalName();
-                        item.ProjectJobSetUp.UpdateJobSetup();
-                    }
+                   
                     if (item.MetalViewModel != null)
                     {
                         item.MetalViewModel.MetalTotals.OnTotalsChange += item.MaterialViewModel.MetalTotals_OnTotalsChange;
@@ -520,6 +516,14 @@ namespace WICR_Estimator.ViewModels
                     {
                         item.SlopeViewModel.SlopeTotals.OnTotalsChange += item.MaterialViewModel.MetalTotals_OnTotalsChange;
                         item.ProjectJobSetUp.JobSetupChange += item.SlopeViewModel.JobSetup_OnJobSetupChange;
+
+                    }
+                    if (item.ProjectJobSetUp != null)
+                    {
+                        item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
+                        item.ProjectJobSetUp.EnableMoreMarkupCommand = new DelegateCommand(item.ProjectJobSetUp.CanAddMoreMarkup, item.ProjectJobSetUp.canAdd);
+                        item.ProjectJobSetUp.GetOriginalName();
+                        item.ProjectJobSetUp.UpdateJobSetup();
                     }
                     item.MaterialViewModel.CheckboxCommand = new DelegateCommand(item.MaterialViewModel.ApplyCheckUnchecks, item.MaterialViewModel.canApply);
                     SystemMaterial.OnQTyChanged += (s, e) => { item.MaterialViewModel.setExceptionValues(s); };
@@ -712,13 +716,7 @@ namespace WICR_Estimator.ViewModels
 
                     item.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
                     SelectedProjects.Add(item);
-                    if (item.ProjectJobSetUp != null)
-                    {
-                        item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
-                        item.ProjectJobSetUp.EnableMoreMarkupCommand = new DelegateCommand(item.ProjectJobSetUp.CanAddMoreMarkup, item.ProjectJobSetUp.canAdd);
-                        item.ProjectJobSetUp.GetOriginalName();
-                        item.ProjectJobSetUp.UpdateJobSetup(ver);
-                    }
+                   
                     if (item.MetalViewModel != null)
                     {
                         item.MetalViewModel.MetalTotals.OnTotalsChange += item.MaterialViewModel.MetalTotals_OnTotalsChange;
@@ -729,8 +727,17 @@ namespace WICR_Estimator.ViewModels
                         item.SlopeViewModel.SlopeTotals.OnTotalsChange += item.MaterialViewModel.MetalTotals_OnTotalsChange;
                         item.ProjectJobSetUp.JobSetupChange += item.SlopeViewModel.JobSetup_OnJobSetupChange;
                     }
+                    if (item.ProjectJobSetUp != null)
+                    {
+                        item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
+                        item.ProjectJobSetUp.EnableMoreMarkupCommand = new DelegateCommand(item.ProjectJobSetUp.CanAddMoreMarkup, item.ProjectJobSetUp.canAdd);
+                        item.ProjectJobSetUp.GetOriginalName();
+                        //item.ProjectJobSetUp.UpdateJobSetup(ver);
+                    }
                     item.MaterialViewModel.CheckboxCommand = new DelegateCommand(item.MaterialViewModel.ApplyCheckUnchecks, item.MaterialViewModel.canApply);
-                   
+
+                    item.ProjectJobSetUp.UpdateJobSetup(ver);
+                    
                     //keep other material and other labor materials in sync
                     var ot= item.MaterialViewModel.OtherLaborMaterials;
                     if (item.OriginalProjectName=="Blank")
@@ -1145,7 +1152,7 @@ namespace WICR_Estimator.ViewModels
 
         private async void RefreshDataFromDB()
         {
-            OnTaskStarted("Fetching latest prices from DB ...");
+            OnTaskStarted("Prices have been updated, Fetching latest prices from DB ...");
             
             foreach (var prj in Projects)
             {
@@ -1156,8 +1163,9 @@ namespace WICR_Estimator.ViewModels
                     //if (dbValues == null)
                     //{
                         //Create dat file locally
-                        await HTTPHelper.FetchFromDbAndSave(prj.OriginalProjectName);
+                        var dbData=await HTTPHelper.FetchFromDbAndSave(prj.OriginalProjectName);
 
+                     DataSerializerService.DSInstance.serializeDbData(dbData, prj.OriginalProjectName);
                     //}
                     UpdateTaskStatus("Wait! Refreshing data for Project : " + prj.OriginalProjectName);
                 }
@@ -1234,28 +1242,26 @@ namespace WICR_Estimator.ViewModels
         }
         
         #region GoogleDataUpdateCheck
-        private string GetLastUpdateDate()
+        private DateTime GetLastUpdateDate()
         {
+            DateTime updateTime;
             string txtVal = string.Empty;
             string filePath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\WICR\\";
                 //+ "LastUpdatedOn.txt";
             if (!Directory.Exists(filePath))
             {
-                return "01-01-1900";
+                return DateTime.Parse("01-01-1900");
             }
             else
                 txtVal= System.IO.File.ReadAllText(Path.Combine(filePath, "LastUpdatedOn.txt"));
 
-            return txtVal;
+            DateTime.TryParse(txtVal,out updateTime);
+            return updateTime;
         }
         private readonly object fileLock = new object();
-        private void UpdateLastDate(string date)
+        private void UpdateLastDate(DateTime date)
         {
-            if (date=="")
-            {
-                var lastDate =  GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("IsSheetUpdated", DataType.Rate);
-                date = lastDate[0][0].ToString();
-            }
+            
             lock (fileLock)
             {
                 try
@@ -1266,7 +1272,7 @@ namespace WICR_Estimator.ViewModels
                         System.IO.Directory.CreateDirectory(folderPath);
                     }
                     Thread.Sleep(200);
-                    System.IO.File.WriteAllText(Path.Combine(folderPath, "LastUpdatedOn.txt"), date);
+                    System.IO.File.WriteAllText(Path.Combine(folderPath, "LastUpdatedOn.txt"), date.ToString());
                 }
                 catch (Exception ex)
                 {
@@ -1274,28 +1280,31 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
-        string lastUpdate = string.Empty;
+        DateTime lastUpdate;
 
-        private async Task<bool> IsGoogleSheetUpated()
-        {  
+        
+
+        private async Task<bool> IsDBUpated()
+        {
             //IList<IList<object>> LaborRate=await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Rate);
-            var lastDate= await  GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("IsSheetUpdated", DataType.Rate);
+            var lastVersion = await HTTPHelper.GetPriceVersionsAsync();
 
-            var needsUpdate = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("IsSheetUpdated", DataType.Metal);
-            if (GetLastUpdateDate() != lastDate[0][0].ToString())
+            if (lastVersion!=null)
             {
-                if (needsUpdate[0][0].ToString() == "Yes")
+                var updateVersion = lastVersion.FirstOrDefault();
+                if (GetLastUpdateDate().ToString() != updateVersion.LastUpdatedOn.ToString())
                 {
-                    lastUpdate = lastDate[0][0].ToString();
-                    
-                    return true;
+                    if (updateVersion.ApplyPrice)
+                    {
+                        lastUpdate = updateVersion.LastUpdatedOn;
+
+                        return true;
+                    }
                 }
-            }
-
-
-            //DataSerializer.DSInstance.serializeGoogleData(DataSerializer.DSInstance.googleData, "IsSheetUpdated");
+            }            
             return false;
         }
+
         #endregion
         void FillProjects()
         {

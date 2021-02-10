@@ -167,8 +167,20 @@ namespace WICR_Estimator.ViewModels
         {
             foreach (Slope slp in UrethaneSlopes)
             {
-                slp.PricePerMix = getPricePerMixDB(slp.Thickness, isApprovedForCement,"Urethane");
-                slp.GSLaborRate = getGSLaborRateDB(slp.Thickness, "Urethane");
+                //slp.PricePerMix = getPricePerMixDB(slp.Thickness, isApprovedForCement,"Urethane");
+                //slp.GSLaborRate = getGSLaborRateDB(slp.Thickness, "Urethane");
+
+                if (dbData == null)
+                {
+                    slp.PricePerMix = getPricePerMix(slp.Thickness, isApprovedForCement,9);
+                    slp.GSLaborRate = getGSLaborRate(slp.Thickness, 9);
+                }
+                else
+                {
+                    slp.PricePerMix = getPricePerMixDB(slp.Thickness, isApprovedForCement, "Urethane");
+                    slp.GSLaborRate = getGSLaborRateDB(slp.Thickness, "Urethane");
+                }
+
             }
             base.reCalculate();
         }
@@ -206,6 +218,8 @@ namespace WICR_Estimator.ViewModels
             base.CalculateAll();
             if (UrethaneOverrideManually)
             {
+                //new add
+                double.TryParse(perMixRates[15][1].ToString(), out urethaneManualAvgMixPrice);
                 CalculateManualUrethane();
             }
 

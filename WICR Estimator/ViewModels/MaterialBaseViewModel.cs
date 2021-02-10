@@ -1647,6 +1647,7 @@ namespace WICR_Estimator.ViewModels
         public void CalculateCost(object obj)
         {
             
+            
             calculateMaterialTotals();
             CalOCTotal();
             CalSCTotal();
@@ -1667,6 +1668,7 @@ namespace WICR_Estimator.ViewModels
                 BaseViewModel.IsDirty = true;
                 previousSale = TotalSale;
             }
+
         }
 
         
@@ -1685,37 +1687,40 @@ namespace WICR_Estimator.ViewModels
         {
             //Task task = new Task(() => 
             //{
-                JobSetup js = sender as JobSetup;
-                if (js != null)
+            JobSetup js = sender as JobSetup;
+            if (js != null)
+            {
+                //weatherWearType = js.WeatherWearType;
+                projectname = js.ProjectName;
+                totalSqft = js.TotalSqft;
+                stairWidth = js.StairWidth;
+                riserCount = js.RiserCount;
+                deckPerimeter = js.DeckPerimeter;
+                isPrevailingWage = js.IsPrevalingWage;
+                hasSpecialPricing = js.HasSpecialPricing;
+                isDiscounted = js.HasDiscount;
+                isApprovedforCement = js.IsApprovedForSandCement;
+                if (isPrevailingWage)
                 {
-                    //weatherWearType = js.WeatherWearType;
-                    projectname = js.ProjectName;
-                    totalSqft = js.TotalSqft;
-                    stairWidth = js.StairWidth;
-                    riserCount = js.RiserCount;
-                    deckPerimeter = js.DeckPerimeter;
-                    isPrevailingWage = js.IsPrevalingWage;
-                    hasSpecialPricing = js.HasSpecialPricing;
-                    isDiscounted = js.HasDiscount;
-                    isApprovedforCement = js.IsApprovedForSandCement;
-                    if (isPrevailingWage)
-                    {
-                        preWage = js.ActualPrevailingWage == 0 ? 0 : (js.ActualPrevailingWage - laborRate) / laborRate;
-                    }
-                    else
-                        preWage = 0;
-                    hasContingencyDisc = js.VHasContingencyDisc;
-                    MarkUpPerc = js.MarkupPercentage;
-                    deckCount = js.DeckCount;
-                    actualPreWage = js.ActualPrevailingWage;
-                    MaterialPerc = getMaterialDiscount(js.ProjectDelayFactor);
+                    preWage = js.ActualPrevailingWage == 0 ? 0 : (js.ActualPrevailingWage - laborRate) / laborRate;
                 }
+                else
+                    preWage = 0;
+                hasContingencyDisc = js.VHasContingencyDisc;
+                MarkUpPerc = js.MarkupPercentage;
+                deckCount = js.DeckCount;
+                actualPreWage = js.ActualPrevailingWage;
+                MaterialPerc = getMaterialDiscount(js.ProjectDelayFactor);
+            }
             if (dbData == null)
             {
                 dbData = js.dbData;
             }
+            
             FetchMaterialValuesAsync(true);
+            
             CalculateCost(null);
+            
             js.TotalSalesCostTemp = TotalSale;           
             //});
                     
@@ -1879,10 +1884,36 @@ namespace WICR_Estimator.ViewModels
         {
             ObservableCollection<SystemMaterial> smCollection = new ObservableCollection<SystemMaterial>();
             int k = 0;
-            if (projectname=="Weather Wear")
+            if (dbData==null)
             {
-                k = 3;
-                smCollection = GetSystemMaterial();
+                double minLCharge = 0;
+                double.TryParse(materialDetails[k][6].ToString(), out minLCharge);
+                LaborMinChargeMinSetup = minLCharge;
+                if (projectname == "Weather Wear")
+                {
+                    k = 3;
+                    smCollection = GetSystemMaterial();
+                }
+                else if (projectname == "Weather Wear Rehab" || projectname == "Barrier Guard")
+                    smCollection = GetSystemMaterial();
+                else
+                {
+                    foreach (string key in materialNames.Keys)
+                    {
+                        if (dbData == null)
+                        {
+                            smCollection.Add(getSMObject(k, key, materialNames[key]));
+
+                        }
+                        else
+                        {
+                            smCollection.Add(createSMObjectDB(key, materialNames[key]));
+
+                        }
+
+                        k++;
+                    }
+                }
             }
             else
             {
@@ -1891,19 +1922,21 @@ namespace WICR_Estimator.ViewModels
                     if (dbData == null)
                     {
                         smCollection.Add(getSMObject(k, key, materialNames[key]));
-                        double minLCharge = 0;
-                        double.TryParse(materialDetails[k][6].ToString(), out minLCharge);
-                        LaborMinChargeMinSetup = minLCharge;
+
                     }
                     else
                     {
                         smCollection.Add(createSMObjectDB(key, materialNames[key]));
-                        LaborMinChargeMinSetup = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Minimum Labor charge").Value;
+
                     }
 
                     k++;
                 }
+                LaborMinChargeMinSetup = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Minimum Labor charge").Value;
             }
+                
+            
+            
             
             
             return smCollection;
@@ -3769,6 +3802,7 @@ namespace WICR_Estimator.ViewModels
             }
             else
                 facValue = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Deduct on Labor for large jobs").Value;
+            
             double fac2 = isDiscounted ? facValue : 0;
             double calbackfactor = 1 + fac1 + fac2;
 

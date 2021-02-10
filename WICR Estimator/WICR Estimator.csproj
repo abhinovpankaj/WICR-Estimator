@@ -26,14 +26,15 @@
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
+    <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>false</MapFileExtensions>
     <InstallUrl>http://estimator.wicr.net/installer/</InstallUrl>
     <UpdateUrl>http://estimator.wicr.net/installer/</UpdateUrl>
     <PublisherName>WICR</PublisherName>
+    <MinimumRequiredVersion>1.0.0.22</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>20</ApplicationRevision>
+    <ApplicationRevision>24</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -219,6 +220,7 @@
     <Compile Include="DBModels\LoginResponseDB.cs" />
     <Compile Include="DBModels\MaterialDB.cs" />
     <Compile Include="DBModels\MetalDB.cs" />
+    <Compile Include="DBModels\PriceVersion.cs" />
     <Compile Include="DBModels\ProjectDB.cs" />
     <Compile Include="DBModels\ProjectDetailsDB.cs" />
     <Compile Include="DBModels\SlopeDB.cs" />

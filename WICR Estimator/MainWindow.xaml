@@ -217,11 +217,42 @@
                                 <TextBlock Text="Labor Factors" Margin="10" FontSize="16"/>
                             </StackPanel>
                         </ListViewItem>
-                        <!--<ListViewItem Height="45" Padding="0" x:Name="nothing">
-                        <StackPanel>
-                            <materialDesign:ColorZone Background="{StaticResource PrimaryHueDarkBrush}"/>
-                        </StackPanel>
-                    </ListViewItem>-->
+                        <ListViewItem Height="120" Padding="0" x:Name="applyprice"
+                                      IsEnabled="{Binding IsUserAdmin}">
+                        <Grid Margin="10,0,0,0" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Price Version"  Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
+                                       Margin="0" />
+                            <TextBlock Text="Last UpdatedOn" 
+                                       Grid.Row="1" Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
+                                       />
+                            <TextBlock Text="{Binding PriceVersion.Version}" Grid.Column="1" HorizontalAlignment="Right"
+                                       Style="{StaticResource MaterialDesignSubtitle2TextBlock}"/>
+                            <TextBlock Text="{Binding PriceVersion.LastUpdatedOn,StringFormat='MM/dd/yy'}" 
+                                       Margin="10,0,0,0"
+                                       Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right"
+                                       Style="{StaticResource MaterialDesignSubtitle2TextBlock}"/>
+                            <TextBlock Text="Push Prices to Users" Grid.Row="2" Margin="0,10,0,0"
+                                       Style="{StaticResource MaterialDesignSubtitle2TextBlock}"/>
+                            <ToggleButton x:Name="OverrideCheckboxUrethan" HorizontalAlignment="Right"
+                              Margin="10,10,0,0" Grid.Row="2" Grid.Column="2" 
+                              Style="{StaticResource MaterialDesignSwitchAccentToggleButton}"
+                          ToolTip="Apply Latest Prices"
+                          IsChecked="{Binding ApplyLatestPrice}"/>
+                            <Button Content="Push Price to DB" Grid.Row="3" Grid.ColumnSpan="2"
+                                    Margin="0,5,0,0"
+                                    Command="{Binding UpdatePriceVersionCommand}"/>
+                        </Grid>
+                    </ListViewItem>
                         <ListViewItem Height="45" Padding="0" x:Name="ChangePalette"
                                   >
                             <StackPanel Orientation="Horizontal" Margin="10,0">

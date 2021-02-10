@@ -152,7 +152,14 @@ namespace WICR_Estimator.ViewModels
                 totalSqft = (hasQuarterMortarBed || hasMortarBed) == true ? js.TotalSqft : 0 ;
                 
             }
-            UrethaneSlopes = CreateSlopesDB("Special");
+            if (dbData==null)
+            {
+                UrethaneSlopes = CreateSlopes(9);
+            }
+            else
+            {
+                UrethaneSlopes = CreateSlopesDB("Special");
+            }
             UpdateSpecialSlope();
             CalculateAll();
                         
@@ -437,8 +444,13 @@ namespace WICR_Estimator.ViewModels
             if (Slopes.Count > 0)
             {
                 LaborCost = Math.Round(SumTotalLaborExt, 2);
-                //double.TryParse(perMixRates[8][0].ToString(), out minLabVal);
-                minLabVal = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Minimum Slope Labor" && x.SlopeType == "Special").LaborRate;
+                if (dbData==null)
+                {
+                    double.TryParse(perMixRates[8][0].ToString(), out minLabVal);
+                }
+                else
+                    minLabVal = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Minimum Slope Labor" && x.SlopeType == "Special").LaborRate;
+                
                 MinimumLaborCost = hasQuarterMortarBed ?0: minLabVal * laborRate;
 
                 lCost = SumTotalLaborExt == 0 ? 0 : LaborCost > MinimumLaborCost ? LaborCost : MinimumLaborCost;
@@ -468,9 +480,12 @@ namespace WICR_Estimator.ViewModels
             {
 
                 lCost = Math.Round(UrethaneSumTotalLaborExt, 2);
-                //double.TryParse(perMixRates[16][0].ToString(), out minLabVal);
-                
-                minLabVal = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Minimum Slope Labor" && x.SlopeType == "Special").LaborRate;
+                if (dbData==null)
+                {
+                    double.TryParse(perMixRates[16][0].ToString(), out minLabVal);
+                }
+                else                
+                    minLabVal = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Minimum Slope Labor" && x.SlopeType == "Special").LaborRate;
 
                 MortarMinimumLaborCost =hasQuarterMortarBed ? minLabVal * laborRate:18*laborRate;
 

@@ -116,7 +116,8 @@
                   materialDesign:DataGridAssist.CellPadding="4"
                   VerticalAlignment="Top" 
                   CanUserAddRows="False"
-                  FrozenColumnCount ="1"                 
+                  FrozenColumnCount ="1" 
+                                   
                   ItemsSource="{Binding SystemMaterials,UpdateSourceTrigger=PropertyChanged}" >
                
                 <DataGrid.RowStyle>

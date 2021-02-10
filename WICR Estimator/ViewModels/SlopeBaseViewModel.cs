@@ -470,16 +470,48 @@ namespace WICR_Estimator.ViewModels
                 }
                 if (isPrevailingWage)
                 {
-                    //double.TryParse(freightData[5][0].ToString(), out productionRate);
-                    productionRate = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "SlopeProdRate").FactorValue;
+                    if (dbData==null)
+                    {
+                        double.TryParse(freightData[5][0].ToString(), out productionRate);
+                        
+                    }
+                    else
+                    {
+                        productionRate = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "SlopeProdRate").FactorValue;
+                        
+                    }
+                        
 
                 }
                 else
                     productionRate = 0;
+
+                if (dbData==null)
+                {
+                    if (perMixRates!=null)
+                    {
+                        double.TryParse(perMixRates[6][1].ToString(), out manualAvgMixPrice);
+                    }
+                    
+                    
+                    if (pWage != null)
+                    {
+                        double.TryParse(pWage[1][0].ToString(), out deductionOnLargeJob);
+                    }
+                }
+                else
+                {
+                    manualAvgMixPrice = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Manul Override Avg Labor/mix").PerMixCost;
+                    deductionOnLargeJob = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Deduct on Labor for large jobs").Value;
+                }
                 //laborRate = js.dbData.FreightDBData.First(x=>x.FactorName== "LaborRate").FactorValue;
                 hasDiscount = js.HasDiscount;
                 materialPerc = getMaterialDiscount(js.ProjectDelayFactor);
                 prevailingWage= js.ActualPrevailingWage == 0 ? 0 : (js.ActualPrevailingWage - laborRate) / laborRate;
+                
+                
+                //double.TryParse(pWage[0][0].ToString(), out prevailingWage);
+                
                 reCalculate();
             }
             
@@ -576,8 +608,17 @@ namespace WICR_Estimator.ViewModels
         {
             foreach (Slope slp in Slopes)
             {
-                slp.PricePerMix = getPricePerMixDB(slp.Thickness, isApprovedForCement,"Cement");
-                slp.GSLaborRate = getGSLaborRateDB(slp.Thickness,"Cement");
+                if (dbData==null)
+                {
+                    slp.PricePerMix = getPricePerMix(slp.Thickness, isApprovedForCement);
+                    slp.GSLaborRate = getGSLaborRate(slp.Thickness, 0);
+                }
+                else
+                {
+                    slp.PricePerMix = getPricePerMixDB(slp.Thickness, isApprovedForCement, "Cement");
+                    slp.GSLaborRate = getGSLaborRateDB(slp.Thickness, "Cement");
+                }
+                
             }
             
             CalculateGridTotal();

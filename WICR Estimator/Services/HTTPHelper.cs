@@ -519,7 +519,7 @@ namespace WICR_Estimator.Services
 
             dbData.FreightDBData = await HTTPHelper.GetFreightsAsync();
 
-            DataSerializerService.DSInstance.serializeDbData(dbData, originalProjectname);
+            
             return dbData;
         }
 
@@ -626,5 +626,48 @@ namespace WICR_Estimator.Services
             }
         }
         #endregion
+
+
+        public static async Task<PriceVersion> PutPriceVersionAsync(int id, PriceVersion price)
+        {
+
+            using (var client = new HttpClient())
+            {
+
+                client.BaseAddress = new Uri(BASEURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await client.PutAsJsonAsync<PriceVersion>("version/" + id, price);
+                if (response.IsSuccessStatusCode)
+                {
+                    System.Threading.Thread.Sleep(1000);
+                    return await response.Content.ReadAsAsync<PriceVersion>();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        public static async Task<IEnumerable<PriceVersion>> GetPriceVersionsAsync()
+        {
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BASEURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await client.GetAsync("version");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<IEnumerable<PriceVersion>>();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
     }
 }

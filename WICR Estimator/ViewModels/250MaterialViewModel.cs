@@ -30,7 +30,7 @@ namespace WICR_Estimator.ViewModels
             FetchMaterialValuesAsync(false);
         }
 
-        private void FillMaterialList()
+        private void FillMaterialList(int addMore=0)
         {
             materialNames.Add("191 QD PRIMER AND PREPARATION FOR RE-SURFACE", "1 GALLON");
             materialNames.Add("TREMPRIME MULTI SURFACE (CONCRETE & OTHER)", "3 GAL KIT");
@@ -61,10 +61,14 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS", "5 GAL PAIL");
             materialNames.Add("Vulkem Tremproof 250 GC L 30 MILS(Additional)", "5 GAL PAIL");
             materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS(Additional)", "5 GAL PAIL");
-            //materialNames.Add("Vulkem Tremproof 201 L 30 MILS", "5 GAL PAIL");
-            //materialNames.Add("Vulkem Tremproof 201 R 30 MILS", "5 GAL PAIL");
-            //materialNames.Add("Vulkem Tremproof 201 L 30 MILS(Additional)", "5 GAL PAIL");
-            //materialNames.Add("Vulkem Tremproof 201 R 30 MILS(Additional)", "5 GAL PAIL");
+            if (addMore==1)
+            {
+                materialNames.Add("Vulkem Tremproof 201 L 30 MILS", "5 GAL PAIL");
+                materialNames.Add("Vulkem Tremproof 201 R 30 MILS", "5 GAL PAIL");
+                materialNames.Add("Vulkem Tremproof 201 L 30 MILS(Additional)", "5 GAL PAIL");
+                materialNames.Add("Vulkem Tremproof 201 R 30 MILS(Additional)", "5 GAL PAIL");
+            }
+            
             materialNames.Add("Plywood 3/4 & blocking (# of 4x8 sheets)", "4x8 sheets");
             materialNames.Add("Stucco Material Remove and replace (LF)", "LF");
             materialNames.Add("PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL WITH SAND BROADCAST", "LF");
@@ -99,8 +103,10 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("TOTAL DRAIN MINUS BOTTOM TD 1000(IN LIEU OF ROCK & PIPE)", "LINEAR FEET");
             materialNames.Add("Vulkem Tremproof 250 GC L 30 MILS", "5 GAL PAIL");
             materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS", "5 GAL PAIL");
+
             //materialNames.Add("Vulkem Tremproof 250 GC L 30 MILS(Additional)", "5 GAL PAIL");
             //materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS(Additional)", "5 GAL PAIL");
+
             //materialNames.Add("Vulkem Tremproof 201 L 30 MILS", "5 GAL PAIL");
             //materialNames.Add("Vulkem Tremproof 201 R 30 MILS", "5 GAL PAIL");
             //materialNames.Add("Vulkem Tremproof 201 L 30 MILS(Additional)", "5 GAL PAIL");
@@ -131,15 +137,16 @@ namespace WICR_Estimator.ViewModels
                 materialNames = new Dictionary<string, string>();
                 if (SystemMaterials.Count>27)
                 {
-                    FillMaterialList();
+                    FillMaterialList(1);
                 }
                 else
                     FillMaterialListEx();
 
             }
             var sysMat = GetSystemMaterial(materialNames);
-
+            sysMat = sysMat.Where(x => x != null).ToObservableCollection();
             //remove GC 250 System Material
+
             List<SystemMaterial> mat250 = sysMat.Where(x => x.Name.Contains("201")).ToList();
             foreach (SystemMaterial item in mat250)
             {

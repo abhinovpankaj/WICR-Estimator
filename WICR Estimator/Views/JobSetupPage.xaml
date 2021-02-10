@@ -171,7 +171,7 @@
                         <TextBlock FontSize="18"
                                    FontWeight="Bold"
                                    Foreground="{StaticResource PrimaryHueLightBrush}"
-                            Text="{Binding TotalSalesCostTemp,StringFormat=N2}"
+                            Text="{Binding TotalSalesCostTemp,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"
                                    HorizontalAlignment="Center"/>
                     </StackPanel>
                 </materialDesign:Card>
