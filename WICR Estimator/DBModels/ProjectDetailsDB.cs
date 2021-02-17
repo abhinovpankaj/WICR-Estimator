@@ -25,5 +25,8 @@ namespace WICR_Estimator.DBModels
 
         public bool HasContingencyDisc { get; set; }
         public double ProjectProfitMargin { get; set; }
+
+        public string ProjectName { get; set; }
+        public bool IsNewProject { get; set; }
     }
 }

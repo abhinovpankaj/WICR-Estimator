@@ -26,6 +26,7 @@ namespace WICR_Estimator.Models
                 }
             }
         }
+
         public bool HasTabSwitched { get; set; }
         private double actualPrevailingWage;
         public double ActualPrevailingWage
@@ -323,6 +324,21 @@ namespace WICR_Estimator.Models
         //        }
         //    }
         //}
+
+        
+        private bool isNewProject;
+        public bool IsNewProject
+        {
+            get { return isNewProject; }
+            set
+            {
+                if (value != isNewProject)
+                {
+                    isNewProject = value;
+                    OnPropertyChanged("IsNewProject");                  
+                }
+            }
+        }
         private bool isContingencyEnabled;
         public bool IsContingencyEnabled
         {

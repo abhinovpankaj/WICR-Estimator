@@ -373,12 +373,33 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                          Margin="10,10" Width="200"
             Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}" VerticalAlignment="Bottom" />
 
-                <TextBox materialDesign:HintAssist.Hint="Prepared By"
+                <!--<TextBox materialDesign:HintAssist.Hint="Prepared By"
                          VerticalAlignment="Bottom" Margin="10,10" Width="200"
                          Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
                      Text="{Binding PreparedBy}"
-                     />
-                <DatePicker Height="30"
+                     />-->
+            <StackPanel VerticalAlignment="Bottom">
+                <TextBlock Margin="10" FontWeight="SemiBold"
+                       Text="Prepared By"/>
+                <ComboBox Text="{Binding PreparedBy,UpdateSourceTrigger=PropertyChanged}" 
+                          HorizontalAlignment="Left"
+                          Margin="10,0,0,10"                        
+                          Width="180">
+                    <ComboBoxItem Content="seank"/>
+                    <ComboBoxItem Content="stevend" />
+                    <ComboBoxItem Content="mikes"/>
+                    <ComboBoxItem Content="davidm"/>
+                    <ComboBoxItem Content="chriss" />
+                    <ComboBoxItem Content="davidd"/>
+                    <ComboBoxItem Content="dianau"/>
+                    <ComboBoxItem Content="erniep" />
+                    <ComboBoxItem Content="guestuser1"/>
+                    <ComboBoxItem Content="guestuser2"/>
+                    <ComboBoxItem Content="guestuser3"/>
+                    <ComboBoxItem Content="guestadmin"/>
+                </ComboBox>
+            </StackPanel>
+            <DatePicker Height="30"
                         Margin="10,10" Width="200"
                         SelectedDate="{Binding JobCreationDate, Mode=TwoWay,
                         UpdateSourceTrigger=PropertyChanged,

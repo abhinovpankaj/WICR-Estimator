@@ -504,6 +504,7 @@ namespace WICR_Estimator
 
         public async Task SaveEstimates(ObservableCollection<Project> SelectedProjects)
         {
+
             DateTime? JobCreationDate = DateTime.Now;
             string JobName = string.Empty, PreparedBy = string.Empty;
             ProjectsTotal ProjectTotals=null;
@@ -549,6 +550,12 @@ namespace WICR_Estimator
                         PreparedBy = hm.PreparedBy;
                         JobCreationDate = hm.JobCreationDate;
                         ProjectTotals = hm.ProjectTotals;
+
+                        if (PreparedBy == null)
+                        {
+                            OnTaskCompleted("Please fill Prepared by and then save the estimate.");
+                            return;
+                        }
                     }
                 }
                 var serializer = new DataContractSerializer(typeof(ObservableCollection<Project>));
@@ -604,6 +611,8 @@ namespace WICR_Estimator
                                 prjDB.HasContingencyDisc = item.ProjectJobSetUp.VHasContingencyDisc;
                                 prjDB.HasPrevailingWage = item.ProjectJobSetUp.IsPrevalingWage;
                                 prjDB.ProjectProfitMargin = item.MaterialViewModel.ProjectProfitMargin;
+                                prjDB.ProjectName = item.ProjectJobSetUp.ProjectName;
+                                prjDB.IsNewProject = item.ProjectJobSetUp.IsNewProject;
                                 await HTTPHelper.PutProjectDetails(item.ProjectID, prjDB);
                             }
                             else
@@ -621,6 +630,8 @@ namespace WICR_Estimator
                                 prjDB.HasContingencyDisc = item.ProjectJobSetUp.VHasContingencyDisc;
                                 prjDB.HasPrevailingWage = item.ProjectJobSetUp.IsPrevalingWage;
                                 prjDB.ProjectProfitMargin = item.MaterialViewModel.ProjectProfitMargin;
+                                prjDB.ProjectName = item.ProjectJobSetUp.ProjectName;
+                                prjDB.IsNewProject = item.ProjectJobSetUp.IsNewProject;
                                 ProjectDetailsDB prj = await HTTPHelper.PostProjectDetails(prjDB);
                                 if (prj != null)
                                 {

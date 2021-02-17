@@ -846,6 +846,12 @@ namespace WICR_Estimator.ViewModels
 
         private async void SaveProjectEstimate(object obj)
         {
+            if (PreparedBy==null)
+            {
+                OnTaskCompleted("Please fill Prepared by and then save the estimate.");
+                return;
+            }
+
             ////serialize Enabled Project Data and Save
 
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
@@ -915,6 +921,8 @@ namespace WICR_Estimator.ViewModels
                                     prjDB.HasContingencyDisc = item.ProjectJobSetUp.VHasContingencyDisc;
                                     prjDB.HasPrevailingWage = item.ProjectJobSetUp.IsPrevalingWage;
                                     prjDB.ProjectProfitMargin = item.MaterialViewModel.ProjectProfitMargin;
+                                    prjDB.ProjectName = item.ProjectJobSetUp.ProjectName;
+                                    prjDB.IsNewProject = item.ProjectJobSetUp.IsNewProject;
                                     await HTTPHelper.PutProjectDetails(item.ProjectID, prjDB);
                                     UpdateTaskStatus("Updating project details for Project :" + item.Name);
                                 }
@@ -933,6 +941,8 @@ namespace WICR_Estimator.ViewModels
                                     prjDB.HasContingencyDisc = item.ProjectJobSetUp.VHasContingencyDisc;
                                     prjDB.HasPrevailingWage = item.ProjectJobSetUp.IsPrevalingWage;
                                     prjDB.ProjectProfitMargin = item.MaterialViewModel.ProjectProfitMargin;
+                                    prjDB.ProjectName = item.ProjectJobSetUp.ProjectName;
+                                    prjDB.IsNewProject = item.ProjectJobSetUp.IsNewProject;
                                     ProjectDetailsDB prj = await HTTPHelper.PostProjectDetails(prjDB);
                                     UpdateTaskStatus("Adding project details for Project: " + item.Name);
                                     if (prj != null)

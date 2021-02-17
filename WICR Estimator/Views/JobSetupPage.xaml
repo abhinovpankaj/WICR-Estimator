@@ -161,6 +161,13 @@
                          VerticalContentAlignment="Center"/>
                     </StackPanel>
                 </materialDesign:Card>
+               
+                    <CheckBox Margin="10"
+                              materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                              IsChecked="{Binding IsNewProject,
+                        UpdateSourceTrigger=PropertyChanged}"
+                              Content="Is a New Project?"/>
+               
                 <materialDesign:Card UniformCornerRadius="5" Padding="10,5,10,10"
                                      Background="{StaticResource PrimaryHueDarkBrush}"
                              Margin="10,10" materialDesign:ShadowAssist.ShadowDepth="Depth1">
@@ -175,8 +182,7 @@
                                    HorizontalAlignment="Center"/>
                     </StackPanel>
                 </materialDesign:Card>
-               
-                </StackPanel>
+            </StackPanel>
 
 
             <!--</Border>-->
