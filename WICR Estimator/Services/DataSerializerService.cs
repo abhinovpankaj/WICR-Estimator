@@ -76,9 +76,9 @@ namespace WICR_Estimator.Services
         {
             lock (serializeLock)
             {
-                var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\" + ProjectName + "_DbData.dat";
-                if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\"))
-                    Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\");
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR1\\" + ProjectName + "_DbData.dat";
+                if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR1\\"))
+                    Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR1\\");
 
 
                 JsonSerializer serializer = new JsonSerializer();
@@ -95,7 +95,7 @@ namespace WICR_Estimator.Services
         {
             lock (serializeLock)
             {
-                var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR\\" + ProjectName + "_DbData.dat";
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR1\\" + ProjectName + "_DbData.dat";
                 IFormatter formatter = new BinaryFormatter();
                 if (!File.Exists(path))
                 {

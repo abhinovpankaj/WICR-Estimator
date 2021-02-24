@@ -23,9 +23,10 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Green.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Teal.xaml" />
                 
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />-->
+                
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Themes/Dialogs/BaseMetroDialog.xaml" />
                 <!-- Material Design -->
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
 
@@ -128,7 +129,7 @@ BorderBrush="Black" Margin="0,0,0,0" CornerRadius="2,2,0,0" Padding="50,0,50,0">
             </Style>
 
 
-            <!--<Style TargetType="{x:Type Dialogs:MessageDialog}" BasedOn="{StaticResource {x:Type Dialogs:BaseMetroDialog}}">
+            <Style TargetType="{x:Type Dialogs:MessageDialog}" BasedOn="{StaticResource {x:Type Dialogs:BaseMetroDialog}}">
                 <Style.Resources>
                     <Style  TargetType="{x:Type Button}">
                         <Setter Property="controls:ControlsHelper.ContentCharacterCasing" Value="Upper" />
@@ -151,7 +152,7 @@ BorderBrush="Black" Margin="0,0,0,0" CornerRadius="2,2,0,0" Padding="50,0,50,0">
                         <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}"/>
                     </Style>
                 </Style.Resources>
-            </Style>-->
+            </Style>
         </ResourceDictionary>
         
         

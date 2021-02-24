@@ -347,9 +347,9 @@ namespace WICR_Estimator.ViewModels
 
             try
             {
-                if (System.IO.Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR"))
+                if (System.IO.Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR1"))
                 {
-                    Directory.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR", true);
+                    Directory.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR1", true);
                     Thread.Sleep(2000);
                 }
 
@@ -1250,20 +1250,28 @@ namespace WICR_Estimator.ViewModels
         {
             return true;
         }
-        
+
         #region GoogleDataUpdateCheck
         private DateTime GetLastUpdateDate()
         {
             DateTime updateTime;
             string txtVal = string.Empty;
             string filePath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\WICR\\";
-                //+ "LastUpdatedOn.txt";
+            //+ "DBLastUpdatedOn.txt";
             if (!Directory.Exists(filePath))
             {
                 return DateTime.Parse("01-01-1900");
             }
             else
-                txtVal= System.IO.File.ReadAllText(Path.Combine(filePath, "LastUpdatedOn.txt"));
+            {
+                if (File.Exists(Path.Combine(filePath, "DBLastUpdatedOn.txt")))
+                {
+                    txtVal = System.IO.File.ReadAllText(Path.Combine(filePath, "DBLastUpdatedOn.txt"));
+                }
+                else
+                    return DateTime.Parse("01-01-1900");
+            }
+               
 
             DateTime.TryParse(txtVal,out updateTime);
             return updateTime;
@@ -1282,7 +1290,7 @@ namespace WICR_Estimator.ViewModels
                         System.IO.Directory.CreateDirectory(folderPath);
                     }
                     Thread.Sleep(200);
-                    System.IO.File.WriteAllText(Path.Combine(folderPath, "LastUpdatedOn.txt"), date.ToString());
+                    System.IO.File.WriteAllText(Path.Combine(folderPath, "DBLastUpdatedOn.txt"), date.ToString());
                 }
                 catch (Exception ex)
                 {
@@ -2231,10 +2239,13 @@ namespace WICR_Estimator.ViewModels
             //WaitWindow ww = new WaitWindow();
             //ww.Show();
             OnTaskStarted("Creating WICR Estimate Summary File.");
+            Thread.Sleep(1000);
+            
             Excel.Workbook summaryWb;
             Excel.Worksheet ws;
             try
             {
+                 UpdateTaskStatus("Creating WICR Estimate Summary Template File.");
                 if (exlApp == null)
                 {
                     exlApp = new Microsoft.Office.Interop.Excel.Application();
@@ -2302,10 +2313,11 @@ namespace WICR_Estimator.ViewModels
                 saveFileDialog.FilterIndex = 0;
                 saveFileDialog.RestoreDirectory = true;
                 saveFileDialog.CreatePrompt = false;
-                if (JobCreationDate != null)
-                {
-                    saveFileDialog.FileName = JobName + " " + string.Format(JobCreationDate.Value.ToShortDateString(), "mm-dd-yyyy");
-                }
+                
+                //if (JobCreationDate != null)
+                //{
+                //    saveFileDialog.FileName = JobName + " " + string.Format(JobCreationDate.Value.ToShortDateString(), "mm-dd-yyyy");
+                //}
                 
                 saveFileDialog.Title = "Save WICR Estimator Summary";
 

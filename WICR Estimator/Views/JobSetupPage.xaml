@@ -166,7 +166,7 @@
                               materialDesign:ShadowAssist.ShadowDepth="Depth3"
                               IsChecked="{Binding IsNewProject,
                         UpdateSourceTrigger=PropertyChanged}"
-                              Content="Is a New Project?"/>
+                              Content="Is a New Construction Project?"/>
                
                 <materialDesign:Card UniformCornerRadius="5" Padding="10,5,10,10"
                                      Background="{StaticResource PrimaryHueDarkBrush}"
