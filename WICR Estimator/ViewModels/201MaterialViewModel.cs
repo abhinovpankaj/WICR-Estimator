@@ -221,7 +221,10 @@ namespace WICR_Estimator.ViewModels
                     || item.Name == "Stucco Material Remove and replace (LF)"
                     || item.Name == "PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL WITH SAND BROADCAST")
                 {
-                    qtyList.Add(item.Name, item.Qty);
+                    if (!qtyList.ContainsKey(item.Name))
+                    {
+                        qtyList.Add(item.Name, item.Qty);
+                    }                   
                 }
 
             }
@@ -239,16 +242,16 @@ namespace WICR_Estimator.ViewModels
             var sysMat = GetSystemMaterial(materialNames);
 
             //remove GC 250 System Material // Not required for DB
-            //List<SystemMaterial> mat250 = sysMat.Where(x => x.Name.Contains("250")).ToList();
-            //foreach (SystemMaterial item in mat250)
-            //{
-            //    sysMat.Remove(item);
-            //}
+            List<SystemMaterial> mat250 = sysMat.Where(x => x.Name.Contains("250")).ToList();
+            foreach (SystemMaterial item in mat250)
+            {
+                sysMat.Remove(item);
+            }
 
             #region  Update Special Material Pricing and QTY on JobSetup change
             if (hasSetupChanged)
             {
-                for (int i = 0; i < SystemMaterials.Count; i++)
+                for (int i = 0; i < sysMat.Count; i++)
                 {
 
                     double sp = SystemMaterials[i].SpecialMaterialPricing;

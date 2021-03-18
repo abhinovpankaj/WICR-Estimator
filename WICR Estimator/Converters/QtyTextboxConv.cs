@@ -44,7 +44,7 @@ namespace WICR_Estimator.Converters
                     case "UNIVERSAL OUTLETS":
                     case "TOTAL DRAIN MINUS BOTTOM TD 1000(IN LIEU OF ROCK & PIPE)":
                     case "SIDE OUTLET 6\"":
-                    case "MIRADRAIN HC 1\" DRAIN - PUNCHED 12\" X 100'  (QUICK DRAIN)":
+                    case "MIRADRAIN HC 1\" DRAIN-PUNCHED 12\" X 100'  (QUICK DRAIN)":
                     case "2 COATS VULKEM 350R/951  @ WALL (LF DECK TO WALL)":
                     case "ENTER # OF DECKS TO WATER TEST \"NO DAM'S NEEDED\"":
                     case "ADD LF FOR DAMMING @ DRIP EDGE":

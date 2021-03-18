@@ -20,7 +20,15 @@
         <conv:UnitTextboxConverter x:Key="unitTextboxConv"/>
         <conv:HasFieldEdited x:Key="HasFieldEdited"/>
         <conv:IsNull x:Key="isNull"/>
-        
+        <Style x:Key = "FlipperStyle" TargetType = "materialDesign:Flipper"  >
+            <Setter Property = "Height" Value = "80" />
+            <Style.Triggers>
+                <Trigger Property = "IsFlipped" Value = "True">
+                    <Setter Property = "Height" Value = "500" />
+                </Trigger>
+                
+            </Style.Triggers>
+        </Style>
         <Style x:Key="cbTB" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource MaterialDesignAccentCheckBox}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding ElementName=qtyTb, Path=IsEnabled,TargetNullValue=false}" Value="True">
@@ -100,14 +108,14 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width=".7*"/>
             
-            <ColumnDefinition Width=".3*"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         
-        <ScrollViewer VerticalScrollBarVisibility="Auto"                       
+        <!--<ScrollViewer VerticalScrollBarVisibility="Auto"                       
                       HorizontalScrollBarVisibility="Auto"
                       HorizontalAlignment="Left"
-                      Height="650"
-                      VerticalAlignment="Top">
+                      Opacity="1"
+                      VerticalAlignment="Top">-->
             <DataGrid AutoGenerateColumns="False" 
                   
                   Name="MaterialGrid" 
@@ -291,7 +299,7 @@
                 </DataGrid.Columns>
 
             </DataGrid>
-        </ScrollViewer>
+        <!--</ScrollViewer>-->
 
         
         <ScrollViewer Grid.Column="2"
@@ -299,21 +307,21 @@
                       HorizontalScrollBarVisibility="Hidden">
             <Grid >
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
 
-                <materialDesign:Flipper Grid.Row="1" Margin="5,180,0,0" IsFlipped="True"
-                    >
-                   
+                <!--<materialDesign:Flipper Grid.Row="0" Margin="5,10,5,10" IsFlipped="True"
+                    VerticalAlignment="Top" x:Name="OtherCost" Style="{StaticResource FlipperStyle}">
+                    
                     <materialDesign:Flipper.FrontContent>
-                        <Grid Margin="5,50,10,50" Height="50">
-                            <Button HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"
-                        Height="40"
+                        <Grid Margin="10,50,10,50" >
+                            <Button HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                            
+                                Height="40"
                         ToolTip="Click to Add Other Costs"
                         Command="{x:Static materialDesign:Flipper.FlipCommand}"
                         >
@@ -336,30 +344,39 @@
 
                             </Button>
                         </Grid>
-                    </materialDesign:Flipper.FrontContent>
-                    <materialDesign:Flipper.BackContent >
-                        <Grid Margin="5" >
+                    </materialDesign:Flipper.FrontContent>-->
+                    <!--<materialDesign:Flipper.BackContent >-->
+                        <Grid Margin="2" >
                             <Grid.RowDefinitions>
                                 <RowDefinition      Height="Auto" />
                                 <RowDefinition      Height="*" />
                             </Grid.RowDefinitions>
                             <materialDesign:ColorZone   Mode="Accent"
                                                 
-                                            Padding="4">
+                                            Padding="10">
                                 <StackPanel   Orientation="Horizontal">
-                                    <Button  Style="{StaticResource MaterialDesignToolForegroundButton}"
+                                    <!--<Button  Style="{StaticResource MaterialDesignToolForegroundButton}"
                                             Command="{x:Static materialDesign:Flipper.FlipCommand}"
                                             HorizontalAlignment="Left">
                                         <materialDesign:PackIcon
                                         Kind="ArrowLeft"
                                         HorizontalAlignment="Right" />
-                                    </Button>
+                                    </Button>-->
                                     <TextBlock
                                         Margin="8 0 0 0"
                                         VerticalAlignment="Center">
-                                        Add Other Costs
+                                        Other Costs
                                     </TextBlock>
-                                </StackPanel>
+                            <TextBlock x:Name="TotalOCExtension"
+                                    IsEnabled="False"   
+                                       FontWeight="Bold"
+                                    Margin="45,0,0,0"    
+                                       HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource  MaterialDesignSubtitle1TextBlock}"                
+                                    Text="{Binding TotalOCExtension, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
+                        </StackPanel>
+                        
                             </materialDesign:ColorZone>
 
                             <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Left"
@@ -490,13 +507,13 @@
                             </StackPanel>
 
                         </Grid>
-                    </materialDesign:Flipper.BackContent>
-                </materialDesign:Flipper>
+                    <!--</materialDesign:Flipper.BackContent>
+                </materialDesign:Flipper>-->
                 <materialDesign:Flipper Margin="5,20,5,10"
-                                        IsFlipped="True"
+                                        
+                                        IsFlipped="True" 
                     VerticalContentAlignment="Center"             
-                    Grid.Row="0"
-                    Style="{DynamicResource MaterialDesignCardFlipper}"
+                    Grid.Row="1" Style="{DynamicResource MaterialDesignCardFlipper}"
                     HorizontalAlignment="Stretch">
                     <materialDesign:Flipper.FrontContent >
                         <Grid Margin=" 10,50,10,50" HorizontalAlignment="Stretch">

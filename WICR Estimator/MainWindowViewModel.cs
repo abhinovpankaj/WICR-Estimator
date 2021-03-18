@@ -154,32 +154,50 @@ namespace WICR_Estimator
             //    await controller.CloseAsync();
 
             //} 
-            if (sender.ToString().Length>0)
+            try
             {
-                ShowMessage(sender.ToString());
-                if (sender.ToString().Contains("Failed to Login"))
+                if (sender.ToString().Length > 0)
                 {
-                    loginFailed = true;
+                    ShowMessage(sender.ToString());
+                    if (sender.ToString().Contains("Failed to Login"))
+                    {
+                        loginFailed = true;
+                    }
                 }
+
+                if (controller?.IsOpen == true)
+                {
+                    await controller.CloseAsync();
+
+                }
+                else
+                    tmr = SetInterval(isControllerOpen, 2000);
+            }
+            catch (Exception)
+            {
+
+                
             }
             
-            if (controller?.IsOpen==true)
-            {
-                await controller.CloseAsync();
-
-            }
-            else
-                tmr=SetInterval(isControllerOpen, 2000);
         }
 
         private async void isControllerOpen()
         {
-            if (controller?.IsOpen == true)
+            try
             {
-                tmr.Stop();
-                await controller.CloseAsync();
+                if (controller?.IsOpen == true)
+                {
+                    tmr.Stop();
+                    await controller.CloseAsync();
+
+                }
+            }
+            catch (Exception)
+            {
+
                 
             }
+            
         }
         #region Timer to close processing Window
         private System.Timers.Timer tmr;
@@ -293,6 +311,59 @@ namespace WICR_Estimator
          
         }
         
+        private DelegateCommand _downloadFileCommand;
+        public DelegateCommand DownloadFileCommand
+        {
+            get
+            {
+                if (_downloadFileCommand == null)
+                {
+                    _downloadFileCommand = new DelegateCommand(DownloadFile, CanDownloadFile);
+                }
+
+                return _downloadFileCommand;
+            }
+        }
+
+        private bool CanDownloadFile(object obj)
+        {
+            return true;
+        }
+
+        private void DownloadFile(object obj)
+        {
+            var dir = AppDomain.CurrentDomain.BaseDirectory;
+            var filePath=dir + "WICR_Pricing.xlsm";
+            System.Diagnostics.Process.Start(filePath);
+        }
+
+        private DelegateCommand _bulkUpdateCommand;
+        public DelegateCommand BulkUpdateCommand
+        {
+            get
+            {
+                if (_bulkUpdateCommand == null)
+                {
+                    _bulkUpdateCommand = new DelegateCommand(BulkUpdate, canUpdateBulk);
+                }
+
+                return _bulkUpdateCommand;
+            }
+        }
+
+        private bool canUpdateBulk(object obj)
+        {
+            return true;
+        }
+
+        private void BulkUpdate(object obj)
+        {
+            OnTaskStarted("Starting Bulk Update...");
+            ExcelService.ReadPriceExcel();
+            
+            //UpdateDBPriceVersion(null);
+            OnTaskCompleted("Prices Updated in DB.");
+        }
 
         public DelegateCommand UpdatePriceVersionCommand
         {
@@ -882,6 +953,8 @@ namespace WICR_Estimator
                 ApplyLatestPrice = PriceVersion.ApplyPrice;
             }
         }
+
+
     }
     
 

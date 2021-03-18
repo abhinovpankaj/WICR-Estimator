@@ -179,7 +179,7 @@
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBox Tag="{Binding Units, Converter={StaticResource HasFieldEdited }}"
-                                Text="{Binding Units,UpdateSourceTrigger=LostFocus}"
+                                Text="{Binding Units,UpdateSourceTrigger=PropertyChanged}"
                                      IsEnabled="{Binding Name,Converter={StaticResource textboxConv}}"
                                          Style="{StaticResource editableTextbox }">
 

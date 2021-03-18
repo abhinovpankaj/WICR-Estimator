@@ -3,7 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+      
       xmlns:local="clr-namespace:WICR_Estimator.Views"
       xmlns:conv="clr-namespace:WICR_Estimator.Converters"
       xmlns:System="clr-namespace:System;assembly=mscorlib"
@@ -66,7 +66,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
             <Setter Property="Template">
                 <Setter.Value>
                      <ControlTemplate>
-                        <Expander Style="{StaticResource   MaterialDesignExpander}" Margin="-10,5,0,0" >
+                        <Expander Style="{StaticResource   MaterialDesignExpander}" Margin="-0,5,0,0" >
                             <!--<i:Interaction.Behaviors>
                                 <behaviors:PersistGroupExpandedStateBehavior GroupName="{Binding Name}" />
                             </i:Interaction.Behaviors>-->
@@ -334,7 +334,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                                     </Button.Content>
                                 </Button>
 
-                                <Button x:Name="refreshGData"
+                                <!--<Button x:Name="refreshGData"
                                 Command="{Binding RefreshGoogleData}">
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
@@ -344,7 +344,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                                        VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Button.Content>
-                                </Button>
+                                </Button>-->
                                 <Separator/>
                                 <CheckBox Content="Apply Latest Prices"
                                       Style="{StaticResource MaterialDesignFilterChipCheckBox}"

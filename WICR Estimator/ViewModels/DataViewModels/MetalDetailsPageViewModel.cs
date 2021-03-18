@@ -32,54 +32,56 @@ namespace WICR_Estimator.ViewModels.DataViewModels
     public class MetalDetailsPageViewModel : BaseViewModel, IPageViewModel
     {
         
-        public List<MetalVendor> Vendors { get; set; }
-        public List<MetalItemType  > MetalTypes { get; set; }
+        //public List<MetalVendor> Vendors { get; set; }
+        //public List<MetalItemType  > MetalTypes { get; set; }
 
+        public string VendorName { get; set; }
+        public string MetalType { get; set; }
         public string SelectedFactor { get; set; }
         public double UpdateFactor { get; set; }
 
-        public MetalVendor _selectedVendors;
-        public MetalVendor SelectedVendors
-        {
-            get
-            {
-                return _selectedVendors;
-            }
-            set
-            {
-                //if (_selectedVendors != value)
-                //{
-                    _selectedVendors = value;
-                    OnPropertyChanged("SelectedVendors");
-                    if (value!=null)
-                    {
-                        Vendors.First(x => x.VendorName == value.VendorName).IsSelected = !value.IsSelected;
-                    }
+        //public MetalVendor _selectedVendors;
+        //public MetalVendor SelectedVendors
+        //{
+        //    get
+        //    {
+        //        return _selectedVendors;
+        //    }
+        //    set
+        //    {
+        //        //if (_selectedVendors != value)
+        //        //{
+        //            _selectedVendors = value;
+        //            OnPropertyChanged("SelectedVendors");
+        //            if (value!=null)
+        //            {
+        //                Vendors.First(x => x.VendorName == value.VendorName).IsSelected = !value.IsSelected;
+        //            }
                     
-                //}
-            }
-        }
-        public MetalItemType _selectedMetalType;
-        public MetalItemType SelectedMetalType
-        {
-            get
-            {
-                return _selectedMetalType;
-            }
-            set
-            {
-                //if (_selectedMetalType != value)
-                //{
-                    _selectedMetalType = value;
-                    OnPropertyChanged("SelectedMetalType");
-                    if (value!=null)
-                    {
-                        MetalTypes.First(x => x.MetalType == value.MetalType).IsSelected = !value.IsSelected;
-                    }
+        //        //}
+        //    }
+        //}
+        //public MetalItemType _selectedMetalType;
+        //public MetalItemType SelectedMetalType
+        //{
+        //    get
+        //    {
+        //        return _selectedMetalType;
+        //    }
+        //    set
+        //    {
+        //        //if (_selectedMetalType != value)
+        //        //{
+        //            _selectedMetalType = value;
+        //            OnPropertyChanged("SelectedMetalType");
+        //            if (value!=null)
+        //            {
+        //                MetalTypes.First(x => x.MetalType == value.MetalType).IsSelected = !value.IsSelected;
+        //            }
                     
-                //}
-            }
-        }
+        //        //}
+        //    }
+        //}
 
         //private IEnumerable<MetalDB> MetalsFilterByProject;
 
@@ -155,16 +157,18 @@ namespace WICR_Estimator.ViewModels.DataViewModels
                         break;
                     
                 }
+                await HTTPHelper.PutMetalAsync(item.MetalId, item);
             }
+
             
-            var result = await HTTPHelper.PutMetalsAsync(filteredMetals);
-            if (result == null)
-            {
-                LastActionResponse = "Failed to save the data";
-            }
-            else
-                LastActionResponse = "Changes Saved Successfully."+ filteredMetals.Count() +" metals updated.";
-            OnTaskCompleted(LastActionResponse);
+            //var result = await HTTPHelper.PutMetalsAsync(filteredMetals);
+            //if (result == null)
+            //{
+            //    LastActionResponse = "Failed to save the data";
+            //}
+            //else
+            //    LastActionResponse = "Changes Saved Successfully."+ filteredMetals.Count() +" metals updated.";
+            OnTaskCompleted("Changes Saved Successfully." + filteredMetals.Count() + " metals updated.");
         }
 
         private DelegateCommand _updateMetalCommand;
@@ -197,37 +201,25 @@ namespace WICR_Estimator.ViewModels.DataViewModels
 
         private void SearchMetal(object obj)
         {
+            IEnumerable<MetalDB> query = Metals;
             if (SearchText != null)
             {
-                var filtered = Metals.Where(x => x.MetalName.ToUpper().Contains(SearchText.ToUpper()));
-
-                //var selectedVen = Vendors.Where(x => x.IsSelected==true);
-
-                //if (selectedVen!=null)
-                //{
-                //    List<MetalDB> tempFilter=new List<MetalDB>();
-                //    foreach (var item in selectedVen)
-                //    {
-                //        var temp  = filtered.Where(x => x.Vendor == item.VendorName).ToList();
-                //        if (temp!=null)
-                //        {
-                //            tempFilter = tempFilter.Add(temp);
-                //        }
-
-                //    }
-
-                //}
-
-                //var selectedtype = MetalTypes.Where(x => x.IsSelected==true);
-                //if (selectedtype != null)
-                //{
-                //    foreach (var item in selectedtype)
-                //    {
-                //        filtered = filtered.Where(x => x.MetalType ==item.MetalType);
-                //    }
-                //}
-                FilteredSystemMetals = filtered.ToObservableCollection();
+                query = Metals.Where(x => x.MetalName.ToUpper().Contains(SearchText.ToUpper()));               
             }
+
+            if (VendorName != null)
+            {
+                query = query.Where(x => x.Vendor == VendorName);
+            }
+
+            
+            if (MetalType != null)
+            {
+
+                query = query.Where(x => x.MetalType == MetalType);
+
+            }
+            FilteredSystemMetals = query.ToObservableCollection();
         }
 
         private bool CanSearch(object obj)
@@ -243,8 +235,18 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             {
                 SearchMetal(null);
             }
+            if (VendorName!=null)
+            {
+                return true;
+            }
+            else if (MetalType!=null)
+            {
+                return true;
 
-            return false;
+            }
+            
+
+                return false;
 
         }
 

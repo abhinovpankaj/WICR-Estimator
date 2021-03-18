@@ -381,6 +381,8 @@ namespace WICR_Estimator.ViewModels
 
                 if (item != null)
                 {
+                    
+
                     item.SMSqftV = item.Qty;                   
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate,item.SMSqftV,item.VerticalProductionRate);
 

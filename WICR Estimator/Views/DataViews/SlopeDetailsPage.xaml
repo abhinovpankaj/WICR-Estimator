@@ -235,11 +235,11 @@
                                                                        Width="200"
                                                                        IsReadOnly="True"
                                                         Binding="{ Binding ProjectId, Converter={StaticResource nameConv}}"/>
-                                    <materialDesign:DataGridTextColumn Header="Labor Rate"
+                        <materialDesign:DataGridTextColumn Header="Labor Rate" IsReadOnly="True"
                                                                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
                                                         Binding="{ Binding LaborRate}"/>
-                                    <materialDesign:DataGridTextColumn Header="Cost Per Mix"
+                        <materialDesign:DataGridTextColumn Header="Cost Per Mix" IsReadOnly="True"
                                                                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
                                                         Binding="{ Binding PerMixCost}"/>

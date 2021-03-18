@@ -91,6 +91,30 @@
                          Width="350"
                          Margin="100,10,10,10"
                          HorizontalAlignment="Left"/>
+            <StackPanel>
+                <TextBlock Margin="10" FontWeight="SemiBold"
+                       Text="Metal Material Type"/>
+                <ComboBox Text="{Binding MetalType,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left"
+                          Margin="10,0,0,10"
+                          
+                          Width="180">
+                    <ComboBoxItem Content="16oz Copper"/>
+                    <ComboBoxItem Content="24ga. Galvanized Primed Steel" 
+                                  IsSelected="True"/>
+                    <ComboBoxItem Content="26 ga. Type 304 Stainless Steel"/>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel>
+                <TextBlock  Margin="10" FontWeight="SemiBold" 
+                       Text="Metal Vendor Name"/>
+                <ComboBox Width="180" HorizontalAlignment="Left"
+                          Margin="10,0,0,10"
+                          Text="{Binding VendorName,UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBoxItem Content="Chivon"/>
+                    <ComboBoxItem Content="Thunder Bird"/>
+                </ComboBox>
+                
+            </StackPanel>
             
             <Button Margin="30,10" HorizontalAlignment="Right"
                                 Command="{Binding SearchCommand}">
@@ -143,15 +167,15 @@
                             <materialDesign:DataGridTextColumn Header="Metal Name"
                                                                IsReadOnly="True"
                                                         Binding="{ Binding MetalName}"/>
-                            <materialDesign:DataGridTextColumn Header="Units"
+                            <materialDesign:DataGridTextColumn Header="Units" IsReadOnly="True"
                                                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
                                                         Binding="{ Binding Units}"/>
-                            <materialDesign:DataGridTextColumn Header="Metal Price"
+                            <materialDesign:DataGridTextColumn Header="Metal Price" IsReadOnly="True"
                                                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
                                                         Binding="{ Binding MetalPrice}"/>
-                            <materialDesign:DataGridTextColumn Header="Prouction Rate"
+                            <materialDesign:DataGridTextColumn Header="Prouction Rate" IsReadOnly="True"
                                                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
                                                         Binding="{ Binding ProductionRate}"/>

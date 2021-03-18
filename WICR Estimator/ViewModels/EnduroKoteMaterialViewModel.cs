@@ -279,7 +279,7 @@ namespace WICR_Estimator.ViewModels
             switch (materialName)
             {
                 case "Select Y for protection coat over membrane below tile(GU80-1 TOP COAT)":
-                case "Stair Nosing":
+                
                 case "Extra stair nosing lf":
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
                 case "Stucco Material Remove and replace (LF)":
@@ -289,6 +289,8 @@ namespace WICR_Estimator.ViewModels
                 case "Staples (3/4 Inch Crown, Box of 13,500)":
                 case "Base Coat EKC Cementitious Mix":
                     return !IsSystemOverConcrete;
+                case "Stair Nosing":
+                    return riserCount > 0 ? true : false;
                 default:
                     return  true;
             }
@@ -386,7 +388,7 @@ namespace WICR_Estimator.ViewModels
             foreach (SystemMaterial item in SystemMaterials)
             {
                 if (item.Name== "2.5 Galvanized Lathe (18 s.f.) no less than 12 per sq ft."|| item.Name == "Base Coat EKC Cementitious Mix"
-                    || item.Name == "Staples (3/4 Inch Crown, Box of 13,500)")
+                    || item.Name == "Staples (3/4 Inch Crown, Box of 13,500)" || item.Name=="Stair Nosing")
                 {
                     item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
                 }

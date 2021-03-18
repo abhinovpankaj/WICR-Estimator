@@ -77,8 +77,9 @@ namespace WICR_Estimator.Views
                     
                     if (prj != null)
                     {
-                        //CommitTables(tabControl);
+                        
                         prj.MaterialViewModel.CalculateCost(null);
+                        //prj.MaterialViewModel.UpdateUILaborCost();
                         prj.ProjectJobSetUp.TotalSalesCostTemp = prj.MaterialViewModel.TotalSale;
                     }
 
@@ -89,6 +90,7 @@ namespace WICR_Estimator.Views
                     if (prj != null)
                     {
                         prj.MaterialViewModel.CalculateCost(null);
+                        //prj.MaterialViewModel.UpdateUILaborCost();
                         prj.ProjectJobSetUp.TotalSalesCostTemp = prj.MaterialViewModel.TotalSale;
                     }
 

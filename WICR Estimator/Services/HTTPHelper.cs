@@ -362,7 +362,7 @@ namespace WICR_Estimator.Services
 
         #region Metal
 
-        internal async static Task<string> PutMetalsAsync(IEnumerable<MetalDB> metals)
+        private async static Task<string> PutMetalsAsync(IEnumerable<MetalDB> metals)
         {
             using (var client = new HttpClient())
             {

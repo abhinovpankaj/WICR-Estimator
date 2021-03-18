@@ -15,7 +15,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
 
         //public static event EventHandler TaskStarted;
         //public static event EventHandler TaskCompleted;
-
+        public double SelectedLaborsFactorNewValue { get; set; }
         private IEnumerable<LaborFactorDB> LaborFactorsFilterByProject;
         private bool allLaborSelected;
         public int SelectedProjectCount { get; set; }
@@ -121,7 +121,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
 
         private async void UpdateLaborFactor(object obj)
         {
-            OnTaskStarted("Updating Labor Factor for:" + SelectedLaborFactor.Name);
+            //OnTaskStarted("Updating Labor Factor for:" + SelectedLaborFactor.Name);
 
             var result  = await HTTPHelper.PutLaborFactorAsync(SelectedLaborFactor.LaborId, SelectedLaborFactor);
             if (result == null)
@@ -133,6 +133,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
             {
                 LastActionResponse = "Changes Saved Successfully.";
                 SelectedLaborFactor = result;
+                OnPropertyChanged("SelectedLaborFactor");
                 OnTaskCompleted(LastActionResponse);
             }
             

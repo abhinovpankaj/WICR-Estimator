@@ -246,7 +246,9 @@
                                     <materialDesign:DataGridTextColumn Header="Factor Value"
                                                                                 ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
     EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
-                                                    Binding="{ Binding FactorValue}"/>
+                                                    Binding="{ Binding FactorValue}"
+                                                                       IsReadOnly="True"
+                                                                       />
 
 
                                 </DataGrid.Columns>
@@ -361,8 +363,8 @@
                                         <materialDesign:DataGridTextColumn Header="Factor Value"
                                                                                  ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
-                                                        Binding="{ Binding Value}"/>
-                                    <materialDesign:DataGridTextColumn Header="Project Name"
+                                                        Binding="{ Binding Value}" IsReadOnly="True"/>
+                                <materialDesign:DataGridTextColumn Header="Project Name" IsReadOnly="True"
                                                                                  ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
                                                         Binding="{ Binding ProjectId,Converter={StaticResource nameconv}}"/>
@@ -371,7 +373,10 @@
                                 </DataGrid>
                             <!--</ScrollViewer>-->
                         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
-                            
+                            <TextBox Text="{Binding SelectedLaborsFactorNewValue}"
+                                        Margin="2" VerticalAlignment="Center"
+                                        materialDesign:HintAssist.Hint="New value"
+                                    HorizontalAlignment="Left" Width="100"/>
                             <Slider Maximum="100" Minimum="-50"
                                 Foreground="Black"  TickFrequency="0.05"
                                 Width="100" Value="{Binding UpdateFactor}"

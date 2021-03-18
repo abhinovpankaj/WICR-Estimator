@@ -135,7 +135,7 @@ namespace WICR_Estimator.ViewModels
             //CalculateAllMaterial();
         }
 
-        bool prevStatus;
+        bool prevStatus=true;
         public override bool getCheckboxCheckStatus(string materialName)
         {
             switch (materialName)

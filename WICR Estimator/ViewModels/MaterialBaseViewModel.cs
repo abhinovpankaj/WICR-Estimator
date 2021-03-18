@@ -1655,11 +1655,11 @@ namespace WICR_Estimator.ViewModels
             calculateLaborTotals();
 
             calculateLaborHrs();
-            calculateLaborTotals();
+            
             
             CalculateCostBreakup();
-            
-            
+            calculateLaborTotals();
+
             CalculateLaborMinCharge(false);
             calculateLaborTotalsWithMinLabor();
             populateCalculation();
@@ -1668,7 +1668,7 @@ namespace WICR_Estimator.ViewModels
                 BaseViewModel.IsDirty = true;
                 previousSale = TotalSale;
             }
-
+            
         }
 
         
@@ -1717,7 +1717,7 @@ namespace WICR_Estimator.ViewModels
                 dbData = js.dbData;
             }
             
-            FetchMaterialValuesAsync(true);
+           FetchMaterialValuesAsync(true);
             
             CalculateCost(null);
             
@@ -1907,6 +1907,7 @@ namespace WICR_Estimator.ViewModels
                         }
                         else
                         {
+
                             smCollection.Add(createSMObjectDB(key, materialNames[key]));
 
                         }
@@ -1926,7 +1927,16 @@ namespace WICR_Estimator.ViewModels
                     }
                     else
                     {
-                        smCollection.Add(createSMObjectDB(key, materialNames[key]));
+                        var sm = createSMObjectDB(key, materialNames[key]);
+                        smCollection.Add(sm);
+                        if (key == "RP FABRIC 10 INCH WIDE X (300 LF)")
+                        {
+                            sm.VerticalProductionRate = 100 * (1 + prPerc);
+                            sm.VerticalSqft = deckPerimeter;
+                            sm.Hours = deckPerimeter / sm.VerticalProductionRate;
+                            sm.LaborExtension = (sm.SetupMinCharge + sm.Hours) * laborRate;
+                            sm.LaborUnitPrice = sm.LaborExtension / (riserCount + totalSqft);
+                        }
 
                     }
 
@@ -1939,7 +1949,7 @@ namespace WICR_Estimator.ViewModels
             
             
             
-            return smCollection;
+                return smCollection;
 
         }
         
@@ -3612,8 +3622,14 @@ namespace WICR_Estimator.ViewModels
 
         public double  TotalLaborWithoutDrive { get; set; }
 
-        private void UpdateUILaborCost()
+        public void UpdateUILaborCost()
         {
+
+            OnPropertyChanged("AllTabsLaborTotal");
+            OnPropertyChanged("AllTabsMaterialTotal");
+            OnPropertyChanged("AllTabsFreightTotal");
+            OnPropertyChanged("AllTabsSubContractTotal");
+            OnPropertyChanged("TotalSetupTimeLabor");
             OnPropertyChanged("TotalLaborWithoutDrive");
             OnPropertyChanged("TotalLaborUnitPrice");
             OnPropertyChanged("TotalLaborExtension");
@@ -3623,11 +3639,6 @@ namespace WICR_Estimator.ViewModels
             OnPropertyChanged("TotalSystemPrice");
             OnPropertyChanged("TotalSale");
 
-            OnPropertyChanged("AllTabsLaborTotal");
-            OnPropertyChanged("AllTabsMaterialTotal");
-            OnPropertyChanged("AllTabsFreightTotal");
-            OnPropertyChanged("AllTabsSubContractTotal");
-            OnPropertyChanged("TotalSetupTimeLabor");
         }
         private double getTotals(double laborCost, double materialCost, double freightCost, double subcontractLabor)
         {

@@ -49,7 +49,7 @@ namespace WICR_Estimator
         private bool isClosingConfirmed;
         private async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (ViewModels.HomeViewModel.MyselectedProjects!=null)
+            if (ViewModels.HomeViewModel.MyselectedProjects!=null && ViewModels.BaseViewModel.IsDirty == true)
             {
                 if (this.isClosingConfirmed)
                 {

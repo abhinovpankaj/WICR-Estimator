@@ -530,6 +530,7 @@ namespace WICR_Estimator.ViewModels
             if (dbData!=null)
             {
                 deductionOnLargeJob = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Deduct on Labor for large jobs").Value;
+                Nails = dbData.MetalDBData.FirstOrDefault(x => x.MetalName == "Nails, caulk + overage on metal").ProductionRate;
             }
             CalculateCost(null);                      
         }
@@ -829,8 +830,17 @@ namespace WICR_Estimator.ViewModels
             ObservableCollection<Metal> met = new ObservableCollection<Metal>();
             met.Add(new Metal("L - METAL / FLASHING", "4X6", getMetalPR("L-Metal/Flashing 4'X6''"), laborRate, 0, getMetalMP("L-Metal/Flashing 4'X6''"), false));
             met.Add(new Metal("DRIP EDGE METAL", "2X4", getMetalPR("Drip Edge Metal 2\" x 4\""), laborRate, 0, getMetalMP("Drip Edge Metal 2\" x 4\""), false));
-            met.Add(new Metal("STAIR METAL", "4X6", getMetalPR("Stair Metal 4X6"), laborRate, getUnits(0), getMetalMP("Stair Metal 4X6"), true));
-            met.Add(new Metal("STAIR METAL", "3X3", getMetalPR("Stair Metal 3X3"), laborRate, getUnits(1), getMetalMP("Stair Metal 3X3"), true));
+            if (type=="")
+            {
+                met.Add(new Metal("STAIR METAL", "4X6", getMetalPR("Stair Metal 4X6"), laborRate, getUnits(0), getMetalMP("Stair Metal 4X6"), true));
+                met.Add(new Metal("STAIR METAL", "3X3", getMetalPR("Stair Metal 3X3"), laborRate, getUnits(1), getMetalMP("Stair Metal 3X3"), true));
+            }
+            else
+            {
+                met.Add(new Metal("STAIR METAL ", "4X6", getMetalPR("Stair Metal 4X6"), laborRate, 0, getMetalMP("Stair Metal 4X6"), true));
+                met.Add(new Metal("STAIR METAL ", "3X3", getMetalPR("Stair Metal 3X3"), laborRate, 0, getMetalMP("Stair Metal 3X3"), true));
+            }
+            
             met.Add(new Metal("DOOR SADDLES", "(4 ft.)", getMetalPR("Door Saddles (4 Ft.)"), laborRate, 0, getMetalMP("Door Saddles (4 Ft.)"), false));
             met.Add(new Metal("DOOR SADDLES", "(6 ft.)", getMetalPR("Door Saddles (6Ft)"), laborRate, 0, getMetalMP("Door Saddles (6Ft)"), false));
             met.Add(new Metal("DOOR SADDLES", "(8 ft.)", getMetalPR("Door Saddles (8Ft)"), laborRate, 0, getMetalMP("Door Saddles (8Ft)"), false));
@@ -856,8 +866,17 @@ namespace WICR_Estimator.ViewModels
             met.Add(new AddOnMetal("L - METAL / FLASHING", "4X8", getMetalPR("L-Metal/Flashing 4'X8''"), laborRate, 0, getMetalMP("L-Metal/Flashing 4'X8''"), false));
             met.Add(new AddOnMetal("DRIP EDGE METAL", "4X4", getMetalPR("Drip Edge Metal 4\" x 4\""), laborRate, 0, getMetalMP("Drip Edge Metal 4\" x 4\""), false));
             met.Add(new AddOnMetal("DRIP EDGE METAL", "3X4", getMetalPR("Drip Edge Metal 3\" x 4\""), laborRate, 0, getMetalMP("Drip Edge Metal 3\" x 4\""), false));
-            met.Add(new AddOnMetal("STAIR METAL", "4X10", getMetalPR("Stair Metal 4\" x 10\""), laborRate, getUnits(0), getMetalMP("Stair Metal 4\" x 10\""), true));
-            met.Add(new AddOnMetal("STAIR METAL", "4X8", getMetalPR("Stair Metal 4\" x 8\""), laborRate, getUnits(0), getMetalMP("Stair Metal 4\" x 8\""), true));
+            if (type=="")
+            {
+                met.Add(new AddOnMetal("STAIR METAL", "4X10", getMetalPR("Stair Metal 4\" x 10\""), laborRate, getUnits(0), getMetalMP("Stair Metal 4\" x 10\""), true));
+                met.Add(new AddOnMetal("STAIR METAL", "4X8", getMetalPR("Stair Metal 4\" x 8\""), laborRate, getUnits(0), getMetalMP("Stair Metal 4\" x 8\""), true));
+            }
+            else
+            {
+                met.Add(new AddOnMetal("STAIR METAL ", "4X10", getMetalPR("Stair Metal 4\" x 10\""), laborRate, 0, getMetalMP("Stair Metal 4\" x 10\""), true));
+                met.Add(new AddOnMetal("STAIR METAL ", "4X8", getMetalPR("Stair Metal 4\" x 8\""), laborRate, 0, getMetalMP("Stair Metal 4\" x 8\""), true));
+            }
+            
             if(type=="")
                 met.Add(new AddOnMetal("Open End Stair Metal", "(Set of 2 L&R)", getMetalPR("Open End Stair Metal (Set of 2 L&R)"), laborRate, 0, getMetalMP("Open End Stair Metal (Set of 2 L&R)"), false));//Added missed metal ,as per mail on 12th Sept 2019.
             

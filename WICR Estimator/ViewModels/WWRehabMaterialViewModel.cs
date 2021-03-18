@@ -40,7 +40,11 @@ namespace WICR_Estimator.ViewModels
                 }
 
             }
-            
+            if (materialNames == null)
+            {
+                materialNames = new Dictionary<string, string>();
+                FillMaterialList();
+            }
             var sysMat = GetSystemMaterial(materialNames);
 
             if (hasSetupChanged)

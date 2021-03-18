@@ -11,7 +11,7 @@
         xmlns:myViews="clr-namespace:WICR_Estimator.Views"
         xmlns:colorViews="clr-namespace:WICR_Estimator.Views.Palletes"
         xmlns:dbViews="clr-namespace:WICR_Estimator.Views.DataViews"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
         mc:Ignorable="d"
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
@@ -217,7 +217,31 @@
                                 <TextBlock Text="Labor Factors" Margin="10" FontSize="16"/>
                             </StackPanel>
                         </ListViewItem>
-                        <ListViewItem Height="120" Padding="0" x:Name="applyprice"
+                    <ListViewItem Height="45" Padding="0" x:Name="bulkUpdate"
+                                  IsEnabled="{Binding IsUserAdmin}">
+                        <StackPanel Orientation="Horizontal" Margin="25,0">
+                            <materialDesign:PackIcon Width="20" Foreground="{StaticResource SecondaryHueMidBrush}"
+                                                     Height="20"
+                                                     VerticalAlignment="Center"
+                                                     Margin="5"
+                                Kind="MicrosoftExcel"/>
+                            <Button Content="Bulk Update to DB" Margin="0,5,0,0"
+                                    Command="{Binding BulkUpdateCommand}"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem Height="45" Padding="0" x:Name="downloadPrices"
+                                  IsEnabled="{Binding IsUserAdmin}">
+                        <StackPanel Orientation="Horizontal" Margin="25,0">
+                            <materialDesign:PackIcon Width="20" Foreground="{StaticResource SecondaryHueMidBrush}"
+                                                     Height="20"
+                                                     VerticalAlignment="Center"
+                                                     Margin="5"
+                                Kind="Download"/>
+                            <Button Content="Get Bulk Prices" Margin="0,5,0,0"
+                                    Command="{Binding DownloadFileCommand}"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem Height="120" Padding="0" x:Name="applyprice"
                                       IsEnabled="{Binding IsUserAdmin}">
                         <Grid Margin="10,0,0,0" >
                             <Grid.RowDefinitions>

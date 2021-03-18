@@ -1173,8 +1173,8 @@ namespace WICR_Estimator.ViewModels
                     //if (dbValues == null)
                     //{
                         //Create dat file locally
-                        var dbData=await HTTPHelper.FetchFromDbAndSave(prj.OriginalProjectName);
-
+                     var dbData=await HTTPHelper.FetchFromDbAndSave(prj.OriginalProjectName);
+                    Thread.Sleep(500);
                      DataSerializerService.DSInstance.serializeDbData(dbData, prj.OriginalProjectName);
                     //}
                     UpdateTaskStatus("Wait! Refreshing data for Project : " + prj.OriginalProjectName);
@@ -1182,7 +1182,7 @@ namespace WICR_Estimator.ViewModels
                 catch (Exception ex)
                 {
 
-                    OnTaskCompleted("Prices Refresh Failed, project :"+prj.OriginalProjectName + "\n"+ex.Message);
+                    //OnTaskCompleted("Prices Refresh Failed, project :"+prj.OriginalProjectName + "\n"+ex.Message);
                 }
 
             }
