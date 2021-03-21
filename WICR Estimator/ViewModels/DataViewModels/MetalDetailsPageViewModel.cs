@@ -188,7 +188,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
 
         private async void UpdateMetal(object obj)
         {
-            OnTaskStarted("Updating Selected Metal factors.");
+            //OnTaskStarted("Updating Selected Metal factors.");
             SelectedMetal = await HTTPHelper.PutMetalAsync(SelectedMetal.MetalId, SelectedMetal);
             if (SelectedMetal!=null)
             {
