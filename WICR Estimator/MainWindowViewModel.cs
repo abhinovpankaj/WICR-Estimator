@@ -64,8 +64,6 @@ namespace WICR_Estimator
             IsUserLoggedIn = false;
             //WindowStyle = WindowStyle.SingleBorderWindow;
 
-            
-
         }
         public IDialogCoordinator dialogCoordinator;
         private MetroDialogSettings dialogSettings;
@@ -86,15 +84,14 @@ namespace WICR_Estimator
                     };
 
             // Add available pages
-
-            PageViewModels.Add(new HomeViewModel());
+            PageViewModels.Add(new PaletteSelectorViewModel());
             PageViewModels.Add(new ProjectViewModel(HomeViewModel.MyselectedProjects));
             PageViewModels.Add(new MaterialDetailsPageViewModel());
             PageViewModels.Add(new LoginPageViewModel());
             PageViewModels.Add(new SlopeDetailsPageViewModel());
             PageViewModels.Add(new MetalDetailsPageViewModel());
             PageViewModels.Add(new LaborFactorDetailsPageViewModel());
-            PageViewModels.Add(new PaletteSelectorViewModel());
+            PageViewModels.Add(new HomeViewModel());
             // Set starting page
             var filePath = Path.GetTempPath() + "wicrlogin.json";
             if (File.Exists(filePath))
@@ -111,7 +108,7 @@ namespace WICR_Estimator
                 Username = myObj.Username;
                 OnPropertyChanged("Username");
                 OnPropertyChanged("IsUserAdmin");
-                CurrentPageViewModel = PageViewModels[0];
+                CurrentPageViewModel = PageViewModels[7];
                 ProjectViewModel.IsAdminloggedIn = IsUserAdmin;
             }
             else
@@ -125,30 +122,25 @@ namespace WICR_Estimator
             BaseViewModel.UpdateTask += PageViewModel_UpdateTaskStatus;
 
             GetPriceVersion();
+ 
         }
-
-
-
+        
 
         #region EVENTS
 
-       
+
         private async void PageViewModel_TaskStarted(object sender, EventArgs e)
         {
-            try
-            {
+            //try
+            //{
+            
                 controller = await dialogCoordinator.ShowProgressAsync(this, "Wait",
                 sender.ToString(), false, dialogSettings);
                 controller.SetIndeterminate();
-            }
-            catch (System.InvalidOperationException ex)
-            {
+            //}
+            //catch (System.InvalidOperationException ex)
+            //{}
 
-                controller = await dialogCoordinator.ShowProgressAsync(this, "Wait",
-               sender.ToString(), false, dialogSettings);
-                controller.SetIndeterminate();
-            }
-            
         }
 
         private void PageViewModel_UpdateTaskStatus(object sender, EventArgs e)
@@ -310,7 +302,7 @@ namespace WICR_Estimator
         }
         #endregion
 
-            #region Properties / Commands
+        #region Properties / Commands
             //private static WindowStyle windowStyle;
         public static WindowStyle WindowStyle
         { get; set;
@@ -834,7 +826,7 @@ namespace WICR_Estimator
             {
                 
                 case "Estimates":
-                    ChangeViewModel(PageViewModels[0]);
+                    ChangeViewModel(PageViewModels[7]);
                     break;
                 case "ProjectList":
                     ChangeViewModel(PageViewModels[1]);
@@ -855,7 +847,7 @@ namespace WICR_Estimator
                     ChangeViewModel(PageViewModels[6]);
                     break;
                 case "ChangePalette":
-                    ChangeViewModel(PageViewModels[7]);
+                    ChangeViewModel(PageViewModels[0]);
                     break;
                 default:
                     break;
@@ -941,12 +933,13 @@ namespace WICR_Estimator
         
         private async void UpdateDBPriceVersion(object obj)
         {
-            
+            //OnTaskStarted("Pushing prices to DB");
             PriceVersion.LastUpdatedOn = DateTime.Now;
             
             PriceVersion.Version = PriceVersion.Version+.1;
             PriceVersion = await HTTPHelper.PutPriceVersionAsync(1, PriceVersion);
             OnPropertyChanged("PriceVersion");
+            OnTaskCompleted("Prices Pushed Successfully");
         }
 
         private async  void GetPriceVersion()

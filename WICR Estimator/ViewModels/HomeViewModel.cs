@@ -42,7 +42,7 @@ namespace WICR_Estimator.ViewModels
         public HomeViewModel()
         {
             FillProjects();
-            CheckPriceUpdate();
+            
             Project.OnSelectedProjectChange += Project_OnSelectedProjectChange;
             
             SaveEstimate = new DelegateCommand(SaveProjectEstimate, canSaveEstimate);
@@ -55,7 +55,11 @@ namespace WICR_Estimator.ViewModels
             ProjectTotals = new ProjectsTotal();
             LoginPageViewModel.OnLoggedIn += LoginPage_OnLoggedIn;
             //statusNotifier = new NotifyIcon();
-
+           
+            Task.Run(async () =>
+            {
+                CheckPriceUpdate();
+            });
         }
 
         private void LoginPage_OnLoggedIn(object sender, EventArgs e)
@@ -64,6 +68,7 @@ namespace WICR_Estimator.ViewModels
             
             PreparedBy = user.Username;
             OnPropertyChanged("PreparedBy");
+            
         }
 
         private async void CheckPriceUpdate()
@@ -1172,10 +1177,9 @@ namespace WICR_Estimator.ViewModels
                 {
                     UpdateTaskStatus("Wait! Refreshing data for Project : " + prj.OriginalProjectName);
                     var dbData=await HTTPHelper.FetchFromDbAndSave(prj.OriginalProjectName);
-                    Thread.Sleep(1000);
+                    //Thread.Sleep(1000);
                     DataSerializerService.DSInstance.serializeDbData(dbData, prj.OriginalProjectName);
-                    
-                   
+     
                 }
                 catch (Exception ex)
                 {
