@@ -127,7 +127,7 @@ namespace WICR_Estimator.ViewModels
             //CalculateLaborMinCharge(hasSetupChanged);
             //CalculateAllMaterial();
         }
-
+        private DBData dbData;
         public override void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {          
             base.JobSetup_OnJobSetupChange(sender, e);
@@ -142,6 +142,7 @@ namespace WICR_Estimator.ViewModels
                 {
                     SystemMaterials.Where(x => x.Name == "RP FABRIC 10 INCH WIDE X (300 LF)").First().IsMaterialChecked = false;
                 }
+                dbData = js.dbData;
             }
         }
         public override ObservableCollection<SystemMaterial> GetSystemMaterial()
@@ -477,8 +478,14 @@ namespace WICR_Estimator.ViewModels
 
                     if (mat.Name == "Resistite textured knockdown finish (smooth or regular per customer)Gray")
                     {
-
-                        SystemMaterial matWhite = getSMObject(7, "Resistite textured knockdown finish (smooth or regular per customer)White", "55 LB BAG");
+                        SystemMaterial matWhite;
+                        if (dbData == null)
+                        {
+                            matWhite = getSMObject(7, "Resistite textured knockdown finish (smooth or regular per customer)White", "55 LB BAG");
+                        }
+                        else
+                            matWhite = createSMObjectDB("Resistite textured knockdown finish (smooth or regular per customer)White", "55 LB BAG");
+                        
                         
                         mat.MaterialPrice = matWhite.MaterialPrice;
                         mat.Name = matWhite.Name;
@@ -497,7 +504,13 @@ namespace WICR_Estimator.ViewModels
                     }
                     if (mat.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)")
                     {
-                        SystemMaterial matWhite = getSMObject(9, "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)", "40 LB BAG");
+                        SystemMaterial matWhite;
+                        if (dbData==null)
+                        {
+                            matWhite = getSMObject(9, "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)", "40 LB BAG");
+                        }
+                        else
+                            matWhite = createSMObjectDB("CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)", "40 LB BAG");
 
                         mat.MaterialPrice = matWhite.MaterialPrice;
                         mat.Name = matWhite.Name;
@@ -535,7 +548,14 @@ namespace WICR_Estimator.ViewModels
 
                     if (mat.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)")
                     {
-                        SystemMaterial matWhite = getSMObject(8, "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)", "40 LB BAG");
+                        SystemMaterial matWhite;
+                        if (dbData==null)
+                        {
+                            matWhite = getSMObject(8, "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)", "40 LB BAG");
+                        }
+                        else
+                            matWhite = createSMObjectDB( "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)", "40 LB BAG");
+
 
                         mat.MaterialPrice = matWhite.MaterialPrice;
                         mat.Name = matWhite.Name;
@@ -553,7 +573,14 @@ namespace WICR_Estimator.ViewModels
                     }
                     if (mat.Name == "Resistite textured knockdown finish (smooth or regular per customer)White")
                     {
-                        SystemMaterial matWhite = getSMObject(6, "Resistite textured knockdown finish (smooth or regular per customer)Gray", "55 LB BAG");
+                        SystemMaterial matWhite;
+                        if (dbData==null)
+                        {
+                            matWhite = getSMObject(6, "Resistite textured knockdown finish (smooth or regular per customer)Gray", "55 LB BAG");
+                        }
+                        else
+                            matWhite = createSMObjectDB( "Resistite textured knockdown finish (smooth or regular per customer)Gray", "55 LB BAG");
+
 
                         mat.MaterialPrice = matWhite.MaterialPrice;
 
@@ -592,7 +619,13 @@ namespace WICR_Estimator.ViewModels
 
                     if (mat.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)")
                     {
-                        SystemMaterial matWhite = getSMObject(8, "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)", "40 LB BAG");
+                        SystemMaterial matWhite;
+                        if (dbData==null)
+                        {
+                            matWhite = getSMObject(8, "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)", "40 LB BAG");
+                        }
+                        else
+                            matWhite = createSMObjectDB( "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)", "40 LB BAG");
 
                         mat.MaterialPrice = matWhite.MaterialPrice;
 
@@ -610,7 +643,14 @@ namespace WICR_Estimator.ViewModels
                     }
                     if (mat.Name == "Resistite textured knockdown finish (smooth or regular per customer)White")
                     {
-                        SystemMaterial matWhite = getSMObject(6, "Resistite textured knockdown finish (smooth or regular per customer)Gray", "55 LB BAG");
+                        SystemMaterial matWhite;
+                        if (dbData==null)
+                        {
+                             matWhite = getSMObject(6, "Resistite textured knockdown finish (smooth or regular per customer)Gray", "55 LB BAG");
+                        }
+                        else
+                            matWhite = createSMObjectDB("Resistite textured knockdown finish (smooth or regular per customer)Gray", "55 LB BAG");
+
 
                         mat.MaterialPrice = matWhite.MaterialPrice;
                         mat.Name = matWhite.Name;

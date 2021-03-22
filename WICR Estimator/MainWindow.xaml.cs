@@ -36,13 +36,7 @@ namespace WICR_Estimator
         public MainWindow()
         {
             InitializeComponent();
-            //DateTime d1 = new DateTime(2019, 12, 15);
-            //if (DateTime.UtcNow>d1)
-            //{
-            //    Environment.Exit(-1);
-            //}
-            //this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
-            //MaxWidth = SystemParameters.VirtualScreenWidth;
+            
             this.DataContext = new MainWindowViewModel(DialogCoordinator.Instance);
             
         }

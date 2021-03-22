@@ -185,7 +185,7 @@ namespace WICR_Estimator.ViewModels
             }
 
             //CalculateAllMaterial();
-            //CalculateLaborMinCharge(hasSetupChanged);
+            CalculateLaborMinCharge(hasSetupChanged);
             //calculateLaborTotalsWithMinLabor();
             CalculateCost(null);
 

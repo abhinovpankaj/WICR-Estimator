@@ -22,6 +22,22 @@ namespace WICR_Estimator.ViewModels
         }
 
         #region Overridden Methods
+
+        public override double CalculateLabrExtn(double calhrs, double setupMin, string matName)
+        {
+            //return base.CalculateLabrExtn(calhrs, setupMin);
+            switch (matName.ToUpper())
+            {
+                case "RESISTITE LIQUID":
+                case "RESISTITE REGULAR GRAY":
+                case "RESISTITE REGULAR OR SMOOTH GRAY (KNOCK DOWN OR SMOOTH)":
+                case "WEATHER SEAL XL TWO COATS":
+                    return (calhrs + setupMin) * laborRate;
+                default:
+                    return calhrs == 0 ? 0 : setupMin > calhrs ? setupMin * laborRate : calhrs * laborRate; ;
+            }
+
+        }
         public override void calculateLaborHrs()
         {
             calLaborHrs(6,totalSqft);
@@ -79,22 +95,22 @@ namespace WICR_Estimator.ViewModels
                 SystemMaterials = sysMat;
                 setCheckBoxes();
             }
-                
 
-            
-            //foreach (var mat in SystemMaterials)
-            //{
-            //    if (mat.Name == "Lip Color" || mat.Name == "Aj-44A Dressing(Sealer)" || mat.Name == "Vista Paint Acripoxy")
-            //    {
-            //        if (mat.IsMaterialChecked)
-            //        {
-            //            ApplyCheckUnchecks(mat.Name);
-            //            break;
-            //        }
-            //    }
-            //}
+
+
+            foreach (var mat in SystemMaterials)
+            {
+                if (mat.Name == "Lip Color" || mat.Name == "Aj-44A Dressing(Sealer)" || mat.Name == "Vista Paint Acripoxy")
+                {
+                    if (mat.IsMaterialChecked)
+                    {
+                        ApplyCheckUnchecks(mat.Name);
+                        break;
+                    }
+                }
+            }
             setExceptionValues(null);
-            calculateRLqty();
+            
 
             if (OtherMaterials.Count == 0)
             {
@@ -107,7 +123,7 @@ namespace WICR_Estimator.ViewModels
             {
                 SubContractLaborItems = GetLaborItems();
             }
-            //CalculateLaborMinCharge(hasSetupChanged);
+            CalculateLaborMinCharge(hasSetupChanged);
             //CalculateAllMaterial();
             calculateRLqty();
             CalculateCost(null);

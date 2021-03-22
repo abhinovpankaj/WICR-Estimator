@@ -15,7 +15,7 @@ namespace WICR_Estimator.Services
         static Microsoft.Office.Interop.Excel.Workbook  exlWb;
         
 
-        public static async void UpdatePrices()
+        public static async Task UpdatePrices()
         {
               
             try
@@ -41,7 +41,7 @@ namespace WICR_Estimator.Services
                                     sht.Cells[i, 8].Value = "";
                                 }
                             }
-                            var result = await HTTPHelper.PutSlopesAsync(updatedSlopes);
+                             var result=await HTTPHelper.PutSlopesAsync(updatedSlopes);
                             
                                 break;
                         case "metals":
@@ -71,7 +71,7 @@ namespace WICR_Estimator.Services
                             break;
                         case "materials":
                             List<MaterialDB> materials = new List<MaterialDB>();
-                            for (int i = 2; i <= 423; i++)
+                            for (int i = 2; i <= 492; i++)
                             {
                                 if (sht.Cells[i, 12].Value == "Yes")
                                 {
@@ -90,7 +90,7 @@ namespace WICR_Estimator.Services
                                     sht.Cells[i, 12].Value = "";
                                 }
                             }
-                            await HTTPHelper.PutMaterialsAsync(materials);
+                            var mats = await HTTPHelper.PutMaterialsAsync(materials);
 
                             break;
                         case "labors":
@@ -109,7 +109,7 @@ namespace WICR_Estimator.Services
                                     sht.Cells[i, 6].Value = "";
                                 }
                             }
-                           await HTTPHelper.PutLaborFactorsAsync(labors);
+                            var lbr = await HTTPHelper.PutLaborFactorsAsync(labors);
 
                             break;
                         case "freights":
@@ -128,7 +128,7 @@ namespace WICR_Estimator.Services
                                     sht.Cells[i, 4].Value = "";
                                 }
                             }
-                            await HTTPHelper.PutFreightsAsync(freights);
+                            var frg = await HTTPHelper.PutFreightsAsync(freights);
                             break;
                         default:
                             break;
@@ -141,16 +141,20 @@ namespace WICR_Estimator.Services
             }
             finally
             {
+                exlWb.Save();
                 exlWb.Close(true);
                 exlWb = null;
+                exlApp.EnableEvents = true;
+                
+                exlApp.DisplayAlerts = true;
                 exlApp.Quit();
                 exlApp = null;
             }
         }
-
-        public static void ReadPriceExcel()
+        static string filePath;
+        public static void BrowseFile()
         {
-            string filePath;
+            
             OpenFileDialog openFileDialog1 = new OpenFileDialog
             {
                 InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
@@ -162,7 +166,7 @@ namespace WICR_Estimator.Services
                 Filter = "Estimator files (*.xlsm)|*.xlsm",
                 FilterIndex = 2,
                 RestoreDirectory = true,
-                ReadOnlyChecked = true,
+
                 ShowReadOnly = true
             };
 
@@ -174,13 +178,23 @@ namespace WICR_Estimator.Services
             {
                 return;
             }
+        }
+        public  static async Task ReadPriceExcel()
+        {
 
-            exlApp = new Microsoft.Office.Interop.Excel.Application();
+            if (filePath!="")
+            {
+                exlApp = new Microsoft.Office.Interop.Excel.Application();
+                exlApp.EnableEvents = false;
+                exlApp.Visible = false;
+                exlApp.DisplayAlerts = false;
+                exlWb = exlApp.Workbooks.Open(filePath);
+
+
+               await UpdatePrices();
+            }
             
-            exlWb = exlApp.Workbooks.Open(filePath);
-            exlApp.Visible = false;
-            exlApp.DisplayAlerts = false;
-            UpdatePrices();
+
         }
     }
 }

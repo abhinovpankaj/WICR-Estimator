@@ -74,6 +74,7 @@ namespace WICR_Estimator.ViewModels
                 if (await IsDBUpated())
                 {
                     //MessageBox.Show("Material prices and values for materials/metals have been changed,Tool will restart once google data is refreshed.");
+                    Thread.Sleep(1000);
                     DeleteGoogleData(null);
                 }
 
@@ -1169,20 +1170,15 @@ namespace WICR_Estimator.ViewModels
                 
                 try
                 {
-                    //var dbValues = DataSerializerService.DSInstance.deserializeDbData(prj.OriginalProjectName);
-                    //if (dbValues == null)
-                    //{
-                        //Create dat file locally
-                     var dbData=await HTTPHelper.FetchFromDbAndSave(prj.OriginalProjectName);
-                    Thread.Sleep(500);
-                     DataSerializerService.DSInstance.serializeDbData(dbData, prj.OriginalProjectName);
-                    //}
                     UpdateTaskStatus("Wait! Refreshing data for Project : " + prj.OriginalProjectName);
+                    var dbData=await HTTPHelper.FetchFromDbAndSave(prj.OriginalProjectName);
+                    Thread.Sleep(1000);
+                    DataSerializerService.DSInstance.serializeDbData(dbData, prj.OriginalProjectName);
+                    
+                   
                 }
                 catch (Exception ex)
                 {
-
-                    //OnTaskCompleted("Prices Refresh Failed, project :"+prj.OriginalProjectName + "\n"+ex.Message);
                 }
 
             }
@@ -1190,62 +1186,7 @@ namespace WICR_Estimator.ViewModels
             OnTaskCompleted("Prices Refreshed Successfully.");
 
         }
-        private async void DownloadGoogleData()
-        {
-            //SetBalloonTip();
-            IList<IList<object>> LaborRate = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Rate);
-            
-            IList<IList<object>> MetalData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Metal);
-            IList<IList<object>> FreightData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Freight);
-
-            foreach (var prj in Projects)
-            {
-                try
-                {
-                    var values = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, prj.OriginalProjectName);
-                    if (values == null)
-                    {
-                        StatusMessage = "Please Wait! Refreshing Google Data for " + prj.OriginalProjectName;
-
-                        //statusNotifier.BalloonTipText = StatusMessage;
-                        //statusNotifier.ShowBalloonTip(2000);
-                        CompletedProjects++;
-                        DataSerializer.DSInstance.googleData = new GSData();
-
-                        DataSerializer.DSInstance.googleData.LaborRate = LaborRate;
-
-                        //Thread.Sleep(1000);
-                        DataSerializer.DSInstance.googleData.MetalData = MetalData;
-
-                        //Thread.Sleep(1000);
-                        DataSerializer.DSInstance.googleData.SlopeData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.OriginalProjectName, DataType.Slope);
-                        Thread.Sleep(1000);
-
-                        DataSerializer.DSInstance.googleData.MaterialData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.OriginalProjectName, DataType.Material);
-
-                        //Thread.Sleep(1000);`
-                        DataSerializer.DSInstance.googleData.LaborData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.OriginalProjectName, DataType.Labor);
-                        //Thread.Sleep(1000);
-                        DataSerializer.DSInstance.googleData.FreightData = FreightData;
-
-                        DataSerializer.DSInstance.serializeGoogleData(DataSerializer.DSInstance.googleData, prj.OriginalProjectName);
-                        Thread.Sleep(3000);
-                    }
-                }
-                catch (Exception)
-                {
-
-                    //throw;
-                }
-                
-            }
-            UpdateLastDate(lastUpdate);
-
-            IsProcessing = false;
-            //MainWindowViewModel.WindowStyle = System.Windows.WindowStyle.SingleBorderWindow;
-            CompletedProjects = 0;
-                             
-        }
+        
         private bool canShow(object obj)
         {
             return true;

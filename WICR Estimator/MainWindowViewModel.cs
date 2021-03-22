@@ -135,10 +135,20 @@ namespace WICR_Estimator
        
         private async void PageViewModel_TaskStarted(object sender, EventArgs e)
         {
+            try
+            {
+                controller = await dialogCoordinator.ShowProgressAsync(this, "Wait",
+                sender.ToString(), false, dialogSettings);
+                controller.SetIndeterminate();
+            }
+            catch (System.InvalidOperationException ex)
+            {
+
+                controller = await dialogCoordinator.ShowProgressAsync(this, "Wait",
+               sender.ToString(), false, dialogSettings);
+                controller.SetIndeterminate();
+            }
             
-            controller = await dialogCoordinator.ShowProgressAsync(this, "Wait",
-             sender.ToString(), false, dialogSettings);
-            controller.SetIndeterminate();
         }
 
         private void PageViewModel_UpdateTaskStatus(object sender, EventArgs e)
@@ -149,11 +159,7 @@ namespace WICR_Estimator
         private bool loginFailed;
         private async void PageViewModel_TaskCompleted(object sender, EventArgs e)
         {
-            //if (controller.IsOpen)
-            //{
-            //    await controller.CloseAsync();
-
-            //} 
+            
             try
             {
                 if (sender.ToString().Length > 0)
@@ -171,12 +177,12 @@ namespace WICR_Estimator
 
                 }
                 else
-                    tmr = SetInterval(isControllerOpen, 2000);
+                    tmr = SetInterval(isControllerOpen, 5000);
             }
             catch (Exception)
             {
+                tmr = SetInterval(isControllerOpen, 5000);
 
-                
             }
             
         }
@@ -344,7 +350,7 @@ namespace WICR_Estimator
             {
                 if (_bulkUpdateCommand == null)
                 {
-                    _bulkUpdateCommand = new DelegateCommand(BulkUpdate, canUpdateBulk);
+                    _bulkUpdateCommand = new DelegateCommand(BulkUpdateAsync, canUpdateBulk);
                 }
 
                 return _bulkUpdateCommand;
@@ -356,13 +362,14 @@ namespace WICR_Estimator
             return true;
         }
 
-        private void BulkUpdate(object obj)
+        private async void BulkUpdateAsync(object obj)
         {
-            OnTaskStarted("Starting Bulk Update...");
-            ExcelService.ReadPriceExcel();
+            OnTaskStarted("Performing Bulk Update...");
+            ExcelService.BrowseFile();
             
-            //UpdateDBPriceVersion(null);
-            OnTaskCompleted("Prices Updated in DB.");
+           await ExcelService.ReadPriceExcel();
+           //UpdateDBPriceVersion(null);
+            OnTaskCompleted("");
         }
 
         public DelegateCommand UpdatePriceVersionCommand
