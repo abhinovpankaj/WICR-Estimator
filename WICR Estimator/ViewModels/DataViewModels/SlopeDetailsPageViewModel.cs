@@ -134,7 +134,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
 
         private async void UpdateSlope(object obj)
         {
-            //OnTaskStarted("Updating Selected Slope.");
+            OnTaskStarted("Updating Selected Slope.");
             SelectedSlope = await HTTPHelper.PutSlopeAsync(SelectedSlope.SlopeId, SelectedSlope);
             if (SelectedSlope == null)
             {

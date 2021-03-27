@@ -45,6 +45,37 @@ namespace WICR_Estimator
         public bool IsUserLoggedIn { get; set; }
         public bool LoginEnabled { get; set; }
         public string Username { get; set; }
+
+        private string _statusmsg;
+        public string StatusMessage 
+        {
+            get { return _statusmsg; }
+
+            set
+            {
+                if (value!=_statusmsg)
+                {
+                    _statusmsg = value;
+                    OnPropertyChanged("StatusMessage");
+                }
+            }
+        }
+
+        private bool _isOpen;
+        public bool IsOpen
+        {
+            get { return _isOpen; }
+
+            set
+            {
+                if (value != _isOpen)
+                {
+                    _isOpen = value;
+                    OnPropertyChanged("IsOpen");
+                }
+            }
+        }
+        //Not used
         public MainWindowViewModel()
         {
             // Add available pages
@@ -65,6 +96,8 @@ namespace WICR_Estimator
             //WindowStyle = WindowStyle.SingleBorderWindow;
 
         }
+
+
         public IDialogCoordinator dialogCoordinator;
         private MetroDialogSettings dialogSettings;
         ProgressDialogController controller;
@@ -78,10 +111,10 @@ namespace WICR_Estimator
             dialogSettings.AnimateHide = true;
             dialogSettings.AnimateShow = true;
             dialogSettings.CustomResourceDictionary =
-                    new ResourceDictionary
-                    {
-                        Source = new Uri("pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Dialogs.xaml")
-                    };
+                new ResourceDictionary
+                {
+                    Source = new Uri("pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Dialogs.xaml")
+                };
 
             // Add available pages
             PageViewModels.Add(new PaletteSelectorViewModel());
@@ -120,7 +153,7 @@ namespace WICR_Estimator
             BaseViewModel.TaskStarted+= PageViewModel_TaskStarted;
             BaseViewModel.TaskCompleted += PageViewModel_TaskCompleted;
             BaseViewModel.UpdateTask += PageViewModel_UpdateTaskStatus;
-
+            IsOpen = false;
             GetPriceVersion();
  
         }
@@ -131,27 +164,24 @@ namespace WICR_Estimator
 
         private async void PageViewModel_TaskStarted(object sender, EventArgs e)
         {
-            //try
-            //{
-            
-                controller = await dialogCoordinator.ShowProgressAsync(this, "Wait",
-                sender.ToString(), false, dialogSettings);
-                controller.SetIndeterminate();
-            //}
-            //catch (System.InvalidOperationException ex)
-            //{}
+
+            //controller = await dialogCoordinator.ShowProgressAsync(this, "Wait",
+            //sender.ToString(), false);
+            //controller.SetIndeterminate();
+            StatusMessage = sender.ToString();
+            IsOpen = true;
 
         }
 
         private void PageViewModel_UpdateTaskStatus(object sender, EventArgs e)
         {
-
-           controller.SetMessage(sender.ToString());
+            StatusMessage = sender.ToString();
+           //controller?.SetMessage(sender.ToString());
         }
         private bool loginFailed;
         private async void PageViewModel_TaskCompleted(object sender, EventArgs e)
         {
-            
+            IsOpen = false;
             try
             {
                 if (sender.ToString().Length > 0)
@@ -163,18 +193,23 @@ namespace WICR_Estimator
                     }
                 }
 
-                if (controller?.IsOpen == true)
-                {
-                    await controller.CloseAsync();
+                //if (controller?.IsOpen == true)
+                //{
+                //    await controller.CloseAsync();
 
-                }
-                else
-                    tmr = SetInterval(isControllerOpen, 5000);
+                //}
+                //else
+                //    tmr = SetInterval(isControllerOpen, 5000);
             }
             catch (Exception)
             {
-                tmr = SetInterval(isControllerOpen, 5000);
-
+                //tmr = SetInterval(isControllerOpen, 5000);
+                //StatusMessage = sender.ToString();
+                
+            }
+            finally
+            {
+                IsOpen = false;
             }
             
         }
@@ -192,7 +227,7 @@ namespace WICR_Estimator
             }
             catch (Exception)
             {
-
+                throw;
                 
             }
             
@@ -237,7 +272,7 @@ namespace WICR_Estimator
                 Username = user.Username;
                 OnPropertyChanged("Username");
                 OnPropertyChanged("IsUserAdmin");
-                CurrentPageViewModel = PageViewModels[0];
+                CurrentPageViewModel = PageViewModels[7];
             }
             
             CloseAsync();
@@ -294,11 +329,12 @@ namespace WICR_Estimator
         }
         public async void CloseAsync()
         {
-            if (controller==null)
-            {
-                Thread.Sleep(500);
-            }
-            await controller?.CloseAsync();
+            //if (controller==null)
+            //{
+            //    Thread.Sleep(2000);
+            //}
+            //await controller?.CloseAsync();
+            IsOpen = false;
         }
         #endregion
 
@@ -359,7 +395,7 @@ namespace WICR_Estimator
             OnTaskStarted("Performing Bulk Update...");
             ExcelService.BrowseFile();
             
-           await ExcelService.ReadPriceExcel();
+            await ExcelService.ReadPriceExcel();
            //UpdateDBPriceVersion(null);
             OnTaskCompleted("");
         }
@@ -936,7 +972,7 @@ namespace WICR_Estimator
             //OnTaskStarted("Pushing prices to DB");
             PriceVersion.LastUpdatedOn = DateTime.Now;
             
-            PriceVersion.Version = PriceVersion.Version+.1;
+            PriceVersion.Version = PriceVersion.Version+0.1;
             PriceVersion = await HTTPHelper.PutPriceVersionAsync(1, PriceVersion);
             OnPropertyChanged("PriceVersion");
             OnTaskCompleted("Prices Pushed Successfully");

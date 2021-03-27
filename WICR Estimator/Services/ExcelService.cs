@@ -71,7 +71,7 @@ namespace WICR_Estimator.Services
                             break;
                         case "materials":
                             List<MaterialDB> materials = new List<MaterialDB>();
-                            for (int i = 2; i <= 492; i++)
+                            for (int i = 2; i < 492; i++)
                             {
                                 if (sht.Cells[i, 12].Value == "Yes")
                                 {
@@ -186,7 +186,7 @@ namespace WICR_Estimator.Services
             {
                 exlApp = new Microsoft.Office.Interop.Excel.Application();
                 exlApp.EnableEvents = false;
-                exlApp.Visible = false;
+                exlApp.Visible = true;
                 exlApp.DisplayAlerts = false;
                 exlWb = exlApp.Workbooks.Open(filePath);
 

@@ -121,7 +121,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
 
         private async void UpdateLaborFactor(object obj)
         {
-            //OnTaskStarted("Updating Labor Factor for:" + SelectedLaborFactor.Name);
+            OnTaskStarted("Updating Labor Factor for:" + SelectedLaborFactor.Name);
 
             var result  = await HTTPHelper.PutLaborFactorAsync(SelectedLaborFactor.LaborId, SelectedLaborFactor);
             if (result == null)

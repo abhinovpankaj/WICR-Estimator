@@ -36,6 +36,7 @@ namespace WICR_Estimator.ViewModels
 
         }
         private string Password { get; set; }
+
         public static event EventHandler OnLoggedIn;
         public static event EventHandler ProgressStarted;
         public string Name => "Login Page";

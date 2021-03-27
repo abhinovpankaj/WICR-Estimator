@@ -189,7 +189,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
         private async void UpdateMaterial(object obj)
         {
 
-            //OnTaskStarted("Updating Selected Material: " + SelectedMaterial.MaterialName); 
+            OnTaskStarted("Updating Selected Material: " + SelectedMaterial.MaterialName); 
             var result = await HTTPHelper.PutMaterialAsync(SelectedMaterial.MaterialId,SelectedMaterial);
             if (result==null)
             {

@@ -51,15 +51,13 @@ namespace WICR_Estimator.ViewModels
             ReplicateIndependentProject = new DelegateCommand(ReplicateIndependent, canReplicate);
             
             CreateSummary = new DelegateCommand(GenerateSummary, canCreateSummary);
-            RefreshGoogleData = new DelegateCommand(DeleteGoogleData, canDelete);
+            //RefreshGoogleData = new DelegateCommand(DeleteGoogleData, canDelete);
             ProjectTotals = new ProjectsTotal();
             LoginPageViewModel.OnLoggedIn += LoginPage_OnLoggedIn;
             //statusNotifier = new NotifyIcon();
-           
-            Task.Run(async () =>
-            {
-                CheckPriceUpdate();
-            });
+
+            CheckPriceUpdate();
+
         }
 
         private void LoginPage_OnLoggedIn(object sender, EventArgs e)
@@ -73,6 +71,7 @@ namespace WICR_Estimator.ViewModels
 
         private async void CheckPriceUpdate()
         {
+            
             //Check If GoogleSheet has been Updated
             try
             {
@@ -80,7 +79,9 @@ namespace WICR_Estimator.ViewModels
                 {
                     //MessageBox.Show("Material prices and values for materials/metals have been changed,Tool will restart once google data is refreshed.");
                     Thread.Sleep(1000);
+                    
                     DeleteGoogleData(null);
+                    
                 }
 
             }
@@ -88,7 +89,8 @@ namespace WICR_Estimator.ViewModels
             {
 
             }
-            
+           
+
         }
         private void ReplicateIndependent(object obj)
         {
@@ -360,8 +362,10 @@ namespace WICR_Estimator.ViewModels
                 }
 
                 //DownloadGoogleData();
-                RefreshDataFromDB();
-
+                Task.Run(async () =>
+                {
+                    await RefreshDataFromDB();
+                });
                 
             }
             catch (Exception ex)
@@ -1038,9 +1042,9 @@ namespace WICR_Estimator.ViewModels
         #region Private Methods
         private void Project_OnSelectedProjectChange(object sender, EventArgs e)
         {
+
             
-               
-                if (OnProjectSelectionChange != null)
+            if (OnProjectSelectionChange != null)
                 {
                     ProjectLoadEventArgs args = new ProjectLoadEventArgs();
                     if (sender!=null)
@@ -1166,7 +1170,7 @@ namespace WICR_Estimator.ViewModels
             CompletedProjects = 0;
         }
 
-        private async void RefreshDataFromDB()
+        private async Task RefreshDataFromDB()
         {
             OnTaskStarted("Prices have been updated, Fetching latest prices from DB ...");
             
