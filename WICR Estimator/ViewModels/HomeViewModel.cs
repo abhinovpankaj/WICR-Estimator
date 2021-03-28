@@ -145,7 +145,7 @@ namespace WICR_Estimator.ViewModels
 
         private async void ApplyLatestPrices()
         {
-            OnTaskStarted("Fetching latest prices for selected projects.");
+            OnTaskStarted("Applying latest prices for selected projects.");
             try
             {
                 if (SelectedProjects != null)
@@ -154,23 +154,29 @@ namespace WICR_Estimator.ViewModels
                     {
                         item.ApplyLatestPrices = applylatestPrice;
                         //ApplyLatestGoogleData(item);
-                        item.ProjectJobSetUp.dbData = await HTTPHelper.FetchFromDbAndSave(item.OriginalProjectName);
+                        var dbValues = DataSerializerService.DSInstance.deserializeDbData(item.OriginalProjectName);
+                        if (dbValues == null)
+                        {
+                            item.ProjectJobSetUp.dbData = await HTTPHelper.FetchFromDbAndSave(item.OriginalProjectName);
+                        }
+                        else
+                            item.ProjectJobSetUp.dbData = dbValues;
+
+                        item.ProjectJobSetUp.UpdateJobSetup();
+                        UpdateProjectTotals();
                     }
                     //OnTaskCompleted("Prices Refreshed for all selected projects.");
                 }
                 //Create dat file locally
-               
-                //item.ProjectJobSetUp.UpdateJobSetup();
-                //UpdateProjectTotals();
-               
-               // OnTaskCompleted("Prices Refreshed for all selected projects.");
+
+            OnTaskCompleted("Prices Refreshed for all selected projects.");
             }
             catch (Exception ex)
             {
-
+                 
                OnTaskCompleted("Prices Refresh Failed"+ "\n" + ex.Message);
             }
-            OnTaskCompleted("Prices Refreshed for all selected projects.");
+            
         }
 
         private string _filterString = string.Empty;
@@ -515,8 +521,18 @@ namespace WICR_Estimator.ViewModels
                     }
 
                     item.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
+                    SystemMaterial.OnQTyChanged += (s, e) => { item.MaterialViewModel.setExceptionValues(s); };
+                    SystemMaterial.OnUnitChanged += (s, e) => { item.MaterialViewModel.setUnitChangeValues(); };
                     SelectedProjects.Add(item);
                    
+                   
+                    if (item.ProjectJobSetUp != null)
+                    {
+                        item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
+                        item.ProjectJobSetUp.EnableMoreMarkupCommand = new DelegateCommand(item.ProjectJobSetUp.CanAddMoreMarkup, item.ProjectJobSetUp.canAdd);
+                        item.ProjectJobSetUp.GetOriginalName();
+                        item.ProjectJobSetUp.UpdateJobSetup();
+                    }
                     if (item.MetalViewModel != null)
                     {
                         item.MetalViewModel.MetalTotals.OnTotalsChange += item.MaterialViewModel.MetalTotals_OnTotalsChange;
@@ -528,16 +544,8 @@ namespace WICR_Estimator.ViewModels
                         item.ProjectJobSetUp.JobSetupChange += item.SlopeViewModel.JobSetup_OnJobSetupChange;
 
                     }
-                    if (item.ProjectJobSetUp != null)
-                    {
-                        item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
-                        item.ProjectJobSetUp.EnableMoreMarkupCommand = new DelegateCommand(item.ProjectJobSetUp.CanAddMoreMarkup, item.ProjectJobSetUp.canAdd);
-                        item.ProjectJobSetUp.GetOriginalName();
-                        item.ProjectJobSetUp.UpdateJobSetup();
-                    }
                     item.MaterialViewModel.CheckboxCommand = new DelegateCommand(item.MaterialViewModel.ApplyCheckUnchecks, item.MaterialViewModel.canApply);
-                    SystemMaterial.OnQTyChanged += (s, e) => { item.MaterialViewModel.setExceptionValues(s); };
-                    SystemMaterial.OnUnitChanged += (s, e) => { item.MaterialViewModel.setUnitChangeValues(); };
+                    
                     //keep other material and other labor materials in sync
                     var ot = item.MaterialViewModel.OtherLaborMaterials;
                     item.MaterialViewModel.OtherLaborMaterials = item.MaterialViewModel.OtherMaterials;
@@ -727,6 +735,15 @@ namespace WICR_Estimator.ViewModels
                     item.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
                     SelectedProjects.Add(item);
                    
+                    
+                    if (item.ProjectJobSetUp != null)
+                    {
+                        item.ProjectJobSetUp.JobSetupChange -= item.MaterialViewModel.JobSetup_OnJobSetupChange;
+                        item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
+                        item.ProjectJobSetUp.EnableMoreMarkupCommand = new DelegateCommand(item.ProjectJobSetUp.CanAddMoreMarkup, item.ProjectJobSetUp.canAdd);
+                        item.ProjectJobSetUp.GetOriginalName();
+                        //item.ProjectJobSetUp.UpdateJobSetup(ver);
+                    }
                     if (item.MetalViewModel != null)
                     {
                         item.MetalViewModel.MetalTotals.OnTotalsChange += item.MaterialViewModel.MetalTotals_OnTotalsChange;
@@ -736,13 +753,6 @@ namespace WICR_Estimator.ViewModels
                     {
                         item.SlopeViewModel.SlopeTotals.OnTotalsChange += item.MaterialViewModel.MetalTotals_OnTotalsChange;
                         item.ProjectJobSetUp.JobSetupChange += item.SlopeViewModel.JobSetup_OnJobSetupChange;
-                    }
-                    if (item.ProjectJobSetUp != null)
-                    {
-                        item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
-                        item.ProjectJobSetUp.EnableMoreMarkupCommand = new DelegateCommand(item.ProjectJobSetUp.CanAddMoreMarkup, item.ProjectJobSetUp.canAdd);
-                        item.ProjectJobSetUp.GetOriginalName();
-                        //item.ProjectJobSetUp.UpdateJobSetup(ver);
                     }
                     item.MaterialViewModel.CheckboxCommand = new DelegateCommand(item.MaterialViewModel.ApplyCheckUnchecks, item.MaterialViewModel.canApply);
 

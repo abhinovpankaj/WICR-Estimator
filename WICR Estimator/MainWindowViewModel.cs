@@ -37,7 +37,7 @@ namespace WICR_Estimator
         private IPageViewModel _currentPageViewModel;
         private List<IPageViewModel> _pageViewModels;
         private DelegateCommand _minimizeCommand;
-        
+
         private DelegateCommand _navigationCommand;
         private DelegateCommand _logoutCommand;
         #endregion
@@ -47,13 +47,13 @@ namespace WICR_Estimator
         public string Username { get; set; }
 
         private string _statusmsg;
-        public string StatusMessage 
+        public string StatusMessage
         {
             get { return _statusmsg; }
 
             set
             {
-                if (value!=_statusmsg)
+                if (value != _statusmsg)
                 {
                     _statusmsg = value;
                     OnPropertyChanged("StatusMessage");
@@ -79,7 +79,7 @@ namespace WICR_Estimator
         public MainWindowViewModel()
         {
             // Add available pages
-           
+
             PageViewModels.Add(new HomeViewModel());
             PageViewModels.Add(new ProjectViewModel(HomeViewModel.MyselectedProjects));
             PageViewModels.Add(new MaterialDetailsPageViewModel());
@@ -129,14 +129,14 @@ namespace WICR_Estimator
             var filePath = Path.GetTempPath() + "wicrlogin.json";
             if (File.Exists(filePath))
             {
-                
+
                 string json = File.ReadAllText(filePath);
                 UserDB myObj = JsonConvert.DeserializeObject<UserDB>(json);
                 IsUserLoggedIn = true;
                 LoginEnabled = false;
                 OnPropertyChanged("LoginEnabled");
                 OnPropertyChanged("IsUserLoggedIn");
-                
+
                 IsUserAdmin = myObj.IsAdmin;
                 Username = myObj.Username;
                 OnPropertyChanged("Username");
@@ -150,14 +150,14 @@ namespace WICR_Estimator
 
             LoginPageViewModel.OnLoggedIn += LoginPage_OnLoggedIn;
             LoginPageViewModel.ProgressStarted += LoginPageViewModel_ProgressStarted;
-            BaseViewModel.TaskStarted+= PageViewModel_TaskStarted;
+            BaseViewModel.TaskStarted += PageViewModel_TaskStarted;
             BaseViewModel.TaskCompleted += PageViewModel_TaskCompleted;
             BaseViewModel.UpdateTask += PageViewModel_UpdateTaskStatus;
             IsOpen = false;
             GetPriceVersion();
- 
+
         }
-        
+
 
         #region EVENTS
 
@@ -176,7 +176,7 @@ namespace WICR_Estimator
         private void PageViewModel_UpdateTaskStatus(object sender, EventArgs e)
         {
             StatusMessage = sender.ToString();
-           //controller?.SetMessage(sender.ToString());
+            //controller?.SetMessage(sender.ToString());
         }
         private bool loginFailed;
         private async void PageViewModel_TaskCompleted(object sender, EventArgs e)
@@ -205,13 +205,13 @@ namespace WICR_Estimator
             {
                 //tmr = SetInterval(isControllerOpen, 5000);
                 //StatusMessage = sender.ToString();
-                
+
             }
             finally
             {
                 IsOpen = false;
             }
-            
+
         }
 
         private async void isControllerOpen()
@@ -228,13 +228,13 @@ namespace WICR_Estimator
             catch (Exception)
             {
                 throw;
-                
+
             }
-            
+
         }
         #region Timer to close processing Window
         private System.Timers.Timer tmr;
-        public  System.Timers.Timer SetInterval(Action Act, int Interval)
+        public System.Timers.Timer SetInterval(Action Act, int Interval)
         {
             System.Timers.Timer tmr = new System.Timers.Timer();
             tmr.Elapsed += (sender, args) => Act();
@@ -251,7 +251,7 @@ namespace WICR_Estimator
             controller = await dialogCoordinator.ShowProgressAsync(this, "Wait",
               sender.ToString(), false, dialogSettings);
             controller.SetIndeterminate();
-            
+
         }
 
         private void LoginPage_OnLoggedIn(object sender, EventArgs e)
@@ -268,18 +268,18 @@ namespace WICR_Estimator
 
                 IsUserAdmin = user.IsAdmin;
 
-                              
+
                 Username = user.Username;
                 OnPropertyChanged("Username");
                 OnPropertyChanged("IsUserAdmin");
                 CurrentPageViewModel = PageViewModels[7];
             }
-            
+
             CloseAsync();
         }
         #endregion
         #region dialogs
-        public async Task<MessageDialogResult> ShowActionMessage(string msg,string header)
+        public async Task<MessageDialogResult> ShowActionMessage(string msg, string header)
         {
             var metroDialogSettings = new MetroDialogSettings
             {
@@ -289,28 +289,28 @@ namespace WICR_Estimator
                         Source = new Uri("pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Dialogs.xaml")
                     },
                 NegativeButtonText = "No",
-                AffirmativeButtonText="Yes",
+                AffirmativeButtonText = "Yes",
                 AnimateHide = true,
                 AnimateShow = true,
                 FirstAuxiliaryButtonText = "Cancel"
                 //ColorScheme= MetroDialogColorScheme.Inverted   
             };
 
-           return await dialogCoordinator.ShowMessageAsync(this, header, msg,MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary, metroDialogSettings);
-           
+            return await dialogCoordinator.ShowMessageAsync(this, header, msg, MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary, metroDialogSettings);
+
         }
 
-        public async Task<MessageDialogResult> ShowActionMessage(string msg, string header,MetroDialogSettings dialogsettings)
+        public async Task<MessageDialogResult> ShowActionMessage(string msg, string header, MetroDialogSettings dialogsettings)
         {
-            
+
 
             return await dialogCoordinator.ShowMessageAsync(this, header, msg, MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary, dialogsettings);
 
         }
         public async void ShowMessage(string message)
         {
-            
-            await dialogCoordinator.ShowMessageAsync(this, "WICR", message,MessageDialogStyle.Affirmative,dialogSettings);
+
+            await dialogCoordinator.ShowMessageAsync(this, "WICR", message, MessageDialogStyle.Affirmative, dialogSettings);
         }
 
         public async void ShowProgress(string msg)
@@ -325,7 +325,7 @@ namespace WICR_Estimator
             //var result = await Task.Run(...);
 
             // Close...
-           
+
         }
         public async void CloseAsync()
         {
@@ -339,12 +339,12 @@ namespace WICR_Estimator
         #endregion
 
         #region Properties / Commands
-            //private static WindowStyle windowStyle;
+        //private static WindowStyle windowStyle;
         public static WindowStyle WindowStyle
         { get; set;
-         
+
         }
-        
+
         private DelegateCommand _downloadFileCommand;
         public DelegateCommand DownloadFileCommand
         {
@@ -367,7 +367,7 @@ namespace WICR_Estimator
         private void DownloadFile(object obj)
         {
             var dir = AppDomain.CurrentDomain.BaseDirectory;
-            var filePath=dir + "WICR_Pricing.xlsm";
+            var filePath = dir + "WICR_Pricing.xlsm";
             System.Diagnostics.Process.Start(filePath);
         }
 
@@ -394,9 +394,9 @@ namespace WICR_Estimator
         {
             OnTaskStarted("Performing Bulk Update...");
             ExcelService.BrowseFile();
-            
+
             await ExcelService.ReadPriceExcel();
-           //UpdateDBPriceVersion(null);
+            //UpdateDBPriceVersion(null);
             OnTaskCompleted("");
         }
 
@@ -406,7 +406,7 @@ namespace WICR_Estimator
             {
                 if (_updatePriceVersionCommand == null)
                 {
-                    _updatePriceVersionCommand = new DelegateCommand(UpdateDBPriceVersion,canUpdatePriceVersion);
+                    _updatePriceVersionCommand = new DelegateCommand(UpdateDBPriceVersion, canUpdatePriceVersion);
                 }
 
                 return _updatePriceVersionCommand;
@@ -418,7 +418,7 @@ namespace WICR_Estimator
             return true;
         }
 
-        
+
 
         public DelegateCommand RestartAppCommand
         {
@@ -472,7 +472,7 @@ namespace WICR_Estimator
                 AffirmativeButtonText = "Yes",
                 AnimateHide = true,
                 AnimateShow = true
-                
+
                 //ColorScheme= MetroDialogColorScheme.Inverted   
             };
             // Displays the MessageBox.
@@ -485,11 +485,11 @@ namespace WICR_Estimator
                     Thread.Sleep(1000);
                     Environment.Exit(-1);
                     break;
-               
+
                 default:
                     break;
             }
-            
+
 
         }
         private bool canRestart(object obj)
@@ -517,8 +517,8 @@ namespace WICR_Estimator
 
                 //ColorScheme= MetroDialogColorScheme.Inverted   
             };
-            var res= await ShowActionMessage("Do you want to logout from App?", "WICR - Logged-in As " + Username,metroDialogSettings);
-            if (res==MessageDialogResult.Affirmative)
+            var res = await ShowActionMessage("Do you want to logout from App?", "WICR - Logged-in As " + Username, metroDialogSettings);
+            if (res == MessageDialogResult.Affirmative)
             {
                 IsUserLoggedIn = false;
                 OnPropertyChanged("IsUserLoggedIn");
@@ -526,7 +526,7 @@ namespace WICR_Estimator
                 //delete login file
                 File.Delete(Path.GetTempPath() + "wicrlogin.json");
             }
-            
+
         }
 
         private bool canSave(object obj)
@@ -540,7 +540,7 @@ namespace WICR_Estimator
         }
         private async void SaveEstimate(object obj)
         {
-           await SaveEstimates(ViewModels.HomeViewModel.MyselectedProjects);
+            await SaveEstimates(ViewModels.HomeViewModel.MyselectedProjects);
         }
 
         public ICommand ChangePageCommand
@@ -613,16 +613,16 @@ namespace WICR_Estimator
 
             DateTime? JobCreationDate = DateTime.Now;
             string JobName = string.Empty, PreparedBy = string.Empty;
-            ProjectsTotal ProjectTotals=null;
+            ProjectsTotal ProjectTotals = null;
 
             var hm1 = this.PageViewModels.FirstOrDefault(x => x.Name == "Home") as HomeViewModel;
-            if (hm1!= null)
+            if (hm1 != null)
             {
                 JobName = hm1.JobName;
                 PreparedBy = hm1.PreparedBy;
             }
-            
-            if (PreparedBy == null)
+
+            if (PreparedBy == null || PreparedBy==string.Empty)
             {
                 OnTaskCompleted("Please fill Prepared by and then save the estimate.");
                 return;
