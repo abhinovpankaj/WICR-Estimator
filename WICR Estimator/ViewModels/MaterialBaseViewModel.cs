@@ -191,6 +191,7 @@ namespace WICR_Estimator.ViewModels
                 else
                     prPerc = 0;
 
+
                 //Get Material Data from DB
                 ////MaterialDB matdb =  HTTPHelper.GetMaterialByName(matName);
                 ////vprRate = matdb.ProdRateVertical;
@@ -201,7 +202,7 @@ namespace WICR_Estimator.ViewModels
                 ////pRateStairs = matdb.ProdRateStair;
                 ////hprRate = matdb.ProdRateHorizontal;
                 //
-
+                
                 double.TryParse(materialDetails[seq][1].ToString(), out vprRate);
                 double.TryParse(materialDetails[seq][2].ToString(), out cov);
                 double.TryParse(materialDetails[seq][0].ToString(), out mp);
@@ -1928,7 +1929,11 @@ namespace WICR_Estimator.ViewModels
                     else
                     {
                         var sm = createSMObjectDB(key, materialNames[key]);
-                        smCollection.Add(sm);
+                        if (sm!=null)
+                        {
+                            smCollection.Add(sm);
+                        }
+                        
                         if (key == "RP FABRIC 10 INCH WIDE X (300 LF)")
                         {
                             sm.VerticalProductionRate = 100 * (1 + prPerc);

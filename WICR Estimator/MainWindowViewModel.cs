@@ -615,6 +615,19 @@ namespace WICR_Estimator
             string JobName = string.Empty, PreparedBy = string.Empty;
             ProjectsTotal ProjectTotals=null;
 
+            var hm1 = this.PageViewModels.FirstOrDefault(x => x.Name == "Home") as HomeViewModel;
+            if (hm1!= null)
+            {
+                JobName = hm1.JobName;
+                PreparedBy = hm1.PreparedBy;
+            }
+            
+            if (PreparedBy == null)
+            {
+                OnTaskCompleted("Please fill Prepared by and then save the estimate.");
+                return;
+            }
+
             if (HomeViewModel.filePath == null)
             {
 
@@ -637,14 +650,14 @@ namespace WICR_Estimator
                 else
                     return;
             }
-            controller = await dialogCoordinator.ShowProgressAsync(this, "WICR",
-               "Wait! Saving Estimate...",false,dialogSettings);
+            //controller = await dialogCoordinator.ShowProgressAsync(this, "WICR",
+            //   "Wait! Saving Estimate...",false,dialogSettings);
             try
             {
-               
 
-                controller.SetIndeterminate();
 
+                // controller.SetIndeterminate();
+                IsOpen = true;  
                 MainWindowViewModel vm = this;
                 HomeViewModel hm = null;
                 if (vm != null)
@@ -657,16 +670,18 @@ namespace WICR_Estimator
                         JobCreationDate = hm.JobCreationDate;
                         ProjectTotals = hm.ProjectTotals;
 
-                        if (PreparedBy == null)
-                        {
-                            OnTaskCompleted("Please fill Prepared by and then save the estimate.");
-                            return;
-                        }
+                        //if (PreparedBy == null)
+                        //{
+                        //    OnTaskCompleted("Please fill Prepared by and then save the estimate.");
+                        //    return;
+                        //}
                     }
                 }
                 var serializer = new DataContractSerializer(typeof(ObservableCollection<Project>));
                 //Save to DB  part
-                controller.SetMessage("Saving estimate to Database...");
+               // controller.SetMessage("Saving estimate to Database...");
+                StatusMessage= "Saving estimate to Database...";
+
                 int myEstimateID;
                 if (SelectedProjects[0].EstimateID != 0)
                 {
@@ -681,11 +696,13 @@ namespace WICR_Estimator
                     myEstimateID = estimate.EstimateID;
                 }
                 //save db ends 
-                controller.SetMessage("Estimate Saved to Database Successfully.");
-                
+                //controller.SetMessage("Estimate Saved to Database Successfully.");
+                StatusMessage= "Estimate Saved to Database Successfully.";
+
                 using (var sw = new StringWriter())
                 {
-                    controller.SetMessage("Saving Estimate Locally...");
+                   // controller.SetMessage("Saving Estimate Locally...");
+                    StatusMessage= "Saving Estimate Locally...";
                     using (var writer = new XmlTextWriter(HomeViewModel.filePath, null))
                     {
                         writer.Formatting = System.Xml.Formatting.Indented; // indent the Xml so it's human readable
@@ -702,7 +719,8 @@ namespace WICR_Estimator
                             if (item.EstimateID != 0)
                             {
                                 //Get the estimate from DB
-                                controller.SetMessage("Updating exiting estimate to DB...");
+                                //controller.SetMessage("Updating exiting estimate to DB...");
+                                StatusMessage = "Updating exiting estimate to DB...";
                                 ProjectDetailsDB prjDB = new ProjectDetailsDB();
                                 prjDB.EstimateID = item.EstimateID;
                                 prjDB.LaborCost = item.LaborCost;
@@ -746,8 +764,9 @@ namespace WICR_Estimator
                                 else
                                 {
                                     //System.Windows.MessageBox.Show("Failed to Post the project to DB", "Failure");
-                                    controller.SetMessage("Failed to Post the project to DB.");
+                                    //controller.SetMessage("Failed to Post the project to DB.");
                                     //ShowMessage("Failed to Post the project to DB.");
+                                    StatusMessage = "Failed to Save the Project Estimate.";
                                 }
 
                             }
@@ -765,9 +784,12 @@ namespace WICR_Estimator
                         serializer.WriteObject(writer, SelectedProjects);
                         
                         writer.Flush();
-                        
-                        controller.SetMessage("Project Estimate Saved locally.");
-                        
+
+                        //controller.SetMessage("Project Estimate Saved locally.");
+                        StatusMessage = "Project Estimate Saved locally.";
+                        OnTaskCompleted("Project Estimate Saved locally.");
+
+
                     }                    
                 }
                 ViewModels.BaseViewModel.IsDirty = false;
@@ -777,10 +799,16 @@ namespace WICR_Estimator
             {
                 // SetBalloonTip("Failed to Save the Project Estimate.");
                 //ShowMessage("Failed to Save the Project Estimate.");
-                controller.SetMessage("Failed to Save the Project Estimate."+ ex.Message);
+                //controller.SetMessage("Failed to Save the Project Estimate."+ ex.Message);
+                StatusMessage = "Failed to Save the Project Estimate.";
+                OnTaskCompleted("Failed to Save the Project Estimate." + ex.Message);
             }
            
-            await controller.CloseAsync();
+            finally
+            {
+                IsOpen = false;
+            }
+            //await controller.CloseAsync();
 
         }
         #endregion

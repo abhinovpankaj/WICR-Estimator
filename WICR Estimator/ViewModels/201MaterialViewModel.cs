@@ -38,7 +38,8 @@ namespace WICR_Estimator.ViewModels
             FetchMaterialValuesAsync(false);
         }
 
-        private void FillMaterialList()
+        
+        private void FillMaterialList(int addmore =0)
         {
             materialNames.Add("191 QD PRIMER AND PREPARATION FOR RE-SURFACE", "1 GALLON");
             materialNames.Add("TREMPRIME MULTI SURFACE (CONCRETE & OTHER)", "3 GAL KIT");
@@ -65,13 +66,17 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("UNIVERSAL OUTLET", "EACH");
             materialNames.Add("TOTAL DRAIN MINUS BOTTOM TD 1000(IN LIEU OF ROCK & PIPE)", "LINEAR FEET");
             //db change
-            //materialNames.Add("Vulkem Tremproof 250 GC L 30 MILS", "5 GAL PAIL");
-            //materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS", "5 GAL PAIL");
+            if (addmore==1)
+            {
+                materialNames.Add("Vulkem Tremproof 250 GC L 30 MILS", "5 GAL PAIL");
+                materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS", "5 GAL PAIL");
 
-            //additional
-            //materialNames.Add("Vulkem Tremproof 250 GC L 30 MILS(Additional)", "5 GAL PAIL");
-            //materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS(Additional)", "5 GAL PAIL");
-            //end
+                //additional
+                materialNames.Add("Vulkem Tremproof 250 GC L 30 MILS(Additional)", "5 GAL PAIL");
+                materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS(Additional)", "5 GAL PAIL");
+                //end
+            }
+
             materialNames.Add("Vulkem Tremproof 201 L 30 MILS", "5 GAL PAIL");
             materialNames.Add("Vulkem Tremproof 201 R 30 MILS", "5 GAL PAIL");
 
@@ -233,7 +238,8 @@ namespace WICR_Estimator.ViewModels
                 materialNames = new Dictionary<string, string>();
                 if (SystemMaterials.Count > 27)
                 {
-                    FillMaterialList();
+                   
+                    FillMaterialList(1);
                 }
                 else
                     FillMaterialListEx();
