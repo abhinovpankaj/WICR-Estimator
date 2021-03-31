@@ -449,7 +449,7 @@ namespace WICR_Estimator.ViewModels
                     double.TryParse(perMixRates[8][0].ToString(), out minLabVal);
                 }
                 else
-                    minLabVal = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Minimum Slope Labor" && x.SlopeType == "Special").LaborRate;
+                    minLabVal = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Minimum Slope Labor" && x.SlopeType == "Cement").LaborRate;
                 
                 MinimumLaborCost = hasQuarterMortarBed ?0: minLabVal * laborRate;
 

@@ -18,22 +18,28 @@
         <conv:EnableTextboxConverter x:Key="textboxConv"/>
         <conv:QtyTextboxConverter x:Key="qtyTextboxConv"/>
         <conv:UnitTextboxConverter x:Key="unitTextboxConv"/>
-        <Style TargetType="Label" x:Key="LabelStyle1">
+        <Style BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}" TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource  PrimaryHueDarkForegroundBrush}" />
+            <Setter Property="Padding" Value="10" />
+
+        </Style>
+        <!--< TargetType="Label" x:Key="LabelStyle1">
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="FontFamily" Value="Arial"/>
             <Setter Property="FontSize" Value="11"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="HorizontalAlignment" Value="Right"/>
-        </Style>
-        <Style TargetType="TextBlock" x:Key="TextBlockStyle1">
+        </Style>-->
+        <!--<Style TargetType="TextBlock" x:Key="TextBlockStyle1">
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="FontFamily" Value="Arial"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="HorizontalAlignment"  Value="Right"/>
-        </Style>
-        <Style TargetType="TextBox" x:Key="TextBoxStyle">
+        </Style>-->
+        <!--<Style TargetType="TextBox" x:Key="TextBoxStyle">
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="FontFamily" Value="Arial"/>
@@ -42,8 +48,9 @@
             <Setter Property="HorizontalContentAlignment"  Value="Center"/>
             <Setter Property="BorderBrush" Value="Black"/>
             <Setter Property="BorderThickness"  Value="1"/>
-        </Style>
-        <Style x:Key="cbTB" TargetType="{x:Type CheckBox}">
+        </Style>-->
+        <Style x:Key="cbTB" TargetType="{x:Type CheckBox}"
+               BasedOn="{StaticResource MaterialDesignAccentCheckBox}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding ElementName=qtyTb, Path=IsEnabled,TargetNullValue=false}" Value="True">
                     <Setter Property="CheckBox.IsChecked" Value="True"/>
@@ -53,13 +60,13 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-        <Style TargetType="{x:Type TextBox}" x:Key="editableTextbox">
+        <Style TargetType="{x:Type TextBox}" x:Key="editableTextbox" BasedOn="{StaticResource  MaterialDesignTextBox}">
 
             <Style.Triggers >
                 
                 <DataTrigger Binding="{Binding IsMaterialChecked}" Value="False">
-                        <Setter Property="Background" Value="Gray"/>
-                        <Setter Property="Foreground" Value="Gray"/>
+                    <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
+                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightForegroundBrush}" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding AllEditable}" Value="True">
                     <Setter Property="IsEnabled" Value="True"/>
@@ -70,7 +77,8 @@
                 </DataTrigger>
                 
                 <Trigger Property="IsEnabled" Value="True">
-                    <Setter Property="Background" Value="LightYellow" />
+                    <Setter Property="Background" Value="{StaticResource   PrimaryHueLightBrush}" />
+                    <Setter Property="Foreground" Value="{StaticResource   PrimaryHueLightForegroundBrush}" />
                     <Setter Property="ToolTip" Value="Please enter a numeric value."/>
                 </Trigger>
             </Style.Triggers>
@@ -124,6 +132,7 @@
                   Name="MaterialGridX" 
                   CanUserSortColumns="False"
                   Margin="10"
+                      materialDesign:DataGridAssist.CellPadding="4"
                   Grid.RowSpan="5"
                   VerticalAlignment="Top" 
                   CanUserAddRows="False"
@@ -134,8 +143,8 @@
 
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsMaterialChecked}" Value="False">
-                                <Setter Property="Background" Value="Gray"/>
-                                <Setter Property="Foreground" Value="Gray"/>
+                                <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -247,21 +256,21 @@
               >-->
             <GroupBox x:Name="OtherCostX"  
                       HorizontalContentAlignment="Stretch"
-                      Header="Other Cost" Foreground="Maroon"
+                      Header="Other Cost" Foreground="{StaticResource SecondaryAccentForegroundBrush}"
                       FontFamily="Arial"
                       FontSize="12"
                       Grid.RowSpan="2"
                       Grid.Row="1"
                       Margin="0,20,0,0"
                       FontWeight="Bold"
-                      BorderBrush="DarkBlue"
+                      BorderBrush="{StaticResource AccentColorBrush}"
                       BorderThickness="0.5" >
 
 
                 <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Stretch"
                       Name="OtherCostGridX" VerticalAlignment="Top"
                           CanUserSortColumns="False"
-                          
+                          materialDesign:DataGridAssist.CellPadding="4"
                       Margin="0,10,10,10"
                       Grid.Column="1"
                       CanUserAddRows="false" 
@@ -316,34 +325,35 @@
                     Orientation="Horizontal"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Bottom">
-                <Button Name="AddButtonX" Background="White"
+                <Button Name="AddButtonX"
                     HorizontalAlignment="Right"
-                                        Height="30"
+                         Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                        Height="25" Width="25"
                     Command="{Binding AddRowCommand}">
                     <Button.Content>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="../Images/Add1.ico"
-                               Height="25"/>
-                        </StackPanel>
+                        <materialDesign:PackIcon Kind="Add"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
                     </Button.Content>
                 </Button>
                 <Button Command="{Binding RemoveCommand}"                   
-                    Height="30"
+                    Height="25"
+                        Width="25"
+                         Style="{StaticResource MaterialDesignFloatingActionButton}"
                     Margin="5"
-                    Background="White"
+                    
                     HorizontalAlignment="Right"
                    >
                     <Button.Content>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="../Images/RNew.ico"
-                               Height="25"/>
-                        </StackPanel>
+                        <materialDesign:PackIcon Kind="Remove"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
                     </Button.Content>
                 </Button>
                 <StackPanel>
                     <Label Content="Total ($) :" Grid.Row="0" Grid.Column="1"  
                        Margin="5"
-                       Style="{StaticResource LabelStyle1}"  FontSize="12" Background="FloralWhite"
+                         FontSize="12" Background="FloralWhite"
                        />
                 </StackPanel>
                 <StackPanel >
@@ -351,7 +361,7 @@
                              IsEnabled="False"                        
                              Margin="5"    
                              VerticalContentAlignment="Center"
-                             Height="25"  Width="100"  Style="{StaticResource TextBoxStyle}"                
+                             Height="25"  Width="100"                 
                              Text="{Binding TotalOCExtension, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
                 </StackPanel>
                 <!--<Button Command="{Binding CalculateCostCommand}"
@@ -379,6 +389,7 @@
                 <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Left"
                       Name="SubConlbrcstGridX" VerticalAlignment="Top"
                           CanUserSortColumns="False"
+                          materialDesign:DataGridAssist.CellPadding="4"
                      CellStyle="{StaticResource editableCell}"
                        Margin="0,10,10,10" Grid.Column="1"
                       CanUserAddRows="false"                      
@@ -403,14 +414,14 @@
                 <StackPanel Orientation="Horizontal"  Background="FloralWhite">
                     <Label Content="Total($):" Grid.Row="0" Grid.Column="1"  
                        Margin="5,5,0,5"
-                       Style="{StaticResource LabelStyle1}"  FontSize="12"
+                        FontSize="12"
                           
                        />
                     <TextBox x:Name="TotalSCExtensionX"
                          IsEnabled="False" 
                              VerticalContentAlignment="Center"
                          Margin="0,5,5,5"                       
-                         Height="25"  Width="80"  Style="{StaticResource TextBoxStyle}"                
+                         Height="25"  Width="80"                
                          Text="{Binding TotalSCExtension, 
                         UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
                     <!--<Label Content="SubContract Markup%" Grid.Column="1"  
@@ -478,24 +489,24 @@
 
                 <Label Content="Total Material Cost ($)" Grid.Row="0"
                        Margin="0,15,5,5"
-                       Style="{StaticResource LabelStyle1}"
+                       
                        />
                 <Label Content="Total Weight "
                        Grid.Row="1"
-                       Style="{StaticResource LabelStyle1}"
+                       
                        />
                 <Label Content="Total Freight Cost ($)"
                        Grid.Row="2"
-                       Style="{StaticResource LabelStyle1}" 
+                        
                        />
                 
                 <Label Content="Total Sub Contract Labor Cost ($)"
                        Grid.Row="3"
-                       Style="{StaticResource LabelStyle1}"  
+                        
                        />
                 <Label Content="Cost per Square Foot ($)"
                        Grid.Row="4"
-                       Style="{StaticResource LabelStyle1}"  
+                        
                        />
                 <TextBox x:Name="TotalMaterialCostbrkpX"
                          IsEnabled="False"
@@ -552,17 +563,19 @@
                     Width="100" Background="LightGreen"/>-->
             <Button Command="{Binding CalculateCostCommand}"                   
                     Height="35" Margin="0,5,22,5"
-                    Background="White"
+                    
                     HorizontalAlignment="Right"
                     >
 
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Calculator"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"/>
                         <TextBlock Text="Calculate" VerticalAlignment="Center"
-                                   HorizontalAlignment="Left"
-                                   Margin="0,0,5,0" FontSize="12" FontWeight="bold"/>
-                        <Image Source="../Images/Calculator.png"
-                               Height="25" />
+                                HorizontalAlignment="Left"
+                                Margin="5" FontWeight="bold"/>
+
                     </StackPanel>
                 </Button.Content>
             </Button>

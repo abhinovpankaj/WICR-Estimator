@@ -58,7 +58,8 @@ namespace WICR_Estimator.Services
                                     metal.MetalType = sht.Cells[i, 6].Value;
                                     metal.ProductionRate = (double)sht.Cells[i, 5].Value;
                                     metal.Vendor = sht.Cells[i, 7].Value;
-                                    if (sht.Cells[i, 3].Value != "")
+                                    var cellValue = sht.Cells[i, 3].Value;
+                                    if (sht.Cells[i, 3].Value != null)
                                     {
                                         metal.Units = (int)sht.Cells[i, 3].Value;
                                     }
@@ -186,7 +187,7 @@ namespace WICR_Estimator.Services
             {
                 exlApp = new Microsoft.Office.Interop.Excel.Application();
                 exlApp.EnableEvents = false;
-                exlApp.Visible = true;
+                exlApp.Visible = false;
                 exlApp.DisplayAlerts = false;
                 exlWb = exlApp.Workbooks.Open(filePath);
 

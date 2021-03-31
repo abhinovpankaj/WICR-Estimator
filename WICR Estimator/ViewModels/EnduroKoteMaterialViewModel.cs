@@ -278,7 +278,7 @@ namespace WICR_Estimator.ViewModels
         {
             switch (materialName)
             {
-                case "Select Y for protection coat over membrane below tile(GU80-1 TOP COAT)":
+                case "Select Y for protection coat over membrane below tile (GU80-1 TOP COAT)":
                 
                 case "Extra stair nosing lf":
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
