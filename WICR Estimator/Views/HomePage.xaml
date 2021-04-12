@@ -132,12 +132,12 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width=".25*"/>
             <ColumnDefinition Width="*"/>
-            
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <!--<Grid.RowDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>-->
+        </Grid.RowDefinitions>
         <!--<StackPanel >
             <TextBlock Text="Projects for Estimates"
                    HorizontalAlignment="Center"    
@@ -154,6 +154,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
         <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth4"
                              materialDesign:ShadowAssist.ShadowEdges="All"
                              materialDesign:ShadowAssist.Darken="True"
+                             Grid.RowSpan="2"
                              Margin="5,0,-5,0" 
                              UniformCornerRadius="5">
             <ListView HorizontalContentAlignment="Stretch" 
@@ -222,13 +223,13 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                   VerticalAlignment="Top"
                           Style="{StaticResource MaterialDesignDataGrid}"
                           ColumnHeaderHeight="50"
-                  HorizontalAlignment="Stretch"                  
-                  IsReadOnly="True"
-                  CanUserAddRows="False"
-                  AutoGenerateColumns="False"
-                              Background="{StaticResource PrimaryHueDarkBrush}"
+                          HorizontalAlignment="Stretch"                  
+                          IsReadOnly="True"
+                          CanUserAddRows="False"
+                          AutoGenerateColumns="False"
+                          Background="{StaticResource PrimaryHueDarkBrush}"
                   
-                  Margin="10,5,10,0"
+                          Margin="10,5,10,0"
                   >
                         <DataGrid.Resources>
 
@@ -407,77 +408,80 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                         VerticalAlignment="Bottom"
                         VerticalContentAlignment="Bottom"
                         HorizontalContentAlignment="Left"/>
-            <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" VerticalAlignment="Bottom"
+            
+        </StackPanel>
+        <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" VerticalAlignment="Bottom"
                                  HorizontalAlignment="Right"
                                  HorizontalContentAlignment="Center"
                                 ToolTip="Project Totals"
                                 UniformCornerRadius="15"
-                                Margin="150,5,0,0" Background="{StaticResource   SecondaryHueMidBrush }">
-                <materialDesign:Card Name="Totals" HorizontalAlignment="Center"
+                                 Grid.Column="2"
+                               
+                             Grid.RowSpan="2"
+                              Margin="10" Background="{StaticResource   SecondaryHueMidBrush }">
+            <materialDesign:Card Name="Totals" HorizontalAlignment="Center"
                                      Padding="10">
-                     
-                    <Grid DataContext="{Binding ProjectTotals,UpdateSourceTrigger=PropertyChanged}"
+
+                <Grid DataContext="{Binding ProjectTotals,UpdateSourceTrigger=PropertyChanged}"
                       HorizontalAlignment="Stretch"
                       MinWidth="200"
                       Grid.Row="1"    
                       Margin="10,0,10,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel>
-                            <TextBlock  Margin="0,0,5,5" 
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock  Margin="0,0,5,5" 
                                    FontWeight="SemiBold" Text="Metal Cost"/>
-                            <TextBlock  FontWeight="SemiBold"
+                        <TextBlock  FontWeight="SemiBold"
                                     Margin="0,0,5,5" Text="Slope Cost"/>
-                            <TextBlock    Margin="0,0,5,5"
+                        <TextBlock    Margin="0,0,5,5"
                                    FontWeight="SemiBold" Text="System Cost"/>
-                            <TextBlock   Margin="0,0,5,5"
+                        <TextBlock   Margin="0,0,5,5"
                                    FontWeight="SemiBold" Text="Material Cost"/>
-                            <TextBlock   Margin="0,0,5,5"
+                        <TextBlock   Margin="0,0,5,5"
                                    FontWeight="SemiBold" Text="Labor Cost"/>
-                            <TextBlock   Margin="0,0,5,5"
+                        <TextBlock   Margin="0,0,5,5"
                                    FontWeight="SemiBold" Text="Labor %"/>
-                            <TextBlock   Margin="0,5,5,5" FontSize="15"
+                        <TextBlock   Margin="0,5,5,5" FontSize="15"
                                          
                                    FontWeight="Bold" Text="Total Cost"/>
-                        </StackPanel>
-                        <StackPanel Grid.Column="1">
-                            <TextBlock  FontWeight="SemiBold"
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock  FontWeight="SemiBold"
                        Text="{Binding MetalCost}"
                        Margin="5,0,5,5"/>
 
-                            <TextBlock  FontWeight="SemiBold"
+                        <TextBlock  FontWeight="SemiBold"
                        Text="{Binding SlopeCost}"
                        Margin="5,0,5,5"/>
 
-                            <TextBlock FontWeight="SemiBold"
+                        <TextBlock FontWeight="SemiBold"
                        Text="{Binding SystemCost}"
                        Margin="5,0,5,5"/>
 
-                            <TextBlock  FontWeight="SemiBold"
+                        <TextBlock  FontWeight="SemiBold"
                        Text="{Binding MaterialCost}"
                        Margin="5,0,5,5"/>
 
-                            <TextBlock  FontWeight="SemiBold"
+                        <TextBlock  FontWeight="SemiBold"
                        Text="{Binding LaborCost}"
                        Margin="5,0,5,5"/>
 
-                            <TextBlock  FontWeight="SemiBold"
+                        <TextBlock  FontWeight="SemiBold"
                        Text="{Binding LaborPercentage}"
                        Margin="5,0,5,5"/>
 
-                            <TextBlock FontSize="15" FontWeight="Bold" Background="{StaticResource SecondaryHueMidBrush}"
+                        <TextBlock FontSize="15" FontWeight="Bold" Background="{StaticResource SecondaryHueMidBrush}"
                        Text="{Binding TotalCost}"
                        Margin="5,5,5,5"/>
-                        </StackPanel>
+                    </StackPanel>
 
-                    </Grid>
-                    <!--</GroupBox>-->
-                </materialDesign:Card>
+                </Grid>
+                <!--</GroupBox>-->
             </materialDesign:Card>
-        </StackPanel>
-       
-       
+        </materialDesign:Card>
+
     </Grid>
 </UserControl>

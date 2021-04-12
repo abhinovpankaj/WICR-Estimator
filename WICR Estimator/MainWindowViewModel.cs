@@ -1000,7 +1000,7 @@ namespace WICR_Estimator
             //OnTaskStarted("Pushing prices to DB");
             PriceVersion.LastUpdatedOn = DateTime.Now;
             
-            PriceVersion.Version = PriceVersion.Version+0.1;
+            PriceVersion.Version = PriceVersion.Version + .1;
             PriceVersion = await HTTPHelper.PutPriceVersionAsync(1, PriceVersion);
             OnPropertyChanged("PriceVersion");
             OnTaskCompleted("Prices Pushed Successfully");

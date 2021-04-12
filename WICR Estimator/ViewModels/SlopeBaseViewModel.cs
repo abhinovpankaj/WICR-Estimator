@@ -464,10 +464,10 @@ namespace WICR_Estimator.ViewModels
                 }
 
                 isPrevailingWage = js.IsPrevalingWage;
-                if (dbData == null)
-                {
+                //if (dbData == null)
+                //{
                     dbData = js.dbData;
-                }
+                //}
                 if (isPrevailingWage)
                 {
                     if (dbData==null)

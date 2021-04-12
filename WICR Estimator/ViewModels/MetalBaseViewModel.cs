@@ -395,10 +395,10 @@ namespace WICR_Estimator.ViewModels
         public virtual void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {
             JobSetup js = sender as JobSetup;
-            if (dbData == null)
-            {
+            //if (dbData == null)
+            //{
                 dbData = js.dbData;
-            }
+            //}
             OnJobSetupChange(js);
             
 

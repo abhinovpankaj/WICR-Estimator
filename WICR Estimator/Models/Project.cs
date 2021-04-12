@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyToolkit.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -141,7 +142,7 @@ namespace WICR_Estimator.Models
     }
     
     
-    public class Project: BaseViewModel
+    public class Project: GraphObservableObject
     {
         private string productVersion;
         public string ProductVersion
@@ -210,9 +211,11 @@ namespace WICR_Estimator.Models
                 updatedJobSetup = new DelegateCommand(UpdateJobSetUp, canUpdate);
             }
         }
+        
         public int CopyCount { get; set; }
 
         public string Name { get; set; }
+        #region MainTable prop
         public void UpdateMainTable()
         {
             OnPropertyChanged("TotalCost");
@@ -460,6 +463,9 @@ namespace WICR_Estimator.Models
                         return 0;
             }
 }
+
+        #endregion
+
         private bool isSelectedProject;
         public bool IsSelectedProject
         {
@@ -487,7 +493,15 @@ namespace WICR_Estimator.Models
         public string GrpName { get; set; }
         public string MainGroup { get; set; }
 
-        public JobSetup ProjectJobSetUp { get; set; }
+        private JobSetup jobSetup;
+        public JobSetup ProjectJobSetUp
+        {
+            get { return jobSetup; }
+            set
+            {
+                Set(ref jobSetup, value);
+            }
+        }
 
         private MetalBaseViewModel metalViewModel;
         
@@ -560,6 +574,7 @@ namespace WICR_Estimator.Models
         private bool canUpdate(object obj)
         {
             return true;
+            
         }
 
         private void UpdateJobSetUp(object obj)

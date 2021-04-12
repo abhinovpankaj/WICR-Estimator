@@ -95,6 +95,16 @@ BorderBrush="Black" Margin="0,0,0,3" CornerRadius="3,3,0,0" >
 
     </UserControl.Resources>
     <Grid>
+        <WrapPanel Orientation="Vertical" Panel.ZIndex="1"
+                   Margin="15,0,0,100"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Bottom">
+            <Button Content="Redo" Command="{Binding RedoCommand}"
+                    Margin="5"/>
+            <Button Content="Undo" Command="{Binding UndoCommand}"
+                    Margin="5"/>
+        </WrapPanel>
+
         <TabControl ItemsSource="{Binding EnabledProjects}"
                     SelectedIndex="{Binding ActiveTabIndex}"
                                  >
@@ -121,6 +131,7 @@ BorderBrush="Black" Margin="0,0,0,3" CornerRadius="3,3,0,0" >
             <TabControl.ContentTemplate>
                 <DataTemplate>
                     <DockPanel>
+                        
                         <TabControl TabStripPlacement="Left"
                                     SelectionChanged="TabControl_SelectionChanged"
                                     SelectedIndex="{Binding ActiveTabIndex}">
@@ -209,7 +220,8 @@ BorderBrush="Black" Margin="0,0,0,3" CornerRadius="3,3,0,0" >
                                 </TabItem.Content>
                             </TabItem>
                         </TabControl>
-                           
+                        
+                        
                     </DockPanel>
                 </DataTemplate>
             </TabControl.ContentTemplate>

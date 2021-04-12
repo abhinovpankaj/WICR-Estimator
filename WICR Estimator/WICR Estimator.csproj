@@ -142,6 +142,9 @@
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.19\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
     </Reference>
+    <Reference Include="MyToolkit, Version=2.5.16.0, Culture=neutral, PublicKeyToken=3e349a1360994d26, processorArchitecture=MSIL">
+      <HintPath>..\packages\MyToolkit.2.5.16\lib\portable-net45+wp8+win8+wpa81\MyToolkit.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -220,6 +223,8 @@
     <Compile Include="GoogleUtility\SpreadSheetConnect.cs" />
     <Compile Include="GSData.cs" />
     <Compile Include="IPageViewModel.cs" />
+    <Compile Include="Models\GraphObservableObject.cs" />
+    <Compile Include="Models\ObservableObject.cs" />
     <Compile Include="PasswordBoxMVVMAttachedProperties.cs" />
     <Compile Include="PasswordHashing.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -228,6 +233,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Services\ExcelService.cs" />
+    <Compile Include="Services\UndoRedoManager.cs" />
     <Compile Include="ViewModels\LoginPageViewModel.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Services\DataSerializerService.cs" />
@@ -546,12 +552,12 @@
   <ItemGroup>
     <PublishFile Include="SummaryRange.xml">
       <Visible>False</Visible>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
   </ItemGroup>

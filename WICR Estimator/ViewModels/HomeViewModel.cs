@@ -163,6 +163,10 @@ namespace WICR_Estimator.ViewModels
                             item.ProjectJobSetUp.dbData = dbValues;
 
                         item.ProjectJobSetUp.UpdateJobSetup();
+                        if (item.OriginalProjectName=="Paraseal LG")
+                        {
+                            item.MaterialViewModel.CalculateCost(null); 
+                        }
                         UpdateProjectTotals();
                     }
                     //OnTaskCompleted("Prices Refreshed for all selected projects.");
@@ -603,6 +607,9 @@ namespace WICR_Estimator.ViewModels
                         item.MaterialViewModel.setUnitChangeValues();
                         item.MaterialViewModel.CalculateCost(null);
                     }
+                    else
+                        item.MaterialViewModel.CalculateCost(null);
+                    item.ProjectJobSetUp.TotalSalesCostTemp = item.MaterialViewModel.TotalSale;
                 }
                 Project_OnSelectedProjectChange(null, null);
                 reader.Close();
@@ -738,7 +745,7 @@ namespace WICR_Estimator.ViewModels
                     
                     if (item.ProjectJobSetUp != null)
                     {
-                        item.ProjectJobSetUp.JobSetupChange -= item.MaterialViewModel.JobSetup_OnJobSetupChange;
+                        //item.ProjectJobSetUp.JobSetupChange -= item.MaterialViewModel.JobSetup_OnJobSetupChange;
                         item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
                         item.ProjectJobSetUp.EnableMoreMarkupCommand = new DelegateCommand(item.ProjectJobSetUp.CanAddMoreMarkup, item.ProjectJobSetUp.canAdd);
                         item.ProjectJobSetUp.GetOriginalName();
@@ -807,7 +814,7 @@ namespace WICR_Estimator.ViewModels
                         SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "2.5 Galvanized Lathe");
                         if (sm != null)
                         {
-                            sm.IsMaterialChecked= ischecked ;
+                            sm.IsMaterialChecked = ischecked;
                         }
                         sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "Staples");
                         if (sm != null)
@@ -821,6 +828,9 @@ namespace WICR_Estimator.ViewModels
                         item.MaterialViewModel.setUnitChangeValues();
                         item.MaterialViewModel.CalculateCost(null);
                     }
+                    else
+                        item.MaterialViewModel.CalculateCost(null);
+                    item.ProjectJobSetUp.TotalSalesCostTemp = item.MaterialViewModel.TotalSale;
                 }
                 
 

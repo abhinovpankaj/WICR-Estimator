@@ -1713,10 +1713,10 @@ namespace WICR_Estimator.ViewModels
                 actualPreWage = js.ActualPrevailingWage;
                 MaterialPerc = getMaterialDiscount(js.ProjectDelayFactor);
             }
-            if (dbData == null)
-            {
+            //if (dbData == null)
+            //{
                 dbData = js.dbData;
-            }
+            //}
             
            FetchMaterialValuesAsync(true);
             

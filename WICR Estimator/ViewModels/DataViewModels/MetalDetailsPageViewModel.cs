@@ -336,13 +336,6 @@ namespace WICR_Estimator.ViewModels.DataViewModels
         }
         public MetalDetailsPageViewModel()
         {
-            //Vendors = new List<MetalVendor>();
-            //Vendors.Add(new MetalVendor { VendorName="Chivon", IsSelected=true });
-            //Vendors.Add(new MetalVendor { VendorName = "Thunderbird", IsSelected = true });
-            //MetalTypes = new List<MetalItemType>();
-            //MetalTypes.Add(new MetalItemType { MetalType = "26 ga. Type 304 Stainless Steel", IsSelected = true });
-            //MetalTypes.Add(new MetalItemType { MetalType = "16oz Copper", IsSelected = true });
-            //MetalTypes.Add(new MetalItemType { MetalType = "24ga. Galvanized Primed Steel", IsSelected = true });
             getdata();
         }
         private async void getdata()

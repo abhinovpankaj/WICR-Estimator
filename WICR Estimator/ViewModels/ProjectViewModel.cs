@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Input;
+using System.Windows.Threading;
 using WICR_Estimator.DBModels;
 using WICR_Estimator.Models;
 using WICR_Estimator.Services;
@@ -32,7 +34,7 @@ namespace WICR_Estimator.ViewModels
             IsAdminloggedIn = user.IsAdmin;
         
         }
-
+         
         public ProjectViewModel()
         {
             EnabledProjects = new ObservableCollection<Project>();
@@ -40,8 +42,8 @@ namespace WICR_Estimator.ViewModels
             
             LoginPageViewModel.OnLoggedIn += HomeViewModel_OnLoggedAsAdmin;
             HomeViewModel.OnProjectSelectionChange += HomeViewModel_OnProjectSelectionChange;
-            
-            
+            //var undoManger= new UndoRedoManager(EnabledProjects, );
+
         }
         List<Project> newlyAddedProjects;
         private void EnabledProjects_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -305,6 +307,44 @@ namespace WICR_Estimator.ViewModels
 
         #endregion
 
-       
+        #region undoredo
+        public ICommand RedoCommand
+        {
+            get
+            {
+                return new DelegateCommand(Redo, canRedo);
+            }
+        }
+
+        private void Redo(object obj)
+        {
+
+        }
+
+        private bool canRedo(object obj)
+        {
+            return true;
+        }
+
+        public ICommand UndoCommand
+        {
+            get
+            {
+                return new DelegateCommand(Undo, canUndo);
+            }
+        }
+
+        private void Undo(object obj)
+        {
+
+        }
+
+        private bool canUndo(object obj)
+        {
+            return true;
+        }
+
+        #endregion
+
     }
 }
