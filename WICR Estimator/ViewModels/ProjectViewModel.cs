@@ -20,6 +20,7 @@ namespace WICR_Estimator.ViewModels
         //Retain the active tab
         public int ActiveTabIndex { get; set; }
         private ObservableCollection<Project> enabledProjects;
+
         public ProjectViewModel(ObservableCollection<Project> enabledProjects)
             :this()
         {
@@ -42,7 +43,8 @@ namespace WICR_Estimator.ViewModels
             
             LoginPageViewModel.OnLoggedIn += HomeViewModel_OnLoggedAsAdmin;
             HomeViewModel.OnProjectSelectionChange += HomeViewModel_OnProjectSelectionChange;
-            //var undoManger= new UndoRedoManager(EnabledProjects, );
+
+            
 
         }
         List<Project> newlyAddedProjects;
@@ -307,44 +309,7 @@ namespace WICR_Estimator.ViewModels
 
         #endregion
 
-        #region undoredo
-        public ICommand RedoCommand
-        {
-            get
-            {
-                return new DelegateCommand(Redo, canRedo);
-            }
-        }
-
-        private void Redo(object obj)
-        {
-
-        }
-
-        private bool canRedo(object obj)
-        {
-            return true;
-        }
-
-        public ICommand UndoCommand
-        {
-            get
-            {
-                return new DelegateCommand(Undo, canUndo);
-            }
-        }
-
-        private void Undo(object obj)
-        {
-
-        }
-
-        private bool canUndo(object obj)
-        {
-            return true;
-        }
-
-        #endregion
+        
 
     }
 }

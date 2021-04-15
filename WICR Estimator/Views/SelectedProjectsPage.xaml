@@ -94,16 +94,9 @@ BorderBrush="Black" Margin="0,0,0,3" CornerRadius="3,3,0,0" >
         </Style>
 
     </UserControl.Resources>
+    
     <Grid>
-        <WrapPanel Orientation="Vertical" Panel.ZIndex="1"
-                   Margin="15,0,0,100"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Bottom">
-            <Button Content="Redo" Command="{Binding RedoCommand}"
-                    Margin="5"/>
-            <Button Content="Undo" Command="{Binding UndoCommand}"
-                    Margin="5"/>
-        </WrapPanel>
+        
 
         <TabControl ItemsSource="{Binding EnabledProjects}"
                     SelectedIndex="{Binding ActiveTabIndex}"
@@ -130,8 +123,43 @@ BorderBrush="Black" Margin="0,0,0,3" CornerRadius="3,3,0,0" >
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
                 <DataTemplate>
-                    <DockPanel>
-                        
+                    <Grid>
+                        <Grid.InputBindings>
+                            <KeyBinding Gesture="Control+Z"
+            Command="{Binding UndoCommand}"/>
+
+                            <KeyBinding Gesture="Control+Y"
+            Command="{Binding RedoCommand}"/>
+                            </Grid.InputBindings>
+                        <WrapPanel Orientation="Vertical" Panel.ZIndex="1"
+                   Margin="15,0,0,100"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Bottom">
+                            
+                            <Button Margin="5" ToolTip="Undo(Ctrl+Z)"
+                    HorizontalAlignment="Right"
+                         Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                        Height="40" Width="40"
+                    Command="{Binding UndoCommand}">
+                                <Button.Content>
+                                    <materialDesign:PackIcon Kind="Undo"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                                </Button.Content>
+                                
+                            </Button>
+                            <Button Margin="5" ToolTip="Redo(Ctrl+Y)"
+                    HorizontalAlignment="Right"
+                         Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                        Height="40" Width="40"
+                    Command="{Binding RedoCommand}">
+                                <Button.Content>
+                                    <materialDesign:PackIcon Kind="Redo"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                                </Button.Content>
+                            </Button>
+                        </WrapPanel>
                         <TabControl TabStripPlacement="Left"
                                     SelectionChanged="TabControl_SelectionChanged"
                                     SelectedIndex="{Binding ActiveTabIndex}">
@@ -222,7 +250,7 @@ BorderBrush="Black" Margin="0,0,0,3" CornerRadius="3,3,0,0" >
                         </TabControl>
                         
                         
-                    </DockPanel>
+                    </Grid>
                 </DataTemplate>
             </TabControl.ContentTemplate>
            </TabControl>

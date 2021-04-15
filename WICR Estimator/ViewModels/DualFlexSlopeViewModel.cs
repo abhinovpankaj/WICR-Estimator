@@ -23,11 +23,12 @@ namespace WICR_Estimator.ViewModels
             }
             set
             {
-                if (mortarSlopes != value)
-                {
-                    mortarSlopes = value;
-                    OnPropertyChanged("UrethaneSlopes");
-                }
+                //if (mortarSlopes != value)
+                //{
+                //    mortarSlopes = value;
+                //    OnPropertyChanged("UrethaneSlopes");
+                //}
+                Set(ref mortarSlopes, value);
             }
         }
 
@@ -44,7 +45,7 @@ namespace WICR_Estimator.ViewModels
                 if (mortarSumTotal != value)
                 {
                     mortarSumTotal = value;
-                    OnPropertyChanged("UrethaneSumTotal");
+                    RaisePropertyChanged("UrethaneSumTotal");
                 }
             }
         }
@@ -61,7 +62,7 @@ namespace WICR_Estimator.ViewModels
                 if (mortarSumTotalMixes != value)
                 {
                     mortarSumTotalMixes = value;
-                    OnPropertyChanged("UrethaneSumTotalMixes");
+                    RaisePropertyChanged("UrethaneSumTotalMixes");
                 }
             }
         }
@@ -79,7 +80,7 @@ namespace WICR_Estimator.ViewModels
                 if (mortarSumTotalMatExt != value)
                 {
                     mortarSumTotalMatExt = value;
-                    OnPropertyChanged("UrethaneSumTotalMatExt");
+                    RaisePropertyChanged("UrethaneSumTotalMatExt");
                 }
             }
         }
@@ -96,7 +97,7 @@ namespace WICR_Estimator.ViewModels
                 if (mortarSumTotalLaborExt != value)
                 {
                     mortarSumTotalLaborExt = value;
-                    OnPropertyChanged("UrethaneSumTotalLaborExt");
+                    RaisePropertyChanged("UrethaneSumTotalLaborExt");
                 }
             }
         }
@@ -430,10 +431,10 @@ namespace WICR_Estimator.ViewModels
                 UrethaneSumTotalLaborExt = Math.Round(UrethaneSlopes.Select(x => x.LaborExtensionSlope).Sum(), 2);
 
             }
-            OnPropertyChanged("MortarSumTotal");
-            OnPropertyChanged("MortarSumTotalMixes");
-            OnPropertyChanged("MortarSumTotalMatExt");
-            OnPropertyChanged("MortarSumTotalLaborExt");
+            RaisePropertyChanged("MortarSumTotal");
+            RaisePropertyChanged("MortarSumTotalMixes");
+            RaisePropertyChanged("MortarSumTotalMatExt");
+            RaisePropertyChanged("MortarSumTotalLaborExt");
         }
 
         public override void CalculateTotalMixes()

@@ -1,4 +1,6 @@
 ﻿using MyToolkit.Data;
+using MyToolkit.Model;
+using MyToolkit.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -147,13 +149,17 @@ namespace WICR_Estimator.Models
         private string productVersion;
         public string ProductVersion
         {
+            //set
+            //{
+            //    if (value!=productVersion)
+            //    {
+            //        productVersion = value;
+            //        OnPropertyChanged("ProductVersion");
+            //    }
+            //}
             set
             {
-                if (value!=productVersion)
-                {
-                    productVersion = value;
-                    OnPropertyChanged("ProductVersion");
-                }
+                Set(ref productVersion, value);
             }
             get
             {
@@ -164,19 +170,32 @@ namespace WICR_Estimator.Models
         public int EstimateID { get; set; }
         public string CreationDetails { get; set; }
 
-        public int ActiveTabIndex { get; set; }
+        private int activeTabIndex;
+        public int ActiveTabIndex
+        {
+            get { return activeTabIndex; }
+            set
+            {
+                Set(ref activeTabIndex, value);
+            }
+        }
+
         private string originalProjectName;
 
         public string OriginalProjectName
         {
             get { return originalProjectName; }
+            //set
+            //{
+            //    if (value!=originalProjectName)
+            //    {
+            //        originalProjectName = value;
+            //        OnPropertyChanged("OriginalProjectName");
+            //    }
+            //}
             set
             {
-                if (value!=originalProjectName)
-                {
-                    originalProjectName = value;
-                    OnPropertyChanged("OriginalProjectName");
-                }
+                Set(ref originalProjectName, value);
             }
         }
         public Dictionary<string, int> lastUsedRows;
@@ -209,26 +228,41 @@ namespace WICR_Estimator.Models
             if (updatedJobSetup == null)
             {
                 updatedJobSetup = new DelegateCommand(UpdateJobSetUp, canUpdate);
+                undoRedoManager = new UndoRedoManager(this, new MyDispatcher());
             }
+            
+            
         }
-        
+        private UndoRedoManager undoRedoManager;
         public int CopyCount { get; set; }
 
         public string Name { get; set; }
         #region MainTable prop
         public void UpdateMainTable()
         {
-            OnPropertyChanged("TotalCost");
-            OnPropertyChanged("MetalCost");
-            OnPropertyChanged("SlopeCost");
+            //OnPropertyChanged("TotalCost");
+            //OnPropertyChanged("MetalCost");
+            //OnPropertyChanged("SlopeCost");
 
-            OnPropertyChanged("SystemNOther");
-            OnPropertyChanged("CostPerSqFoot");
-            OnPropertyChanged("SystemNOther");
-            OnPropertyChanged("LaborCost");
-            OnPropertyChanged("TotalCost");
-            OnPropertyChanged("MaterialCost");
-            OnPropertyChanged("LaborPercentage");
+            //OnPropertyChanged("SystemNOther");
+            //OnPropertyChanged("CostPerSqFoot");
+            //OnPropertyChanged("SystemNOther");
+            //OnPropertyChanged("LaborCost");
+            //OnPropertyChanged("TotalCost");
+            //OnPropertyChanged("MaterialCost");
+            //OnPropertyChanged("LaborPercentage");
+
+            RaisePropertyChanged("TotalCost");
+            RaisePropertyChanged("MetalCost");
+            RaisePropertyChanged("SlopeCost");
+
+            RaisePropertyChanged("SystemNOther");
+            RaisePropertyChanged("CostPerSqFoot");
+            RaisePropertyChanged("SystemNOther");
+            RaisePropertyChanged("LaborCost");
+            RaisePropertyChanged("TotalCost");
+            RaisePropertyChanged("MaterialCost");
+            RaisePropertyChanged("LaborPercentage");
         }
         //private double metalCost;
         public double MetalCost
@@ -333,7 +367,7 @@ namespace WICR_Estimator.Models
                     return "";
             }
         }
-        private double costPerSqft;
+        //private double costPerSqft;
         public double CostPerSqFoot
         {
             //set
@@ -478,7 +512,8 @@ namespace WICR_Estimator.Models
                 if (isSelectedProject != value)
                 {
                     isSelectedProject = value;
-                    OnPropertyChanged("IsSelectedProject");
+                    //OnPropertyChanged("IsSelectedProject");
+                    RaisePropertyChanged("IsSelectedProject");
                     if (OnSelectedProjectChange!=null)
                     {
                         OnSelectedProjectChange(this, EventArgs.Empty);
@@ -500,6 +535,11 @@ namespace WICR_Estimator.Models
             set
             {
                 Set(ref jobSetup, value);
+                //if (jobSetup!=value)
+                //{
+                //    jobSetup = value;
+                //    RaisePropertyChanged("ProjectJobSetUp");
+                //}
             }
         }
 
@@ -513,11 +553,14 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (metalViewModel != value)
-                {
-                    metalViewModel = value;
-                    OnPropertyChanged("MetalViewModel");
-                }
+                //if (metalViewModel != value)
+                //{
+                //    metalViewModel = value;
+                //    OnPropertyChanged("MetalViewModel");
+                //    //RaisePropertyChanged("MetalViewModel");
+                //}
+
+                Set(ref metalViewModel, value);
             }
         }
         private SlopeBaseViewModel slopeViewModel;
@@ -533,9 +576,10 @@ namespace WICR_Estimator.Models
                 if (slopeViewModel != value)
                 {
                     slopeViewModel = value;
-                    OnPropertyChanged("SlopeViewModel");
-
+                    //OnPropertyChanged("SlopeViewModel");
+                    RaisePropertyChanged("SlopeViewModel");
                 }
+                //Set(ref slopeViewModel, value);
             }
         }
         private MaterialBaseViewModel materialViewModel;
@@ -551,8 +595,10 @@ namespace WICR_Estimator.Models
                 if (materialViewModel != value)
                 {
                     materialViewModel = value;
-                    OnPropertyChanged("MaterialViewModel");
+                    //OnPropertyChanged("MaterialViewModel");
+                    RaisePropertyChanged("MaterialViewModel");
                 }
+                //Set(ref materialViewModel, value);
             }
         }
 
@@ -587,9 +633,63 @@ namespace WICR_Estimator.Models
         //{
         //    throw new NotImplementedException();
         //}
+        
         public override string ToString()
         {
             return "Selected Project:"+ Name;
+        }
+
+        #region undoredo
+        public ICommand RedoCommand
+        {
+            get
+            {
+                return new DelegateCommand(Redo, canRedo);
+            }
+        }
+
+        private void Redo(object obj)
+        {
+            undoRedoManager.Redo();
+        }
+
+        private bool canRedo(object obj)
+        {
+            return undoRedoManager.CanRedo;
+        }
+
+        public ICommand UndoCommand
+        {
+            get
+            {
+                return new DelegateCommand(Undo, canUndo);
+            }
+        }
+
+        private void Undo(object obj)
+        {
+            undoRedoManager.Undo();
+        }
+
+        private bool canUndo(object obj)
+        {
+            if (undoRedoManager.CurrentIndex>2)
+            {
+                return undoRedoManager.CanUndo;
+            }
+            else
+                return false;
+
+        }
+
+        #endregion
+    }
+
+    public class MyDispatcher : IDispatcher
+    {
+        public void InvokeAsync(Action action)
+        {
+            action.Invoke();
         }
     }
 }

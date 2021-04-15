@@ -10,12 +10,13 @@ using System.Runtime.Serialization;
 using WICR_Estimator.Models;
 using WICR_Estimator.Services;
 using WICR_Estimator.DBModels;
+using MyToolkit.Model;
 
 namespace WICR_Estimator.ViewModels
 {
     [KnownType(typeof(MetalViewModel))]
     [KnownType(typeof(ZeroMetalViewModel))]
-    public class MetalBaseViewModel:BaseViewModel
+    public class MetalBaseViewModel:GraphObservableObject
     {
 
         public Totals MetalTotals;
@@ -90,7 +91,8 @@ namespace WICR_Estimator.ViewModels
                 if (showSpecialPriceColumn != value)
                 {
                     showSpecialPriceColumn = value;
-                    OnPropertyChanged("ShowSpecialPriceColumn");
+                    RaisePropertyChanged("ShowSpecialPriceColumn");
+                    
                 }
             }
         }
@@ -103,7 +105,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != mName)
                 {
                     mName = value;
-                    OnPropertyChanged("MetalName");
+                    RaisePropertyChanged("MetalName");
                 }
             }
         }
@@ -116,7 +118,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != nails)
                 {
                     nails = value;
-                    OnPropertyChanged("Nails");
+                    RaisePropertyChanged("Nails");
                 }
             }
         }
@@ -132,7 +134,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != totalLaborCost)
                 {
                     totalLaborCost = value;
-                    OnPropertyChanged("TotalLaborCost");
+                    RaisePropertyChanged("TotalLaborCost");
                 }
             }
         }
@@ -150,7 +152,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != totalMaterialCost)
                 {
                     totalMaterialCost = value;
-                    OnPropertyChanged("TotalMaterialCost");
+                    RaisePropertyChanged("TotalMaterialCost");
                 }
             }
         }
@@ -164,11 +166,12 @@ namespace WICR_Estimator.ViewModels
             }
             set
             {
-                if (metals != value)
-                {
-                    metals = value;
-                    OnPropertyChanged("Metals");
-                }
+                //if (metals != value)
+                //{
+                //    metals = value;
+                //    RaisePropertyChanged("Metals");
+                //}
+                Set(ref metals, value);
             }
         }
 
@@ -183,8 +186,9 @@ namespace WICR_Estimator.ViewModels
                 if (addOnMetals != value)
                 {
                     addOnMetals = value;
-                    OnPropertyChanged("AddOnMetals");
+                    RaisePropertyChanged("AddOnMetals");
                 }
+                //Set(ref addOnMetals, value);
             }
         }
         public ObservableCollection<MiscMetal> MiscMetals
@@ -195,11 +199,12 @@ namespace WICR_Estimator.ViewModels
             }
             set
             {
-                if (miscMetals != value)
-                {
-                    miscMetals = value;
-                    OnPropertyChanged("MiscMetals");
-                }
+                //if (miscMetals != value)
+                //{
+                //    miscMetals = value;
+                //    RaisePropertyChanged("MiscMetals");
+                //}
+                Set(ref miscMetals, value);
             }
         }
         //[XmlIgnore]

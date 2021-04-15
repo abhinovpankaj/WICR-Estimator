@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyToolkit.Model;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace WICR_Estimator.ViewModels
     [KnownType(typeof(EnduroKoteSlopeViewModel))]
     [KnownType(typeof(DualFlexSlopeViewModel))]
     [DataContract]
-    public class SlopeBaseViewModel:BaseViewModel
+    public class SlopeBaseViewModel:GraphObservableObject
     {
         
         #region Private Properties
@@ -101,7 +102,7 @@ namespace WICR_Estimator.ViewModels
                 if (value!=slopeMaterialName)
                 {
                     slopeMaterialName = value;
-                    OnPropertyChanged("SlopeMaterialName");
+                    RaisePropertyChanged("SlopeMaterialName");
                 }
             }
         }
@@ -114,7 +115,7 @@ namespace WICR_Estimator.ViewModels
             set
             {
                 isUrethaneVisible = value;
-                OnPropertyChanged("IsUrethaneVisible");
+                RaisePropertyChanged("IsUrethaneVisible");
             }
         }
         public bool IsOverrridable
@@ -135,24 +136,35 @@ namespace WICR_Estimator.ViewModels
             }
             set
             {
-                if (value != overrideManually)
-                {
-                    overrideManually = value;
+                //if (value != overrideManually)
+                //{
+                //    overrideManually = value;
+                //    if (!overrideManually)
+                //    {
+
+                //        totalmixesman = 0;
+                //        averagemixesprice = 0;
+                //        //CalculateGridTotal();
+                //        //CalculateTotalMixes();
+                //        OnPropertyChanged("TotalMixesMan");
+                //        OnPropertyChanged("AverageMixesPrice");
+                //    }
+
+
+                //    OnPropertyChanged("OverrideManually");
+                    Set(ref overrideManually, value);
                     if (!overrideManually)
                     {
 
                         totalmixesman = 0;
                         averagemixesprice = 0;
-                        //CalculateGridTotal();
-                        //CalculateTotalMixes();
-                        OnPropertyChanged("TotalMixesMan");
-                        OnPropertyChanged("AverageMixesPrice");
+                        
+                        RaisePropertyChanged("TotalMixesMan");
+                        RaisePropertyChanged("AverageMixesPrice");
                     }
-                    
 
-                    OnPropertyChanged("OverrideManually");
-                }
             }
+        
         }
         [DataMember]
         public ObservableCollection<Slope> Slopes
@@ -163,11 +175,12 @@ namespace WICR_Estimator.ViewModels
             }
             set
             {
-                if (slopes != value)
-                {
-                    slopes = value;
-                    OnPropertyChanged("Slopes");
-                }
+                //if (slopes != value)
+                //{
+                //    slopes = value;
+                //    OnPropertyChanged("Slopes");
+                //}
+                Set(ref slopes, value);
             }
         }
         [DataMember]
@@ -185,11 +198,12 @@ namespace WICR_Estimator.ViewModels
                 //    CalculateManual();
                 //    OnPropertyChanged("TotalMixesMan");
                 //}
-                if(value != totalmixesman)
-                {
-                    totalmixesman = value;
-                    OnPropertyChanged("TotalMixesMan");
-                }
+                //if(value != totalmixesman)
+                //{
+                //    totalmixesman = value;
+                //    OnPropertyChanged("TotalMixesMan");
+                //}
+                Set(ref totalmixesman, value);
             }
         }
         [DataMember]
@@ -209,11 +223,12 @@ namespace WICR_Estimator.ViewModels
                 //}
                 //else
                 //    averagemixesprice = 0;
-                if (averagemixesprice != value)
-                {
-                    averagemixesprice = value;
-                    OnPropertyChanged("AverageMixesPrice");
-                }
+                //if (averagemixesprice != value)
+                //{
+                //    averagemixesprice = value;
+                //    OnPropertyChanged("AverageMixesPrice");
+                //}
+                Set(ref averagemixesprice, value);
 
             }
         }
@@ -229,7 +244,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != totalweight)
                 {
                     totalweight = value;
-                    OnPropertyChanged("TotalWeight");
+                    RaisePropertyChanged("TotalWeight");
                 }
             }
         }
@@ -245,7 +260,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != totalfreightcost)
                 {
                     totalfreightcost = value;
-                    OnPropertyChanged("TotalFrightCost");
+                    RaisePropertyChanged("TotalFrightCost");
                 }
             }
         }
@@ -261,7 +276,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != laborcost)
                 {
                     laborcost = value;
-                    OnPropertyChanged("LaborCost");
+                    RaisePropertyChanged("LaborCost");
 
                 }
             }
@@ -278,7 +293,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != minimumlaborcost)
                 {
                     minimumlaborcost = value;
-                    OnPropertyChanged("MinimumLaborCost");
+                    RaisePropertyChanged("MinimumLaborCost");
                 }
             }
         }
@@ -294,7 +309,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != totallaborcost)
                 {
                     totallaborcost = value;
-                    OnPropertyChanged("TotalLaborCost");
+                    RaisePropertyChanged("TotalLaborCost");
                 }
             }
         }
@@ -310,7 +325,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != totalmaterialCost)
                 {
                     totalmaterialCost = value;
-                    OnPropertyChanged("TotalMaterialCost");
+                    RaisePropertyChanged("TotalMaterialCost");
                 }
             }
         }
@@ -326,7 +341,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != sumtotal)
                 {
                     sumtotal = value;
-                    OnPropertyChanged("SumTotal");
+                    RaisePropertyChanged("SumTotal");
                 }
             }
         }
@@ -343,7 +358,7 @@ namespace WICR_Estimator.ViewModels
                 {
                     sumtotalmixes = value;
 
-                    OnPropertyChanged("SumTotalMixes");
+                    RaisePropertyChanged("SumTotalMixes");
                 }
             }
         }
@@ -359,7 +374,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != sumtotalmatext)
                 {
                     sumtotalmatext = value;
-                    OnPropertyChanged("SumTotalMatExt");
+                    RaisePropertyChanged("SumTotalMatExt");
                 }
             }
         }
@@ -375,7 +390,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != sumtotallaborext)
                 {
                     sumtotallaborext = value;
-                    OnPropertyChanged("SumTotalLaborExt");
+                    RaisePropertyChanged("SumTotalLaborExt");
                 }
             }
         }

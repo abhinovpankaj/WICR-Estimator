@@ -24,11 +24,12 @@ namespace WICR_Estimator.ViewModels
             }
             set
             {
-                if (urethaneSlopes != value)
-                {
-                    urethaneSlopes = value;
-                    OnPropertyChanged("UrethaneSlopes");
-                }
+                //if (urethaneSlopes != value)
+                //{
+                //    urethaneSlopes = value;
+                //    OnPropertyChanged("UrethaneSlopes");
+                //}
+                Set(ref urethaneSlopes, value);
             }
         }
         private double urethaneSumTotal;
@@ -44,7 +45,7 @@ namespace WICR_Estimator.ViewModels
                 if (urethaneSumTotal != value)
                 {
                     urethaneSumTotal = value;
-                    OnPropertyChanged("UrethaneSumTotal");
+                    RaisePropertyChanged("UrethaneSumTotal");
                 }
             }
         }
@@ -61,7 +62,7 @@ namespace WICR_Estimator.ViewModels
                 if (urethaneSumTotalMixes != value)
                 {
                     urethaneSumTotalMixes = value;
-                    OnPropertyChanged("UrethaneSumTotalMixes");
+                    RaisePropertyChanged("UrethaneSumTotalMixes");
                 }
             }
         }
@@ -79,7 +80,7 @@ namespace WICR_Estimator.ViewModels
                 if (urethaneSumTotalMatExt != value)
                 {
                     urethaneSumTotalMatExt = value;
-                    OnPropertyChanged("UrethaneSumTotalMatExt");
+                    RaisePropertyChanged("UrethaneSumTotalMatExt");
                 }
             }
         }
@@ -96,7 +97,7 @@ namespace WICR_Estimator.ViewModels
                 if (urethaneSumTotalLaborExt != value)
                 {
                     urethaneSumTotalLaborExt = value;
-                    OnPropertyChanged("UrethaneSumTotalLaborExt");
+                    RaisePropertyChanged("UrethaneSumTotalLaborExt");
                 }
             }
         }
@@ -113,7 +114,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != UrethaneMinimumlaborcost)
                 {
                     UrethaneMinimumlaborcost = value;
-                    OnPropertyChanged("UrethaneMinimumLaborCost");
+                    RaisePropertyChanged("UrethaneMinimumLaborCost");
                 }
             }
         }
@@ -125,11 +126,12 @@ namespace WICR_Estimator.ViewModels
             get { return urethaneOverrideManually; }
             set
             {
-                if (value!=urethaneOverrideManually)
-                {
-                    urethaneOverrideManually = value;
-                    OnPropertyChanged("UrethaneOverrideManually");
-                }
+                //if (value!=urethaneOverrideManually)
+                //{
+                //    urethaneOverrideManually = value;
+                //    OnPropertyChanged("UrethaneOverrideManually");
+                //}
+                Set(ref urethaneOverrideManually, value);
             }
         }
 
@@ -140,11 +142,12 @@ namespace WICR_Estimator.ViewModels
             get { return urethaneTotalMixesMan; }
             set
             {
-                if (value!=urethaneTotalMixesMan)
-                {
-                    urethaneTotalMixesMan = value;
-                    OnPropertyChanged("UrethaneTotalMixesMan");
-                }
+                //if (value!=urethaneTotalMixesMan)
+                //{
+                //    urethaneTotalMixesMan = value;
+                //    OnPropertyChanged("UrethaneTotalMixesMan");
+                //}
+                Set(ref urethaneTotalMixesMan, value);
             }
         }
         private double urethaneAverageMixesPrice;
@@ -154,11 +157,12 @@ namespace WICR_Estimator.ViewModels
             get { return urethaneAverageMixesPrice; }
             set
             {
-                if (value != urethaneAverageMixesPrice)
-                {
-                    urethaneAverageMixesPrice = value;
-                    OnPropertyChanged("UrethaneAverageMixesPrice");
-                }
+                //if (value != urethaneAverageMixesPrice)
+                //{
+                //    urethaneAverageMixesPrice = value;
+                //    OnPropertyChanged("UrethaneAverageMixesPrice");
+                //}
+                Set(ref urethaneAverageMixesPrice, value);
             }
         }
 

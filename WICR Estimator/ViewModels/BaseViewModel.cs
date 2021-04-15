@@ -32,11 +32,11 @@ namespace WICR_Estimator.ViewModels
             if (PropertyChanged != null)
             {
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
-                Models.JobSetup js = this as Models.JobSetup;
-                if (js!=null)
-                {                   
-                    IsDirty = true;
-                }
+                //Models.JobSetup js = this as Models.JobSetup;
+                //if (js!=null)
+                //{                   
+                //    IsDirty = true;
+                //}
                 
                 //switch (propertyName)
                 //{

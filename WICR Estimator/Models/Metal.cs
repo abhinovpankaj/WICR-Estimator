@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyToolkit.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ using WICR_Estimator.ViewModels;
 namespace WICR_Estimator.Models
 {
     [Serializable]
-    public class Metal: BaseViewModel
+    public class Metal: GraphObservableObject
     {
         
         public double LaborRate { set; get; }
@@ -30,9 +31,10 @@ namespace WICR_Estimator.Models
                 {
                     isStairMetal = value;
 
-                    OnPropertyChanged("IsStairMetal");
+                    RaisePropertyChanged("IsStairMetal");
 
                 }
+                //Set(ref isStairMetal, value);
             }
         }
         private bool isStairMetalChecked;
@@ -44,15 +46,18 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value!= isStairMetalChecked)
-                {
-                    isStairMetalChecked = value;
-                    
-                    OnPropertyChanged("IsStairMetalChecked");
-                    
-                    OnPropertyChanged("LaborExtension");
-                    OnPropertyChanged("MaterialExtension");
-                }
+                //if (value!= isStairMetalChecked)
+                //{
+                //    isStairMetalChecked = value;
+
+                //    OnPropertyChanged("IsStairMetalChecked");
+
+                //    OnPropertyChanged("LaborExtension");
+                //    OnPropertyChanged("MaterialExtension");
+                //}
+                Set(ref isStairMetalChecked, value);
+                RaisePropertyChanged("LaborExtension");
+                RaisePropertyChanged("MaterialExtension");
             }
         }
         private double units;
@@ -65,13 +70,16 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (units != value)
-                {
-                    units = value;
-                    OnPropertyChanged("Units");
-                    OnPropertyChanged("LaborExtension");
-                    OnPropertyChanged("MaterialExtension");
-                }
+                //if (units != value)
+                //{
+                //    units = value;
+                //    OnPropertyChanged("Units");
+                //    OnPropertyChanged("LaborExtension");
+                //    OnPropertyChanged("MaterialExtension");
+                //}
+                Set(ref units, value);
+                RaisePropertyChanged("LaborExtension");
+                RaisePropertyChanged("MaterialExtension");
             }
         }
         private double pr;
@@ -83,7 +91,7 @@ namespace WICR_Estimator.Models
                 if (value!=pr)
                 {
                     pr = value;
-                    OnPropertyChanged("ProductionRate");
+                    RaisePropertyChanged("ProductionRate");
                 }
             }
         }
@@ -97,7 +105,7 @@ namespace WICR_Estimator.Models
                 if (value!=size)
                 {
                     size = value;
-                    OnPropertyChanged("Size");
+                    RaisePropertyChanged("Size");
                 }
             }
         }
@@ -142,8 +150,8 @@ namespace WICR_Estimator.Models
                 if (materialPrice!=value)
                 {
                     materialPrice = value;
-                    OnPropertyChanged("MaterialPrice");
-                    OnPropertyChanged("MaterialExtension");
+                    RaisePropertyChanged("MaterialPrice");
+                    RaisePropertyChanged("MaterialExtension");
                 }
             }
         }
@@ -182,12 +190,13 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (specialMetalPricing != value)
-                {
-                    specialMetalPricing = value;
-                    OnPropertyChanged("SpecialMetalPricing");
-                    OnPropertyChanged("MaterialExtension");
-                }
+                //if (specialMetalPricing != value)
+                //{
+                //    specialMetalPricing = value;
+                //    OnPropertyChanged("SpecialMetalPricing");
+                //    OnPropertyChanged("MaterialExtension");
+                //}
+                Set(ref specialMetalPricing, value);
             }
         }
 
@@ -221,8 +230,8 @@ namespace WICR_Estimator.Models
                 if (unitPrice!=value)
                 {
                     unitPrice = value;
-                    OnPropertyChanged("UnitPrice");
-                    OnPropertyChanged("LaborExtension");
+                    RaisePropertyChanged("UnitPrice");
+                    RaisePropertyChanged("LaborExtension");
                 }
                
             }

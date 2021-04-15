@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyToolkit.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -11,7 +12,7 @@ using WICR_Estimator.ViewModels;
 namespace WICR_Estimator.Models
 {
     
-    public class JobSetup : BaseViewModel
+    public class JobSetup : GraphObservableObject
     {
         private DBData _dbdata;
         public DBData dbData 
@@ -21,9 +22,11 @@ namespace WICR_Estimator.Models
                 if (value != _dbdata)
                 {
                     _dbdata = value;
-                    OnPropertyChanged("dbData");
+                    RaisePropertyChanged("dbData");
                     UpdateJobSetup();
                 }
+                //Set(ref _dbdata, value);
+                //UpdateJobSetup();
             }
         }
 
@@ -37,12 +40,14 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value != actualPrevailingWage)
-                {
-                    actualPrevailingWage = value;
-                    OnPropertyChanged("ActualPrevailingWage");
-                    UpdateJobSetup();
-                }
+                //if (value != actualPrevailingWage)
+                //{
+                //    actualPrevailingWage = value;
+                //    OnPropertyChanged("ActualPrevailingWage");
+                //    UpdateJobSetup();
+                //}
+                Set(ref actualPrevailingWage, value);
+                UpdateJobSetup();
             }
         }
         public bool IsProjectIndependent { get; set; }
@@ -57,11 +62,13 @@ namespace WICR_Estimator.Models
             get { return notesToBill; }
             set
             {
-                if (value != notesToBill)
-                {
-                    notesToBill = value;
-                    OnPropertyChanged("NotesToBill");                  
-                }
+                //if (value != notesToBill)
+                //{
+                //    notesToBill = value;
+                //    OnPropertyChanged("NotesToBill");                  
+                //}
+                Set(ref notesToBill, value);
+                
             }
         }
         public string ProjectName
@@ -69,14 +76,19 @@ namespace WICR_Estimator.Models
             get { return projectname; }
             set
             {
-                if (value != projectname)
+                //if (value != projectname)
+                //{
+                //    projectname = value;
+                //    OnPropertyChanged("ProjectName");
+                //    if (OnProjectNameChange != null)
+                //    {
+                //        OnProjectNameChange(this, EventArgs.Empty);
+                //    }                    
+                //}
+                Set(ref projectname, value);
+                if (OnProjectNameChange != null)
                 {
-                    projectname = value;
-                    OnPropertyChanged("ProjectName");
-                    if (OnProjectNameChange != null)
-                    {
-                        OnProjectNameChange(this, EventArgs.Empty);
-                    }                    
+                    OnProjectNameChange(this, EventArgs.Empty);
                 }
             }
         }
@@ -108,11 +120,12 @@ namespace WICR_Estimator.Models
             get { return jobDate; }
             set
             {
-                if (value!=jobDate)
-                {
-                    jobDate = value;
-                    OnPropertyChanged("JobDate");
-                }
+                //if (value!=jobDate)
+                //{
+                //    jobDate = value;
+                //    OnPropertyChanged("JobDate");
+                //}
+                Set(ref jobDate, value);
             }
         }
         public System.Windows.Visibility HidePasswordSection { get; set; }
@@ -125,10 +138,12 @@ namespace WICR_Estimator.Models
             {
                 MinMarkUp = -50;
                 passwordBox.Password = "";
-                OnPropertyChanged("MinMarkUp");
+                // OnPropertyChanged("MinMarkUp");
+                RaisePropertyChanged("MinMarkUp");
                 LoginMessage = "You can add MarkUp less than -10%";
                 HidePasswordSection = System.Windows.Visibility.Hidden;
-                OnPropertyChanged("HidePasswordSection");
+                //OnPropertyChanged("HidePasswordSection");
+                RaisePropertyChanged("HidePasswordSection");
             }
             else
             {
@@ -136,7 +151,8 @@ namespace WICR_Estimator.Models
                 LoginMessage = "Incorrect Password.";
                 
             }
-            OnPropertyChanged("LoginMessage");
+            //OnPropertyChanged("LoginMessage");
+            RaisePropertyChanged("LoginMessage");
         }
 
         private string projectDelayFactor;
@@ -145,12 +161,13 @@ namespace WICR_Estimator.Models
             get { return projectDelayFactor; }
             set
             {
-                if (value!= projectDelayFactor)
-                {
-                    projectDelayFactor = value;
-                    OnPropertyChanged("ProjectDelayFactor");
-                    UpdateJobSetup();
-                }
+                //if (value!= projectDelayFactor)
+                //{
+                //    projectDelayFactor = value;
+                //    OnPropertyChanged("ProjectDelayFactor");
+                //    UpdateJobSetup();
+                //}
+                Set(ref projectDelayFactor, value);
             }
         }
         private string specialProductName;
@@ -159,16 +176,17 @@ namespace WICR_Estimator.Models
             get { return specialProductName; }
             set
             {
-                if (value!=specialProductName)
-                {
-                    specialProductName = value;
-                    OnPropertyChanged("SpecialProductName");
-                    
-                    if (OnProjectNameChange != null)
-                    {
-                        OnProjectNameChange(this, EventArgs.Empty);
-                    }
-                }
+                //if (value!=specialProductName)
+                //{
+                //    specialProductName = value;
+                //    OnPropertyChanged("SpecialProductName");
+
+                //    if (OnProjectNameChange != null)
+                //    {
+                //        OnProjectNameChange(this, EventArgs.Empty);
+                //    }
+                //}
+                Set(ref specialProductName, value);
             }
         }
         private bool allowMoreMarkup;
@@ -177,23 +195,36 @@ namespace WICR_Estimator.Models
             get { return allowMoreMarkup; }
             set
             {
-                if (value!=allowMoreMarkup)
+                //if (value!=allowMoreMarkup)
+                //{
+                //    allowMoreMarkup = value;
+                //    OnPropertyChanged("AllowMoreMarkUp");
+                //    if (!value)
+                //    {
+                //        MinMarkUp = -10;
+                //        LoginMessage = "";
+                //        OnPropertyChanged("MinMarkUp");
+                //        OnPropertyChanged("LoginMessage");
+                //        HidePasswordSection = System.Windows.Visibility.Hidden;
+
+                //    }
+                //    else
+                //        HidePasswordSection = System.Windows.Visibility.Visible;
+                //    OnPropertyChanged("HidePasswordSection");
+                //}
+                Set(ref allowMoreMarkup, value);
+                if (!value)
                 {
-                    allowMoreMarkup = value;
-                    OnPropertyChanged("AllowMoreMarkUp");
-                    if (!value)
-                    {
-                        MinMarkUp = -10;
-                        LoginMessage = "";
-                        OnPropertyChanged("MinMarkUp");
-                        OnPropertyChanged("LoginMessage");
-                        HidePasswordSection = System.Windows.Visibility.Hidden;
-                        
-                    }
-                    else
-                        HidePasswordSection = System.Windows.Visibility.Visible;
-                    OnPropertyChanged("HidePasswordSection");
+                    MinMarkUp = -10;
+                    LoginMessage = "";
+                    RaisePropertyChanged("MinMarkUp");
+                    RaisePropertyChanged("LoginMessage");
+                    HidePasswordSection = System.Windows.Visibility.Hidden;
+
                 }
+                else
+                    HidePasswordSection = System.Windows.Visibility.Visible;
+                RaisePropertyChanged("HidePasswordSection");
             }
         }
 
@@ -208,7 +239,8 @@ namespace WICR_Estimator.Models
             set
             {
                 totalsalesTemp = value;
-                OnPropertyChanged("TotalSalesCostTemp");
+                //OnPropertyChanged("TotalSalesCostTemp");
+                RaisePropertyChanged("TotalSalesCostTemp");
             }
         }
 
@@ -302,7 +334,7 @@ namespace WICR_Estimator.Models
                 if (value!=enableMMCommand)
                 {
                     enableMMCommand = value;
-                    OnPropertyChanged("EnableMoreMarkupCommand");
+                    RaisePropertyChanged("EnableMoreMarkupCommand");
                 }
             }
         }
@@ -332,11 +364,12 @@ namespace WICR_Estimator.Models
             get { return isNewProject; }
             set
             {
-                if (value != isNewProject)
-                {
-                    isNewProject = value;
-                    OnPropertyChanged("IsNewProject");                  
-                }
+                //if (value != isNewProject)
+                //{
+                //    isNewProject = value;
+                //    OnPropertyChanged("IsNewProject");                  
+                //}
+                Set(ref isNewProject, value);
             }
         }
         private bool isContingencyEnabled;
@@ -345,12 +378,13 @@ namespace WICR_Estimator.Models
             get { return isContingencyEnabled; }
             set
             {
-                if (value != isContingencyEnabled)
-                {
-                    isContingencyEnabled = value;
-                    OnPropertyChanged("IsContingencyEnabled");
-                    UpdateJobSetup();
-                }
+                //if (value != isContingencyEnabled)
+                //{
+                //    isContingencyEnabled = value;
+                //    OnPropertyChanged("IsContingencyEnabled");
+                //    UpdateJobSetup();
+                //}
+                Set(ref isContingencyEnabled, value);
             }
         }
         string originalName;
@@ -418,11 +452,12 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value!=jobName)
-                {
-                    jobName = value;
-                    OnPropertyChanged("JobName");
-                }
+                //if (value!=jobName)
+                //{
+                //    jobName = value;
+                //    OnPropertyChanged("JobName");
+                //}
+                Set(ref jobName, value);
             }
         }
         
@@ -435,13 +470,15 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value != vendorName)
-                {
-                    vendorName = value;
-                    OnPropertyChanged("VendorName");
-                    UpdateJobSetup();
+                //if (value != vendorName)
+                //{
+                //    vendorName = value;
+                //    OnPropertyChanged("VendorName");
+                //    UpdateJobSetup();
 
-                }
+                //}
+                Set(ref vendorName, value);
+                UpdateJobSetup();
             }
         }
         private string bidBy;
@@ -453,11 +490,12 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value != bidBy)
-                {
-                    bidBy = value;
-                    OnPropertyChanged("BidBy");
-                }
+                //if (value != bidBy)
+                //{
+                //    bidBy = value;
+                //    OnPropertyChanged("BidBy");
+                //}
+                Set(ref bidBy, value);
             }
         }
         private string workArea;
@@ -469,15 +507,20 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value!=workArea)
-                {
+                //if (value!=workArea)
+                //{
 
-                    workArea = value;
-                    OnPropertyChanged("WorkArea");
-                    if (OnProjectNameChange != null)
-                    {
-                        OnProjectNameChange(this, EventArgs.Empty);
-                    }
+                //    workArea = value;
+                //    OnPropertyChanged("WorkArea");
+                //    if (OnProjectNameChange != null)
+                //    {
+                //        OnProjectNameChange(this, EventArgs.Empty);
+                //    }
+                //}
+                Set(ref workArea, value);
+                if (OnProjectNameChange != null)
+                {
+                    OnProjectNameChange(this, EventArgs.Empty);
                 }
             }
         }
@@ -490,11 +533,12 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value != selecteddate)
-                {
-                    selecteddate = value;                   
-                    OnPropertyChanged("SelectedDate");
-                }
+                //if (value != selecteddate)
+                //{
+                //    selecteddate = value;                   
+                //    OnPropertyChanged("SelectedDate");
+                //}
+                Set(ref selecteddate, value);
             }
         }
         private double totalSqft;
@@ -506,15 +550,19 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value != totalSqft)
-                {
-                    totalSqft = value;
+                //if (value != totalSqft)
+                //{
+                //    totalSqft = value;
 
-                    setContingency();
-                    OnPropertyChanged("TotalSqft");
-                    UpdateJobSetup();
-                   
-                }
+                //    setContingency();
+                //    OnPropertyChanged("TotalSqft");
+                //    UpdateJobSetup();
+
+                //}
+                Set(ref totalSqft, value);
+                setContingency();
+
+                UpdateJobSetup();
             }
         }
 
@@ -524,12 +572,14 @@ namespace WICR_Estimator.Models
             get { return vhasContingencyDisc; }
             set
             {
-                if (value != vhasContingencyDisc)
-                {
-                    vhasContingencyDisc = value;
-                    OnPropertyChanged("VHasContingencyDisc");
-                    UpdateJobSetup();
-                }
+                //if (value != vhasContingencyDisc)
+                //{
+                //    vhasContingencyDisc = value;
+                //    OnPropertyChanged("VHasContingencyDisc");
+                //    UpdateJobSetup();
+                //}
+                Set(ref vhasContingencyDisc, value);
+                UpdateJobSetup();
             }
         }
 
@@ -542,12 +592,14 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value != deckPerimeter)
-                {
-                    deckPerimeter = value;
-                    OnPropertyChanged("DeckPerimeter");
-                    UpdateJobSetup();
-                }
+                //if (value != deckPerimeter)
+                //{
+                //    deckPerimeter = value;
+                //    OnPropertyChanged("DeckPerimeter");
+                //    UpdateJobSetup();
+                //}
+                Set(ref deckPerimeter, value);
+                UpdateJobSetup();
             }
         }
         
@@ -561,12 +613,14 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value != riserCount)
-                {
-                    riserCount = value;
-                    OnPropertyChanged("RiserCount");
-                    UpdateJobSetup();
-                }
+                //if (value != riserCount)
+                //{
+                //    riserCount = value;
+                //    OnPropertyChanged("RiserCount");
+                //    UpdateJobSetup();
+                //}
+                Set(ref riserCount, value);
+                UpdateJobSetup();
             }
         }
         private int deckCount;
@@ -578,13 +632,16 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value != deckCount)
-                {
-                    deckCount = value;
-                    setContingency();
-                    OnPropertyChanged("DeckCount");
-                    UpdateJobSetup();
-                }
+                //if (value != deckCount)
+                //{
+                //    deckCount = value;
+                //    setContingency();
+                //    OnPropertyChanged("DeckCount");
+                //    UpdateJobSetup();
+                //}
+                Set(ref deckCount, value);
+                setContingency();
+                UpdateJobSetup();
             }
         }
         private bool isApprovedForSandCement;
@@ -596,14 +653,17 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value != isApprovedForSandCement)
-                {
-                    isApprovedForSandCement = value;
-                    //IsReseal = value;
-                    
-                    OnPropertyChanged("IsApprovedForSandCement");
-                    UpdateJobSetup();
-                }
+                //if (value != isApprovedForSandCement)
+                //{
+                //    isApprovedForSandCement = value;
+                //    //IsReseal = value;
+
+                //    OnPropertyChanged("IsApprovedForSandCement");
+                //    UpdateJobSetup();
+                //}
+                Set(ref isApprovedForSandCement, value);
+                
+                UpdateJobSetup();
             }
         }
         private bool isPrevalingWage;
@@ -615,12 +675,15 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value != isPrevalingWage)
-                {
-                    isPrevalingWage = value;
-                    OnPropertyChanged("IsPrevalingWage");
-                    UpdateJobSetup();
-                }
+                //if (value != isPrevalingWage)
+                //{
+                //    isPrevalingWage = value;
+                //    OnPropertyChanged("IsPrevalingWage");
+                //    UpdateJobSetup();
+                //}
+                Set(ref isPrevalingWage, value);
+
+                UpdateJobSetup();
             }
         }
         private double laborRate;
@@ -637,12 +700,15 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value!=laborRate)
-                {
-                    laborRate = value;
-                    OnPropertyChanged("LaborRate");
-                    UpdateJobSetup();
-                }
+                //if (value!=laborRate)
+                //{
+                //    laborRate = value;
+                //    OnPropertyChanged("LaborRate");
+                //    UpdateJobSetup();
+                //}
+                Set(ref laborRate, value);
+
+                UpdateJobSetup();
             }
         }
  
@@ -655,12 +721,15 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value != hasSpecialMaterial)
-                {
-                    hasSpecialMaterial = value;
-                    OnPropertyChanged("HasSpecialMaterial");
-                    UpdateJobSetup();
-                }
+                //if (value != hasSpecialMaterial)
+                //{
+                //    hasSpecialMaterial = value;
+                //    OnPropertyChanged("HasSpecialMaterial");
+                //    UpdateJobSetup();
+                //}
+                Set(ref hasSpecialMaterial, value);
+
+                UpdateJobSetup();
             }
         }
         private bool isFlashingRequired;
@@ -672,12 +741,15 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value != isFlashingRequired)
-                {
-                    isFlashingRequired = value;
-                    OnPropertyChanged("IsFlashingRequired");
-                    UpdateJobSetup();
-                }
+                //if (value != isFlashingRequired)
+                //{
+                //    isFlashingRequired = value;
+                //    OnPropertyChanged("IsFlashingRequired");
+                //    UpdateJobSetup();
+                //}
+                Set(ref isFlashingRequired, value);
+
+                UpdateJobSetup();
             }
         }
         private bool hasSpecialPricing;
@@ -689,12 +761,15 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value != hasSpecialPricing)
-                {
-                    hasSpecialPricing = value;
-                    OnPropertyChanged("HasSpecialPricing");
-                    UpdateJobSetup();
-                }
+                //if (value != hasSpecialPricing)
+                //{
+                //    hasSpecialPricing = value;
+                //    OnPropertyChanged("HasSpecialPricing");
+                //    UpdateJobSetup();
+                //}
+                Set(ref hasSpecialPricing, value);
+
+                UpdateJobSetup();
             }
         }
         private bool hasDiscount;
@@ -706,12 +781,15 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value != hasDiscount)
-                {
-                    hasDiscount = value;
-                    OnPropertyChanged("HasDiscount");
-                    UpdateJobSetup();
-                }
+                //if (value != hasDiscount)
+                //{
+                //    hasDiscount = value;
+                //    OnPropertyChanged("HasDiscount");
+                //    UpdateJobSetup();
+                //}
+                Set(ref hasDiscount, value);
+
+                UpdateJobSetup();
             }
         }
         private double markupPercentage;
@@ -723,12 +801,15 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value != markupPercentage)
-                {
-                    markupPercentage = value;
-                    OnPropertyChanged("MarkupPercentage");
-                    UpdateJobSetup();
-                }
+                //if (value != markupPercentage)
+                //{
+                //    markupPercentage = value;
+                //    OnPropertyChanged("MarkupPercentage");
+                //    UpdateJobSetup();
+                //}
+                Set(ref markupPercentage, value);
+
+                UpdateJobSetup();
             }
         }
         private string materialName;
@@ -740,13 +821,16 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value != materialName)
-                {
-                    materialName = value;
-                    OnPropertyChanged("MaterialName");
-                    UpdateJobSetup();
+                //if (value != materialName)
+                //{
+                //    materialName = value;
+                //    OnPropertyChanged("MaterialName");
+                //    UpdateJobSetup();
 
-                }
+                
+                Set(ref materialName, value);
+
+                UpdateJobSetup();
             }
         }
         private double stairWidth;
@@ -758,12 +842,15 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value != stairWidth)
-                {
-                    stairWidth = value;
-                    OnPropertyChanged("StairWidth");
-                    UpdateJobSetup();
-                }
+                //if (value != stairWidth)
+                //{
+                //    stairWidth = value;
+                //    OnPropertyChanged("StairWidth");
+                //    UpdateJobSetup();
+                //}
+                Set(ref stairWidth, value);
+
+                UpdateJobSetup();
             }
         }
 
@@ -774,12 +861,15 @@ namespace WICR_Estimator.Models
             get { return isJobSpecifiedByArchitect; }
             set
             {
-                if (value!=isJobSpecifiedByArchitect)
-                {
-                    isJobSpecifiedByArchitect = value;
-                    OnPropertyChanged("IsJobSpecifiedByArchitect");
-                    UpdateJobSetup();
-                }
+                //if (value!=isJobSpecifiedByArchitect)
+                //{
+                //    isJobSpecifiedByArchitect = value;
+                //    OnPropertyChanged("IsJobSpecifiedByArchitect");
+                //    UpdateJobSetup();
+                //}
+                Set(ref isJobSpecifiedByArchitect, value);
+
+                UpdateJobSetup();
             }
         }
         
@@ -801,12 +891,15 @@ namespace WICR_Estimator.Models
             get { return isSystemOverConcrete; }
             set
             {
-                if (value != isSystemOverConcrete)
-                {
-                    isSystemOverConcrete = value;
-                    OnPropertyChanged("IsSystemOverConcrete");
-                    UpdateJobSetup();
-                }
+                //if (value != isSystemOverConcrete)
+                //{
+                //    isSystemOverConcrete = value;
+                //    OnPropertyChanged("IsSystemOverConcrete");
+                //    UpdateJobSetup();
+                //}
+                Set(ref isSystemOverConcrete, value);
+
+                UpdateJobSetup();
             }
         }
         public System.Windows.Visibility IsJobByArchitectVisible
@@ -830,12 +923,15 @@ namespace WICR_Estimator.Models
             get { return isNewPlywood; }
             set
             {
-                if (value != isNewPlywood)
-                {
-                    isNewPlywood = value;
-                    OnPropertyChanged("IsNewPlywood");
-                    UpdateJobSetup();
-                }
+                //if (value != isNewPlywood)
+                //{
+                //    isNewPlywood = value;
+                //    OnPropertyChanged("IsNewPlywood");
+                //    UpdateJobSetup();
+                //}
+                Set(ref isNewPlywood, value);
+
+                UpdateJobSetup();
             }
         }
         public string StairRiserText
@@ -949,12 +1045,15 @@ namespace WICR_Estimator.Models
             get { return isReseal; }
             set
             {
-                if (value != isReseal)
-                {
-                    isReseal = value;
-                    OnPropertyChanged("IsReseal");
-                    UpdateJobSetup();
-                }
+                //if (value != isReseal)
+                //{
+                //    isReseal = value;
+                //    OnPropertyChanged("IsReseal");
+                //    UpdateJobSetup();
+                //}
+                Set(ref isReseal, value);
+
+                UpdateJobSetup();
             }
         }
         private double totalSqftPlywood;
@@ -963,13 +1062,16 @@ namespace WICR_Estimator.Models
             get { return totalSqftPlywood; }
             set
             {
-                if (value != totalSqftPlywood)
-                {
-                    totalSqftPlywood = value;
-                    setContingency();
-                    UpdateJobSetup(); //JobSetupChange(this, EventArgs.Empty);
-                    OnPropertyChanged("TotalSqftPlywood");
-                }
+                //if (value != totalSqftPlywood)
+                //{
+                //    totalSqftPlywood = value;
+                //    setContingency();
+                //    UpdateJobSetup(); //JobSetupChange(this, EventArgs.Empty);
+                //    OnPropertyChanged("TotalSqftPlywood");
+                //}
+                Set(ref totalSqftPlywood, value);
+                setContingency();
+                UpdateJobSetup();
             }
         }
 
@@ -1002,8 +1104,8 @@ namespace WICR_Estimator.Models
                 }
             }
             
-            OnPropertyChanged("IsContingencyEnabled");
-            OnPropertyChanged("VHasContingencyDisc");
+            RaisePropertyChanged("IsContingencyEnabled");
+            RaisePropertyChanged("VHasContingencyDisc");
             
         }
         #endregion
@@ -1031,12 +1133,14 @@ namespace WICR_Estimator.Models
             get { return linearCopingFootage; }
             set
             {
-                if (value != linearCopingFootage)
-                {
-                    linearCopingFootage = value;
-                    OnPropertyChanged("LinearCopingFootage");
-                    UpdateJobSetup();
-                }
+                //if (value != linearCopingFootage)
+                //{
+                //    linearCopingFootage = value;
+                //    OnPropertyChanged("LinearCopingFootage");
+                //    UpdateJobSetup();
+                //}
+                Set(ref linearCopingFootage, value);
+                UpdateJobSetup();
             }
         }
         public System.Windows.Visibility IslinearCopingFootageVisible
@@ -1076,12 +1180,14 @@ namespace WICR_Estimator.Models
             get { return additonalTermbarLF; }
             set
             {
-                if (value != additonalTermbarLF)
-                {
-                    additonalTermbarLF = value;
-                    OnPropertyChanged("AdditionalTermBarLF");
-                    UpdateJobSetup();
-                }
+                //if (value != additonalTermbarLF)
+                //{
+                //    additonalTermbarLF = value;
+                //    OnPropertyChanged("AdditionalTermBarLF");
+                //    UpdateJobSetup();
+                //}
+                Set(ref additonalTermbarLF, value);
+                UpdateJobSetup();
             }
         }
         private bool superStopAtFooting;
@@ -1090,12 +1196,14 @@ namespace WICR_Estimator.Models
             get { return superStopAtFooting; }
             set
             {
-                if (value != superStopAtFooting)
-                {
-                    superStopAtFooting = value;
-                    OnPropertyChanged("SuperStopAtFooting");
-                    UpdateJobSetup();
-                }
+                //if (value != superStopAtFooting)
+                //{
+                //    superStopAtFooting = value;
+                //    OnPropertyChanged("SuperStopAtFooting");
+                //    UpdateJobSetup();
+                //}
+                Set(ref superStopAtFooting, value);
+                UpdateJobSetup();
             }
         }
         private double insideOutsideCornerDetails;
@@ -1104,12 +1212,14 @@ namespace WICR_Estimator.Models
             get { return insideOutsideCornerDetails; }
             set
             {
-                if (value != insideOutsideCornerDetails)
-                {
-                    insideOutsideCornerDetails = value;
-                    OnPropertyChanged("InsideOutsideCornerDetails");
-                    UpdateJobSetup();
-                }
+                //if (value != insideOutsideCornerDetails)
+                //{
+                //    insideOutsideCornerDetails = value;
+                //    OnPropertyChanged("InsideOutsideCornerDetails");
+                //    UpdateJobSetup();
+                //}
+                Set(ref insideOutsideCornerDetails, value);
+                UpdateJobSetup();
             }
         }
         
@@ -1149,12 +1259,14 @@ namespace WICR_Estimator.Models
             get { return rakerCornerBases; }
             set
             {
-                if (value != rakerCornerBases)
-                {
-                    rakerCornerBases = value;
-                    OnPropertyChanged("RakerCornerBases");
-                    UpdateJobSetup();
-                }
+                //if (value != rakerCornerBases)
+                //{
+                //    rakerCornerBases = value;
+                //    OnPropertyChanged("RakerCornerBases");
+                //    UpdateJobSetup();
+                //}
+                Set(ref rakerCornerBases, value);
+                UpdateJobSetup();
             }
         }
         private double cementBoardDetail;
@@ -1163,12 +1275,14 @@ namespace WICR_Estimator.Models
             get { return cementBoardDetail; }
             set
             {
-                if (value != cementBoardDetail)
-                {
-                    cementBoardDetail = value;
-                    OnPropertyChanged("CementBoardDetail");
-                    UpdateJobSetup();
-                }
+                //if (value != cementBoardDetail)
+                //{
+                //    cementBoardDetail = value;
+                //    OnPropertyChanged("CementBoardDetail");
+                //    UpdateJobSetup();
+                //}
+                Set(ref cementBoardDetail, value);
+                UpdateJobSetup();
             }
         }
         private double rockPockets;
@@ -1177,12 +1291,14 @@ namespace WICR_Estimator.Models
             get { return rockPockets; }
             set
             {
-                if (value != rockPockets)
-                {
-                    rockPockets = value;
-                    OnPropertyChanged("RockPockets");
-                    UpdateJobSetup();
-                }
+                //if (value != rockPockets)
+                //{
+                //    rockPockets = value;
+                //    OnPropertyChanged("RockPockets");
+                //    UpdateJobSetup();
+                //}
+                Set(ref rockPockets, value);
+                UpdateJobSetup();
             }
         }
         private double parasealFoundation;
@@ -1191,11 +1307,13 @@ namespace WICR_Estimator.Models
             get { return parasealFoundation; }
             set
             {
-                if (value != parasealFoundation)
-                {
-                    parasealFoundation = value;
-                    UpdateJobSetup();
-                }
+                //if (value != parasealFoundation)
+                //{
+                //    parasealFoundation = value;
+                //    UpdateJobSetup();
+                //}
+                Set(ref parasealFoundation, value);
+                UpdateJobSetup();
             }
         }
         private double rearMidLagging;
@@ -1204,12 +1322,14 @@ namespace WICR_Estimator.Models
             get { return rearMidLagging; }
             set
             {
-                if (value != rearMidLagging)
-                {
-                    rearMidLagging = value;
-                    OnPropertyChanged("RearMidLagging");
-                    UpdateJobSetup();
-                }
+                //if (value != rearMidLagging)
+                //{
+                //    rearMidLagging = value;
+                //    OnPropertyChanged("RearMidLagging");
+                //    UpdateJobSetup();
+                //}
+                Set(ref rearMidLagging, value);
+                UpdateJobSetup();
             }
         }
         #endregion
@@ -1248,13 +1368,17 @@ namespace WICR_Estimator.Models
             get { return totalSqftVertical; }
             set
             {
-                if (value != totalSqftVertical)
-                {
-                    totalSqftVertical = value;
-                    setContingency();
-                    OnPropertyChanged("TotalSqftVertical");
-                    UpdateJobSetup();
-                }
+                //if (value != totalSqftVertical)
+                //{
+                //    totalSqftVertical = value;
+                //    setContingency();
+                //    OnPropertyChanged("TotalSqftVertical");
+                //    UpdateJobSetup();
+                //}
+                Set(ref totalSqftVertical, value);
+                setContingency();
+
+                UpdateJobSetup();
             }
         }
 
@@ -1264,12 +1388,14 @@ namespace WICR_Estimator.Models
             get { return termBarLF; }
             set
             {
-                if (value != termBarLF)
-                {
-                    termBarLF = value;
-                    OnPropertyChanged("TermBarLF");
-                    UpdateJobSetup();
-                }
+                //if (value != termBarLF)
+                //{
+                //    termBarLF = value;
+                //    OnPropertyChanged("TermBarLF");
+                //    UpdateJobSetup();
+                //}
+                Set(ref termBarLF, value);
+                UpdateJobSetup();
             }
         }
         private double rebarPrepWallsLF;
@@ -1278,12 +1404,14 @@ namespace WICR_Estimator.Models
             get { return rebarPrepWallsLF; }
             set
             {
-                if (value != rebarPrepWallsLF)
-                {
-                    rebarPrepWallsLF = value;
-                    OnPropertyChanged("RebarPrepWallsLF");
-                    UpdateJobSetup();
-                }
+                //if (value != rebarPrepWallsLF)
+                //{
+                //    rebarPrepWallsLF = value;
+                //    OnPropertyChanged("RebarPrepWallsLF");
+                //    UpdateJobSetup();
+                //}
+                Set(ref rebarPrepWallsLF, value);
+                UpdateJobSetup();
             }
         }
         private double superStopLF;
@@ -1292,12 +1420,14 @@ namespace WICR_Estimator.Models
             get { return superStopLF; }
             set
             {
-                if (value != superStopLF)
-                {
-                    superStopLF = value;
-                    OnPropertyChanged("SuperStopLF");
-                    UpdateJobSetup();
-                }
+                //if (value != superStopLF)
+                //{
+                //    superStopLF = value;
+                //    OnPropertyChanged("SuperStopLF");
+                //    UpdateJobSetup();
+                //}
+                Set(ref superStopLF, value);
+                UpdateJobSetup();
             }
         }
         private double penetrations;
@@ -1306,12 +1436,14 @@ namespace WICR_Estimator.Models
             get { return penetrations; }
             set
             {
-                if (value != penetrations)
-                {
-                    penetrations = value;
-                    OnPropertyChanged("Penetrations");
-                    UpdateJobSetup();
-                }
+                //if (value != penetrations)
+                //{
+                //    penetrations = value;
+                //    OnPropertyChanged("Penetrations");
+                //    UpdateJobSetup();
+                //}
+                Set(ref penetrations, value);
+                UpdateJobSetup();
             }
         }
         #endregion
@@ -1336,12 +1468,14 @@ namespace WICR_Estimator.Models
             get { return hasQuarterMortarBed; }
             set
             {
-                if (value != hasQuarterMortarBed)
-                {
-                    hasQuarterMortarBed = value;
-                    OnPropertyChanged("HasQuarterMortarBed");
-                    UpdateJobSetup();
-                }
+                //if (value != hasQuarterMortarBed)
+                //{
+                //    hasQuarterMortarBed = value;
+                //    OnPropertyChanged("HasQuarterMortarBed");
+                //    UpdateJobSetup();
+                //}
+                Set(ref hasQuarterMortarBed, value);
+                UpdateJobSetup();
             }
         }
         private bool hasQuarterLessMortarBed;
@@ -1350,12 +1484,14 @@ namespace WICR_Estimator.Models
             get { return hasQuarterLessMortarBed; }
             set
             {
-                if (value != hasQuarterLessMortarBed)
-                {
-                    hasQuarterLessMortarBed = value;
-                    OnPropertyChanged("HasQuarterLessMortarBed");
-                    UpdateJobSetup();
-                }
+                //if (value != hasQuarterLessMortarBed)
+                //{
+                //    hasQuarterLessMortarBed = value;
+                //    OnPropertyChanged("HasQuarterLessMortarBed");
+                //    UpdateJobSetup();
+                //}
+                Set(ref hasQuarterLessMortarBed, value);
+                UpdateJobSetup();
             }
         }
         private bool hasElastex;
@@ -1364,12 +1500,14 @@ namespace WICR_Estimator.Models
             get { return hasElastex; }
             set
             {
-                if (value != hasElastex)
-                {
-                    hasElastex = value;
-                    OnPropertyChanged("HasElastex");
-                    UpdateJobSetup();
-                }
+                //if (value != hasElastex)
+                //{
+                //    hasElastex = value;
+                //    OnPropertyChanged("HasElastex");
+                //    UpdateJobSetup();
+                //}
+                Set(ref hasElastex, value);
+                UpdateJobSetup();
             }
         }
         private bool hasEasyAccess;
@@ -1378,12 +1516,14 @@ namespace WICR_Estimator.Models
             get { return hasEasyAccess; }
             set
             {
-                if (value != hasEasyAccess)
-                {
-                    hasEasyAccess = value;
-                    OnPropertyChanged("HasEasyAccess");
-                    UpdateJobSetup();
-                }
+                //if (value != hasEasyAccess)
+                //{
+                //    hasEasyAccess = value;
+                //    OnPropertyChanged("HasEasyAccess");
+                //    UpdateJobSetup();
+                //}
+                Set(ref hasEasyAccess, value);
+                UpdateJobSetup();
             }
         }
         #endregion
