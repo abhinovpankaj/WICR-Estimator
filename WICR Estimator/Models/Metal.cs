@@ -70,16 +70,24 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                //if (units != value)
-                //{
-                //    units = value;
-                //    RaisePropertyChanged("Units");
-                //    RaisePropertyChanged("LaborExtension");
-                //    RaisePropertyChanged("MaterialExtension");
-                //}
-                Set(ref units, value);
-                RaisePropertyChanged("LaborExtension");
-                RaisePropertyChanged("MaterialExtension");
+                
+                if (Name=="STAIR METAL"|| Name== "Nosing for Concrete risers" || Name== "Pins & Loads for metal over concrete")
+                {
+                    if (units != value)
+                    {
+                        units = value;
+                        RaisePropertyChanged("Units");
+                        RaisePropertyChanged("LaborExtension");
+                        RaisePropertyChanged("MaterialExtension");
+                    }
+                }
+                else
+                {
+                    Set(ref units, value);
+                    RaisePropertyChanged("LaborExtension");
+                    RaisePropertyChanged("MaterialExtension");
+                }
+                
             }
         }
         private double pr;

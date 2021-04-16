@@ -584,13 +584,13 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (slopeViewModel != value)
-                {
-                    slopeViewModel = value;
-                    //OnPropertyChanged("SlopeViewModel");
-                    RaisePropertyChanged("SlopeViewModel");
-                }
-                //Set(ref slopeViewModel, value);
+                //if (slopeViewModel != value)
+                //{
+                //    slopeViewModel = value;
+                //    //OnPropertyChanged("SlopeViewModel");
+                //    RaisePropertyChanged("SlopeViewModel");
+                //}
+                Set(ref slopeViewModel, value);
             }
         }
         private MaterialBaseViewModel materialViewModel;

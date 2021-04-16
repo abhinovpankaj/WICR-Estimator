@@ -458,8 +458,19 @@ namespace WICR_Estimator.ViewModels
                 }
                     //met = UpdateMetalsDB();//GetMetalsDB();
             }
-               
 
+            //code for updating metals for undo redo
+            Metal[] stairM = Metals.Where(x => x.Name == "STAIR METAL").ToArray();
+            for (int i = 0; i < stairM.Count(); i++)
+            {
+                if (Js.ProjectName == "Paraseal LG")
+                {
+                    stairM[i].Units = 0;
+                }
+                else
+                    stairM[i].Units = getUnits(i);
+            }
+            //ends
                //for (int i = 0; i < Metals.Count; i++)
                //{
                //    double units = Metals[i].Units;
@@ -500,21 +511,33 @@ namespace WICR_Estimator.ViewModels
                 else
                     addOnMet = GetAddOnMetalsDB();
             }
-                
-             
-               //for (int i = 0; i < AddOnMetals.Count; i++)
-               //{
-               //    double units = AddOnMetals[i].Units;
-               //    double sp = AddOnMetals[i].SpecialMetalPricing;
-               //    bool ischecked = AddOnMetals[i].IsMetalChecked;
-               //    AddOnMetals[i] = addOnMet[i];
-               //    if (!AddOnMetals[i].Name.Contains("STAIR METAL"))
-               //    {
-               //        AddOnMetals[i].Units = units;
-               //    }
-               //    AddOnMetals[i].IsMetalChecked = ischecked;
-               //    AddOnMetals[i].SpecialMetalPricing = sp;
-               //}
+
+            //code for updating metals for undo redo
+            Metal[] addOnstairM = AddOnMetals.Where(x => x.Name == "STAIR METAL").ToArray();
+            for (int i = 0; i < addOnstairM.Count(); i++)
+            {
+                if (Js.ProjectName == "Paraseal LG")
+                {
+                    addOnstairM[i].Units = 0;
+                }
+                else
+                    addOnstairM[i].Units = getUnits(0);
+            }
+            //ends
+
+            //for (int i = 0; i < AddOnMetals.Count; i++)
+            //{
+            //    double units = AddOnMetals[i].Units;
+            //    double sp = AddOnMetals[i].SpecialMetalPricing;
+            //    bool ischecked = AddOnMetals[i].IsMetalChecked;
+            //    AddOnMetals[i] = addOnMet[i];
+            //    if (!AddOnMetals[i].Name.Contains("STAIR METAL"))
+            //    {
+            //        AddOnMetals[i].Units = units;
+            //    }
+            //    AddOnMetals[i].IsMetalChecked = ischecked;
+            //    AddOnMetals[i].SpecialMetalPricing = sp;
+            //}
 
             if (Js!=null)
             {
@@ -523,7 +546,11 @@ namespace WICR_Estimator.ViewModels
                     MiscMetals.Where(x => x.Name == "Nosing for Concrete risers").FirstOrDefault().Units = 0;
                 }
                 else
+                {
                     MiscMetals[1].Units = getUnits(3);
+                    MiscMetals[0].Units = getUnits(2);
+                }
+                    
             }
             if (pWage != null)
                 double.TryParse(pWage[1][0].ToString(), out deductionOnLargeJob);
@@ -691,7 +718,7 @@ namespace WICR_Estimator.ViewModels
 
         public void CalculateCost(object obj)
         {
-            MiscMetals[0].Units = getUnits(2);
+            //MiscMetals[0].Units = getUnits(2);
             
             updateLaborCost();
             updateMaterialCost();
