@@ -14,10 +14,10 @@ namespace WICR_Estimator.Models
             get { return isMetalChecked; }
             set
             {
-                //if (value!=isMetalChecked)
+                //if (value != isMetalChecked)
                 //{
                 //    isMetalChecked = value;
-                //    OnPropertyChanged("IsMetalChecked");
+                //    RaisePropertyChanged("IsMetalChecked");
                 //}
                 Set(ref isMetalChecked, value);
             }

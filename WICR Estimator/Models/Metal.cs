@@ -34,7 +34,7 @@ namespace WICR_Estimator.Models
                     RaisePropertyChanged("IsStairMetal");
 
                 }
-                //Set(ref isStairMetal, value);
+                
             }
         }
         private bool isStairMetalChecked;
@@ -46,14 +46,14 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                //if (value!= isStairMetalChecked)
+                //if (value != isStairMetalChecked)
                 //{
                 //    isStairMetalChecked = value;
 
-                //    OnPropertyChanged("IsStairMetalChecked");
+                //    RaisePropertyChanged("IsStairMetalChecked");
 
-                //    OnPropertyChanged("LaborExtension");
-                //    OnPropertyChanged("MaterialExtension");
+                //    RaisePropertyChanged("LaborExtension");
+                //    RaisePropertyChanged("MaterialExtension");
                 //}
                 Set(ref isStairMetalChecked, value);
                 RaisePropertyChanged("LaborExtension");
@@ -73,9 +73,9 @@ namespace WICR_Estimator.Models
                 //if (units != value)
                 //{
                 //    units = value;
-                //    OnPropertyChanged("Units");
-                //    OnPropertyChanged("LaborExtension");
-                //    OnPropertyChanged("MaterialExtension");
+                //    RaisePropertyChanged("Units");
+                //    RaisePropertyChanged("LaborExtension");
+                //    RaisePropertyChanged("MaterialExtension");
                 //}
                 Set(ref units, value);
                 RaisePropertyChanged("LaborExtension");
@@ -147,12 +147,13 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (materialPrice!=value)
-                {
-                    materialPrice = value;
-                    RaisePropertyChanged("MaterialPrice");
-                    RaisePropertyChanged("MaterialExtension");
-                }
+                //if (materialPrice!=value)
+                //{
+                //    materialPrice = value;
+                //    RaisePropertyChanged("MaterialPrice");
+                //    RaisePropertyChanged("MaterialExtension");
+                //}
+                Set(ref materialPrice, value);
             }
         }
 
@@ -193,10 +194,11 @@ namespace WICR_Estimator.Models
                 //if (specialMetalPricing != value)
                 //{
                 //    specialMetalPricing = value;
-                //    OnPropertyChanged("SpecialMetalPricing");
-                //    OnPropertyChanged("MaterialExtension");
+                //    RaisePropertyChanged("SpecialMetalPricing");
+                //    RaisePropertyChanged("MaterialExtension");
                 //}
                 Set(ref specialMetalPricing, value);
+                RaisePropertyChanged("MaterialExtension");
             }
         }
 
@@ -205,8 +207,15 @@ namespace WICR_Estimator.Models
         {
             this.ProductionRate = productionRate;
             this.LaborRate = laborRate;
-            this.Units = units;
-            this.SpecialMetalPricing = specialPricing;
+            if (units!=0)
+            {
+                this.Units = units;
+            }
+            if (specialMetalPricing!=0)
+            {
+                this.SpecialMetalPricing = specialPricing;
+            }
+            
             this.MaterialPrice = materialPrice;
             this.Name = name;
             this.isStairMetalChecked = isStairMetal;
@@ -227,13 +236,14 @@ namespace WICR_Estimator.Models
             get { return unitPrice; }
             set
             {
-                if (unitPrice!=value)
-                {
-                    unitPrice = value;
-                    RaisePropertyChanged("UnitPrice");
-                    RaisePropertyChanged("LaborExtension");
-                }
-               
+                //if (unitPrice!=value)
+                //{
+                //    unitPrice = value;
+                //    RaisePropertyChanged("UnitPrice");
+                //    RaisePropertyChanged("LaborExtension");
+                //}
+                Set(ref unitPrice, value);
+                RaisePropertyChanged("LaborExtension");
             }
         }
 

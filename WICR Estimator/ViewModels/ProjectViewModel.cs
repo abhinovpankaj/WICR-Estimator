@@ -260,7 +260,7 @@ namespace WICR_Estimator.ViewModels
                         }
                     }
                     prj.ProjectJobSetUp.TotalSalesCostTemp = prj.MaterialViewModel.TotalSale;
-                    
+                    prj.RegisterForUndoRedo(prj);
                 }
             }          
 

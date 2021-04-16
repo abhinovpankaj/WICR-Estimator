@@ -228,9 +228,20 @@ namespace WICR_Estimator.Models
             if (updatedJobSetup == null)
             {
                 updatedJobSetup = new DelegateCommand(UpdateJobSetUp, canUpdate);
-                undoRedoManager = new UndoRedoManager(this, new MyDispatcher());
+                //RegisterForUndoRedo();
             }
+
             
+
+        }
+
+        
+
+        public void RegisterForUndoRedo(Project prj)
+        {
+            //string[] ds = { "MetalBaseViewModel","Metals" };
+            undoRedoManager = new UndoRedoManager(prj, new MyDispatcher());
+            //undoRedoManager.Reset();
             
         }
         private UndoRedoManager undoRedoManager;
@@ -669,16 +680,18 @@ namespace WICR_Estimator.Models
         private void Undo(object obj)
         {
             undoRedoManager.Undo();
+            
         }
 
         private bool canUndo(object obj)
         {
-            if (undoRedoManager.CurrentIndex>2)
-            {
-                return undoRedoManager.CanUndo;
-            }
-            else
-                return false;
+            return undoRedoManager.CanUndo;
+            //if (undoRedoManager.CurrentIndex>3)
+            //{
+            //    return undoRedoManager.CanUndo;
+            //}
+            //else
+            //    return false;
 
         }
 

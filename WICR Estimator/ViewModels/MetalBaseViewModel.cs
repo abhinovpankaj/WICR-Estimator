@@ -171,6 +171,7 @@ namespace WICR_Estimator.ViewModels
                 //    metals = value;
                 //    RaisePropertyChanged("Metals");
                 //}
+
                 Set(ref metals, value);
             }
         }
@@ -183,12 +184,12 @@ namespace WICR_Estimator.ViewModels
             }
             set
             {
-                if (addOnMetals != value)
-                {
-                    addOnMetals = value;
-                    RaisePropertyChanged("AddOnMetals");
-                }
-                //Set(ref addOnMetals, value);
+                //if (addOnMetals != value)
+                //{
+                //    addOnMetals = value;
+                //    RaisePropertyChanged("AddOnMetals");
+                //}
+                Set(ref addOnMetals, value);
             }
         }
         public ObservableCollection<MiscMetal> MiscMetals
@@ -451,30 +452,34 @@ namespace WICR_Estimator.ViewModels
                     met = GetMetals();
                 }
                 else
+                {
                     met = GetMetalsDB();
+                    
+                }
+                    //met = UpdateMetalsDB();//GetMetalsDB();
             }
                
 
-               for (int i = 0; i < Metals.Count; i++)
-               {
-                   double units = Metals[i].Units;
-                   double sp = Metals[i].SpecialMetalPricing;
-                   bool isSelected = Metals[i].IsStairMetalChecked;
+               //for (int i = 0; i < Metals.Count; i++)
+               //{
+               //    double units = Metals[i].Units;
+               //    double sp = Metals[i].SpecialMetalPricing;
+               //    bool isSelected = Metals[i].IsStairMetalChecked;
                 
-                   Metals[i] = met[i];
-                   if (!Metals[i].Name.Contains("STAIR METAL"))
-                   {
-                       Metals[i].Units = units;
-                        Metals[i].IsStairMetalChecked = isSelected;
+               //    Metals[i] = met[i];
+               //    if (!Metals[i].Name.Contains("STAIR METAL"))
+               //    {
+               //        Metals[i].Units = units;
+               //         Metals[i].IsStairMetalChecked = isSelected;
 
-                    }
-                   else
-                   {
-                       Metals[i].IsStairMetalChecked = isSelected;
-                   }
+               //     }
+               //    else
+               //    {
+               //        Metals[i].IsStairMetalChecked = isSelected;
+               //    }
 
-                   Metals[i].SpecialMetalPricing = sp;
-               }
+               //    Metals[i].SpecialMetalPricing = sp;
+               //}
             ObservableCollection<AddOnMetal> addOnMet = new ObservableCollection<AddOnMetal>();
             if (Js.ProjectName == "Paraseal LG")
             {
@@ -497,19 +502,19 @@ namespace WICR_Estimator.ViewModels
             }
                 
              
-               for (int i = 0; i < AddOnMetals.Count; i++)
-               {
-                   double units = AddOnMetals[i].Units;
-                   double sp = AddOnMetals[i].SpecialMetalPricing;
-                   bool ischecked = AddOnMetals[i].IsMetalChecked;
-                   AddOnMetals[i] = addOnMet[i];
-                   if (!AddOnMetals[i].Name.Contains("STAIR METAL"))
-                   {
-                       AddOnMetals[i].Units = units;
-                   }
-                   AddOnMetals[i].IsMetalChecked = ischecked;
-                   AddOnMetals[i].SpecialMetalPricing = sp;
-               }
+               //for (int i = 0; i < AddOnMetals.Count; i++)
+               //{
+               //    double units = AddOnMetals[i].Units;
+               //    double sp = AddOnMetals[i].SpecialMetalPricing;
+               //    bool ischecked = AddOnMetals[i].IsMetalChecked;
+               //    AddOnMetals[i] = addOnMet[i];
+               //    if (!AddOnMetals[i].Name.Contains("STAIR METAL"))
+               //    {
+               //        AddOnMetals[i].Units = units;
+               //    }
+               //    AddOnMetals[i].IsMetalChecked = ischecked;
+               //    AddOnMetals[i].SpecialMetalPricing = sp;
+               //}
 
             if (Js!=null)
             {
@@ -538,6 +543,11 @@ namespace WICR_Estimator.ViewModels
                 Nails = dbData.MetalDBData.FirstOrDefault(x => x.MetalName == "Nails, caulk + overage on metal").ProductionRate;
             }
             CalculateCost(null);                      
+        }
+
+        private ObservableCollection<Metal> UpdateMetalsDB()
+        {
+            throw new NotImplementedException();
         }
 
         public virtual ObservableCollection<Metal> GetMetals()
