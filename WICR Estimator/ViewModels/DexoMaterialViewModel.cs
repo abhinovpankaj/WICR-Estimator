@@ -496,7 +496,7 @@ namespace WICR_Estimator.ViewModels
                         mat.StairsProductionRate = matWhite.StairsProductionRate * (1 + prPerc);
                         
                         mat.SetupMinCharge = mat.SetupMinCharge;
-                        OnPropertyChanged("SetupMinCharge");
+                        RaisePropertyChanged("SetupMinCharge");
                         mat.Hours = matWhite.Hours;
                         mat.LaborExtension = matWhite.LaborExtension;
                         mat.LaborUnitPrice = matWhite.LaborUnitPrice;
@@ -521,7 +521,7 @@ namespace WICR_Estimator.ViewModels
                         mat.StairsProductionRate = matWhite.StairsProductionRate * (1 + prPerc);
 
                         mat.SetupMinCharge = mat.SetupMinCharge;
-                        OnPropertyChanged("SetupMinCharge");
+                        RaisePropertyChanged("SetupMinCharge");
                         mat.Hours = matWhite.Hours;
                         mat.LaborExtension = matWhite.LaborExtension;
                         mat.LaborUnitPrice = matWhite.LaborUnitPrice;
@@ -566,7 +566,7 @@ namespace WICR_Estimator.ViewModels
                         mat.StairsProductionRate = matWhite.StairsProductionRate * (1 + prPerc);
 
                         mat.SetupMinCharge = mat.SetupMinCharge;
-                        OnPropertyChanged("SetupMinCharge");
+                        RaisePropertyChanged("SetupMinCharge");
                         mat.Hours = matWhite.Hours;
                         mat.LaborExtension = matWhite.LaborExtension;
                         mat.LaborUnitPrice = matWhite.LaborUnitPrice;
@@ -591,7 +591,7 @@ namespace WICR_Estimator.ViewModels
                         mat.StairsProductionRate = matWhite.StairsProductionRate * (1 + prPerc);
 
                         mat.SetupMinCharge = mat.SetupMinCharge;
-                        OnPropertyChanged("SetupMinCharge");
+                        RaisePropertyChanged("SetupMinCharge");
                         mat.Hours = matWhite.Hours;
                         mat.LaborExtension = matWhite.LaborExtension;
                         mat.LaborUnitPrice = matWhite.LaborUnitPrice;
@@ -636,7 +636,7 @@ namespace WICR_Estimator.ViewModels
                         mat.StairsProductionRate = matWhite.StairsProductionRate * (1 + prPerc);
 
                         mat.SetupMinCharge = mat.SetupMinCharge;
-                        OnPropertyChanged("SetupMinCharge");
+                        RaisePropertyChanged("SetupMinCharge");
                         mat.Hours = matWhite.Hours;
                         mat.LaborExtension = matWhite.LaborExtension;
                         mat.LaborUnitPrice = matWhite.LaborUnitPrice;
@@ -661,7 +661,7 @@ namespace WICR_Estimator.ViewModels
                         mat.StairsProductionRate = matWhite.StairsProductionRate * (1 + prPerc);
 
                         mat.SetupMinCharge = mat.SetupMinCharge;
-                        OnPropertyChanged("SetupMinCharge");
+                        RaisePropertyChanged("SetupMinCharge");
                         mat.Hours = matWhite.Hours;
                         mat.LaborExtension = matWhite.LaborExtension;
                         mat.LaborUnitPrice = matWhite.LaborUnitPrice;

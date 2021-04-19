@@ -603,13 +603,12 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (materialViewModel != value)
-                {
-                    materialViewModel = value;
-                    //OnPropertyChanged("MaterialViewModel");
-                    RaisePropertyChanged("MaterialViewModel");
-                }
-                //Set(ref materialViewModel, value);
+                //if (materialViewModel != value)
+                //{
+                //    materialViewModel = value;
+                //    RaisePropertyChanged("MaterialViewModel");
+                //}
+                Set(ref materialViewModel, value);
             }
         }
 

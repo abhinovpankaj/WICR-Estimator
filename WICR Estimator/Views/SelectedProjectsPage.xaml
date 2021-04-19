@@ -136,10 +136,11 @@ BorderBrush="Black" Margin="0,0,0,3" CornerRadius="3,3,0,0" >
                    HorizontalAlignment="Left"
                    VerticalAlignment="Bottom">
                             
-                            <Button Margin="5" ToolTip="Undo(Ctrl+Z)"
+                            <Button Margin="5" ToolTip="Undo(Ctrl+Z)" materialDesign:ShadowAssist.Darken="True"
+                                    materialDesign:ShadowAssist.ShadowDepth="Depth4"
                     HorizontalAlignment="Right"
                          Style="{StaticResource MaterialDesignFloatingActionButton}"
-                                        Height="40" Width="40"
+                                        Height="50" Width="50"
                     Command="{Binding UndoCommand}">
                                 <Button.Content>
                                     <materialDesign:PackIcon Kind="Undo"
@@ -148,10 +149,10 @@ BorderBrush="Black" Margin="0,0,0,3" CornerRadius="3,3,0,0" >
                                 </Button.Content>
                                 
                             </Button>
-                            <Button Margin="5" ToolTip="Redo(Ctrl+Y)"
+                            <Button Margin="5" ToolTip="Redo(Ctrl+Y)" materialDesign:ShadowAssist.ShadowDepth="Depth4"
                     HorizontalAlignment="Right"
                          Style="{StaticResource MaterialDesignFloatingActionButton}"
-                                        Height="40" Width="40"
+                                        Height="50" Width="50"
                     Command="{Binding RedoCommand}">
                                 <Button.Content>
                                     <materialDesign:PackIcon Kind="Redo"

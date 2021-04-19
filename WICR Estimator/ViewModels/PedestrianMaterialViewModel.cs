@@ -32,7 +32,7 @@ namespace WICR_Estimator.ViewModels
         {
             double sumVal = totalSqft + TotalSqftPlywood;
             TotalLaborUnitPrice = sumVal == 0 ? 0 : TotalLaborWithoutDrive / sumVal;
-            OnPropertyChanged("TotalLaborUnitPrice");
+            RaisePropertyChanged("TotalLaborUnitPrice");
         }
         public override void setUnitChangeValues()
         {
@@ -237,11 +237,11 @@ namespace WICR_Estimator.ViewModels
             CostperSqftMaterial = (totalSqft + riserCount + TotalSqftPlywood) == 0 ? 0 : TotalSystemPrice / (totalSqft + riserCount + TotalSqftPlywood);
             CostperSqftSubContract = (totalSqft + riserCount + TotalSqftPlywood) == 0 ? 0 : TotalSubcontractLabor / (totalSqft + riserCount + TotalSqftPlywood);
             TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
-            OnPropertyChanged("CostperSqftSlope");
-            OnPropertyChanged("CostperSqftMetal");
-            OnPropertyChanged("CostperSqftMaterial");
-            OnPropertyChanged("CostperSqftSubContract");
-            OnPropertyChanged("TotalCostperSqft");
+            RaisePropertyChanged("CostperSqftSlope");
+            RaisePropertyChanged("CostperSqftMetal");
+            RaisePropertyChanged("CostperSqftMaterial");
+            RaisePropertyChanged("CostperSqftSubContract");
+            RaisePropertyChanged("TotalCostperSqft");
         }
 
         

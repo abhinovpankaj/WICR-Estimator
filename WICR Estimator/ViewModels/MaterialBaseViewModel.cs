@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyToolkit.Model;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -43,7 +44,7 @@ namespace WICR_Estimator.ViewModels
     [KnownType(typeof(WestcoatColorMaterialViewModel))]
     [KnownType(typeof(UPIBelowTileMaterialViewModel))]
     [KnownType(typeof(IndependentMaterialViewModel))]
-    public class MaterialBaseViewModel:BaseViewModel
+    public class MaterialBaseViewModel:GraphObservableObject
     {
         [DataMember]
         public Totals MetalTotals { set; get; }
@@ -322,11 +323,12 @@ namespace WICR_Estimator.ViewModels
             get { return subContractLaborItems; }
             set
             {
-                if (value != subContractLaborItems)
-                {
-                    subContractLaborItems = value;
-                    OnPropertyChanged("SubContractLaborItems");
-                }
+                //if (value != subContractLaborItems)
+                //{
+                //    subContractLaborItems = value;
+                //    RaisePropertyChanged("SubContractLaborItems");
+                //}
+                Set(ref subContractLaborItems, value);
             }
         }
         [DataMember]
@@ -338,12 +340,13 @@ namespace WICR_Estimator.ViewModels
             }
             set
             {
-                if (value != systemMaterials)
-                {
-                    systemMaterials = value;
-                    OnPropertyChanged("SystemMaterials");
+                //if (value != systemMaterials)
+                //{
+                //    systemMaterials = value;
+                //    OnPropertyChanged("SystemMaterials");
 
-                }
+                //}
+                Set(ref systemMaterials, value);
             }
         }
         [DataMember]
@@ -352,12 +355,14 @@ namespace WICR_Estimator.ViewModels
             get { return otherMaterials; }
             set
             {
-                if (value != otherMaterials)
-                {
-                    otherMaterials = value;
-                    OnPropertyChanged("OtherMaterials");
-                    CalOCTotal();
-                }
+                //if (value != otherMaterials)
+                //{
+                //    otherMaterials = value;
+                //    OnPropertyChanged("OtherMaterials");
+                //    CalOCTotal();
+                //}
+                Set(ref otherMaterials, value);
+                CalOCTotal();
             }
         }
         [DataMember]
@@ -369,7 +374,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != costPerSquareFeet)
                 {
                     costPerSquareFeet = value;
-                    OnPropertyChanged("CostPerSquareFeet");
+                    RaisePropertyChanged("CostPerSquareFeet");
                 }
             }
         }
@@ -383,7 +388,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != sumFreight)
                 {
                     sumFreight = value;
-                    OnPropertyChanged("SumFreight");
+                    RaisePropertyChanged("SumFreight");
                 }
             }
         }
@@ -397,7 +402,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != sumWeight)
                 {
                     sumWeight = value;
-                    OnPropertyChanged("SumWeight");
+                    RaisePropertyChanged("SumWeight");
                 }
             }
         }
@@ -411,7 +416,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != sumTotalMatExt)
                 {
                     sumTotalMatExt = value;
-                    OnPropertyChanged("SumTotalMatExt");
+                    RaisePropertyChanged("SumTotalMatExt");
                 }
             }
         }
@@ -425,7 +430,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != sumMatPrice)
                 {
                     sumMatPrice = value;
-                    OnPropertyChanged("SumMatPrice");
+                    RaisePropertyChanged("SumMatPrice");
                 }
             }
         }
@@ -439,7 +444,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != sumQty)
                 {
                     sumQty = value;
-                    OnPropertyChanged("SumQty");
+                    RaisePropertyChanged("SumQty");
                 }
             }
         }
@@ -453,7 +458,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != totalWeightbrkp)
                 {
                     totalWeightbrkp = value;
-                    OnPropertyChanged("TotalWeightbrkp");
+                    RaisePropertyChanged("TotalWeightbrkp");
                 }
             }
         }
@@ -467,7 +472,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != totalFreightCostBrkp)
                 {
                     totalFreightCostBrkp = value;
-                    OnPropertyChanged("TotalFreightCostBrkp");
+                    RaisePropertyChanged("TotalFreightCostBrkp");
                 }
             }
         }
@@ -481,7 +486,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != totalMaterialCostbrkp)
                 {
                     totalMaterialCostbrkp = value;
-                    OnPropertyChanged("TotalMaterialCostbrkp");
+                    RaisePropertyChanged("TotalMaterialCostbrkp");
                 }
             }
         }
@@ -496,8 +501,8 @@ namespace WICR_Estimator.ViewModels
                 {
                     totalSubContractLaborCostBrkp = value;
 
-                    OnPropertyChanged("TotalSubContractLaborCostBrkp");
-                    OnPropertyChanged("matTotals");
+                    RaisePropertyChanged("TotalSubContractLaborCostBrkp");
+                    //RaisePropertyChanged("MatTotals");
                 }
             }
         }
@@ -511,7 +516,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != totalOCExtension)
                 {
                     totalOCExtension = value;
-                    OnPropertyChanged("TotalOCExtension");
+                    RaisePropertyChanged("TotalOCExtension");
 
                 }
             }
@@ -526,7 +531,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != totalSCExtension)
                 {
                     totalSCExtension = value;
-                    OnPropertyChanged("TotalSCExtension");
+                    RaisePropertyChanged("TotalSCExtension");
 
                 }
             }
@@ -544,7 +549,7 @@ namespace WICR_Estimator.ViewModels
                 {
                     subContractMarkup = value;
                     populateCalculation();
-                    OnPropertyChanged("SubContractMarkup");
+                    RaisePropertyChanged("SubContractMarkup");
 
                 }
             }
@@ -562,7 +567,7 @@ namespace WICR_Estimator.ViewModels
                 {
                     subContractprofitMargin = value;
                     populateCalculation();
-                    OnPropertyChanged("SubContractProfitMargin");
+                    RaisePropertyChanged("SubContractProfitMargin");
 
                 }
             }
@@ -579,7 +584,7 @@ namespace WICR_Estimator.ViewModels
                 {
                     metalMarkup = value;
                     populateCalculation();
-                    OnPropertyChanged("MetalMarkup");
+                    RaisePropertyChanged("MetalMarkup");
 
                 }
             }
@@ -595,7 +600,7 @@ namespace WICR_Estimator.ViewModels
                 {
                     slopeMarkup = value;
                     populateCalculation();
-                    OnPropertyChanged("SlopeMarkup");
+                    RaisePropertyChanged("SlopeMarkup");
 
                 }
             }
@@ -611,7 +616,7 @@ namespace WICR_Estimator.ViewModels
                 {
                     materialMarkup = value;
                     populateCalculation();
-                    OnPropertyChanged("MaterialMarkup");
+                    RaisePropertyChanged("MaterialMarkup");
 
                 }
             }
@@ -633,7 +638,7 @@ namespace WICR_Estimator.ViewModels
                 //{
                     addLaborMinCharge = value;
                     previousMinLaborCheckboxStatus = addLaborMinCharge;
-                    OnPropertyChanged("ZAddLaborMinCharge");
+                RaisePropertyChanged("ZAddLaborMinCharge");
                     
                 //}
             }
@@ -644,11 +649,12 @@ namespace WICR_Estimator.ViewModels
             get { return otherLaborMaterials; }
             set
             {
-                if (value != otherLaborMaterials)
-                {
-                    otherLaborMaterials = value;
-                    OnPropertyChanged("OtherLaborMaterials");
-                }
+                //if (value != otherLaborMaterials)
+                //{
+                //    otherLaborMaterials = value;
+                //    OnPropertyChanged("OtherLaborMaterials");
+                //}
+                Set(ref otherLaborMaterials, value);
             }
         }
         [DataMember]
@@ -660,7 +666,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != lCostBreakUp)
                 {
                     lCostBreakUp = value;
-                    OnPropertyChanged("LCostBreakUp");
+                    RaisePropertyChanged("LCostBreakUp");
                 }
             }
         }
@@ -727,7 +733,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != markUpPerc)
                 {
                     markUpPerc = value;
-                    OnPropertyChanged("MarkUpPerc");
+                    RaisePropertyChanged("MarkUpPerc");
                 }
             }
         }
@@ -740,10 +746,10 @@ namespace WICR_Estimator.ViewModels
         public virtual void driveHrs(int hrs,double tSqft)
         {
             TotalHrsDriveLabor = tSqft < 1001 ? hrs : Math.Ceiling(tSqft / 1000 ) * hrs;
-            
+
             //DriveLaborValue = Math.Round(TotalHrsDriveLabor * laborRate,2);
             //OnPropertyChanged("DriveLaborValue");
-            OnPropertyChanged("TotalHrsDriveLabor");
+            RaisePropertyChanged("TotalHrsDriveLabor");
         }
         double tempTotalLaborExtension = 0;
         public void calLaborHrs(int hrs,double tSqft)
@@ -759,19 +765,19 @@ namespace WICR_Estimator.ViewModels
             {
                 TotalHrsSystemLabor = 0;
             }
-            OnPropertyChanged("TotalHrsSystemLabor");
+            RaisePropertyChanged("TotalHrsSystemLabor");
             if (SlopeTotals != null )
             {
                 
                 TotalHrsSlopeLabor = isPrevailingWage ? (SlopeTotals.LaborExtTotal / actualPreWage) :
                                                       (SlopeTotals.LaborExtTotal / laborRate);
-                OnPropertyChanged("TotalHrsSlopeLabor");
+                RaisePropertyChanged("TotalHrsSlopeLabor");
             }
             if (MetalTotals!=null)
             {
                 TotalHrsMetalLabor = isPrevailingWage ? (MetalTotals.LaborExtTotal / actualPreWage) :
                                                   (MetalTotals.LaborExtTotal / laborRate);
-                OnPropertyChanged("TotalHrsMetalLabor");
+                RaisePropertyChanged("TotalHrsMetalLabor");
             }
             TotalHrsDriveLabor = Math.Ceiling((TotalHrsSystemLabor + TotalHrsMetalLabor + TotalHrsSlopeLabor) / 10 * 2);
             if (TotalHrsDriveLabor<4)
@@ -790,10 +796,10 @@ namespace WICR_Estimator.ViewModels
             DriveLaborValue =IncludeDriveHours ? TotalHrsDriveLabor * DHLR:0;
 
             TotalHrsLabor = TotalHrsSystemLabor + TotalHrsMetalLabor + TotalHrsSlopeLabor;
-           
-            OnPropertyChanged("DriveLaborValue");
-            OnPropertyChanged("TotalHrsDriveLabor");
-            OnPropertyChanged("TotalHrsLabor");
+
+            RaisePropertyChanged("DriveLaborValue");
+            RaisePropertyChanged("TotalHrsDriveLabor");
+            RaisePropertyChanged("TotalHrsLabor");
 
         }
         
@@ -861,7 +867,7 @@ namespace WICR_Estimator.ViewModels
                             mat.StairsProductionRate = matVal * (1 + prPerc);
                             double.TryParse(materialDetails[13][6].ToString(), out matVal);
                             mat.SetupMinCharge = matVal;
-                            OnPropertyChanged("SetupMinCharge");
+                            RaisePropertyChanged("SetupMinCharge");
                             mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
@@ -879,7 +885,7 @@ namespace WICR_Estimator.ViewModels
                             mat.StairsProductionRate = matVal * (1 + prPerc);
 
                             mat.SetupMinCharge = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).LaborMinCharge;
-                            OnPropertyChanged("SetupMinCharge");
+                            RaisePropertyChanged("SetupMinCharge");
                             mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
@@ -903,7 +909,7 @@ namespace WICR_Estimator.ViewModels
                             mat.StairsProductionRate = matVal * (1 + prPerc);
                             double.TryParse(materialDetails[15][6].ToString(), out matVal);
                             mat.SetupMinCharge = matVal;
-                            OnPropertyChanged("SetupMinCharge");
+                            RaisePropertyChanged("SetupMinCharge");
                             mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
@@ -921,7 +927,7 @@ namespace WICR_Estimator.ViewModels
                             mat.StairsProductionRate = matVal * (1 + prPerc);
 
                             mat.SetupMinCharge = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).LaborMinCharge;
-                            OnPropertyChanged("SetupMinCharge");
+                            RaisePropertyChanged("SetupMinCharge");
                             mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
@@ -944,7 +950,7 @@ namespace WICR_Estimator.ViewModels
                             mat.StairsProductionRate = matVal * (1 + prPerc);
                             double.TryParse(materialDetails[21][6].ToString(), out matVal);
                             mat.SetupMinCharge = matVal;
-                            OnPropertyChanged("SetupMinCharge");
+                            RaisePropertyChanged("SetupMinCharge");
                             mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
@@ -962,7 +968,7 @@ namespace WICR_Estimator.ViewModels
                             mat.StairsProductionRate = matVal * (1 + prPerc);
 
                             mat.SetupMinCharge = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).LaborMinCharge;
-                            OnPropertyChanged("SetupMinCharge");
+                            RaisePropertyChanged("SetupMinCharge");
                             mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
@@ -1006,7 +1012,7 @@ namespace WICR_Estimator.ViewModels
                             mat.StairsProductionRate = matVal * (1 + prPerc);
                             double.TryParse(materialDetails[12][6].ToString(), out matVal);
                             mat.SetupMinCharge = matVal;
-                            OnPropertyChanged("SetupMinCharge");
+                            RaisePropertyChanged("SetupMinCharge");
                             mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
@@ -1025,7 +1031,7 @@ namespace WICR_Estimator.ViewModels
                             mat.StairsProductionRate = matVal * (1 + prPerc);
 
                             mat.SetupMinCharge = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).LaborMinCharge;
-                            OnPropertyChanged("SetupMinCharge");
+                            RaisePropertyChanged("SetupMinCharge");
                             mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
@@ -1048,7 +1054,7 @@ namespace WICR_Estimator.ViewModels
                             mat.StairsProductionRate = matVal * (1 + prPerc);
                             double.TryParse(materialDetails[14][6].ToString(), out matVal);
                             mat.SetupMinCharge = matVal;
-                            OnPropertyChanged("SetupMinCharge");
+                            RaisePropertyChanged("SetupMinCharge");
                             mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
@@ -1066,7 +1072,7 @@ namespace WICR_Estimator.ViewModels
                             mat.StairsProductionRate = matVal * (1 + prPerc);
 
                             mat.SetupMinCharge = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).LaborMinCharge;
-                            OnPropertyChanged("SetupMinCharge");
+                            RaisePropertyChanged("SetupMinCharge");
                             mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
@@ -1089,7 +1095,7 @@ namespace WICR_Estimator.ViewModels
                             mat.StairsProductionRate = matVal * (1 + prPerc);
                             double.TryParse(materialDetails[20][6].ToString(), out matVal);
                             mat.SetupMinCharge = matVal;
-                            OnPropertyChanged("SetupMinCharge");
+                            RaisePropertyChanged("SetupMinCharge");
                             mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
@@ -1107,7 +1113,7 @@ namespace WICR_Estimator.ViewModels
                             mat.StairsProductionRate = matVal * (1 + prPerc);
 
                             mat.SetupMinCharge = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).LaborMinCharge;
-                            OnPropertyChanged("SetupMinCharge");
+                            RaisePropertyChanged("SetupMinCharge");
                             mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
@@ -1150,7 +1156,7 @@ namespace WICR_Estimator.ViewModels
                             mat.StairsProductionRate = matVal * (1 + prPerc);
                             double.TryParse(materialDetails[12][6].ToString(), out matVal);
                             mat.SetupMinCharge = matVal;
-                            OnPropertyChanged("SetupMinCharge");
+                            RaisePropertyChanged("SetupMinCharge");
                             mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
@@ -1168,7 +1174,7 @@ namespace WICR_Estimator.ViewModels
                             mat.StairsProductionRate = matVal * (1 + prPerc);
                             
                             mat.SetupMinCharge = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "RESISTITE REGULAR GRAY").LaborMinCharge ;
-                            OnPropertyChanged("SetupMinCharge");
+                            RaisePropertyChanged("SetupMinCharge");
                             mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
@@ -1190,7 +1196,7 @@ namespace WICR_Estimator.ViewModels
                             mat.StairsProductionRate = matVal * (1 + prPerc);
                             double.TryParse(materialDetails[14][6].ToString(), out matVal);
                             mat.SetupMinCharge = matVal;
-                            OnPropertyChanged("SetupMinCharge");
+                            RaisePropertyChanged("SetupMinCharge");
                             mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
@@ -1208,7 +1214,7 @@ namespace WICR_Estimator.ViewModels
                             mat.StairsProductionRate = matVal * (1 + prPerc);
 
                             mat.SetupMinCharge = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).LaborMinCharge;
-                            OnPropertyChanged("SetupMinCharge");
+                            RaisePropertyChanged("SetupMinCharge");
                             mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
@@ -1231,7 +1237,7 @@ namespace WICR_Estimator.ViewModels
                             mat.StairsProductionRate = matVal * (1 + prPerc);
                             double.TryParse(materialDetails[20][6].ToString(), out matVal);
                             mat.SetupMinCharge = matVal;
-                            OnPropertyChanged("SetupMinCharge");
+                            RaisePropertyChanged("SetupMinCharge");
                             mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
@@ -1250,7 +1256,7 @@ namespace WICR_Estimator.ViewModels
                             mat.StairsProductionRate = matVal * (1 + prPerc);
 
                             mat.SetupMinCharge = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == mat.Name.ToUpper()).LaborMinCharge;
-                            OnPropertyChanged("SetupMinCharge");
+                            RaisePropertyChanged("SetupMinCharge");
                             mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
@@ -1783,11 +1789,11 @@ namespace WICR_Estimator.ViewModels
             {
                 ZAddLaborMinCharge = previousMinLaborCheckboxStatus;
             }
-            OnPropertyChanged("LaborMinChargeMinSetup");
-            OnPropertyChanged("ZAddLaborMinCharge");
-            OnPropertyChanged("LaborMinChargeHrs");
-            OnPropertyChanged("LaborMinChargeLaborExtension");
-            OnPropertyChanged("LaborMinChargeLaborUnitPrice");
+            RaisePropertyChanged("LaborMinChargeMinSetup");
+            RaisePropertyChanged("ZAddLaborMinCharge");
+            RaisePropertyChanged("LaborMinChargeHrs");
+            RaisePropertyChanged("LaborMinChargeLaborExtension");
+            RaisePropertyChanged("LaborMinChargeLaborUnitPrice");
 
 
         }
@@ -3230,7 +3236,7 @@ namespace WICR_Estimator.ViewModels
                 if (OtherLaborMaterials.Count > 0)
                 {
                     TotalOCLaborExtension = OtherLaborMaterials.Select(x => x.LExtension).Sum();
-                    OnPropertyChanged("TotalOCLaborExtension");
+                    RaisePropertyChanged("TotalOCLaborExtension");
                 }
             }
 
@@ -3383,7 +3389,7 @@ namespace WICR_Estimator.ViewModels
                 TotalMaterialCostbrkp = (SumTotalMatExt + TotalOCExtension);
                 
                 TotalMaterialCost = TotalMaterialCostbrkp;
-                OnPropertyChanged("TotalMaterialCost");
+                RaisePropertyChanged("TotalMaterialCost");
                 TotalMaterialCostbrkp = TotalMaterialCostbrkp*(1+MaterialPerc);
                 TotalWeightbrkp = SumWeight;
                 TotalFreightCostBrkp = FreightCalculator(TotalWeightbrkp);
@@ -3421,10 +3427,10 @@ namespace WICR_Estimator.ViewModels
                     //{
                         CalculateCost(null);
                         CalculateCost(null);
-                        //CalculateAllMaterial();
+                    //CalculateAllMaterial();
                     //}
-                    
-                    OnPropertyChanged("IncludeDriveHours");
+
+                    RaisePropertyChanged("IncludeDriveHours");
                 }
             }
         }
@@ -3609,20 +3615,20 @@ namespace WICR_Estimator.ViewModels
                 TotalLaborExtension = TotalLaborExtension + LaborMinChargeLaborExtension * (1 + preWage + laborDeduction);
                 extrHrs= TotalHrsSystemLabor<20?20 - TotalHrsSystemLabor:0;
                 AllTabsLaborTotal = AllTabsLaborTotal + LaborMinChargeLaborExtension * (1 + preWage + laborDeduction); ;
-                OnPropertyChanged("AllTabsLaborTotal");
-                OnPropertyChanged("TotalLaborExtension");
+                RaisePropertyChanged("AllTabsLaborTotal");
+                RaisePropertyChanged("TotalLaborExtension");
 
             }
             TotalHrsSystemLabor = TotalHrsSystemLabor + extrHrs;
-            OnPropertyChanged("TotalHrsSystemLabor");
+            RaisePropertyChanged("TotalHrsSystemLabor");
             TotalHrsLabor = TotalHrsSystemLabor + TotalHrsMetalLabor + TotalHrsSlopeLabor;
-            OnPropertyChanged("TotalHrsLabor");
+            RaisePropertyChanged("TotalHrsLabor");
         }
         public virtual void UpdateSumOfSqft()
         {
             double sumVal = totalSqft;
             TotalLaborUnitPrice = sumVal == 0 ? 0 : TotalLaborWithoutDrive / sumVal;
-            OnPropertyChanged("TotalLaborUnitPrice");
+            RaisePropertyChanged("TotalLaborUnitPrice");
         }
 
         public double  TotalLaborWithoutDrive { get; set; }
@@ -3630,19 +3636,19 @@ namespace WICR_Estimator.ViewModels
         public void UpdateUILaborCost()
         {
 
-            OnPropertyChanged("AllTabsLaborTotal");
-            OnPropertyChanged("AllTabsMaterialTotal");
-            OnPropertyChanged("AllTabsFreightTotal");
-            OnPropertyChanged("AllTabsSubContractTotal");
-            OnPropertyChanged("TotalSetupTimeLabor");
-            OnPropertyChanged("TotalLaborWithoutDrive");
-            OnPropertyChanged("TotalLaborUnitPrice");
-            OnPropertyChanged("TotalLaborExtension");
-            OnPropertyChanged("TotalSlopingPrice");
+            RaisePropertyChanged("AllTabsLaborTotal");
+            RaisePropertyChanged("AllTabsMaterialTotal");
+            RaisePropertyChanged("AllTabsFreightTotal");
+            RaisePropertyChanged("AllTabsSubContractTotal");
+            RaisePropertyChanged("TotalSetupTimeLabor");
+            RaisePropertyChanged("TotalLaborWithoutDrive");
+            RaisePropertyChanged("TotalLaborUnitPrice");
+            RaisePropertyChanged("TotalLaborExtension");
+            RaisePropertyChanged("TotalSlopingPrice");
 
-            OnPropertyChanged("TotalMetalPrice");
-            OnPropertyChanged("TotalSystemPrice");
-            OnPropertyChanged("TotalSale");
+            RaisePropertyChanged("TotalMetalPrice");
+            RaisePropertyChanged("TotalSystemPrice");
+            RaisePropertyChanged("TotalSale");
 
         }
         private double getTotals(double laborCost, double materialCost, double freightCost, double subcontractLabor)
@@ -4241,13 +4247,13 @@ namespace WICR_Estimator.ViewModels
             CalculateTotalSqFt();
             TotalSale = TotalMetalPrice + TotalSlopingPrice + TotalSystemPrice + TotalSubcontractLabor;
             LaborPerc= Math.Round(AllTabsLaborTotal / TotalSale,2);
-            OnPropertyChanged("MaterialPerc");
-            OnPropertyChanged("LaborPerc");
-            OnPropertyChanged("TotalMetalPrice");
-            OnPropertyChanged("TotalSlopingPrice");
-            OnPropertyChanged("TotalSystemPrice");
-            OnPropertyChanged("TotalSubcontractLabor");
-            OnPropertyChanged("TotalSale");
+            RaisePropertyChanged("MaterialPerc");
+            RaisePropertyChanged("LaborPerc");
+            RaisePropertyChanged("TotalMetalPrice");
+            RaisePropertyChanged("TotalSlopingPrice");
+            RaisePropertyChanged("TotalSystemPrice");
+            RaisePropertyChanged("TotalSubcontractLabor");
+            RaisePropertyChanged("TotalSale");
         }
 
         public virtual void CalculateTotalSqFt()
@@ -4267,11 +4273,11 @@ namespace WICR_Estimator.ViewModels
                 CostperSqftSubContract = TotalSubcontractLabor / (totalSqft + riserCount);
             }           
             TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
-            OnPropertyChanged("CostperSqftSlope");
-            OnPropertyChanged("CostperSqftMetal");
-            OnPropertyChanged("CostperSqftMaterial");
-            OnPropertyChanged("CostperSqftSubContract");
-            OnPropertyChanged("TotalCostperSqft");
+            RaisePropertyChanged("CostperSqftSlope");
+            RaisePropertyChanged("CostperSqftMetal");
+            RaisePropertyChanged("CostperSqftMaterial");
+            RaisePropertyChanged("CostperSqftSubContract");
+            RaisePropertyChanged("TotalCostperSqft");
         }
 
         #region DBData

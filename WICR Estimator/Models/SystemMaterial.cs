@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyToolkit.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ using WICR_Estimator.ViewModels;
 namespace WICR_Estimator.Models
 {
     
-    public class SystemMaterial : BaseViewModel
+    public class SystemMaterial : GraphObservableObject
     {
 
         private bool ismaterialchecked;
@@ -56,7 +57,7 @@ namespace WICR_Estimator.Models
                 if (value != sMSqftH)
                 {
                     sMSqftH = value;
-                    OnPropertyChanged("SMSqftH");
+                    RaisePropertyChanged("SMSqftH");
                 }
             }
         }
@@ -70,7 +71,7 @@ namespace WICR_Estimator.Models
                 if (value != horizontalProductionRate)
                 {
                     horizontalProductionRate = value;
-                    OnPropertyChanged("HorizontalProductionRate");
+                    RaisePropertyChanged("HorizontalProductionRate");
                 }
             }
         }
@@ -84,7 +85,7 @@ namespace WICR_Estimator.Models
                 if (value != sMSqftV)
                 {
                     sMSqftV = value;
-                    OnPropertyChanged("SMSqftV");
+                    RaisePropertyChanged("SMSqftV");
                 }
             }
         }
@@ -98,7 +99,7 @@ namespace WICR_Estimator.Models
                 if (value != verticleProductionRate)
                 {
                     verticleProductionRate = value;
-                    OnPropertyChanged("VerticleProductionRate");
+                    RaisePropertyChanged("VerticleProductionRate");
                 }
             }
         }
@@ -112,7 +113,7 @@ namespace WICR_Estimator.Models
                 if (value != stairsProductionRate)
                 {
                     stairsProductionRate = value;
-                    OnPropertyChanged("StairsProductionRate");
+                    RaisePropertyChanged("StairsProductionRate");
                 }
             }
         }
@@ -126,7 +127,7 @@ namespace WICR_Estimator.Models
                 if (value != stairSqft)
                 {
                     stairSqft = value;
-                    OnPropertyChanged("StairSqft");
+                    RaisePropertyChanged("StairSqft");
                 }
             }
         }
@@ -140,8 +141,8 @@ namespace WICR_Estimator.Models
                 if (value != hours)
                 {
                     hours = value;
-                    OnPropertyChanged("Hours");
-                    OnPropertyChanged("LaborExtension");
+                    RaisePropertyChanged("Hours");
+                    RaisePropertyChanged("LaborExtension");
                 }
             }
         }
@@ -154,7 +155,7 @@ namespace WICR_Estimator.Models
                 if (value!=setupMinCharge)
                 {
                     setupMinCharge = value;
-                    OnPropertyChanged("SetupMinCharge");
+                    RaisePropertyChanged("SetupMinCharge");
                 }
             }
         }
@@ -170,8 +171,8 @@ namespace WICR_Estimator.Models
                 if (coverage != value)
                 {
                     coverage = value;
-                    OnPropertyChanged("Coverage");
-                    OnPropertyChanged("Qty");
+                    RaisePropertyChanged("Coverage");
+                    RaisePropertyChanged("Qty");
                 }
             }
         }
@@ -187,7 +188,7 @@ namespace WICR_Estimator.Models
                 if (smunits != value)
                 {
                     smunits = value;
-                    OnPropertyChanged("SMUnits");
+                    
                     if (Name== "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)"||
                         Name== "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH) UPI 7013 SC BASE COAT"
                         ||Name== "Striping for small cracKs (less than 1/8\")"
@@ -205,7 +206,8 @@ namespace WICR_Estimator.Models
                             IsMaterialChecked = false;
 
                         OnUnitChanged?.Invoke(this.name, EventArgs.Empty);
-
+                        Set(ref smunits, value);
+                        //RaisePropertyChanged("SMUnits");
                     }
                     
                 }
@@ -223,12 +225,12 @@ namespace WICR_Estimator.Models
                 if (sqft != value)
                 {
                     sqft = value;
-                    OnPropertyChanged("SMSqft");
+                    RaisePropertyChanged("SMSqft");
                     //Paraseal Change
                     if (name== "SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT")
                     {
                         Qty = sqft / coverage;
-                        OnPropertyChanged("Qty");
+                        RaisePropertyChanged("Qty");
                     }
 
                 }
@@ -247,8 +249,8 @@ namespace WICR_Estimator.Models
                 {
                     weight = value;
                     FreightExtension = value * Qty;
-                    OnPropertyChanged("Weight");
-                    OnPropertyChanged("FreightExtension");
+                    RaisePropertyChanged("Weight");
+                    RaisePropertyChanged("FreightExtension");
                 }
             }
         }
@@ -264,7 +266,7 @@ namespace WICR_Estimator.Models
                 if (extension != value)
                 {
                     extension = value;
-                    OnPropertyChanged("FreightExtension");
+                    RaisePropertyChanged("FreightExtension");
                     
                 }
             }
@@ -283,8 +285,8 @@ namespace WICR_Estimator.Models
                 {
                     materialPrice = value;
                     MaterialExtension = Qty * value;
-                    OnPropertyChanged("MaterialPrice");
-                    OnPropertyChanged("MaterialExtension");
+                    RaisePropertyChanged("MaterialPrice");
+                    RaisePropertyChanged("MaterialExtension");
                 }
             }
         }
@@ -302,17 +304,9 @@ namespace WICR_Estimator.Models
                 //{
 
                 qtysm = value;
-                //if (!IsMaterialEnabled)
-                //{
-                //    if (qtysm != 0)
-                //    {
-                //        IsMaterialChecked = true;
-                //    }
-                //    else
-                //        IsMaterialChecked = false;
-                //}
                 
-                OnPropertyChanged("Qty");
+
+                RaisePropertyChanged("Qty");
                 MaterialExtension = value * materialPrice;
                 FreightExtension = value * weight;
                 
@@ -330,10 +324,10 @@ namespace WICR_Estimator.Models
                         OnQTyChanged(this.Name, EventArgs.Empty);
                     }
                 }
-                
-                OnPropertyChanged("MaterialExtension");
-                OnPropertyChanged("FreightExtension");
-                OnPropertyChanged("LaborExtension");
+
+                RaisePropertyChanged("MaterialExtension");
+                RaisePropertyChanged("FreightExtension");
+                RaisePropertyChanged("LaborExtension");
             }
         }
         private double laborUnitPrice;
@@ -356,7 +350,7 @@ namespace WICR_Estimator.Models
                     }
                     else
                         laborUnitPrice = value;
-                    OnPropertyChanged("LaborUnitPrice");
+                    RaisePropertyChanged("LaborUnitPrice");
                 }
             }
         }
@@ -368,7 +362,7 @@ namespace WICR_Estimator.Models
                 if (name!=value)
                 {
                     name = value;
-                    OnPropertyChanged("Name");
+                    RaisePropertyChanged("Name");
                 }
                 
             }
@@ -381,12 +375,21 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value != ismaterialchecked)
+                if (IsMaterialEnabled)
                 {
-                    ismaterialchecked = value;
-                    OnPropertyChanged("IsMaterialChecked");
-                    OnPropertyChanged("SystemMaterials");
+                    Set(ref ismaterialchecked, value);
                 }
+                else
+                {
+                    if (value != ismaterialchecked)
+                    {
+                        ismaterialchecked = value;
+                        RaisePropertyChanged("IsMaterialChecked");
+                        RaisePropertyChanged("SystemMaterials");
+                    }
+                }
+                
+                
             }
         }
         public bool IsMaterialEnabled
@@ -400,7 +403,7 @@ namespace WICR_Estimator.Models
                 if (value != isMaterialEnabled)
                 {
                     isMaterialEnabled = value;
-                    OnPropertyChanged("IsMaterialEnabled");
+                    RaisePropertyChanged("IsMaterialEnabled");
 
                 }
             }
@@ -413,7 +416,7 @@ namespace WICR_Estimator.Models
                 if (matExt!=value)
                 {
                     matExt = value;
-                    OnPropertyChanged("MaterialExtension");
+                    RaisePropertyChanged("MaterialExtension");
                 }
             }
             get
@@ -438,26 +441,41 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (specialMaterialPricing != value)
+                //if (specialMaterialPricing != value)
+                //{
+                //    specialMaterialPricing = value;
+                //    if (specialMaterialPricing != 0)
+                //    {
+                //        matExt = SpecialMaterialPricing * Qty;
+                //    }
+                //    else
+                //    {
+                //        matExt = MaterialPrice * Qty;
+                //        if (OnQTyChanged != null)
+                //        {
+                //            OnQTyChanged(this.Name, null);
+                //        }
+                //    }
+
+
+                //    OnPropertyChanged("SpecialMaterialPricing");
+                //    OnPropertyChanged("MaterialExtension");
+                //}
+                
+                if (specialMaterialPricing != 0)
                 {
-                    specialMaterialPricing = value;
-                    if (specialMaterialPricing != 0)
-                    {
-                        matExt = SpecialMaterialPricing * Qty;
-                    }
-                    else
-                    {
-                        matExt = MaterialPrice * Qty;
-                        if (OnQTyChanged != null)
-                        {
-                            OnQTyChanged(this.Name, null);
-                        }
-                    }
-                        
-                    
-                    OnPropertyChanged("SpecialMaterialPricing");
-                    OnPropertyChanged("MaterialExtension");
+                    matExt = SpecialMaterialPricing * Qty;
                 }
+                else
+                {
+                    matExt = MaterialPrice * Qty;
+                    if (OnQTyChanged != null)
+                    {
+                        OnQTyChanged(this.Name, null);
+                    }
+                }
+                Set(ref specialMaterialPricing, value);
+                RaisePropertyChanged("MaterialExtension");
             }
         }
         private double laborextn;
@@ -478,7 +496,7 @@ namespace WICR_Estimator.Models
                 if (value!=laborextn)
                 {
                     laborextn = value;
-                    OnPropertyChanged("LaborExtension");
+                    RaisePropertyChanged("LaborExtension");
                 }
             }   
         }
@@ -539,7 +557,7 @@ namespace WICR_Estimator.Models
         public bool AllEditable { get; set; }
     }
     
-    public class OtherItem:BaseViewModel
+    public class OtherItem:GraphObservableObject
     {
         public OtherItem()
         { }
@@ -548,13 +566,17 @@ namespace WICR_Estimator.Models
         { get { return name; }
             set
 
-            { if (value != name)
+            {
+                if (IsReadOnly)
                 {
-                    name = value;
-                    OnPropertyChanged("Name");
+                    if (value != name)
+                    {
+                        name = value;
+                        RaisePropertyChanged("Name");
+                    }
                 }
-
-                    
+                else
+                    Set(ref name, value);
            }
         }
 
@@ -566,11 +588,13 @@ namespace WICR_Estimator.Models
 
             set
             {
-                if (value!=quantity)
-                {
-                    quantity = value;
-                    UpdateUI();
-                }
+                //if (value!=quantity)
+                //{
+                //    quantity = value;
+                //    UpdateUI();
+                //}
+                Set(ref quantity, value);
+                UpdateUI();
             }
 
         }
@@ -581,11 +605,13 @@ namespace WICR_Estimator.Models
 
             set
             {
-                if (value != materialPrice)
-                {
-                    materialPrice = value;
-                    UpdateUI();
-                }
+                //if (value != materialPrice)
+                //{
+                //    materialPrice = value;
+                //    UpdateUI();
+                //}
+                Set(ref materialPrice, value);
+                UpdateUI();
             }
 
         }
@@ -596,11 +622,13 @@ namespace WICR_Estimator.Models
 
             set
             {
-                if (value != lquantity)
-                {
-                    lquantity = value;
-                    UpdateUI();
-                }
+                //if (value != lquantity)
+                //{
+                //    lquantity = value;
+                //    UpdateUI();
+                //}
+                Set(ref lquantity, value);
+                UpdateUI();
             }
 
         }
@@ -611,11 +639,13 @@ namespace WICR_Estimator.Models
 
             set
             {
-                if (value != lmaterialPrice)
-                {
-                    lmaterialPrice = value;
-                    UpdateUI();
-                }
+                //if (value != lmaterialPrice)
+                //{
+                //    lmaterialPrice = value;
+                //    UpdateUI();
+                //}
+                Set(ref lmaterialPrice, value);
+                UpdateUI();
             }
 
         }
@@ -625,30 +655,33 @@ namespace WICR_Estimator.Models
         private void UpdateUI()
 
         {
-            OnPropertyChanged("Quantity");
-            OnPropertyChanged("MaterialPrice");
-            OnPropertyChanged("Extension");
-            OnPropertyChanged("LQuantity");
-            OnPropertyChanged("LMaterialPrice");
-            OnPropertyChanged("LExtension");
+            RaisePropertyChanged("Quantity");
+            RaisePropertyChanged("MaterialPrice");
+            RaisePropertyChanged("Extension");
+            RaisePropertyChanged("LQuantity");
+            RaisePropertyChanged("LMaterialPrice");
+            RaisePropertyChanged("LExtension");
         }       
     }
 
-    public class LaborContract : BaseViewModel
+    public class LaborContract : GraphObservableObject
     {
         public LaborContract() { }
         private string name;
         public string Name
         {
             get
-            { return name; }
+            {
+                return name;
+            }
             set
             {
-                if (name!=value)
-                {
-                    name = value;
-                    OnPropertyChanged("Name");
-                }
+                //if (name!=value)
+                //{
+                //    name = value;
+                //    RaisePropertyChanged("Name");
+                //}
+                Set(ref name, value);
             }
         }
         
@@ -659,11 +692,13 @@ namespace WICR_Estimator.Models
 
             set
             {
-                if (value != unitconlbrcst)
-                {
-                    unitconlbrcst = value;
-                    UpdateSC();
-                }
+                //if (value != unitconlbrcst)
+                //{
+                //    unitconlbrcst = value;
+                //    UpdateSC();
+                //}
+                Set(ref unitconlbrcst, value);
+                UpdateSC();
             }
 
         }
@@ -674,19 +709,22 @@ namespace WICR_Estimator.Models
 
             set
             {
-                if (value != unitpriceConlbrcst)
-                {
-                    unitpriceConlbrcst = value;
-                    UpdateSC();
-                }
+                //if (value != unitpriceConlbrcst)
+                //{
+                //    unitpriceConlbrcst = value;
+                //    UpdateSC();
+                //}
+
+                Set(ref unitpriceConlbrcst, value);
+                UpdateSC();
             }
         }
         public double MaterialExtensionConlbrcst { get { return UnitConlbrcst * UnitPriceConlbrcst; } }
         private void UpdateSC()
         {
-            OnPropertyChanged("UnitConlbrcst");
-            OnPropertyChanged("UnitPriceConlbrcst");
-            OnPropertyChanged("MaterialExtensionConlbrcst");
+            RaisePropertyChanged("UnitConlbrcst");
+            RaisePropertyChanged("UnitPriceConlbrcst");
+            RaisePropertyChanged("MaterialExtensionConlbrcst");
         }
 
         
