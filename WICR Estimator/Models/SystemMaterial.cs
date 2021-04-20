@@ -375,19 +375,19 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (IsMaterialEnabled)
-                {
-                    Set(ref ismaterialchecked, value);
-                }
-                else
-                {
+                //if (IsMaterialEnabled)
+                //{
+                //    Set(ref ismaterialchecked, value);
+                //}
+                //else
+                //{
                     if (value != ismaterialchecked)
                     {
                         ismaterialchecked = value;
                         RaisePropertyChanged("IsMaterialChecked");
                         RaisePropertyChanged("SystemMaterials");
                     }
-                }
+                //}
                 
                 
             }
@@ -501,7 +501,21 @@ namespace WICR_Estimator.Models
             }   
         }
         #endregion
+        public void UpdateCheckStatus(bool isMatEnabled,bool isMaterialChecked)
+        {
+            this.isMaterialEnabled = isMatEnabled;
+            this.ismaterialchecked = isMaterialChecked;
+        }
 
+        public void UpdateSpecialPricing(double price)
+        {
+            this.specialMaterialPricing = price;
+        }
+        public void UpdateQuantity(double qty)
+        {
+            this.qtysm = qty;
+        }
+        
         public bool allowHooking(string matName)
         {
             switch (matName)

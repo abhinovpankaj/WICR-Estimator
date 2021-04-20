@@ -349,6 +349,11 @@ namespace WICR_Estimator.ViewModels
                 Set(ref systemMaterials, value);
             }
         }
+        public void UpdateMe(SystemMaterial sm)
+        {
+            SystemMaterial firstMat= systemMaterials.FirstOrDefault(x => x.Name == sm.Name);
+            firstMat = sm;
+        }
         [DataMember]
         public ObservableCollection<OtherItem> OtherMaterials
         {
@@ -1724,7 +1729,7 @@ namespace WICR_Estimator.ViewModels
                 dbData = js.dbData;
             //}
             
-           FetchMaterialValuesAsync(true);
+             FetchMaterialValuesAsync(true);
             
             CalculateCost(null);
             
