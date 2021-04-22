@@ -19,7 +19,7 @@ namespace WICR_Estimator.ViewModels
     [KnownType(typeof(EnduroKoteSlopeViewModel))]
     [KnownType(typeof(DualFlexSlopeViewModel))]
     [DataContract]
-    public class SlopeBaseViewModel:GraphObservableObject
+    public class SlopeBaseViewModel:UndoRedoObservableObject
     {
         
         #region Private Properties

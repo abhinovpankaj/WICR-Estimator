@@ -9,7 +9,7 @@ using WICR_Estimator.ViewModels;
 namespace WICR_Estimator.Models
 {
     
-    public class Slope:GraphObservableObject
+    public class Slope:UndoRedoObservableObject
     {
         public Slope()
         {

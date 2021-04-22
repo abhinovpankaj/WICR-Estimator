@@ -7,6 +7,7 @@ using System.Reflection;
 using MyToolkit.Collections;
 using MyToolkit.Model;
 using MyToolkit.Mvvm;
+using WICR_Estimator.Models;
 
 namespace WICR_Estimator.Services
 {
@@ -15,12 +16,12 @@ namespace WICR_Estimator.Services
     /// changed via the Set method or raise <see cref="GraphPropertyChangedEventArgs"/> are tracked for undo/redo. 
     /// Properties must have an accessible setter. Collection must inherit from INotifyCollectionChanged for
     /// undo/redo of collection changes. The class is not thread-safe; all methods must be called on the UI thread. </summary>
-    public class UndoRedoManager : ObservableObject
+    public class UndoRedoManager : NotifiableObject
     {
         private readonly List<List<UndoRedoCommand>> _commands = new List<List<UndoRedoCommand>>();
         private readonly IDispatcher _dispatcher;
         private readonly string[] _excludedRootProperties;
-        private readonly GraphObservableObject _root;
+        private readonly UndoRedoObservableObject _root;
 
         private int _currentIndex = -1;
         private bool _trackEntities = true;
@@ -31,7 +32,7 @@ namespace WICR_Estimator.Services
         /// <param name="root">The root.</param>
         /// <param name="dispatcher">The dispatcher.</param>
         /// <param name="excludedRootProperties">The excluded root properties.</param>
-        public UndoRedoManager(GraphObservableObject root, IDispatcher dispatcher, string[] excludedRootProperties = null)
+        public UndoRedoManager(UndoRedoObservableObject root, IDispatcher dispatcher, string[] excludedRootProperties = null)
         {
             _root = root;
             _dispatcher = dispatcher;
@@ -322,7 +323,7 @@ namespace WICR_Estimator.Services
         }
     }
 
-    internal class ObservableCollectionWrapper : GraphObservableObject
+    internal class ObservableCollectionWrapper : UndoRedoObservableObject
     {
         private INotifyCollectionChanged _collection;
 

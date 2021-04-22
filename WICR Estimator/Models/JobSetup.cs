@@ -12,7 +12,7 @@ using WICR_Estimator.ViewModels;
 namespace WICR_Estimator.Models
 {
     
-    public class JobSetup : GraphObservableObject
+    public class JobSetup : UndoRedoObservableObject
     {
         private DBData _dbdata;
         public DBData dbData 

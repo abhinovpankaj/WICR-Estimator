@@ -16,7 +16,7 @@ namespace WICR_Estimator.ViewModels
 {
     [KnownType(typeof(MetalViewModel))]
     [KnownType(typeof(ZeroMetalViewModel))]
-    public class MetalBaseViewModel:GraphObservableObject
+    public class MetalBaseViewModel:UndoRedoObservableObject
     {
 
         public Totals MetalTotals;

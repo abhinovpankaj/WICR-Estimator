@@ -1,4 +1,4 @@
-﻿using MyToolkit.Data;
+﻿//using MyToolkit.Data;
 using MyToolkit.Model;
 using MyToolkit.Mvvm;
 using System;
@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml.Serialization;
+using WICR_Estimator.Services;
 using WICR_Estimator.ViewModels;
 
 namespace WICR_Estimator.Models
@@ -144,7 +145,7 @@ namespace WICR_Estimator.Models
     }
     
     
-    public class Project: GraphObservableObject
+    public class Project: UndoRedoObservableObject
     {
         private string productVersion;
         public string ProductVersion

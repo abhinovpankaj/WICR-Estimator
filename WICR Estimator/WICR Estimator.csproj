@@ -223,6 +223,8 @@
     <Compile Include="GoogleUtility\SpreadSheetConnect.cs" />
     <Compile Include="GSData.cs" />
     <Compile Include="IPageViewModel.cs" />
+    <Compile Include="Models\NotifiableableObject.cs" />
+    <Compile Include="Models\UndoRedoObservableObject.cs" />
     <Compile Include="PasswordBoxMVVMAttachedProperties.cs" />
     <Compile Include="PasswordHashing.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -550,12 +552,12 @@
   <ItemGroup>
     <PublishFile Include="SummaryRange.xml">
       <Visible>False</Visible>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
   </ItemGroup>

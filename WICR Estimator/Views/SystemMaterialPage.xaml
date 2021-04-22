@@ -54,6 +54,7 @@
                 <DataTrigger Binding="{Binding AllEditable}" Value="False">
                     <Setter Property="IsEnabled" Value="{Binding Path=Name,
                                 Converter={StaticResource unitTextboxConv}}"/>
+                    
                 </DataTrigger>
                 
                 <Trigger Property="IsEnabled" Value="True">
@@ -62,7 +63,7 @@
                     <Setter Property="Foreground" Value="{StaticResource   PrimaryHueLightForegroundBrush}" />
                     <Setter Property="ToolTip" Value="Please enter a numeric value."/>
                 </Trigger>
-
+                
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
                         <Condition Binding ="{Binding Tag,RelativeSource={RelativeSource Self}}" 
@@ -78,13 +79,13 @@
                     </MultiDataTrigger.Setters>
                     
                 </MultiDataTrigger>
+
                 <Trigger Property="IsEnabled" Value="False">
-                    <!--<Setter Property="Background" Value="LightYellow" />-->
-                    <Setter Property="Background" Value="{Binding}" />
-                    <Setter Property="Foreground" Value="{Binding}" />
+
+                    <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
+                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightForegroundBrush}" />
 
                 </Trigger>
-
 
             </Style.Triggers>
         </Style>
@@ -97,6 +98,7 @@
                 
             </Style.Triggers>
         </Style>
+        
         <Style BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}" TargetType="{x:Type DataGridColumnHeader}">
             <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
             <Setter Property="Foreground" Value="{StaticResource  PrimaryHueDarkForegroundBrush}" />
@@ -173,9 +175,11 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox Tag="{Binding SMUnits,Converter={StaticResource HasFieldEdited}}" 
-                                     Text="{Binding SMUnits,UpdateSourceTrigger=LostFocus,Mode=TwoWay}"
+                                     Text="{Binding SMUnits,UpdateSourceTrigger=LostFocus}"
                                      Name="unitTb" 
-                                     Style="{StaticResource editableTextbox}"
+                                         IsEnabled="{Binding Path=Name,
+                                Converter={StaticResource unitTextboxConv}}"
+                                     Style="{StaticResource  editableTextbox}"
                                     />
                             </DataTemplate>
 

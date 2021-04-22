@@ -9,7 +9,7 @@ using WICR_Estimator.ViewModels;
 namespace WICR_Estimator.Models
 {
     
-    public class SystemMaterial : GraphObservableObject
+    public class SystemMaterial : UndoRedoObservableObject
     {
 
         private bool ismaterialchecked;
@@ -206,8 +206,8 @@ namespace WICR_Estimator.Models
                             IsMaterialChecked = false;
 
                         OnUnitChanged?.Invoke(this.name, EventArgs.Empty);
-                        Set(ref smunits, value);
-                        //RaisePropertyChanged("SMUnits");
+                        //Set(ref smunits, value);
+                        RaisePropertyChanged("SMUnits");
                     }
                     
                 }
@@ -375,21 +375,21 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                //if (IsMaterialEnabled)
-                //{
-                //    Set(ref ismaterialchecked, value);
-                //}
-                //else
-                //{
+                if (IsMaterialEnabled)
+                {
+                    Set(ref ismaterialchecked, value);
+                }
+                else
+                {
                     if (value != ismaterialchecked)
                     {
                         ismaterialchecked = value;
                         RaisePropertyChanged("IsMaterialChecked");
                         RaisePropertyChanged("SystemMaterials");
                     }
-                //}
-                
-                
+                }
+
+
             }
         }
         public bool IsMaterialEnabled

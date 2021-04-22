@@ -44,7 +44,7 @@ namespace WICR_Estimator.ViewModels
     [KnownType(typeof(WestcoatColorMaterialViewModel))]
     [KnownType(typeof(UPIBelowTileMaterialViewModel))]
     [KnownType(typeof(IndependentMaterialViewModel))]
-    public class MaterialBaseViewModel:GraphObservableObject
+    public class MaterialBaseViewModel:UndoRedoObservableObject
     {
         [DataMember]
         public Totals MetalTotals { set; get; }

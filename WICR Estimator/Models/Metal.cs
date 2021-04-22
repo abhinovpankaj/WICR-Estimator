@@ -9,7 +9,7 @@ using WICR_Estimator.ViewModels;
 namespace WICR_Estimator.Models
 {
     [Serializable]
-    public class Metal: GraphObservableObject
+    public class Metal: UndoRedoObservableObject
     {
         
         public double LaborRate { set; get; }
