@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace WICR_Estimator.Models
 {
-    [DataContract]
+    [DataContract]  
     public class UndoRedoObservableObject : NotifiableObject
     {
         private readonly List<object> _registeredChildren = new List<object>();
