@@ -91,13 +91,18 @@ namespace WICR_Estimator.ViewModels
                     double sp = SystemMaterials[i].SpecialMaterialPricing;
                     bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
                     bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
-                    SystemMaterials[i] = sysMat[i];
+                    //SystemMaterials[i] = sysMat[i];
 
-                    SystemMaterials[i].SpecialMaterialPricing = sp;
+                    //SystemMaterials[i].SpecialMaterialPricing = sp;
+                    UpdateMe(sysMat[i]);
+
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
+
                     if (iscbEnabled)
                     {
-                        SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                        SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                        //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                        //SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                        SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
                     }
 
                     if (SystemMaterials[i].Name == "SIDE OUTLET 6\"" || SystemMaterials[i].Name == "MIRADRAIN HC 1\" DRAIN-PUNCHED 12\" X 100'  (QUICK DRAIN)"
@@ -105,7 +110,8 @@ namespace WICR_Estimator.ViewModels
                     { 
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
-                            SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            //SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
 
                         }
                     }

@@ -9,7 +9,7 @@ using WICR_Estimator.ViewModels;
 namespace WICR_Estimator.Models
 {
     
-    public class Totals:BaseViewModel
+    public class Totals:NotifiableObject
     {
         public Totals()
         { }
@@ -23,7 +23,7 @@ namespace WICR_Estimator.Models
                 if (value!=laborextTotal)
                 {
                     laborextTotal = value;
-                    OnPropertyChanged("LaborExtTotal");
+                    RaisePropertyChanged("LaborExtTotal");
                     if (OnTotalsChange != null)
                     {
                         OnTotalsChange(this, EventArgs.Empty);
@@ -40,7 +40,7 @@ namespace WICR_Estimator.Models
                 if (value!=matExtTotal)
                 {
                     matExtTotal = value;
-                    OnPropertyChanged("MaterialExtTotal");
+                    RaisePropertyChanged("MaterialExtTotal");
                     if (OnTotalsChange != null)
                     {
                         OnTotalsChange(this, EventArgs.Empty);
@@ -57,7 +57,7 @@ namespace WICR_Estimator.Models
                 if (value != frTotal)
                 {
                     frTotal = value;
-                    OnPropertyChanged("MaterialFreightTotal");
+                    RaisePropertyChanged("MaterialFreightTotal");
                     if (OnTotalsChange != null)
                     {
                         OnTotalsChange(this, EventArgs.Empty);
@@ -74,7 +74,7 @@ namespace WICR_Estimator.Models
                 if (value != scLabor)
                 {
                     scLabor = value;
-                    OnPropertyChanged("SubContractLabor");
+                    RaisePropertyChanged("SubContractLabor");
                     if (OnTotalsChange != null)
                     {
                         OnTotalsChange(this, EventArgs.Empty);

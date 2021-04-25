@@ -223,7 +223,7 @@ namespace WICR_Estimator.ViewModels
             if (UrethaneOverrideManually)
             {
                 //new add
-                double.TryParse(perMixRates[15][1].ToString(), out urethaneManualAvgMixPrice);
+                //double.TryParse(perMixRates[15][1].ToString(), out urethaneManualAvgMixPrice);
                 CalculateManualUrethane();
             }
 

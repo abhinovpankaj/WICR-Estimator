@@ -167,7 +167,9 @@ namespace WICR_Estimator.ViewModels
                         {
                             item.MaterialViewModel.CalculateCost(null); 
                         }
+
                         UpdateProjectTotals();
+                        item.ProjectJobSetUp.TotalSalesCostTemp = item.MaterialViewModel.TotalSale;
                     }
                     //OnTaskCompleted("Prices Refreshed for all selected projects.");
                 }
@@ -609,7 +611,9 @@ namespace WICR_Estimator.ViewModels
                     }
                     else
                         item.MaterialViewModel.CalculateCost(null);
+
                     item.ProjectJobSetUp.TotalSalesCostTemp = item.MaterialViewModel.TotalSale;
+                    item.RegisterForUndoRedo(item);
                 }
                 Project_OnSelectedProjectChange(null, null);
                 reader.Close();
@@ -831,6 +835,7 @@ namespace WICR_Estimator.ViewModels
                     else
                         item.MaterialViewModel.CalculateCost(null);
                     item.ProjectJobSetUp.TotalSalesCostTemp = item.MaterialViewModel.TotalSale;
+                    item.RegisterForUndoRedo(item);
                 }
                 
 

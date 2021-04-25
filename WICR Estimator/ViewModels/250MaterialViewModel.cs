@@ -162,9 +162,14 @@ namespace WICR_Estimator.ViewModels
                     double sp = SystemMaterials[i].SpecialMaterialPricing;
                     bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
                     bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
-                    SystemMaterials[i] = sysMat[i];
 
-                    SystemMaterials[i].SpecialMaterialPricing = sp;
+                    //SystemMaterials[i] = sysMat[i];
+
+                    //SystemMaterials[i].SpecialMaterialPricing = sp;
+                    UpdateMe(sysMat[i]);
+
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
+
                     if (iscbEnabled)
                     {
                         if (SystemMaterials[i].Name == "Vulkem Tremproof 201 L 30 MILS" || SystemMaterials[i].Name == "Vulkem Tremproof 201 R 30 MILS"
@@ -172,12 +177,15 @@ namespace WICR_Estimator.ViewModels
                             || SystemMaterials[i].Name == "Vulkem Tremproof 250 GC L 30 MILS" || SystemMaterials[i].Name == "Vulkem Tremproof 250 GC R 30 MILS"
                             || SystemMaterials[i].Name == "Vulkem Tremproof 250 GC L 30 MILS(Additional)" || SystemMaterials[i].Name == "Vulkem Tremproof 250 GC R 30 MILS(Additional)")
                         {
-                            SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                            //SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                            SystemMaterials[i].UpdateCheckStatus(iscbChecked);
+
                         }
                         else
                         {
-                            SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                            SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                            SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
+                            //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                            //SystemMaterials[i].IsMaterialChecked = iscbChecked;
                         }
                         
                     }
@@ -190,7 +198,7 @@ namespace WICR_Estimator.ViewModels
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
-                            SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
                         }
                     }
 

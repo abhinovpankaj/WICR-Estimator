@@ -168,6 +168,7 @@ namespace WICR_Estimator.Models
                 //    UpdateJobSetup();
                 //}
                 Set(ref projectDelayFactor, value);
+                UpdateJobSetup();
             }
         }
         private string specialProductName;
@@ -385,6 +386,7 @@ namespace WICR_Estimator.Models
                 //    UpdateJobSetup();
                 //}
                 Set(ref isContingencyEnabled, value);
+                UpdateJobSetup();
             }
         }
         string originalName;

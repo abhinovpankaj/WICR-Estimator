@@ -194,20 +194,25 @@ namespace WICR_Estimator.ViewModels
                     double sp = SystemMaterials[i].SpecialMaterialPricing;
                     bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
                     bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
-                    SystemMaterials[i] = sysMat[i];
+                    //SystemMaterials[i] = sysMat[i];
 
-                    SystemMaterials[i].SpecialMaterialPricing = sp;
-                    //if (iscbEnabled)
-                    //{
-                        SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                        SystemMaterials[i].IsMaterialChecked = iscbChecked;
-                    //}
+                    //SystemMaterials[i].SpecialMaterialPricing = sp;
+
+                    //    SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                    //    SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                    UpdateMe(sysMat[i]);
+
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
+                    SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
+
+
                     if (SystemMaterials[i].Name == "EXTRA STAIR NOSING" || SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
                         SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)")
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
-                            SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            //SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
 
                         }
                     }
@@ -218,8 +223,8 @@ namespace WICR_Estimator.ViewModels
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
-                            SystemMaterials[i].SMUnits = qtyList[SystemMaterials[i].Name].ToString();
-
+                            //SystemMaterials[i].SMUnits = qtyList[SystemMaterials[i].Name].ToString();
+                            SystemMaterials[i].UpdateUnits(qtyList[SystemMaterials[i].Name].ToString());
                         }
                     }
 

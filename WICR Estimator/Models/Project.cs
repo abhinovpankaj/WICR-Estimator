@@ -15,7 +15,7 @@ using WICR_Estimator.ViewModels;
 namespace WICR_Estimator.Models
 {
        
-    public class ProjectsTotal:BaseViewModel
+    public class ProjectsTotal:NotifiableObject
     {
         private string name;
         private string workArea;
@@ -36,7 +36,7 @@ namespace WICR_Estimator.Models
                 if (value!=name)
                 {
                     name = value;
-                    OnPropertyChanged("Name");
+                    RaisePropertyChanged("Name");
                 }
             }
         }
@@ -48,7 +48,7 @@ namespace WICR_Estimator.Models
                 if (value != workArea)
                 {
                     workArea = value;
-                    OnPropertyChanged("WorkArea");
+                    RaisePropertyChanged("WorkArea");
                 }
             }
         }
@@ -61,7 +61,7 @@ namespace WICR_Estimator.Models
                 if (value != metalCost)
                 {
                     metalCost = value;
-                    OnPropertyChanged("MetalCost");
+                    RaisePropertyChanged("MetalCost");
                 }
             }
         }
@@ -74,7 +74,7 @@ namespace WICR_Estimator.Models
                 if (value != slopeCost)
                 {
                     slopeCost = value;
-                    OnPropertyChanged("SlopeCost");
+                    RaisePropertyChanged("SlopeCost");
                 }
             }
         }
@@ -87,7 +87,7 @@ namespace WICR_Estimator.Models
                 if (value != systemCost)
                 {
                     systemCost = value;
-                    OnPropertyChanged("SystemCost");
+                    RaisePropertyChanged("SystemCost");
                 }
             }
         }
@@ -99,7 +99,7 @@ namespace WICR_Estimator.Models
                 if (value != materialCost)
                 {
                     materialCost = value;
-                    OnPropertyChanged("MaterialCost");
+                    RaisePropertyChanged("MaterialCost");
                 }
             }
         }
@@ -111,7 +111,7 @@ namespace WICR_Estimator.Models
                 if (value != laborCost)
                 {
                     laborCost = value;
-                    OnPropertyChanged("LaborCost");
+                    RaisePropertyChanged("LaborCost");
                 }
             }
         }
@@ -124,7 +124,7 @@ namespace WICR_Estimator.Models
                 if (value != totalCost)
                 {
                     totalCost = value;
-                    OnPropertyChanged("TotalCost");
+                    RaisePropertyChanged("TotalCost");
                 }
             }
         }
@@ -136,7 +136,7 @@ namespace WICR_Estimator.Models
                 if (value != laborPerc)
                 {
                     laborPerc = value;
-                    OnPropertyChanged("LaborPercentage");
+                    RaisePropertyChanged("LaborPercentage");
                 }
             }
         }

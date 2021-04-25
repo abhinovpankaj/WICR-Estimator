@@ -351,8 +351,41 @@ namespace WICR_Estimator.ViewModels
         }
         public void UpdateMe(SystemMaterial sm)
         {
-            SystemMaterial firstMat= systemMaterials.FirstOrDefault(x => x.Name == sm.Name);
-            firstMat = sm;
+            SystemMaterial firstMat= SystemMaterials.FirstOrDefault(x => x.Name == sm.Name);
+
+            //int index = SystemMaterials.IndexOf(firstMat);
+            //systemMaterials.RemoveAt(index);
+            //systemMaterials.Insert(index, sm);
+
+            //firstMat.SMUnits = sm.SMUnits;
+            firstMat.UpdateUnits(sm.SMUnits);
+
+            firstMat.SMSqft = sm.SMSqft;
+            firstMat.Coverage = sm.Coverage;
+            firstMat.MaterialPrice = sm.MaterialPrice;
+            firstMat.Weight = sm.Weight;
+
+            //firstMat.Qty = sm.Qty;
+            firstMat.UpdateQuantity(sm.Qty);
+
+            firstMat.SMSqftH = sm.SMSqftH;
+            firstMat.Operation = sm.Operation;
+            firstMat.HorizontalProductionRate = sm.HorizontalProductionRate;
+            firstMat.StairsProductionRate = sm.StairsProductionRate;
+            firstMat.StairSqft = sm.StairSqft;
+            firstMat.SetupMinCharge = sm.SetupMinCharge;
+            firstMat.Hours = sm.Hours;
+            firstMat.LaborExtension = sm.LaborExtension;
+            firstMat.VerticalProductionRate = sm.VerticalProductionRate;
+            firstMat.LaborUnitPrice = sm.LaborUnitPrice;
+            firstMat.FreightExtension = sm.FreightExtension;
+            firstMat.MaterialExtension = sm.MaterialExtension;  //chnage for independent projects
+            //firstMat.IsMaterialChecked = sm.IsMaterialChecked;
+            //firstMat.IsMaterialEnabled = sm.IsMaterialEnabled;
+            firstMat.IncludeInLaborMinCharge = sm.IncludeInLaborMinCharge;
+            firstMat.IsCheckboxDependent = sm.IsCheckboxDependent;
+                   
+
         }
         [DataMember]
         public ObservableCollection<OtherItem> OtherMaterials
@@ -1413,11 +1446,15 @@ namespace WICR_Estimator.ViewModels
                     double sp = SystemMaterials[i].SpecialMaterialPricing;
                     bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
                     bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
-                    SystemMaterials[i] = sysMat[i];
+                    //SystemMaterials[i] = sysMat[i];
+                    UpdateMe(sysMat[i]);
 
-                    SystemMaterials[i].SpecialMaterialPricing = sp;
-                    SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                    SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                    //SystemMaterials[i].SpecialMaterialPricing = sp;
+                    //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                    //SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                    SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
+
                     if (SystemMaterials[i].Name == "Stucco Material Remove And Replace (Lf)" || SystemMaterials[i].Name == "Plywood 3/4 & Blocking(# Of 4X8 Sheets)" ||
                     SystemMaterials[i].Name == "Extra Stair Nosing Lf" || SystemMaterials[i].Name == "Bubble Repair(Measure Sq Ft)"
                             || SystemMaterials[i].Name == "Large Crack Repair")

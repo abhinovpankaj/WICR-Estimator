@@ -1,7 +1,4 @@
-﻿using MyToolkit.Collections;
-using MyToolkit.Model;
-using MyToolkit.Utilities;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -10,14 +7,15 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+using MyToolkit.Collections;
+using MyToolkit.Model;
+using MyToolkit.Utilities;
 
 namespace WICR_Estimator.Models
 {
-    [DataContract]
-    public class UndoRedoObservableObject : NotifiableObject
+    /// <summary>An <see cref="ObservableObject"/> with graph property changed event and extended 
+    /// changed event (including old and new value). </summary>
+    public class GraphObservableObject : ObservableObject
     {
         private readonly List<object> _registeredChildren = new List<object>();
         private readonly Dictionary<object, List<object>> _registeredCollections = new Dictionary<object, List<object>>();
@@ -88,10 +86,7 @@ namespace WICR_Estimator.Models
         {
             if (child == null)
                 return;
-            if (_registeredChildren == null)
-                return;
-            if (ExcludedChildTypes == null)
-                return;
+
 #if LEGACY
             var childTypeInfo = child.GetType();
             if (_registeredChildren.Contains(child) || ExcludedChildTypes.Any(t => t.IsAssignableFrom(childTypeInfo)))
@@ -102,9 +97,9 @@ namespace WICR_Estimator.Models
                 return;
 #endif
 
-            if (child is UndoRedoObservableObject)
+            if (child is GraphObservableObject)
             {
-                ((UndoRedoObservableObject)child).GraphPropertyChanged += RaiseGraphPropertyChanged;
+                ((GraphObservableObject)child).GraphPropertyChanged += RaiseGraphPropertyChanged;
                 _registeredChildren.Add(child);
             }
             else if (child is INotifyPropertyChanged)
@@ -141,17 +136,12 @@ namespace WICR_Estimator.Models
         /// <param name="child">The child object. </param>
         protected void DeregisterChild(object child)
         {
-            if (_registeredChildren == null)
-                return;
-            if (ExcludedChildTypes == null)
-                return;
-
             if (child == null || !_registeredChildren.Contains(child))
                 return;
 
-            if (child is UndoRedoObservableObject)
+            if (child is GraphObservableObject)
             {
-                ((UndoRedoObservableObject)child).GraphPropertyChanged -= RaiseGraphPropertyChanged;
+                ((GraphObservableObject)child).GraphPropertyChanged -= RaiseGraphPropertyChanged;
                 _registeredChildren.Remove(child);
             }
             else if (child is INotifyPropertyChanged)
@@ -231,4 +221,13 @@ namespace WICR_Estimator.Models
             RaiseGraphPropertyChanged(sender, new MtNotifyCollectionChangedEventArgs<object>(addedItems, removedItems, oldCollectionCopy));
         }
     }
+
+#pragma warning disable 1591
+
+    [Obsolete("Use GraphObservableObject instead. 11/26/2014")]
+    public class ExtendedObservableObject : GraphObservableObject
+    {
+    }
+
+#pragma warning restore 1591
 }

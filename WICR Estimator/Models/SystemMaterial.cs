@@ -300,13 +300,10 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                //if (qtysm != value)
-                //{
 
-                qtysm = value;
-                
-
-                RaisePropertyChanged("Qty");
+                //qtysm = value;
+                //RaisePropertyChanged("Qty");
+                Set(ref qtysm, value);
                 MaterialExtension = value * materialPrice;
                 FreightExtension = value * weight;
                 
@@ -478,6 +475,12 @@ namespace WICR_Estimator.Models
                 RaisePropertyChanged("MaterialExtension");
             }
         }
+
+        internal void UpdateUnits(string sMUnits)
+        {
+            this.smunits = sMUnits;
+        }
+
         private double laborextn;
         public double LaborExtension
         {
@@ -511,6 +514,12 @@ namespace WICR_Estimator.Models
         {
             this.specialMaterialPricing = price;
         }
+
+        internal void UpdateCheckStatus(bool iscbChecked)
+        {
+            this.ismaterialchecked = iscbChecked;
+        }
+
         public void UpdateQuantity(double qty)
         {
             this.qtysm = qty;
@@ -571,7 +580,7 @@ namespace WICR_Estimator.Models
         public bool AllEditable { get; set; }
     }
     
-    public class OtherItem:GraphObservableObject
+    public class OtherItem:UndoRedoObservableObject
     {
         public OtherItem()
         { }
@@ -678,7 +687,7 @@ namespace WICR_Estimator.Models
         }       
     }
 
-    public class LaborContract : GraphObservableObject
+    public class LaborContract : UndoRedoObservableObject
     {
         public LaborContract() { }
         private string name;
