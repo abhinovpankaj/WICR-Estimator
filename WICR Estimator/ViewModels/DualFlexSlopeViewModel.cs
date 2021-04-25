@@ -160,6 +160,7 @@ namespace WICR_Estimator.ViewModels
             else
             {
                 UrethaneSlopes = CreateSlopesDB("Special");
+
             }
             UpdateSpecialSlope();
             CalculateAll();

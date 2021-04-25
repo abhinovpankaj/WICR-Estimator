@@ -88,24 +88,24 @@ namespace WICR_Estimator.ViewModels
                         double sp = SystemMaterials[i].SpecialMaterialPricing;
                         bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
                         bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
-                        //if (sysMat[i]==null)
-                        //{
-                        //    continue;
-                        //}
-                        SystemMaterials[i] = sysMat[i];
 
-                        SystemMaterials[i].SpecialMaterialPricing = sp;
-                        //if (iscbEnabled)
-                        //{
-                        SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                        SystemMaterials[i].IsMaterialChecked = iscbChecked;
-                        //}
+                        //SystemMaterials[i] = sysMat[i];
+
+                        //SystemMaterials[i].SpecialMaterialPricing = sp;
+                        UpdateMe(sysMat[i]);
+
+                        SystemMaterials[i].UpdateSpecialPricing(sp);
+
+                        //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                        //SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                        SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
 
                         if (SystemMaterials[i].Name == "LARGE CRACK REPAIR" || SystemMaterials[i].Name == "BUBBLE REPAIR (MEASURE SQ FT)")
                         {
                             if (qtyList.ContainsKey(SystemMaterials[i].Name))
                             {
-                                SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                                //SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                                SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
                             }
                         }
 

@@ -300,10 +300,17 @@ namespace WICR_Estimator.Models
             }
             set
             {
+                if (allowHooking(name))
+                {
+                    Set(ref qtysm, value);
+                }
+                else
+                {
+                    qtysm = value;
+                    RaisePropertyChanged("Qty");
+                }
 
-                //qtysm = value;
-                //RaisePropertyChanged("Qty");
-                Set(ref qtysm, value);
+
                 MaterialExtension = value * materialPrice;
                 FreightExtension = value * weight;
                 

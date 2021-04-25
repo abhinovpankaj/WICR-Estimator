@@ -275,7 +275,7 @@ namespace WICR_Estimator.ViewModels
             switch (materialName)
             {
                 case "MURIATIC ACID WASH":
-                case "CALCIUM CHLORIDE TEST (MINIMUM OF 3 FOR EACH JOB)":
+                //case "CALCIUM CHLORIDE TEST (MINIMUM OF 3 FOR EACH JOB)":
                 case "EC-12 Epoxy Primer":
                     return false;
                 case "A-81 underlayment for coved base (non-wet areas)":
