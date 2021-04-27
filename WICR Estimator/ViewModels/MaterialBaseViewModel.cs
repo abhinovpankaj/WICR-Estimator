@@ -150,6 +150,7 @@ namespace WICR_Estimator.ViewModels
             
             //getDatafromGoogle(Js.ProjectName);          
             getDatafromDB(Js.ProjectName);
+
         }
 
         public virtual void setUnitChangeValues()
@@ -309,7 +310,7 @@ namespace WICR_Estimator.ViewModels
                 BaseViewModel.IsDirty = true;
             }
             CalculateCost(null);
-
+            _js.TotalSalesCostTemp = TotalSale;
         }
         
 
@@ -1731,6 +1732,7 @@ namespace WICR_Estimator.ViewModels
         #endregion
 
         #region methods
+        private JobSetup _js;
         //Event handler to get JobSetup change updates.
         public virtual void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {
@@ -1739,6 +1741,7 @@ namespace WICR_Estimator.ViewModels
             JobSetup js = sender as JobSetup;
             if (js != null)
             {
+                _js = js;
                 //weatherWearType = js.WeatherWearType;
                 projectname = js.ProjectName;
                 totalSqft = js.TotalSqft;

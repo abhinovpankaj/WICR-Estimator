@@ -506,6 +506,7 @@ namespace WICR_Estimator.ViewModels
                         {
                             ischecked = sm.IsMaterialChecked;
                         }
+                        item.MaterialViewModel.ApplyCheckUnchecks("2.5 Galvanized Lathe");
                     }
 
                     if (item.CreationDetails != null)
@@ -721,6 +722,7 @@ namespace WICR_Estimator.ViewModels
                         {
                             ischecked = sm.IsMaterialChecked;
                         }
+                        item.MaterialViewModel.ApplyCheckUnchecks("2.5 Galvanized Lathe");
                     }
 
                     if (item.CreationDetails != null)
