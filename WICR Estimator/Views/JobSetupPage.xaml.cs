@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WICR_Estimator.Models;
 
 namespace WICR_Estimator.Views
 {
@@ -29,6 +31,37 @@ namespace WICR_Estimator.Views
         {
 
         }
+        private TextBox txtbox;
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+             txtbox = sender as TextBox;
+            JobSetup js = txtbox.DataContext as JobSetup;
 
+            var binding = BindingOperations.GetBinding(txtbox, TextBox.TextProperty).Path.Path;
+            js.SelectedData= js.ZData.FirstOrDefault(x => x.Key == binding.ToString());
+
+           
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox txtbox1 = sender as TextBox;
+            JobSetup js = this.DataContext as JobSetup;
+            try
+            {
+                var calVal = new DataTable().Compute(txtbox1.Text ?? "0", null);
+                if (calVal != null)
+                {
+                    txtbox.Text = calVal.ToString();
+                }
+            }
+            catch (Exception)
+            {
+
+                //throw;
+            }
+           
+            //js.SelectedData.CalculatedValue.ToString();
+        }
     }
 }

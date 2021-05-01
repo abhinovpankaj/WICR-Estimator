@@ -357,7 +357,10 @@ namespace WICR_Estimator.ViewModels
             //int index = SystemMaterials.IndexOf(firstMat);
             //systemMaterials.RemoveAt(index);
             //systemMaterials.Insert(index, sm);
-
+            if (firstMat==null)
+            {
+                return;
+            }
             //firstMat.SMUnits = sm.SMUnits;
             firstMat.UpdateUnits(sm.SMUnits);
 

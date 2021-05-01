@@ -1,6 +1,8 @@
 ﻿using MyToolkit.Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -14,6 +16,109 @@ namespace WICR_Estimator.Models
     
     public class JobSetup : UndoRedoObservableObject
     {
+
+        #region Formula
+        private DataPresentor selectedData;
+
+        public DataPresentor SelectedData
+        {
+            get { return selectedData; }
+            set
+            {
+                selectedData = value;
+                RaisePropertyChanged("SelectedData");
+                Formula = value.Formula;
+                Comment = value.Comment;
+                CalculateValue();
+            }
+        }
+
+        private string comment;
+        [IgnoreDataMember]
+        public string Comment 
+        {
+            get { return comment; }
+            set
+            {
+                comment = value;
+                SelectedData.Comment = value;
+                RaisePropertyChanged("Comment");
+            }
+        }
+        
+        private string formula;
+        [IgnoreDataMember]
+        public string Formula
+        {
+            get { return formula; }
+            set
+            {
+                formula = value;
+                RaisePropertyChanged("Formula");
+                SelectedData.Formula = value;
+                CalculateValue();
+                //Call Serializing Method Here Just Pass Data property or the SelectedData property whatever will be feasible for you
+            }
+        }
+
+        public void CalculateValue()
+        {
+            try
+            {
+                SelectedData.CalculatedValue = Convert.ToDouble(new DataTable().Compute(SelectedData.Formula ?? "0", null));
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private BindingList<DataPresentor> data;
+
+        public BindingList<DataPresentor> ZData
+        {
+            get { return data; }
+            set
+            {
+                data = value;
+                RaisePropertyChanged("ZData");
+            }
+        }
+        private void PopulateCalculatbleTextBox()
+        {
+            ZData = new BindingList<DataPresentor>
+            {
+                new DataPresentor { Key = "ActualPrevailingWage"},
+                new DataPresentor { Key = "TotalSqftPlywood"},
+                new DataPresentor { Key = "TotalSqft"},
+                new DataPresentor { Key = "TotalSqftVertical"},
+                new DataPresentor { Key = "LinearCopingFootage"},
+                new DataPresentor { Key = "DeckPerimeter"},
+                new DataPresentor { Key = "RiserCount"},
+                new DataPresentor { Key = "DeckCount"},
+                new DataPresentor { Key = "AdditionalTermBarLF"},
+                new DataPresentor { Key = "InsideOutsideCornerDetails"},
+                new DataPresentor { Key = "RakerCornerBases"},
+                new DataPresentor { Key = "CementBoardDetail"},
+                new DataPresentor { Key = "InsideOutsideCornerDetails"},
+                new DataPresentor { Key = "RockPockets"},
+                new DataPresentor { Key = "ParasealFoundation"},
+                new DataPresentor { Key = "RearMidLagging"},
+                new DataPresentor { Key = "TermBarLF"},
+
+                new DataPresentor { Key = "RebarPrepWallsLF"},
+                new DataPresentor { Key = "SuperStopLF"},
+                new DataPresentor { Key = "Penetrations"},
+                new DataPresentor { Key = "ParasealFoundation"},
+                new DataPresentor { Key = "RearMidLagging"}
+                
+            };
+        }
+        #endregion
+
+
+
+
         private DBData _dbdata;
         public DBData dbData 
         { get { return _dbdata; }
@@ -252,6 +357,7 @@ namespace WICR_Estimator.Models
         public JobSetup(string name)            
         {
             ProjectName = name;
+            PopulateCalculatbleTextBox();
             GetOriginalName();
             if (originalName == "Paraseal")
             {
@@ -309,6 +415,7 @@ namespace WICR_Estimator.Models
             FirstCheckBoxLabel = "Approved for Sand & Cement ?";
             ProjectDelayFactor = "0-3 Months";
             UpdateJobSetup();
+
         }
 
         //private bool canApply(object obj)
