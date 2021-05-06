@@ -305,11 +305,11 @@
                         <StackPanel>
                             <TextBlock Text="Additional Term Bar (LF)" Margin="5,2"
                            FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
                          Text="{Binding AdditionalTermBarLF ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="Inside and Outside Corner Details (LF)" Margin="5,2"
                            FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
                          Text="{Binding InsideOutsideCornerDetails ,UpdateSourceTrigger=PropertyChanged}"/>
                             <CheckBox 
                           IsChecked="{Binding SuperStopAtFooting,
@@ -329,31 +329,31 @@
                         <StackPanel>
                             <TextBlock Text="Additional Term Bar (LF)" Margin="5,2"
                            FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
                          Text="{Binding AdditionalTermBarLF ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="Rakers/Corner Braces EA" Margin="5,2"
                            FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
                          Text="{Binding RakerCornerBases ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="Cement Board Detail EA" Margin="5,2"
                            FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
                          Text="{Binding CementBoardDetail ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="Inside and Outside Corner Details (LF)" Margin="5,2"
                            FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
                          Text="{Binding InsideOutsideCornerDetails ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="Rock Pockets EA." Margin="5,2"
                            FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
                          Text="{Binding RockPockets ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="Labor for 3 FT Strip of Paraseal at Foundaton or Other Areas (LF)" Margin="5,2"
                            FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
                          Text="{Binding ParasealFoundation ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="Rear/Mid Lagging LF of beam" Margin="5,2"
                            FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
                          Text="{Binding RearMidLagging ,UpdateSourceTrigger=PropertyChanged}"/>
                             <CheckBox 
                           IsChecked="{Binding SuperStopAtFooting,
@@ -374,19 +374,19 @@
                         <StackPanel>
                             <TextBlock Text="Term Bar (LF)" Margin="5,2"
                                         FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
                                      Text="{Binding TermBarLF ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="Rebar Prep @ Walls (LF)" Margin="5,2"
                                        FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
                                      Text="{Binding RebarPrepWallsLF ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="Superstop (LF)" Margin="5,2"
                                        FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
                                      Text="{Binding SuperStopLF ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="Penetrations" Margin="5,2"
                                        FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
                                      Text="{Binding Penetrations ,UpdateSourceTrigger=PropertyChanged}"/>
 
                         </StackPanel>
@@ -403,15 +403,15 @@
                         <StackPanel>
                             <TextBlock Text="Additional Term Bar (LF)" Margin="5,2"
                                         FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
                                      Text="{Binding TermBarLF ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="Inside and Outside Corner Details (LF)" Margin="5,2"
                                        FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
                                      Text="{Binding InsideOutsideCornerDetails ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="Penetrations" Margin="5,2"
                                        FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
                                      Text="{Binding Penetrations ,UpdateSourceTrigger=PropertyChanged}"/>
                             <CheckBox 
                                       IsChecked="{Binding SuperStopAtFooting,
@@ -476,21 +476,21 @@
                             <TextBlock FontWeight="SemiBold" Margin="5,2"
                            Visibility="{Binding IslinearCopingFootageVisible}"
                        Text="{Binding LinearFootageText}"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
                          Visibility="{Binding IslinearCopingFootageVisible}"
                          Text="{Binding LinearCopingFootage,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock FontWeight="SemiBold" Margin="5,2"
                        Text="{Binding DeckLabel}"
                            />
-                            <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
                          Text="{Binding DeckPerimeter ,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock FontWeight="SemiBold" Margin="5,2"
                        Text="{Binding StairRiserText}"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
                          Text="{Binding RiserCount,UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock FontWeight="SemiBold" Margin="5,2"
                        Text="{Binding DeckCountText}"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
+                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
                          Text="{Binding DeckCount,UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                     </materialDesign:Card>

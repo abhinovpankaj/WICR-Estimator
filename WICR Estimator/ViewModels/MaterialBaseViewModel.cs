@@ -872,6 +872,7 @@ namespace WICR_Estimator.ViewModels
 
         public virtual void ApplyCheckUnchecks(object obj)
         {
+            
             if (obj == null)
             {
                 return;
@@ -893,6 +894,7 @@ namespace WICR_Estimator.ViewModels
                     if (mat.Name == "Vista Paint Acripoxy" || mat.Name == "Aj-44A Dressing(Sealer)")
                     {
                         mat.IsMaterialChecked = false;
+                        //mat.UpdateCheckStatus(false);
                         mat.IsMaterialEnabled = true;
                     }
 
@@ -1038,6 +1040,7 @@ namespace WICR_Estimator.ViewModels
                     if (mat.Name == "Lip Color" || mat.Name == "Aj-44A Dressing(Sealer)")
                     {
                         mat.IsMaterialChecked = false;
+                        //mat.UpdateCheckStatus(false);
                         mat.IsMaterialEnabled = true;
                     }
 
@@ -1183,6 +1186,7 @@ namespace WICR_Estimator.ViewModels
                     {
                         mat.IsMaterialChecked = false;
                         mat.IsMaterialEnabled = true;
+                        //mat.UpdateCheckStatus(false);
                     }
 
                     if (mat.Name == "Resistite Regular White")

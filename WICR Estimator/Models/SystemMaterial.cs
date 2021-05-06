@@ -25,6 +25,7 @@ namespace WICR_Estimator.Models
 
         public static event EventHandler OnQTyChanged;
         public static event EventHandler OnUnitChanged;
+        public static event EventHandler OnApplyChecks;
         public SystemMaterial()
         {
             
@@ -371,6 +372,7 @@ namespace WICR_Estimator.Models
                 
             }
         }
+        
         public bool IsMaterialChecked
         {
             get
@@ -381,7 +383,9 @@ namespace WICR_Estimator.Models
             {
                 if (IsMaterialEnabled)
                 {
+                      
                     Set(ref ismaterialchecked, value);
+                    OnApplyChecks?.Invoke(this.name, EventArgs.Empty);                                           
                 }
                 else
                 {
@@ -392,8 +396,9 @@ namespace WICR_Estimator.Models
                         RaisePropertyChanged("SystemMaterials");
                     }
                 }
-
-
+                //Set(ref ismaterialchecked, value);
+                //RaisePropertyChanged("IsMaterialChecked");
+                //RaisePropertyChanged("SystemMaterials");
             }
         }
         public bool IsMaterialEnabled
