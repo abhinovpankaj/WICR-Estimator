@@ -353,6 +353,7 @@ namespace WICR_Estimator.ViewModels
         public void UpdateMe(SystemMaterial sm)
         {
             SystemMaterial firstMat= SystemMaterials.FirstOrDefault(x => x.Name == sm.Name);
+
             if (firstMat==null)
             {
                 if (sm.Name.Contains("White"))
@@ -363,6 +364,7 @@ namespace WICR_Estimator.ViewModels
                 else
                     return;
             }
+
             firstMat.UpdateUnits(sm.SMUnits);
 
             firstMat.SMSqft = sm.SMSqft;

@@ -223,6 +223,7 @@
     <Compile Include="GoogleUtility\SpreadSheetConnect.cs" />
     <Compile Include="GSData.cs" />
     <Compile Include="IPageViewModel.cs" />
+    <Compile Include="Models\DataPresentor.cs" />
     <Compile Include="Models\NotifiableableObject.cs" />
     <Compile Include="Models\UndoRedoObservableObject.cs" />
     <Compile Include="PasswordBoxMVVMAttachedProperties.cs" />
