@@ -23,13 +23,39 @@ namespace WICR_Estimator.ViewModels
             FetchMaterialValuesAsync(false);
 
         }
+        private bool systemOverconcChanged;
+        private bool isSpecifiedbyArch;
         public override void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {
             JobSetup Js = sender as JobSetup;
             if (Js!=null)
             {
-                IsJobSpecifiedByArchitect = Js.IsJobSpecifiedByArchitect;
-                IsSystemOverConcrete = Js.IsSystemOverConcrete;
+                if (IsSystemOverConcrete != Js.IsSystemOverConcrete)
+                {
+                    IsSystemOverConcrete = Js.IsSystemOverConcrete;
+                    systemOverconcChanged = true;
+                }
+                else
+                    systemOverconcChanged = false;
+                if (IsJobSpecifiedByArchitect==null)
+                {
+                    IsJobSpecifiedByArchitect = Js.IsJobSpecifiedByArchitect;
+                    isSpecifiedbyArch = false;
+                }
+                else
+                {
+                    if (!IsJobSpecifiedByArchitect.Equals(Js.IsJobSpecifiedByArchitect))
+                    {
+                        IsJobSpecifiedByArchitect = Js.IsJobSpecifiedByArchitect;
+                        isSpecifiedbyArch = true;
+                    }
+                    else
+                    {
+                        isSpecifiedbyArch = false;
+                    }
+                }
+               
+
             }
             
             base.JobSetup_OnJobSetupChange(sender, e);
@@ -148,9 +174,9 @@ namespace WICR_Estimator.ViewModels
                 case "Stucco Material Remove and replace (LF)":
                     return false;
                 case "BASE COAT 50 lb Desert Crete Level Max 20/30":
-                    return IsSystemOverConcrete == true ? !IsSystemOverConcrete : (bool)IsJobSpecifiedByArchitect;
-                case "BASE COAT Desert Crete poly base mixed with water":
                     return IsSystemOverConcrete == true ? !IsSystemOverConcrete : (bool)!IsJobSpecifiedByArchitect;
+                case "BASE COAT Desert Crete poly base mixed with water":
+                    return IsSystemOverConcrete == true ? !IsSystemOverConcrete : (bool)IsJobSpecifiedByArchitect;
                 case "2.5 Galvanized Lathe (18 s.f.)":
                 case "Staples":
                     return !IsSystemOverConcrete;
@@ -360,23 +386,31 @@ namespace WICR_Estimator.ViewModels
             {
                 isSpecified = (bool)IsJobSpecifiedByArchitect;
             }
-            
-            
-            SystemMaterial sysmat = SystemMaterials.Where(x => x.Name == "BASE COAT Desert Crete poly base mixed with water").FirstOrDefault();
-            sysmat.IsMaterialChecked = isSpecified;
-            sysmat.IsMaterialEnabled = isSpecified;
 
-            sysmat = SystemMaterials.Where(x => x.Name == "BASE COAT 50 lb Desert Crete Level Max 20/30").FirstOrDefault();
-            sysmat.IsMaterialChecked = !isSpecified;
-            sysmat.IsMaterialEnabled = !isSpecified;
-            
-            foreach (SystemMaterial item in SystemMaterials)
+            if (isSpecifiedbyArch)
             {
-                if (item.Name == "2.5 Galvanized Lathe (18 s.f.)" || item.Name == "Staples")
+                SystemMaterial sysmat = SystemMaterials.Where(x => x.Name == "BASE COAT Desert Crete poly base mixed with water").FirstOrDefault();
+                sysmat.IsMaterialChecked = isSpecified;
+                sysmat.IsMaterialEnabled = isSpecified;
+                
+                SystemMaterial sysmat1 = SystemMaterials.Where(x => x.Name == "BASE COAT 50 lb Desert Crete Level Max 20/30").FirstOrDefault();
+                sysmat1.IsMaterialChecked = !isSpecified;
+                sysmat1.IsMaterialEnabled = !isSpecified;
+
+            }
+            
+
+            if (systemOverconcChanged)
+            {
+                foreach (SystemMaterial item in SystemMaterials)
                 {
-                    item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
+                    if (item.Name == "2.5 Galvanized Lathe (18 s.f.)" || item.Name == "Staples")
+                    {
+                        item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
+                    }
                 }
             }
+            
         }
     }
 }

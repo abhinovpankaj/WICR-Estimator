@@ -219,9 +219,9 @@ namespace WICR_Estimator.ViewModels
             switch (materialName)
             {
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
-                case "ADD LF FOR DAMMING @ DRIP EDGE":
+               // case "ADD LF FOR DAMMING @ DRIP EDGE":
                 case "Stucco Material Remove and replace (LF)":
-                case "ENTER # OF DECKS TO WATER TEST \"NO DAM'S NEEDED\"":
+                //case "ENTER # OF DECKS TO WATER TEST \"NO DAM'S NEEDED\"":
                     return false;
                 case "INTERLAMINATE PRIMER (XYLENE FROM LOWRYS)":
                 case "ELASTATEX 500 RESIN AND CATALYST (2 COATS/ HORIZONTAL SURFACES ONLY) 40 MILS":

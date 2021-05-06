@@ -19,7 +19,7 @@ namespace WICR_Estimator.ViewModels
             materialNames = new Dictionary<string, string>();
             FillMaterialList();
             FetchMaterialValuesAsync(false);
-            ApplyCheckUnchecks("Aj - 44A Dressing(Sealer)");
+            ApplyCheckUnchecks("Aj-44A Dressing(Sealer)");
         }
 
         private void FillMaterialList()

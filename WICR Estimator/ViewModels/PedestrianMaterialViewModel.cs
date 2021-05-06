@@ -43,6 +43,7 @@ namespace WICR_Estimator.ViewModels
                 double unit = 0;
                 
                 Double.TryParse(item.SMUnits,out unit);
+
                 item.SMSqftH = unit;
                 item.Qty = unit / item.Coverage;
                 item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, 0, 0);
@@ -72,7 +73,7 @@ namespace WICR_Estimator.ViewModels
         
         public override void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {
-            JobSetup Js = sender as JobSetup;
+                JobSetup Js = sender as JobSetup;
             if (Js!=null)
             {
                 TotalSqftPlywood = Js.TotalSqftPlywood;
@@ -174,6 +175,7 @@ namespace WICR_Estimator.ViewModels
             if (hasSetupChanged)
             {
                 setCheckBoxes();
+                setUnitChangeValues();
             }          
             
             
