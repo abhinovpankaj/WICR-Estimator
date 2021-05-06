@@ -21,13 +21,20 @@ namespace WICR_Estimator.ViewModels
             FetchMaterialValuesAsync(false);
             
         }
-
+        bool systemOverconcChanged=false;
         public override void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {
             JobSetup Js = sender as JobSetup;
             if (Js != null)
             {
-                IsSystemOverConcrete = Js.IsSystemOverConcrete;
+                if (IsSystemOverConcrete != Js.IsSystemOverConcrete)
+                {
+                    IsSystemOverConcrete = Js.IsSystemOverConcrete;
+                    systemOverconcChanged = true;
+                }
+                else
+                    systemOverconcChanged = false;
+
             }
             base.JobSetup_OnJobSetupChange(sender, e);
         }
@@ -143,7 +150,7 @@ namespace WICR_Estimator.ViewModels
                 SystemMaterials = sysMat;
 
             setExceptionValues(null);
-            if (hasSetupChanged)
+            if (systemOverconcChanged)
             {
                 setCheckBoxes();
             }

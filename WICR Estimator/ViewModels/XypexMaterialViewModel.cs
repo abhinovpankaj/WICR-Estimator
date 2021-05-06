@@ -267,7 +267,15 @@ namespace WICR_Estimator.ViewModels
 
         public override void setExceptionValues(object s)
         {
-            
+            //if (s!=null)
+            //{
+            //    SystemMaterial item = SystemMaterials.Where(x => x.Name == "Add for penetrations  -customer to determine qty").FirstOrDefault();
+            //    if (item != null)
+            //    {
+            //        item.MaterialExtension =item.Qty * item.MaterialPrice;
+            //        item. FreightExtension = item.Qty * item.Weight;
+            //    }
+            //}
         }
 
         public override void ApplyCheckUnchecks(object obj)

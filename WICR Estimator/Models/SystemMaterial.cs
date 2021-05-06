@@ -486,6 +486,28 @@ namespace WICR_Estimator.Models
         internal void UpdateUnits(string sMUnits)
         {
             this.smunits = sMUnits;
+            
+               
+
+                if (Name == "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)" ||
+                    Name == "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH) UPI 7013 SC BASE COAT"
+                    || Name == "Striping for small cracKs (less than 1/8\")"
+                    || Name == "Route and caulk moving cracks (greater than 1/8\")"
+                    || Name == "SECOND INTERMEDIATE COAT FOR HIGH TRAFFIC")
+                {
+                    int unit = 0;
+                    Int32.TryParse(this.smunits, out unit);
+                    if (unit != 0)
+                    {
+                        ismaterialchecked = true;
+
+                    }
+                    else
+                        ismaterialchecked = false;
+                   
+                }
+
+            
         }
 
         private double laborextn;
@@ -520,6 +542,19 @@ namespace WICR_Estimator.Models
         public void UpdateSpecialPricing(double price)
         {
             this.specialMaterialPricing = price;
+            if (specialMaterialPricing != 0)
+            {
+                matExt = SpecialMaterialPricing * Qty;
+            }
+            else
+            {
+                matExt = MaterialPrice * Qty;
+                //if (OnQTyChanged != null)
+                //{
+                //    OnQTyChanged(this.Name, null);
+                //}
+            }
+
         }
 
         internal void UpdateCheckStatus(bool iscbChecked)
@@ -530,6 +565,8 @@ namespace WICR_Estimator.Models
         public void UpdateQuantity(double qty)
         {
             this.qtysm = qty;
+            matExt = qty * materialPrice;
+            extension = qty * weight;
         }
         
         public bool allowHooking(string matName)

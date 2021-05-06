@@ -354,14 +354,17 @@ namespace WICR_Estimator.ViewModels
         {
             SystemMaterial firstMat= SystemMaterials.FirstOrDefault(x => x.Name == sm.Name);
 
-            //int index = SystemMaterials.IndexOf(firstMat);
-            //systemMaterials.RemoveAt(index);
-            //systemMaterials.Insert(index, sm);
             if (firstMat==null)
             {
-                return;
+                if (sm.Name.Contains("White"))
+                {
+                    string name = sm.Name.Replace("White", "Gray");
+                    firstMat = SystemMaterials.FirstOrDefault(x => x.Name == name);
+                }
+                else
+                    return;
             }
-            //firstMat.SMUnits = sm.SMUnits;
+
             firstMat.UpdateUnits(sm.SMUnits);
 
             firstMat.SMSqft = sm.SMSqft;

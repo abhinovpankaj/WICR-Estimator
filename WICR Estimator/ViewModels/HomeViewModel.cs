@@ -589,6 +589,7 @@ namespace WICR_Estimator.ViewModels
                         {
                             sm.IsMaterialChecked = ischecked2;
                         }
+                        item.MaterialViewModel.setUnitChangeValues();
                         item.MaterialViewModel.CalculateCost(null);
                     }
                     else if (item.OriginalProjectName == "Pli-Dek")
@@ -813,6 +814,7 @@ namespace WICR_Estimator.ViewModels
                         {
                              sm.IsMaterialChecked= ischecked2 ;
                         }
+                        item.MaterialViewModel.setUnitChangeValues();
                         item.MaterialViewModel.CalculateCost(null);
                     }
                     else if (item.OriginalProjectName == "Pli-Dek")
