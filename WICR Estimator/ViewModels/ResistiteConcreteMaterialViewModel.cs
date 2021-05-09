@@ -177,11 +177,11 @@ namespace WICR_Estimator.ViewModels
                 }
                 bool isChecked = sysMat1.IsMaterialChecked;
                 sysMat1.Qty = sysMat1.Coverage == 0 ? 0 : sysMat1.SMSqft / sysMat1.Coverage;
-                sysMat1.IsMaterialChecked = isChecked;
+                sysMat1.UpdateCheckStatus(  isChecked);
 
                 isChecked = sysMat2.IsMaterialChecked;
                 sysMat2.Qty = sysMat2.Coverage == 0 ? 0 : sysMat2.SMSqft / sysMat2.Coverage;
-                sysMat2.IsMaterialChecked = isChecked;
+                sysMat2.UpdateCheckStatus(  isChecked);
 
             }
             //CalculateLaborMinCharge(false);
@@ -243,6 +243,7 @@ namespace WICR_Estimator.ViewModels
         }
         public override void ApplyCheckUnchecks(object obj)
         {
+            lastCheckedMat = obj.ToString();
             if (obj.ToString()== "Slurry Coat for repairs" || obj.ToString()== "Slurry coat over texture (Resistite smooth 120 sq ft per mix with 1 gal liquid)")
             {
                 SystemMaterial sysMat1 = SystemMaterials.Where(x => x.Name == "Slurry Coat for repairs").FirstOrDefault();
@@ -250,7 +251,8 @@ namespace WICR_Estimator.ViewModels
                 {
                     sysMat1 = SystemMaterials.Where(x => x.Name == "Slurry coat over texture (Resistite smooth 120 sq ft per mix with 1 gal liquid)").FirstOrDefault();
                 }
-                SystemMaterials.Where(x => x.Name == "Light crack and repairs- resistite smooth (no more than 5% of area) with 1 gal liquid").FirstOrDefault().IsMaterialChecked = !sysMat1.IsMaterialChecked;
+                var mat1 = SystemMaterials.Where(x => x.Name == "Light crack and repairs- resistite smooth (no more than 5% of area) with 1 gal liquid").FirstOrDefault();
+                mat1.UpdateCheckStatus(sysMat1.IsMaterialChecked);
             }
             calculateRLqty();
         }
@@ -413,27 +415,31 @@ namespace WICR_Estimator.ViewModels
                 {
                     sysMat2.SMSqft = val1 + val2;
                     sysMat1.SMSqft = val2 + val1;
-                    sysMat1.IsMaterialChecked = true;
-                    sysMat1.IsMaterialEnabled = false;
+                    //sysMat1.IsMaterialChecked = true;
+                    //sysMat1.IsMaterialEnabled = false;
+                    sysMat1.UpdateCheckStatus(false, true);
 
                     SystemMaterials.Where(x => x.Name == "Light crack and repairs- resistite smooth (no more than 5% of area) with 1 gal liquid").FirstOrDefault().IsMaterialChecked = false;
-                    sysMat2.IsMaterialChecked = true;
-                    sysMat2.IsMaterialEnabled = false;
-                    
+                    //sysMat2.IsMaterialChecked = true;
+                    //sysMat2.IsMaterialEnabled = false;
+                    sysMat2.UpdateCheckStatus(false, true);
+
                 }
                 else
                 {
                     if (!sysMat1.IsMaterialEnabled)
                     {
-                        sysMat1.IsMaterialChecked = false;
-                        sysMat1.IsMaterialEnabled = true;
+                        //sysMat1.IsMaterialChecked = false;
+                        //sysMat1.IsMaterialEnabled = true;
+                        sysMat1.UpdateCheckStatus(true, false);
                         SystemMaterials.Where(x => x.Name == "Light crack and repairs- resistite smooth (no more than 5% of area) with 1 gal liquid").FirstOrDefault().IsMaterialChecked = true;
                         sysMat1.SMSqft = totalSqft + (stairWidth * riserCount * 2);
                     }
                     if (!sysMat2.IsMaterialEnabled)
                     {
-                        sysMat2.IsMaterialChecked = false;
-                        sysMat2.IsMaterialEnabled = true;
+                        //sysMat2.IsMaterialChecked = false;
+                        //sysMat2.IsMaterialEnabled = true;
+                        sysMat2.UpdateCheckStatus(true, false);
                         sysMat2.SMSqft = totalSqft + (riserCount * stairWidth * 2);
                     }              
                 }

@@ -377,7 +377,7 @@ namespace WICR_Estimator.ViewModels
         public override void ApplyCheckUnchecks(object obj)
         {
             //base.ApplyCheckUnchecks(obj);
-
+            lastCheckedMat = obj.ToString();
             if (obj.ToString()== "ENDURO ELA-98 BINDER (2 COATS)")
             {
                 bool isChecked = SystemMaterials.Where(x => x.Name == "ENDURO ELA-98 BINDER (2 COATS)").FirstOrDefault().IsMaterialChecked;

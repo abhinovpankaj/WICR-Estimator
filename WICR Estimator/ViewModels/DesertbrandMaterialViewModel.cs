@@ -369,6 +369,7 @@ namespace WICR_Estimator.ViewModels
         }
         public override void ApplyCheckUnchecks(object obj)
         {
+            lastCheckedMat = obj.ToString();
             if (obj.ToString() == "2.5 Galvanized Lathe (18 s.f.)")
             {
                 bool isChecked = SystemMaterials.Where(x => x.Name == "2.5 Galvanized Lathe (18 s.f.)").FirstOrDefault().IsMaterialChecked;

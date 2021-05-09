@@ -440,11 +440,12 @@ namespace WICR_Estimator.ViewModels
         
         public override void ApplyCheckUnchecks(object obj)
         {
-
+            lastCheckedMat = obj.ToString();
             SystemMaterial sysmat = null;
             bool ischecked = false, ischecked1 = false;
             if (obj.ToString() == "MIRADRAIN 6000 XL (VERTICAL ONLY)" || obj.ToString() == "MIRADRAIN 6000 XL  (HORIZONTAL ONLY)")
             {
+
                 sysmat = SystemMaterials.Where(x => x.Name == "MIRADRAIN 6000 XL (VERTICAL ONLY)").FirstOrDefault();
                 ischecked = sysmat.IsMaterialChecked;
                 sysmat = SystemMaterials.Where(x => x.Name == "MIRADRAIN 6000 XL  (HORIZONTAL ONLY)").FirstOrDefault();

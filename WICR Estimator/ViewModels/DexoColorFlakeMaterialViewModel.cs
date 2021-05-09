@@ -319,6 +319,7 @@ namespace WICR_Estimator.ViewModels
 
         public override void ApplyCheckUnchecks(object obj)
         {
+            lastCheckedMat = obj.ToString();
             SystemMaterial sysmat = null;
             bool ischecked = false;
             if (obj.ToString() == "1 COAT (6 MILS) OF VC 200 PRIMER IN LIEU OF BONDCOAT (FOR HYDROSTATIC up to 10 lbs.)")

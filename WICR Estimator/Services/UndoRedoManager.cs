@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -82,16 +83,31 @@ namespace WICR_Estimator.Services
 
         /// <summary>Reverts the last action. </summary>
         /// <returns>A value indicating whether the undo could be performed. </returns>
+        /// 
+        public static event EventHandler OnApplyChecks;
         public bool Undo()
         {
             if (CanUndo)
             {
                 _trackEntities = false;
                 foreach (var command in _commands[_currentIndex])
+                {
                     command.Undo();
+                    PropertyCommand propCOmm = command as PropertyCommand;
+                    if (propCOmm!=null)
+                    {
+                        if (propCOmm.PropertyName=="IsMaterialChecked")
+                        {
+                            
+                            OnApplyChecks?.Invoke(propCOmm.Sender, EventArgs.Empty);
+                        }
+                    }
+                }
+                    
 
                 _currentIndex--;
                 _trackEntities = true;
+
 
                 RaiseAllUndoRedoPropertiesChanged();
                 return true;
@@ -109,8 +125,20 @@ namespace WICR_Estimator.Services
                 _currentIndex++;
 
                 foreach (var command in _commands[_currentIndex])
+                {
                     command.Redo();
 
+                    PropertyCommand propCOmm = command as PropertyCommand;
+                    if (propCOmm != null)
+                    {
+                        if (propCOmm.PropertyName == "IsMaterialChecked")
+                        {
+
+                            OnApplyChecks?.Invoke(propCOmm.Sender, EventArgs.Empty);
+                        }
+                    }
+                }
+                    
                 _trackEntities = true;
 
                 RaiseAllUndoRedoPropertiesChanged();

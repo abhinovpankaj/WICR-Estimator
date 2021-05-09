@@ -247,6 +247,7 @@ namespace WICR_Estimator.ViewModels
         }
         public override void ApplyCheckUnchecks(object obj)
         {
+            lastCheckedMat = obj.ToString();
             if (obj.ToString() == "Slurry Coat for repairs" || obj.ToString() == "Slurry coat over texture (Krete Kote 120 sq ft per mix)")
             {
                 SystemMaterial sysMat1 = SystemMaterials.Where(x => x.Name == "Slurry Coat for repairs").FirstOrDefault();

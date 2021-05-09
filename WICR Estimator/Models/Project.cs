@@ -243,12 +243,19 @@ namespace WICR_Estimator.Models
             //string[] ds = { "MetalBaseViewModel","Metals" };
             undoRedoManager = new UndoRedoManager(prj, new MyDispatcher());
             //undoRedoManager.Reset();
-            SystemMaterial.OnApplyChecks += SystemMaterial_OnApplyChecks;
+            UndoRedoManager.OnApplyChecks += SystemMaterial_OnApplyChecks;
+           
         }
-
+        
         private void SystemMaterial_OnApplyChecks(object sender, EventArgs e)
         {
-            this.MaterialViewModel.ApplyCheckUnchecks(sender.ToString());
+            if (this.MaterialViewModel.lastCheckedMat!=null)
+            {
+                var mat = this.MaterialViewModel.SystemMaterials.First(x => x.Name == this.MaterialViewModel.lastCheckedMat);
+
+                this.MaterialViewModel.ApplyCheckUnchecks(this.MaterialViewModel.lastCheckedMat);
+            }
+      
         }
 
 

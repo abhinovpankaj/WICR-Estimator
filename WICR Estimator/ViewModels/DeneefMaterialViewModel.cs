@@ -133,7 +133,6 @@ namespace WICR_Estimator.ViewModels
             {
                 for (int i = 0; i < SystemMaterials.Count; i++)
                 {
-
                     double sp = SystemMaterials[i].SpecialMaterialPricing;
                     bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
                     bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
@@ -294,27 +293,9 @@ namespace WICR_Estimator.ViewModels
         }
 
         public override void ApplyCheckUnchecks(object obj)
-        {
-            ////base.ApplyCheckUnchecks(obj);
-
-            //if (obj.ToString()== "ENDURO ELA-98 BINDER (2 COATS)")
-            //{
-            //    bool isChecked = SystemMaterials.Where(x => x.Name == "ENDURO ELA-98 BINDER (2 COATS)").FirstOrDefault().IsMaterialChecked;
-            //    SystemMaterials.Where(x => x.Name == "3/4 oz. Fiberglass (2000 sq ft rolls Purchased from Hill Brothers )").FirstOrDefault().IsMaterialChecked = isChecked;
-            //    if (!isChecked)
-            //    {
-            //        SystemMaterials.Where(x => x.Name == "Caulk, dymonic 100").FirstOrDefault().IsMaterialChecked = true;
-            //    }
-            //}
-            //if (obj.ToString() == "2.5 Galvanized Lathe (18 s.f.) no less than 12 per sq ft.")
-            //{
-            //    bool isChecked = SystemMaterials.Where(x => x.Name == "2.5 Galvanized Lathe (18 s.f.) no less than 12 per sq ft.").FirstOrDefault().IsMaterialChecked;
-            //    SystemMaterials.Where(x => x.Name == "Staples (3/4 Inch Crown, Box of 13,500)").FirstOrDefault().IsMaterialChecked = isChecked;                
-            //}
-            getEKLQnty();
-            ////update Add labor for minimum cost
-            //CalculateLaborMinCharge(false);
-
+        {            
+            lastCheckedMat = obj.ToString();
+            getEKLQnty();         
         }
         public override void CalculateTotalSqFt()
         {

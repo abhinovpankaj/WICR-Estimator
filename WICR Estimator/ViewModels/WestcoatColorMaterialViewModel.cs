@@ -300,6 +300,7 @@ namespace WICR_Estimator.ViewModels
 
         public override void ApplyCheckUnchecks(object obj)
         {
+            lastCheckedMat = obj.ToString();
             if (obj.ToString() == "SC-10 solid color sealer IN LIEU of SC-70")
             {
                 SystemMaterial sysmat = SystemMaterials.Where(x => x.Name == "SC-70 clear acrylic lacquer 200-300 sq ft per gallon").FirstOrDefault();

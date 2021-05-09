@@ -458,6 +458,7 @@ namespace WICR_Estimator.ViewModels
         public override void ApplyCheckUnchecks(object obj)
         {
             SystemMaterial sysmat = null;
+            lastCheckedMat = obj.ToString();
             //change 25-5-2020
             //if (obj.ToString() == "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER")
             //{

@@ -471,26 +471,29 @@ namespace WICR_Estimator.ViewModels
                     stairM[i].Units = getUnits(i);
             }
             //ends
-               //for (int i = 0; i < Metals.Count; i++)
-               //{
-               //    double units = Metals[i].Units;
-               //    double sp = Metals[i].SpecialMetalPricing;
-               //    bool isSelected = Metals[i].IsStairMetalChecked;
-                
-               //    Metals[i] = met[i];
-               //    if (!Metals[i].Name.Contains("STAIR METAL"))
-               //    {
-               //        Metals[i].Units = units;
-               //         Metals[i].IsStairMetalChecked = isSelected;
+            for (int i = 0; i < Metals.Count; i++)
+            {
+                double units = Metals[i].Units;
+                double sp = Metals[i].SpecialMetalPricing;
+                bool isSelected = Metals[i].IsStairMetalChecked;
 
-               //     }
-               //    else
-               //    {
-               //        Metals[i].IsStairMetalChecked = isSelected;
-               //    }
+                //Metals[i] = met[i];
+                UpdateMe(met[i],i);
+                if (!Metals[i].Name.Contains("STAIR METAL"))
+                {
+                    //Metals[i].Units = units;
+                    //Metals[i].IsStairMetalChecked = isSelected;
+                    Metals[i].UpdateUnits(units);
+                    Metals[i].UpdateIsStairChecked(isSelected);
+                }
+                else
+                {
+                    //Metals[i].IsStairMetalChecked = isSelected;
+                    Metals[i].UpdateIsStairChecked(isSelected);
+                }
 
-               //    Metals[i].SpecialMetalPricing = sp;
-               //}
+                Metals[i].UpdateSpecialPricing(sp);
+            }
             ObservableCollection<AddOnMetal> addOnMet = new ObservableCollection<AddOnMetal>();
             if (Js.ProjectName == "Paraseal LG")
             {
@@ -525,25 +528,31 @@ namespace WICR_Estimator.ViewModels
             }
             //ends
 
-            //for (int i = 0; i < AddOnMetals.Count; i++)
-            //{
-            //    double units = AddOnMetals[i].Units;
-            //    double sp = AddOnMetals[i].SpecialMetalPricing;
-            //    bool ischecked = AddOnMetals[i].IsMetalChecked;
-            //    AddOnMetals[i] = addOnMet[i];
-            //    if (!AddOnMetals[i].Name.Contains("STAIR METAL"))
-            //    {
-            //        AddOnMetals[i].Units = units;
-            //    }
-            //    AddOnMetals[i].IsMetalChecked = ischecked;
-            //    AddOnMetals[i].SpecialMetalPricing = sp;
-            //}
+            for (int i = 0; i < AddOnMetals.Count; i++)
+            {
+                double units = AddOnMetals[i].Units;
+                double sp = AddOnMetals[i].SpecialMetalPricing;
+                bool ischecked = AddOnMetals[i].IsMetalChecked;
+
+                //AddOnMetals[i] = addOnMet[i];
+                UpdateAddonMe(addOnMet[i],i);
+                if (!AddOnMetals[i].Name.Contains("STAIR METAL"))
+                {
+                    // AddOnMetals[i].Units = units;
+                    AddOnMetals[i].UpdateUnits(units);
+                }
+                //AddOnMetals[i].IsMetalChecked = ischecked;
+                //AddOnMetals[i].SpecialMetalPricing = sp;
+                AddOnMetals[i].UpdateIsChecked(ischecked);
+                AddOnMetals[i].UpdateSpecialPricing(sp);
+            }
 
             if (Js!=null)
             {
                 if (Js.ProjectName == "Multicoat")
                 {
                     MiscMetals.Where(x => x.Name == "Nosing for Concrete risers").FirstOrDefault().Units = 0;
+                    MiscMetals[0].Units = getUnits(2);
                 }
                 else
                 {
@@ -572,6 +581,27 @@ namespace WICR_Estimator.ViewModels
             CalculateCost(null);                      
         }
 
+        private void UpdateMe(Metal metal, int index)
+        {
+            
+                Metals[index].ProductionRate = metal.ProductionRate;
+                Metals[index].LaborRate = metal.LaborRate;
+
+                //sysMet.MaterialPrice = metal.MaterialPrice;
+                Metals[index].UpdateMaterialPrice(metal.MaterialPrice);
+
+        }
+        private void UpdateAddonMe(AddOnMetal metal,int index)
+        {
+            
+            AddOnMetals[index].ProductionRate = metal.ProductionRate;
+            AddOnMetals[index].LaborRate = metal.LaborRate;
+
+            //sysMet.MaterialPrice = metal.MaterialPrice;
+            AddOnMetals[index].UpdateMaterialPrice(metal.MaterialPrice);
+
+           
+        }
         private ObservableCollection<Metal> UpdateMetalsDB()
         {
             throw new NotImplementedException();

@@ -443,7 +443,7 @@ namespace WICR_Estimator.ViewModels
         public override void ApplyCheckUnchecks(object obj)
         {
 
-            
+            lastCheckedMat = obj.ToString();
         }
 
         public override double CalculateLabrExtn(double calhrs, double setupMin, string matName = "")

@@ -25,7 +25,7 @@ namespace WICR_Estimator.Models
 
         public static event EventHandler OnQTyChanged;
         public static event EventHandler OnUnitChanged;
-        public static event EventHandler OnApplyChecks;
+        
         public SystemMaterial()
         {
             
@@ -385,7 +385,7 @@ namespace WICR_Estimator.Models
                 {
                       
                     Set(ref ismaterialchecked, value);
-                    OnApplyChecks?.Invoke(this.name, EventArgs.Empty);                                           
+                                                            
                 }
                 else
                 {
@@ -570,6 +570,15 @@ namespace WICR_Estimator.Models
         public void UpdateQuantity(double qty)
         {
             this.qtysm = qty;
+            if (allowHooking(Name))
+            {
+                if (qtysm != 0)
+                {
+                    ismaterialchecked = true;
+                }
+                else
+                    ismaterialchecked = false;              
+            }
             matExt = qty * materialPrice;
             extension = qty * weight;
         }

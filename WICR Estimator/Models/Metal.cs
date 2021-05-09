@@ -155,13 +155,14 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                //if (materialPrice!=value)
+                //if (materialPrice != value)
                 //{
                 //    materialPrice = value;
                 //    RaisePropertyChanged("MaterialPrice");
                 //    RaisePropertyChanged("MaterialExtension");
                 //}
                 Set(ref materialPrice, value);
+                RaisePropertyChanged("MaterialExtension");
             }
         }
 
@@ -232,6 +233,28 @@ namespace WICR_Estimator.Models
         }
         public Metal()
         { }
+
+        internal void UpdateSpecialPricing(double sp)
+        {
+            specialMetalPricing = sp;
+        }
+
+        internal void UpdateUnits(double units)
+        {
+            this.units = units;
+        }
+
+        
+
+        internal void UpdateIsStairChecked(bool isSelected)
+        {
+            isStairMetalChecked = isSelected;
+        }
+
+        internal void UpdateMaterialPrice(double materialPrice)
+        {
+            this.materialPrice = materialPrice;
+        }
     }
 
     public class MiscMetal:Metal

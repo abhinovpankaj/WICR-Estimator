@@ -455,6 +455,7 @@ namespace WICR_Estimator.ViewModels
             {
                 return;
             }
+            lastCheckedMat = obj.ToString();
             //set RL Qty
             if (obj.ToString() == "Underlay over membrane (Resistite regular 150 sq ft per mix )" ||
                 obj.ToString() == "Underlay over rough surface (Resistite regular 150 sq ft per mix)" ||

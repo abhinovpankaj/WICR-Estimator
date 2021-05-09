@@ -387,8 +387,12 @@ namespace WICR_Estimator.ViewModels
             firstMat.LaborUnitPrice = sm.LaborUnitPrice;
             firstMat.FreightExtension = sm.FreightExtension;
             firstMat.MaterialExtension = sm.MaterialExtension;  //chnage for independent projects
-            //firstMat.IsMaterialChecked = sm.IsMaterialChecked;
-            //firstMat.IsMaterialEnabled = sm.IsMaterialEnabled;
+            if (!sm.IsMaterialEnabled)
+            {
+                firstMat.IsMaterialChecked = sm.IsMaterialChecked;
+                firstMat.IsMaterialEnabled = sm.IsMaterialEnabled;
+            }
+
             firstMat.IncludeInLaborMinCharge = sm.IncludeInLaborMinCharge;
             firstMat.IsCheckboxDependent = sm.IsCheckboxDependent;
                    
@@ -869,7 +873,7 @@ namespace WICR_Estimator.ViewModels
                 return true;
             
         }
-
+        public string lastCheckedMat;
         public virtual void ApplyCheckUnchecks(object obj)
         {
             
@@ -877,9 +881,10 @@ namespace WICR_Estimator.ViewModels
             {
                 return;
             }
-
+            lastCheckedMat = obj.ToString();
             if (obj.ToString() == "Lip Color")
             {
+                
                 #region ifLipcolor
                 var materials = SystemMaterials.Where(x => x.IsCheckboxDependent == true).ToList();
 
@@ -887,12 +892,17 @@ namespace WICR_Estimator.ViewModels
                 {
                     if (mat.Name == "Lip Color")
                     {
+                        mat.IsMaterialChecked = true;
                         mat.IsMaterialEnabled = false;
 
                     }
 
                     if (mat.Name == "Vista Paint Acripoxy" || mat.Name == "Aj-44A Dressing(Sealer)")
                     {
+                        if (mat.IsMaterialChecked)
+                        {
+                            lastCheckedMat = mat.Name;
+                        } 
                         mat.IsMaterialChecked = false;
                         //mat.UpdateCheckStatus(false);
                         mat.IsMaterialEnabled = true;
@@ -1028,17 +1038,23 @@ namespace WICR_Estimator.ViewModels
             }
             if (obj.ToString() == "Vista Paint Acripoxy")
             {
+                
                 #region ifVista
                 var materials = SystemMaterials.Where(x => x.IsCheckboxDependent == true).ToList();
                 foreach (SystemMaterial mat in materials)
                 {
                     if (mat.Name == "Vista Paint Acripoxy")
                     {
+                        mat.IsMaterialChecked = true;
                         mat.IsMaterialEnabled = false;
 
                     }
                     if (mat.Name == "Lip Color" || mat.Name == "Aj-44A Dressing(Sealer)")
                     {
+                        if (mat.IsMaterialChecked)
+                        {
+                            lastCheckedMat = mat.Name;
+                        }
                         mat.IsMaterialChecked = false;
                         //mat.UpdateCheckStatus(false);
                         mat.IsMaterialEnabled = true;
@@ -1172,18 +1188,24 @@ namespace WICR_Estimator.ViewModels
             }
             if (obj.ToString() == "Aj-44A Dressing(Sealer)")
             {
+                
                 #region Aj44
                 var materials = SystemMaterials.Where(x => x.IsCheckboxDependent == true).ToList();
                 foreach (SystemMaterial mat in materials)
                 {
                     if (mat.Name == "Aj-44A Dressing(Sealer)")
                     {
+                        mat.IsMaterialChecked = true;
                         mat.IsMaterialEnabled = false;
 
                     }
 
                     if (mat.Name == "Lip Color" || mat.Name == "Vista Paint Acripoxy")
                     {
+                        if (mat.IsMaterialChecked)
+                        {
+                            lastCheckedMat = mat.Name;
+                        }
                         mat.IsMaterialChecked = false;
                         mat.IsMaterialEnabled = true;
                         //mat.UpdateCheckStatus(false);

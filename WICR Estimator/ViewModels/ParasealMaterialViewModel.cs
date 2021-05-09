@@ -394,7 +394,7 @@ namespace WICR_Estimator.ViewModels
         }
         public override void ApplyCheckUnchecks(object obj)
         {
-            
+            lastCheckedMat = obj.ToString();
             calculateRLqty();
             CalculateLaborMinCharge(false);
         }

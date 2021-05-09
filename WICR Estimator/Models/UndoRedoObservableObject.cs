@@ -39,6 +39,8 @@ namespace WICR_Estimator.Models
         /// <param name="oldValue">A reference to the backing field of the property. </param>
         /// <param name="newValue">The new value. </param>
         /// <returns>True if the property has changed. </returns>
+        /// 
+
         public override bool Set<T>(string propertyName, ref T oldValue, T newValue)
         {
             if (Equals(oldValue, newValue))

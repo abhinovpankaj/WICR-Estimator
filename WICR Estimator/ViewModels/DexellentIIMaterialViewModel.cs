@@ -322,6 +322,7 @@ namespace WICR_Estimator.ViewModels
         
         public override void ApplyCheckUnchecks(object obj)
         {
+            lastCheckedMat = obj.ToString();
             if (obj.ToString() == "Vista Paint Acripoxy (TOPCOAT)")
             {
                 bool ischecked = SystemMaterials.Where(x => x.Name == "Vista Paint Acripoxy (TOPCOAT)").FirstOrDefault().IsMaterialChecked;
