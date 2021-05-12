@@ -188,7 +188,7 @@ namespace WICR_Estimator.Models
             {
                 if (smunits != value)
                 {
-                    smunits = value;
+                   // smunits = value;
                     
                     if (Name== "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)"||
                         Name== "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH) UPI 7013 SC BASE COAT"
@@ -206,9 +206,10 @@ namespace WICR_Estimator.Models
                         else
                             IsMaterialChecked = false;
 
-                        OnUnitChanged?.Invoke(this.name, EventArgs.Empty);
-                        //Set(ref smunits, value);
                         RaisePropertyChanged("SMUnits");
+                        Set(ref smunits, value);
+                        OnUnitChanged?.Invoke(this.name, EventArgs.Empty);
+                        
                     }
                     
                 }
@@ -381,21 +382,21 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (IsMaterialEnabled)
-                {
+                //if (IsMaterialEnabled)
+                //{
                       
-                    Set(ref ismaterialchecked, value);
+                //    //Set(ref ismaterialchecked, value);
                                                             
-                }
-                else
-                {
+                //}
+                //else
+                //{
                     if (value != ismaterialchecked)
                     {
                         ismaterialchecked = value;
                         RaisePropertyChanged("IsMaterialChecked");
                         RaisePropertyChanged("SystemMaterials");
                     }
-                }
+                //}
                 //Set(ref ismaterialchecked, value);
                 //RaisePropertyChanged("IsMaterialChecked");
                 //RaisePropertyChanged("SystemMaterials");

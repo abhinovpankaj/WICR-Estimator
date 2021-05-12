@@ -938,7 +938,7 @@ namespace WICR_Estimator.ViewModels
 
 
                                 item.CreationDetails = JobName + ":;" + PreparedBy + ":;" + JobCreationDate.ToString();
-                                item.ProductVersion = "4.0";
+                                item.ProductVersion = "5.0";
                                 //Update DB
 
 
@@ -1307,34 +1307,34 @@ namespace WICR_Estimator.ViewModels
             
             Projects = new ObservableCollection<Project>();
             //SelectedProjects = new List<Project>();
-            Projects.Add(new Project { Name = "Weather Wear", OriginalProjectName= "Weather Wear", GrpName= "Dexotex" ,MainGroup="Deck Coatings",ProductVersion="4.0"});
-            Projects.Add(new Project { Name = "Weather Wear Rehab", OriginalProjectName = "Weather Wear Rehab", GrpName = "Dexotex", MainGroup = "Deck Coatings", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "Barrier Guard", OriginalProjectName = "Barrier Guard", GrpName = "Dexotex", MainGroup = "Deck Coatings", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "Endurokote", OriginalProjectName = "Endurokote",GrpName= "Endurokote", MainGroup = "Deck Coatings", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "Desert Crete", OriginalProjectName = "Desert Crete", GrpName = "Hill Brothers", MainGroup = "Deck Coatings", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "Paraseal", OriginalProjectName = "Paraseal", Rank = 6, GrpName = "Tremco", MainGroup = "Below Grade", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "Paraseal LG", OriginalProjectName = "Paraseal LG", Rank = 17, GrpName = "Tremco", MainGroup = "Below Grade", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "860 Carlisle", OriginalProjectName = "860 Carlisle", Rank = 18, GrpName = "Carlisle", MainGroup = "Below Grade", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "201", OriginalProjectName = "201", Rank = 18, GrpName = "Tremco", MainGroup = "Below Grade", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "250 GC", OriginalProjectName = "250 GC", Rank = 19, GrpName = "Tremco", MainGroup = "Below Grade", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "Pli-Dek", OriginalProjectName = "Pli-Dek", Rank = 7, GrpName = "Pli -Dek", MainGroup = "Deck Coatings", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "Pedestrian System", OriginalProjectName = "Pedestrian System", Rank = 8,GrpName= "UPI", MainGroup = "Deck Coatings", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "Parking Garage", OriginalProjectName = "Parking Garage", Rank = 9, GrpName = "UPI", MainGroup = "Deck Coatings", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "Tufflex", OriginalProjectName = "Tufflex", Rank = 10, GrpName = "UPI", MainGroup = "Deck Coatings", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "Color Wash Reseal", OriginalProjectName = "Color Wash Reseal", Rank = 11, GrpName = "Westcoat", MainGroup = "Deck Coatings", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "ALX", OriginalProjectName = "ALX", Rank = 12, GrpName = "Westcoat", MainGroup = "Deck Coatings", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "MACoat", OriginalProjectName = "MACoat", Rank = 13, GrpName = "Westcoat", MainGroup = "Deck Coatings", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "Reseal all systems", OriginalProjectName = "Reseal all systems", Rank = 14, GrpName = "Reseal", ProductVersion = "4.0", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Resistite", OriginalProjectName = "Resistite", Rank = 15, GrpName = "Dexotex", MainGroup = "Concrete On Grade", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "Multicoat", OriginalProjectName = "Multicoat", Rank = 16, GrpName = "Multicoat", MainGroup = "Concrete On Grade", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "Dexcellent II", OriginalProjectName = "Dexcellent II", Rank = 16, GrpName = "Nevada Coatings", MainGroup = "Deck Coatings", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "Westcoat BT", OriginalProjectName = "Westcoat BT", Rank = 19, GrpName = "Westcoat", MainGroup = "Below Tile", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "UPI BT", OriginalProjectName = "UPI BT", Rank = 20, GrpName = "UPI", MainGroup = "Below Tile", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "Dual Flex", OriginalProjectName = "Dual Flex", Rank = 21, GrpName = "Dexotex", MainGroup = "Below Tile", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "Westcoat Epoxy", OriginalProjectName = "Westcoat Epoxy", Rank = 22, GrpName = "Westcoat", MainGroup = "Epoxy Coatings", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "Polyurethane Injection Block", OriginalProjectName = "Polyurethane Injection Block", Rank = 23, GrpName = "DeNeef", MainGroup = "Below Grade", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "Xypex", OriginalProjectName ="Xypex", Rank = 24, GrpName = "Negative side coating", MainGroup = "Below Grade", ProductVersion = "4.0" });
-            Projects.Add(new Project { Name = "Blank", OriginalProjectName = "Blank", Rank = 25, GrpName = "Independent", MainGroup = "Blank Template", ProductVersion = "4.0" });
+            Projects.Add(new Project { Name = "Weather Wear", OriginalProjectName= "Weather Wear", GrpName= "Dexotex" ,MainGroup="Deck Coatings",ProductVersion="5.0"});
+            Projects.Add(new Project { Name = "Weather Wear Rehab", OriginalProjectName = "Weather Wear Rehab", GrpName = "Dexotex", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Barrier Guard", OriginalProjectName = "Barrier Guard", GrpName = "Dexotex", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Endurokote", OriginalProjectName = "Endurokote",GrpName= "Endurokote", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Desert Crete", OriginalProjectName = "Desert Crete", GrpName = "Hill Brothers", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Paraseal", OriginalProjectName = "Paraseal", Rank = 6, GrpName = "Tremco", MainGroup = "Below Grade", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Paraseal LG", OriginalProjectName = "Paraseal LG", Rank = 17, GrpName = "Tremco", MainGroup = "Below Grade", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "860 Carlisle", OriginalProjectName = "860 Carlisle", Rank = 18, GrpName = "Carlisle", MainGroup = "Below Grade", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "201", OriginalProjectName = "201", Rank = 18, GrpName = "Tremco", MainGroup = "Below Grade", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "250 GC", OriginalProjectName = "250 GC", Rank = 19, GrpName = "Tremco", MainGroup = "Below Grade", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Pli-Dek", OriginalProjectName = "Pli-Dek", Rank = 7, GrpName = "Pli -Dek", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Pedestrian System", OriginalProjectName = "Pedestrian System", Rank = 8,GrpName= "UPI", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Parking Garage", OriginalProjectName = "Parking Garage", Rank = 9, GrpName = "UPI", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Tufflex", OriginalProjectName = "Tufflex", Rank = 10, GrpName = "UPI", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Color Wash Reseal", OriginalProjectName = "Color Wash Reseal", Rank = 11, GrpName = "Westcoat", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "ALX", OriginalProjectName = "ALX", Rank = 12, GrpName = "Westcoat", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "MACoat", OriginalProjectName = "MACoat", Rank = 13, GrpName = "Westcoat", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Reseal all systems", OriginalProjectName = "Reseal all systems", Rank = 14, GrpName = "Reseal", ProductVersion = "5.0", MainGroup = "Deck Coatings" });
+            Projects.Add(new Project { Name = "Resistite", OriginalProjectName = "Resistite", Rank = 15, GrpName = "Dexotex", MainGroup = "Concrete On Grade", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Multicoat", OriginalProjectName = "Multicoat", Rank = 16, GrpName = "Multicoat", MainGroup = "Concrete On Grade", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Dexcellent II", OriginalProjectName = "Dexcellent II", Rank = 16, GrpName = "Nevada Coatings", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Westcoat BT", OriginalProjectName = "Westcoat BT", Rank = 19, GrpName = "Westcoat", MainGroup = "Below Tile", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "UPI BT", OriginalProjectName = "UPI BT", Rank = 20, GrpName = "UPI", MainGroup = "Below Tile", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Dual Flex", OriginalProjectName = "Dual Flex", Rank = 21, GrpName = "Dexotex", MainGroup = "Below Tile", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Westcoat Epoxy", OriginalProjectName = "Westcoat Epoxy", Rank = 22, GrpName = "Westcoat", MainGroup = "Epoxy Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Polyurethane Injection Block", OriginalProjectName = "Polyurethane Injection Block", Rank = 23, GrpName = "DeNeef", MainGroup = "Below Grade", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Xypex", OriginalProjectName ="Xypex", Rank = 24, GrpName = "Negative side coating", MainGroup = "Below Grade", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Blank", OriginalProjectName = "Blank", Rank = 25, GrpName = "Independent", MainGroup = "Blank Template", ProductVersion = "5.0" });
             ProjectView = CollectionViewSource.GetDefaultView(Projects);
             
             ProjectView.GroupDescriptions.Add(new PropertyGroupDescription("MainGroup"));
@@ -2383,7 +2383,7 @@ namespace WICR_Estimator.ViewModels
             
             get
             {
-                return "Version 4.0";
+                return "Version 5.0";
             }
         }
 

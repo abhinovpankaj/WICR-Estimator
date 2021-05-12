@@ -714,7 +714,7 @@ namespace WICR_Estimator
                                 hm.UpdateProjectTotals();
 
                             item.CreationDetails = JobName + ":;" + PreparedBy + ":;" + JobCreationDate.ToString();
-                            item.ProductVersion = "4.0";
+                            item.ProductVersion = "5.0";
                             //Update DB
                             if (item.EstimateID != 0)
                             {

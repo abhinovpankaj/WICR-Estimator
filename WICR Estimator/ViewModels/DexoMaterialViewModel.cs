@@ -17,6 +17,7 @@ namespace WICR_Estimator.ViewModels
         {
             materialNames = new Dictionary<string, string>();
             FillMaterialList();
+            dbData = Js.dbData;
             FetchMaterialValuesAsync(false);
             //set  resititeLiquid QTY
             resistiteQty();
@@ -310,7 +311,8 @@ namespace WICR_Estimator.ViewModels
             {
                 bool isChecked = skipMat.IsMaterialChecked;
                 skipMat.Qty = qty1;
-                skipMat.IsMaterialChecked = isChecked;
+                //skipMat.IsMaterialChecked = isChecked;
+                skipMat.UpdateCheckStatus(isChecked);
             }
         }
 
@@ -475,13 +477,19 @@ namespace WICR_Estimator.ViewModels
                 {
                     if (mat.Name == "Lip Color")
                     {
+                        mat.IsMaterialChecked = true;
                         mat.IsMaterialEnabled = false;
-
+                        
                     }
 
                     if (mat.Name == "Vista Paint Acripoxy" || mat.Name == "Aj-44A Dressing(Sealer)")
                     {
+                        if (mat.IsMaterialChecked)
+                        {
+                            lastCheckedMat = mat.Name;
+                        }
                         mat.IsMaterialChecked = false;
+                        //mat.UpdateCheckStatus(false);
                         mat.IsMaterialEnabled = true;
                     }
 
@@ -546,11 +554,17 @@ namespace WICR_Estimator.ViewModels
                 {
                     if (mat.Name == "Vista Paint Acripoxy")
                     {
+                        mat.IsMaterialChecked = true;
                         mat.IsMaterialEnabled = false;
 
                     }
                     if (mat.Name == "Lip Color" || mat.Name == "Aj-44A Dressing(Sealer)")
                     {
+                        if (mat.IsMaterialChecked)
+                        {
+                            lastCheckedMat = mat.Name;
+                        }
+                        //mat.UpdateCheckStatus(false);
                         mat.IsMaterialChecked = false;
                         mat.IsMaterialEnabled = true;
                     }
@@ -616,13 +630,19 @@ namespace WICR_Estimator.ViewModels
                 {
                     if (mat.Name == "Aj-44A Dressing(Sealer)")
                     {
+                        mat.IsMaterialChecked = true;
                         mat.IsMaterialEnabled = false;
 
                     }
 
                     if (mat.Name == "Lip Color" || mat.Name == "Vista Paint Acripoxy")
                     {
+                        if (mat.IsMaterialChecked)
+                        {
+                            lastCheckedMat = mat.Name;
+                        }
                         mat.IsMaterialChecked = false;
+                        //mat.UpdateCheckStatus(false);
                         mat.IsMaterialEnabled = true;
                     }
 
