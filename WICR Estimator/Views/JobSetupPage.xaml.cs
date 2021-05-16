@@ -52,7 +52,13 @@ namespace WICR_Estimator.Views
                 var calVal = new DataTable().Compute(txtbox1.Text ?? "0", null);
                 if (calVal != null)
                 {
-                    txtbox.Text = calVal.ToString();
+                    if (txtbox1.Text.Length==0)
+                    {
+                        txtbox.Text = "0";
+                    }
+                    else
+                        txtbox.Text = calVal.ToString();
+
                 }
             }
             catch (Exception)

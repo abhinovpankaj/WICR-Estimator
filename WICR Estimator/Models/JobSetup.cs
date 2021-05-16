@@ -151,6 +151,12 @@ namespace WICR_Estimator.Models
                 //    OnPropertyChanged("ActualPrevailingWage");
                 //    UpdateJobSetup();
                 //}
+                if (selectedData!=null)
+                {
+                    selectedData.Formula = value.ToString();
+                }
+                
+
                 Set(ref actualPrevailingWage, value);
                 UpdateJobSetup();
             }
@@ -668,6 +674,10 @@ namespace WICR_Estimator.Models
                 //    UpdateJobSetup();
 
                 //}
+                if (selectedData != null)
+                {
+                    selectedData.Formula = value.ToString();
+                }
                 Set(ref totalSqft, value);
                 setContingency();
 
@@ -707,6 +717,10 @@ namespace WICR_Estimator.Models
                 //    OnPropertyChanged("DeckPerimeter");
                 //    UpdateJobSetup();
                 //}
+                if (selectedData != null)
+                {
+                    selectedData.Formula = value.ToString();
+                }
                 Set(ref deckPerimeter, value);
                 UpdateJobSetup();
             }
@@ -728,6 +742,10 @@ namespace WICR_Estimator.Models
                 //    OnPropertyChanged("RiserCount");
                 //    UpdateJobSetup();
                 //}
+                if (selectedData != null)
+                {
+                    selectedData.Formula = value.ToString();
+                }
                 Set(ref riserCount, value);
                 UpdateJobSetup();
             }
@@ -748,6 +766,10 @@ namespace WICR_Estimator.Models
                 //    OnPropertyChanged("DeckCount");
                 //    UpdateJobSetup();
                 //}
+                if (selectedData != null)
+                {
+                    selectedData.Formula = value.ToString();
+                }
                 Set(ref deckCount, value);
                 setContingency();
                 UpdateJobSetup();
@@ -1178,6 +1200,11 @@ namespace WICR_Estimator.Models
                 //    UpdateJobSetup(); //JobSetupChange(this, EventArgs.Empty);
                 //    OnPropertyChanged("TotalSqftPlywood");
                 //}
+                if (selectedData != null)
+                {
+                    selectedData.Formula = value.ToString();
+                }
+
                 Set(ref totalSqftPlywood, value);
                 setContingency();
                 UpdateJobSetup();
@@ -1248,6 +1275,10 @@ namespace WICR_Estimator.Models
                 //    OnPropertyChanged("LinearCopingFootage");
                 //    UpdateJobSetup();
                 //}
+                if (selectedData != null)
+                {
+                    selectedData.Formula = value.ToString();
+                }
                 Set(ref linearCopingFootage, value);
                 UpdateJobSetup();
             }
@@ -1295,6 +1326,10 @@ namespace WICR_Estimator.Models
                 //    OnPropertyChanged("AdditionalTermBarLF");
                 //    UpdateJobSetup();
                 //}
+                if (selectedData != null)
+                {
+                    selectedData.Formula = value.ToString();
+                }
                 Set(ref additonalTermbarLF, value);
                 UpdateJobSetup();
             }
@@ -1327,6 +1362,10 @@ namespace WICR_Estimator.Models
                 //    OnPropertyChanged("InsideOutsideCornerDetails");
                 //    UpdateJobSetup();
                 //}
+                if (selectedData != null)
+                {
+                    selectedData.Formula = value.ToString();
+                }
                 Set(ref insideOutsideCornerDetails, value);
                 UpdateJobSetup();
             }
@@ -1374,6 +1413,10 @@ namespace WICR_Estimator.Models
                 //    OnPropertyChanged("RakerCornerBases");
                 //    UpdateJobSetup();
                 //}
+                if (selectedData != null)
+                {
+                    selectedData.Formula = value.ToString();
+                }
                 Set(ref rakerCornerBases, value);
                 UpdateJobSetup();
             }
@@ -1390,6 +1433,10 @@ namespace WICR_Estimator.Models
                 //    OnPropertyChanged("CementBoardDetail");
                 //    UpdateJobSetup();
                 //}
+                if (selectedData != null)
+                {
+                    selectedData.Formula = value.ToString();
+                }
                 Set(ref cementBoardDetail, value);
                 UpdateJobSetup();
             }
@@ -1406,6 +1453,10 @@ namespace WICR_Estimator.Models
                 //    OnPropertyChanged("RockPockets");
                 //    UpdateJobSetup();
                 //}
+                if (selectedData != null)
+                {
+                    selectedData.Formula = value.ToString();
+                }
                 Set(ref rockPockets, value);
                 UpdateJobSetup();
             }
@@ -1421,6 +1472,10 @@ namespace WICR_Estimator.Models
                 //    parasealFoundation = value;
                 //    UpdateJobSetup();
                 //}
+                if (selectedData != null)
+                {
+                    selectedData.Formula = value.ToString();
+                }
                 Set(ref parasealFoundation, value);
                 UpdateJobSetup();
             }
@@ -1437,6 +1492,10 @@ namespace WICR_Estimator.Models
                 //    OnPropertyChanged("RearMidLagging");
                 //    UpdateJobSetup();
                 //}
+                if (selectedData != null)
+                {
+                    selectedData.Formula = value.ToString();
+                }
                 Set(ref rearMidLagging, value);
                 UpdateJobSetup();
             }
@@ -1484,6 +1543,10 @@ namespace WICR_Estimator.Models
                 //    OnPropertyChanged("TotalSqftVertical");
                 //    UpdateJobSetup();
                 //}
+                if (selectedData != null)
+                {
+                    selectedData.Formula = value.ToString();
+                }
                 Set(ref totalSqftVertical, value);
                 setContingency();
 
@@ -1503,6 +1566,10 @@ namespace WICR_Estimator.Models
                 //    OnPropertyChanged("TermBarLF");
                 //    UpdateJobSetup();
                 //}
+                if (selectedData != null)
+                {
+                    selectedData.Formula = value.ToString();
+                }
                 Set(ref termBarLF, value);
                 UpdateJobSetup();
             }
@@ -1519,6 +1586,10 @@ namespace WICR_Estimator.Models
                 //    OnPropertyChanged("RebarPrepWallsLF");
                 //    UpdateJobSetup();
                 //}
+                if (selectedData != null)
+                {
+                    selectedData.Formula = value.ToString();
+                }
                 Set(ref rebarPrepWallsLF, value);
                 UpdateJobSetup();
             }
@@ -1535,6 +1606,10 @@ namespace WICR_Estimator.Models
                 //    OnPropertyChanged("SuperStopLF");
                 //    UpdateJobSetup();
                 //}
+                if (selectedData != null)
+                {
+                    selectedData.Formula = value.ToString();
+                }
                 Set(ref superStopLF, value);
                 UpdateJobSetup();
             }
@@ -1551,6 +1626,10 @@ namespace WICR_Estimator.Models
                 //    OnPropertyChanged("Penetrations");
                 //    UpdateJobSetup();
                 //}
+                if (selectedData != null)
+                {
+                    selectedData.Formula = value.ToString();
+                }
                 Set(ref penetrations, value);
                 UpdateJobSetup();
             }

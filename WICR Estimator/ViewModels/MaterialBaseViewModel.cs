@@ -3499,15 +3499,15 @@ namespace WICR_Estimator.ViewModels
             {
                 if (value!=includeDriveHrs)
                 {
-                    includeDriveHrs = value;
+                    //includeDriveHrs = value;
                     //if (isDataAvailable)
                     //{
                         CalculateCost(null);
                         CalculateCost(null);
                     //CalculateAllMaterial();
                     //}
-
-                    RaisePropertyChanged("IncludeDriveHours");
+                    Set(ref includeDriveHrs, value);
+                    //RaisePropertyChanged("IncludeDriveHours");
                 }
             }
         }

@@ -26,6 +26,7 @@ using System.Windows.Interop;
 using System.Runtime.InteropServices;
 using WICR_Estimator.DBModels;
 using WICR_Estimator.Services;
+using System.IO.Compression;
 
 namespace WICR_Estimator.ViewModels
 {
@@ -662,10 +663,15 @@ namespace WICR_Estimator.ViewModels
             }
             //OnTaskStarted("Please wait, Loading Estimate File.");
             DataContractSerializer deserializer = new DataContractSerializer(typeof(ObservableCollection<Project>));
-                
+
             FileStream fs = new FileStream(filePath, FileMode.Open);
-            XmlDictionaryReader reader = XmlDictionaryReader.CreateTextReader(fs, new XmlDictionaryReaderQuotas());
             
+            //var gZipStream = new GZipStream(fs, CompressionMode.Decompress);
+            
+                
+            
+            XmlDictionaryReader reader = XmlDictionaryReader.CreateTextReader(fs, new XmlDictionaryReaderQuotas());
+            //XmlDictionaryReader reader = XmlDictionaryReader.CreateTextReader(gZipStream, new XmlDictionaryReaderQuotas());
             try
             {
                 ObservableCollection<Project> est = (ObservableCollection<Project>)deserializer.ReadObject(reader);
@@ -888,6 +894,7 @@ namespace WICR_Estimator.ViewModels
             if (PreparedBy==null)
             {
                 OnTaskCompleted("Please fill Prepared by and then save the estimate.");
+
                 return;
             }
 
@@ -930,84 +937,86 @@ namespace WICR_Estimator.ViewModels
                     {
                         using (var writer = new XmlTextWriter(saveFileDialog1.FileName, null))
                         {
+
                             writer.Formatting = Formatting.Indented; // indent the Xml so it's human readable
-                            foreach (Project item in SelectedProjects)
-                            {
-                                item.MaterialViewModel.CalculateCost(null);
-                                item.UpdateMainTable();
-
-
-                                item.CreationDetails = JobName + ":;" + PreparedBy + ":;" + JobCreationDate.ToString();
-                                item.ProductVersion = "5.0";
-                                //Update DB
-
-
-                                if (item.EstimateID != 0)
+                            
+                                foreach (Project item in SelectedProjects)
                                 {
-                                    //Get the estimate from DB
+                                    item.MaterialViewModel.CalculateCost(null);
+                                    item.UpdateMainTable();
 
-                                    ProjectDetailsDB prjDB = new ProjectDetailsDB();
-                                    prjDB.EstimateID = item.EstimateID;
-                                    prjDB.LaborCost = item.LaborCost;
-                                    prjDB.LaborPercentage = item.LaborPercentage;
-                                    prjDB.MaterialCost = item.MaterialCost;
-                                    prjDB.SlopeCost = item.SlopeCost;
-                                    prjDB.MetalCost = item.MetalCost;
-                                    prjDB.SystemCost = item.SystemNOther;
-                                    prjDB.CostPerSqFoot = item.CostPerSqFoot;
-                                    prjDB.TotalCost = item.TotalCost;
-                                    prjDB.ProjectDetailID = item.ProjectID;
-                                    prjDB.HasContingencyDisc = item.ProjectJobSetUp.VHasContingencyDisc;
-                                    prjDB.HasPrevailingWage = item.ProjectJobSetUp.IsPrevalingWage;
-                                    prjDB.ProjectProfitMargin = item.MaterialViewModel.ProjectProfitMargin;
-                                    prjDB.ProjectName = item.ProjectJobSetUp.ProjectName;
-                                    prjDB.IsNewProject = item.ProjectJobSetUp.IsNewProject;
-                                    await HTTPHelper.PutProjectDetails(item.ProjectID, prjDB);
-                                    UpdateTaskStatus("Updating project details for Project :" + item.Name);
-                                }
-                                else
-                                {
-                                    ProjectDetailsDB prjDB = new ProjectDetailsDB();
-                                    prjDB.EstimateID = myEstimateID;
-                                    prjDB.LaborCost = item.LaborCost;
-                                    prjDB.LaborPercentage = item.LaborPercentage;
-                                    prjDB.MaterialCost = item.MaterialCost;
-                                    prjDB.SlopeCost = item.SlopeCost;
-                                    prjDB.MetalCost = item.MetalCost;
-                                    prjDB.SystemCost = item.SystemNOther;
-                                    prjDB.CostPerSqFoot = item.CostPerSqFoot;
-                                    prjDB.TotalCost = item.TotalCost;
-                                    prjDB.HasContingencyDisc = item.ProjectJobSetUp.VHasContingencyDisc;
-                                    prjDB.HasPrevailingWage = item.ProjectJobSetUp.IsPrevalingWage;
-                                    prjDB.ProjectProfitMargin = item.MaterialViewModel.ProjectProfitMargin;
-                                    prjDB.ProjectName = item.ProjectJobSetUp.ProjectName;
-                                    prjDB.IsNewProject = item.ProjectJobSetUp.IsNewProject;
-                                    ProjectDetailsDB prj = await HTTPHelper.PostProjectDetails(prjDB);
-                                    UpdateTaskStatus("Adding project details for Project: " + item.Name);
-                                    if (prj != null)
+
+                                    item.CreationDetails = JobName + ":;" + PreparedBy + ":;" + JobCreationDate.ToString();
+                                    item.ProductVersion = "5.0";
+                                    //Update DB
+
+
+                                    if (item.EstimateID != 0)
                                     {
-                                        item.ProjectID = prj.ProjectDetailID;
+                                        //Get the estimate from DB
+
+                                        ProjectDetailsDB prjDB = new ProjectDetailsDB();
+                                        prjDB.EstimateID = item.EstimateID;
+                                        prjDB.LaborCost = item.LaborCost;
+                                        prjDB.LaborPercentage = item.LaborPercentage;
+                                        prjDB.MaterialCost = item.MaterialCost;
+                                        prjDB.SlopeCost = item.SlopeCost;
+                                        prjDB.MetalCost = item.MetalCost;
+                                        prjDB.SystemCost = item.SystemNOther;
+                                        prjDB.CostPerSqFoot = item.CostPerSqFoot;
+                                        prjDB.TotalCost = item.TotalCost;
+                                        prjDB.ProjectDetailID = item.ProjectID;
+                                        prjDB.HasContingencyDisc = item.ProjectJobSetUp.VHasContingencyDisc;
+                                        prjDB.HasPrevailingWage = item.ProjectJobSetUp.IsPrevalingWage;
+                                        prjDB.ProjectProfitMargin = item.MaterialViewModel.ProjectProfitMargin;
+                                        prjDB.ProjectName = item.ProjectJobSetUp.ProjectName;
+                                        prjDB.IsNewProject = item.ProjectJobSetUp.IsNewProject;
+                                        await HTTPHelper.PutProjectDetails(item.ProjectID, prjDB);
+                                        UpdateTaskStatus("Updating project details for Project :" + item.Name);
                                     }
                                     else
                                     {
-                                        //MessageBox.Show("Failed to Post the project to DB", "Failure");
-                                        UpdateTaskStatus("Failed to Add the project: " + item.Name);
+                                        ProjectDetailsDB prjDB = new ProjectDetailsDB();
+                                        prjDB.EstimateID = myEstimateID;
+                                        prjDB.LaborCost = item.LaborCost;
+                                        prjDB.LaborPercentage = item.LaborPercentage;
+                                        prjDB.MaterialCost = item.MaterialCost;
+                                        prjDB.SlopeCost = item.SlopeCost;
+                                        prjDB.MetalCost = item.MetalCost;
+                                        prjDB.SystemCost = item.SystemNOther;
+                                        prjDB.CostPerSqFoot = item.CostPerSqFoot;
+                                        prjDB.TotalCost = item.TotalCost;
+                                        prjDB.HasContingencyDisc = item.ProjectJobSetUp.VHasContingencyDisc;
+                                        prjDB.HasPrevailingWage = item.ProjectJobSetUp.IsPrevalingWage;
+                                        prjDB.ProjectProfitMargin = item.MaterialViewModel.ProjectProfitMargin;
+                                        prjDB.ProjectName = item.ProjectJobSetUp.ProjectName;
+                                        prjDB.IsNewProject = item.ProjectJobSetUp.IsNewProject;
+                                        ProjectDetailsDB prj = await HTTPHelper.PostProjectDetails(prjDB);
+                                        UpdateTaskStatus("Adding project details for Project: " + item.Name);
+                                        if (prj != null)
+                                        {
+                                            item.ProjectID = prj.ProjectDetailID;
+                                        }
+                                        else
+                                        {
+                                            //MessageBox.Show("Failed to Post the project to DB", "Failure");
+                                            UpdateTaskStatus("Failed to Add the project: " + item.Name);
+                                        }
+
                                     }
-
+                                    item.EstimateID = myEstimateID;
                                 }
-                                item.EstimateID = myEstimateID;
-                            }
-                            UpdateTaskStatus("Saving Estimate locally.");
-                            UpdateProjectTotals();
-                            var updatedEstimate = new EstimateDB(JobName, PreparedBy, JobCreationDate, ProjectTotals);
-                            updatedEstimate.EstimateID = myEstimateID;
-                            await HTTPHelper.PutEstimate(myEstimateID, updatedEstimate);
+                                UpdateTaskStatus("Saving Estimate locally.");
+                                UpdateProjectTotals();
+                                var updatedEstimate = new EstimateDB(JobName, PreparedBy, JobCreationDate, ProjectTotals);
+                                updatedEstimate.EstimateID = myEstimateID;
+                                await HTTPHelper.PutEstimate(myEstimateID, updatedEstimate);
 
-                            serializer.WriteObject(writer, SelectedProjects);
+                                serializer.WriteObject(writer, SelectedProjects);
 
-                            writer.Flush();
-                            //UpdateTaskStatus("Project Estimate Saved Succesfully");
-
+                                writer.Flush();
+                                //UpdateTaskStatus("Project Estimate Saved Succesfully");
+                            
                         }
                     }
                     OnTaskCompleted("Project Estimate Saved Succesfully");
