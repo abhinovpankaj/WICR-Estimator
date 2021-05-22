@@ -401,6 +401,7 @@ namespace WICR_Estimator.ViewModels
                 case "TREMPRIME MULTI SURFACE (CONCRETE & OTHER)":
                 case "#191 QD INTERLAMINATE PRIMER":
                 case "GLASSMAT #II (FROM MERKOTE / LOWRYS) FLOORS YES/NO":
+                case "GLASSMAT #II (FROM MERKOTE / LOWRYS) WALLS":
                 case "PROTECTION MAT (HORIZONTAL ONLY)":
                 case "PB-4 (VERTICAL ONLY)":
                 case "TREMDRAIN 1000 (VERTICAL ONLY)":

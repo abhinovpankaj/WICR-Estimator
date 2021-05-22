@@ -198,6 +198,8 @@ namespace WICR_Estimator.ViewModels
             switch (materialName)
             {
                 //case "2.5 Galvanized Lathe (18 s.f.)":
+                case "(Stairs Only) Texture with Dexcelcrete Gray Powder and Liquid Adhesive":
+                case "Texture with Dexcelcrete Gray Powder":
                 case "Vista Paint Acripoxy (TOPCOAT)":
                     return true;
                 default:
@@ -327,7 +329,8 @@ namespace WICR_Estimator.ViewModels
             {
                 bool ischecked = SystemMaterials.Where(x => x.Name == "Vista Paint Acripoxy (TOPCOAT)").FirstOrDefault().IsMaterialChecked;
                 SystemMaterials.Where(x => x.Name == "Dexcelent II Final Coat (TOPCOAT)").FirstOrDefault().IsMaterialChecked = !ischecked;
-            }             
+            }
+            calculateRLqty();
             //CalculateLaborMinCharge(false);
             //CalculateAllMaterial();
         }
