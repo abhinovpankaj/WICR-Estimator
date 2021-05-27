@@ -40,6 +40,8 @@ namespace WICR_Estimator.Converters
                     case "Add for removing and replacing concrete (no more than 100 sq ft)":
                     case "UNIVERSAL OUTLET":
                     case "TOTAL DRAIN 2' x 50' ( In lieu of rock & pipe) \"LINEAR FEET\"":
+                    case "TOTAL DRAIN 2' x 50' ( In lieu of rock & pipe) LINEAR FEET":
+                   // case "4 INCH SCHEDULE 40 PIPE FOR ROCK POCKETS":
                     case "VISQUINE PROTECTION FOR INCLEMENT WEATHER":
                     case "UNIVERSAL OUTLETS":
                     case "TOTAL DRAIN MINUS BOTTOM TD 1000(IN LIEU OF ROCK & PIPE)":

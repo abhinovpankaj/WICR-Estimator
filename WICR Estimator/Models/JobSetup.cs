@@ -369,7 +369,7 @@ namespace WICR_Estimator.Models
             {
                 SqftLabel = "Sqft of Vertical Concrete Walls";
             }
-            else if (originalName == "Paraseal LG")
+            else if (originalName == "Paraseal LG" || originalName == "Paraseal GM")
             {
                 SqftLabel = "Sqft of Vertical Lagging Walls";
             }
@@ -523,7 +523,7 @@ namespace WICR_Estimator.Models
                     return "Linear of Deck to Wall Metal";
                 else if (originalName == "Paraseal")
                     return "LF of Perimeter Footing (Standard Paragranular Detail and Term Bar)";
-                else if (originalName == "Paraseal LG")
+                else if (originalName == "Paraseal LG"|| originalName == "Paraseal GM")
                     return "LF of Perimeter Footing (adds term bar only )";
                 else if (originalName == "Tufflex" || originalName == "201" || originalName == "250 GC" || originalName == "UPI BT")
                     return "Linear of Perimeter (Decks)";
@@ -1077,7 +1077,7 @@ namespace WICR_Estimator.Models
                     originalName == "860 Carlisle" || originalName == "UPI BT" || originalName == "Westcoat Epoxy" ||
                     originalName == "Polyurethane Injection Block" || originalName == "Xypex")
                     return "# RISERS (3.5-4 Ft Wide)";
-                else if (originalName == "Paraseal LG")
+                else if (originalName == "Paraseal LG" || originalName == "Paraseal GM")
                     return "Tie Backs (block outs must be priced separately)";
                 else if (originalName == "Dual Flex")
                     return "#  Risers Includes Metal (3.5-4 Ft Wide)";
@@ -1093,7 +1093,7 @@ namespace WICR_Estimator.Models
                 {
                     return "Sqft of Between Slab Membrane (Concrete)";
                 }
-                else if (originalName == "Paraseal LG")
+                else if (originalName == "Paraseal LG" || originalName == "Paraseal GM")
                 {
                     return "Additional Super Stop for Cold Joints in Field or Extra Lifts(LF)";
                 }
@@ -1106,7 +1106,7 @@ namespace WICR_Estimator.Models
             get
             {
                 if (originalName == "Pedestrian System" || originalName == "Parking Garage" || originalName == "Paraseal" || originalName == "Tufflex" ||
-                    originalName == "Paraseal LG" || originalName=="860 Carlisle"||originalName=="UPI BT"||originalName=="Westcoat Epoxy"
+                    originalName == "Paraseal LG" ||originalName == "Paraseal GM" || originalName=="860 Carlisle"||originalName=="UPI BT"||originalName=="Westcoat Epoxy"
                     ||originalName== "Polyurethane Injection Block" || originalName == "Xypex")
                 {
                     return System.Windows.Visibility.Collapsed;
@@ -1393,7 +1393,7 @@ namespace WICR_Estimator.Models
             get
             {
 
-                if (originalName == "Paraseal LG")
+                if (originalName == "Paraseal LG" || originalName=="Paraseal GM")
                 {
                     return System.Windows.Visibility.Visible;
                 }

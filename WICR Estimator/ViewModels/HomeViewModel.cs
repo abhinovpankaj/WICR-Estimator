@@ -1323,6 +1323,7 @@ namespace WICR_Estimator.ViewModels
             Projects.Add(new Project { Name = "Desert Crete", OriginalProjectName = "Desert Crete", GrpName = "Hill Brothers", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
             Projects.Add(new Project { Name = "Paraseal", OriginalProjectName = "Paraseal", Rank = 6, GrpName = "Tremco", MainGroup = "Below Grade", ProductVersion = "5.0" });
             Projects.Add(new Project { Name = "Paraseal LG", OriginalProjectName = "Paraseal LG", Rank = 17, GrpName = "Tremco", MainGroup = "Below Grade", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Paraseal GM", OriginalProjectName = "Paraseal GM", Rank = 17, GrpName = "Tremco", MainGroup = "Below Grade", ProductVersion = "5.0" });
             Projects.Add(new Project { Name = "860 Carlisle", OriginalProjectName = "860 Carlisle", Rank = 18, GrpName = "Carlisle", MainGroup = "Below Grade", ProductVersion = "5.0" });
             Projects.Add(new Project { Name = "201", OriginalProjectName = "201", Rank = 18, GrpName = "Tremco", MainGroup = "Below Grade", ProductVersion = "5.0" });
             Projects.Add(new Project { Name = "250 GC", OriginalProjectName = "250 GC", Rank = 19, GrpName = "Tremco", MainGroup = "Below Grade", ProductVersion = "5.0" });

@@ -44,6 +44,7 @@ namespace WICR_Estimator.ViewModels
     [KnownType(typeof(WestcoatColorMaterialViewModel))]
     [KnownType(typeof(UPIBelowTileMaterialViewModel))]
     [KnownType(typeof(IndependentMaterialViewModel))]
+    [KnownType(typeof(ParasealGMMaterialViewModel))]
     public class MaterialBaseViewModel:UndoRedoObservableObject
     {
         [DataMember]

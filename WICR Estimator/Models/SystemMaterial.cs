@@ -612,6 +612,7 @@ namespace WICR_Estimator.Models
                 case "Add for removing and replacing concrete (no more than 100 sq ft)":
                 case "UNIVERSAL OUTLET":
                 case "TOTAL DRAIN 2' x 50' ( In lieu of rock & pipe) \"LINEAR FEET\"":
+                case "TOTAL DRAIN 2' x 50' ( In lieu of rock & pipe) LINEAR FEET":
                 case "VISQUINE PROTECTION FOR INCLEMENT WEATHER":
                 case "UNIVERSAL OUTLETS":
                 case "TOTAL DRAIN MINUS BOTTOM TD 1000(IN LIEU OF ROCK & PIPE)":
@@ -623,6 +624,7 @@ namespace WICR_Estimator.Models
                 case "CALCIUM CHLORIDE TEST (MINIMUM OF 3 FOR EACH JOB)":
                 case "PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL WITH SAND BROADCAST":
                 case "Add for penetrations  -customer to determine qty":
+                //case "4 INCH SCHEDULE 40 PIPE FOR ROCK POCKETS":
                     return true;
                 default:
                     return false;

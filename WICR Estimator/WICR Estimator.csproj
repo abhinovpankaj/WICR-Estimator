@@ -244,6 +244,7 @@
     <Compile Include="ViewModels\PaletteSpecifics\AnotherCommandImplementation.cs" />
     <Compile Include="ViewModels\PaletteSpecifics\PaletteHelperExtension.cs" />
     <Compile Include="ViewModels\PaletteSpecifics\PaletteSelectorViewModel.cs" />
+    <Compile Include="ViewModels\ParasealGMMaterialViewModel.cs" />
     <Compile Include="Views\DataViews\LaborFactorsDetailsPage.xaml.cs">
       <DependentUpon>LaborFactorsDetailsPage.xaml</DependentUpon>
     </Compile>

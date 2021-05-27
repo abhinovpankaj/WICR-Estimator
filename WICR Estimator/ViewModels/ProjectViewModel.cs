@@ -222,7 +222,7 @@ namespace WICR_Estimator.ViewModels
                                   prj.SlopeViewModel.SlopeTotals,prj.ProjectJobSetUp);
                         }
                     }
-                    else if (originalProjectname=="Paraseal LG"|| originalProjectname == "Westcoat Epoxy"||originalProjectname== "Polyurethane Injection Block" || originalProjectname == "Block Wall")
+                    else if (originalProjectname=="Paraseal LG"|| originalProjectname == "Paraseal GM" || originalProjectname == "Westcoat Epoxy"||originalProjectname== "Polyurethane Injection Block" || originalProjectname == "Block Wall")
                     {
                         if (prj.MetalViewModel == null)
                         {
