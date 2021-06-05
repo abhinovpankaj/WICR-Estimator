@@ -236,14 +236,14 @@ namespace WICR_Estimator.Models
 
         }
 
-        
 
         public void RegisterForUndoRedo(Project prj)
         {
             //string[] ds = { "MetalBaseViewModel","Metals" };
             undoRedoManager = new UndoRedoManager(prj, new MyDispatcher());
+            
             //undoRedoManager.Reset();
-            UndoRedoManager.OnApplyChecks += SystemMaterial_OnApplyChecks;
+            //UndoRedoManager.OnApplyChecks += SystemMaterial_OnApplyChecks;
            
         }
         
@@ -260,6 +260,7 @@ namespace WICR_Estimator.Models
 
 
         private UndoRedoManager undoRedoManager;
+
         public int CopyCount { get; set; }
 
         public string Name { get; set; }

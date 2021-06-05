@@ -13,8 +13,10 @@ namespace WICR_Estimator.Models
     {
         public Slope()
         {
-
+            
         }
+
+        
         public Slope(string thickNess,double sqft,int deckCount,
             double pricePermix,double laborRate,double LaborRateGS)
         {
@@ -49,6 +51,7 @@ namespace WICR_Estimator.Models
                 //    changeProperty();
                 //}
                 Set(ref sqft, value);
+                
             }
         }
 

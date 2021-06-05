@@ -92,7 +92,7 @@
                         <DatePicker Margin="5" Height="30"
                             FontSize="14"
                             SelectedDate="{Binding SelectedDate, Mode=TwoWay,
-                            UpdateSourceTrigger=PropertyChanged,
+                            UpdateSourceTrigger=LostFocus,
                             TargetNullValue={x:Static System:DateTime.Now}}"                           
                             VerticalContentAlignment="Center"
                             HorizontalContentAlignment="Left"/>
@@ -306,11 +306,13 @@
                             <TextBlock Text="Additional Term Bar (LF)" Margin="5,2"
                            FontWeight="SemiBold"/>
                             <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                         Text="{Binding AdditionalTermBarLF ,UpdateSourceTrigger=PropertyChanged}"/>
+                                 LostFocus="TextBox_LostFocus"    
+                         Text="{Binding AdditionalTermBarLF ,UpdateSourceTrigger=LostFocus}"/>
                             <TextBlock Text="Inside and Outside Corner Details (LF)" Margin="5,2"
                            FontWeight="SemiBold"/>
                             <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                         Text="{Binding InsideOutsideCornerDetails ,UpdateSourceTrigger=PropertyChanged}"/>
+                                     LostFocus="TextBox_LostFocus"
+                         Text="{Binding InsideOutsideCornerDetails ,UpdateSourceTrigger=LostFocus}"/>
                             <CheckBox 
                           IsChecked="{Binding SuperStopAtFooting,
                     UpdateSourceTrigger=PropertyChanged}"
@@ -330,31 +332,38 @@
                             <TextBlock Text="Additional Term Bar (LF)" Margin="5,2"
                            FontWeight="SemiBold"/>
                             <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                         Text="{Binding AdditionalTermBarLF ,UpdateSourceTrigger=PropertyChanged}"/>
+                                     LostFocus="TextBox_LostFocus"
+                         Text="{Binding AdditionalTermBarLF ,UpdateSourceTrigger=LostFocus}"/>
                             <TextBlock Text="Rakers/Corner Braces EA" Margin="5,2"
                            FontWeight="SemiBold"/>
                             <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                         Text="{Binding RakerCornerBases ,UpdateSourceTrigger=PropertyChanged}"/>
+                                     LostFocus="TextBox_LostFocus"
+                         Text="{Binding RakerCornerBases ,UpdateSourceTrigger=LostFocus}"/>
                             <TextBlock Text="Cement Board Detail EA" Margin="5,2"
                            FontWeight="SemiBold"/>
                             <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                         Text="{Binding CementBoardDetail ,UpdateSourceTrigger=PropertyChanged}"/>
+                                     LostFocus="TextBox_LostFocus"
+                         Text="{Binding CementBoardDetail ,UpdateSourceTrigger=LostFocus}"/>
                             <TextBlock Text="Inside and Outside Corner Details (LF)" Margin="5,2"
                            FontWeight="SemiBold"/>
                             <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                         Text="{Binding InsideOutsideCornerDetails ,UpdateSourceTrigger=PropertyChanged}"/>
+                                     LostFocus="TextBox_LostFocus"
+                         Text="{Binding InsideOutsideCornerDetails ,UpdateSourceTrigger=LostFocus}"/>
                             <TextBlock Text="Rock Pockets EA." Margin="5,2"
                            FontWeight="SemiBold"/>
                             <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                         Text="{Binding RockPockets ,UpdateSourceTrigger=PropertyChanged}"/>
+                                     LostFocus="TextBox_LostFocus"
+                         Text="{Binding RockPockets ,UpdateSourceTrigger=LostFocus}"/>
                             <TextBlock Text="Labor for 3 FT Strip of Paraseal at Foundaton or Other Areas (LF)" Margin="5,2"
                            FontWeight="SemiBold"/>
                             <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                         Text="{Binding ParasealFoundation ,UpdateSourceTrigger=PropertyChanged}"/>
+                                     LostFocus="TextBox_LostFocus"
+                         Text="{Binding ParasealFoundation ,UpdateSourceTrigger=LostFocus}"/>
                             <TextBlock Text="Rear/Mid Lagging LF of beam" Margin="5,2"
                            FontWeight="SemiBold"/>
                             <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                         Text="{Binding RearMidLagging ,UpdateSourceTrigger=PropertyChanged}"/>
+                                     LostFocus="TextBox_LostFocus"
+                         Text="{Binding RearMidLagging ,UpdateSourceTrigger=LostFocus}"/>
                             <CheckBox 
                           IsChecked="{Binding SuperStopAtFooting,
                     UpdateSourceTrigger=PropertyChanged}"
@@ -375,19 +384,23 @@
                             <TextBlock Text="Term Bar (LF)" Margin="5,2"
                                         FontWeight="SemiBold"/>
                             <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     Text="{Binding TermBarLF ,UpdateSourceTrigger=PropertyChanged}"/>
+                                     LostFocus="TextBox_LostFocus"
+                                     Text="{Binding TermBarLF ,UpdateSourceTrigger=LostFocus}"/>
                             <TextBlock Text="Rebar Prep @ Walls (LF)" Margin="5,2"
                                        FontWeight="SemiBold"/>
                             <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     Text="{Binding RebarPrepWallsLF ,UpdateSourceTrigger=PropertyChanged}"/>
+                                     LostFocus="TextBox_LostFocus"
+                                     Text="{Binding RebarPrepWallsLF ,UpdateSourceTrigger=LostFocus}"/>
                             <TextBlock Text="Superstop (LF)" Margin="5,2"
                                        FontWeight="SemiBold"/>
                             <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     Text="{Binding SuperStopLF ,UpdateSourceTrigger=PropertyChanged}"/>
+                                     LostFocus="TextBox_LostFocus"
+                                     Text="{Binding SuperStopLF ,UpdateSourceTrigger=LostFocus}"/>
                             <TextBlock Text="Penetrations" Margin="5,2"
                                        FontWeight="SemiBold"/>
                             <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     Text="{Binding Penetrations ,UpdateSourceTrigger=PropertyChanged}"/>
+                                     LostFocus="TextBox_LostFocus"
+                                     Text="{Binding Penetrations ,UpdateSourceTrigger=LostFocus}"/>
 
                         </StackPanel>
 
@@ -404,15 +417,18 @@
                             <TextBlock Text="Additional Term Bar (LF)" Margin="5,2"
                                         FontWeight="SemiBold"/>
                             <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     Text="{Binding TermBarLF ,UpdateSourceTrigger=PropertyChanged}"/>
+                                     LostFocus="TextBox_LostFocus"
+                                     Text="{Binding TermBarLF ,UpdateSourceTrigger=LostFocus}"/>
                             <TextBlock Text="Inside and Outside Corner Details (LF)" Margin="5,2"
                                        FontWeight="SemiBold"/>
                             <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     Text="{Binding InsideOutsideCornerDetails ,UpdateSourceTrigger=PropertyChanged}"/>
+                                     LostFocus="TextBox_LostFocus"
+                                     Text="{Binding InsideOutsideCornerDetails ,UpdateSourceTrigger=LostFocus}"/>
                             <TextBlock Text="Penetrations" Margin="5,2"
                                        FontWeight="SemiBold"/>
                             <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     Text="{Binding Penetrations ,UpdateSourceTrigger=PropertyChanged}"/>
+                                     LostFocus="TextBox_LostFocus"
+                                     Text="{Binding Penetrations ,UpdateSourceTrigger=LostFocus}"/>
                             <CheckBox 
                                       IsChecked="{Binding SuperStopAtFooting,
                                       UpdateSourceTrigger=PropertyChanged}"
@@ -448,50 +464,58 @@
                        Text="Actual Prevailing Wage"/>
                             <TextBox Style="{StaticResource TextBoxStyle}"
                                      GotFocus="TextBox_GotFocus"
+                                     LostFocus="TextBox_LostFocus"
                           IsEnabled="{Binding IsPrevalingWage}"
                          Text="{Binding ActualPrevailingWage,
-                    UpdateSourceTrigger=PropertyChanged}"/>
+                    UpdateSourceTrigger=LostFocus}"/>
 
                             <TextBlock FontWeight="SemiBold" Margin="5,2"
                        Text="Total Sq Ft Plywood"
                            Visibility="{Binding IsPlywoodSqftVisible}"/>
                             <TextBox Style="{StaticResource TextBoxStyle}"
                                      GotFocus="TextBox_GotFocus"
+                                     LostFocus="TextBox_LostFocus"
                           Visibility="{Binding IsPlywoodSqftVisible}"
-                         Text="{Binding TotalSqftPlywood,UpdateSourceTrigger=PropertyChanged}"/>
+                         Text="{Binding TotalSqftPlywood,UpdateSourceTrigger=LostFocus}"/>
                             <StackPanel Visibility="{Binding IsSqftConcreteVisible}">
                                 <TextBlock FontWeight="SemiBold" Margin="5,2"
                        Text="{Binding SqftLabel}"/>
                                 <TextBox Style="{StaticResource TextBoxStyle}"
                                          GotFocus="TextBox_GotFocus"
-                         Text="{Binding TotalSqft,UpdateSourceTrigger=PropertyChanged}"/>
+                                         LostFocus="TextBox_LostFocus"
+                         Text="{Binding TotalSqft,UpdateSourceTrigger=LostFocus}"/>
                             </StackPanel>
                             <StackPanel Visibility="{Binding IsSqftVerticleVisible}">
                                 <TextBlock FontWeight="SemiBold" Margin="5,2"
                        Text="{Binding VerticalSqftLabel}"/>
                                 <TextBox Style="{StaticResource TextBoxStyle}"
                                          GotFocus="TextBox_GotFocus"
-                         Text="{Binding TotalSqftVertical,UpdateSourceTrigger=PropertyChanged}"/>
+                                         LostFocus="TextBox_LostFocus"
+                         Text="{Binding TotalSqftVertical,UpdateSourceTrigger=LostFocus}"/>
                             </StackPanel>
                             <TextBlock FontWeight="SemiBold" Margin="5,2"
                            Visibility="{Binding IslinearCopingFootageVisible}"
                        Text="{Binding LinearFootageText}"/>
                             <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
+                                     LostFocus="TextBox_LostFocus"
                          Visibility="{Binding IslinearCopingFootageVisible}"
-                         Text="{Binding LinearCopingFootage,UpdateSourceTrigger=PropertyChanged}"/>
+                         Text="{Binding LinearCopingFootage,UpdateSourceTrigger=LostFocus}"/>
                             <TextBlock FontWeight="SemiBold" Margin="5,2"
                        Text="{Binding DeckLabel}"
                            />
                             <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                         Text="{Binding DeckPerimeter ,UpdateSourceTrigger=PropertyChanged}"/>
+                                     LostFocus="TextBox_LostFocus"
+                         Text="{Binding DeckPerimeter ,UpdateSourceTrigger=LostFocus}"/>
                             <TextBlock FontWeight="SemiBold" Margin="5,2"
                        Text="{Binding StairRiserText}"/>
                             <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                         Text="{Binding RiserCount,UpdateSourceTrigger=PropertyChanged}"/>
+                                     LostFocus="TextBox_LostFocus"
+                         Text="{Binding RiserCount,UpdateSourceTrigger=LostFocus}"/>
                             <TextBlock FontWeight="SemiBold" Margin="5,2"
                        Text="{Binding DeckCountText}"/>
                             <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                         Text="{Binding DeckCount,UpdateSourceTrigger=PropertyChanged}"/>
+                                     LostFocus="TextBox_LostFocus"
+                         Text="{Binding DeckCount,UpdateSourceTrigger=LostFocus}"/>
                         </StackPanel>
                     </materialDesign:Card>
                     <!--<TextBlock FontWeight="SemiBold"
@@ -507,7 +531,7 @@
                            FontWeight="SemiBold"/>
                             <StackPanel Orientation="Horizontal">
                                 <TextBox Text="{Binding ElementName=markup,
-                             Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                             Path=Value, UpdateSourceTrigger=LostFocus}"
                              TextAlignment="Center"
                              Width="50" 
                              Style="{StaticResource TextBoxStyle}"
@@ -579,7 +603,9 @@
                     <TextBlock Text="Formula" Margin="2,2"/>
                 </StackPanel>
                 
-                <TextBox Text="{Binding Formula}" TextChanged="TextBox_TextChanged"
+                <TextBox Text="{Binding Formula, UpdateSourceTrigger=PropertyChanged}" 
+                         TextChanged="TextBox_TextChanged"
+                         
                          Style="{StaticResource TextBoxStyle}"/>
                 <TextBlock Text="Comments" Margin="5,2"/>
                 <TextBox Text="{Binding Comment}" Height="60"
@@ -629,7 +655,7 @@
             <TextBlock Text="NOTES TO FIELD:" FontSize="14" FontWeight="SemiBold"/>
                 <TextBox Height="30" TextWrapping="Wrap" FontSize="13"
                          Grid.Row="1"
-                         Text="{Binding NotesToBill,UpdateSourceTrigger=PropertyChanged}"
+                         Text="{Binding NotesToBill,UpdateSourceTrigger=LostFocus}"
                          Width="450" HorizontalAlignment="Left">
                     
                 </TextBox>

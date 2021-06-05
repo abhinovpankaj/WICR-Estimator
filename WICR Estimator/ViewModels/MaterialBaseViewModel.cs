@@ -311,7 +311,11 @@ namespace WICR_Estimator.ViewModels
                 BaseViewModel.IsDirty = true;
             }
             CalculateCost(null);
-            _js.TotalSalesCostTemp = TotalSale;
+            if (_js!=null)
+            {
+                _js.TotalSalesCostTemp = TotalSale;
+            }
+            
         }
         
 

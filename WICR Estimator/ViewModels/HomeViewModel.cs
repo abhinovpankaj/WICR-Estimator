@@ -649,7 +649,7 @@ namespace WICR_Estimator.ViewModels
                     Filter = "Estimator files (*.est)|*.est",
                     FilterIndex = 2,
                     RestoreDirectory = true,
-                    ReadOnlyChecked = true,
+                    //ReadOnlyChecked = true,
                     ShowReadOnly = true
                 };
 
@@ -680,7 +680,6 @@ namespace WICR_Estimator.ViewModels
                 
                 foreach (Project item in est)
                 {
-                    
                     string ver = item.ProductVersion;
                     bool adminLabor = item.MaterialViewModel.ZAddLaborMinCharge;
                     if (item.GrpName=="Copied")
@@ -693,6 +692,7 @@ namespace WICR_Estimator.ViewModels
                         Projects.Remove(savedProject);
                         Projects.Add(item);
                     }
+
                     
                     //code to rename the Material Name for paraseal LG, to make sure old estimates work.
                     if (item.OriginalProjectName=="Paraseal LG")
@@ -845,9 +845,12 @@ namespace WICR_Estimator.ViewModels
                     else
                         item.MaterialViewModel.CalculateCost(null);
                     item.ProjectJobSetUp.TotalSalesCostTemp = item.MaterialViewModel.TotalSale;
+
                     item.RegisterForUndoRedo(item);
+
+
                 }
-                
+
 
                 Project_OnSelectedProjectChange(null, null);
                 reader.Close();
@@ -871,6 +874,11 @@ namespace WICR_Estimator.ViewModels
             {
                 reader.Close();
             }
+        }
+
+        private void SlopeViewModel_GraphPropertyChanged1(object sender, PropertyChangedEventArgs e)
+        {
+           // throw new NotImplementedException();
         }
 
         

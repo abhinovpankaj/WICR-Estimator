@@ -38,7 +38,11 @@ namespace WICR_Estimator.Views
             JobSetup js = txtbox.DataContext as JobSetup;
 
             var binding = BindingOperations.GetBinding(txtbox, TextBox.TextProperty).Path.Path;
-            js.SelectedData= js.ZData.FirstOrDefault(x => x.Key == binding.ToString());
+            if (js.ZData!=null)
+            {
+                js.SelectedData = js.ZData.FirstOrDefault(x => x.Key == binding.ToString());
+            }
+          
 
            
         }
@@ -47,17 +51,25 @@ namespace WICR_Estimator.Views
         {
             TextBox txtbox1 = sender as TextBox;
             JobSetup js = this.DataContext as JobSetup;
+            var binding = BindingOperations.GetBinding(txtbox, TextBox.TextProperty).Path.Path;
             try
-            {
+            {                
                 var calVal = new DataTable().Compute(txtbox1.Text ?? "0", null);
                 if (calVal != null)
                 {
                     if (txtbox1.Text.Length==0)
                     {
-                        txtbox.Text = "0";
+                        //txtbox.Text = "0";
+                        js[binding.ToString()] = 0;
                     }
                     else
-                        txtbox.Text = calVal.ToString();
+                    {                       
+                        //txtbox.Text = calVal.ToString();
+                        js[binding.ToString()] = calVal;
+                    }
+                    
+                    
+                    
 
                 }
             }
@@ -68,6 +80,15 @@ namespace WICR_Estimator.Views
             }
            
             //js.SelectedData.CalculatedValue.ToString();
+        }
+
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            //JobSetup js = txtbox.DataContext as JobSetup;
+
+            
+            //    js.SelectedData = null;
+            
         }
     }
 }

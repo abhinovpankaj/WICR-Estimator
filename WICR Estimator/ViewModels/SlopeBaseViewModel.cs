@@ -55,6 +55,12 @@ namespace WICR_Estimator.ViewModels
             SlopeHeaderText = "Slope Sand Cement Scrim";
         }
 
+        //[OnDeserializing]
+        //internal void OnDeserializingCallBack(StreamingContext streamingContext)
+        //{
+        //    this.Slopes = new ObservableCollection<Slope>();
+        //}
+
         public SlopeBaseViewModel(DBData dbData)
         {
             this.dbData = dbData;

@@ -73,6 +73,13 @@ namespace WICR_Estimator.ViewModels
 
             EnabledProjects = sender as ObservableCollection<Project>;
 
+            //if (EnabledProjects.Count>0)
+            //{
+            //    foreach (var item in EnabledProjects)
+            //    {
+            //        item.RegisterForUndoRedo(item);
+            //    }
+            //}
             //if (EnabledProjects != null)
             //{
             //    EnabledProjects.CollectionChanged += EnabledProjects_CollectionChanged;

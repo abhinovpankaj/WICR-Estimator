@@ -150,7 +150,8 @@ namespace WICR_Estimator.ViewModels
                 case "Stucco Material Remove and replace (LF)":
                 case "GS13 Clear Sealer":
                 case "Select Y for protection coat over membrane below tile (GU80-1 TOP COAT)":
-                //case "Color Jar Pigment, 1 JAR per PAIL OF GS88":
+                case "Caulk, dymonic 100":
+                    //case "Color Jar Pigment, 1 JAR per PAIL OF GS88":
                     return false;
                 case "2.5 Galvanized Lathe":
                 case "Staples":
@@ -166,6 +167,7 @@ namespace WICR_Estimator.ViewModels
         {
             switch (materialName)
             {
+                case "Caulk, dymonic 100":
                 case "PD Resin (If dimension exceeds 20 ft in any direction or for below tile)":
                 case "2.5 Galvanized Lathe":
                 case "GS13 Clear Sealer":
