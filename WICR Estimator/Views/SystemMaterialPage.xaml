@@ -276,14 +276,14 @@
                                     Header="Material Price $">
                     </DataGridTextColumn>
 
-                    <!--<DataGridTextColumn Header="Material Extension" Binding="{Binding MaterialExtension,
+                    <DataGridTextColumn Header="Material Extension" Binding="{Binding MaterialExtension,
                     UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"
                                     IsReadOnly="True" KeyboardNavigation.IsTabStop="False">
-                    </DataGridTextColumn>-->
-                    <DataGridTextColumn Header="Weight" Binding="{Binding Weight,UpdateSourceTrigger=PropertyChanged}"
+                    </DataGridTextColumn>
+                    <!--<DataGridTextColumn Header="Weight" Binding="{Binding Weight,UpdateSourceTrigger=PropertyChanged}"
                                     IsReadOnly="True" KeyboardNavigation.IsTabStop="False">
 
-                    </DataGridTextColumn>
+                    </DataGridTextColumn>-->
                     <DataGridTextColumn Header="Extension" Binding="{Binding FreightExtension,
                     UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:n2}}"
                                     IsReadOnly="True" KeyboardNavigation.IsTabStop="False">

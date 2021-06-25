@@ -31,10 +31,10 @@
     <InstallUrl>http://estimator.wicr.net/installer/</InstallUrl>
     <UpdateUrl>http://estimator.wicr.net/installer/</UpdateUrl>
     <PublisherName>WICR</PublisherName>
-    <MinimumRequiredVersion>1.0.0.47</MinimumRequiredVersion>
+    <MinimumRequiredVersion>1.0.0.60</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>50</ApplicationRevision>
+    <ApplicationRevision>61</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -554,12 +554,12 @@
   <ItemGroup>
     <PublishFile Include="SummaryRange.xml">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
   </ItemGroup>

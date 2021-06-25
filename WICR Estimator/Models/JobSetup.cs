@@ -185,7 +185,7 @@ namespace WICR_Estimator.Models
                 {
                     if (ZData != null)
                     {
-                        var myData = ZData.FirstOrDefault(x => x.Key == "ActualPrevailingWage");
+                        var mydata = ZData.FirstOrDefault(x => x.Key == "ActualPrevailingWage");
 
                         if (!calledFromBackend)
                         {
@@ -796,8 +796,8 @@ namespace WICR_Estimator.Models
         }
         
         
-        private int riserCount;
-        public int RiserCount
+        private double riserCount;
+        public double RiserCount
         {
             get
             {

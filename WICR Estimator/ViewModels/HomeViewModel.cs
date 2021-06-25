@@ -401,12 +401,17 @@ namespace WICR_Estimator.ViewModels
 
         private void GenerateSummary(object obj)
         {
+           // OnTaskStarted("Summary Sheet ");
+           //Task.Run(()=>WriteToSummary());
+            //OnTaskCompleted("Summary Created.");
+
             WriteToSummary();
+            
         }
-       
-       
-       
-        
+
+
+
+
         private bool canReplicate(object obj)
         {
             bool isEnabled = false;
@@ -1613,7 +1618,7 @@ namespace WICR_Estimator.ViewModels
                 else
                     dataRange.Offset[k, 3].Value = item.MaterialExtension != 0 ? item.MaterialPrice:0;
 
-                dataRange.Offset[k, 4].Value = item.MaterialExtension;
+                dataRange.Offset[k, 4].Value = item.IsMaterialChecked? item.MaterialExtension:0;
                 k = k + 1;
             }
             k = k + dataRange.Row;
@@ -2230,18 +2235,19 @@ namespace WICR_Estimator.ViewModels
                 System.Windows.Forms.MessageBox.Show("Failed to clear Empty Rows" + "\n" + ex.Message, "Failure");
             }
         }
+        
         private void WriteToSummary()
         {
             //WaitWindow ww = new WaitWindow();
             //ww.Show();
-            OnTaskStarted("Creating WICR Estimate Summary File.");
-            Thread.Sleep(1000);
+            //OnTaskStarted("Creating WICR Estimate Summary File.");
+            //Thread.Sleep(1000);
             
             Excel.Workbook summaryWb;
             Excel.Worksheet ws;
             try
             {
-                 UpdateTaskStatus("Creating WICR Estimate Summary Template File.");
+                 //UpdateTaskStatus("Creating WICR Estimate Summary Template File.");
                 if (exlApp == null)
                 {
                     exlApp = new Microsoft.Office.Interop.Excel.Application();
@@ -2327,12 +2333,12 @@ namespace WICR_Estimator.ViewModels
                 {
                     //System.Windows.MessageBox.Show("Summary Sheet won't be saved now", "Save Cancelled",
                     //    System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
-                    OnTaskCompleted("User canceled file save,Summary Sheet won't be saved now.");
+                   OnTaskCompleted("User canceled file save,Summary Sheet won't be saved now.");
                 }
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show(ex.Message +"\n\n"+ "Please SaveAs different name or close the file before Saving the Summary File.", "Summary File Save", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //System.Windows.Forms.MessageBox.Show(ex.Message +"\n\n"+ "Please SaveAs different name or close the file before Saving the Summary File.", "Summary File Save", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 OnTaskCompleted("Please SaveAs different name or close the file before Saving the Summary File.\n" + ex.Message);
             }
             finally

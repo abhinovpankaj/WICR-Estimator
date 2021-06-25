@@ -57,7 +57,19 @@ namespace WICR_Estimator
                 switch (res)
                 {
                     case MessageDialogResult.Affirmative:
+                        var hm1 = vm.PageViewModels.FirstOrDefault(x => x.Name == "Home") as HomeViewModel;
+                        if (hm1 != null)
+                        {
+                            if (hm1.PreparedBy == null || hm1.PreparedBy == string.Empty)
+                            {
+                                vm.OnTaskCompleted("Please fill Prepared by and then save the estimate.");
+                                return;
+                            }
+                        }
+
+                        
                         await vm.SaveEstimates(ViewModels.HomeViewModel.MyselectedProjects);
+
                         isClosingConfirmed = true;
                         this.Close();
                         break;
