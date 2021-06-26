@@ -331,7 +331,7 @@
                         Margin="2" Width="120" Style="{StaticResource MaterialDesignRaisedDarkButton}"
                         Command="{Binding DataContext.ChangePageCommand,
                         RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                        CommandParameter="{Binding PageViewModels[7]}">
+                        CommandParameter="{Binding PageViewModels[6]}">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Home" Foreground="{StaticResource SecondaryHueMidBrush}"

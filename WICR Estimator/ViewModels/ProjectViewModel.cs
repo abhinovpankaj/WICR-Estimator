@@ -33,6 +33,7 @@ namespace WICR_Estimator.ViewModels
             //IsAdminloggedIn = (bool)sender ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden; 
             var user = (UserDB)sender;
             IsAdminloggedIn = user.IsAdmin;
+            
         
         }
          

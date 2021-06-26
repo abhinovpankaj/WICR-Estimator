@@ -26,12 +26,27 @@ namespace WICR_Estimator.ViewModels
         }
         public LoginPageViewModel()
         {
+            Username = "";
+            Password = "";
+
             if (Properties.Settings.Default.SaveCredentials)
             {
                 Username = Properties.Settings.Default.Username;
                 Password = Properties.Settings.Default.Password;
+                IsAdmin= Properties.Settings.Default.IsAdmin;
                 SaveCredentials = Properties.Settings.Default.SaveCredentials;
                 OnPropertyChanged("SaveCredentials");
+                if (Username.Length>0 && Password.Length>0)
+                {
+                    UserDB user = new UserDB();
+                    user.Username = Username;
+                    user.IsAdmin = IsAdmin;
+                    if (OnLoggedIn != null)
+                    {
+                        OnLoggedIn(user, EventArgs.Empty);
+
+                    }
+                }
             }
 
         }
@@ -61,6 +76,19 @@ namespace WICR_Estimator.ViewModels
                 {
                     _errorMessage = value;
                     OnPropertyChanged("ErrorMessage");
+                }
+            }
+        }
+        private bool _isadmin;
+        public bool IsAdmin
+        {
+            get { return _isadmin; }
+            set
+            {
+                if (_isadmin!=value)
+                {
+                    _isadmin = value;
+                    OnPropertyChanged("IsAdmin");
                 }
             }
         }
@@ -124,6 +152,7 @@ namespace WICR_Estimator.ViewModels
             //}
             OnTaskStarted("Signing In...");
             LoginFailed = false;
+            ErrorMessage = "";
             var passwordBox = obj as PasswordBox;
             Password = passwordBox.Password;
             UserDB user = new UserDB();
@@ -143,6 +172,7 @@ namespace WICR_Estimator.ViewModels
                 
                 Properties.Settings.Default.Username=Username;
                 Properties.Settings.Default.Password=Password;
+                Properties.Settings.Default.IsAdmin=user.IsAdmin;
                 Properties.Settings.Default.SaveCredentials = SaveCredentials;
                 Properties.Settings.Default.Save();
 

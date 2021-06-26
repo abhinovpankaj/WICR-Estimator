@@ -116,15 +116,26 @@ namespace WICR_Estimator
                     Source = new Uri("pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Dialogs.xaml")
                 };
 
+            LoginPageViewModel.OnLoggedIn += LoginPage_OnLoggedIn;
+            LoginPageViewModel.ProgressStarted += LoginPageViewModel_ProgressStarted;
+
             // Add available pages
             PageViewModels.Add(new PaletteSelectorViewModel());
             PageViewModels.Add(new ProjectViewModel(HomeViewModel.MyselectedProjects));
             PageViewModels.Add(new MaterialDetailsPageViewModel());
-            PageViewModels.Add(new LoginPageViewModel());
+            
             PageViewModels.Add(new SlopeDetailsPageViewModel());
             PageViewModels.Add(new MetalDetailsPageViewModel());
             PageViewModels.Add(new LaborFactorDetailsPageViewModel());
             PageViewModels.Add(new HomeViewModel());
+            PageViewModels.Add(new LoginPageViewModel());
+
+
+
+            BaseViewModel.TaskStarted += PageViewModel_TaskStarted;
+            BaseViewModel.TaskCompleted += PageViewModel_TaskCompleted;
+            BaseViewModel.UpdateTask += PageViewModel_UpdateTaskStatus;
+
             // Set starting page
             var filePath = Path.GetTempPath() + "wicrlogin.json";
             if (File.Exists(filePath))
@@ -141,18 +152,13 @@ namespace WICR_Estimator
                 Username = myObj.Username;
                 OnPropertyChanged("Username");
                 OnPropertyChanged("IsUserAdmin");
-                CurrentPageViewModel = PageViewModels[7];
+                CurrentPageViewModel = PageViewModels[6];
                 ProjectViewModel.IsAdminloggedIn = IsUserAdmin;
             }
             else
-                CurrentPageViewModel = PageViewModels[3];
+                CurrentPageViewModel = PageViewModels[7];
             CurWindowState = WindowState.Maximized;
 
-            LoginPageViewModel.OnLoggedIn += LoginPage_OnLoggedIn;
-            LoginPageViewModel.ProgressStarted += LoginPageViewModel_ProgressStarted;
-            BaseViewModel.TaskStarted += PageViewModel_TaskStarted;
-            BaseViewModel.TaskCompleted += PageViewModel_TaskCompleted;
-            BaseViewModel.UpdateTask += PageViewModel_UpdateTaskStatus;
             IsOpen = false;
             GetPriceVersion();
 
@@ -256,6 +262,10 @@ namespace WICR_Estimator
 
         private void LoginPage_OnLoggedIn(object sender, EventArgs e)
         {
+            if (PageViewModels.Count<4)
+            {
+                return;
+            }
             if (!loginFailed)
             {
                 var user = (UserDB)sender;
@@ -272,7 +282,9 @@ namespace WICR_Estimator
                 Username = user.Username;
                 OnPropertyChanged("Username");
                 OnPropertyChanged("IsUserAdmin");
-                CurrentPageViewModel = PageViewModels[7];
+
+
+                CurrentPageViewModel = PageViewModels[6];
             }
 
             CloseAsync();
@@ -522,7 +534,7 @@ namespace WICR_Estimator
             {
                 IsUserLoggedIn = false;
                 OnPropertyChanged("IsUserLoggedIn");
-                ChangeViewModel(PageViewModels[3]);
+                ChangeViewModel(PageViewModels[7]);
                 //delete login file
                 File.Delete(Path.GetTempPath() + "wicrlogin.json");
             }

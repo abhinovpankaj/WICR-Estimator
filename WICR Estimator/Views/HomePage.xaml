@@ -392,12 +392,17 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                     <ComboBoxItem Content="davidm"/>
                     <ComboBoxItem Content="chriss" />
                     <ComboBoxItem Content="davidd"/>
-                    <ComboBoxItem Content="dianau"/>
                     <ComboBoxItem Content="erniep" />
                     <ComboBoxItem Content="guestuser1"/>
                     <ComboBoxItem Content="guestuser2"/>
                     <ComboBoxItem Content="guestuser3"/>
                     <ComboBoxItem Content="guestadmin"/>
+                    <ComboBoxItem Content="admin"/>
+                    <ComboBoxItem Content="feliciab" />
+                    <ComboBoxItem Content="tammya"/>
+                    <ComboBoxItem Content="nancyr"/>
+                    <ComboBoxItem Content="aracelim" />
+                    <ComboBoxItem Content="deionr"/>
                 </ComboBox>
             </StackPanel>
             <DatePicker Height="30"
