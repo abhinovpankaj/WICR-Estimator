@@ -587,8 +587,8 @@ namespace WICR_Estimator.ViewModels
                 Metals[index].ProductionRate = metal.ProductionRate;
                 Metals[index].LaborRate = metal.LaborRate;
 
-                //sysMet.MaterialPrice = metal.MaterialPrice;
-                Metals[index].UpdateMaterialPrice(metal.MaterialPrice);
+                Metals[index].MaterialPrice = metal.MaterialPrice;
+                //Metals[index].UpdateMaterialPrice(metal.MaterialPrice);
 
         }
         private void UpdateAddonMe(AddOnMetal metal,int index)
@@ -597,8 +597,8 @@ namespace WICR_Estimator.ViewModels
             AddOnMetals[index].ProductionRate = metal.ProductionRate;
             AddOnMetals[index].LaborRate = metal.LaborRate;
 
-            //sysMet.MaterialPrice = metal.MaterialPrice;
-            AddOnMetals[index].UpdateMaterialPrice(metal.MaterialPrice);
+            AddOnMetals[index].MaterialPrice = metal.MaterialPrice;
+            //AddOnMetals[index].UpdateMaterialPrice(metal.MaterialPrice);
 
            
         }

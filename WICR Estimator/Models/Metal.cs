@@ -155,14 +155,14 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                //if (materialPrice != value)
-                //{
-                //    materialPrice = value;
-                //    RaisePropertyChanged("MaterialPrice");
-                //    RaisePropertyChanged("MaterialExtension");
-                //}
-                Set(ref materialPrice, value);
-                RaisePropertyChanged("MaterialExtension");
+                if (materialPrice != value)
+                {
+                    materialPrice = value;
+                    RaisePropertyChanged("MaterialPrice");
+                    RaisePropertyChanged("MaterialExtension");
+                }
+                //Set(ref materialPrice, value);
+                //RaisePropertyChanged("MaterialExtension");
             }
         }
 

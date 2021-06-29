@@ -288,15 +288,16 @@ namespace WICR_Estimator.ViewModels
                 case "TREMDRAIN 1000 (HORIZONTAL ONLY)":
                     return true;
                 case "Vulkem Tremproof 250 GC L 30 MILS":
-                case "Vulkem Tremproof 201 L 30 MILS":
+                //case "Vulkem Tremproof 201 L 30 MILS":
                 case "Vulkem Tremproof 250 GC L 30 MILS(Additional)":
-                case "Vulkem Tremproof 201 L 30 MILS(Additional)":
-                    return totalSqft + totalPlywoodSqft > 0 ? true : false;
+                //case "Vulkem Tremproof 201 L 30 MILS(Additional)":
+                    //return totalSqft + totalPlywoodSqft > 0 ? true : false;
                 case "Vulkem Tremproof 250 GC R 30 MILS":
-                case "Vulkem Tremproof 201 R 30 MILS":
+                //case "Vulkem Tremproof 201 R 30 MILS":
                 case "Vulkem Tremproof 250 GC R 30 MILS(Additional)":
-                case "Vulkem Tremproof 201 R 30 MILS(Additional)":
-                    return totalSqftVertical + riserCount > 0 ? true : false;
+                    //case "Vulkem Tremproof 201 R 30 MILS(Additional)":
+                    //return totalSqftVertical + riserCount > 0 ? true : false;
+                    return true;
                 default:
                     return false;
             }

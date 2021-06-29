@@ -472,9 +472,9 @@ namespace WICR_Estimator.Models
                 //    OnPropertyChanged("MaterialExtension");
                 //}
                 
-                if (specialMaterialPricing != 0)
+                if (value != 0)
                 {
-                    matExt = SpecialMaterialPricing * Qty;
+                    matExt = value * Qty;
                 }
                 else
                 {
