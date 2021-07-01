@@ -570,9 +570,12 @@ namespace WICR_Estimator.Models
 
         public void UpdateQuantity(double qty)
         {
+
             this.qtysm = qty;
+            RaisePropertyChanged("Qty");
             if (allowHooking(Name))
             {
+
                 if (qtysm != 0)
                 {
                     ismaterialchecked = true;
@@ -580,6 +583,7 @@ namespace WICR_Estimator.Models
                 else
                     ismaterialchecked = false;              
             }
+            
             matExt = qty * materialPrice;
             extension = qty * weight;
         }
