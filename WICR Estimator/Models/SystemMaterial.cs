@@ -584,8 +584,8 @@ namespace WICR_Estimator.Models
                     ismaterialchecked = false;              
             }
             
-            matExt = qty * materialPrice;
-            extension = qty * weight;
+            MaterialExtension = qty * materialPrice;
+            FreightExtension = qty * weight;
         }
         
         public bool allowHooking(string matName)
