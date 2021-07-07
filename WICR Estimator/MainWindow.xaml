@@ -365,7 +365,7 @@
                         CommandParameter="{Binding }" ToolTip="Save Estimate" VerticalContentAlignment="Top">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="ContentSaveAll" Width="22" Height="22"
+                            <materialDesign:PackIcon Kind="ContentSave" Width="22" Height="22"
                                                              Foreground="{StaticResource SecondaryHueMidBrush}"
                                                              VerticalAlignment="Center"/>
                             <TextBlock Text="Save" Margin="10,0,0,0"
@@ -373,7 +373,22 @@
                         </StackPanel>
                     </Button.Content>
                 </Button>
-                <!--<Separator Style="{StaticResource MaterialDesignLightSeparator}"/>-->
+                <Button x:Name="SaveAs" Margin="2" Width="120" Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                        Command="{Binding DataContext.SaveAsEstimateCommand,
+                        RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                        CommandParameter="{Binding }" ToolTip="SaveAs Estimate" VerticalContentAlignment="Top">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ContentSaveAll" Width="22" Height="22"
+                                                             Foreground="{StaticResource SecondaryHueMidBrush}"
+                                                             VerticalAlignment="Center"/>
+                            <TextBlock Text="SaveAs" Margin="10,0,0,0"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <Separator Style="{StaticResource MaterialDesignLightSeparator}"/>
+                
                 <Button Margin="10,2,2,2" Width="130" Style="{StaticResource MaterialDesignRaisedDarkButton}"
                         VerticalContentAlignment="Top"
                         Command="{Binding DataContext.LogoutCommand,

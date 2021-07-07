@@ -33,6 +33,7 @@ namespace WICR_Estimator
         private ICommand _changePageCommand;
         private DelegateCommand _restartAppCommand;
         private DelegateCommand _saveEstimateCommand;
+        private DelegateCommand _saveAsEstimateCommand;
         private DelegateCommand _updatePriceVersionCommand;
         private IPageViewModel _currentPageViewModel;
         private List<IPageViewModel> _pageViewModels;
@@ -198,7 +199,8 @@ namespace WICR_Estimator
                         loginFailed = true;
                     }
                 }
-
+                else
+                    loginFailed = false;
                 //if (controller?.IsOpen == true)
                 //{
                 //    await controller.CloseAsync();
@@ -444,6 +446,21 @@ namespace WICR_Estimator
                 return _restartAppCommand;
             }
         }
+        public DelegateCommand SaveAsEstimateCommand
+        {
+            get
+            {
+                if (_saveAsEstimateCommand == null)
+                {
+                    _saveAsEstimateCommand = new DelegateCommand(SaveAsEstimate, canSaveAs);
+                }
+
+                return _saveAsEstimateCommand;
+            }
+        }
+
+       
+
         public DelegateCommand SaveEstimateCommand
         {
             get
@@ -545,10 +562,39 @@ namespace WICR_Estimator
         {
             if (ViewModels.BaseViewModel.IsDirty)
             {
-                return true;
+                if (ViewModels.HomeViewModel.MyselectedProjects!=null)
+                {
+                    if (ViewModels.HomeViewModel.MyselectedProjects.Count>0)
+                    {
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+                else
+                    return false;
             }
             else
                 return false;
+        }
+
+        private bool canSaveAs(object obj)
+        {
+            if (ViewModels.HomeViewModel.MyselectedProjects != null)
+            {
+                if (ViewModels.HomeViewModel.MyselectedProjects.Count > 0)
+                {
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else
+                return false;
+        }
+        private async void SaveAsEstimate(object obj)
+        {
+            await SaveEstimates(ViewModels.HomeViewModel.MyselectedProjects,true);
         }
         private async void SaveEstimate(object obj)
         {
@@ -620,7 +666,7 @@ namespace WICR_Estimator
             }
         }
 
-        public async Task SaveEstimates(ObservableCollection<Project> SelectedProjects)
+        public async Task SaveEstimates(ObservableCollection<Project> SelectedProjects, bool isSaveAs=false)
         {
 
             DateTime? JobCreationDate = DateTime.Now;
@@ -662,6 +708,30 @@ namespace WICR_Estimator
                 else
                     return;
             }
+            else
+            {
+                if (isSaveAs)
+                {
+                    Microsoft.Win32.SaveFileDialog saveFileDialog1 = new Microsoft.Win32.SaveFileDialog();
+                    saveFileDialog1.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                    saveFileDialog1.Title = "Save Project Estimate";
+                    saveFileDialog1.CheckFileExists = false;
+                    saveFileDialog1.CheckPathExists = false;
+                    //saveFileDialog1.DefaultExt = "txt";
+                    saveFileDialog1.Filter = "Project files (*.est)|*.est|All files (*.*)|*.*";
+                    //saveFileDialog1.FilterIndex = 2;
+                    saveFileDialog1.RestoreDirectory = true;
+                    saveFileDialog1.ShowDialog();
+
+
+                    if (saveFileDialog1.FileName != "")
+                    {
+                        HomeViewModel.filePath = saveFileDialog1.FileName;
+                    }
+                    else
+                        return;
+                }
+            }
             //controller = await dialogCoordinator.ShowProgressAsync(this, "WICR",
             //   "Wait! Saving Estimate...",false,dialogSettings);
             try
@@ -682,11 +752,6 @@ namespace WICR_Estimator
                         JobCreationDate = hm.JobCreationDate;
                         ProjectTotals = hm.ProjectTotals;
 
-                        //if (PreparedBy == null)
-                        //{
-                        //    OnTaskCompleted("Please fill Prepared by and then save the estimate.");
-                        //    return;
-                        //}
                     }
                 }
                 var serializer = new DataContractSerializer(typeof(ObservableCollection<Project>));
@@ -823,6 +888,8 @@ namespace WICR_Estimator
             //await controller.CloseAsync();
 
         }
+
+       
         #endregion
         private void SetBalloonTip(string tip)
         {

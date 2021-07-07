@@ -531,7 +531,7 @@
                            FontWeight="SemiBold"/>
                             <StackPanel Orientation="Horizontal">
                                 <TextBox Text="{Binding ElementName=markup,
-                             Path=Value, UpdateSourceTrigger=LostFocus}"
+                             Path=Value, UpdateSourceTrigger=PropertyChanged}"
                              TextAlignment="Center"
                              Width="50" 
                              Style="{StaticResource TextBoxStyle}"

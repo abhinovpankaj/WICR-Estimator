@@ -20,6 +20,7 @@ namespace WICR_Estimator.ViewModels.PaletteSpecifics
 
             PaletteHelper paletteHelper = new PaletteHelper();
             ITheme theme = paletteHelper.GetTheme();
+            
 
             IsDarkTheme = theme.GetBaseTheme() == BaseTheme.Dark;
             var themeManager = paletteHelper.GetThemeManager();
@@ -41,6 +42,8 @@ namespace WICR_Estimator.ViewModels.PaletteSpecifics
                 if (this.MutateVerbose(ref _isDarkTheme, value, e => PropertyChanged?.Invoke(this, e)))
                 {
                     ModifyTheme(theme => theme.SetBaseTheme(value ? Theme.Dark : Theme.Light));
+                    Properties.Settings.Default.Theme1 = !IsDarkTheme ? "Light" : "Dark";
+                    Properties.Settings.Default.Save();
                 }
             }
         }
@@ -49,15 +52,27 @@ namespace WICR_Estimator.ViewModels.PaletteSpecifics
 
         public ICommand ApplyPrimaryCommand { get; } = new AnotherCommandImplementation(o => ApplyPrimary((Swatch)o));
 
-        private static void ApplyPrimary(Swatch swatch)
-            => ModifyTheme(theme => theme.SetPrimaryColor(swatch.ExemplarHue.Color));
+        
+
+        public static void ApplyPrimary(Swatch swatch)
+        {
+            ModifyTheme(theme => theme.SetPrimaryColor(swatch.ExemplarHue.Color));
+            Properties.Settings.Default.Primary1 = swatch.ExemplarHue.Color.ToString(); ;
+            Properties.Settings.Default.Save();
+        }
+             
 
         public ICommand ApplyAccentCommand { get; } = new AnotherCommandImplementation(o => ApplyAccent((Swatch)o));
 
         public string Name =>  "Palette Selector";
 
         private static void ApplyAccent(Swatch swatch)
-            => ModifyTheme(theme => theme.SetSecondaryColor(swatch.AccentExemplarHue.Color));
+        {
+            ModifyTheme(theme => theme.SetSecondaryColor(swatch.AccentExemplarHue.Color));
+            Properties.Settings.Default.Accent1 = swatch.AccentExemplarHue.Color.ToString();
+            Properties.Settings.Default.Save();
+        }
+            
 
         private static void ModifyTheme(Action<ITheme> modificationAction)
         {
@@ -67,6 +82,7 @@ namespace WICR_Estimator.ViewModels.PaletteSpecifics
             modificationAction?.Invoke(theme);
 
             paletteHelper.SetTheme(theme);
+            
         }
     }
 

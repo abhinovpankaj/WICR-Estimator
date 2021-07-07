@@ -70,5 +70,41 @@ namespace WICR_Estimator.Properties {
                 this["IsAdmin"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Primary1 {
+            get {
+                return ((string)(this["Primary1"]));
+            }
+            set {
+                this["Primary1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Accent1 {
+            get {
+                return ((string)(this["Accent1"]));
+            }
+            set {
+                this["Accent1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Light")]
+        public string Theme1 {
+            get {
+                return ((string)(this["Theme1"]));
+            }
+            set {
+                this["Theme1"] = value;
+            }
+        }
     }
 }

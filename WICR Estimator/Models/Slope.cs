@@ -51,7 +51,8 @@ namespace WICR_Estimator.Models
                 //    changeProperty();
                 //}
                 Set(ref sqft, value);
-                
+                changeProperty();
+
             }
         }
 
@@ -71,6 +72,7 @@ namespace WICR_Estimator.Models
                 //    changeProperty();
                 //}
                 Set(ref deckCount, value);
+                changeProperty();
             }
         }
         public double Total

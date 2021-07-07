@@ -1,5 +1,6 @@
 ﻿using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -33,12 +34,31 @@ namespace WICR_Estimator
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
+        private readonly PaletteHelper _paletteHelper = new PaletteHelper();
         public MainWindow()
         {
             InitializeComponent();
             
             this.DataContext = new MainWindowViewModel(DialogCoordinator.Instance);
+
+            //Apply Pallete
+            var accentColor = Properties.Settings.Default.Accent1;
+            var primaryColor = Properties.Settings.Default.Primary1;
+            if (primaryColor.Length==0)
+            {
+                return;
+            }
+            System.Windows.Media.Color color = (Color)System.Windows.Media.ColorConverter.ConvertFromString(accentColor);
+            ITheme theme = _paletteHelper.GetTheme();
+            theme.SetSecondaryColor(color);
             
+
+            color = (Color)System.Windows.Media.ColorConverter.ConvertFromString(primaryColor);
+            theme.SetPrimaryColor(color);
+            _paletteHelper.SetTheme(theme);
+
+
+
         }
         private bool isClosingConfirmed;
         private async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

@@ -187,6 +187,7 @@ namespace WICR_Estimator.ViewModels
                 OnLoggedIn(user, EventArgs.Empty);
 
             }
+            OnTaskCompleted("");
         }
     }
 
