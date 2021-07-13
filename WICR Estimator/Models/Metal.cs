@@ -11,7 +11,7 @@ namespace WICR_Estimator.Models
     [Serializable]
     public class Metal: UndoRedoObservableObject
     {
-        
+        public static event EventHandler onUnitChanged;
         public double LaborRate { set; get; }
         public MetalType Type { get; set; }
         public string Name { get; set; }
@@ -86,8 +86,13 @@ namespace WICR_Estimator.Models
                     Set(ref units, value);
                     RaisePropertyChanged("LaborExtension");
                     RaisePropertyChanged("MaterialExtension");
+                    if (onUnitChanged!=null)
+                    {
+                        onUnitChanged(this.Name, EventArgs.Empty);
+                    }
                 }
                 
+
             }
         }
         private double pr;

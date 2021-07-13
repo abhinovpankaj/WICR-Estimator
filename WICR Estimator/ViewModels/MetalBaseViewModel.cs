@@ -74,6 +74,13 @@ namespace WICR_Estimator.ViewModels
             riserCount = 0;
             stairWidth = 4.5;
             CheckboxCommand = new DelegateCommand(ApplyCheckUnchecks, canApply);
+            Metal.onUnitChanged += Metal_onUnitChanged;
+        }
+
+        public void Metal_onUnitChanged(object sender, EventArgs e)
+        {
+            if (miscMetals.Count>0)
+                MiscMetals[0].Units = getUnits(2);
         }
 
 

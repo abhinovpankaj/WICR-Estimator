@@ -40,6 +40,7 @@ namespace WICR_Estimator.ViewModels
             //        item.Units = 0;
             //    }
             //}
+            Metal.onUnitChanged += Metal_onUnitChanged;
             CalculateCost(null);
             if (!js.IsProjectIndependent)
             {

@@ -510,9 +510,12 @@ namespace WICR_Estimator
             switch (res)
             {
                 case MessageDialogResult.Affirmative:
-                    Process.Start(System.Windows.Forms.Application.ExecutablePath);
-                    Thread.Sleep(1000);
+                    System.Windows.Forms.Application.Restart();
                     Environment.Exit(-1);
+                    //Thread.Sleep(1000);
+                    //Process.Start(System.Windows.Forms.Application.ExecutablePath);
+                    
+                    
                     break;
 
                 default:
@@ -969,25 +972,25 @@ namespace WICR_Estimator
             {
                 
                 case "Estimates":
-                    ChangeViewModel(PageViewModels[7]);
+                    ChangeViewModel(PageViewModels[6]);
                     break;
                 case "ProjectList":
                     ChangeViewModel(PageViewModels[1]);
                     break;
                 case "Login":
-                    ChangeViewModel(PageViewModels[3]);
+                    ChangeViewModel(PageViewModels[7]);
                     break;
                 case "Materials":
                     ChangeViewModel(PageViewModels[2]);
                     break;
                 case "Slopes":
-                    ChangeViewModel(PageViewModels[4]);
+                    ChangeViewModel(PageViewModels[3]);
                     break;
                 case "Metals":
-                    ChangeViewModel(PageViewModels[5]);
+                    ChangeViewModel(PageViewModels[4]);
                     break;
                 case "Laborfactors":
-                    ChangeViewModel(PageViewModels[6]);
+                    ChangeViewModel(PageViewModels[5]);
                     break;
                 case "ChangePalette":
                     ChangeViewModel(PageViewModels[0]);

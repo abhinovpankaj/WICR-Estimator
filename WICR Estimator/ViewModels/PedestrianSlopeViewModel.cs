@@ -305,6 +305,7 @@ namespace WICR_Estimator.ViewModels
             base.CalculateTotalMixes();
             double minLabVal = 0;
             double lCost = 0;
+
             if (UrethaneSlopes.Count > 0)
             {
                 if (UrethaneOverrideManually == false)

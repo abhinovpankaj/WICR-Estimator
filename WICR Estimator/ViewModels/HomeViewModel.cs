@@ -544,7 +544,7 @@ namespace WICR_Estimator.ViewModels
                         item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
                         item.ProjectJobSetUp.EnableMoreMarkupCommand = new DelegateCommand(item.ProjectJobSetUp.CanAddMoreMarkup, item.ProjectJobSetUp.canAdd);
                         item.ProjectJobSetUp.GetOriginalName();
-                        item.ProjectJobSetUp.UpdateJobSetup();
+                        //item.ProjectJobSetUp.UpdateJobSetup();
                     }
                     if (item.MetalViewModel != null)
                     {
@@ -558,7 +558,8 @@ namespace WICR_Estimator.ViewModels
 
                     }
                     item.MaterialViewModel.CheckboxCommand = new DelegateCommand(item.MaterialViewModel.ApplyCheckUnchecks, item.MaterialViewModel.canApply);
-                    
+
+                    item.ProjectJobSetUp.UpdateJobSetup();
                     //keep other material and other labor materials in sync
                     var ot = item.MaterialViewModel.OtherLaborMaterials;
                     item.MaterialViewModel.OtherLaborMaterials = item.MaterialViewModel.OtherMaterials;

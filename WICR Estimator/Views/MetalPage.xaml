@@ -152,7 +152,10 @@
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
-                                                <CheckBox x:Name="includeMe" Visibility="{Binding IsStairMetal}"
+                                                <CheckBox x:Name="includeMe" 
+                                                          Command="{Binding DataContext.CheckboxCommand,
+                                ElementName=MetalGrid}"
+                                                          Visibility="{Binding IsStairMetal}"
                                           IsChecked="{Binding IsStairMetalChecked,
                                     UpdateSourceTrigger=PropertyChanged}"></CheckBox>
                                                 <!--<CheckBox x:Name="includeMe" Visibility="{Binding Name,

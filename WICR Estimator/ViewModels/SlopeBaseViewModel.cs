@@ -656,9 +656,14 @@ namespace WICR_Estimator.ViewModels
             if (Slopes.Count > 0)
             {
                 LaborCost = Math.Round(SumTotalLaborExt, 2);
+                
                 if (dbData==null)
                 {
-                    double.TryParse(perMixRates[8][0].ToString(), out minLabVal);
+                    if (perMixRates!=null)
+                    {
+                        double.TryParse(perMixRates[8][0].ToString(), out minLabVal);
+                    }
+                    
                 }
                 else
                     minLabVal = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Minimum Slope Labor" && x.SlopeType == "Cement").LaborRate;
