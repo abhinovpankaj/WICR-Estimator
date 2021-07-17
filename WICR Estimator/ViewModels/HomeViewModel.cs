@@ -757,7 +757,8 @@ namespace WICR_Estimator.ViewModels
                     }
                     SystemMaterial.OnQTyChanged += (s, e) => { item.MaterialViewModel.setExceptionValues(s); };
                     SystemMaterial.OnUnitChanged += (s, e) => { item.MaterialViewModel.setUnitChangeValues(); };
-
+                    Metal.onUnitChanged += (s, e) => { item.MetalViewModel.Metal_onUnitChanged(s, e); };
+                 
                     item.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
                     SelectedProjects.Add(item);
                    

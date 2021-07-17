@@ -71,6 +71,7 @@ namespace WICR_Estimator.ViewModels
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
                             //SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
                         }
                     }
 
