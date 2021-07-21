@@ -536,6 +536,11 @@ namespace WICR_Estimator.ViewModels
                     item.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
                     SystemMaterial.OnQTyChanged += (s, e) => { item.MaterialViewModel.setExceptionValues(s); };
                     SystemMaterial.OnUnitChanged += (s, e) => { item.MaterialViewModel.setUnitChangeValues(); };
+                    if (item.MetalViewModel != null)
+                    {
+                        Metal.onUnitChanged += (s, e) => { item.MetalViewModel.Metal_onUnitChanged(s, e); };
+                    }
+
                     SelectedProjects.Add(item);
                    
                    
@@ -561,8 +566,14 @@ namespace WICR_Estimator.ViewModels
 
                     item.ProjectJobSetUp.UpdateJobSetup();
                     //keep other material and other labor materials in sync
+
                     var ot = item.MaterialViewModel.OtherLaborMaterials;
-                    item.MaterialViewModel.OtherLaborMaterials = item.MaterialViewModel.OtherMaterials;
+                    if (item.OriginalProjectName == "Blank")
+                    {
+                        item.MaterialViewModel.OtherLaborMaterials = item.MaterialViewModel.OtherMaterials.Where(x => x.Name != "").ToObservableCollection();
+                    }
+                    else
+                        item.MaterialViewModel.OtherLaborMaterials = item.MaterialViewModel.OtherMaterials;
                     int k = 0;
                     foreach (OtherItem olm in item.MaterialViewModel.OtherLaborMaterials)
                     {
@@ -571,10 +582,11 @@ namespace WICR_Estimator.ViewModels
                         olm.LMaterialPrice = ot[k].LMaterialPrice;
                         k++;
                     }
+                    
                     //ends
 
                     //item.MaterialViewModel.CalculateCost(null);
-                    item.MaterialViewModel.ZAddLaborMinCharge = adminLabor;
+                    
                     item.ProductVersion = ver;
                     //if (item.OriginalProjectName == "Reseal all systems" || item.OriginalProjectName == "Weather Wear" || item.OriginalProjectName == "Weather Wear Rehab" || item.OriginalProjectName == "Paraseal LG" || item.OriginalProjectName == "Barrier Guard")
                     //{
@@ -623,7 +635,10 @@ namespace WICR_Estimator.ViewModels
 
                     item.ProjectJobSetUp.TotalSalesCostTemp = item.MaterialViewModel.TotalSale;
                     item.RegisterForUndoRedo(item);
+                    item.MaterialViewModel.ZAddLaborMinCharge = adminLabor;
+                    item.MaterialViewModel.CalculateCost(null);
                 }
+                
                 Project_OnSelectedProjectChange(null, null);
                 reader.Close();
                
@@ -635,9 +650,10 @@ namespace WICR_Estimator.ViewModels
                 OnPropertyChanged("Projects");
 
             }
-            catch
+            catch(Exception ex)
             {
-                MessageBox.Show("Your estimate seems to be created in Older version of WICR Estimator. \n\nPlease re-create the estimates, Or Contact the manufacturer.");
+                MessageBox.Show(ex.Message + "Your estimate seems to be created in Older version of WICR Estimator. \n\nPlease re-create the estimates, Or Contact the manufacturer.");
+                throw;
             }
         }
         //Browse Open Estimate.
@@ -667,14 +683,12 @@ namespace WICR_Estimator.ViewModels
             {
                 return;
             }
-            //OnTaskStarted("Please wait, Loading Estimate File.");
+
+            //OpenEstimateFile(filePath);
+            //return;
             DataContractSerializer deserializer = new DataContractSerializer(typeof(ObservableCollection<Project>));
 
-            FileStream fs = new FileStream(filePath, FileMode.Open);
-            
-            //var gZipStream = new GZipStream(fs, CompressionMode.Decompress);
-            
-                
+            FileStream fs = new FileStream(filePath, FileMode.Open);                         
             
             XmlDictionaryReader reader = XmlDictionaryReader.CreateTextReader(fs, new XmlDictionaryReaderQuotas());
             //XmlDictionaryReader reader = XmlDictionaryReader.CreateTextReader(gZipStream, new XmlDictionaryReaderQuotas());
@@ -757,7 +771,11 @@ namespace WICR_Estimator.ViewModels
                     }
                     SystemMaterial.OnQTyChanged += (s, e) => { item.MaterialViewModel.setExceptionValues(s); };
                     SystemMaterial.OnUnitChanged += (s, e) => { item.MaterialViewModel.setUnitChangeValues(); };
-                    Metal.onUnitChanged += (s, e) => { item.MetalViewModel.Metal_onUnitChanged(s, e); };
+                    if (item.MetalViewModel!=null)
+                    {
+                        Metal.onUnitChanged += (s, e) => { item.MetalViewModel.Metal_onUnitChanged(s, e); };
+                    }
+                    
                  
                     item.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
                     SelectedProjects.Add(item);
@@ -804,7 +822,7 @@ namespace WICR_Estimator.ViewModels
                     //ends
 
                     //item.MaterialViewModel.CalculateCost(null);
-                    item.MaterialViewModel.ZAddLaborMinCharge = adminLabor;
+                    
                     item.ProductVersion = ver;
                     //if (item.OriginalProjectName == "Reseal all systems" || item.OriginalProjectName=="Weather Wear"||item.OriginalProjectName=="Weather Wear Rehab"
                     //    ||item.OriginalProjectName=="Paraseal LG" || item.OriginalProjectName == "Barrier Guard")
@@ -854,8 +872,8 @@ namespace WICR_Estimator.ViewModels
                     item.ProjectJobSetUp.TotalSalesCostTemp = item.MaterialViewModel.TotalSale;
 
                     item.RegisterForUndoRedo(item);
-
-
+                    item.MaterialViewModel.ZAddLaborMinCharge = adminLabor;
+                    item.MaterialViewModel.CalculateCost(null);
                 }
 
 
