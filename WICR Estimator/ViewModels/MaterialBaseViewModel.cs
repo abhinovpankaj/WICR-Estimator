@@ -4329,6 +4329,7 @@ namespace WICR_Estimator.ViewModels
             CalculateTotalSqFt();
             TotalSale = TotalMetalPrice + TotalSlopingPrice + TotalSystemPrice + TotalSubcontractLabor;
             LaborPerc= Math.Round(AllTabsLaborTotal / TotalSale,2);
+            ProjectProfitMargin = Math.Round(((totalCostM - totalJobCostM) + (totalCostS - totalJobCostS) + (totalCostSy - totalJobCostSy)) / TotalSale,2);
             RaisePropertyChanged("MaterialPerc");
             RaisePropertyChanged("LaborPerc");
             RaisePropertyChanged("TotalMetalPrice");
