@@ -924,9 +924,9 @@ namespace WICR_Estimator.ViewModels
 
         private async void SaveProjectEstimate(object obj)
         {
-            if (PreparedBy==null)
+            if (PreparedBy==null || JobName == null || JobName == string.Empty)
             {
-                OnTaskCompleted("Please fill Prepared by and then save the estimate.");
+                OnTaskCompleted("Please fill JobName & Prepared by and then save the estimate.");
 
                 return;
             }

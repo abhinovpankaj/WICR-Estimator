@@ -80,9 +80,9 @@ namespace WICR_Estimator
                         var hm1 = vm.PageViewModels.FirstOrDefault(x => x.Name == "Home") as HomeViewModel;
                         if (hm1 != null)
                         {
-                            if (hm1.PreparedBy == null || hm1.PreparedBy == string.Empty)
+                            if (hm1.PreparedBy == null || hm1.PreparedBy == string.Empty || hm1.JobName == null || hm1.JobName == string.Empty)
                             {
-                                vm.OnTaskCompleted("Please fill Prepared by and then save the estimate.");
+                                vm.OnTaskCompleted("Please fill JobName & Prepared by and then save the estimate.");
                                 return;
                             }
                         }

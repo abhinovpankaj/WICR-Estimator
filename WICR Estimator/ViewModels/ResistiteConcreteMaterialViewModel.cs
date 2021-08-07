@@ -237,7 +237,7 @@ namespace WICR_Estimator.ViewModels
                 case "DETAIL PERIMETER - RP FABRIC 10\" x 300' (FROM ACME BAG)":
                 case "DETAIL PERIMETER - CPC MEMBRANE":
                     return deckPerimeter;
-                default:
+                default:                                                                                                                                                    
                     return totalSqft + (riserCount * stairWidth * 2);
             }
         }

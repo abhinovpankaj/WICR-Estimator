@@ -683,9 +683,9 @@ namespace WICR_Estimator
                 PreparedBy = hm1.PreparedBy;
             }
 
-            if (PreparedBy == null || PreparedBy==string.Empty)
+            if (PreparedBy == null || PreparedBy==string.Empty ||JobName==null||JobName==string.Empty)
             {
-                OnTaskCompleted("Please fill Prepared by and then save the estimate.");
+                OnTaskCompleted("Please fill JobName & Prepared by and then save the estimate.");
                 return;
             }
 
