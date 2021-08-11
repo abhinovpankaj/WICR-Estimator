@@ -31,10 +31,10 @@
     <InstallUrl>http://estimator.wicr.net/installer/</InstallUrl>
     <UpdateUrl>http://estimator.wicr.net/installer/</UpdateUrl>
     <PublisherName>WICR</PublisherName>
-    <MinimumRequiredVersion>1.0.0.77</MinimumRequiredVersion>
+    <MinimumRequiredVersion>1.0.0.79</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>79</ApplicationRevision>
+    <ApplicationRevision>80</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>

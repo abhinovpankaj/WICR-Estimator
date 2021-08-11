@@ -568,20 +568,29 @@ namespace WICR_Estimator.ViewModels
                     //keep other material and other labor materials in sync
 
                     var ot = item.MaterialViewModel.OtherLaborMaterials;
-                    if (item.OriginalProjectName == "Blank")
-                    {
-                        item.MaterialViewModel.OtherLaborMaterials = item.MaterialViewModel.OtherMaterials.Where(x => x.Name != "").ToObservableCollection();
-                    }
-                    else
+                    //if (item.OriginalProjectName == "Blank")
+                    //{
+                    //    item.MaterialViewModel.OtherLaborMaterials = item.MaterialViewModel.OtherMaterials.Where(x => x.Name != "").ToObservableCollection();
+                    //}
+                    //else
                         item.MaterialViewModel.OtherLaborMaterials = item.MaterialViewModel.OtherMaterials;
                     int k = 0;
-                    foreach (OtherItem olm in item.MaterialViewModel.OtherLaborMaterials)
+                    try
                     {
-                        //olm.Name = ot[k].Name;
-                        olm.LQuantity = ot[k].LQuantity;
-                        olm.LMaterialPrice = ot[k].LMaterialPrice;
-                        k++;
+                        foreach (OtherItem olm in item.MaterialViewModel.OtherLaborMaterials)
+                        {
+                            //olm.Name = ot[k].Name;
+                            olm.LQuantity = ot[k].LQuantity;
+                            olm.LMaterialPrice = ot[k].LMaterialPrice;
+                            k++;
+                        }
                     }
+                    catch (Exception)
+                    {
+
+                        
+                    }
+                    
                     
                     //ends
 
@@ -805,20 +814,30 @@ namespace WICR_Estimator.ViewModels
                     
                     //keep other material and other labor materials in sync
                     var ot= item.MaterialViewModel.OtherLaborMaterials;
-                    if (item.OriginalProjectName=="Blank")
-                    {
-                        item.MaterialViewModel.OtherLaborMaterials = item.MaterialViewModel.OtherMaterials.Where(x => x.Name != "").ToObservableCollection();
-                    }
-                    else
+                    //if (item.OriginalProjectName=="Blank")
+                    //{
+                    //    item.MaterialViewModel.OtherLaborMaterials = item.MaterialViewModel.OtherMaterials.Where(x => x.Name != "").ToObservableCollection();
+
+                    //}
+                    //else
                         item.MaterialViewModel.OtherLaborMaterials= item.MaterialViewModel.OtherMaterials;
                     int k = 0;
-                    foreach (OtherItem olm in item.MaterialViewModel.OtherLaborMaterials)
+                    try
                     {
-                        //olm.Name = ot[k].Name;
-                        olm.LQuantity = ot[k].LQuantity;
-                        olm.LMaterialPrice = ot[k].LMaterialPrice;
-                        k++;
+                        foreach (OtherItem olm in item.MaterialViewModel.OtherLaborMaterials)
+                        {
+                            //olm.Name = ot[k].Name;
+                            olm.LQuantity = ot[k].LQuantity;
+                            olm.LMaterialPrice = ot[k].LMaterialPrice;
+                            k++;
+                        }
                     }
+                    catch (Exception)
+                    {
+
+                       
+                    }
+                    
                     //ends
 
                     //item.MaterialViewModel.CalculateCost(null);
