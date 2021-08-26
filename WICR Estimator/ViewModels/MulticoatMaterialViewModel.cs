@@ -431,15 +431,17 @@ namespace WICR_Estimator.ViewModels
                         sysMat1.IsMaterialEnabled = true;
                         SystemMaterials.Where(x => x.Name == "Light crack and repairs- speed bond (no more than 1% of area)").FirstOrDefault().IsMaterialChecked
                             = true;
-                        sysMat1.SMSqft = totalSqft + (stairWidth * riserCount * 2);
+                        
                     }
+                    sysMat1.SMSqft = totalSqft + (stairWidth * riserCount * 2);
                     if (!sysMat2.IsMaterialEnabled)
                     {
                         sysMat2.IsMaterialChecked = false;
                         sysMat2.IsMaterialEnabled = true;
-                        sysMat2.SMSqft = totalSqft + (riserCount * stairWidth * 2);
+                        
                     }
-                   
+                    sysMat2.SMSqft = totalSqft + (riserCount * stairWidth * 2);
+
                 }
 
                 if (val2 > 0 || val1 > 0)

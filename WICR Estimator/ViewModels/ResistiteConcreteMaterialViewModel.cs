@@ -429,19 +429,21 @@ namespace WICR_Estimator.ViewModels
                 {
                     if (!sysMat1.IsMaterialEnabled)
                     {
-                        //sysMat1.IsMaterialChecked = false;
-                        //sysMat1.IsMaterialEnabled = true;
+                        sysMat1.IsMaterialChecked = false;
+                        sysMat1.IsMaterialEnabled = true;
                         sysMat1.UpdateCheckStatus(true, false);
                         SystemMaterials.Where(x => x.Name == "Light crack and repairs- resistite smooth (no more than 5% of area) with 1 gal liquid").FirstOrDefault().IsMaterialChecked = true;
-                        sysMat1.SMSqft = totalSqft + (stairWidth * riserCount * 2);
+                        
                     }
+                    sysMat1.SMSqft = totalSqft + (stairWidth * riserCount * 2);
                     if (!sysMat2.IsMaterialEnabled)
                     {
-                        //sysMat2.IsMaterialChecked = false;
-                        //sysMat2.IsMaterialEnabled = true;
+                        sysMat2.IsMaterialChecked = false;
+                        sysMat2.IsMaterialEnabled = true;
                         sysMat2.UpdateCheckStatus(true, false);
-                        sysMat2.SMSqft = totalSqft + (riserCount * stairWidth * 2);
-                    }              
+                        
+                    }
+                    sysMat2.SMSqft = totalSqft + (riserCount * stairWidth * 2);
                 }
 
                 
