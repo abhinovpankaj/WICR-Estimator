@@ -65,17 +65,14 @@ namespace WICR_Estimator.Views
                         js[binding.ToString()] = 0;
                     }
                     else
-                    {                       
+                    {
                         //txtbox.Text = calVal.ToString();
-                        js[binding.ToString()] = calVal;
+                        
+                        js[binding.ToString()] = Convert.ToDouble(calVal);
                     }
-                    
-                    
-                    
-
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 //throw;
@@ -127,7 +124,7 @@ namespace WICR_Estimator.Views
                     else
                     {
                         //txtbox.Text = calVal.ToString();
-                        js[binding.ToString()] = calVal;
+                        js[binding.ToString()] = Convert.ToDouble(calVal);
                     }
 
 

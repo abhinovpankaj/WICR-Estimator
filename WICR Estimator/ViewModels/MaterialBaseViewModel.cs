@@ -62,7 +62,7 @@ namespace WICR_Estimator.ViewModels
        
         public bool isPrevailingWage;
         public bool isDiscounted;
-        public int deckCount;
+        public double deckCount;
         public bool hasContingencyDisc;
         [DataMember]
         public IList<IList<Object>> laborDetails { get; set; }

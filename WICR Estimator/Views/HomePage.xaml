@@ -403,6 +403,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                     <ComboBoxItem Content="tammya"/>
                     <ComboBoxItem Content="nancyr"/>
                     <ComboBoxItem Content="aracelim" />
+                    <ComboBoxItem Content="matts" />
                     <ComboBoxItem Content="deionr"/>
                 </ComboBox>
             </StackPanel>

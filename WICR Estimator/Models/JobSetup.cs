@@ -826,8 +826,8 @@ namespace WICR_Estimator.Models
                 UpdateJobSetup();
             }
         }
-        private int deckCount;
-        public int DeckCount
+        private double deckCount;
+        public double DeckCount
         {
             get
             {
