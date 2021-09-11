@@ -62,7 +62,7 @@ namespace WICR_Estimator.ViewModels
 
                     UpdateMe(sysMat[i]);
 
-                    SystemMaterials[i].UpdateSpecialPricing(sp);
+                    //SystemMaterials[i].UpdateSpecialPricing(sp);
                     SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
 
                     if (SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)" || SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
@@ -74,7 +74,7 @@ namespace WICR_Estimator.ViewModels
                             SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
                         }
                     }
-
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
                 }
 
             }

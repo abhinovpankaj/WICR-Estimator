@@ -560,7 +560,7 @@ namespace WICR_Estimator.Models
                 //    OnQTyChanged(this.Name, null);
                 //}
             }
-
+            RaisePropertyChanged("MaterialExtension");
         }
 
         internal void UpdateCheckStatus(bool iscbChecked)
@@ -586,6 +586,8 @@ namespace WICR_Estimator.Models
             
             MaterialExtension = qty * materialPrice;
             FreightExtension = qty * weight;
+            RaisePropertyChanged("MaterialExtension");
+            RaisePropertyChanged("FreightExtension");
         }
         
         public bool allowHooking(string matName)
