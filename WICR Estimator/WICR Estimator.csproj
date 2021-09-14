@@ -34,7 +34,7 @@
     <MinimumRequiredVersion>1.0.0.83</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>84</ApplicationRevision>
+    <ApplicationRevision>85</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>

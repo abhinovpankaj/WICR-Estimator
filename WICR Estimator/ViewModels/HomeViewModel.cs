@@ -1131,35 +1131,27 @@ namespace WICR_Estimator.ViewModels
 
         #region Private Methods
         private void Project_OnSelectedProjectChange(object sender, EventArgs e)
-        {
-
-            
+        {          
             if (OnProjectSelectionChange != null)
+            {
+                ProjectLoadEventArgs args = new ProjectLoadEventArgs();
+                if (sender!=null)
                 {
-                    ProjectLoadEventArgs args = new ProjectLoadEventArgs();
-                    if (sender!=null)
+                    var proj = sender as Project;
+                    if (proj.EstimateID==0)
                     {
                         args.IsProjectLoadedfromEstimate = false;
                     }
                     else
-                    {
                         args.IsProjectLoadedfromEstimate = true;
-                    //foreach (var item in SelectedProjects)
-                    //{
-                    //    //item.ProjectJobSetUp?.UpdateJobSetup();
-                    //    item.SlopeViewModel?.CalculateAll();
-                    //    item.MetalViewModel?.CalculateCost(null);
-                    //    item.MaterialViewModel?.CalculateCost(null);
-                    //    item.UpdateMainTable();
 
-                    //}
-                }    
-                    OnProjectSelectionChange(SelectedProjects, args);
                 }
-            
-           
-            
-
+                else
+                {
+                    args.IsProjectLoadedfromEstimate = true;                
+                }    
+                OnProjectSelectionChange(SelectedProjects, args);
+            }
             MyselectedProjects = SelectedProjects;
             OnPropertyChanged("SelectedProjects");
             if (SelectedProjects != null)
