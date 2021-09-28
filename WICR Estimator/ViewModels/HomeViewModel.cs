@@ -642,10 +642,11 @@ namespace WICR_Estimator.ViewModels
                     else
                         item.MaterialViewModel.CalculateCost(null);
 
-                    item.ProjectJobSetUp.TotalSalesCostTemp = item.MaterialViewModel.TotalSale;
+                    
                     item.RegisterForUndoRedo(item);
                     item.MaterialViewModel.ZAddLaborMinCharge = adminLabor;
                     item.MaterialViewModel.CalculateCost(null);
+                    item.ProjectJobSetUp.TotalSalesCostTemp = item.MaterialViewModel.TotalSale;
                 }
                 
                 Project_OnSelectedProjectChange(null, null);
@@ -888,11 +889,12 @@ namespace WICR_Estimator.ViewModels
                     }
                     else
                         item.MaterialViewModel.CalculateCost(null);
-                    item.ProjectJobSetUp.TotalSalesCostTemp = item.MaterialViewModel.TotalSale;
+                    
 
                     item.RegisterForUndoRedo(item);
                     item.MaterialViewModel.ZAddLaborMinCharge = adminLabor;
                     item.MaterialViewModel.CalculateCost(null);
+                    item.ProjectJobSetUp.TotalSalesCostTemp = item.MaterialViewModel.TotalSale;
                 }
 
 
