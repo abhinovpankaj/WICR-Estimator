@@ -670,20 +670,20 @@ namespace WICR_Estimator.ViewModels
         private void LoadProjectEstimate(object obj)
         {
             Project savedProject = null;
-              OpenFileDialog openFileDialog1 = new OpenFileDialog
-                {
-                    InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    Title = "Browse Estimate File",
-                    CheckFileExists = true,
-                    CheckPathExists = true,
+            OpenFileDialog openFileDialog1 = new OpenFileDialog
+            {
+                InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                Title = "Browse Estimate File",
+                CheckFileExists = true,
+                CheckPathExists = true,
 
-                    DefaultExt = "est",
-                    Filter = "Estimator files (*.est)|*.est",
-                    FilterIndex = 2,
-                    RestoreDirectory = true,
-                    //ReadOnlyChecked = true,
-                    ShowReadOnly = true
-                };
+                DefaultExt = "est",
+                Filter = "Estimator files (*.est)|*.est",
+                FilterIndex = 2,
+                RestoreDirectory = true,
+                //ReadOnlyChecked = true,
+                ShowReadOnly = true
+            };
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {

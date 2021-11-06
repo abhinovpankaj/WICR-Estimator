@@ -45,8 +45,8 @@
             <!--<Setter Property="Height" Value="40"/>-->
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Style.Triggers>
-                
-                    <Trigger Property="IsEnabled" Value="True">
+
+                <Trigger Property="IsEnabled" Value="True">
                     <Setter Property="Background" Value="{StaticResource   SecondaryHueMidBrush}" />
                     <Setter Property="ToolTip" Value="Please enter a numeric value."/>
                 </Trigger>
@@ -63,12 +63,13 @@
                     <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightForegroundBrush}" />
                 </Trigger>
             </Style.Triggers>
-            
+
         </Style>
     </UserControl.Resources>
     <Grid  Margin="-1,0,1,0">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="163*"/>
+            <RowDefinition Height="1590*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -78,7 +79,7 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <materialDesign:Card UniformCornerRadius="5" Width="300"
-                             Margin="10" materialDesign:ShadowAssist.ShadowDepth="Depth1">
+                             Margin="10,10,10.5,10" materialDesign:ShadowAssist.ShadowDepth="Depth1" Grid.RowSpan="2">
             <!--<Border BorderThickness="0" BorderBrush="Black"
                 Background="AliceBlue"
                 Margin="10"
@@ -86,17 +87,17 @@
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="10" Color="#82000000" />
                 </Border.Effect>-->
-                <StackPanel HorizontalAlignment="Stretch" Margin="5">
-                    <materialDesign:Card Padding="10" UniformCornerRadius="5"
+            <StackPanel HorizontalAlignment="Stretch" Margin="5">
+                <materialDesign:Card Padding="10" UniformCornerRadius="5"
                              Margin="10,2" materialDesign:ShadowAssist.ShadowDepth="Depth3">
-                        <DatePicker Margin="5" Height="30"
+                    <DatePicker Margin="5" Height="30"
                             FontSize="14"
                             SelectedDate="{Binding SelectedDate, Mode=TwoWay,
                             UpdateSourceTrigger=LostFocus,
                             TargetNullValue={x:Static System:DateTime.Now}}"                           
                             VerticalContentAlignment="Center"
                             HorizontalContentAlignment="Left"/>
-                    </materialDesign:Card>
+                </materialDesign:Card>
                 <materialDesign:Card Padding="10" UniformCornerRadius="5"
                              Margin="10,2" materialDesign:ShadowAssist.ShadowDepth="Depth3">
                     <StackPanel>
@@ -127,7 +128,7 @@
                             <ComboBoxItem Content="26 ga. Type 304 Stainless Steel"/>
                         </ComboBox>
                     </StackPanel>
-                    
+
                 </materialDesign:Card>
                 <materialDesign:Card Padding="10" UniformCornerRadius="5"
                              Margin="10,2" materialDesign:ShadowAssist.ShadowDepth="Depth3">
@@ -161,13 +162,13 @@
                          VerticalContentAlignment="Center"/>
                     </StackPanel>
                 </materialDesign:Card>
-               
-                    <CheckBox Margin="10"
+
+                <CheckBox Margin="10"
                               materialDesign:ShadowAssist.ShadowDepth="Depth3"
                               IsChecked="{Binding IsNewProject,
                         UpdateSourceTrigger=PropertyChanged}"
                               Content="Is a New Construction Project?"/>
-               
+
                 <materialDesign:Card UniformCornerRadius="5" Padding="10,5,10,10"
                                      Background="{StaticResource PrimaryHueDarkBrush}"
                              Margin="10,10" materialDesign:ShadowAssist.ShadowDepth="Depth1">
@@ -190,8 +191,8 @@
 
         <materialDesign:Card UniformCornerRadius="5" Width="320"
                              Grid.Column="1"
-                             Margin="10" materialDesign:ShadowAssist.ShadowDepth="Depth1">
-           
+                             Margin="10.5,10,10,10" materialDesign:ShadowAssist.ShadowDepth="Depth1" Grid.RowSpan="2">
+
             <ScrollViewer VerticalScrollBarVisibility="Auto" >
                 <StackPanel>
                     <materialDesign:Card UniformCornerRadius="5" Padding="10"
@@ -320,7 +321,7 @@
                         </StackPanel>
                         <!--</Border>-->
                     </materialDesign:Card>
-                    
+
                     <!--<Border x:Name="ParasealLGSection" BorderThickness="1" BorderBrush="Black"
                 Background="AliceBlue"
                 Margin="10"
@@ -372,7 +373,7 @@
 
                         <!--</Border>-->
                     </materialDesign:Card>
-                    
+
                     <!--<Border x:Name="Section201" BorderThickness="1" BorderBrush="Black"
                             Background="AliceBlue"
                             Margin="10"
@@ -444,7 +445,7 @@
 
         <materialDesign:Card UniformCornerRadius="5" Width="320"
                              Grid.Column="2"
-                             Margin="10" materialDesign:ShadowAssist.ShadowDepth="Depth1">
+                             Margin="10,10,10.5,10" materialDesign:ShadowAssist.ShadowDepth="Depth1" Grid.RowSpan="2">
             <!--<Border BorderThickness="0" BorderBrush="Black"
                 Background="AliceBlue"
                 Grid.Column="2"
@@ -453,10 +454,10 @@
             <Border.Effect>
                 <DropShadowEffect BlurRadius="10" Color="#82000000" />
             </Border.Effect>-->
-            
-                <ScrollViewer VerticalScrollBarVisibility="Auto" >
-                
-                    <StackPanel>
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto" >
+
+                <StackPanel>
                     <materialDesign:Card UniformCornerRadius="5" Width="300"
                              Margin="10" materialDesign:ShadowAssist.ShadowDepth="Depth1">
                         <StackPanel>
@@ -547,32 +548,32 @@
                             TickFrequency="1" IsSnapToTickEnabled="True"
                             />
                             </StackPanel>
-                            
+
                         </StackPanel>
                     </materialDesign:Card>
                     <CheckBox Content="Enter less than (-10%)"
                           Margin="10,5" x:Name="cbpasswordSection"
                           Foreground="#FF2A6DCD"
                           IsChecked="{Binding AllowMoreMarkUp}">
-                        </CheckBox>
-                        <materialDesign:Card UniformCornerRadius="5" Padding="10" 
+                    </CheckBox>
+                    <materialDesign:Card UniformCornerRadius="5" Padding="10" 
                                          Margin="10,5" materialDesign:ShadowAssist.ShadowDepth="Depth3"
                                          Visibility="{Binding HidePasswordSection}" >
 
-                            <StackPanel>
-                                <TextBlock Text="{Binding LoginMessage}"
+                        <StackPanel>
+                            <TextBlock Text="{Binding LoginMessage}"
                            Margin="10,0,0,0" Foreground="Red"/>
-                                <StackPanel>
-                                    <TextBlock Margin="10,0,0,0" Text="Enter Password" FontWeight="SemiBold"
+                            <StackPanel>
+                                <TextBlock Margin="10,0,0,0" Text="Enter Password" FontWeight="SemiBold"
                                Foreground="#FF2A6DCD"/>
-                                    <PasswordBox x:Name="passwordbox" Margin="10" Width="140"
+                                <PasswordBox x:Name="passwordbox" Margin="10" Width="140"
                                  HorizontalAlignment="Left"/>
-                                    <Button HorizontalAlignment="Left" Content="OK"
+                                <Button HorizontalAlignment="Left" Content="OK"
                             Margin="10,0,0,0"
                             Command="{Binding EnableMoreMarkupCommand}" 
                             CommandParameter="{Binding ElementName=passwordbox}"/>
 
-                                    <!--<StackPanel.Style>
+                                <!--<StackPanel.Style>
                         <Style TargetType="{x:Type StackPanel}">
                             <Setter Property="Visibility" Value="Hidden"/>
                             <Style.Triggers>
@@ -583,26 +584,26 @@
                             </Style.Triggers>
                         </Style>
                     </StackPanel.Style>-->
-                                </StackPanel>
                             </StackPanel>
-                        </materialDesign:Card>
-                    </StackPanel>
-                </ScrollViewer>
-                <!--</Border>-->
-            
+                        </StackPanel>
+                    </materialDesign:Card>
+                </StackPanel>
+            </ScrollViewer>
+            <!--</Border>-->
+
         </materialDesign:Card>
         <materialDesign:Card Grid.Column="3"
                              UniformCornerRadius="5" Width="240"
                              Height="200"
                              HorizontalAlignment="Left"
                              VerticalAlignment="Top"
-                             Margin="2,10" materialDesign:ShadowAssist.ShadowDepth="Depth1">
+                             Margin="2.5,10,0,0" materialDesign:ShadowAssist.ShadowDepth="Depth1" Grid.RowSpan="2">
             <StackPanel >
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding SelectedData.Key}" Margin="5,2"/>
                     <TextBlock Text="Formula" Margin="2,2"/>
                 </StackPanel>
-                
+
                 <TextBox Text="{Binding Formula, UpdateSourceTrigger=PropertyChanged}" 
                          TextChanged="TextBox_TextChanged"
                          
@@ -610,13 +611,13 @@
                 <TextBlock Text="Comments" Margin="5,2"/>
                 <TextBox Text="{Binding Comment}" Height="60"
                          Style="{StaticResource TextBoxStyle}"/>
-                
+
             </StackPanel>
         </materialDesign:Card>
         <DataGrid ItemsSource="{Binding ZData}" SelectedItem="{Binding SelectedData}" 
                   Grid.Column="3" Panel.ZIndex="-1"
                   x:Name="textxoDataPresenterGrid"
-                  Visibility="Hidden">
+                  Visibility="Hidden" Margin="0.5,0,0,0" Grid.RowSpan="2">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Width="*">
 
@@ -646,21 +647,21 @@
             <Border.Effect>
                 <DropShadowEffect BlurRadius="10" Color="#82000000" />
             </Border.Effect>-->
-            <Grid Grid.ColumnSpan="2" Grid.Row="1"
-                        Margin="10,-10,10,10">
+        <Grid Grid.ColumnSpan="2" Grid.Row="1"
+                        Margin="10,1580,10,10" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <TextBlock Text="NOTES TO FIELD:" FontSize="14" FontWeight="SemiBold"/>
-                <TextBox Height="30" TextWrapping="Wrap" FontSize="13"
+            <TextBox Height="30" TextWrapping="Wrap" FontSize="13"
                          Grid.Row="1"
                          Text="{Binding NotesToBill,UpdateSourceTrigger=LostFocus}"
                          Width="450" HorizontalAlignment="Left">
-                    
-                </TextBox>
-            </Grid>
-            
+
+            </TextBox>
+        </Grid>
+
         <!--</Border>-->
     </Grid>
 </UserControl>

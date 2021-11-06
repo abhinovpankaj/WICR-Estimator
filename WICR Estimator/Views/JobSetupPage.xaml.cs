@@ -25,37 +25,45 @@ namespace WICR_Estimator.Views
         public JobSetupPage()
         {
             InitializeComponent();
+            txtbox = null;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
         }
+        private bool prevBox;
         private TextBox txtbox;
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
-             txtbox = sender as TextBox;
+            txtbox = sender as TextBox;
             JobSetup js = txtbox.DataContext as JobSetup;
-
+            preProjectName = js.ProjectName;
             var binding = BindingOperations.GetBinding(txtbox, TextBox.TextProperty).Path.Path;
             if (js.ZData!=null)
             {
                 js.SelectedData = js.ZData.FirstOrDefault(x => x.Key == binding.ToString());
-            } 
+            }
+            prevBox = true;
         }
-
+        string preProjectName = string.Empty;
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+           
             if (txtbox == null)
             {
                 return;
             }
             TextBox txtbox1 = sender as TextBox;
             JobSetup js = this.DataContext as JobSetup;
-            
+
+            if (preProjectName!=js.ProjectName)
+            {
+                return;
+            }
             var binding = BindingOperations.GetBinding(txtbox, TextBox.TextProperty).Path.Path;
             try
-            {                
+            {
                 var calVal = new DataTable().Compute(txtbox1.Text ?? "0", null);
                 if (calVal != null)
                 {
@@ -78,7 +86,7 @@ namespace WICR_Estimator.Views
                 //throw;
             }
            
-            //js.SelectedData.CalculatedValue.ToString();
+            
         }
 
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
@@ -97,8 +105,8 @@ namespace WICR_Estimator.Views
                     js.Formula = txtbox.Text;
                 }
             }
-               
 
+            ///txtbox = null;
         }
 
         private void TextBox_LostFocus_1(object sender, RoutedEventArgs e)
@@ -126,10 +134,6 @@ namespace WICR_Estimator.Views
                         //txtbox.Text = calVal.ToString();
                         js[binding.ToString()] = Convert.ToDouble(calVal);
                     }
-
-
-
-
                 }
             }
             catch (Exception ex)

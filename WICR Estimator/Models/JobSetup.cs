@@ -256,10 +256,10 @@ namespace WICR_Estimator.Models
         public event EventHandler JobSetupChange;
         
         public event EventHandler OnProjectNameChange;
-        public string SlopeMaterialName{get;set;}
+        public string SlopeMaterialName { get; set; }
         public JobSetup()
-        { 
-            
+        {
+            SelectedData = null;
         }
         //public string toolVersion;
         public void UpdateJobSetup(string version = "")
@@ -338,16 +338,7 @@ namespace WICR_Estimator.Models
             get { return specialProductName; }
             set
             {
-                //if (value!=specialProductName)
-                //{
-                //    specialProductName = value;
-                //    OnPropertyChanged("SpecialProductName");
-
-                //    if (OnProjectNameChange != null)
-                //    {
-                //        OnProjectNameChange(this, EventArgs.Empty);
-                //    }
-                //}
+                
                 Set(ref specialProductName, value);
             }
         }
@@ -357,23 +348,7 @@ namespace WICR_Estimator.Models
             get { return allowMoreMarkup; }
             set
             {
-                //if (value!=allowMoreMarkup)
-                //{
-                //    allowMoreMarkup = value;
-                //    OnPropertyChanged("AllowMoreMarkUp");
-                //    if (!value)
-                //    {
-                //        MinMarkUp = -10;
-                //        LoginMessage = "";
-                //        OnPropertyChanged("MinMarkUp");
-                //        OnPropertyChanged("LoginMessage");
-                //        HidePasswordSection = System.Windows.Visibility.Hidden;
-
-                //    }
-                //    else
-                //        HidePasswordSection = System.Windows.Visibility.Visible;
-                //    OnPropertyChanged("HidePasswordSection");
-                //}
+                
                 Set(ref allowMoreMarkup, value);
                 if (!value)
                 {
@@ -412,6 +387,7 @@ namespace WICR_Estimator.Models
         }
         public JobSetup(string name)            
         {
+            SelectedData = null;
             ProjectName = name;
             PopulateCalculatbleTextBox();
             GetOriginalName();
@@ -456,12 +432,7 @@ namespace WICR_Estimator.Models
             IsPrevalingWage = false;
             HasDiscount = false;
             StairWidth = 4.5;
-            //TotalSqft = 1000;
-            //RiserCount = 30;
-                       
-            //DeckPerimeter = 300;
-            ////WeatherWearType = "Weather Wear";
-            //DeckCount = 1;
+            
             VendorName = "Chivon";
             MaterialName = "24ga. Galvanized Primed Steel";
             EnableMoreMarkupCommand = new DelegateCommand(CanAddMoreMarkup, canAdd);
@@ -470,21 +441,13 @@ namespace WICR_Estimator.Models
             AllowMoreMarkUp = false;
             FirstCheckBoxLabel = "Approved for Sand & Cement ?";
             ProjectDelayFactor = "0-3 Months";
+            
             UpdateJobSetup();
+
 
         }
 
-        //private bool canApply(object obj)
-        //{
-        //    return HomeViewModel.IsDirty;
-        //}
-
-        //private void ApplyChanges(object obj)
-        //{
-        //    UpdateJobSetup();
-        //    //HomeViewModel.IsDirty = false;
-        //}
-
+        
         public double MinMarkUp { get; set; }
         
         private DelegateCommand enableMMCommand;
@@ -503,24 +466,7 @@ namespace WICR_Estimator.Models
             }
         }
 
-        //ApplyChangesCommnad
-
-        //private DelegateCommand applyChangesCommand;
-
-        //[IgnoreDataMember]
-        //public DelegateCommand ApplyChangesCommnad
-        //{
-        //    get { return applyChangesCommand; }
-        //    set
-        //    {
-        //        if (value != applyChangesCommand)
-        //        {
-        //            applyChangesCommand = value;
-        //            OnPropertyChanged("ApplyChangesCommnad");
-        //        }
-        //    }
-        //}
-
+        
         
         private bool isNewProject;
         public bool IsNewProject
@@ -528,11 +474,7 @@ namespace WICR_Estimator.Models
             get { return isNewProject; }
             set
             {
-                //if (value != isNewProject)
-                //{
-                //    isNewProject = value;
-                //    OnPropertyChanged("IsNewProject");                  
-                //}
+                
                 Set(ref isNewProject, value);
             }
         }
@@ -542,12 +484,7 @@ namespace WICR_Estimator.Models
             get { return isContingencyEnabled; }
             set
             {
-                //if (value != isContingencyEnabled)
-                //{
-                //    isContingencyEnabled = value;
-                //    OnPropertyChanged("IsContingencyEnabled");
-                //    UpdateJobSetup();
-                //}
+                
                 Set(ref isContingencyEnabled, value);
                 UpdateJobSetup();
             }
@@ -564,7 +501,7 @@ namespace WICR_Estimator.Models
         public string DeckLabel
         {
             get
-            {                
+            {
                 if (originalName == "Weather Wear" || originalName == "Weather Wear Rehab" || originalName == "Reseal all systems")
                     return "Linear of Deck Perimeter";
                 else if (originalName == "Resistite" || originalName == "Multicoat")
@@ -727,7 +664,7 @@ namespace WICR_Estimator.Models
                         }
                         
                     }
-                    calledFromBackend = false;
+                    
                 }
                
 
@@ -783,13 +720,7 @@ namespace WICR_Estimator.Models
                         }
                     }
                 }
-                
-
-                //if (selectedData != null)
-                //{
-                //    if (selectedData.Formula=="" && selectedData.Key == "DeckPerimeter")
-                //    { selectedData.Formula = value.ToString();}
-                //}
+               
                 Set(ref deckPerimeter, value);
                 UpdateJobSetup();
             }
@@ -1310,7 +1241,7 @@ namespace WICR_Estimator.Models
             {
                 if (DeckCount >= 1000 || TotalSqftVertical >= 1000 || TotalSqft >= 1000)
                 {
-                    VHasContingencyDisc = false;
+                    //VHasContingencyDisc = false;
                     IsContingencyEnabled = true;
                 }
                 else
@@ -1323,7 +1254,7 @@ namespace WICR_Estimator.Models
             {
                 if (TotalSqftPlywood >= 1000 || TotalSqftVertical >= 1000 || TotalSqft >= 1000)
                 {
-                    VHasContingencyDisc = false;
+                    //VHasContingencyDisc = false;
                     IsContingencyEnabled = true;
                 }
                 else
@@ -1362,17 +1293,26 @@ namespace WICR_Estimator.Models
             get { return linearCopingFootage; }
             set
             {
-                
-                //if (ZData != null)
-                //{
-                //    var mydata = ZData.FirstOrDefault(x => x.Key == "LinearCopingFootage");
-                //    mydata.Formula = value.ToString();
-                //}
 
-                if (selectedData != null)
+                if (ZData != null)
                 {
-                    if (selectedData.Formula==""&& selectedData.Key== "LinearCopingFootage"){selectedData.Formula = value.ToString();}
+                    var mydata = ZData.FirstOrDefault(x => x.Key == "LinearCopingFootage");
+                    if (!calledFromBackend)
+                    {
+                        mydata.Formula = value.ToString();
+                    }
+                    
                 }
+
+                //5th nov fix.
+
+                //if (selectedData != null)
+                //{
+                //    if (selectedData.Formula==""&& selectedData.Key== "LinearCopingFootage")
+                //    {
+                //        selectedData.Formula = value.ToString();
+                //    }
+                //}
                 Set(ref linearCopingFootage, value);
                 UpdateJobSetup();
             }
