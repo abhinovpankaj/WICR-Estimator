@@ -57,13 +57,14 @@ namespace WICR_Estimator.Views
             TextBox txtbox1 = sender as TextBox;
             JobSetup js = this.DataContext as JobSetup;
 
-            if (preProjectName!=js.ProjectName)
-            {
-                return;
-            }
+            
             var binding = BindingOperations.GetBinding(txtbox, TextBox.TextProperty).Path.Path;
             try
             {
+                if (preProjectName != js.ProjectName)
+                {
+                    return;
+                }
                 var calVal = new DataTable().Compute(txtbox1.Text ?? "0", null);
                 if (calVal != null)
                 {
