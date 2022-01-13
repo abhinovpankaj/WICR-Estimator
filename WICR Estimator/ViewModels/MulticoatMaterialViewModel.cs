@@ -461,11 +461,15 @@ namespace WICR_Estimator.ViewModels
                 else
                 {
                     sysMat2.Name = "Krete Kote or Top Cote texture";
+                    sysMat2.SMSqftH = getSqFtAreaH("Krete Kote or Top Cote texture");
+                    sysMat2.StairSqft = getSqFtStairs("Krete Kote or Top Cote texture");
                     sysMat2.Hours = CalculateHrs(sysMat2.SMSqftH, sysMat2.HorizontalProductionRate, sysMat2.StairSqft, sysMat2.StairsProductionRate);
 
                     sysMat2.LaborExtension = (sysMat2.Hours != 0) ? (sysMat2.SetupMinCharge + sysMat2.Hours) * laborRate : 0;
                     sysMat2.LaborUnitPrice = sysMat2.LaborExtension / (riserCount + totalSqft);
                     sysMat1.Name = "Slurry coat over texture (Krete Kote 120 sq ft per mix)";
+                    sysMat1.SMSqftH = getSqFtAreaH("Slurry coat over texture (Krete Kote 120 sq ft per mix)");
+                    sysMat1.StairSqft = getSqFtStairs("Slurry coat over texture (Krete Kote 120 sq ft per mix)");
                     sysMat1.Hours = CalculateHrs(sysMat1.SMSqftH, sysMat1.HorizontalProductionRate, sysMat1.StairSqft, sysMat1.StairsProductionRate);
 
                     sysMat1.LaborExtension = (sysMat1.Hours != 0) ? (sysMat1.SetupMinCharge + sysMat1.Hours) * laborRate : 0;
