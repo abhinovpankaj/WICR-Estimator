@@ -457,6 +457,22 @@ namespace WICR_Estimator.ViewModels
                 {
                     sysMat2.Name = "Resistite textured knockdown finish (regular or smooth)";
                     sysMat1.Name = "Slurry coat over texture (Resistite smooth 120 sq ft per mix with 1 gal liquid)";
+                    
+                    sysMat2.SMSqftH = getSqFtAreaH(sysMat2.Name);
+                    sysMat2.StairSqft = getSqFtStairs(sysMat2.Name);
+                    sysMat2.Hours = CalculateHrs(sysMat2.SMSqftH, sysMat2.HorizontalProductionRate, sysMat2.StairSqft, sysMat2.StairsProductionRate);
+
+                    sysMat2.LaborExtension = (sysMat2.Hours != 0) ? (sysMat2.SetupMinCharge + sysMat2.Hours) * laborRate : 0;
+                    sysMat2.LaborUnitPrice = sysMat2.LaborExtension / (riserCount + totalSqft);
+                    
+                    sysMat1.SMSqftH = getSqFtAreaH(sysMat1.Name);
+                    sysMat1.StairSqft = getSqFtStairs(sysMat1.Name);
+                    sysMat1.Hours = CalculateHrs(sysMat1.SMSqftH, sysMat1.HorizontalProductionRate, sysMat1.StairSqft, sysMat1.StairsProductionRate);
+
+                    sysMat1.LaborExtension = (sysMat1.Hours != 0) ? (sysMat1.SetupMinCharge + sysMat1.Hours) * laborRate : 0;
+                    sysMat1.LaborUnitPrice = sysMat1.LaborExtension / (riserCount + totalSqft);
+
+                  
                 }
 
             }
