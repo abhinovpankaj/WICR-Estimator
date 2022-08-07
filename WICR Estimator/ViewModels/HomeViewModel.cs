@@ -153,6 +153,23 @@ namespace WICR_Estimator.ViewModels
                 {
                     foreach (Project item in SelectedProjects)
                     {
+                        bool ischecked = false, ischecked2 = false;
+
+                        if (item.OriginalProjectName == "Pedestrian System")
+                        {
+                            SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL");
+                            if (sm != null)
+                            {
+                                ischecked = sm.IsMaterialChecked;
+                            }
+                            //7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL
+                            sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "UI 7118 CONCRETE PRIMER 1-1/2 GAL KIT");
+                            if (sm != null)
+                            {
+                                ischecked2 = sm.IsMaterialChecked;
+                            }
+                        }
+
                         item.ApplyLatestPrices = applylatestPrice;
                         //ApplyLatestGoogleData(item);
                         var dbValues = DataSerializerService.DSInstance.deserializeDbData(item.OriginalProjectName);
@@ -168,8 +185,23 @@ namespace WICR_Estimator.ViewModels
                         {
                             item.MaterialViewModel.CalculateCost(null); 
                         }
-
+                        
                         UpdateProjectTotals();
+                        if (item.OriginalProjectName == "Pedestrian System")
+                        {
+                            SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL");
+                            if (sm != null)
+                            {
+                                sm.IsMaterialChecked = ischecked;
+                            }
+                            sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "UI 7118 CONCRETE PRIMER 1-1/2 GAL KIT");
+                            if (sm != null)
+                            {
+                                sm.IsMaterialChecked = ischecked2;
+                            }
+                            item.MaterialViewModel.setUnitChangeValues();
+                            item.MaterialViewModel.CalculateCost(null);
+                        }
                         item.ProjectJobSetUp.TotalSalesCostTemp = item.MaterialViewModel.TotalSale;
                     }
                     //OnTaskCompleted("Prices Refreshed for all selected projects.");
