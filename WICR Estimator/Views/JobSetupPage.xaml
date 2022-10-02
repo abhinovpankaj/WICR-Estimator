@@ -1,58 +1,58 @@
-﻿<UserControl x:Class="WICR_Estimator.Views.JobSetupPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:WICR_Estimator.Views"
-      xmlns:System="clr-namespace:System;assembly=mscorlib"
-      mc:Ignorable="d" 
-      xmlns:conv="clr-namespace:WICR_Estimator.Converters"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        TextElement.FontWeight="Regular"
-        TextElement.FontSize="13"
-        TextOptions.TextFormattingMode="Ideal" 
-        TextOptions.TextRenderingMode="Auto"
-        Background="{DynamicResource MaterialDesignPaper}"
-        FontFamily="{materialDesign:MaterialDesignFont}"
-        
-             d:DesignHeight="1800" d:DesignWidth="1400"
-      >
+﻿<UserControl
+    x:Class="WICR_Estimator.Views.JobSetupPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
+    xmlns:conv="clr-namespace:WICR_Estimator.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WICR_Estimator.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="1800"
+    d:DesignWidth="1400"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{materialDesign:MaterialDesignFont}"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
     <UserControl.Resources>
-        <conv:HasFieldEdited x:Key="HasFieldEdited"/>
+        <conv:HasFieldEdited x:Key="HasFieldEdited" />
         <Style x:Key="FieldHeader" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Margin" Value="5,5,5,0"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Margin" Value="5,5,5,0" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
-        <Style  BasedOn="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}"
-                TargetType="{x:Type CheckBox}">
-            <Setter Property="Height" Value="40"/>
+        <Style BasedOn="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" TargetType="{x:Type CheckBox}">
+            <Setter Property="Height" Value="40" />
             <!--<Setter Property="FontSize" Value="14" MaterialDesignFilterChipCheckBoxMaterialDesignAccentCheckBox  />
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>-->
         </Style>
         <Style x:Key="RBxStyle" TargetType="RadioButton">
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
         </Style>
-        <Style x:Key="TextBoxStyle" BasedOn="{StaticResource  MaterialDesignOutlinedTextFieldTextBox}" TargetType="{x:Type TextBox}" >
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Margin" Value="5,0,5,10"/>
+        <Style
+            x:Key="TextBoxStyle"
+            BasedOn="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+            TargetType="{x:Type TextBox}">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Margin" Value="5,0,5,10" />
             <!--<Setter Property="Height" Value="40"/>-->
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Style.Triggers>
 
                 <Trigger Property="IsEnabled" Value="True">
-                    <Setter Property="Background" Value="{StaticResource   SecondaryHueMidBrush}" />
-                    <Setter Property="ToolTip" Value="Please enter a numeric value."/>
+                    <Setter Property="Background" Value="{StaticResource SecondaryHueMidBrush}" />
+                    <Setter Property="ToolTip" Value="Please enter a numeric value." />
                 </Trigger>
-                <DataTrigger Binding="{Binding Text,RelativeSource={RelativeSource Self},
-                                       Converter={StaticResource HasFieldEdited} }" 
-                             Value="True">
+                <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource Self}, Converter={StaticResource HasFieldEdited}}" Value="True">
                     <Setter Property="FontWeight" Value="Bold" />
                     <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
                     <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
@@ -66,20 +66,24 @@
 
         </Style>
     </UserControl.Resources>
-    <Grid  Margin="-1,0,1,0">
+    <Grid Margin="-1,0,1,0">
         <Grid.RowDefinitions>
-            <RowDefinition Height="163*"/>
-            <RowDefinition Height="1590*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="163*" />
+            <RowDefinition Height="1590*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <materialDesign:Card UniformCornerRadius="5" Width="300"
-                             Margin="10,10,10.5,10" materialDesign:ShadowAssist.ShadowDepth="Depth1" Grid.RowSpan="2">
+        <materialDesign:Card
+            Grid.RowSpan="2"
+            Width="300"
+            Margin="10,10,10.5,10"
+            materialDesign:ShadowAssist.ShadowDepth="Depth1"
+            UniformCornerRadius="5">
             <!--<Border BorderThickness="0" BorderBrush="Black"
                 Background="AliceBlue"
                 Margin="10"
@@ -87,100 +91,136 @@
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="10" Color="#82000000" />
                 </Border.Effect>-->
-            <StackPanel HorizontalAlignment="Stretch" Margin="5">
-                <materialDesign:Card Padding="10" UniformCornerRadius="5"
-                             Margin="10,2" materialDesign:ShadowAssist.ShadowDepth="Depth3">
-                    <DatePicker Margin="5" Height="30"
-                            FontSize="14"
-                            SelectedDate="{Binding SelectedDate, Mode=TwoWay,
-                            UpdateSourceTrigger=LostFocus,
-                            TargetNullValue={x:Static System:DateTime.Now}}"                           
+            <StackPanel Margin="5" HorizontalAlignment="Stretch">
+                <materialDesign:Card
+                    Margin="10,2"
+                    Padding="10"
+                    materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                    UniformCornerRadius="5">
+                    <DatePicker
+                        Height="30"
+                        Margin="5"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Center"
+                        FontSize="14"
+                        SelectedDate="{Binding SelectedDate, Mode=TwoWay, UpdateSourceTrigger=LostFocus, TargetNullValue={x:Static System:DateTime.Now}}" />
+                </materialDesign:Card>
+                <materialDesign:Card
+                    Margin="10,2"
+                    Padding="10"
+                    materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                    UniformCornerRadius="5">
+                    <StackPanel>
+                        <TextBlock
+                            Margin="5,0"
+                            FontWeight="SemiBold"
+                            Text="Project Start Date" />
+                        <ComboBox
+                            Width="180"
+                            Margin="5,0,0,0"
+                            HorizontalAlignment="Left"
+                            Text="{Binding ProjectDelayFactor, UpdateSourceTrigger=PropertyChanged}">
+                            <ComboBoxItem Content="0-3 Months" IsSelected="True" />
+                            <ComboBoxItem Content="3-6 Months" />
+                            <ComboBoxItem Content="6-12 Months" />
+                            <ComboBoxItem Content="&gt;12 Months" />
+                        </ComboBox>
+                    </StackPanel>
+                </materialDesign:Card>
+                <materialDesign:Card
+                    Margin="10,2"
+                    Padding="10"
+                    materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                    UniformCornerRadius="5">
+                    <StackPanel>
+                        <TextBlock
+                            Margin="10"
+                            FontWeight="SemiBold"
+                            Text="Metal Material Type" />
+                        <ComboBox
+                            Width="180"
+                            Margin="10,0,0,10"
+                            HorizontalAlignment="Left"
+                            Text="{Binding MaterialName, UpdateSourceTrigger=PropertyChanged}">
+                            <ComboBoxItem Content="16oz Copper" />
+                            <ComboBoxItem Content="24ga. Galvanized Primed Steel" IsSelected="True" />
+                            <ComboBoxItem Content="26 ga. Type 304 Stainless Steel" />
+                        </ComboBox>
+                    </StackPanel>
+
+                </materialDesign:Card>
+                <materialDesign:Card
+                    Margin="10,2"
+                    Padding="10"
+                    materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                    UniformCornerRadius="5">
+                    <StackPanel>
+                        <TextBlock
+                            Margin="10"
+                            FontWeight="SemiBold"
+                            Text="Metal Vendor Name" />
+                        <ComboBox
+                            Width="180"
+                            Margin="10,0,0,10"
+                            HorizontalAlignment="Left"
+                            Text="{Binding VendorName, UpdateSourceTrigger=PropertyChanged}">
+                            <ComboBoxItem Content="Chivon" />
+                            <ComboBoxItem Content="Thunder Bird" />
+                        </ComboBox>
+                    </StackPanel>
+                </materialDesign:Card>
+                <materialDesign:Card
+                    Margin="10,2"
+                    Padding="10"
+                    materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                    UniformCornerRadius="5">
+                    <StackPanel>
+                        <TextBlock
+                            Margin="5,10,10,0"
+                            FontWeight="SemiBold"
+                            Text="Work Area" />
+                        <TextBox
+                            Margin="5,0,5,0"
                             VerticalContentAlignment="Center"
-                            HorizontalContentAlignment="Left"/>
-                </materialDesign:Card>
-                <materialDesign:Card Padding="10" UniformCornerRadius="5"
-                             Margin="10,2" materialDesign:ShadowAssist.ShadowDepth="Depth3">
-                    <StackPanel>
-                        <TextBlock Margin="5,0" FontWeight="SemiBold"
-                       Text="Project Start Date"/>
-                        <ComboBox Text="{Binding ProjectDelayFactor,UpdateSourceTrigger=PropertyChanged}" 
-                          Width="180" HorizontalAlignment="Left"
-                          Margin="5,0,0,0" >
-                            <ComboBoxItem Content="0-3 Months" IsSelected="True"/>
-                            <ComboBoxItem Content="3-6 Months"/>
-                            <ComboBoxItem Content="6-12 Months"/>
-                            <ComboBoxItem Content=">12 Months"/>
-                        </ComboBox>
-                    </StackPanel>
-                </materialDesign:Card>
-                <materialDesign:Card Padding="10" UniformCornerRadius="5"
-                             Margin="10,2" materialDesign:ShadowAssist.ShadowDepth="Depth3">
-                    <StackPanel>
-                        <TextBlock Margin="10" FontWeight="SemiBold"
-                       Text="Metal Material Type"/>
-                        <ComboBox Text="{Binding MaterialName,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left"
-                          Margin="10,0,0,10"
-                          
-                          Width="180">
-                            <ComboBoxItem Content="16oz Copper"/>
-                            <ComboBoxItem Content="24ga. Galvanized Primed Steel" 
-                                  IsSelected="True"/>
-                            <ComboBoxItem Content="26 ga. Type 304 Stainless Steel"/>
-                        </ComboBox>
-                    </StackPanel>
-
-                </materialDesign:Card>
-                <materialDesign:Card Padding="10" UniformCornerRadius="5"
-                             Margin="10,2" materialDesign:ShadowAssist.ShadowDepth="Depth3">
-                    <StackPanel>
-                        <TextBlock  Margin="10" FontWeight="SemiBold" 
-                       Text="Metal Vendor Name"/>
-                        <ComboBox Width="180" HorizontalAlignment="Left"
-                          Margin="10,0,0,10"
-                          Text="{Binding VendorName,UpdateSourceTrigger=PropertyChanged}">
-                            <ComboBoxItem Content="Chivon"/>
-                            <ComboBoxItem Content="Thunder Bird"/>
-                        </ComboBox>
-                    </StackPanel>
-                </materialDesign:Card>
-                <materialDesign:Card Padding="10" UniformCornerRadius="5"
-                             Margin="10,2" materialDesign:ShadowAssist.ShadowDepth="Depth3">
-                    <StackPanel>
-                        <TextBlock FontWeight="SemiBold"
-                           Margin="5,10,10,0" Text="Work Area"/>
-                        <TextBox Margin="5,0,5,0"
-                         ToolTip="Enter unique workarea for each projects."
-                         
-                         Text="{Binding WorkArea,UpdateSourceTrigger=LostFocus}"
-                         VerticalContentAlignment="Center"/>
-                        <TextBlock 
-                           Margin="5,30,10,0" FontWeight="SemiBold"
-                       Text="NOTE:DIFFERENT PRODUCT USED"/>
-                        <TextBox Margin="5,0,5,0" Height="30"
-                         MaxLength="20"
-                         Text="{Binding SpecialProductName,UpdateSourceTrigger=LostFocus}"
-                         VerticalContentAlignment="Center"/>
+                            Text="{Binding WorkArea, UpdateSourceTrigger=LostFocus}"
+                            ToolTip="Enter unique workarea for each projects." />
+                        <TextBlock
+                            Margin="5,30,10,0"
+                            FontWeight="SemiBold"
+                            Text="NOTE:DIFFERENT PRODUCT USED" />
+                        <TextBox
+                            Height="30"
+                            Margin="5,0,5,0"
+                            VerticalContentAlignment="Center"
+                            MaxLength="20"
+                            Text="{Binding SpecialProductName, UpdateSourceTrigger=LostFocus}" />
                     </StackPanel>
                 </materialDesign:Card>
 
-                <CheckBox Margin="10"
-                              materialDesign:ShadowAssist.ShadowDepth="Depth3"
-                              IsChecked="{Binding IsNewProject,
-                        UpdateSourceTrigger=PropertyChanged}"
-                              Content="Is a New Construction Project?"/>
+                <CheckBox
+                    Margin="10"
+                    materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                    Content="Is a New Construction Project?"
+                    IsChecked="{Binding IsNewProject, UpdateSourceTrigger=PropertyChanged}" />
 
-                <materialDesign:Card UniformCornerRadius="5" Padding="10,5,10,10"
-                                     Background="{StaticResource PrimaryHueDarkBrush}"
-                             Margin="10,10" materialDesign:ShadowAssist.ShadowDepth="Depth1">
-                    <StackPanel HorizontalAlignment="Center" >
-                        <TextBlock Text="Total Sale"  HorizontalAlignment="Left"
-                                   FontSize="18"
-                           FontWeight="Bold"/>
-                        <TextBlock FontSize="18"
-                                   FontWeight="Bold"
-                                   Foreground="{StaticResource PrimaryHueLightBrush}"
-                            Text="{Binding TotalSalesCostTemp,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"
-                                   HorizontalAlignment="Center"/>
+                <materialDesign:Card
+                    Margin="10,10"
+                    Padding="10,5,10,10"
+                    materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                    Background="{StaticResource PrimaryHueDarkBrush}"
+                    UniformCornerRadius="5">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock
+                            HorizontalAlignment="Left"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Text="Total Sale" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Foreground="{StaticResource PrimaryHueLightBrush}"
+                            Text="{Binding TotalSalesCostTemp, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </materialDesign:Card>
             </StackPanel>
@@ -189,83 +229,93 @@
             <!--</Border>-->
         </materialDesign:Card>
 
-        <materialDesign:Card UniformCornerRadius="5" Width="320"
-                             Grid.Column="1"
-                             Margin="10.5,10,10,10" materialDesign:ShadowAssist.ShadowDepth="Depth1" Grid.RowSpan="2">
+        <materialDesign:Card
+            Grid.RowSpan="2"
+            Grid.Column="1"
+            Width="320"
+            Margin="10.5,10,10,10"
+            materialDesign:ShadowAssist.ShadowDepth="Depth1"
+            UniformCornerRadius="5">
 
-            <ScrollViewer VerticalScrollBarVisibility="Auto" >
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel>
-                    <materialDesign:Card UniformCornerRadius="5" Padding="10"
-                                         Margin="10,5" materialDesign:ShadowAssist.ShadowDepth="Depth3">
+                    <materialDesign:Card
+                        Margin="10,5"
+                        Padding="10"
+                        materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                        UniformCornerRadius="5">
                         <StackPanel>
-                            <CheckBox Margin="5"
-                              Visibility="{Binding IsNewPlywoodVisible}"
-                              IsChecked="{Binding IsNewPlywood,
-                        UpdateSourceTrigger=PropertyChanged}"
-                              Content="New Plywood?"/>
-                            <CheckBox Margin="5"
-                              Visibility="{Binding IsJobByArchitectVisible}"
-                              IsChecked="{Binding IsJobSpecifiedByArchitect,
-                        UpdateSourceTrigger=PropertyChanged}"
-                              Content="Is This Job Specified By Architect"/>
-                            <CheckBox Margin="5"
-                                  Visibility="{Binding IsSystemOverConcreteVisible}"
-                              IsChecked="{Binding IsSystemOverConcrete,UpdateSourceTrigger=PropertyChanged}"
-                              Content="System Over Concrete"/>
-                            <CheckBox Margin="5" 
-                                  Visibility="{Binding IsSandCementVisible}"
-                              IsChecked="{Binding IsApprovedForSandCement,UpdateSourceTrigger=PropertyChanged}"
-                              Content="{Binding FirstCheckBoxLabel}"/>
-                            <CheckBox Margin="5"
-                                  Visibility="{Binding IsResealVisible}"
-                              IsChecked="{Binding IsReseal,UpdateSourceTrigger=PropertyChanged}"
-                              Content="Reseal?"/>
-                            <CheckBox  Margin="5"
-                               Content="Prevailing Wages"
-                               IsChecked="{Binding IsPrevalingWage,UpdateSourceTrigger=PropertyChanged}"/>
-                            <CheckBox  Margin="5"
-                               IsChecked="{Binding IsFlashingRequired,UpdateSourceTrigger=PropertyChanged}"
-                               Content="Metal Flashing Over Concrete?"/>
-                            <CheckBox  Margin="5"
-                               IsChecked="{Binding HasSpecialPricing,UpdateSourceTrigger=PropertyChanged}"
-                           Content="Special Metal Pricing"/>
-                            <CheckBox Margin="5"
-                               IsChecked="{Binding HasDiscount,UpdateSourceTrigger=PropertyChanged}"
-                           Content="Labor Discount Large Project (over 1,000 sq. ft.)"/>
-                            <CheckBox Margin="5"
-                                   IsEnabled="{Binding IsContingencyEnabled,UpdateSourceTrigger=PropertyChanged}"
-                               IsChecked="{Binding VHasContingencyDisc,UpdateSourceTrigger=PropertyChanged}">
-                                <TextBlock Text="Contingency Discount for Large New Construction Project (over 1,000 sq. ft.)"
-                                           TextWrapping="Wrap"/>
+                            <CheckBox
+                                Margin="5"
+                                Content="New Plywood?"
+                                IsChecked="{Binding IsNewPlywood, UpdateSourceTrigger=PropertyChanged}"
+                                Visibility="{Binding IsNewPlywoodVisible}" />
+                            <CheckBox
+                                Margin="5"
+                                Content="Is This Job Specified By Architect"
+                                IsChecked="{Binding IsJobSpecifiedByArchitect, UpdateSourceTrigger=PropertyChanged}"
+                                Visibility="{Binding IsJobByArchitectVisible}" />
+                            <CheckBox
+                                Margin="5"
+                                Content="System Over Concrete"
+                                IsChecked="{Binding IsSystemOverConcrete, UpdateSourceTrigger=PropertyChanged}"
+                                Visibility="{Binding IsSystemOverConcreteVisible}" />
+                            <CheckBox
+                                Margin="5"
+                                Content="{Binding FirstCheckBoxLabel}"
+                                IsChecked="{Binding IsApprovedForSandCement, UpdateSourceTrigger=PropertyChanged}"
+                                Visibility="{Binding IsSandCementVisible}" />
+                            <CheckBox
+                                Margin="5"
+                                Content="Reseal?"
+                                IsChecked="{Binding IsReseal, UpdateSourceTrigger=PropertyChanged}"
+                                Visibility="{Binding IsResealVisible}" />
+                            <CheckBox
+                                Margin="5"
+                                Content="Prevailing Wages"
+                                IsChecked="{Binding IsPrevalingWage, UpdateSourceTrigger=PropertyChanged}" />
+                            <CheckBox
+                                Margin="5"
+                                Content="Metal Flashing Over Concrete?"
+                                IsChecked="{Binding IsFlashingRequired, UpdateSourceTrigger=PropertyChanged}" />
+                            <CheckBox
+                                Margin="5"
+                                Content="Special Metal Pricing"
+                                IsChecked="{Binding HasSpecialPricing, UpdateSourceTrigger=PropertyChanged}" />
+                            <CheckBox
+                                Margin="5"
+                                Content="Labor Discount Large Project (over 1,000 sq. ft.)"
+                                IsChecked="{Binding HasDiscount, UpdateSourceTrigger=PropertyChanged}" />
+                            <CheckBox
+                                Margin="5"
+                                IsChecked="{Binding VHasContingencyDisc, UpdateSourceTrigger=PropertyChanged}"
+                                IsEnabled="{Binding IsContingencyEnabled, UpdateSourceTrigger=PropertyChanged}">
+                                <TextBlock Text="Contingency Discount for Large New Construction Project (over 1,000 sq. ft.)" TextWrapping="Wrap" />
                             </CheckBox>
-                            <materialDesign:Card UniformCornerRadius="5" Padding="10" Visibility="{Binding DualFlexVisible}"
-                                         Margin="10,5" materialDesign:ShadowAssist.ShadowDepth="Depth3">
+                            <materialDesign:Card
+                                Margin="10,5"
+                                Padding="10"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                                UniformCornerRadius="5"
+                                Visibility="{Binding DualFlexVisible}">
                                 <StackPanel>
                                     <!--<Border BorderBrush="Gray" BorderThickness="1" Margin="2">-->
                                     <StackPanel>
-                                        <CheckBox Margin="5" 
-                               IsChecked="{Binding HasQuarterMortarBed,UpdateSourceTrigger=PropertyChanged}">
-                                            <TextBlock Text="1  1/4 inch Mortar Bed With 2X2 Metal"
-                                           TextWrapping="Wrap"/>
+                                        <CheckBox Margin="5" IsChecked="{Binding HasQuarterMortarBed, UpdateSourceTrigger=PropertyChanged}">
+                                            <TextBlock Text="1  1/4 inch Mortar Bed With 2X2 Metal" TextWrapping="Wrap" />
                                         </CheckBox>
-                                        <CheckBox  Margin="5" 
-                               IsChecked="{Binding HasQuarterLessMortarBed,UpdateSourceTrigger=PropertyChanged}">
-                                            <TextBlock Text="3/4 Inch Mortar Bed With Metal Lathe"
-                                           TextWrapping="Wrap"/>
+                                        <CheckBox Margin="5" IsChecked="{Binding HasQuarterLessMortarBed, UpdateSourceTrigger=PropertyChanged}">
+                                            <TextBlock Text="3/4 Inch Mortar Bed With Metal Lathe" TextWrapping="Wrap" />
                                         </CheckBox>
                                     </StackPanel>
 
                                     <!--</Border>-->
 
-                                    <CheckBox  Margin="5" 
-                               IsChecked="{Binding HasElastex,UpdateSourceTrigger=PropertyChanged}">
-                                        <TextBlock Text="Add for Elastatex 2-Membrane System"
-                                           TextWrapping="Wrap"/>
+                                    <CheckBox Margin="5" IsChecked="{Binding HasElastex, UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBlock Text="Add for Elastatex 2-Membrane System" TextWrapping="Wrap" />
                                     </CheckBox>
-                                    <CheckBox  Margin="5" 
-                               IsChecked="{Binding HasEasyAccess,UpdateSourceTrigger=PropertyChanged}">
-                                        <TextBlock Text="Easy Access With  No Ladder?"
-                                           TextWrapping="Wrap"/>
+                                    <CheckBox Margin="5" IsChecked="{Binding HasEasyAccess, UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBlock Text="Easy Access With  No Ladder?" TextWrapping="Wrap" />
                                     </CheckBox>
                                 </StackPanel>
                             </materialDesign:Card>
@@ -273,51 +323,81 @@
                     </materialDesign:Card>
                     <!--<Border BorderBrush="Black"
                         BorderThickness="0,1,0,0">-->
-                    <materialDesign:Card UniformCornerRadius="5" Padding="10"
-                                         Margin="10,5" materialDesign:ShadowAssist.ShadowDepth="Depth3">
-                        <StackPanel VerticalAlignment="Center"
-                   Grid.Row="4" Grid.Column="1"
-                   Margin="5">
-                            <TextBlock Text="Stair Width" HorizontalAlignment="Center"
-                           FontWeight="SemiBold"/>
-                            <TextBox Text="{Binding ElementName=slWidth,
-                Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                     TextAlignment="Center"
-                     Width="80" Style="{StaticResource TextBoxStyle}"
-                         HorizontalAlignment="Center"
-                     Margin="5"/>
-                            <Slider Maximum="10" Value="{Binding StairWidth}"
-                                Width="250" Style="{StaticResource MaterialDesignDiscreteSlider}" 
-                    TickPlacement="BottomRight"
-                    TickFrequency=".5" IsSnapToTickEnabled="True" Name="slWidth"
-                    />
+                    <materialDesign:Card
+                        Margin="10,5"
+                        Padding="10"
+                        materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                        UniformCornerRadius="5">
+                        <StackPanel
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            Margin="5"
+                            VerticalAlignment="Center">
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                FontWeight="SemiBold"
+                                Text="Stair Width" />
+                            <TextBox
+                                Width="80"
+                                Margin="5"
+                                HorizontalAlignment="Center"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding ElementName=slWidth, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                TextAlignment="Center" />
+                            <Slider
+                                Name="slWidth"
+                                Width="250"
+                                IsSnapToTickEnabled="True"
+                                Maximum="10"
+                                Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                TickFrequency=".5"
+                                TickPlacement="BottomRight"
+                                Value="{Binding StairWidth}" />
                         </StackPanel>
                         <!--</Border>-->
                     </materialDesign:Card>
                     <!--<Border x:Name="ParasealSection"
                     BorderThickness="1" BorderBrush="Black"
-                        
+
                 Background="AliceBlue"
                 Margin="10"
                 Padding="0,0,0,15"
                 Visibility="{Binding IsParasealSectionVisible}">-->
-                    <materialDesign:Card UniformCornerRadius="5" Padding="10" Visibility="{Binding IsParasealSectionVisible}"
-                                         Margin="10,5" materialDesign:ShadowAssist.ShadowDepth="Depth3">
+                    <materialDesign:Card
+                        Margin="10,5"
+                        Padding="10"
+                        materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                        UniformCornerRadius="5"
+                        Visibility="{Binding IsParasealSectionVisible}">
                         <StackPanel>
-                            <TextBlock Text="Additional Term Bar (LF)" Margin="5,2"
-                           FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                 LostFocus="TextBox_LostFocus"    
-                         Text="{Binding AdditionalTermBarLF ,UpdateSourceTrigger=LostFocus}"/>
-                            <TextBlock Text="Inside and Outside Corner Details (LF)" Margin="5,2"
-                           FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     LostFocus="TextBox_LostFocus"
-                         Text="{Binding InsideOutsideCornerDetails ,UpdateSourceTrigger=LostFocus}"/>
-                            <CheckBox 
-                          IsChecked="{Binding SuperStopAtFooting,
-                    UpdateSourceTrigger=PropertyChanged}"
-                          Content="Super Stop at Footing?"/>
+                            <TextBlock
+                                Margin="5,2"
+                                FontWeight="SemiBold"
+                                Text="Additional Term Bar (LF)" />
+                            <TextBox
+                                GotFocus="TextBox_GotFocus"
+                                LostFocus="TextBox_LostFocus"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding AdditionalTermBarLF, UpdateSourceTrigger=LostFocus}" />
+                            <TextBlock
+                                Margin="5,2"
+                                FontWeight="SemiBold"
+                                Text="Inside and Outside Corner Details (LF)" />
+                            <TextBox
+                                GotFocus="TextBox_GotFocus"
+                                LostFocus="TextBox_LostFocus"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding InsideOutsideCornerDetails, UpdateSourceTrigger=LostFocus}" />
+                            <CheckBox Content="Super Stop at Footing?" IsChecked="{Binding SuperStopAtFooting, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock
+                                Margin="5,2"
+                                FontWeight="SemiBold"
+                                Text="Additional Footing" />
+                            <TextBox
+                                GotFocus="TextBox_GotFocus"
+                                LostFocus="TextBox_LostFocus"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding AdditionalFootingLF, UpdateSourceTrigger=LostFocus}" />
                         </StackPanel>
                         <!--</Border>-->
                     </materialDesign:Card>
@@ -327,48 +407,77 @@
                 Margin="10"
                 Padding="0,0,0,15"
                 Visibility="{Binding IsParasealLGSectionVisible}">-->
-                    <materialDesign:Card UniformCornerRadius="5" Padding="10" Visibility="{Binding IsParasealLGSectionVisible}"
-                                         Margin="10,5" materialDesign:ShadowAssist.ShadowDepth="Depth3">
+                    <materialDesign:Card
+                        Margin="10,5"
+                        Padding="10"
+                        materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                        UniformCornerRadius="5"
+                        Visibility="{Binding IsParasealLGSectionVisible}">
                         <StackPanel>
-                            <TextBlock Text="Additional Term Bar (LF)" Margin="5,2"
-                           FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     LostFocus="TextBox_LostFocus"
-                         Text="{Binding AdditionalTermBarLF ,UpdateSourceTrigger=LostFocus}"/>
-                            <TextBlock Text="Rakers/Corner Braces EA" Margin="5,2"
-                           FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     LostFocus="TextBox_LostFocus"
-                         Text="{Binding RakerCornerBases ,UpdateSourceTrigger=LostFocus}"/>
-                            <TextBlock Text="Cement Board Detail EA" Margin="5,2"
-                           FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     LostFocus="TextBox_LostFocus"
-                         Text="{Binding CementBoardDetail ,UpdateSourceTrigger=LostFocus}"/>
-                            <TextBlock Text="Inside and Outside Corner Details (LF)" Margin="5,2"
-                           FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     LostFocus="TextBox_LostFocus"
-                         Text="{Binding InsideOutsideCornerDetails ,UpdateSourceTrigger=LostFocus}"/>
-                            <TextBlock Text="Rock Pockets EA." Margin="5,2"
-                           FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     LostFocus="TextBox_LostFocus"
-                         Text="{Binding RockPockets ,UpdateSourceTrigger=LostFocus}"/>
-                            <TextBlock Text="Labor for 3 FT Strip of Paraseal at Foundaton or Other Areas (LF)" Margin="5,2"
-                           FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     LostFocus="TextBox_LostFocus"
-                         Text="{Binding ParasealFoundation ,UpdateSourceTrigger=LostFocus}"/>
-                            <TextBlock Text="Rear/Mid Lagging LF of beam" Margin="5,2"
-                           FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     LostFocus="TextBox_LostFocus"
-                         Text="{Binding RearMidLagging ,UpdateSourceTrigger=LostFocus}"/>
-                            <CheckBox 
-                          IsChecked="{Binding SuperStopAtFooting,
-                    UpdateSourceTrigger=PropertyChanged}"
-                          Content="Super Stop at Footing?"/>
+                            <TextBlock
+                                Margin="5,2"
+                                FontWeight="SemiBold"
+                                Text="Additional Term Bar (LF)" />
+                            <TextBox
+                                GotFocus="TextBox_GotFocus"
+                                LostFocus="TextBox_LostFocus"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding AdditionalTermBarLF, UpdateSourceTrigger=LostFocus}" />
+                            <TextBlock
+                                Margin="5,2"
+                                FontWeight="SemiBold"
+                                Text="Rakers/Corner Braces EA" />
+                            <TextBox
+                                GotFocus="TextBox_GotFocus"
+                                LostFocus="TextBox_LostFocus"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding RakerCornerBases, UpdateSourceTrigger=LostFocus}" />
+                            <TextBlock
+                                Margin="5,2"
+                                FontWeight="SemiBold"
+                                Text="Cement Board Detail EA" />
+                            <TextBox
+                                GotFocus="TextBox_GotFocus"
+                                LostFocus="TextBox_LostFocus"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding CementBoardDetail, UpdateSourceTrigger=LostFocus}" />
+                            <TextBlock
+                                Margin="5,2"
+                                FontWeight="SemiBold"
+                                Text="Inside and Outside Corner Details (LF)" />
+                            <TextBox
+                                GotFocus="TextBox_GotFocus"
+                                LostFocus="TextBox_LostFocus"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding InsideOutsideCornerDetails, UpdateSourceTrigger=LostFocus}" />
+                            <TextBlock
+                                Margin="5,2"
+                                FontWeight="SemiBold"
+                                Text="Rock Pockets EA." />
+                            <TextBox
+                                GotFocus="TextBox_GotFocus"
+                                LostFocus="TextBox_LostFocus"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding RockPockets, UpdateSourceTrigger=LostFocus}" />
+                            <TextBlock
+                                Margin="5,2"
+                                FontWeight="SemiBold"
+                                Text="Labor for 3 FT Strip of Paraseal at Foundaton or Other Areas (LF)" />
+                            <TextBox
+                                GotFocus="TextBox_GotFocus"
+                                LostFocus="TextBox_LostFocus"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding ParasealFoundation, UpdateSourceTrigger=LostFocus}" />
+                            <TextBlock
+                                Margin="5,2"
+                                FontWeight="SemiBold"
+                                Text="Rear/Mid Lagging LF of beam" />
+                            <TextBox
+                                GotFocus="TextBox_GotFocus"
+                                LostFocus="TextBox_LostFocus"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding RearMidLagging, UpdateSourceTrigger=LostFocus}" />
+                            <CheckBox Content="Super Stop at Footing?" IsChecked="{Binding SuperStopAtFooting, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
 
                         <!--</Border>-->
@@ -379,61 +488,94 @@
                             Margin="10"
                             Padding="0,0,0,15"
                             Visibility="{Binding Is201SectionVisible}">-->
-                    <materialDesign:Card UniformCornerRadius="5" Padding="10" Visibility="{Binding Is201SectionVisible}"
-                                         Margin="10,5" materialDesign:ShadowAssist.ShadowDepth="Depth3">
+                    <materialDesign:Card
+                        Margin="10,5"
+                        Padding="10"
+                        materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                        UniformCornerRadius="5"
+                        Visibility="{Binding Is201SectionVisible}">
                         <StackPanel>
-                            <TextBlock Text="Term Bar (LF)" Margin="5,2"
-                                        FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     LostFocus="TextBox_LostFocus"
-                                     Text="{Binding TermBarLF ,UpdateSourceTrigger=LostFocus}"/>
-                            <TextBlock Text="Rebar Prep @ Walls (LF)" Margin="5,2"
-                                       FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     LostFocus="TextBox_LostFocus"
-                                     Text="{Binding RebarPrepWallsLF ,UpdateSourceTrigger=LostFocus}"/>
-                            <TextBlock Text="Superstop (LF)" Margin="5,2"
-                                       FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     LostFocus="TextBox_LostFocus"
-                                     Text="{Binding SuperStopLF ,UpdateSourceTrigger=LostFocus}"/>
-                            <TextBlock Text="Penetrations" Margin="5,2"
-                                       FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     LostFocus="TextBox_LostFocus"
-                                     Text="{Binding Penetrations ,UpdateSourceTrigger=LostFocus}"/>
+                            <TextBlock
+                                Margin="5,2"
+                                FontWeight="SemiBold"
+                                Text="Term Bar (LF)" />
+                            <TextBox
+                                GotFocus="TextBox_GotFocus"
+                                LostFocus="TextBox_LostFocus"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding TermBarLF, UpdateSourceTrigger=LostFocus}" />
+                            <TextBlock
+                                Margin="5,2"
+                                FontWeight="SemiBold"
+                                Text="Rebar Prep @ Walls (LF)" />
+                            <TextBox
+                                GotFocus="TextBox_GotFocus"
+                                LostFocus="TextBox_LostFocus"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding RebarPrepWallsLF, UpdateSourceTrigger=LostFocus}" />
+                            <TextBlock
+                                Margin="5,2"
+                                FontWeight="SemiBold"
+                                Text="Superstop (LF)" />
+                            <TextBox
+                                GotFocus="TextBox_GotFocus"
+                                LostFocus="TextBox_LostFocus"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding SuperStopLF, UpdateSourceTrigger=LostFocus}" />
+                            <TextBlock
+                                Margin="5,2"
+                                FontWeight="SemiBold"
+                                Text="Penetrations" />
+                            <TextBox
+                                GotFocus="TextBox_GotFocus"
+                                LostFocus="TextBox_LostFocus"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding Penetrations, UpdateSourceTrigger=LostFocus}" />
 
                         </StackPanel>
 
                         <!--</Border>-->
                     </materialDesign:Card>
-                    <materialDesign:Card UniformCornerRadius="5" Padding="10" Visibility="{Binding Is860SectionVisible}"
-                                         Margin="10,5" materialDesign:ShadowAssist.ShadowDepth="Depth3">
+                    <materialDesign:Card
+                        Margin="10,5"
+                        Padding="10"
+                        materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                        UniformCornerRadius="5"
+                        Visibility="{Binding Is860SectionVisible}">
                         <!--<Border x:Name="Section860" BorderThickness="1" BorderBrush="Black"
                             Background="AliceBlue"
                             Margin="10"
                             Padding="0,0,0,15"
                             Visibility="{Binding Is860SectionVisible}">-->
                         <StackPanel>
-                            <TextBlock Text="Additional Term Bar (LF)" Margin="5,2"
-                                        FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     LostFocus="TextBox_LostFocus"
-                                     Text="{Binding TermBarLF ,UpdateSourceTrigger=LostFocus}"/>
-                            <TextBlock Text="Inside and Outside Corner Details (LF)" Margin="5,2"
-                                       FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     LostFocus="TextBox_LostFocus"
-                                     Text="{Binding InsideOutsideCornerDetails ,UpdateSourceTrigger=LostFocus}"/>
-                            <TextBlock Text="Penetrations" Margin="5,2"
-                                       FontWeight="SemiBold"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     LostFocus="TextBox_LostFocus"
-                                     Text="{Binding Penetrations ,UpdateSourceTrigger=LostFocus}"/>
-                            <CheckBox 
-                                      IsChecked="{Binding SuperStopAtFooting,
-                                      UpdateSourceTrigger=PropertyChanged}"
-                                      Content="Super Stop at Footing?"/>
+                            <TextBlock
+                                Margin="5,2"
+                                FontWeight="SemiBold"
+                                Text="Additional Term Bar (LF)" />
+                            <TextBox
+                                GotFocus="TextBox_GotFocus"
+                                LostFocus="TextBox_LostFocus"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding TermBarLF, UpdateSourceTrigger=LostFocus}" />
+                            <TextBlock
+                                Margin="5,2"
+                                FontWeight="SemiBold"
+                                Text="Inside and Outside Corner Details (LF)" />
+                            <TextBox
+                                GotFocus="TextBox_GotFocus"
+                                LostFocus="TextBox_LostFocus"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding InsideOutsideCornerDetails, UpdateSourceTrigger=LostFocus}" />
+                            <TextBlock
+                                Margin="5,2"
+                                FontWeight="SemiBold"
+                                Text="Penetrations" />
+                            <TextBox
+                                GotFocus="TextBox_GotFocus"
+                                LostFocus="TextBox_LostFocus"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding Penetrations, UpdateSourceTrigger=LostFocus}" />
+                            <CheckBox Content="Super Stop at Footing?" IsChecked="{Binding SuperStopAtFooting, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
 
                         <!--</Border>-->
@@ -443,9 +585,13 @@
             <!--</Border>-->
         </materialDesign:Card>
 
-        <materialDesign:Card UniformCornerRadius="5" Width="320"
-                             Grid.Column="2"
-                             Margin="10,10,10.5,10" materialDesign:ShadowAssist.ShadowDepth="Depth1" Grid.RowSpan="2">
+        <materialDesign:Card
+            Grid.RowSpan="2"
+            Grid.Column="2"
+            Width="320"
+            Margin="10,10,10.5,10"
+            materialDesign:ShadowAssist.ShadowDepth="Depth1"
+            UniformCornerRadius="5">
             <!--<Border BorderThickness="0" BorderBrush="Black"
                 Background="AliceBlue"
                 Grid.Column="2"
@@ -455,123 +601,175 @@
                 <DropShadowEffect BlurRadius="10" Color="#82000000" />
             </Border.Effect>-->
 
-            <ScrollViewer VerticalScrollBarVisibility="Auto" >
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
 
                 <StackPanel>
-                    <materialDesign:Card UniformCornerRadius="5" Width="300"
-                             Margin="10" materialDesign:ShadowAssist.ShadowDepth="Depth1">
+                    <materialDesign:Card
+                        Width="300"
+                        Margin="10"
+                        materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                        UniformCornerRadius="5">
                         <StackPanel>
-                            <TextBlock FontWeight="SemiBold" Margin="5,2"
-                       Text="Actual Prevailing Wage"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
-                                     GotFocus="TextBox_GotFocus"
-                                     LostFocus="TextBox_LostFocus"
-                          IsEnabled="{Binding IsPrevalingWage}"
-                         Text="{Binding ActualPrevailingWage,
-                    UpdateSourceTrigger=LostFocus}"/>
+                            <TextBlock
+                                Margin="5,2"
+                                FontWeight="SemiBold"
+                                Text="Actual Prevailing Wage" />
+                            <TextBox
+                                GotFocus="TextBox_GotFocus"
+                                IsEnabled="{Binding IsPrevalingWage}"
+                                LostFocus="TextBox_LostFocus"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding ActualPrevailingWage, UpdateSourceTrigger=LostFocus}" />
 
-                            <TextBlock FontWeight="SemiBold" Margin="5,2"
-                       Text="Total Sq Ft Plywood"
-                           Visibility="{Binding IsPlywoodSqftVisible}"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
-                                     GotFocus="TextBox_GotFocus"
-                                     LostFocus="TextBox_LostFocus"
-                          Visibility="{Binding IsPlywoodSqftVisible}"
-                         Text="{Binding TotalSqftPlywood,UpdateSourceTrigger=LostFocus}"/>
+                            <TextBlock
+                                Margin="5,2"
+                                FontWeight="SemiBold"
+                                Text="Total Sq Ft Plywood"
+                                Visibility="{Binding IsPlywoodSqftVisible}" />
+                            <TextBox
+                                GotFocus="TextBox_GotFocus"
+                                LostFocus="TextBox_LostFocus"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding TotalSqftPlywood, UpdateSourceTrigger=LostFocus}"
+                                Visibility="{Binding IsPlywoodSqftVisible}" />
                             <StackPanel Visibility="{Binding IsSqftConcreteVisible}">
-                                <TextBlock FontWeight="SemiBold" Margin="5,2"
-                       Text="{Binding SqftLabel}"/>
-                                <TextBox Style="{StaticResource TextBoxStyle}"
-                                         GotFocus="TextBox_GotFocus"
-                                         LostFocus="TextBox_LostFocus"
-                         Text="{Binding TotalSqft,UpdateSourceTrigger=LostFocus}"/>
+                                <TextBlock
+                                    Margin="5,2"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding SqftLabel}" />
+                                <TextBox
+                                    GotFocus="TextBox_GotFocus"
+                                    LostFocus="TextBox_LostFocus"
+                                    Style="{StaticResource TextBoxStyle}"
+                                    Text="{Binding TotalSqft, UpdateSourceTrigger=LostFocus}" />
                             </StackPanel>
                             <StackPanel Visibility="{Binding IsSqftVerticleVisible}">
-                                <TextBlock FontWeight="SemiBold" Margin="5,2"
-                       Text="{Binding VerticalSqftLabel}"/>
-                                <TextBox Style="{StaticResource TextBoxStyle}"
-                                         GotFocus="TextBox_GotFocus"
-                                         LostFocus="TextBox_LostFocus"
-                         Text="{Binding TotalSqftVertical,UpdateSourceTrigger=LostFocus}"/>
+                                <TextBlock
+                                    Margin="5,2"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding VerticalSqftLabel}" />
+                                <TextBox
+                                    GotFocus="TextBox_GotFocus"
+                                    LostFocus="TextBox_LostFocus"
+                                    Style="{StaticResource TextBoxStyle}"
+                                    Text="{Binding TotalSqftVertical, UpdateSourceTrigger=LostFocus}" />
                             </StackPanel>
-                            <TextBlock FontWeight="SemiBold" Margin="5,2"
-                           Visibility="{Binding IslinearCopingFootageVisible}"
-                       Text="{Binding LinearFootageText}"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     LostFocus="TextBox_LostFocus"
-                         Visibility="{Binding IslinearCopingFootageVisible}"
-                         Text="{Binding LinearCopingFootage,UpdateSourceTrigger=LostFocus}"/>
-                            <TextBlock FontWeight="SemiBold" Margin="5,2"
-                       Text="{Binding DeckLabel}"
-                           />
-                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     LostFocus="TextBox_LostFocus"
-                         Text="{Binding DeckPerimeter ,UpdateSourceTrigger=LostFocus}"/>
-                            <TextBlock FontWeight="SemiBold" Margin="5,2"
-                       Text="{Binding StairRiserText}"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     LostFocus="TextBox_LostFocus"
-                         Text="{Binding RiserCount,UpdateSourceTrigger=LostFocus}"/>
-                            <TextBlock FontWeight="SemiBold" Margin="5,2"
-                       Text="{Binding DeckCountText}"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}" GotFocus="TextBox_GotFocus"
-                                     LostFocus="TextBox_LostFocus"
-                         Text="{Binding DeckCount,UpdateSourceTrigger=LostFocus}"/>
+                            <TextBlock
+                                Margin="5,2"
+                                FontWeight="SemiBold"
+                                Text="{Binding LinearFootageText}"
+                                Visibility="{Binding IslinearCopingFootageVisible}" />
+                            <TextBox
+                                GotFocus="TextBox_GotFocus"
+                                LostFocus="TextBox_LostFocus"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding LinearCopingFootage, UpdateSourceTrigger=LostFocus}"
+                                Visibility="{Binding IslinearCopingFootageVisible}" />
+                            <TextBlock
+                                Margin="5,2"
+                                FontWeight="SemiBold"
+                                Text="{Binding DeckLabel}" />
+                            <TextBox
+                                GotFocus="TextBox_GotFocus"
+                                LostFocus="TextBox_LostFocus"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding DeckPerimeter, UpdateSourceTrigger=LostFocus}" />
+                            <TextBlock
+                                Margin="5,2"
+                                FontWeight="SemiBold"
+                                Text="{Binding StairRiserText}" />
+                            <TextBox
+                                GotFocus="TextBox_GotFocus"
+                                LostFocus="TextBox_LostFocus"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding RiserCount, UpdateSourceTrigger=LostFocus}" />
+                            <TextBlock
+                                Margin="5,2"
+                                FontWeight="SemiBold"
+                                Text="{Binding DeckCountText}" />
+                            <TextBox
+                                GotFocus="TextBox_GotFocus"
+                                LostFocus="TextBox_LostFocus"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding DeckCount, UpdateSourceTrigger=LostFocus}" />
                         </StackPanel>
                     </materialDesign:Card>
                     <!--<TextBlock FontWeight="SemiBold"
                        Text="Mark Up % "/>
                 <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding MarkupPercentage}"/>-->
-                    <materialDesign:Card UniformCornerRadius="5" Width="300"
-                             Margin="10" materialDesign:ShadowAssist.ShadowDepth="Depth1">
-                        <StackPanel VerticalAlignment="Center"
-                   
-                   Margin="5">
-                            <TextBlock Text="Mark Up %" HorizontalAlignment="Left" Margin="5,2"
-                           FontWeight="SemiBold"/>
+                    <materialDesign:Card
+                        Width="300"
+                        Margin="10"
+                        materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                        UniformCornerRadius="5">
+                        <StackPanel Margin="5" VerticalAlignment="Center">
+                            <TextBlock
+                                Margin="5,2"
+                                HorizontalAlignment="Left"
+                                FontWeight="SemiBold"
+                                Text="Mark Up %" />
                             <StackPanel Orientation="Horizontal">
-                                <TextBox Text="{Binding ElementName=markup,
-                             Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                             TextAlignment="Center"
-                             Width="50" 
-                             Style="{StaticResource TextBoxStyle}"
-                             HorizontalAlignment="Left"
-                             Margin="5"/>
-                                <Slider Value="{Binding MarkupPercentage}" Maximum="100"
-                            Width="250" x:Name="markup" Style="{StaticResource MaterialDesignDiscreteSlider}"
-                            HorizontalAlignment="Left" VerticalAlignment="Center"
-                            Minimum="{Binding MinMarkUp}"
-                            LargeChange="5"
-                            SmallChange="0.5"
-                            TickPlacement="BottomRight"
-                            TickFrequency="1" IsSnapToTickEnabled="True"
-                            />
+                                <TextBox
+                                    Width="50"
+                                    Margin="5"
+                                    HorizontalAlignment="Left"
+                                    Style="{StaticResource TextBoxStyle}"
+                                    Text="{Binding ElementName=markup, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    TextAlignment="Center" />
+                                <Slider
+                                    x:Name="markup"
+                                    Width="250"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    IsSnapToTickEnabled="True"
+                                    LargeChange="5"
+                                    Maximum="100"
+                                    Minimum="{Binding MinMarkUp}"
+                                    SmallChange="0.5"
+                                    Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                    TickFrequency="1"
+                                    TickPlacement="BottomRight"
+                                    Value="{Binding MarkupPercentage}" />
                             </StackPanel>
 
                         </StackPanel>
                     </materialDesign:Card>
-                    <CheckBox Content="Enter less than (-10%)"
-                          Margin="10,5" x:Name="cbpasswordSection"
-                          Foreground="#FF2A6DCD"
-                          IsChecked="{Binding AllowMoreMarkUp}">
-                    </CheckBox>
-                    <materialDesign:Card UniformCornerRadius="5" Padding="10" 
-                                         Margin="10,5" materialDesign:ShadowAssist.ShadowDepth="Depth3"
-                                         Visibility="{Binding HidePasswordSection}" >
+                    <CheckBox
+                        x:Name="cbpasswordSection"
+                        Margin="10,5"
+                        Content="Enter less than (-10%)"
+                        Foreground="#FF2A6DCD"
+                        IsChecked="{Binding AllowMoreMarkUp}" />
+                    <materialDesign:Card
+                        Margin="10,5"
+                        Padding="10"
+                        materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                        UniformCornerRadius="5"
+                        Visibility="{Binding HidePasswordSection}">
 
                         <StackPanel>
-                            <TextBlock Text="{Binding LoginMessage}"
-                           Margin="10,0,0,0" Foreground="Red"/>
+                            <TextBlock
+                                Margin="10,0,0,0"
+                                Foreground="Red"
+                                Text="{Binding LoginMessage}" />
                             <StackPanel>
-                                <TextBlock Margin="10,0,0,0" Text="Enter Password" FontWeight="SemiBold"
-                               Foreground="#FF2A6DCD"/>
-                                <PasswordBox x:Name="passwordbox" Margin="10" Width="140"
-                                 HorizontalAlignment="Left"/>
-                                <Button HorizontalAlignment="Left" Content="OK"
-                            Margin="10,0,0,0"
-                            Command="{Binding EnableMoreMarkupCommand}" 
-                            CommandParameter="{Binding ElementName=passwordbox}"/>
+                                <TextBlock
+                                    Margin="10,0,0,0"
+                                    FontWeight="SemiBold"
+                                    Foreground="#FF2A6DCD"
+                                    Text="Enter Password" />
+                                <PasswordBox
+                                    x:Name="passwordbox"
+                                    Width="140"
+                                    Margin="10"
+                                    HorizontalAlignment="Left" />
+                                <Button
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    Command="{Binding EnableMoreMarkupCommand}"
+                                    CommandParameter="{Binding ElementName=passwordbox}"
+                                    Content="OK" />
 
                                 <!--<StackPanel.Style>
                         <Style TargetType="{x:Type StackPanel}">
@@ -592,32 +790,43 @@
             <!--</Border>-->
 
         </materialDesign:Card>
-        <materialDesign:Card Grid.Column="3"
-                             UniformCornerRadius="5" Width="240"
-                             Height="200"
-                             HorizontalAlignment="Left"
-                             VerticalAlignment="Top"
-                             Margin="2.5,10,0,0" materialDesign:ShadowAssist.ShadowDepth="Depth1" Grid.RowSpan="2">
-            <StackPanel >
+        <materialDesign:Card
+            Grid.RowSpan="2"
+            Grid.Column="3"
+            Width="240"
+            Height="200"
+            Margin="2.5,10,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            materialDesign:ShadowAssist.ShadowDepth="Depth1"
+            UniformCornerRadius="5">
+            <StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding SelectedData.Key}" Margin="5,2"/>
-                    <TextBlock Text="Formula" Margin="2,2"/>
+                    <TextBlock Margin="5,2" Text="{Binding SelectedData.Key}" />
+                    <TextBlock Margin="2,2" Text="Formula" />
                 </StackPanel>
 
-                <TextBox Text="{Binding Formula, UpdateSourceTrigger=PropertyChanged}" 
-                         TextChanged="TextBox_TextChanged"
-                         
-                         Style="{StaticResource TextBoxStyle}"/>
-                <TextBlock Text="Comments" Margin="5,2"/>
-                <TextBox Text="{Binding Comment}" Height="60"
-                         Style="{StaticResource TextBoxStyle}"/>
+                <TextBox
+                    Style="{StaticResource TextBoxStyle}"
+                    Text="{Binding Formula, UpdateSourceTrigger=PropertyChanged}"
+                    TextChanged="TextBox_TextChanged" />
+                <TextBlock Margin="5,2" Text="Comments" />
+                <TextBox
+                    Height="60"
+                    Style="{StaticResource TextBoxStyle}"
+                    Text="{Binding Comment}" />
 
             </StackPanel>
         </materialDesign:Card>
-        <DataGrid ItemsSource="{Binding ZData}" SelectedItem="{Binding SelectedData}" 
-                  Grid.Column="3" Panel.ZIndex="-1"
-                  x:Name="textxoDataPresenterGrid"
-                  Visibility="Hidden" Margin="0.5,0,0,0" Grid.RowSpan="2">
+        <DataGrid
+            x:Name="textxoDataPresenterGrid"
+            Grid.RowSpan="2"
+            Grid.Column="3"
+            Margin="0.5,0,0,0"
+            Panel.ZIndex="-1"
+            ItemsSource="{Binding ZData}"
+            SelectedItem="{Binding SelectedData}"
+            Visibility="Hidden">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Width="*">
 
@@ -647,19 +856,27 @@
             <Border.Effect>
                 <DropShadowEffect BlurRadius="10" Color="#82000000" />
             </Border.Effect>-->
-        <Grid Grid.ColumnSpan="2" Grid.Row="1"
-                        Margin="10,1580,10,10" Grid.RowSpan="2">
+        <Grid
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Grid.ColumnSpan="2"
+            Margin="10,1580,10,10">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <TextBlock Text="NOTES TO FIELD:" FontSize="14" FontWeight="SemiBold"/>
-            <TextBox Height="30" TextWrapping="Wrap" FontSize="13"
-                         Grid.Row="1"
-                         Text="{Binding NotesToBill,UpdateSourceTrigger=LostFocus}"
-                         Width="450" HorizontalAlignment="Left">
-
-            </TextBox>
+            <TextBlock
+                FontSize="14"
+                FontWeight="SemiBold"
+                Text="NOTES TO FIELD:" />
+            <TextBox
+                Grid.Row="1"
+                Width="450"
+                Height="30"
+                HorizontalAlignment="Left"
+                FontSize="13"
+                Text="{Binding NotesToBill, UpdateSourceTrigger=LostFocus}"
+                TextWrapping="Wrap" />
         </Grid>
 
         <!--</Border>-->

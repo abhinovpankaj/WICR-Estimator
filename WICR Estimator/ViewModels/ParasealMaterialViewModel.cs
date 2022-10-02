@@ -14,6 +14,7 @@ namespace WICR_Estimator.ViewModels
     {
         private Dictionary<string, string> materialNames;
         private double additionalTermBarLF;
+        private double additionalFootingLF;
         private double insideOutsideCornerDetails;
         private bool superStopFooting;
         private double pinsCoverage;
@@ -156,6 +157,7 @@ namespace WICR_Estimator.ViewModels
             JobSetup Js = sender as JobSetup;
             if (Js != null)
             {
+                additionalFootingLF = Js.AdditionalFootingLF;
                 additionalTermBarLF = Js.AdditionalTermBarLF;
                 insideOutsideCornerDetails = Js.InsideOutsideCornerDetails;
                 superStopFooting = Js.SuperStopAtFooting;
@@ -220,7 +222,8 @@ namespace WICR_Estimator.ViewModels
                 case "PARATERM BAR LF (TOP ONLY- STANDARD INSTALL)":
                 case "PARAGRANULAR (FOR CANT AT FOOTING)":
                 case "SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT":
-                    return deckPerimeter>sqftSuperStop?deckPerimeter:sqftSuperStop;  //change for special handling
+                    // return deckPerimeter>sqftSuperStop?deckPerimeter:sqftSuperStop;  //change for special handling
+                    return superStopFooting?deckPerimeter + additionalFootingLF: deckPerimeter;
                 case "VULKEM 116 CAULK (FOR TERM BAR)":
                     return deckPerimeter + additionalTermBarLF;
                 case "EXTRA PARATERM BAR LF (BOTTOM OR SIDES)":

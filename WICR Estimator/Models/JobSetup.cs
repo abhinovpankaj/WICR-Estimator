@@ -142,8 +142,8 @@ namespace WICR_Estimator.Models
                 new DataPresentor { Key = "RockPockets"},
                 new DataPresentor { Key = "ParasealFoundation"},
                 new DataPresentor { Key = "RearMidLagging"},
+                new DataPresentor { Key = "AdditionalFootingLF"},
                 new DataPresentor { Key = "TermBarLF"},
-
                 new DataPresentor { Key = "RebarPrepWallsLF"},
                 new DataPresentor { Key = "SuperStopLF"},
                 new DataPresentor { Key = "Penetrations"},
@@ -153,7 +153,7 @@ namespace WICR_Estimator.Models
             };
         }
         #endregion
-
+        
         private DBData _dbdata;
         public DBData dbData 
         { get { return _dbdata; }
@@ -1347,6 +1347,35 @@ namespace WICR_Estimator.Models
         #endregion
 
         #region Paraseal
+
+        private double additionalFootingLF;
+        public double AdditionalFootingLF
+        {
+            get { return additionalFootingLF; }
+            set
+            {
+                if (value != additionalFootingLF)
+                {
+                    if (ZData != null)
+                    {
+                        var mydata = ZData.FirstOrDefault(x => x.Key == "AdditionalFootingLF");
+                        if (!calledFromBackend)
+                        {
+                            mydata.Formula = value.ToString();
+                        }
+                    }
+                }
+
+
+                //if (selectedData != null)
+                //{
+                //    if (selectedData.Formula=="" && selectedData.Key == "AdditionalTermBarLF") {selectedData.Formula = value.ToString();}
+                //}
+                Set(ref additionalFootingLF, value);
+                if(superStopAtFooting)
+                    UpdateJobSetup();
+            }
+        }
 
         private double additonalTermbarLF;
         public double AdditionalTermBarLF

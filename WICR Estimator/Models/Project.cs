@@ -562,14 +562,16 @@ namespace WICR_Estimator.Models
             set
             {
                 Set(ref jobSetup, value);
+                
                 //if (jobSetup!=value)
                 //{
                 //    jobSetup = value;
                 //    RaisePropertyChanged("ProjectJobSetUp");
                 //}
+                
             }
         }
-
+        //public double TotalSalesCost { get; set; }
         private MetalBaseViewModel metalViewModel;
         
         public MetalBaseViewModel MetalViewModel

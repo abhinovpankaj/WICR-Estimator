@@ -1755,7 +1755,10 @@ namespace WICR_Estimator.ViewModels
                 BaseViewModel.IsDirty = true;
                 previousSale = TotalSale;
             }
-            
+            if (_js != null)
+            {
+                _js.TotalSalesCostTemp = TotalSale;
+            }
         }
 
         
