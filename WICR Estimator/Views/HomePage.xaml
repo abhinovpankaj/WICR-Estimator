@@ -1,121 +1,122 @@
-﻿<UserControl x:Class="WICR_Estimator.Views.HomePage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      
-      xmlns:local="clr-namespace:WICR_Estimator.Views"
-      xmlns:conv="clr-namespace:WICR_Estimator.Converters"
-      xmlns:System="clr-namespace:System;assembly=mscorlib"
-      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-      TextElement.FontWeight="Regular"
-      TextElement.FontSize="13"
-      TextOptions.TextFormattingMode="Ideal"
-      TextOptions.TextRenderingMode="Auto"
-      xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
-      Dialog:DialogParticipation.Register="{Binding}"       
-      xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-      mc:Ignorable="d" d:DesignWidth="1550" d:DesignHeight="800"
-      xmlns:behaviors="clr-namespace:WICR_Estimator"
-           Loaded="UserControl_Loaded"    
-      >
+﻿<UserControl
+    x:Class="WICR_Estimator.Views.HomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
+    xmlns:behaviors="clr-namespace:WICR_Estimator"
+    xmlns:conv="clr-namespace:WICR_Estimator.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+    xmlns:local="clr-namespace:WICR_Estimator.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Dialog:DialogParticipation.Register="{Binding}"
+    d:DesignHeight="800"
+    d:DesignWidth="1550"
+    Loaded="UserControl_Loaded"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
     <UserControl.Resources>
-        <conv:BoolToVisibilityConverter x:Key="VisibilityConv"/>
-        <conv:OriginalProjectnameConverter x:Key="projectNameConv"/>
+        <conv:BoolToVisibilityConverter x:Key="VisibilityConv" />
+        <conv:OriginalProjectnameConverter x:Key="projectNameConv" />
         <DataTemplate x:Key="ProjectTemplate">
-            <DockPanel VerticalAlignment="Center"
-                        >
-                <Image x:Name="tickImage" Source="..\Images\tick.png"
-                       Height="25" HorizontalAlignment="Right"
-                       VerticalAlignment="Center"
-                      Visibility="{Binding IsSelectedProject,
-                    Converter={StaticResource VisibilityConv}}"/>
-                <TextBlock Text="{Binding Converter={ StaticResource projectNameConv}}"
-                           FontWeight="SemiBold"
-                           VerticalAlignment="Center"
-                           FontSize="13" />
-                <Button                       
-                                                
-                        BorderThickness="0"
-                        
-                        Command="{Binding RelativeSource={RelativeSource FindAncestor, 
-AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
-                        CommandParameter="{Binding}"
-                        VerticalAlignment="Center"
-                        Margin="0,0,10,0"
-                        HorizontalAlignment="Right"
-                        >
+            <DockPanel VerticalAlignment="Center">
+                <Image
+                    x:Name="tickImage"
+                    Height="25"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Source="..\Images\tick.png"
+                    Visibility="{Binding IsSelectedProject, Converter={StaticResource VisibilityConv}}" />
+                <TextBlock
+                    VerticalAlignment="Center"
+                    FontSize="13"
+                    FontWeight="SemiBold"
+                    Text="{Binding Converter={StaticResource projectNameConv}}" />
+                <Button
+                    Margin="0,0,10,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    BorderThickness="0"
+                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
+                    CommandParameter="{Binding}">
                     <Button.Content>
-                        <materialDesign:PackIcon Kind="ContentCopy" VerticalAlignment="Center" HorizontalAlignment="Center"
-                                                 Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"/> 
+                        <materialDesign:PackIcon
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
+                            Kind="ContentCopy" />
                     </Button.Content>
                 </Button>
-               
+
             </DockPanel>
-            
+
         </DataTemplate>
         <Style x:Key="ButtonTemplate" TargetType="Button">
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="Height" Value="35"/>
-            <Setter Property="Width" Value="170"/>
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Height" Value="35" />
+            <Setter Property="Width" Value="170" />
         </Style>
-                
+
         <Style x:Key="ContainerStyle" TargetType="{x:Type GroupItem}">
             <Setter Property="Template">
                 <Setter.Value>
-                     <ControlTemplate>
-                        <Expander Style="{StaticResource   MaterialDesignExpander}" Margin="-0,5,0,0" >
+                    <ControlTemplate>
+                        <Expander Margin="-0,5,0,0" Style="{StaticResource MaterialDesignExpander}">
                             <!--<i:Interaction.Behaviors>
                                 <behaviors:PersistGroupExpandedStateBehavior GroupName="{Binding Name}" />
                             </i:Interaction.Behaviors>-->
                             <Expander.Header>
-                                <TextBlock Text="{Binding Name}"
-                                           VerticalAlignment="Bottom">
+                                <TextBlock VerticalAlignment="Bottom" Text="{Binding Name}">
                                     <TextBlock.Style>
                                         <Style>
-                                            <Setter Property="TextBlock.FontWeight" Value="Bold"/>
-                                            <Setter Property="TextBlock.FontSize" Value="15"/>
-                                            <Setter Property="TextBlock.Foreground" Value="{StaticResource PrimaryHueDarkBrush}"/>
-                                            
+                                            <Setter Property="TextBlock.FontWeight" Value="Bold" />
+                                            <Setter Property="TextBlock.FontSize" Value="15" />
+                                            <Setter Property="TextBlock.Foreground" Value="{StaticResource PrimaryHueDarkBrush}" />
+
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding Name}" Value="Deck Coatings">
-                                                    <Setter Property="TextBlock.FontWeight" Value="Bold"/>
-                                                    <Setter Property="TextBlock.FontSize" Value="16"/>
+                                                    <Setter Property="TextBlock.FontWeight" Value="Bold" />
+                                                    <Setter Property="TextBlock.FontSize" Value="16" />
                                                     <!--<Setter Property="TextBlock.Foreground" Value="BurlyWood"/>-->
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Name}" Value="Blank Template">
-                                                    <Setter Property="TextBlock.FontWeight" Value="Bold"/>
-                                                    <Setter Property="TextBlock.FontSize" Value="16"/>
+                                                    <Setter Property="TextBlock.FontWeight" Value="Bold" />
+                                                    <Setter Property="TextBlock.FontSize" Value="16" />
                                                     <!--<Setter Property="TextBlock.Foreground" Value="BurlyWood"/>-->
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Name}" Value="Concrete On Grade">
-                                                    <Setter Property="TextBlock.FontWeight" Value="Bold"/>
-                                                    <Setter Property="TextBlock.FontSize" Value="16"/>
+                                                    <Setter Property="TextBlock.FontWeight" Value="Bold" />
+                                                    <Setter Property="TextBlock.FontSize" Value="16" />
                                                     <!--<Setter Property="TextBlock.Foreground" Value="BurlyWood"/>-->
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Name}" Value="Below Grade">
-                                                    <Setter Property="TextBlock.FontWeight" Value="Bold"/>
-                                                    <Setter Property="TextBlock.FontSize" Value="16"/>
+                                                    <Setter Property="TextBlock.FontWeight" Value="Bold" />
+                                                    <Setter Property="TextBlock.FontSize" Value="16" />
                                                     <!--<Setter Property="TextBlock.Foreground" Value="BurlyWood"/>-->
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Name}" Value="Replicated Projects">
-                                                    <Setter Property="TextBlock.FontWeight" Value="Bold"/>
-                                                    <Setter Property="TextBlock.FontSize" Value="16"/>
+                                                    <Setter Property="TextBlock.FontWeight" Value="Bold" />
+                                                    <Setter Property="TextBlock.FontSize" Value="16" />
                                                     <!--<Setter Property="TextBlock.Foreground" Value="BurlyWood"/>-->
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Name}" Value="Below Tile">
-                                                    <Setter Property="TextBlock.FontWeight" Value="Bold"/>
-                                                    <Setter Property="TextBlock.FontSize" Value="16"/>
+                                                    <Setter Property="TextBlock.FontWeight" Value="Bold" />
+                                                    <Setter Property="TextBlock.FontSize" Value="16" />
                                                     <!--<Setter Property="TextBlock.Foreground" Value="BurlyWood"/>-->
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Name}" Value="Epoxy Coatings">
-                                                    <Setter Property="TextBlock.FontWeight" Value="Bold"/>
-                                                    <Setter Property="TextBlock.FontSize" Value="16"/>
+                                                    <Setter Property="TextBlock.FontWeight" Value="Bold" />
+                                                    <Setter Property="TextBlock.FontSize" Value="16" />
                                                     <!--<Setter Property="TextBlock.Foreground" Value="BurlyWood"/>-->
                                                 </DataTrigger>
-                                            </Style.Triggers> 
+                                            </Style.Triggers>
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
@@ -128,47 +129,49 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
         </Style>
     </UserControl.Resources>
     <Grid>
-        
+
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width=".25*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width=".25*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <!--<StackPanel >
             <TextBlock Text="Projects for Estimates"
-                   HorizontalAlignment="Center"    
+                   HorizontalAlignment="Center"
                    FontSize="16"
                    Margin="5,10,0,5"
                    FontWeight="Bold"/>
-            --><!--<TextBox Margin="5,0,5,5" 
-                     FontWeight="SemiBold"  
+        -->
+        <!--<TextBox Margin="5,0,5,5"
+                     FontWeight="SemiBold"
                      x:Name="FilterTextBox"
                      TextChanged="FilterTextBox_TextChanged"
                      Text="{Binding FilterString,UpdateSourceTrigger=PropertyChanged}"
-                     FontSize="14"></TextBox>--><!--
+                     FontSize="14"></TextBox>-->
+        <!--
         </StackPanel>-->
-        <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth4"
-                             materialDesign:ShadowAssist.ShadowEdges="All"
-                             materialDesign:ShadowAssist.Darken="True"
-                             Grid.RowSpan="2"
-                             Margin="5,0,-5,0" 
-                             UniformCornerRadius="5">
-            <ListView HorizontalContentAlignment="Stretch" 
-                  
-                 Margin="5,0,0,5"                 
-                 x:Name="ProjectList"
-                 SelectionMode="Multiple"
-                 ItemsSource="{Binding ProjectView}"
-                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                 
-                 ItemTemplate="{StaticResource ProjectTemplate}">
+        <materialDesign:Card
+            Grid.RowSpan="2"
+            Margin="5,0,-5,0"
+            materialDesign:ShadowAssist.Darken="True"
+            materialDesign:ShadowAssist.ShadowDepth="Depth4"
+            materialDesign:ShadowAssist.ShadowEdges="All"
+            UniformCornerRadius="5">
+            <ListView
+                x:Name="ProjectList"
+                Margin="5,0,0,5"
+                HorizontalContentAlignment="Stretch"
+                ItemTemplate="{StaticResource ProjectTemplate}"
+                ItemsSource="{Binding ProjectView}"
+                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                SelectionMode="Multiple">
 
                 <ListView.GroupStyle>
-                    <GroupStyle ContainerStyle="{StaticResource ContainerStyle}"/>
+                    <GroupStyle ContainerStyle="{StaticResource ContainerStyle}" />
                 </ListView.GroupStyle>
 
                 <ListView.ItemContainerStyle>
@@ -181,7 +184,7 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                                 <MultiTrigger.Setters>
                                     <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
                                     <Setter Property="BorderBrush" Value="{StaticResource SecondaryHueMidBrush}" />
-                                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}"/>
+                                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
                                 </MultiTrigger.Setters>
                             </MultiTrigger>
                         </Style.Triggers>
@@ -191,46 +194,50 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
 
             </ListView>
         </materialDesign:Card>
-        
-        <ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Auto" Grid.Column="1">
-            <Grid  
-               >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Popup  HorizontalAlignment="Stretch"
-                   IsOpen="{Binding IsProcessing}"
-                   Height="100"
-                     
-                    AllowsTransparency="True"
-                    Placement="Center"
-                    Width="500"
-                   VerticalAlignment="Center">
-                    <StackPanel Background="{StaticResource PrimaryHueDarkBrush}">
-                        <TextBlock Background="{StaticResource PrimaryHueDarkForegroundBrush}" FontSize="15"
-                               Margin="10"                              
-                           Text="{Binding StatusMessage}">
 
-                        </TextBlock>
-                        <ProgressBar  Height="10" Margin="10"
-                        Minimum="1" Maximum="28" Value="{Binding CompletedProjects}" />
+        <ScrollViewer Grid.Column="1" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Popup
+                    Width="500"
+                    Height="100"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    AllowsTransparency="True"
+                    IsOpen="{Binding IsProcessing}"
+                    Placement="Center">
+                    <StackPanel Background="{StaticResource PrimaryHueDarkBrush}">
+                        <TextBlock
+                            Margin="10"
+                            Background="{StaticResource PrimaryHueDarkForegroundBrush}"
+                            FontSize="15"
+                            Text="{Binding StatusMessage}" />
+                        <ProgressBar
+                            Height="10"
+                            Margin="10"
+                            Maximum="28"
+                            Minimum="1"
+                            Value="{Binding CompletedProjects}" />
                     </StackPanel>
 
                 </Popup>
-                <StackPanel Orientation="Horizontal" >
-                    <DataGrid ItemsSource="{Binding SelectedProjects,UpdateSourceTrigger=PropertyChanged}"
-                  VerticalAlignment="Top"
-                          Style="{StaticResource MaterialDesignDataGrid}"
-                          ColumnHeaderHeight="50"
-                          HorizontalAlignment="Stretch"                  
-                          IsReadOnly="True"
-                          CanUserAddRows="False"
-                          AutoGenerateColumns="False"
-                          Background="{StaticResource PrimaryHueDarkBrush}"
-                  
-                          Margin="10,5,10,0"
-                  >
+                <StackPanel Orientation="Horizontal">
+                    <DataGrid
+                        x:Name="projectsDatagrid"
+                        Margin="10,5,10,0"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
+                        AllowDrop="True"
+                        AutoGenerateColumns="False"
+                        Background="{StaticResource PrimaryHueDarkBrush}"
+                        CanUserAddRows="False"
+                        ColumnHeaderHeight="50"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding SelectedProjects, UpdateSourceTrigger=PropertyChanged}"
+                        Style="{StaticResource MaterialDesignDataGrid}">
                         <DataGrid.Resources>
 
                             <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="{x:Type DataGridRow}">
@@ -238,79 +245,99 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                             </Style>
                         </DataGrid.Resources>
                         <DataGrid.ColumnHeaderStyle>
-                            <Style BasedOn="{StaticResource {x:Type  DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                            <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
                                 <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
-                                <Setter Property="Foreground" Value="{StaticResource  PrimaryHueDarkForegroundBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
                             </Style>
                         </DataGrid.ColumnHeaderStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Name" IsReadOnly="True"
-                                            Width="200"
-                                    Binding="{Binding Converter={ StaticResource  projectNameConv}}">
+                            <DataGridTextColumn
+                                Width="200"
+                                Binding="{Binding Name}"
+                                Header="Name"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="150"
+                                Binding="{Binding WorkArea}"
+                                Header="Work Area"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn Binding="{Binding MaterialViewModel.TotalMetalPrice, StringFormat='c', UpdateSourceTrigger=PropertyChanged}" Header="Metal Cost" />
+                            <DataGridTextColumn
+                                Binding="{Binding MaterialViewModel.TotalSlopingPrice, StringFormat='c', UpdateSourceTrigger=PropertyChanged}"
+                                Header="Slope Cost"
+                                IsReadOnly="False" />
+                            <DataGridTextColumn
+                                Binding="{Binding MaterialViewModel.TotalSystemPrice, StringFormat='c', UpdateSourceTrigger=PropertyChanged}"
+                                Header="System Cost"
+                                IsReadOnly="False" />
+                            <DataGridTextColumn
+                                Binding="{Binding MaterialViewModel.AllTabsMaterialTotal, StringFormat='c', UpdateSourceTrigger=PropertyChanged}"
+                                Header="Material Cost"
+                                IsReadOnly="False" />
+                            <DataGridTextColumn
+                                Binding="{Binding MaterialViewModel.AllTabsLaborTotal, StringFormat='c', UpdateSourceTrigger=PropertyChanged}"
+                                Header="Labor Cost"
+                                IsReadOnly="False" />
 
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Header="Work Area" IsReadOnly="True"
-                                             Width="150"
-                                    Binding="{Binding WorkArea}">
-
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Header="Metal Cost" 
-                                    Binding="{Binding MaterialViewModel.TotalMetalPrice,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
-                            <DataGridTextColumn Header ="Slope Cost"
-                                    Binding="{Binding MaterialViewModel.TotalSlopingPrice,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"
-                                    IsReadOnly="False"/>
-                            <DataGridTextColumn Header ="System Cost"
-                                    Binding="{Binding MaterialViewModel.TotalSystemPrice,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"
-                                    IsReadOnly="False"/>
-                            <DataGridTextColumn Header ="Material Cost" 
-                                    Binding="{Binding MaterialViewModel.AllTabsMaterialTotal,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"
-                                    IsReadOnly="False"/>
-                            <DataGridTextColumn Header ="Labor Cost" 
-                                    Binding="{Binding MaterialViewModel.AllTabsLaborTotal,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"
-                                    IsReadOnly="False"/>
-
-                            <DataGridTextColumn Header ="Labor %" 
-                                    Binding="{Binding LaborPercentage,UpdateSourceTrigger=PropertyChanged}"
-                                    IsReadOnly="False"/>
-                            <DataGridTextColumn Header ="Total Cost" 
-                                    Binding="{Binding MaterialViewModel.TotalSale,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"
-                                    IsReadOnly="False"/>
-                            <DataGridTextColumn Header ="Total Cost/Sqft" 
-                                    Binding="{Binding MaterialViewModel.TotalCostperSqft,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"
-                                    IsReadOnly="False"/>
+                            <DataGridTextColumn
+                                Binding="{Binding LaborPercentage, UpdateSourceTrigger=PropertyChanged}"
+                                Header="Labor %"
+                                IsReadOnly="False" />
+                            <DataGridTextColumn
+                                Binding="{Binding MaterialViewModel.TotalSale, StringFormat='c', UpdateSourceTrigger=PropertyChanged}"
+                                Header="Total Cost"
+                                IsReadOnly="False" />
+                            <DataGridTextColumn
+                                Binding="{Binding MaterialViewModel.TotalCostperSqft, StringFormat='c', UpdateSourceTrigger=PropertyChanged}"
+                                Header="Total Cost/Sqft"
+                                IsReadOnly="False" />
                         </DataGrid.Columns>
 
                     </DataGrid>
-                    <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" VerticalAlignment="Top"
-                                     Height="50" Width="50"
-                                     ToolTip="Click to Perform Actions"
-                                     UniformCornerRadius="20"
-                                     Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
-                                     Margin="0,5,0,0" Background="{StaticResource  PrimaryHueDarkBrush }">
-                        <materialDesign:PopupBox HorizontalContentAlignment="Center" HorizontalAlignment="Center" >
+                    <materialDesign:Card
+                        Width="50"
+                        Height="50"
+                        Margin="0,5,0,0"
+                        VerticalAlignment="Top"
+                        materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                        Background="{StaticResource PrimaryHueDarkBrush}"
+                        Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
+                        ToolTip="Click to Perform Actions"
+                        UniformCornerRadius="20">
+                        <materialDesign:PopupBox HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                             <StackPanel>
                                 <Button Command="{Binding LoadEstimate}">
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
-                                            <materialDesign:PackIcon Kind="FileDocumentEdit" VerticalAlignment="Center"
-                                                                 Foreground="{StaticResource PrimaryHueDarkBrush}"/>
-                                            <TextBlock Text="Load Estimate" Margin="10,0,0,0" VerticalAlignment="Center" />
-                                            <Label Content="{Binding SelectedProjects[0].ProductVersion}"
-                               HorizontalAlignment="Right"
-                               FontSize="8"
-                               Foreground="Blue"                              
-                               Margin="20,0,0,0"
-                               VerticalAlignment="Bottom"/>
+                                            <materialDesign:PackIcon
+                                                VerticalAlignment="Center"
+                                                Foreground="{StaticResource PrimaryHueDarkBrush}"
+                                                Kind="FileDocumentEdit" />
+                                            <TextBlock
+                                                Margin="10,0,0,0"
+                                                VerticalAlignment="Center"
+                                                Text="Load Estimate" />
+                                            <Label
+                                                Margin="20,0,0,0"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Bottom"
+                                                Content="{Binding SelectedProjects[0].ProductVersion}"
+                                                FontSize="8"
+                                                Foreground="Blue" />
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
-                                <Button Command="{Binding SaveEstimate}" >
+                                <Button Command="{Binding SaveEstimate}">
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
-                                            <materialDesign:PackIcon Kind="ContentSaveEdit" VerticalAlignment="Center"
-                                                                 Foreground="{StaticResource PrimaryHueDarkBrush}"/>
-                                            <TextBlock Text="SaveAs Estimate" Margin="10,0,0,0"
-                                       VerticalAlignment="Center"/>
+                                            <materialDesign:PackIcon
+                                                VerticalAlignment="Center"
+                                                Foreground="{StaticResource PrimaryHueDarkBrush}"
+                                                Kind="ContentSaveEdit" />
+                                            <TextBlock
+                                                Margin="10,0,0,0"
+                                                VerticalAlignment="Center"
+                                                Text="SaveAs Estimate" />
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
@@ -327,10 +354,14 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                                 <Button Command="{Binding CreateSummary}">
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
-                                            <materialDesign:PackIcon Kind="MicrosoftExcel" VerticalAlignment="Center"
-                                                                 Foreground="{StaticResource PrimaryHueDarkBrush}"/>
-                                            <TextBlock Text="Create Summary" Margin="10,0,0,0"
-                                       VerticalAlignment="Center"/>
+                                            <materialDesign:PackIcon
+                                                VerticalAlignment="Center"
+                                                Foreground="{StaticResource PrimaryHueDarkBrush}"
+                                                Kind="MicrosoftExcel" />
+                                            <TextBlock
+                                                Margin="10,0,0,0"
+                                                VerticalAlignment="Center"
+                                                Text="Create Summary" />
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
@@ -346,14 +377,14 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>-->
-                                <Separator/>
-                                <CheckBox Content="Apply Latest Prices"
-                                      Style="{StaticResource MaterialDesignFilterChipCheckBox}"
-                                      ToolTip="Please check if you want to apply the latest prices. To revert to old price reload the estimate file."
-                                      x:Name="applynewPrice"
-                                      IsChecked="{Binding ApplyLatestPrice}"
-                                      IsEnabled="{Binding CanApplyLatestPrice}"
-                                      />
+                                <Separator />
+                                <CheckBox
+                                    x:Name="applynewPrice"
+                                    Content="Apply Latest Prices"
+                                    IsChecked="{Binding ApplyLatestPrice}"
+                                    IsEnabled="{Binding CanApplyLatestPrice}"
+                                    Style="{StaticResource MaterialDesignFilterChipCheckBox}"
+                                    ToolTip="Please check if you want to apply the latest prices. To revert to old price reload the estimate file." />
                             </StackPanel>
 
                         </materialDesign:PopupBox>
@@ -365,124 +396,163 @@ AncestorType={x:Type UserControl}}, Path=DataContext.ReplicateProject}"
 
             </Grid>
         </ScrollViewer>
-       
-        
-        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1"
-                        VerticalAlignment="Bottom" Margin="0,0,0,15">
-                
-                <TextBox materialDesign:HintAssist.Hint="Job Name" Text="{Binding JobName}"
-                         Margin="10,10" Width="200"
-            Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}" VerticalAlignment="Bottom" />
 
-                <!--<TextBox materialDesign:HintAssist.Hint="Prepared By"
+
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="0,0,0,15"
+            VerticalAlignment="Bottom"
+            Orientation="Horizontal">
+
+            <TextBox
+                Width="200"
+                Margin="10,10"
+                VerticalAlignment="Bottom"
+                materialDesign:HintAssist.Hint="Job Name"
+                Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                Text="{Binding JobName}" />
+
+            <!--<TextBox materialDesign:HintAssist.Hint="Prepared By"
                          VerticalAlignment="Bottom" Margin="10,10" Width="200"
                          Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
                      Text="{Binding PreparedBy}"
                      />-->
             <StackPanel VerticalAlignment="Bottom">
-                <TextBlock Margin="10" FontWeight="SemiBold"
-                       Text="Prepared By"/>
-                <ComboBox Text="{Binding PreparedBy,UpdateSourceTrigger=PropertyChanged}" 
-                          HorizontalAlignment="Left"
-                          Margin="10,0,0,10"                        
-                          Width="180">
-                    <ComboBoxItem Content="seank"/>
-                    <ComboBoxItem Content="admin"/>
+                <TextBlock
+                    Margin="10"
+                    FontWeight="SemiBold"
+                    Text="Prepared By" />
+                <ComboBox
+                    Width="180"
+                    Margin="10,0,0,10"
+                    HorizontalAlignment="Left"
+                    Text="{Binding PreparedBy, UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBoxItem Content="seank" />
+                    <ComboBoxItem Content="admin" />
                     <ComboBoxItem Content="stevend" />
-                    <ComboBoxItem Content="mikes"/>
-                    <ComboBoxItem Content="davidm"/>
+                    <ComboBoxItem Content="mikes" />
+                    <ComboBoxItem Content="davidm" />
                     <ComboBoxItem Content="chriss" />
-                    <ComboBoxItem Content="davidd"/>
+                    <ComboBoxItem Content="davidd" />
                     <ComboBoxItem Content="erniep" />
-                    <ComboBoxItem Content="guestuser1"/>
-                    <ComboBoxItem Content="guestuser2"/>
-                    <ComboBoxItem Content="guestuser3"/>
-                    <ComboBoxItem Content="guestadmin"/>
-                    <ComboBoxItem Content="admin"/>
+                    <ComboBoxItem Content="guestuser1" />
+                    <ComboBoxItem Content="guestuser2" />
+                    <ComboBoxItem Content="guestuser3" />
+                    <ComboBoxItem Content="guestadmin" />
+                    <ComboBoxItem Content="admin" />
                     <ComboBoxItem Content="feliciab" />
-                    <ComboBoxItem Content="tammya"/>
-                    <ComboBoxItem Content="nancyr"/>
+                    <ComboBoxItem Content="tammya" />
+                    <ComboBoxItem Content="nancyr" />
                     <ComboBoxItem Content="aracelim" />
                     <ComboBoxItem Content="matts" />
-                    <ComboBoxItem Content="deionr"/>
+                    <ComboBoxItem Content="deionr" />
                 </ComboBox>
             </StackPanel>
-            <DatePicker Height="30"
-                        Margin="10,10" Width="200"
-                        SelectedDate="{Binding JobCreationDate, Mode=TwoWay,
-                        UpdateSourceTrigger=PropertyChanged,
-                        TargetNullValue={x:Static System:DateTime.Now}}"
-                        VerticalAlignment="Bottom"
-                        VerticalContentAlignment="Bottom"
-                        HorizontalContentAlignment="Left"/>
-            
-        </StackPanel>
-        <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" VerticalAlignment="Bottom"
-                                 HorizontalAlignment="Right"
-                                 HorizontalContentAlignment="Center"
-                                ToolTip="Project Totals"
-                                UniformCornerRadius="15"
-                                 Grid.Column="2"
-                               
-                             Grid.RowSpan="2"
-                              Margin="10" Background="{StaticResource   SecondaryHueMidBrush }">
-            <materialDesign:Card Name="Totals" HorizontalAlignment="Center"
-                                     Padding="10">
+            <DatePicker
+                Width="200"
+                Height="30"
+                Margin="10,10"
+                VerticalAlignment="Bottom"
+                HorizontalContentAlignment="Left"
+                VerticalContentAlignment="Bottom"
+                SelectedDate="{Binding JobCreationDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static System:DateTime.Now}}" />
 
-                <Grid DataContext="{Binding ProjectTotals,UpdateSourceTrigger=PropertyChanged}"
-                      HorizontalAlignment="Stretch"
-                      MinWidth="200"
-                      Grid.Row="1"    
-                      Margin="10,0,10,10">
+        </StackPanel>
+        <materialDesign:Card
+            Grid.RowSpan="2"
+            Grid.Column="2"
+            Margin="10"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            HorizontalContentAlignment="Center"
+            materialDesign:ShadowAssist.ShadowDepth="Depth3"
+            Background="{StaticResource SecondaryHueMidBrush}"
+            ToolTip="Project Totals"
+            UniformCornerRadius="15">
+            <materialDesign:Card
+                Name="Totals"
+                Padding="10"
+                HorizontalAlignment="Center">
+
+                <Grid
+                    Grid.Row="1"
+                    MinWidth="200"
+                    Margin="10,0,10,10"
+                    HorizontalAlignment="Stretch"
+                    DataContext="{Binding ProjectTotals, UpdateSourceTrigger=PropertyChanged}">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <StackPanel>
-                        <TextBlock  Margin="0,0,5,5" 
-                                   FontWeight="SemiBold" Text="Metal Cost"/>
-                        <TextBlock  FontWeight="SemiBold"
-                                    Margin="0,0,5,5" Text="Slope Cost"/>
-                        <TextBlock    Margin="0,0,5,5"
-                                   FontWeight="SemiBold" Text="System Cost"/>
-                        <TextBlock   Margin="0,0,5,5"
-                                   FontWeight="SemiBold" Text="Material Cost"/>
-                        <TextBlock   Margin="0,0,5,5"
-                                   FontWeight="SemiBold" Text="Labor Cost"/>
-                        <TextBlock   Margin="0,0,5,5"
-                                   FontWeight="SemiBold" Text="Labor %"/>
-                        <TextBlock   Margin="0,5,5,5" FontSize="15"
-                                         
-                                   FontWeight="Bold" Text="Total Cost"/>
+                        <TextBlock
+                            Margin="0,0,5,5"
+                            FontWeight="SemiBold"
+                            Text="Metal Cost" />
+                        <TextBlock
+                            Margin="0,0,5,5"
+                            FontWeight="SemiBold"
+                            Text="Slope Cost" />
+                        <TextBlock
+                            Margin="0,0,5,5"
+                            FontWeight="SemiBold"
+                            Text="System Cost" />
+                        <TextBlock
+                            Margin="0,0,5,5"
+                            FontWeight="SemiBold"
+                            Text="Material Cost" />
+                        <TextBlock
+                            Margin="0,0,5,5"
+                            FontWeight="SemiBold"
+                            Text="Labor Cost" />
+                        <TextBlock
+                            Margin="0,0,5,5"
+                            FontWeight="SemiBold"
+                            Text="Labor %" />
+                        <TextBlock
+                            Margin="0,5,5,5"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Text="Total Cost" />
                     </StackPanel>
                     <StackPanel Grid.Column="1">
-                        <TextBlock  FontWeight="SemiBold"
-                       Text="{Binding MetalCost}"
-                       Margin="5,0,5,5"/>
+                        <TextBlock
+                            Margin="5,0,5,5"
+                            FontWeight="SemiBold"
+                            Text="{Binding MetalCost}" />
 
-                        <TextBlock  FontWeight="SemiBold"
-                       Text="{Binding SlopeCost}"
-                       Margin="5,0,5,5"/>
+                        <TextBlock
+                            Margin="5,0,5,5"
+                            FontWeight="SemiBold"
+                            Text="{Binding SlopeCost}" />
 
-                        <TextBlock FontWeight="SemiBold"
-                       Text="{Binding SystemCost}"
-                       Margin="5,0,5,5"/>
+                        <TextBlock
+                            Margin="5,0,5,5"
+                            FontWeight="SemiBold"
+                            Text="{Binding SystemCost}" />
 
-                        <TextBlock  FontWeight="SemiBold"
-                       Text="{Binding MaterialCost}"
-                       Margin="5,0,5,5"/>
+                        <TextBlock
+                            Margin="5,0,5,5"
+                            FontWeight="SemiBold"
+                            Text="{Binding MaterialCost}" />
 
-                        <TextBlock  FontWeight="SemiBold"
-                       Text="{Binding LaborCost}"
-                       Margin="5,0,5,5"/>
+                        <TextBlock
+                            Margin="5,0,5,5"
+                            FontWeight="SemiBold"
+                            Text="{Binding LaborCost}" />
 
-                        <TextBlock  FontWeight="SemiBold"
-                       Text="{Binding LaborPercentage}"
-                       Margin="5,0,5,5"/>
+                        <TextBlock
+                            Margin="5,0,5,5"
+                            FontWeight="SemiBold"
+                            Text="{Binding LaborPercentage}" />
 
-                        <TextBlock FontSize="15" FontWeight="Bold" Background="{StaticResource SecondaryHueMidBrush}"
-                       Text="{Binding TotalCost}"
-                       Margin="5,5,5,5"/>
+                        <TextBlock
+                            Margin="5,5,5,5"
+                            Background="{StaticResource SecondaryHueMidBrush}"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Text="{Binding TotalCost}" />
                     </StackPanel>
 
                 </Grid>

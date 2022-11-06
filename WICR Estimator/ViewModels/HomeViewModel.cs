@@ -469,7 +469,7 @@ namespace WICR_Estimator.ViewModels
                     
                     prj.CopyCount++;
                     string prjName = prj.WorkArea == null ? prj.Name + "." + prj.CopyCount : prj.WorkArea;
-                    replicatedProject.Name = prjName; 
+                    replicatedProject.Name = prjName.Replace(prj.Sequence+".",""); 
                     replicatedProject.OriginalProjectName = prj.OriginalProjectName;
                     replicatedProject.GrpName = "Copied";
                     replicatedProject.MainGroup = "Replicated Projects";
@@ -1183,15 +1183,28 @@ namespace WICR_Estimator.ViewModels
                 else
                 {
                     args.IsProjectLoadedfromEstimate = true;                
-                }    
+                }
+                
                 OnProjectSelectionChange(SelectedProjects, args);
             }
+            AddProjectSequence(SelectedProjects);
             MyselectedProjects = SelectedProjects;
             OnPropertyChanged("SelectedProjects");
             if (SelectedProjects != null)
             {
                 
                 UpdateProjectTotals();
+            }
+        }
+
+        public void AddProjectSequence(ObservableCollection<Project> selectedProjects)
+        {
+            int k = 1;
+            foreach (var item in selectedProjects)
+            {
+                item.Sequence = k;
+                k++;
+                //item.OriginalProjectName = item.Sequence +"."+ item.OriginalProjectName;
             }
         }
 
@@ -1219,10 +1232,10 @@ namespace WICR_Estimator.ViewModels
                 {
                     if (item.ProjectJobSetUp.WorkArea != "")
                     {
-                        item.Name = item.ProjectJobSetUp.WorkArea;
+                        item.Name = item.Sequence+"."+ item.ProjectJobSetUp.WorkArea;
                     }
                     else
-                        item.Name = item.ProjectJobSetUp.ProjectName;
+                        item.Name = item.Sequence + "." + item.ProjectJobSetUp.ProjectName;
                 }
 
 

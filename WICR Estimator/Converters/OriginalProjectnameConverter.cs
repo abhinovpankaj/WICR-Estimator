@@ -22,7 +22,7 @@ namespace WICR_Estimator.Converters
                 }
             }
             
-            return prj.OriginalProjectName;
+            return prj.Name;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

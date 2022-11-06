@@ -231,7 +231,6 @@ namespace WICR_Estimator.Models
                 updatedJobSetup = new DelegateCommand(UpdateJobSetUp, canUpdate);
                 //RegisterForUndoRedo();
             }
-
             
 
         }
@@ -263,8 +262,25 @@ namespace WICR_Estimator.Models
 
         public int CopyCount { get; set; }
 
-        public string Name { get; set; }
+        private string _name;
+        public string Name
+        {
+            get
+            {
+                return Sequence==0?_name:Sequence + "." + _name;
+            }
+            set
+            {
+                _name = value;
+                RaisePropertyChanged("Name");
+            }
+        }
         #region MainTable prop
+        public void RefreshProjectName()
+        {
+            var nme = OriginalProjectName;
+            RaisePropertyChanged("OriginalProjectName");
+        }
         public void UpdateMainTable()
         {
             //OnPropertyChanged("TotalCost");
@@ -650,7 +666,17 @@ namespace WICR_Estimator.Models
             return true;
             
         }
-
+        private int seq;
+        public int Sequence 
+        {
+            get { return seq; }
+            set
+            {
+                seq = value;
+                RaisePropertyChanged("Sequence");
+                RaisePropertyChanged("Name");
+            }
+        }
         private void UpdateJobSetUp(object obj)
         {
             if(this.MetalViewModel!=null)
