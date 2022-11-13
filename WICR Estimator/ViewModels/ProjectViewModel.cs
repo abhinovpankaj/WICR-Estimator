@@ -87,11 +87,21 @@ namespace WICR_Estimator.ViewModels
             //}
             if (!e.IsProjectLoadedfromEstimate)
             {
-                initializeApp();
+                if (e.IsReshuffled)
+                {
+                    ShuffleProjects();
+                }
+                else
+                    initializeApp();
             }
             
         }
-
+        private void ShuffleProjects()
+        {
+            
+            EnabledProjects = HomeViewModel.MyselectedProjects;
+            
+        }
 
         #region Properties
         private static bool isAdminloggedIn;
@@ -147,7 +157,7 @@ namespace WICR_Estimator.ViewModels
 
             if (EnabledProjects!=null)
             {
-                 
+               
                 foreach (Project prj in EnabledProjects)
                 {
                     

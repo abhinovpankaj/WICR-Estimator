@@ -42,7 +42,7 @@ namespace WICR_Estimator.Views
 
         }
 
-       
+        HomeViewModel vm;
 
         private void refreshGData_Click(object sender, RoutedEventArgs e)
         {
@@ -149,6 +149,10 @@ namespace WICR_Estimator.Views
 
         void projectsDatagrid_Drop(object sender, DragEventArgs e)
         {
+            if (vm==null)
+            {
+                vm = this.DataContext as HomeViewModel;
+            }
             if (rowIndex < 0)
                 return;
             int index = this.GetCurrentRowIndex(e.GetPosition);
@@ -165,10 +169,11 @@ namespace WICR_Estimator.Views
             Project changedProduct = projects[rowIndex];
             projects.RemoveAt(rowIndex);
             projects.Insert(index, changedProduct);
-            
-            AddProjectSequence(projects);
+            //vm.AddProjectSequence();
+            //vm.fireEvent(changedProduct);
+            AddProjectSequence(projects,index);
         }
-        public void AddProjectSequence(ObservableCollection<Project> selectedProjects)
+        public void AddProjectSequence(ObservableCollection<Project> selectedProjects,int index)
         {
             int k = 1;
             foreach (var item in selectedProjects)
@@ -178,7 +183,20 @@ namespace WICR_Estimator.Views
                 item.RefreshProjectName();                
                 //item.OriginalProjectName = item.Sequence +"."+ item.OriginalProjectName;
             }
+
+            
+            if (selectedProjects.Count > 1)
+            {
+                var result = from item in selectedProjects
+                             orderby item.Sequence ascending
+                             select item;
+
+                selectedProjects = (ObservableCollection<Project>)result.ToObservableCollection();
+            }
+            //vm.SelectedProjects=selectedProjects; 
+            HomeViewModel.MyselectedProjects = selectedProjects;
             projectsDatagrid.InvalidateVisual();
+            vm.fireEvent(selectedProjects[index]);
         }
         void projectsDatagrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {

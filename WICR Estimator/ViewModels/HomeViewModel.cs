@@ -353,7 +353,7 @@ namespace WICR_Estimator.ViewModels
         {
             get
             {
-                var selected = Projects.Where(p => p.IsSelectedProject == true).ToList();
+                var selected = Projects.Where(p => p.IsSelectedProject == true).OrderBy(x=>x.Sequence).ToList();
                 return new ObservableCollection<Project>(selected);
             }
             set
@@ -1184,11 +1184,11 @@ namespace WICR_Estimator.ViewModels
                 {
                     args.IsProjectLoadedfromEstimate = true;                
                 }
+                AddProjectSequence();
                 
                 OnProjectSelectionChange(SelectedProjects, args);
             }
-            AddProjectSequence(SelectedProjects);
-            MyselectedProjects = SelectedProjects;
+            
             OnPropertyChanged("SelectedProjects");
             if (SelectedProjects != null)
             {
@@ -1196,16 +1196,50 @@ namespace WICR_Estimator.ViewModels
                 UpdateProjectTotals();
             }
         }
+        public void fireEvent(Project sender)
+        {
+            ProjectLoadEventArgs args = new ProjectLoadEventArgs();
+            if (sender != null)
+            {
+                var proj = sender as Project;
+                if (proj.EstimateID == 0)
+                {
+                    args.IsProjectLoadedfromEstimate = false;
+                }
+                else
+                    args.IsProjectLoadedfromEstimate = true;
 
-        public void AddProjectSequence(ObservableCollection<Project> selectedProjects)
+            }
+            else
+            {
+                args.IsProjectLoadedfromEstimate = true;
+            }
+            args.IsReshuffled = true;
+            selectedProjects = HomeViewModel.MyselectedProjects;
+            OnProjectSelectionChange(SelectedProjects, args);
+        }
+        public void AddProjectSequence()
         {
             int k = 1;
-            foreach (var item in selectedProjects)
+            foreach (var item in SelectedProjects)
             {
                 item.Sequence = k;
                 k++;
+                item.RefreshProjectName();
                 //item.OriginalProjectName = item.Sequence +"."+ item.OriginalProjectName;
             }
+
+            if (SelectedProjects.Count>1)
+            {
+                var result = from item in SelectedProjects
+                             orderby item.Sequence ascending
+                             select item;
+
+               
+                SelectedProjects = (ObservableCollection<Project>)result.ToObservableCollection();
+            }
+            OnPropertyChanged("SelectedProjects");
+            MyselectedProjects = SelectedProjects;
         }
 
         private void ProjectJobSetUp_OnProjectNameChange(object sender, EventArgs e)
@@ -2496,5 +2530,7 @@ namespace WICR_Estimator.ViewModels
     public class ProjectLoadEventArgs:EventArgs
     {
         public bool IsProjectLoadedfromEstimate { get; set; }
+
+        public bool IsReshuffled { get; set; }
     }
 }
