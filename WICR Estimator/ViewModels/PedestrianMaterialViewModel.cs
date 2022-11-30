@@ -32,9 +32,9 @@ namespace WICR_Estimator.ViewModels
         {
             double sumVal = totalSqft + TotalSqftPlywood;
             TotalLaborUnitPrice = sumVal == 0 ? 0 : TotalLaborWithoutDrive / sumVal;
-            OnPropertyChanged("TotalLaborUnitPrice");
+            RaisePropertyChanged("TotalLaborUnitPrice");
         }
-        private void setUnitChangeValues()
+        public override void setUnitChangeValues()
         {
             SystemMaterial item = SystemMaterials.Where(x => x.Name == "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)").FirstOrDefault();
             if (item != null)
@@ -43,6 +43,7 @@ namespace WICR_Estimator.ViewModels
                 double unit = 0;
                 
                 Double.TryParse(item.SMUnits,out unit);
+
                 item.SMSqftH = unit;
                 item.Qty = unit / item.Coverage;
                 item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, 0, 0);
@@ -72,7 +73,7 @@ namespace WICR_Estimator.ViewModels
         
         public override void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {
-            JobSetup Js = sender as JobSetup;
+                JobSetup Js = sender as JobSetup;
             if (Js!=null)
             {
                 TotalSqftPlywood = Js.TotalSqftPlywood;
@@ -88,6 +89,7 @@ namespace WICR_Estimator.ViewModels
         }
         public override void ApplyCheckUnchecks(object obj)
         {
+            lastCheckedMat = obj.ToString();
             //base.ApplyCheckUnchecks(obj);
             calculateRLqty();
             CalculateLaborMinCharge(false);
@@ -132,33 +134,36 @@ namespace WICR_Estimator.ViewModels
                     double sp = SystemMaterials[i].SpecialMaterialPricing;
                     bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
                     bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
-                    SystemMaterials[i] = sysMat[i];
 
-                    SystemMaterials[i].SpecialMaterialPricing = sp;
-                    if(iscbEnabled)
-                    {
-                        SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                        SystemMaterials[i].IsMaterialChecked = iscbChecked;
-                    }
-                    
+                    //SystemMaterials[i] = sysMat[i];
+
+                    //SystemMaterials[i].SpecialMaterialPricing = sp;
+
+                    //    SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                    //    SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                    UpdateMe(sysMat[i]);
+
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
+                    SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
+
                     if (SystemMaterials[i].Name == "EXTRA STAIR NOSING" || SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
                         SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)")
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
-                            SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            //SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
                         }
                     }
                     if (SystemMaterials[i].Name == "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)")
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
-                            SystemMaterials[i].SMUnits = qtyList[SystemMaterials[i].Name].ToString();
+                            //SystemMaterials[i].SMUnits = qtyList[SystemMaterials[i].Name].ToString();
+                            SystemMaterials[i].UpdateUnits(qtyList[SystemMaterials[i].Name].ToString());
                         }
                     }
-
                 }
-
             }
             #endregion
 
@@ -167,8 +172,13 @@ namespace WICR_Estimator.ViewModels
                 SystemMaterials = sysMat;
                 
             }
-            setCheckBoxes();
             setExceptionValues(null);
+            if (hasSetupChanged)
+            {
+                setCheckBoxes();
+                setUnitChangeValues();
+            }          
+            
             
             if (OtherMaterials.Count == 0)
             {
@@ -233,11 +243,11 @@ namespace WICR_Estimator.ViewModels
             CostperSqftMaterial = (totalSqft + riserCount + TotalSqftPlywood) == 0 ? 0 : TotalSystemPrice / (totalSqft + riserCount + TotalSqftPlywood);
             CostperSqftSubContract = (totalSqft + riserCount + TotalSqftPlywood) == 0 ? 0 : TotalSubcontractLabor / (totalSqft + riserCount + TotalSqftPlywood);
             TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
-            OnPropertyChanged("CostperSqftSlope");
-            OnPropertyChanged("CostperSqftMetal");
-            OnPropertyChanged("CostperSqftMaterial");
-            OnPropertyChanged("CostperSqftSubContract");
-            OnPropertyChanged("TotalCostperSqft");
+            RaisePropertyChanged("CostperSqftSlope");
+            RaisePropertyChanged("CostperSqftMetal");
+            RaisePropertyChanged("CostperSqftMaterial");
+            RaisePropertyChanged("CostperSqftSubContract");
+            RaisePropertyChanged("TotalCostperSqft");
         }
 
         
@@ -297,17 +307,23 @@ namespace WICR_Estimator.ViewModels
                     || item.Name == "1/20 SAND/ #100 LB"
                     ||item.Name== "INTERLAMINATE PRIMER (XYLENE) FROM LOWRYS"
                     || item.Name== "7016 - AR - INTERMEDIATE COAT / 5 GAL PAILS 20 MILS"
-                    || item.Name == "Stucco Material Remove and replace (LF)")
+                    || item.Name == "Stucco Material Remove and replace (LF)"                   
+                    )
                 {
 
                 }
                 else
                 {
-                    //if (!item.IsMaterialEnabled)
+                    //if (item.Name == "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL")
                     //{
-                        item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
+                    //    bool ischecked = item.IsMaterialChecked;
+                    //    if (IsReseal)
+                    //    {
+                    //        item.IsMaterialChecked = IsReseal;
+                    //    }
                     //}
-                    
+                    //else
+                        item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);        
                 }
 
             }
@@ -358,7 +374,11 @@ namespace WICR_Estimator.ViewModels
         }
         //calculateQTY for 9801 ACCELERATOR
         public override void calculateRLqty()
-        {            
+        {
+            if (SystemMaterials.Count==0)
+            {
+                return;
+            }
             double qty = 0;
             foreach (var item in SystemMaterials)
             {
@@ -424,7 +444,7 @@ namespace WICR_Estimator.ViewModels
                 item.LaborUnitPrice = (TotalSqftPlywood + totalSqft + riserCount)==0?0:item.LaborExtension / (TotalSqftPlywood+totalSqft+riserCount);
 
             }
-            
+            calculateRLqty();
 
         }
         public override double getSqFtAreaH(string materialName)

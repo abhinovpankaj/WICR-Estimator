@@ -9,7 +9,7 @@ using System.Windows.Data;
 
 namespace WICR_Estimator.Converters
 {
-    class BoolToVisibilityConverter : IValueConverter
+    public class BoolToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

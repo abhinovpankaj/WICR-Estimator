@@ -27,7 +27,7 @@ namespace WICR_Estimator.ViewModels
         {
             double sumVal = totalSqftPlywood;
             TotalLaborUnitPrice = sumVal == 0 ? 0 : TotalLaborWithoutDrive / sumVal;
-            OnPropertyChanged("TotalLaborUnitPrice");
+            RaisePropertyChanged("TotalLaborUnitPrice");
         }
         public override void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {
@@ -100,13 +100,18 @@ namespace WICR_Estimator.ViewModels
                     double sp = SystemMaterials[i].SpecialMaterialPricing;
                     bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
                     bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
-                    SystemMaterials[i] = sysMat[i];
+                    //SystemMaterials[i] = sysMat[i];
 
-                    SystemMaterials[i].SpecialMaterialPricing = sp;
+                    //SystemMaterials[i].SpecialMaterialPricing = sp;
+                    UpdateMe(sysMat[i]);
+
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
+
                     if (iscbEnabled)
                     {
-                        SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                        SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                        //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                        //SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                        SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
                     }
 
                     if (SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
@@ -117,8 +122,8 @@ namespace WICR_Estimator.ViewModels
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
-                            SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
-
+                            //SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
                         }
                     }
 
@@ -362,6 +367,7 @@ namespace WICR_Estimator.ViewModels
 
         public override void ApplyCheckUnchecks(object obj)
         {
+            lastCheckedMat = obj.ToString();
             bool isChecked;
             if (obj.ToString() == "ADD METAL LATHE AND STAPLES")
             {
@@ -417,11 +423,11 @@ namespace WICR_Estimator.ViewModels
                 CostperSqftSubContract = TotalSubcontractLabor / (totalSqftPlywood + riserCount);
             }
             TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
-            OnPropertyChanged("CostperSqftSlope");
-            OnPropertyChanged("CostperSqftMetal");
-            OnPropertyChanged("CostperSqftMaterial");
-            OnPropertyChanged("CostperSqftSubContract");
-            OnPropertyChanged("TotalCostperSqft");
+            RaisePropertyChanged("CostperSqftSlope");
+            RaisePropertyChanged("CostperSqftMetal");
+            RaisePropertyChanged("CostperSqftMaterial");
+            RaisePropertyChanged("CostperSqftSubContract");
+            RaisePropertyChanged("TotalCostperSqft");
         }
 
     }

@@ -21,13 +21,20 @@ namespace WICR_Estimator.ViewModels
             FetchMaterialValuesAsync(false);
             
         }
-
+        bool systemOverconcChanged=false;
         public override void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {
             JobSetup Js = sender as JobSetup;
             if (Js != null)
             {
-                IsSystemOverConcrete = Js.IsSystemOverConcrete;
+                if (IsSystemOverConcrete != Js.IsSystemOverConcrete)
+                {
+                    IsSystemOverConcrete = Js.IsSystemOverConcrete;
+                    systemOverconcChanged = true;
+                }
+                else
+                    systemOverconcChanged = false;
+
             }
             base.JobSetup_OnJobSetupChange(sender, e);
         }
@@ -113,17 +120,25 @@ namespace WICR_Estimator.ViewModels
                     double sp = SystemMaterials[i].SpecialMaterialPricing;
                     bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
                     bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
-                    SystemMaterials[i] = sysMat[i];
+                    //SystemMaterials[i] = sysMat[i];
 
-                    SystemMaterials[i].SpecialMaterialPricing = sp;
-                    SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                    SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                    //SystemMaterials[i].SpecialMaterialPricing = sp;
+                    UpdateMe(sysMat[i]);
+
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
+
+                    //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                    //SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                    SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
+
+
                     if (SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)" || SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
                     SystemMaterials[i].Name == "Extra stair nosing lf")
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
-                            SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            //SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
                         }
                     }
 
@@ -135,7 +150,7 @@ namespace WICR_Estimator.ViewModels
                 SystemMaterials = sysMat;
 
             setExceptionValues(null);
-            if (hasSetupChanged)
+            if (systemOverconcChanged)
             {
                 setCheckBoxes();
             }
@@ -278,8 +293,8 @@ namespace WICR_Estimator.ViewModels
         {
             switch (materialName)
             {
-                case "Select Y for protection coat over membrane below tile(GU80-1 TOP COAT)":
-                case "Stair Nosing":
+                case "Select Y for protection coat over membrane below tile (GU80-1 TOP COAT)":
+                
                 case "Extra stair nosing lf":
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
                 case "Stucco Material Remove and replace (LF)":
@@ -289,6 +304,8 @@ namespace WICR_Estimator.ViewModels
                 case "Staples (3/4 Inch Crown, Box of 13,500)":
                 case "Base Coat EKC Cementitious Mix":
                     return !IsSystemOverConcrete;
+                case "Stair Nosing":
+                    return riserCount > 0 ? true : false;
                 default:
                     return  true;
             }
@@ -360,7 +377,7 @@ namespace WICR_Estimator.ViewModels
         public override void ApplyCheckUnchecks(object obj)
         {
             //base.ApplyCheckUnchecks(obj);
-
+            lastCheckedMat = obj.ToString();
             if (obj.ToString()== "ENDURO ELA-98 BINDER (2 COATS)")
             {
                 bool isChecked = SystemMaterials.Where(x => x.Name == "ENDURO ELA-98 BINDER (2 COATS)").FirstOrDefault().IsMaterialChecked;
@@ -386,7 +403,7 @@ namespace WICR_Estimator.ViewModels
             foreach (SystemMaterial item in SystemMaterials)
             {
                 if (item.Name== "2.5 Galvanized Lathe (18 s.f.) no less than 12 per sq ft."|| item.Name == "Base Coat EKC Cementitious Mix"
-                    || item.Name == "Staples (3/4 Inch Crown, Box of 13,500)")
+                    || item.Name == "Staples (3/4 Inch Crown, Box of 13,500)" || item.Name=="Stair Nosing")
                 {
                     item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
                 }

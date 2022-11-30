@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyToolkit.Model;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml.Serialization;
 using WICR_Estimator.Models;
+using WICR_Estimator.Services;
 
 namespace WICR_Estimator.ViewModels
 {
@@ -17,7 +19,7 @@ namespace WICR_Estimator.ViewModels
     [KnownType(typeof(EnduroKoteSlopeViewModel))]
     [KnownType(typeof(DualFlexSlopeViewModel))]
     [DataContract]
-    public class SlopeBaseViewModel:BaseViewModel
+    public class SlopeBaseViewModel:UndoRedoObservableObject
     {
         
         #region Private Properties
@@ -51,6 +53,23 @@ namespace WICR_Estimator.ViewModels
             IsOverrridable = true;
             UrethaneText="Slope Sand and Urethane Fill";
             SlopeHeaderText = "Slope Sand Cement Scrim";
+        }
+
+        //[OnDeserializing]
+        //internal void OnDeserializingCallBack(StreamingContext streamingContext)
+        //{
+        //    this.Slopes = new ObservableCollection<Slope>();
+        //}
+
+        public SlopeBaseViewModel(DBData dbData)
+        {
+            this.dbData = dbData;
+            Slopes = new ObservableCollection<Slope>();
+            SlopeTotals = new Totals { TabName = "Slope" };
+            IsOverrridable = true;
+            UrethaneText = "Slope Sand and Urethane Fill";
+            SlopeHeaderText = "Slope Sand Cement Scrim";
+            laborRate = dbData.FreightDBData.First(x => x.FactorName == "LaborRate").FactorValue;
         }
 
         #region public properties
@@ -89,7 +108,7 @@ namespace WICR_Estimator.ViewModels
                 if (value!=slopeMaterialName)
                 {
                     slopeMaterialName = value;
-                    OnPropertyChanged("SlopeMaterialName");
+                    RaisePropertyChanged("SlopeMaterialName");
                 }
             }
         }
@@ -102,7 +121,7 @@ namespace WICR_Estimator.ViewModels
             set
             {
                 isUrethaneVisible = value;
-                OnPropertyChanged("IsUrethaneVisible");
+                RaisePropertyChanged("IsUrethaneVisible");
             }
         }
         public bool IsOverrridable
@@ -123,24 +142,35 @@ namespace WICR_Estimator.ViewModels
             }
             set
             {
-                if (value != overrideManually)
-                {
-                    overrideManually = value;
+                //if (value != overrideManually)
+                //{
+                //    overrideManually = value;
+                //    if (!overrideManually)
+                //    {
+
+                //        totalmixesman = 0;
+                //        averagemixesprice = 0;
+                //        //CalculateGridTotal();
+                //        //CalculateTotalMixes();
+                //        OnPropertyChanged("TotalMixesMan");
+                //        OnPropertyChanged("AverageMixesPrice");
+                //    }
+
+
+                //    OnPropertyChanged("OverrideManually");
+                    Set(ref overrideManually, value);
                     if (!overrideManually)
                     {
 
                         totalmixesman = 0;
                         averagemixesprice = 0;
-                        //CalculateGridTotal();
-                        //CalculateTotalMixes();
-                        OnPropertyChanged("TotalMixesMan");
-                        OnPropertyChanged("AverageMixesPrice");
+                        
+                        RaisePropertyChanged("TotalMixesMan");
+                        RaisePropertyChanged("AverageMixesPrice");
                     }
-                    
 
-                    OnPropertyChanged("OverrideManually");
-                }
             }
+        
         }
         [DataMember]
         public ObservableCollection<Slope> Slopes
@@ -151,11 +181,12 @@ namespace WICR_Estimator.ViewModels
             }
             set
             {
-                if (slopes != value)
-                {
-                    slopes = value;
-                    OnPropertyChanged("Slopes");
-                }
+                //if (slopes != value)
+                //{
+                //    slopes = value;
+                //    OnPropertyChanged("Slopes");
+                //}
+                Set(ref slopes, value);
             }
         }
         [DataMember]
@@ -173,11 +204,12 @@ namespace WICR_Estimator.ViewModels
                 //    CalculateManual();
                 //    OnPropertyChanged("TotalMixesMan");
                 //}
-                if(value != totalmixesman)
-                {
-                    totalmixesman = value;
-                    OnPropertyChanged("TotalMixesMan");
-                }
+                //if(value != totalmixesman)
+                //{
+                //    totalmixesman = value;
+                //    OnPropertyChanged("TotalMixesMan");
+                //}
+                Set(ref totalmixesman, value);
             }
         }
         [DataMember]
@@ -197,11 +229,12 @@ namespace WICR_Estimator.ViewModels
                 //}
                 //else
                 //    averagemixesprice = 0;
-                if (averagemixesprice != value)
-                {
-                    averagemixesprice = value;
-                    OnPropertyChanged("AverageMixesPrice");
-                }
+                //if (averagemixesprice != value)
+                //{
+                //    averagemixesprice = value;
+                //    OnPropertyChanged("AverageMixesPrice");
+                //}
+                Set(ref averagemixesprice, value);
 
             }
         }
@@ -217,7 +250,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != totalweight)
                 {
                     totalweight = value;
-                    OnPropertyChanged("TotalWeight");
+                    RaisePropertyChanged("TotalWeight");
                 }
             }
         }
@@ -233,7 +266,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != totalfreightcost)
                 {
                     totalfreightcost = value;
-                    OnPropertyChanged("TotalFrightCost");
+                    RaisePropertyChanged("TotalFrightCost");
                 }
             }
         }
@@ -249,7 +282,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != laborcost)
                 {
                     laborcost = value;
-                    OnPropertyChanged("LaborCost");
+                    RaisePropertyChanged("LaborCost");
 
                 }
             }
@@ -266,7 +299,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != minimumlaborcost)
                 {
                     minimumlaborcost = value;
-                    OnPropertyChanged("MinimumLaborCost");
+                    RaisePropertyChanged("MinimumLaborCost");
                 }
             }
         }
@@ -282,7 +315,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != totallaborcost)
                 {
                     totallaborcost = value;
-                    OnPropertyChanged("TotalLaborCost");
+                    RaisePropertyChanged("TotalLaborCost");
                 }
             }
         }
@@ -298,7 +331,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != totalmaterialCost)
                 {
                     totalmaterialCost = value;
-                    OnPropertyChanged("TotalMaterialCost");
+                    RaisePropertyChanged("TotalMaterialCost");
                 }
             }
         }
@@ -314,7 +347,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != sumtotal)
                 {
                     sumtotal = value;
-                    OnPropertyChanged("SumTotal");
+                    RaisePropertyChanged("SumTotal");
                 }
             }
         }
@@ -331,7 +364,7 @@ namespace WICR_Estimator.ViewModels
                 {
                     sumtotalmixes = value;
 
-                    OnPropertyChanged("SumTotalMixes");
+                    RaisePropertyChanged("SumTotalMixes");
                 }
             }
         }
@@ -347,7 +380,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != sumtotalmatext)
                 {
                     sumtotalmatext = value;
-                    OnPropertyChanged("SumTotalMatExt");
+                    RaisePropertyChanged("SumTotalMatExt");
                 }
             }
         }
@@ -363,7 +396,7 @@ namespace WICR_Estimator.ViewModels
                 if (value != sumtotallaborext)
                 {
                     sumtotallaborext = value;
-                    OnPropertyChanged("SumTotalLaborExt");
+                    RaisePropertyChanged("SumTotalLaborExt");
                 }
             }
         }
@@ -381,7 +414,13 @@ namespace WICR_Estimator.ViewModels
             TotalWeight = Math.Round(50 * TotalMixesMan, 2);
             TotalFrightCost = Math.Round(FreightCalculator(TotalWeight), 2);
             SumTotalLaborExt = Math.Round(TotalMixesMan * manualAvgMixPrice, 2);
-            double.TryParse(perMixRates[8][0].ToString(), out minLabVal);
+            if (dbData==null)
+            {
+                double.TryParse(perMixRates[8][0].ToString(), out minLabVal);
+            }
+            else
+                minLabVal = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Minimum Slope Labor" && x.SlopeType == "Cement").LaborRate;
+            
             MinimumLaborCost = minLabVal * laborRate;
             TotalLaborCost = SumTotalLaborExt==0?0:MinimumLaborCost > SumTotalLaborExt ? MinimumLaborCost : SumTotalLaborExt;
 
@@ -426,10 +465,11 @@ namespace WICR_Estimator.ViewModels
             }
             double.TryParse(perMixRates[6][1].ToString(), out manualAvgMixPrice);
             //double.TryParse(pWage[0][0].ToString(), out prevailingWage);
-            double.TryParse(pWage[1][0].ToString(), out deductionOnLargeJob);
-
-            
-
+            if (pWage!=null)
+            {
+                double.TryParse(pWage[1][0].ToString(), out deductionOnLargeJob);
+            }
+ 
         }
         
         public virtual void JobSetup_OnJobSetupChange(object sender, EventArgs e)
@@ -445,17 +485,54 @@ namespace WICR_Estimator.ViewModels
                 }
 
                 isPrevailingWage = js.IsPrevalingWage;
+                //if (dbData == null)
+                //{
+                    dbData = js.dbData;
+                //}
                 if (isPrevailingWage)
                 {
-                    double.TryParse(freightData[5][0].ToString(), out productionRate);
+                    if (dbData==null)
+                    {
+                        double.TryParse(freightData[5][0].ToString(), out productionRate);
+                        
+                    }
+                    else
+                    {
+                        productionRate = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "SlopeProdRate").FactorValue;
+                        
+                    }
+                        
 
                 }
                 else
                     productionRate = 0;
-                laborRate = js.LaborRate;
+
+                if (dbData==null)
+                {
+                    if (perMixRates!=null)
+                    {
+                        double.TryParse(perMixRates[6][1].ToString(), out manualAvgMixPrice);
+                    }
+                    
+                    
+                    if (pWage != null)
+                    {
+                        double.TryParse(pWage[1][0].ToString(), out deductionOnLargeJob);
+                    }
+                }
+                else
+                {
+                    manualAvgMixPrice = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Manul Override Avg Labor/mix").PerMixCost;
+                    deductionOnLargeJob = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Deduct on Labor for large jobs").Value;
+                }
+                //laborRate = js.dbData.FreightDBData.First(x=>x.FactorName== "LaborRate").FactorValue;
                 hasDiscount = js.HasDiscount;
                 materialPerc = getMaterialDiscount(js.ProjectDelayFactor);
                 prevailingWage= js.ActualPrevailingWage == 0 ? 0 : (js.ActualPrevailingWage - laborRate) / laborRate;
+                
+                
+                //double.TryParse(pWage[0][0].ToString(), out prevailingWage);
+                
                 reCalculate();
             }
             
@@ -552,8 +629,17 @@ namespace WICR_Estimator.ViewModels
         {
             foreach (Slope slp in Slopes)
             {
-                slp.PricePerMix = getPricePerMix(slp.Thickness, isApprovedForCement);
-                slp.GSLaborRate = getGSLaborRate(slp.Thickness, 0);
+                if (dbData==null)
+                {
+                    slp.PricePerMix = getPricePerMix(slp.Thickness, isApprovedForCement);
+                    slp.GSLaborRate = getGSLaborRate(slp.Thickness, 0);
+                }
+                else
+                {
+                    slp.PricePerMix = getPricePerMixDB(slp.Thickness, isApprovedForCement, "Cement");
+                    slp.GSLaborRate = getGSLaborRateDB(slp.Thickness, "Cement");
+                }
+                
             }
             
             CalculateGridTotal();
@@ -570,8 +656,18 @@ namespace WICR_Estimator.ViewModels
             if (Slopes.Count > 0)
             {
                 LaborCost = Math.Round(SumTotalLaborExt, 2);
-               double.TryParse(perMixRates[8][0].ToString(), out minLabVal);
                 
+                if (dbData==null)
+                {
+                    if (perMixRates!=null)
+                    {
+                        double.TryParse(perMixRates[8][0].ToString(), out minLabVal);
+                    }
+                    
+                }
+                else
+                    minLabVal = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Minimum Slope Labor" && x.SlopeType == "Cement").LaborRate;
+               
                 MinimumLaborCost = minLabVal * laborRate;
 
                 double lCost = SumTotalLaborExt == 0 ? 0 : LaborCost > MinimumLaborCost ? LaborCost : MinimumLaborCost;
@@ -709,7 +805,12 @@ namespace WICR_Estimator.ViewModels
                 {
                     if (weight > 10000)
                     {
-                        double.TryParse(freightData[0][1].ToString(), out factor);
+                        if (dbData==null)
+                        {
+                            double.TryParse(freightData[0][1].ToString(), out factor);
+                        }
+                        else
+                            factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight10000").FactorValue;
                         frCalc =  factor* weight; /*0.03*/
                     }
 
@@ -717,28 +818,49 @@ namespace WICR_Estimator.ViewModels
                     {
                         if (weight > 5000)
                         {
-                            double.TryParse(freightData[1][1].ToString(), out factor);
+                            if (dbData == null)
+                            {
+                                double.TryParse(freightData[1][1].ToString(), out factor);
+                            }
+                            else
+                                factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight5000").FactorValue;
+                            
                             frCalc = factor * weight; /*0.04*/
                         }
                         else
                         {
                             if (weight > 2000)
                             {
-                                double.TryParse(freightData[2][1].ToString(), out factor);
+                                if (dbData == null)
+                                {
+                                    double.TryParse(freightData[2][1].ToString(), out factor);
+                                }
+                                else
+                                    factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight2000").FactorValue;
                                 frCalc = factor * weight; /*0.09*/
                             }
                             else
                             {
                                 if (weight > 1000)
                                 {
-                                    double.TryParse(freightData[3][1].ToString(), out factor);
+                                    if (dbData == null)
+                                    {
+                                        double.TryParse(freightData[3][1].ToString(), out factor);
+                                    }
+                                    else
+                                        factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight1000").FactorValue;
                                     frCalc = factor * weight; /*0.12*/
                                 }
                                 else
                                 {
                                     if (weight > 400)
                                     {
-                                        double.TryParse(freightData[4][1].ToString(), out factor);
+                                        if (dbData == null)
+                                        {
+                                            double.TryParse(freightData[4][1].ToString(), out factor);
+                                        }
+                                        else
+                                            factor = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "Weight400").FactorValue;
                                         frCalc = factor;/*75*/
                                     }
                                     else
@@ -778,6 +900,107 @@ namespace WICR_Estimator.ViewModels
                 
             }
 
+        }
+        #endregion
+
+        #region DBData
+        public DBData dbData;
+        public void GetSlopeDetailsDB(string projectName)
+        {
+            if (projectName.Contains('.'))
+            {
+                projectName = projectName.Split('.')[0];
+            }
+
+            if (dbData == null)
+            {
+                dbData = DataSerializerService.DSInstance.deserializeDbData(projectName);
+            }
+            laborRate = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "LaborRate").FactorValue;
+            manualAvgMixPrice = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Manul Override Avg Labor/mix" && x.SlopeType=="Cement").PerMixCost;
+            deductionOnLargeJob = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Deduct on Labor for large jobs").Value;
+            
+            
+        }
+        public virtual double getGSLaborRateDB(string thickness,string slopeType)
+        {
+            double result;
+            result = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == thickness && x.SlopeType==slopeType).LaborRate;
+            return result * (1 - productionRate);           
+        }
+
+        public virtual double getPricePerMixDB(string thickness, bool isApproved, string slopeType)
+        {
+            double result;
+            
+            if (isApproved)
+            {
+                result = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == thickness && x.SlopeType == slopeType).PerMixCost;
+            }
+            else
+            {
+                result = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName.Trim() == "Default" && x.SlopeType == slopeType).PerMixCost;               
+            }
+            return result;
+        }
+
+        public virtual ObservableCollection<Slope> CreateSlopesDB(string slopeType)
+        {
+            ObservableCollection<Slope> slopes = new ObservableCollection<Slope>();
+
+            slopes.Add(new Slope
+            {
+                Thickness = "1/4 inch Average",
+                DeckCount = 0,
+                Sqft = 0,
+                GSLaborRate = getGSLaborRateDB("1/4 inch Average", slopeType),
+                LaborRate = laborRate,
+                PricePerMix = getPricePerMixDB("1/4 inch Average", isApprovedForCement, slopeType),
+                SlopeType = slopeType == "Cement" ? "" : "URI"
+            });
+            slopes.Add(new Slope
+            {
+                Thickness = "1/2 inch Average",
+                DeckCount = 0,
+                Sqft = 0,
+                GSLaborRate = getGSLaborRateDB("1/2 inch Average", slopeType),
+                LaborRate = laborRate,
+                PricePerMix = getPricePerMixDB("1/2 inch Average", isApprovedForCement, slopeType),
+                SlopeType = slopeType == "Cement" ? "" : "URI"
+            });
+
+            slopes.Add(new Slope
+            {
+                Thickness = "3/4 inch Average",
+                DeckCount = 0,
+                Sqft = 0,
+                GSLaborRate = getGSLaborRateDB("3/4 inch Average", slopeType),
+                LaborRate = laborRate,
+                PricePerMix = getPricePerMixDB("3/4 inch Average", isApprovedForCement, slopeType),
+                SlopeType = slopeType == "Cement" ? "" : "URI"
+            });
+            slopes.Add(new Slope
+            {
+                Thickness = "1 inch Average",
+                DeckCount = 0,
+                Sqft = 0,
+                GSLaborRate = getGSLaborRateDB("1 inch Average", slopeType),
+                LaborRate = laborRate,
+                PricePerMix = getPricePerMixDB("1 inch Average", isApprovedForCement, slopeType),
+                SlopeType = slopeType == "Cement" ? "" : "URI"
+            });
+            slopes.Add(new Slope
+            {
+                Thickness = "1 1/4 inch Average",
+                DeckCount = 0,
+                Sqft = 0,
+                GSLaborRate = getGSLaborRateDB("1 1/4 inch Average", slopeType),
+                LaborRate = laborRate,
+                PricePerMix = getPricePerMixDB("1 1/4 inch Average", isApprovedForCement, slopeType),
+                SlopeType = slopeType == "Cement" ? "" : "URI"
+            });
+
+            return slopes;
         }
         #endregion
 

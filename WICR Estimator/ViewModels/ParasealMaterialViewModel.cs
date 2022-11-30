@@ -14,6 +14,7 @@ namespace WICR_Estimator.ViewModels
     {
         private Dictionary<string, string> materialNames;
         private double additionalTermBarLF;
+        private double additionalFootingLF;
         private double insideOutsideCornerDetails;
         private bool superStopFooting;
         private double pinsCoverage;
@@ -83,20 +84,31 @@ namespace WICR_Estimator.ViewModels
                     double sp = SystemMaterials[i].SpecialMaterialPricing;
                     bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
                     bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
-                    SystemMaterials[i] = sysMat[i];
+                    //SystemMaterials[i] = sysMat[i];
 
-                    SystemMaterials[i].SpecialMaterialPricing = sp;
+                    //SystemMaterials[i].SpecialMaterialPricing = sp;
+                    UpdateMe(sysMat[i]);
+
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
+
                     if (iscbEnabled)
                     {
-                        SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                        SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                        SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
+                        //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                        //SystemMaterials[i].IsMaterialChecked = iscbChecked;
                     }
                     
                     if (SystemMaterials[i].Name == "UNIVERSAL OUTLET" || SystemMaterials[i].Name == "TOTAL DRAIN 2' x 50' ( In lieu of rock & pipe) \"LINEAR FEET\"")
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
-                            SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            //SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
+                            if (SystemMaterials[i].Name == "UNIVERSAL OUTLET")
+                            {
+                                //SystemMaterials[i].IsMaterialChecked = SystemMaterials[i].Qty > 0 ? true:false;
+                                SystemMaterials[i].UpdateCheckStatus(SystemMaterials[i].Qty > 0 ? true : false);
+                            }
 
                         }
                     }                  
@@ -145,6 +157,7 @@ namespace WICR_Estimator.ViewModels
             JobSetup Js = sender as JobSetup;
             if (Js != null)
             {
+                additionalFootingLF = Js.AdditionalFootingLF;
                 additionalTermBarLF = Js.AdditionalTermBarLF;
                 insideOutsideCornerDetails = Js.InsideOutsideCornerDetails;
                 superStopFooting = Js.SuperStopAtFooting;
@@ -162,7 +175,8 @@ namespace WICR_Estimator.ViewModels
                 case "TREMDRAIN 1000 (VERTICAL ONLY)":
                 case "TREMDRAIN 1000 (HORIZONTAL ONLY)":
                 case "TOTAL DRAIN 2' x 50' ( In lieu of rock & pipe) \"LINEAR FEET\"":
-                
+                case "UNIVERSAL OUTLET":
+                case "PARAMASTIC (1000 LF PER PAIL FOR PREP & TERMINATIONS)":
                     return false;
                 case "EXTRA PARATERM BAR LF (BOTTOM OR SIDES)":
                     return additionalTermBarLF>0 ? true : false;
@@ -186,13 +200,14 @@ namespace WICR_Estimator.ViewModels
         {
             switch (materialName)
             {
-                //case "PARATERM BAR LF (TOP ONLY- STANDARD INSTALL)":
-                //case "PARAMASTIC AND PARASTICK AND DRY (FOR PENETRATIONS)":
                 //case "PINS & LOADS":
+                //case "PARATERM BAR LF (TOP ONLY- STANDARD INSTALL)":
+                case "PARAMASTIC AND PARASTICK AND DRY (FOR PENETRATIONS)":               
                 case "PB-4 (VERTICAL ONLY)":
                 case "TREMDRAIN 1000 (VERTICAL ONLY)":
                 case "PROTECTION MAT (HORIZONTAL ONLY)":
                 case "TREMDRAIN 1000 (HORIZONTAL ONLY)":
+                case "PARAMASTIC (1000 LF PER PAIL FOR PREP & TERMINATIONS)":
                     return true;
                 default:
                     return false;
@@ -207,7 +222,8 @@ namespace WICR_Estimator.ViewModels
                 case "PARATERM BAR LF (TOP ONLY- STANDARD INSTALL)":
                 case "PARAGRANULAR (FOR CANT AT FOOTING)":
                 case "SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT":
-                    return deckPerimeter>sqftSuperStop?deckPerimeter:sqftSuperStop;  //change for special handling
+                    // return deckPerimeter>sqftSuperStop?deckPerimeter:sqftSuperStop;  //change for special handling
+                    return superStopFooting?deckPerimeter + additionalFootingLF: deckPerimeter;
                 case "VULKEM 116 CAULK (FOR TERM BAR)":
                     return deckPerimeter + additionalTermBarLF;
                 case "EXTRA PARATERM BAR LF (BOTTOM OR SIDES)":
@@ -381,7 +397,7 @@ namespace WICR_Estimator.ViewModels
         }
         public override void ApplyCheckUnchecks(object obj)
         {
-            
+            lastCheckedMat = obj.ToString();
             calculateRLqty();
             CalculateLaborMinCharge(false);
         }
@@ -428,11 +444,11 @@ namespace WICR_Estimator.ViewModels
                 CostperSqftSubContract = TotalSubcontractLabor / (totalSqft + deckCount);
             }
             TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
-            OnPropertyChanged("CostperSqftSlope");
-            OnPropertyChanged("CostperSqftMetal");
-            OnPropertyChanged("CostperSqftMaterial");
-            OnPropertyChanged("CostperSqftSubContract");
-            OnPropertyChanged("TotalCostperSqft");
+            RaisePropertyChanged("CostperSqftSlope");
+            RaisePropertyChanged("CostperSqftMetal");
+            RaisePropertyChanged("CostperSqftMaterial");
+            RaisePropertyChanged("CostperSqftSubContract");
+            RaisePropertyChanged("TotalCostperSqft");
         }
     }
 }

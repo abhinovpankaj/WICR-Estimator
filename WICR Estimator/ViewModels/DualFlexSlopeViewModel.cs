@@ -23,11 +23,12 @@ namespace WICR_Estimator.ViewModels
             }
             set
             {
-                if (mortarSlopes != value)
-                {
-                    mortarSlopes = value;
-                    OnPropertyChanged("UrethaneSlopes");
-                }
+                //if (mortarSlopes != value)
+                //{
+                //    mortarSlopes = value;
+                //    OnPropertyChanged("UrethaneSlopes");
+                //}
+                Set(ref mortarSlopes, value);
             }
         }
 
@@ -44,7 +45,7 @@ namespace WICR_Estimator.ViewModels
                 if (mortarSumTotal != value)
                 {
                     mortarSumTotal = value;
-                    OnPropertyChanged("UrethaneSumTotal");
+                    RaisePropertyChanged("UrethaneSumTotal");
                 }
             }
         }
@@ -61,7 +62,7 @@ namespace WICR_Estimator.ViewModels
                 if (mortarSumTotalMixes != value)
                 {
                     mortarSumTotalMixes = value;
-                    OnPropertyChanged("UrethaneSumTotalMixes");
+                    RaisePropertyChanged("UrethaneSumTotalMixes");
                 }
             }
         }
@@ -79,7 +80,7 @@ namespace WICR_Estimator.ViewModels
                 if (mortarSumTotalMatExt != value)
                 {
                     mortarSumTotalMatExt = value;
-                    OnPropertyChanged("UrethaneSumTotalMatExt");
+                    RaisePropertyChanged("UrethaneSumTotalMatExt");
                 }
             }
         }
@@ -96,7 +97,7 @@ namespace WICR_Estimator.ViewModels
                 if (mortarSumTotalLaborExt != value)
                 {
                     mortarSumTotalLaborExt = value;
-                    OnPropertyChanged("UrethaneSumTotalLaborExt");
+                    RaisePropertyChanged("UrethaneSumTotalLaborExt");
                 }
             }
         }
@@ -110,22 +111,25 @@ namespace WICR_Estimator.ViewModels
         private double riserCount;
         private bool hasMortarBed;
         private bool hasQuarterMortarBed;
-        
-        public DualFlexSlopeViewModel(JobSetup Js)
+        //private DBData dbData;
+        public DualFlexSlopeViewModel(JobSetup Js) : base(Js.dbData)
         {
             IsUrethaneVisible = System.Windows.Visibility.Visible;
+            dbData = Js.dbData;
             if (Js.ProjectName=="Dual Flex")
             {
                 IsOverrridable = false;
                 UrethaneText = "Manufacturer approvd Mortar Bed";
                 SlopeHeaderText = "Manufacturer approved underlay";
             }
-            GetSlopeDetailsFromGoogle(Js.ProjectName);
-
+            //GetSlopeDetailsFromGoogle(Js.ProjectName);
+            GetSlopeDetailsDB(Js.ProjectName);
             isApprovedForCement = Js.IsApprovedForSandCement;
             totalSqft = Js.TotalSqft;
-            Slopes = CreateSlopes(0);
-            UrethaneSlopes = CreateSlopes(9);
+            //Slopes = CreateSlopes(0);
+            //UrethaneSlopes = CreateSlopes(9);
+            Slopes = CreateSlopesDB("Cement");
+            UrethaneSlopes = CreateSlopesDB("Special");
             UpdateSpecialSlope();
             CalculateAll();
             Js.JobSetupChange += JobSetup_OnJobSetupChange;
@@ -149,7 +153,15 @@ namespace WICR_Estimator.ViewModels
                 totalSqft = (hasQuarterMortarBed || hasMortarBed) == true ? js.TotalSqft : 0 ;
                 
             }
-            UrethaneSlopes = CreateSlopes(9);
+            if (dbData==null)
+            {
+                UrethaneSlopes = CreateSlopes(9);
+            }
+            else
+            {
+                UrethaneSlopes = CreateSlopesDB("Special");
+
+            }
             UpdateSpecialSlope();
             CalculateAll();
                         
@@ -158,8 +170,17 @@ namespace WICR_Estimator.ViewModels
         private void UpdateSpecialSlope()
         {
             double val1, val2;
-            double.TryParse(perMixRates[13][0].ToString(), out val1);
-            double.TryParse(perMixRates[14][0].ToString(), out val2);
+            if (dbData==null)
+            {
+                double.TryParse(perMixRates[13][0].ToString(), out val1);
+                double.TryParse(perMixRates[14][0].ToString(), out val2);
+            }
+            else
+            {
+                val1 = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeId == 269).LaborRate;
+                val2 = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeId == 270).LaborRate;
+            }
+           
             double latherate = hasMortarBed ?val1: val2;
 
             Slope slp = UrethaneSlopes.FirstOrDefault(x => x.Thickness == "1 1/4 inch Mortar Bed with 2x2 or diamond metal lathe");
@@ -205,6 +226,43 @@ namespace WICR_Estimator.ViewModels
             
         }
 
+        public override double getPricePerMixDB(string thickness, bool isApproved, string slopeType)
+        {
+            double result, val1, val2, val3;
+
+            if (slopeType == "Cement")
+            {
+                return base.getPricePerMixDB(thickness, isApproved,slopeType);
+            }
+            else
+            {
+                switch (thickness)
+                {
+                    case "Cement Board and screws for stair applications":
+                    case "1/4 inch Expansion Joints":
+                    case "Access":
+                        //double.TryParse(perMixRates[addRow][1].ToString(), out result);
+                        result = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == thickness && x.SlopeType == slopeType).PerMixCost;
+                        return result;
+                 
+                    case "1 1/4 inch Mortar Bed with 2x2 or diamond metal lathe":
+                        //double.TryParse(perMixRates[3 + addRow][1].ToString(), out result);
+                        //double.TryParse(perMixRates[4 + addRow][1].ToString(), out val1);
+                        //double.TryParse(perMixRates[5 + addRow][1].ToString(), out val2);
+                        //double.TryParse(perMixRates[6 + addRow][1].ToString(), out val3);
+                        result= dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "1 1/4 inch Mortar Bed with 2x2 or diamond metal lathe").PerMixCost;
+                        val1 = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "MATERIAL MIX PRICE FOR 3/4 INCH FILL SAND AND CEMENT").PerMixCost;
+                        val2 = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "MATERIAL MIX PRICE FOR 1&1/4 INCH FILL UNDERLAY M").PerMixCost;
+                        val3 = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "MATERIAL MIX PRICE FOR 3/4 INCH FILL UNDERLAY M").PerMixCost;
+
+                        return CalculateSpecialPriceMix(result, val1, val2, val3);
+                    default:
+                        return 0;
+                }
+            }
+
+        }
+
         private double CalculateSpecialPriceMix(double result, double val1, double val2, double val3)
         {
             double mixPrice=0;
@@ -236,6 +294,65 @@ namespace WICR_Estimator.ViewModels
             return mixPrice;
         }
 
+        public override ObservableCollection<Slope> CreateSlopesDB(string slopeType)
+        {
+            if (slopeType == "Special")
+            {
+                ObservableCollection<Slope> slopes = new ObservableCollection<Slope>();
+                slopes.Add(new Slope
+                {
+                    Thickness = "Access",
+                    DeckCount = 1,
+                    Sqft = easyAccessNoLadder ? 0 : totalSqft,
+                    GSLaborRate = getGSLaborRateDB("Access","Special"),
+                    LaborRate = laborRate,
+                    PricePerMix = getPricePerMixDB("Access", isApprovedForCement, "Special"),
+                    SlopeType = "DualFlex"
+                });
+                slopes.Add(new Slope
+                {
+                    Thickness = "1/4 inch Expansion Joints",
+                    DeckCount = 1,
+                    Sqft = Math.Round(linearCopingFootage + totalSqft / 120 * 22, 2),
+                    GSLaborRate = getGSLaborRateDB("1/4 inch Expansion Joints", "Special"),
+                    LaborRate = laborRate,
+                    PricePerMix = getPricePerMixDB("1/4 inch Expansion Joints", isApprovedForCement, "Special"),
+
+                    SlopeType = "DualFlex",
+                });
+                Slope slp =
+                new Slope
+                {
+                    Thickness = "Cement Board and screws for stair applications",
+                    DeckCount = 0,
+                    riserCount = riserCount,
+                    Sqft = Math.Round(riserCount * 20 * 3.5 / 24, 2),
+                    GSLaborRate = getGSLaborRateDB("Cement Board and screws for stair applications", "Special"),
+                    LaborRate = laborRate,
+                    PricePerMix = getPricePerMixDB("Cement Board and screws for stair applications", isApprovedForCement, "Special"),
+                    SlopeType =  "DualFlex"
+                };
+
+                slopes.Add(slp);
+
+                slp = new Slope
+                {
+                    Thickness = "1 1/4 inch Mortar Bed with 2x2 or diamond metal lathe",
+                    DeckCount = 1,
+                    Sqft = totalSqft,
+                    hasMortarBed = hasMortarBed,
+                    GSLaborRate = getGSLaborRateDB("1 1/4 inch Mortar Bed with 2x2 or diamond metal lathe", "Special"),
+                    LaborRate = laborRate,
+                    PricePerMix = getPricePerMixDB("1 1/4 inch Mortar Bed with 2x2 or diamond metal lathe", isApprovedForCement, "Special"),
+                    SlopeType =  "DualFlex"
+                };
+
+                slopes.Add(slp);
+                return slopes;
+            }
+            else
+                return base.CreateSlopesDB(slopeType);
+        }
         public override ObservableCollection<Slope> CreateSlopes(int RowN = 0)
         {
             if (RowN==9)
@@ -315,10 +432,10 @@ namespace WICR_Estimator.ViewModels
                 UrethaneSumTotalLaborExt = Math.Round(UrethaneSlopes.Select(x => x.LaborExtensionSlope).Sum(), 2);
 
             }
-            OnPropertyChanged("MortarSumTotal");
-            OnPropertyChanged("MortarSumTotalMixes");
-            OnPropertyChanged("MortarSumTotalMatExt");
-            OnPropertyChanged("MortarSumTotalLaborExt");
+            RaisePropertyChanged("MortarSumTotal");
+            RaisePropertyChanged("MortarSumTotalMixes");
+            RaisePropertyChanged("MortarSumTotalMatExt");
+            RaisePropertyChanged("MortarSumTotalLaborExt");
         }
 
         public override void CalculateTotalMixes()
@@ -329,8 +446,13 @@ namespace WICR_Estimator.ViewModels
             if (Slopes.Count > 0)
             {
                 LaborCost = Math.Round(SumTotalLaborExt, 2);
-                double.TryParse(perMixRates[8][0].ToString(), out minLabVal);
-
+                if (dbData==null)
+                {
+                    double.TryParse(perMixRates[8][0].ToString(), out minLabVal);
+                }
+                else
+                    minLabVal = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Minimum Slope Labor" && x.SlopeType == "Cement").LaborRate;
+                
                 MinimumLaborCost = hasQuarterMortarBed ?0: minLabVal * laborRate;
 
                 lCost = SumTotalLaborExt == 0 ? 0 : LaborCost > MinimumLaborCost ? LaborCost : MinimumLaborCost;
@@ -360,7 +482,12 @@ namespace WICR_Estimator.ViewModels
             {
 
                 lCost = Math.Round(UrethaneSumTotalLaborExt, 2);
-                double.TryParse(perMixRates[16][0].ToString(), out minLabVal);
+                if (dbData==null)
+                {
+                    double.TryParse(perMixRates[16][0].ToString(), out minLabVal);
+                }
+                else                
+                    minLabVal = dbData.SlopeDBData.FirstOrDefault(x => x.SlopeName == "Minimum Slope Labor" && x.SlopeType == "Special").LaborRate;
 
                 MortarMinimumLaborCost =hasQuarterMortarBed ? minLabVal * laborRate:18*laborRate;
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyToolkit.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,12 +9,14 @@ using WICR_Estimator.ViewModels;
 namespace WICR_Estimator.Models
 {
     
-    public class Slope:BaseViewModel
+    public class Slope:UndoRedoObservableObject
     {
         public Slope()
         {
-
+            
         }
+
+        
         public Slope(string thickNess,double sqft,int deckCount,
             double pricePermix,double laborRate,double LaborRateGS)
         {
@@ -41,12 +44,15 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value != sqft)
-                {
-                    sqft = value;
-                    OnPropertyChanged("Sqft");
-                    changeProperty();
-                }
+                //if (value != sqft)
+                //{
+                //    sqft = value;
+                //    OnPropertyChanged("Sqft");
+                //    changeProperty();
+                //}
+                Set(ref sqft, value);
+                changeProperty();
+
             }
         }
 
@@ -59,12 +65,14 @@ namespace WICR_Estimator.Models
             }
             set
             {
-                if (value != deckCount)
-                {
-                    deckCount = value;
-                    OnPropertyChanged("DeckCount");
-                    changeProperty();
-                }
+                //if (value != deckCount)
+                //{
+                //    deckCount = value;
+                //    OnPropertyChanged("DeckCount");
+                //    changeProperty();
+                //}
+                Set(ref deckCount, value);
+                changeProperty();
             }
         }
         public double Total
@@ -90,7 +98,7 @@ namespace WICR_Estimator.Models
                 if (value != totalMixes)
                 {
                     totalMixes = value;
-                    OnPropertyChanged("TotalMixes");
+                    RaisePropertyChanged("TotalMixes");
                 }
             }
             get
@@ -151,8 +159,8 @@ namespace WICR_Estimator.Models
                 if (value!=priceperMix)
                 {
                     priceperMix = value;
-                    OnPropertyChanged("PricePerMix");
-                    OnPropertyChanged("MaterialExtensionSlope");
+                    RaisePropertyChanged("PricePerMix");
+                    RaisePropertyChanged("MaterialExtensionSlope");
                 }
             }
         }
@@ -174,7 +182,7 @@ namespace WICR_Estimator.Models
                 if (value!=labrExtnSlope)
                 {
                     labrExtnSlope = value;
-                    OnPropertyChanged("LaborExtensionSlope");
+                    RaisePropertyChanged("LaborExtensionSlope");
                 }
             }   
             get
@@ -196,11 +204,11 @@ namespace WICR_Estimator.Models
         }
         private void changeProperty()
         {
-            OnPropertyChanged("DeckCount");
-            OnPropertyChanged("LaborExtensionSlope");
-            OnPropertyChanged("MaterialExtensionSlope");
-            OnPropertyChanged("Total");
-            OnPropertyChanged("TotalMixes");
+            RaisePropertyChanged("DeckCount");
+            RaisePropertyChanged("LaborExtensionSlope");
+            RaisePropertyChanged("MaterialExtensionSlope");
+            RaisePropertyChanged("Total");
+            RaisePropertyChanged("TotalMixes");
             //OnPropertyChanged("AverageMixesPrice");
         }
 

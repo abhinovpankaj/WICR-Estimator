@@ -5,36 +5,43 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WICR_Estimator.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="1400">
+             d:DesignHeight="700" d:DesignWidth="1400"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+     TextElement.FontWeight="Regular"
+     TextElement.FontSize="13"
+     TextOptions.TextFormattingMode="Ideal"
+     TextOptions.TextRenderingMode="Auto">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Background="Black">
-            <TextBlock Text="Cost Factor Name" Width="250" 
-                       Foreground="White"
+        <StackPanel Orientation="Horizontal" Background="{StaticResource PrimaryHueDarkBrush}"
+                    >
+            <TextBlock Text="Cost Factor Name" Width="350" 
+                       Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
                        Margin="5"
                        FontWeight="Bold"/>
             <TextBlock Text="Factor Value" Width="80"
-                       FontWeight="Bold" Foreground="White"
+                       FontWeight="Bold" Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
                        Margin="5"/>
             <TextBlock Text="Slope" Width="80"
                        FontWeight="Bold"
-                       Foreground="White"
+                       Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
                        Margin="5"/>
             <TextBlock Text="Metal" Width="80"
                        FontWeight="Bold"
-                       Foreground="White"
+                      Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
                        Margin="5"/>
             <TextBlock Text="System" Width="80"
                        FontWeight="Bold"
-                       Foreground="White"
+                       Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
                        Margin="5"/>
             <TextBlock Text="Sub-Contract" Width="80"
                        FontWeight="Bold"
-                       Foreground="White"
+                       Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
                        Margin="5"/>
         </StackPanel>
         <ListView Name="Calculationdetails"
@@ -46,7 +53,7 @@
                         
                         <TextBlock Text="{Binding Name}"
                                    Margin="5,0,5,0"
-                                   Width="250"/>
+                                   Width="350"/>
                         <TextBlock Text="{Binding CalFactor,UpdateSourceTrigger=PropertyChanged}"
                                    Visibility="{Binding HideCalFactor}"
                                    FontWeight="Bold" Margin="5,0,5,0"
@@ -68,19 +75,21 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <StackPanel VerticalAlignment="Center"
+        <materialDesign:Card UniformCornerRadius="5" Grid.Row="2" HorizontalAlignment="Left"
+                             Margin="10">
+            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <StackPanel VerticalAlignment="Center"
                                 HorizontalAlignment="Left"
                                 Margin="5">
-                <TextBlock Text="Slope Profit Margin" 
+                    <TextBlock Text="Slope Profit Margin" 
                                    HorizontalAlignment="Center"/>
-                <TextBox Text="{Binding ElementName=slSlope,
+                    <TextBox Text="{Binding ElementName=slSlope,
                                  Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                  TextAlignment="Right"
                                  Width="40" 
                                  HorizontalAlignment="Center"
                                  Margin="5"/>
-                <Slider Maximum="1" Value="{Binding SlopeMarkup}"
+                    <Slider Maximum="1" Value="{Binding SlopeMarkup}"
                                 Width="200"
                                 LargeChange=".2"
                                 Minimum="0"
@@ -89,19 +98,19 @@
                                 IsSnapToTickEnabled="True"
                                 Name="slSlope"
                     />
-            </StackPanel>
-            <StackPanel VerticalAlignment="Center"
+                </StackPanel>
+                <StackPanel VerticalAlignment="Center"
                                 HorizontalAlignment="Left"
                                 Margin="5">
-                <TextBlock Text="Metal Profit Margin" 
+                    <TextBlock Text="Metal Profit Margin" 
                                    HorizontalAlignment="Center"/>
-                <TextBox Text="{Binding ElementName=slMetal,
+                    <TextBox Text="{Binding ElementName=slMetal,
                                  Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                  TextAlignment="Right"
                                  Width="40" 
                                  HorizontalAlignment="Center"
                                  Margin="5"/>
-                <Slider Maximum="1" Value="{Binding MetalMarkup}"
+                    <Slider Maximum="1" Value="{Binding MetalMarkup}"
                                 Width="200"
                                 LargeChange=".2"
                                 Minimum="0"
@@ -110,21 +119,21 @@
                                 IsSnapToTickEnabled="True"
                                 Name="slMetal"
                     />
-            </StackPanel>
-            
-            <StackPanel VerticalAlignment="Center"
+                </StackPanel>
+
+                <StackPanel VerticalAlignment="Center"
                                 HorizontalAlignment="Left"
                                 Grid.Column="1"
                                 Margin="5">
-                <TextBlock Text="Material Profit Margin" 
+                    <TextBlock Text="Material Profit Margin" 
                                    HorizontalAlignment="Center"/>
-                <TextBox Text="{Binding ElementName=slMat,
+                    <TextBox Text="{Binding ElementName=slMat,
                                  Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                  TextAlignment="Right"
                                  Width="40" 
                                  HorizontalAlignment="Center"
                                  Margin="5"/>
-                <Slider Maximum="1" Value="{Binding MaterialMarkup}"
+                    <Slider Maximum="1" Value="{Binding MaterialMarkup}"
                                 Width="200"
                                 LargeChange=".2"
                                 Minimum="0"
@@ -133,19 +142,19 @@
                                 IsSnapToTickEnabled="True"
                                 Name="slMat"
                     />
-            </StackPanel>
-            <StackPanel VerticalAlignment="Center"
+                </StackPanel>
+                <StackPanel VerticalAlignment="Center"
                                 HorizontalAlignment="Left"
                                 Margin="5">
-                <TextBlock Text="SubContract Profit Margin" 
+                    <TextBlock Text="SubContract Profit Margin" 
                                    HorizontalAlignment="Center"/>
-                <TextBox Text="{Binding ElementName=slSub,
+                    <TextBox Text="{Binding ElementName=slSub,
                                  Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                  TextAlignment="Right"
                                  Width="40" 
                                  HorizontalAlignment="Center"
                                  Margin="5"/>
-                <Slider Maximum="1" Value="{Binding SubContractProfitMargin}"
+                    <Slider Maximum="1" Value="{Binding SubContractProfitMargin}"
                                 Width="200"
                                 LargeChange=".2"
                                 Minimum="0"
@@ -154,22 +163,24 @@
                                 IsSnapToTickEnabled="True"
                                 Name="slSub"
                     />
-            </StackPanel>
-            <StackPanel>
-                
+                </StackPanel>
+                <StackPanel>
+
                     <TextBlock Text="Total Sales" Width="120" 
                                Margin="30,5,10,5"
                                HorizontalAlignment="Stretch"
                                FontWeight="Bold" FontSize="14"/>
-                
-                <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+
+                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,0">
-                    <TextBlock HorizontalAlignment="Stretch" Width="100"
-                                   FontWeight="Bold" Background="#FFE7BA0A" FontSize="14"
+                        <TextBlock HorizontalAlignment="Stretch" Width="100"
+                                   FontWeight="Bold" Background="{StaticResource SecondaryAccentBrush}" FontSize="14"
                         Text="{Binding TotalSale,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
-                </Border>
+                    </Border>
+                </StackPanel>
+
             </StackPanel>
-            
-        </StackPanel>
+        </materialDesign:Card>
+        
     </Grid>
 </UserControl>

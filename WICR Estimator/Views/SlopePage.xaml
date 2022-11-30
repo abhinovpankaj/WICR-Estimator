@@ -7,6 +7,12 @@
               xmlns:conv="clr-namespace:WICR_Estimator.Converters"
              xmlns:sysglb="clr-namespace:System.Globalization;assembly=mscorlib"
              mc:Ignorable="d" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+     TextElement.FontWeight="Regular"
+     TextElement.FontSize="13"
+     TextOptions.TextFormattingMode="Ideal"
+     TextOptions.TextRenderingMode="Auto"
              d:DesignHeight="700" d:DesignWidth="900">
     <UserControl.Resources>
 
@@ -58,6 +64,7 @@
                   CanUserSortColumns="False"
                   Name="SlopeGridDefault" 
                   Margin="10"
+                  materialDesign:DataGridAssist.CellPadding="4 2 2 2"
                   VerticalAlignment="Top" 
                   CanUserAddRows="False"
                   ItemsSource="{Binding Slopes,UpdateSourceTrigger=PropertyChanged}">

@@ -1,9 +1,13 @@
-﻿using Microsoft.Win32;
+﻿using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
+using MaterialDesignThemes.Wpf;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,10 +16,12 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using System.Xml;
 using WICR_Estimator.Models;
 using WICR_Estimator.ViewModels;
@@ -26,50 +32,77 @@ namespace WICR_Estimator
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
+        private readonly PaletteHelper _paletteHelper = new PaletteHelper();
         public MainWindow()
         {
             InitializeComponent();
-            //DateTime d1 = new DateTime(2019, 12, 15);
-            //if (DateTime.UtcNow>d1)
-            //{
-            //    Environment.Exit(-1);
-            //}
             
-            this.DataContext = new MainWindowViewModel();
-        }
+            this.DataContext = new MainWindowViewModel(DialogCoordinator.Instance);
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (ViewModels.BaseViewModel.IsDirty)
+            //Apply Pallete
+            var accentColor = Properties.Settings.Default.Accent1;
+            var primaryColor = Properties.Settings.Default.Primary1;
+            if (primaryColor.Length==0)
             {
-                MessageBoxResult res = MessageBox.Show("Do you want to Save the Estimate.", "Save State", MessageBoxButton.YesNoCancel);
+                return;
+            }
+            System.Windows.Media.Color color = (Color)System.Windows.Media.ColorConverter.ConvertFromString(accentColor);
+            ITheme theme = _paletteHelper.GetTheme();
+            theme.SetSecondaryColor(color);
+            
+
+            color = (Color)System.Windows.Media.ColorConverter.ConvertFromString(primaryColor);
+            theme.SetPrimaryColor(color);
+            _paletteHelper.SetTheme(theme);
+
+
+
+        }
+        private bool isClosingConfirmed;
+        private async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (ViewModels.HomeViewModel.MyselectedProjects!=null && ViewModels.BaseViewModel.IsDirty == true)
+            {
+                if (this.isClosingConfirmed)
+                {
+                    // window will close, if e.Cancel is passed in as "false"
+                    return;
+                }
+                e.Cancel = true;
+                MainWindowViewModel vm = this.DataContext as MainWindowViewModel;
+                var res = await vm.ShowActionMessage("Do you want to Save the Estimate.", "WICR");
+
                 switch (res)
                 {
-                    case MessageBoxResult.Yes:
-                        //Save the state.
-                        //SaveEstimate(ViewModels.HomeViewModel.MyselectedProjects);
-                        MainWindowViewModel vm = this.DataContext as MainWindowViewModel;
-                        if (vm!=null)
+                    case MessageDialogResult.Affirmative:
+                        var hm1 = vm.PageViewModels.FirstOrDefault(x => x.Name == "Home") as HomeViewModel;
+                        if (hm1 != null)
                         {
-                            vm.SaveEstimateCommand.Execute(null);
+                            if (hm1.PreparedBy == null || hm1.PreparedBy == string.Empty || hm1.JobName == null || hm1.JobName == string.Empty)
+                            {
+                                vm.OnTaskCompleted("Please fill JobName & Prepared by and then save the estimate.");
+                                return;
+                            }
                         }
+
+                        
+                        await vm.SaveEstimates(ViewModels.HomeViewModel.MyselectedProjects);
+
+                        isClosingConfirmed = true;
+                        this.Close();
                         break;
-                    case MessageBoxResult.Cancel:
-                        e.Cancel = true;
-                        break;
-                    case MessageBoxResult.No:
-                        ViewModels.BaseViewModel.IsDirty = false;
+                    case MessageDialogResult.Negative:
+                        isClosingConfirmed = true;
+                        this.Close();
                         break;
                     default:
                         break;
-                }                
+                }
             }
-            else
-            {
-
-            }
+           
+            //MessageBoxResult res = MessageBox.Show("Do you want to Save the Estimate.", "Save State", MessageBoxButton.YesNoCancel);   
         }
 
         public void SaveEstimate(ObservableCollection<Project> SelectedProjects)
@@ -119,5 +152,19 @@ namespace WICR_Estimator
                 ViewModels.BaseViewModel.IsDirty = false;
             }
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            
+            if (DataContext is ICloseWindow )
+            {
+                var vm = DataContext as ICloseWindow;
+                vm.Close += () =>
+                  {
+                      this.Close();
+                  };
+            }
+        }
+        
     }
 }

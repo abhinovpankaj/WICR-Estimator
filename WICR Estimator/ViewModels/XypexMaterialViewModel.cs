@@ -25,7 +25,7 @@ namespace WICR_Estimator.ViewModels
         {
             double sumVal = totalSqft + totalVerticalSqft;
             TotalLaborUnitPrice = sumVal == 0 ? 0 : TotalLaborWithoutDrive / sumVal;
-            OnPropertyChanged("TotalLaborUnitPrice");
+            RaisePropertyChanged("TotalLaborUnitPrice");
         }
         private void FillMaterialList()
         {
@@ -149,16 +149,22 @@ namespace WICR_Estimator.ViewModels
                     double sp = SystemMaterials[i].SpecialMaterialPricing;
                     bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
                     bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
-                    SystemMaterials[i] = sysMat[i];
+                    //SystemMaterials[i] = sysMat[i];
 
-                    SystemMaterials[i].SpecialMaterialPricing = sp;
-                    SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                    SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                    //SystemMaterials[i].SpecialMaterialPricing = sp;
+                    //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                    //SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                    UpdateMe(sysMat[i]);
+
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
+                    SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
+
                     if (SystemMaterials[i].Name == "Add for penetrations  -customer to determine qty")
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
-                            SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            //SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
                         }
                     }
                 }
@@ -261,12 +267,20 @@ namespace WICR_Estimator.ViewModels
 
         public override void setExceptionValues(object s)
         {
-            
+            //if (s!=null)
+            //{
+            //    SystemMaterial item = SystemMaterials.Where(x => x.Name == "Add for penetrations  -customer to determine qty").FirstOrDefault();
+            //    if (item != null)
+            //    {
+            //        item.MaterialExtension =item.Qty * item.MaterialPrice;
+            //        item. FreightExtension = item.Qty * item.Weight;
+            //    }
+            //}
         }
 
         public override void ApplyCheckUnchecks(object obj)
         {
-            
+            lastCheckedMat = obj.ToString();
         }
         public override void CalculateCostPerSqFT()
         {
@@ -290,11 +304,11 @@ namespace WICR_Estimator.ViewModels
                 CostperSqftSubContract = TotalSubcontractLabor / (totalSqft + totalVerticalSqft);
             }
             TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
-            OnPropertyChanged("CostperSqftSlope");
-            OnPropertyChanged("CostperSqftMetal");
-            OnPropertyChanged("CostperSqftMaterial");
-            OnPropertyChanged("CostperSqftSubContract");
-            OnPropertyChanged("TotalCostperSqft");
+            RaisePropertyChanged("CostperSqftSlope");
+            RaisePropertyChanged("CostperSqftMetal");
+            RaisePropertyChanged("CostperSqftMaterial");
+            RaisePropertyChanged("CostperSqftSubContract");
+            RaisePropertyChanged("TotalCostperSqft");
         }
     }
 }

@@ -30,7 +30,7 @@ namespace WICR_Estimator.ViewModels
             FetchMaterialValuesAsync(false);
         }
 
-        private void FillMaterialList()
+        private void FillMaterialList(int addMore=0)
         {
             materialNames.Add("191 QD PRIMER AND PREPARATION FOR RE-SURFACE", "1 GALLON");
             materialNames.Add("TREMPRIME MULTI SURFACE (CONCRETE & OTHER)", "3 GAL KIT");
@@ -59,14 +59,63 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("TOTAL DRAIN MINUS BOTTOM TD 1000(IN LIEU OF ROCK & PIPE)", "LINEAR FEET");
             materialNames.Add("Vulkem Tremproof 250 GC L 30 MILS", "5 GAL PAIL");
             materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS", "5 GAL PAIL");
-            materialNames.Add("Vulkem Tremproof 201 L 30 MILS", "5 GAL PAIL");
-            materialNames.Add("Vulkem Tremproof 201 R 30 MILS", "5 GAL PAIL");
+            materialNames.Add("Vulkem Tremproof 250 GC L 30 MILS(Additional)", "5 GAL PAIL");
+            materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS(Additional)", "5 GAL PAIL");
+            if (addMore==1)
+            {
+                materialNames.Add("Vulkem Tremproof 201 L 30 MILS", "5 GAL PAIL");
+                materialNames.Add("Vulkem Tremproof 201 R 30 MILS", "5 GAL PAIL");
+                materialNames.Add("Vulkem Tremproof 201 L 30 MILS(Additional)", "5 GAL PAIL");
+                materialNames.Add("Vulkem Tremproof 201 R 30 MILS(Additional)", "5 GAL PAIL");
+            }
+            
             materialNames.Add("Plywood 3/4 & blocking (# of 4x8 sheets)", "4x8 sheets");
             materialNames.Add("Stucco Material Remove and replace (LF)", "LF");
             materialNames.Add("PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL WITH SAND BROADCAST", "LF");
            
         }
+        private void FillMaterialListEx()
+        {
+            materialNames.Add("191 QD PRIMER AND PREPARATION FOR RE-SURFACE", "1 GALLON");
+            materialNames.Add("TREMPRIME MULTI SURFACE (CONCRETE & OTHER)", "3 GAL KIT");
+            materialNames.Add("#191 QD INTERLAMINATE PRIMER", "1 GALLON");
+            materialNames.Add("Vulkem Tremproof 250 GC L", "5 GAL PAIL");
+            materialNames.Add("Vulkem Tremproof 250 GC R", "5 GAL PAIL");
 
+            materialNames.Add("Vulkem Tremproof 201 L", "5 GAL PAIL");
+            materialNames.Add("Vulkem Tremproof 201 R", "5 GAL PAIL");
+            materialNames.Add("Tremco Dymonic 100 (Cant at footing and prep rebar)", "20OZ SAUSAGE");
+            materialNames.Add("GLASSMAT #II (FROM MERKOTE / LOWRYS) WALLS", "1200 SF ROLL");
+            materialNames.Add("GLASSMAT #II (FROM MERKOTE / LOWRYS) FLOORS YES/NO", "1200 SF ROLL");
+            materialNames.Add("PW POLYESTER FABRIC FROM UPI 4\"(PERIMETER)", "150 SF ROLL");
+            materialNames.Add("TREMCO DYMONIC 100 OR VULKEM 116 (PERIMETER JOINTS)", "20OZ SAUSAGE");
+            materialNames.Add("PW POLYESTER FABRIC FROM UPI 4\"(PLYWOOD SEAMS)", "150 SF ROLL");
+            materialNames.Add("TREMCO DYMONIC 100 OR VULKEM 116 (PLYWOOD JOINTS)", "20OZ SAUSAGE");
+            materialNames.Add("PROTECTION MAT (HORIZONTAL ONLY)", "667 SF ROLL");
+            materialNames.Add("PB-4 (VERTICAL ONLY)", "200 SF ROLL");
+            materialNames.Add("TREMDRAIN 1000 (VERTICAL ONLY)", "200 SF ROLL");
+            materialNames.Add("CALIFORNIA SEALER FROM LOWRYS (GLUING DRAIN MAT)", "5 GAL PAIL");
+            materialNames.Add("TREMDRAIN 1000 (HORIZONTAL ONLY)", "200 SF ROLL");
+            materialNames.Add("TERM BAR, VULKEM 116, PINS AND LOADS", "LF");
+            materialNames.Add("SUPERSTOP(LF)", "LF");
+            materialNames.Add("PENETRATIONS", "EACH");
+            materialNames.Add("UNIVERSAL OUTLET", "EACH");
+            materialNames.Add("TOTAL DRAIN MINUS BOTTOM TD 1000(IN LIEU OF ROCK & PIPE)", "LINEAR FEET");
+            materialNames.Add("Vulkem Tremproof 250 GC L 30 MILS", "5 GAL PAIL");
+            materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS", "5 GAL PAIL");
+
+            //materialNames.Add("Vulkem Tremproof 250 GC L 30 MILS(Additional)", "5 GAL PAIL");
+            //materialNames.Add("Vulkem Tremproof 250 GC R 30 MILS(Additional)", "5 GAL PAIL");
+
+            //materialNames.Add("Vulkem Tremproof 201 L 30 MILS", "5 GAL PAIL");
+            //materialNames.Add("Vulkem Tremproof 201 R 30 MILS", "5 GAL PAIL");
+            //materialNames.Add("Vulkem Tremproof 201 L 30 MILS(Additional)", "5 GAL PAIL");
+            //materialNames.Add("Vulkem Tremproof 201 R 30 MILS(Additional)", "5 GAL PAIL");
+            materialNames.Add("Plywood 3/4 & blocking (# of 4x8 sheets)", "4x8 sheets");
+            materialNames.Add("Stucco Material Remove and replace (LF)", "LF");
+            materialNames.Add("PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL WITH SAND BROADCAST", "LF");
+
+        }
         public override void FetchMaterialValuesAsync(bool hasSetupChanged)
         {
             Dictionary<string, double> qtyList = new Dictionary<string, double>();
@@ -86,11 +135,18 @@ namespace WICR_Estimator.ViewModels
             if (materialNames == null)
             {
                 materialNames = new Dictionary<string, string>();
-                FillMaterialList();
+                if (SystemMaterials.Count>27)
+                {
+                    FillMaterialList(1);
+                }
+                else
+                    FillMaterialListEx();
+
             }
             var sysMat = GetSystemMaterial(materialNames);
-
+            sysMat = sysMat.Where(x => x != null).ToObservableCollection();
             //remove GC 250 System Material
+
             List<SystemMaterial> mat250 = sysMat.Where(x => x.Name.Contains("201")).ToList();
             foreach (SystemMaterial item in mat250)
             {
@@ -106,21 +162,30 @@ namespace WICR_Estimator.ViewModels
                     double sp = SystemMaterials[i].SpecialMaterialPricing;
                     bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
                     bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
-                    SystemMaterials[i] = sysMat[i];
 
-                    SystemMaterials[i].SpecialMaterialPricing = sp;
+                    //SystemMaterials[i] = sysMat[i];
+
+                    //SystemMaterials[i].SpecialMaterialPricing = sp;
+                    UpdateMe(sysMat[i]);
+
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
+
                     if (iscbEnabled)
                     {
                         if (SystemMaterials[i].Name == "Vulkem Tremproof 201 L 30 MILS" || SystemMaterials[i].Name == "Vulkem Tremproof 201 R 30 MILS"
-                            || SystemMaterials[i].Name == "Vulkem Tremproof 250 GC L 30 MILS" 
-                            || SystemMaterials[i].Name == "Vulkem Tremproof 250 GC R 30 MILS")
+                            || SystemMaterials[i].Name == "Vulkem Tremproof 201 L 30 MILS(Additional)" || SystemMaterials[i].Name == "Vulkem Tremproof 201 R 30 MILS(Additional)"
+                            || SystemMaterials[i].Name == "Vulkem Tremproof 250 GC L 30 MILS" || SystemMaterials[i].Name == "Vulkem Tremproof 250 GC R 30 MILS"
+                            || SystemMaterials[i].Name == "Vulkem Tremproof 250 GC L 30 MILS(Additional)" || SystemMaterials[i].Name == "Vulkem Tremproof 250 GC R 30 MILS(Additional)")
                         {
-                            SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                            //SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                            SystemMaterials[i].UpdateCheckStatus(iscbChecked);
+
                         }
                         else
                         {
-                            SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                            SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                            SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
+                            //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                            //SystemMaterials[i].IsMaterialChecked = iscbChecked;
                         }
                         
                     }
@@ -133,7 +198,7 @@ namespace WICR_Estimator.ViewModels
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
-                            SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
                         }
                     }
 
@@ -163,6 +228,7 @@ namespace WICR_Estimator.ViewModels
             //CalculateLaborMinCharge(hasSetupChanged);
             //CalculateAllMaterial();
             CalculateCost(null);
+            
         }
 
         public override void JobSetup_OnJobSetupChange(object sender, EventArgs e)
@@ -215,17 +281,23 @@ namespace WICR_Estimator.ViewModels
                 case "TREMPRIME MULTI SURFACE (CONCRETE & OTHER)":
                 case "#191 QD INTERLAMINATE PRIMER":
                 case "GLASSMAT #II (FROM MERKOTE / LOWRYS) FLOORS YES/NO":
+                case "GLASSMAT #II (FROM MERKOTE / LOWRYS) WALLS":
                 case "PROTECTION MAT (HORIZONTAL ONLY)":
                 case "PB-4 (VERTICAL ONLY)":
                 case "TREMDRAIN 1000 (VERTICAL ONLY)":
                 case "TREMDRAIN 1000 (HORIZONTAL ONLY)":
                     return true;
                 case "Vulkem Tremproof 250 GC L 30 MILS":
-                case "Vulkem Tremproof 201 L 30 MILS":
-                    return totalSqft + totalPlywoodSqft > 0 ? true : false;
+                //case "Vulkem Tremproof 201 L 30 MILS":
+                case "Vulkem Tremproof 250 GC L 30 MILS(Additional)":
+                //case "Vulkem Tremproof 201 L 30 MILS(Additional)":
+                    //return totalSqft + totalPlywoodSqft > 0 ? true : false;
                 case "Vulkem Tremproof 250 GC R 30 MILS":
-                case "Vulkem Tremproof 201 R 30 MILS":
-                    return totalSqftVertical + riserCount > 0 ? true : false;
+                //case "Vulkem Tremproof 201 R 30 MILS":
+                case "Vulkem Tremproof 250 GC R 30 MILS(Additional)":
+                    //case "Vulkem Tremproof 201 R 30 MILS(Additional)":
+                    //return totalSqftVertical + riserCount > 0 ? true : false;
+                    return true;
                 default:
                     return false;
             }
@@ -247,12 +319,16 @@ namespace WICR_Estimator.ViewModels
                 case "GLASSMAT #II (FROM MERKOTE / LOWRYS) FLOORS YES/NO":
                 case "Vulkem Tremproof 250 GC L 30 MILS":
                 case "Vulkem Tremproof 201 L 30 MILS":
+                case "Vulkem Tremproof 250 GC L 30 MILS(Additional)":
+                case "Vulkem Tremproof 201 L 30 MILS(Additional)":
                     return totalPlywoodSqft + totalSqft;
 
                 case "Vulkem Tremproof 250 GC R":
                 case "Vulkem Tremproof 201 R":
                 case "Vulkem Tremproof 201 R 30 MILS":
                 case "Vulkem Tremproof 250 GC R 30 MILS":
+                case "Vulkem Tremproof 201 R 30 MILS(Additional)":
+                case "Vulkem Tremproof 250 GC R 30 MILS(Additional)":
                     return totalSqftVertical + riserCount * stairWidth * 2;
 
                 case "Tremco Dymonic 100 (Cant at footing and prep rebar)":
@@ -324,6 +400,8 @@ namespace WICR_Estimator.ViewModels
                 case "TREMDRAIN 1000 (HORIZONTAL ONLY)":
                 case "Vulkem Tremproof 201 L 30 MILS":
                 case "Vulkem Tremproof 250 GC L 30 MILS":
+                case "Vulkem Tremproof 201 L 30 MILS(Additional)":
+                case "Vulkem Tremproof 250 GC L 30 MILS(Additional)":
                     return totalPlywoodSqft+totalSqft;
                 case "PW POLYESTER FABRIC FROM UPI 4\"(PERIMETER)":
                     return deckPerimeter;
@@ -351,6 +429,8 @@ namespace WICR_Estimator.ViewModels
                 case "CALIFORNIA SEALER FROM LOWRYS (GLUING DRAIN MAT)":
                 case "Vulkem Tremproof 201 R 30 MILS":
                 case "Vulkem Tremproof 250 GC R 30 MILS":
+                case "Vulkem Tremproof 201 R 30 MILS(Additional)":
+                case "Vulkem Tremproof 250 GC R 30 MILS(Additional)":
                     return totalSqftVertical;
                 
                 case "Tremco Dymonic 100 (Cant at footing and prep rebar)":
@@ -384,6 +464,8 @@ namespace WICR_Estimator.ViewModels
                 case "TREMDRAIN 1000 (HORIZONTAL ONLY)":
                 case "Vulkem Tremproof 201 R 30 MILS":
                 case "Vulkem Tremproof 250 GC R 30 MILS":
+                case "Vulkem Tremproof 201 R 30 MILS(Additional)":
+                case "Vulkem Tremproof 250 GC R 30 MILS(Additional)":
                 case "Vulkem Tremproof 201 L":
                 case "Vulkem Tremproof 201 R":
                     return riserCount*stairWidth*2;
@@ -506,11 +588,11 @@ namespace WICR_Estimator.ViewModels
         {
             double sumVal = totalSqft + totalPlywoodSqft + totalSqftVertical;
             TotalLaborUnitPrice = sumVal == 0 ? 0 : TotalLaborWithoutDrive / sumVal;
-            OnPropertyChanged("TotalLaborUnitPrice");
+            RaisePropertyChanged("TotalLaborUnitPrice");
         }
         public override void ApplyCheckUnchecks(object obj)
         {
-            
+            lastCheckedMat = obj.ToString();
             SystemMaterial sysmat = null;
             bool ischecked = false, ischecked1 = false;
             if (obj.ToString() == "TREMDRAIN 1000 (VERTICAL ONLY)" || obj.ToString() == "TREMDRAIN 1000 (HORIZONTAL ONLY)")
@@ -521,9 +603,20 @@ namespace WICR_Estimator.ViewModels
                 ischecked1 = sysmat.IsMaterialChecked;
                 SystemMaterials.Where(x => x.Name == "CALIFORNIA SEALER FROM LOWRYS (GLUING DRAIN MAT)").FirstOrDefault().IsMaterialChecked = ischecked || ischecked1;
             }
-            
 
-            
+            if (obj.ToString() == "Vulkem Tremproof 250 GC L 30 MILS")
+            {
+                sysmat = SystemMaterials.Where(x => x.Name == "Vulkem Tremproof 250 GC L 30 MILS").FirstOrDefault();
+                ischecked = sysmat.IsMaterialChecked;
+                SystemMaterials.Where(x => x.Name == "Vulkem Tremproof 250 GC R 30 MILS").FirstOrDefault().IsMaterialChecked = ischecked;
+            }
+            if (obj.ToString() == "Vulkem Tremproof 250 GC L 30 MILS(Additional)")
+            {
+                sysmat = SystemMaterials.Where(x => x.Name == "Vulkem Tremproof 250 GC L 30 MILS(Additional)").FirstOrDefault();
+                ischecked = sysmat.IsMaterialChecked;
+                SystemMaterials.Where(x => x.Name == "Vulkem Tremproof 250 GC R 30 MILS(Additional)").FirstOrDefault().IsMaterialChecked = ischecked;
+            }
+
             calculateRLqty();
             //CalculateLaborMinCharge(false);
         }
@@ -587,11 +680,11 @@ namespace WICR_Estimator.ViewModels
                 CostperSqftSubContract = TotalSubcontractLabor / (totalSqft + totalPlywoodSqft + totalSqftVertical);
             }
             TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
-            OnPropertyChanged("CostperSqftSlope");
-            OnPropertyChanged("CostperSqftMetal");
-            OnPropertyChanged("CostperSqftMaterial");
-            OnPropertyChanged("CostperSqftSubContract");
-            OnPropertyChanged("TotalCostperSqft");
+            RaisePropertyChanged("CostperSqftSlope");
+            RaisePropertyChanged("CostperSqftMetal");
+            RaisePropertyChanged("CostperSqftMaterial");
+            RaisePropertyChanged("CostperSqftSubContract");
+            RaisePropertyChanged("TotalCostperSqft");
         }
         public override double getLaborUnitPrice(double laborExtension, double riserCount, double totalSqft, double sqftVert = 0, double sqftHor = 0,
             double sqftStairs = 0, string materialName = "")

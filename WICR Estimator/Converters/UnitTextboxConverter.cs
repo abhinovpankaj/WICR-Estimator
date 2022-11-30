@@ -8,8 +8,8 @@ using System.Windows.Data;
 
 namespace WICR_Estimator.Converters
 {
-    
-    class UnitTextboxConverter : IValueConverter
+
+    public class UnitTextboxConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -22,6 +22,7 @@ namespace WICR_Estimator.Converters
                     case "Striping for small cracKs (less than 1/8\")":
                     case "Route and caulk moving cracks (greater than 1/8\")":
                     case "SECOND INTERMEDIATE COAT FOR HIGH TRAFFIC":
+                    
                         return true;
                     default:
                         return false;

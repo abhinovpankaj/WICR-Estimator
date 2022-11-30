@@ -133,13 +133,18 @@ namespace WICR_Estimator.ViewModels
                     double sp = SystemMaterials[i].SpecialMaterialPricing;
                     bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
                     bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
-                    SystemMaterials[i] = sysMat[i];
+                    //SystemMaterials[i] = sysMat[i];
 
-                    SystemMaterials[i].SpecialMaterialPricing = sp;
+                    //SystemMaterials[i].SpecialMaterialPricing = sp;
+                    UpdateMe(sysMat[i]);
+
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
+                    
                     if (iscbEnabled)
                     {
-                        SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                        SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                        //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                        //SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                        SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
                     }
 
                     if (SystemMaterials[i].Name == "UNIVERSAL OUTLETS" || 
@@ -148,8 +153,11 @@ namespace WICR_Estimator.ViewModels
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
-                            SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
-
+                            //SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
+                            //SystemMaterials[i].IsMaterialChecked = SystemMaterials[i].Qty > 0 ? true : false;
+                            bool isChk= SystemMaterials[i].Qty > 0 ? true : false; 
+                            SystemMaterials[i].UpdateCheckStatus(isChk);
                         }
                     }
 
@@ -228,6 +236,10 @@ namespace WICR_Estimator.ViewModels
                     return true;
                 case "PARAGRANULAR (FOR CANT AT FOOTING)":
                 case "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER":
+                case "PARAMASTIC (1000 LF PER PAIL FOR PREP & TERMINATIONS)": //Add 25-5-2020
+                case "VISQUINE PROTECTION FOR INCLEMENT WEATHER":
+                case "UNIVERSAL OUTLETS":
+                case "TOTAL DRAIN 2' x 50' ( In lieu of rock & pipe) \"LINEAR FEET\"":
                     return false;
                 case "PARATERM BAR LF":
                     return deckPerimeter>0? true:false;
@@ -253,7 +265,8 @@ namespace WICR_Estimator.ViewModels
             switch (materialName)
             {
                 case "PARAGRANULAR (FOR CANT AT FOOTING)":
-                case "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER":
+                case "PARAMASTIC (1000 LF PER PAIL FOR PREP & TERMINATIONS)"://Add 25-5-2020
+                //case "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER":
                     return true;
                 default:
                     return false;
@@ -445,13 +458,16 @@ namespace WICR_Estimator.ViewModels
         public override void ApplyCheckUnchecks(object obj)
         {
             SystemMaterial sysmat = null;
-            if (obj.ToString() == "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER")
-            {
-                sysmat=SystemMaterials.Where(x => x.Name == "PARAMASTIC (1000 LF PER PAIL FOR PREP & TERMINATIONS)").FirstOrDefault();
+            lastCheckedMat = obj.ToString();
+            //change 25-5-2020
+            //if (obj.ToString() == "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER")
+            //{
+            //    sysmat=SystemMaterials.Where(x => x.Name == "PARAMASTIC (1000 LF PER PAIL FOR PREP & TERMINATIONS)").FirstOrDefault();
 
-                sysmat.IsMaterialChecked=!SystemMaterials.Where(x => x.Name == "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER").
-                    FirstOrDefault().IsMaterialChecked;               
-            }
+            //    sysmat.IsMaterialChecked=!SystemMaterials.Where(x => x.Name == "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER").
+            //        FirstOrDefault().IsMaterialChecked;               
+            //}
+
             //if (obj.ToString() == "PB-4 (VERTICAL ONLY)")
             //{
             //    sysmat = SystemMaterials.Where(x => x.Name == "PROTECTION MAT (HORIZONTAL ONLY)").FirstOrDefault();
@@ -513,10 +529,10 @@ namespace WICR_Estimator.ViewModels
          
         public override void setCheckBoxes()
         {
-            SystemMaterial sysmat = null;
-            sysmat = SystemMaterials.Where(x => x.Name == "PARAMASTIC (1000 LF PER PAIL FOR PREP & TERMINATIONS)").FirstOrDefault();
-            sysmat.IsMaterialChecked = !SystemMaterials.Where(x => x.Name == "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER").
-                    FirstOrDefault().IsMaterialChecked;            
+            //SystemMaterial sysmat = null;
+            //sysmat = SystemMaterials.Where(x => x.Name == "PARAMASTIC (1000 LF PER PAIL FOR PREP & TERMINATIONS)").FirstOrDefault();
+            //sysmat.IsMaterialChecked = !SystemMaterials.Where(x => x.Name == "**VULKEM 201 T CAN SOMETIMES BE USED IN LIEU OF PARAMASTIC ON LARGE JOBS.  CHECK WITH MANUFACTURER").
+            //        FirstOrDefault().IsMaterialChecked;            
         }
 
         public override void CalculateTotalSqFt()
@@ -536,11 +552,11 @@ namespace WICR_Estimator.ViewModels
                 CostperSqftSubContract = TotalSubcontractLabor / (totalSqft + deckPerimeter);
             }
             TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
-            OnPropertyChanged("CostperSqftSlope");
-            OnPropertyChanged("CostperSqftMetal");
-            OnPropertyChanged("CostperSqftMaterial");
-            OnPropertyChanged("CostperSqftSubContract");
-            OnPropertyChanged("TotalCostperSqft");
+            RaisePropertyChanged("CostperSqftSlope");
+            RaisePropertyChanged("CostperSqftMetal");
+            RaisePropertyChanged("CostperSqftMaterial");
+            RaisePropertyChanged("CostperSqftSubContract");
+            RaisePropertyChanged("TotalCostperSqft");
         }
     }
 }

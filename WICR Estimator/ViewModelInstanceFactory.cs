@@ -35,6 +35,7 @@ namespace WICR_Estimator
                 case "Tufflex":
                 //case "Paraseal":
                 case "Paraseal LG":
+                case "Paraseal GM":
                 case "201":
                 case "250 GC":
                 case "Dexcellent II":
@@ -142,6 +143,8 @@ namespace WICR_Estimator
                     return new ParasealMaterialViewModel(metalT, slopeT, Js);
                 case "Paraseal LG":
                     return new ParasealLGMaterialViewModel(metalT, slopeT, Js);
+                case "Paraseal GM":
+                    return new ParasealGMMaterialViewModel(metalT, slopeT, Js);
                 case "201":
                     return new _201MaterialViewModel(metalT, slopeT, Js);
                 case "250 GC":

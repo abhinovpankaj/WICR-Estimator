@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 using System.Xml;
 
 namespace WICR_Estimator.GoogleUtility
@@ -25,8 +26,8 @@ namespace WICR_Estimator.GoogleUtility
         //public static UserCredential credential;
         public static SheetsService service ;
         private static string spreadsheetId = "1pQG-Z9vaaWhCjCUiG1XqmEj1Pjavoz86RCfG6-ews2k";
-
-        public async static Task<IList<IList<Object>>> GetDataFromGoogleSheetsAsync(string projectName, DataType datatype)
+        
+            public async static Task<IList<IList<Object>>> GetDataFromGoogleSheetsAsync(string projectName, DataType datatype)
         //public static IList<IList<Object>> GetDataFromGoogleSheetsAsync(string projectName, DataType datatype)
         {
             if (credential==null)
@@ -43,8 +44,8 @@ namespace WICR_Estimator.GoogleUtility
                 //        new FileDataStore(credPath, true)).Result;
 
                 //}
-
-                using (var stream = new FileStream(@"GoogleUtility\client_secret.json", FileMode.Open, FileAccess.Read))
+                string jsonPath= System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location); 
+                using (var stream = new FileStream(jsonPath + @"\GoogleUtility\client_secret.json", FileMode.Open, FileAccess.Read))
                 {
                     credential = GoogleCredential.FromStream(stream)
                         .CreateScoped(Scopes);
@@ -80,10 +81,14 @@ namespace WICR_Estimator.GoogleUtility
             if (doc==null)
             {
                 doc = new XmlDocument();
-                doc.Load(@"GoogleUtility\ProjectGoogleRangeInfo.xml");
+                string jsonPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+                doc.Load(jsonPath+@"\GoogleUtility\ProjectGoogleRangeInfo.xml");
             }
             switch (projectName)
             {
+                case "IsSheetUpdated":
+                    prjName = "IsSheetUpdated";
+                    break;
                 case "Weather Wear":
                     prjName = "WeatherWear";
                     break;
@@ -173,45 +178,48 @@ namespace WICR_Estimator.GoogleUtility
             return node.InnerText;
         }
 
-        //public static IList<IList<Object>> GetDataFromGoogleSheets(string projectName, DataType datatype)
-        //{
-        //    UserCredential credential;
-        //    //lock (lockobj)
-        //    //{
-        //    using (var stream =
-        //    new FileStream(@"GoogleUtility\credentials.json", FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-        //    {
-        //        string credPath = "token.json";
-        //        credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-        //            GoogleClientSecrets.Load(stream).Secrets,
-        //            Scopes,
-        //            "user",
-        //            CancellationToken.None,
-        //            new FileDataStore(credPath, true)).Result;
-        //        //Console.WriteLine("Credential file saved to: " + credPath);
-        //    }
-        //    //}
+        public static IList<IList<Object>> GetDataFromGoogleSheets(string projectName, DataType datatype)
+        
+        {
+            try
+            {
+                if (credential == null)
+                {
+                    string jsonPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+                    
+                    using (var stream = new FileStream(jsonPath + @"\GoogleUtility\client_secret.json", FileMode.Open, FileAccess.Read, FileShare.Read))
+                    {
+                        credential = GoogleCredential.FromStream(stream)
+                            .CreateScoped(Scopes);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
 
+                System.Windows.Forms.MessageBox.Show(ex.Message);
+            }
+ 
+            // Create Google Sheets API service.
+            if (service == null)
+            {
+                service = new SheetsService(new BaseClientService.Initializer()
+                {
+                    HttpClientInitializer = credential,
+                    ApplicationName = ApplicationName,
+                });
+            }
+            // Define request parameters.
 
-        //    // Create Google Sheets API service.
-        //    var service = new SheetsService(new BaseClientService.Initializer()
-        //    {
-        //        HttpClientInitializer = credential,
-        //        ApplicationName = ApplicationName,
-        //    });
+            String range = "Pricing!" + GetRangeFromXML(projectName, datatype);
+            SpreadsheetsResource.ValuesResource.GetRequest request =
+                    service.Spreadsheets.Values.Get(spreadsheetId, range);
 
-        //    // Define request parameters.
-        //    String spreadsheetId = "1pQG-Z9vaaWhCjCUiG1XqmEj1Pjavoz86RCfG6-ews2k";
-        //    String range =  "Pricing!" + GetRangeFromXML(projectName,datatype);
-        //    SpreadsheetsResource.ValuesResource.GetRequest request =
-        //            service.Spreadsheets.Values.Get(spreadsheetId, range);
+            //ValueRange response = request.ExecuteAsync().Result;
+            ValueRange response = request.Execute();
+            return response.Values;
 
-        //    ValueRange response = request.Execute();
-            
-        //    IList<IList<Object>> values = response.Values;
-        //    object [] myarray=values.ToArray<object>();
-        //    return values;
+        }
 
-        //}
     }
 }

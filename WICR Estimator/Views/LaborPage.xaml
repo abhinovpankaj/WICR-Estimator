@@ -4,43 +4,22 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WICR_Estimator.Views"
-              xmlns:conv="clr-namespace:WICR_Estimator.Converters"
+             xmlns:conv="clr-namespace:WICR_Estimator.Converters"
              mc:Ignorable="d" 
-              d:DesignHeight="700" d:DesignWidth="1200">
+             d:DesignHeight="700" d:DesignWidth="1200"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="13"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto">
     <UserControl.Resources>
 
         <conv:CheckBoxVisibilityConverter x:Key="checkBoxConv"/>
         <conv:EnableTextboxConverter x:Key="textboxConv"/>
         <conv:QtyTextboxConverter x:Key="qtyTextboxConv"/>
         <conv:HasFieldEdited x:Key="HasFieldEdited"/>
-        <Style TargetType="Label" x:Key="LabelStyle1">
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="FontFamily" Value="Arial"/>
-            <Setter Property="FontSize" Value="11"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            <Setter Property="HorizontalAlignment" Value="Right"/>
-            <Setter Property="BorderThickness" Value="0,0,0,1"/>
-            <Setter Property="BorderBrush" Value="Black"/>
-        </Style>
-        <Style TargetType="TextBlock" x:Key="TextBlockStyle1">
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="FontFamily" Value="Arial"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="HorizontalAlignment"  Value="Right"/>
-        </Style>
-        <Style TargetType="TextBox" x:Key="TextBoxStyle">
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="FontFamily" Value="Arial"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="HorizontalContentAlignment"  Value="Center"/>
-            <!--<Setter Property="BorderBrush" Value="Black"/>
-            <Setter Property="BorderThickness"  Value="1"/>-->
-        </Style>
+       
         <Style x:Key="cbTB" TargetType="{x:Type CheckBox}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding ElementName=qtyTb, Path=IsEnabled}" Value="True">
@@ -52,11 +31,14 @@
 
             <Style.Triggers >
                 <Trigger Property="IsEnabled" Value="True">
-                    <Setter Property="Background" Value="LightYellow" />
+                    <!--<Setter Property="Background" Value="LightYellow" />-->
+                    <Setter Property="Background" Value="{StaticResource   PrimaryHueLightBrush}" />
                 </Trigger>
                 <DataTrigger Binding="{Binding IsMaterialChecked}" Value="False">
-                    <Setter Property="Background" Value="Gray"/>
-                    <Setter Property="Foreground" Value="Gray"/>
+                    <!--<Setter Property="Background" Value="Gray"/>
+                    <Setter Property="Foreground" Value="Gray"/>-->
+                    <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
+                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightBrush}" />
                 </DataTrigger>
                 
             </Style.Triggers>
@@ -64,9 +46,15 @@
         <Style TargetType="{x:Type DataGridCell}" x:Key="editableCell">
             <Style.Triggers >
                 <Trigger Property="IsReadOnly" Value="False">
-                    <Setter Property="Background" Value="LightYellow" />
+                    <!--<Setter Property="Background" Value="LightYellow" />-->
+                    <Setter Property="Background" Value="{StaticResource   PrimaryHueLightBrush}" />
                 </Trigger>
             </Style.Triggers>
+        </Style>
+        <Style BasedOn="{StaticResource {x:Type  DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource  PrimaryHueDarkForegroundBrush}" />
+            <Setter Property="Padding" Value="6" />
         </Style>
     </UserControl.Resources>
     <Grid>
@@ -86,6 +74,7 @@
                   Name="MaterialGrid" 
                   FrozenColumnCount ="2"
                   Margin="10,0,0,0"
+                      materialDesign:DataGridAssist.CellPadding="4 2 2 2"
                   VerticalAlignment="Top" 
                   CanUserAddRows="False"
                   ItemsSource="{Binding SystemMaterials,UpdateSourceTrigger=PropertyChanged}"  >
@@ -94,8 +83,10 @@
 
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsMaterialChecked}" Value="False">
-                                <Setter Property="Background" Value="Gray"/>
-                                <Setter Property="Foreground" Value="Gray"/>
+                                <!--<Setter Property="Background" Value="Gray"/>
+                                <Setter Property="Foreground" Value="Gray"/>-->
+                                <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightBrush}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -145,85 +136,61 @@
                                     IsReadOnly="True"
                                     KeyboardNavigation.IsTabStop="False">
                     </DataGridTextColumn>
-                    <!--<DataGridTextColumn Header="Sqft V" IsReadOnly="True" Binding="{Binding SMSqftV}"
-                                     KeyboardNavigation.IsTabStop="False">
-                </DataGridTextColumn>
-
-                <DataGridTextColumn Binding="{Binding VerticleProductionRate,UpdateSourceTrigger=PropertyChanged}"
-                                    IsReadOnly="True" Header="P/Rate V"
-                                    KeyboardNavigation.IsTabStop="False">
-                </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding SMSqftH}"
-                                    IsReadOnly="True" Header="Sqft H"
-                                    KeyboardNavigation.IsTabStop="False">
-                </DataGridTextColumn>
-
-                <DataGridTextColumn Binding="{Binding HorizontalProductionRate,UpdateSourceTrigger=PropertyChanged}"
-                                    IsReadOnly="True" Header="P/Rate H"
-                                    KeyboardNavigation.IsTabStop="False">
-                </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding StairSqft,UpdateSourceTrigger=PropertyChanged}"
-                                    IsReadOnly="True" Header="Sqft Stairs"
-                                    KeyboardNavigation.IsTabStop="False">
-                </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding StairsProductionRate,UpdateSourceTrigger=PropertyChanged}"
-                                    IsReadOnly="True" Header="P/R Stairs"
-                                    KeyboardNavigation.IsTabStop="False">
-                </DataGridTextColumn>-->
+                   
                 </DataGrid.Columns>
 
             </DataGrid>
         </ScrollViewer>
         
-        <Grid Grid.Column="1" Grid.RowSpan="2">
+        <Grid Grid.Column="1" Grid.RowSpan="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
         
-        <GroupBox x:Name="OtherCost" Grid.Column="1"
-                  Header="Other Cost" Foreground="Maroon"
-                  FontFamily="Arial"
-                  FontSize="12"
-                  FontWeight="Bold"
-                  BorderBrush="DarkBlue"
-                  BorderThickness="0.5" >
-                <ScrollViewer>
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal"
-                            Background="FloralWhite" >
-                            <Label Content="Total ($) :"                         
-                       Margin="5"
-                       Style="{StaticResource LabelStyle1}"
-                           FontSize="12"
-                           Background="FloralWhite"/>
+        <GroupBox x:Name="OtherCost" Grid.Column="1" Margin="5">
+                <GroupBox.Header>
+                    <StackPanel Orientation="Horizontal">
+                        
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock 
+                            Margin="2,0,0,0"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
+                            Text="Sub Contract Labor" />
+                            <TextBlock x:Name="TotalSCExtension" 
+                            IsEnabled="False"                        
+                            Margin="15,0,0,0"    
+                            VerticalAlignment="Center"
+                            Style="{StaticResource  MaterialDesignSubtitle1TextBlock}"                
+                            Text="{Binding TotalOCLaborExtension, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
 
-                            <TextBox x:Name="TotalOCExtension"
-                             IsEnabled="False"
-                             VerticalContentAlignment="Center"
-                             Margin="5"                       
-                             Height="25"  Width="100"  Style="{StaticResource TextBoxStyle}"                
-                             Text="{Binding TotalOCLaborExtension, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
 
                         </StackPanel>
-                        <DataGrid AutoGenerateColumns="False"
+                    </StackPanel>
+                </GroupBox.Header>
+                <ScrollViewer Margin="0" VerticalScrollBarVisibility="Auto">
+                    
+                        <DataGrid AutoGenerateColumns="False" Margin="0"
+                              materialDesign:DataGridAssist.CellPadding="4 2 2 2"  
                                   CanUserSortColumns="False"
                           HorizontalAlignment="Left"
                       Name="OtherCostGrid" 
                           VerticalAlignment="Top"
-                      Margin="5,10,10,10"
-                      Grid.Column="1"
+                      
+                      
                           CellStyle="{StaticResource editableCell}"
                       CanUserAddRows="false"                      
                   ItemsSource="{Binding OtherLaborMaterials,UpdateSourceTrigger=PropertyChanged}">
+                           
                             <DataGrid.Columns>
-                                <DataGridTemplateColumn Header="Items" IsReadOnly="True">
+                                <DataGridTemplateColumn Header="Items" IsReadOnly="True" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBox BorderThickness="0"
                                                 Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}"
-                                     IsReadOnly="True">
+                                                        IsReadOnly="True">
 
                                             </TextBox>
                                         </DataTemplate>
@@ -235,14 +202,17 @@
                                         <Style TargetType="{x:Type DataGridCell}">
                                             <Style.Triggers >
                                                 <Trigger Property="IsReadOnly" Value="False">
-                                                    <Setter Property="Background" Value="LightYellow" />
-                                                </Trigger>
+                                                    <!--<Setter Property="Background" Value="LightYellow" />-->
+                                                <Setter Property="Background" Value="{StaticResource   PrimaryHueLightBrush}" />
+                                            </Trigger>
                                                 <DataTrigger Binding="{Binding LQuantity, 
                                             Converter={StaticResource HasFieldEdited}}" 
                                                      Value="True">
-                                                    <Setter Property="Background" Value="Green" />
-                                                    <Setter Property="Foreground" Value="White"/>
-                                                    <Setter Property="FontWeight" Value="Bold"/>
+                                                    <!--<Setter Property="Background" Value="Green" />
+                                                    <Setter Property="Foreground" Value="White"/>-->
+                                                <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+                                                <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
+                                                <Setter Property="FontWeight" Value="Bold"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -254,14 +224,17 @@
                                         <Style TargetType="{x:Type DataGridCell}">
                                             <Style.Triggers >
                                                 <Trigger Property="IsReadOnly" Value="False">
-                                                    <Setter Property="Background" Value="LightYellow" />
-                                                </Trigger>
+                                                    <!--<Setter Property="Background" Value="LightYellow" />-->
+                                                <Setter Property="Background" Value="{StaticResource   PrimaryHueLightBrush}" />
+                                            </Trigger>
                                                 <DataTrigger Binding="{Binding LMaterialPrice, 
                                             Converter={StaticResource HasFieldEdited}}" 
                                                      Value="True">
-                                                    <Setter Property="Background" Value="Green" />
-                                                    <Setter Property="Foreground" Value="White"/>
-                                                    <Setter Property="FontWeight" Value="Bold"/>
+                                                    <!--<Setter Property="Background" Value="Green" />
+                                                    <Setter Property="Foreground" Value="White"/>-->
+                                                <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+                                                <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
+                                                <Setter Property="FontWeight" Value="Bold"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -274,584 +247,630 @@
                             </DataGrid.Columns>
 
                         </DataGrid>
-                    </StackPanel>
+                   
                 </ScrollViewer>
             
         </GroupBox>
-        <Grid Grid.Row="1" x:Name="TotalHrsSection">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <!--<RowDefinition Height="*"/>-->
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                    <!--<RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>-->
-                </Grid.RowDefinitions>
-                <Label Content="Total hours"
-                       Style="{StaticResource LabelStyle1}"/>
-                <Label Content="System hours" Grid.Row="1"
-                       Style="{StaticResource LabelStyle1}"/>
-                <Label Content="Metal hours" Grid.Row="2"
-                       Style="{StaticResource LabelStyle1}"/>
-                <Label Content="Sloping hours" Grid.Row="3"
-                       Style="{StaticResource LabelStyle1}"/>
-                <!--<Label Content="Freight hours" Grid.Row="4"
-                       Style="{StaticResource LabelStyle1}"/>-->
-                <StackPanel Grid.Row="5" Orientation="Horizontal"
-                            VerticalAlignment="Center"
+            <materialDesign:Card Grid.Row="1" x:Name="TotalHrsSection"
+                                 Margin="5" UniformCornerRadius="5">
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        
+                    </Grid.RowDefinitions>
+                    <Label Content="Total hours"
+                           VerticalAlignment="Center"
+                           Margin="3"
+                           HorizontalAlignment="Center"
+                           Style="{StaticResource  MaterialDesignLabel}"/>
+                    <Label Content="System hours" Grid.Row="1"
+                           Margin="3" VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Style="{StaticResource  MaterialDesignLabel}"/>
+                    <Label Content="Metal hours" Grid.Row="2"
+                           Margin="3" VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Style="{StaticResource  MaterialDesignLabel}"/>
+                    <Label Content="Sloping hours" Grid.Row="3"
+                           Margin="3" VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Style="{StaticResource  MaterialDesignLabel}"/>
+                    
+                    <StackPanel Grid.Row="4" Orientation="Horizontal"
+                                VerticalAlignment="Center"
                            
-                            HorizontalAlignment="Right">
-                    <CheckBox IsChecked="{Binding IncludeDriveHours}"
-                              Margin="5"></CheckBox>
-                    <Label Content="Drive hours"  
-                           Style="{StaticResource LabelStyle1}"/>
-                
-                </StackPanel>
-                
-                <Border BorderThickness="0,2,0,0" Margin="2,10,2,10"
-                        BorderBrush="Black" Grid.Row="6"
-                        Grid.ColumnSpan="2"/>
-                <!--<Label Content="Total Setup Time" Grid.Row="7"
-                   Style="{StaticResource LabelStyle1}"/>-->
-                <Label Content="Labor Cost per SQ. FT." Grid.Row="7"
-                   Style="{StaticResource LabelStyle1}"/>
-                <Label Content="Total Labor Cost" Grid.Row="8"
-                   Style="{StaticResource LabelStyle1}"/>
-                <Border Grid.Column="1" BorderBrush="Black"
-                        BorderThickness="0,0,0,1">
-                    <TextBlock IsEnabled="False"                        
-                         Margin="5"                
-                         Width="100"
-                         FontSize="14"               
-                         Text="{Binding TotalHrsLabor,  StringFormat={}{0:n2},
-                    UpdateSourceTrigger=PropertyChanged}"/>
-                </Border>
-                <Border Grid.Column="1" Grid.Row="1" BorderBrush="Black"
-                        BorderThickness="0,0,0,1">
-                    <TextBlock IsEnabled="False"                        
-                         Margin="5"                       
-                         Width="100"
-                          FontSize="14"              
-                         Text="{Binding TotalHrsSystemLabor,
-                    UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
-                </Border>
-                <Border Grid.Column="1"  Grid.Row="2" BorderBrush="Black"
-                        BorderThickness="0,0,0,1">
-                    <TextBlock IsEnabled="False"                        
-                         Margin="5"                     
-                         Width="100"
-                           FontSize="14"              
-                         Text="{Binding TotalHrsMetalLabor,
-                    UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
-                </Border>
-                <Border Grid.Column="1"  Grid.Row="3" BorderBrush="Black"
-                        BorderThickness="0,0,0,1">
-                    <TextBlock IsEnabled="False"                        
-                         Margin="5"                      
-                         Width="100"
-                         FontSize="14"              
-                         Text="{Binding TotalHrsSlopeLabor, UpdateSourceTrigger=PropertyChanged,
-                        StringFormat={}{0:n2}}"/>
-                </Border>
-                <!--<Border Grid.Column="1"  Grid.Row="4" BorderBrush="Black"
-                        BorderThickness="0,0,0,1">
-                    <TextBlock IsEnabled="False"                      
-                         Width="100" 
-                         FontSize="14"                
-                         Text="{Binding TotalHrsFreightLabor, 
-                        UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
-                </Border>-->
-                <Border Grid.Column="1"  Grid.Row="5" BorderBrush="Black"
-                        BorderThickness="0,0,0,1">
-                    <TextBlock IsEnabled="False" 
-                               Background="Yellow"
-                          Grid.Column="1"                      
-                         Width="100"
-                         FontSize="14"                
-                         Text="{Binding TotalHrsDriveLabor, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
-                </Border>
-                
-                <Border Grid.Column="1"  Grid.Row="7" 
-                        BorderBrush="Black"
-                        BorderThickness="0,0,0,1">
-                    <TextBlock IsEnabled="False"                        
-                         Margin="5"                       
-                         Width="100"
-                         FontSize="14"              
-                         Text="{Binding TotalLaborUnitPrice, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
-                </Border>
-                <Border Grid.Column="1"  Grid.Row="8" BorderBrush="Black"
-                        BorderThickness="0,0,0,1">
-                    <TextBlock IsEnabled="False"                        
-                               Margin="5"                      
-                               Width="100"
-                               FontSize="14"             
-                               Text="{Binding TotalLaborWithoutDrive, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
-                </Border>
+                                HorizontalAlignment="Center">
+                        <CheckBox IsChecked="{Binding IncludeDriveHours}"
+                                  Margin="5"></CheckBox>
+                        <Label Content="Drive hours"  
+                               Style="{StaticResource  MaterialDesignLabel}"/>
 
-                <StackPanel Grid.ColumnSpan="2" Grid.Row="9"
-                            Margin="0,15,0,0">
-                    <CheckBox Content="ADD LABOR FOR MINIMUM CHARGE" 
-                              Margin="20,5,0,5"
-                              IsChecked="{Binding ZAddLaborMinCharge}"
-                              FontSize="15"/>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <!--<ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>-->
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <!--<TextBlock Text="#Hours"/>
-                        <TextBlock Text="{Binding LaborMinChargeHrs,StringFormat=N2}"
-                               Grid.Row="1"/>
-                        <TextBlock Text="SetupMinCharge" Grid.Column="1"/>
-                        <TextBlock Text="{Binding LaborMinChargeMinSetup,StringFormat=N2}" 
-                                   Grid.Column="1"
-                                   Grid.Row="1"/>-->
-                        <TextBlock Text="Min Labor Hrs" Grid.Column="0" Margin="0,0,15,0"/>
-                        <TextBlock Text="{Binding LaborMinChargeLaborUnitPrice,StringFormat=N2}" 
-                               Grid.Row="1" Grid.Column="0"  Margin="0,0,15,0"/>
-                        <TextBlock Text="Min Labor Extension" Grid.Column="1"/>
-                        <TextBlock Text="{Binding LaborMinChargeLaborExtension,StringFormat=N2}" Grid.Column="1"
-                               Grid.Row="1"/>
-                    </Grid>
-                    
-                </StackPanel>
-                    
-                
-               
-            </Grid>
-        <Button Command="{Binding CalculateCostCommand}"                   
-                    Height="35"
-                    Margin="0,10,22,5"
-                    Background="White"
-                    Grid.Row="2"
-                    VerticalAlignment="Bottom"
-                    HorizontalAlignment="right">
+                    </StackPanel>
+
+                    <Border BorderThickness="0,2,0,0" Margin="20,0,20,0"
+                            BorderBrush="{StaticResource PrimaryHueDarkBrush}" Grid.Row="5"
+                            Grid.ColumnSpan="2"/>
+
+                    <Label Content="Labor Cost per SQ. FT." Grid.Row="6" VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                       Style="{StaticResource  MaterialDesignLabel}"/>
+                    <Label Content="Total Labor Cost" Grid.Row="7" HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                       Style="{StaticResource  MaterialDesignLabel}"/>
+                    <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                            Margin="50,0"
+                            Grid.ColumnSpan="2"
+                            BorderThickness="0,0,0,1">
+                        <Label HorizontalAlignment="Right" Style="{StaticResource  MaterialDesignLabel}"               
+                             Width="100"
+                             Margin="3"
+                             FontSize="14"  
+                             ContentStringFormat="{}{0:n2}"
+                             Content="{Binding TotalHrsLabor, 
+                        UpdateSourceTrigger=PropertyChanged}"/>
+                    </Border>
+                    <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                            BorderThickness="0,0,0,1"
+                            Margin="50,0">
+                        <Label    HorizontalAlignment="Right"                   
+                             Margin="3"                       
+                             Width="100"
+                                  ContentStringFormat="{}{0:n2}"
+                              FontSize="14"              
+                             Content="{Binding TotalHrsSystemLabor,
+                        UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
+                    </Border>
+                    <Border Grid.ColumnSpan="2"  Grid.Row="2" BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                            BorderThickness="0,0,0,1"
+                            Margin="50,0">
+                        <Label      HorizontalAlignment="Right"                 
+                             Margin="3"                     
+                             Width="100"
+                                    ContentStringFormat="{}{0:n2}"
+                               FontSize="14"              
+                             Content="{Binding TotalHrsMetalLabor,
+                        UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
+                    </Border>
+                    <Border Grid.ColumnSpan="2"   Grid.Row="3" BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                            Margin="50,0"
+                            BorderThickness="0,0,0,1">
+                        <Label          HorizontalAlignment="Right"               
+                             Margin="3"                      
+                             Width="100"
+                             FontSize="14"              
+                             Content="{Binding TotalHrsSlopeLabor, UpdateSourceTrigger=PropertyChanged,
+                            StringFormat={}{0:n2}}"/>
+                    </Border>
+
+                    <Border Grid.ColumnSpan="2"   Grid.Row="4" BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                            BorderThickness="0,0,0,0"
+                            Margin="50,0">
+                        <Label  HorizontalAlignment="Right"
+                                   Background="{StaticResource SecondaryHueMidBrush}"
+                              Grid.Column="1"                      
+                             Width="100"
+                            Margin="3"
+                             FontSize="14"                
+                             Content="{Binding TotalHrsDriveLabor, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
+                    </Border>
+
+                    <Border Grid.ColumnSpan="2"   Grid.Row="6" BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                            BorderThickness="0,0,0,1" Margin="50,0">
+                        <Label    HorizontalAlignment="Right"                  
+                             Margin="3"                       
+                             Width="100"
+                                  ContentStringFormat="c"
+                             FontSize="14"              
+                             Content="{Binding TotalLaborUnitPrice, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
+                    </Border>
+                    <Border Grid.ColumnSpan="2" Margin="50,0"   Grid.Row="7" BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                            BorderThickness="0,0,0,1">
+                        <Label        VerticalAlignment="Center"  HorizontalAlignment="Right"                 
+                                   Margin="3"                      
+                                   Width="100"
+                                   FontSize="14" 
+                                      ContentStringFormat="c"
+                                   Content="{Binding TotalLaborWithoutDrive, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
+                    </Border>
+
+                    <StackPanel Grid.ColumnSpan="2" Grid.Row="8"
+                                HorizontalAlignment="Center"
+                                Margin="0,15,0,0">
+                        <CheckBox Content="ADD LABOR FOR MINIMUM CHARGE" 
+                                  Margin="20,5,0,5"
+                                  IsChecked="{Binding ZAddLaborMinCharge}"
+                                  FontSize="15"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                               
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                           
+                            <TextBlock Text="Min Labor Hrs" Grid.Column="0" Margin="0,0,15,0"/>
+                            <TextBlock Text="{Binding LaborMinChargeLaborUnitPrice,StringFormat=N2}"  HorizontalAlignment="Center"
+                                   Grid.Row="1" Grid.Column="0"  Margin="0,0,15,0"/>
+                            <TextBlock Text="Min Labor Extension" Grid.Column="1"/>
+                            <TextBlock Text="{Binding LaborMinChargeLaborExtension,StringFormat=c}" Grid.Column="1"  HorizontalAlignment="Center"
+                                   Grid.Row="1"/>
+                        </Grid>
+
+                    </StackPanel>
+
+
+
+                </Grid>
+            </materialDesign:Card>
+            
+            <Button Command="{Binding CalculateCostCommand}"                   
+                        Height="35"
+                        Margin="0,15,5,5"
+                        Grid.Row="2"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="right">
 
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="&#xE1D0;" FontFamily="Segoe UI Symbol" FontSize="16"
-                                       VerticalAlignment="Center"/>
+                        <materialDesign:PackIcon Kind="Calculator"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"/>
                         <TextBlock Text="Calculate" VerticalAlignment="Center"
-                                   HorizontalAlignment="Left"
-                                   Margin="5,0,5,0" FontSize="12" FontWeight="bold"/>
-                        <!--<Image Source="../Images/Calculator.png"
-                               Height="25" Width="36"/>-->
+                                    HorizontalAlignment="Left"
+                                    Margin="5" FontWeight="bold"/>
+
                     </StackPanel>
                 </Button.Content>
             </Button>
-          
-            
+
+
         </Grid>
-        <ScrollViewer Grid.Row="1">
-        <Grid Margin="10,2,2,2"
-             Background="AliceBlue" >
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+        <Grid Margin="10,10,2,2"
+             >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                
             </Grid.ColumnDefinitions>
-            
-            <Border Grid.ColumnSpan="2" Background="Black">
-                <TextBlock Text="TOTAL COST FOR CUSTOMER"
+            <materialDesign:Card UniformCornerRadius="5" 
+                                 Margin="0,5" materialDesign:ShadowAssist.ShadowDepth="Depth3">
+                    
+                    <Grid Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:ColorZone  CornerRadius="5" Background="{StaticResource PrimaryHueDarkBrush}"
+                                                   
+                                                   Grid.ColumnSpan="2"
+                                      Padding="5">
+                            <TextBlock Text="TOTAL COST FOR CUSTOMER"
                            HorizontalAlignment="Center"
-                           Foreground="White"
+                           Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
                            FontSize="14" FontWeight="Bold"/>
-            </Border>
-            <Border Grid.Column="2" Grid.ColumnSpan="5" Background="Black"
-                    BorderBrush="Blue" BorderThickness="2,0,0,0">
-                <TextBlock Text="TOTAL WICR JOB COST" 
-                           Foreground="White"
+                        </materialDesign:ColorZone>
+                        <ListBox Background="{StaticResource PrimaryHueDarkForegroundBrush}" Grid.Row="1">
+
+                            <ListBoxItem HorizontalAlignment="Center"
+                             FontWeight="Bold">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,1">
+                                    <TextBlock Text="Items" Width="120"
+                                               
+                                               HorizontalAlignment="Stretch"
+                                               FontWeight="Bold"/>  
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,1">
+                                    <TextBlock Text="Sloping" Width="120" 
+                               HorizontalAlignment="Stretch"
+                               />
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,1">
+                                    <TextBlock Text="Metal" Width="120" 
+                               HorizontalAlignment="Stretch"
+                               />
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,1">
+                                    <TextBlock Text="System &amp; Other Costs"
+                                   Width="120"
+                               HorizontalAlignment="Stretch"
+                               />
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center" >
+
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,2">
+                                    <TextBlock Text="Sub Contract Labor"
+                                   Width="120"
+                               HorizontalAlignment="Stretch"
+                               />
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                             FontWeight="Bold" Margin="0,5,0,0">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,0">
+                                    <TextBlock Text="Total Sales" Width="120" 
+                               HorizontalAlignment="Stretch"
+                               FontWeight="Bold"/>
+                                </Border>
+                            </ListBoxItem>
+                        </ListBox>
+                        <ListBox Grid.Row="1"
+                                    Background="{StaticResource PrimaryHueDarkForegroundBrush}"
+                     Grid.Column="1">
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
+                                        
+                            BorderThickness="0,0,0,1">
+                                    <TextBlock Text="Total Sales"
+                           HorizontalAlignment="Stretch"
+                               Width="100" FontWeight="Bold"/>
+                                </Border>
+
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,1">
+                                    <TextBlock Width="100"
+                            Text="{Binding TotalSlopingPrice,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,1">
+                                    <TextBlock Width="100" Text="{Binding TotalMetalPrice,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,1">
+                                    <TextBlock Width="100" Text="{Binding TotalSystemPrice,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,2">
+                                    <TextBlock Width="100"
+                            Text="{Binding TotalSubcontractLabor,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"  Margin="0,5,0,0">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
+                            BorderThickness="0,0,0,0">
+                                    <TextBlock HorizontalAlignment="Stretch" Width="100"
+                                   FontWeight="Bold" Background="{StaticResource SecondaryHueMidBrush}" FontSize="14"
+                        Text="{Binding TotalSale,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
+                                </Border>
+                            </ListBoxItem>
+                        </ListBox>
+                    </Grid>
+                   
+                </materialDesign:Card>
+
+                <materialDesign:Card UniformCornerRadius="5" Grid.Column="1" materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                                     Margin="5,5,0,5"
+                                     Grid.ColumnSpan="2">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:ColorZone Margin="5"  Background="{StaticResource PrimaryHueDarkBrush}"
+                                                  CornerRadius="5" Grid.ColumnSpan="5"
+                                          Padding="5" >
+                            <TextBlock Text="TOTAL WICR JOB COST" 
+                           Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
                            HorizontalAlignment="Center"
                            FontSize="14" FontWeight="Bold"
                            />
-            </Border>
-
-            <ListBox Background="AliceBlue"
-                     Grid.Row="1">
-
-                <ListBoxItem HorizontalAlignment="Center"
-                             FontWeight="Bold">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                        </materialDesign:ColorZone>
+                        <ListBox Grid.Row="1"  Background="{StaticResource PrimaryHueDarkForegroundBrush}"
+                                    Grid.Column="0">
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock Text="Items" Width="120" 
-                               HorizontalAlignment="Stretch"
-                               FontWeight="Bold"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
-                            BorderThickness="0,0,0,1">
-                        <TextBlock Text="Sloping" Width="120" 
-                               HorizontalAlignment="Stretch"
-                               />
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
-                            BorderThickness="0,0,0,1">
-                        <TextBlock Text="Metal" Width="120" 
-                               HorizontalAlignment="Stretch"
-                               />
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
-                            BorderThickness="0,0,0,1">
-                        <TextBlock Text="System &amp; Other Costs"
-                                   Width="120"
-                               HorizontalAlignment="Stretch"
-                               />
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center" >
-
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
-                            BorderThickness="0,0,0,2">
-                        <TextBlock Text="Sub Contract Labor"
-                                   Width="120"
-                               HorizontalAlignment="Stretch"
-                               />
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center"
-                             FontWeight="Bold" Margin="0,5,0,0">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
-                            BorderThickness="0,0,0,0">
-                        <TextBlock Text="Total Sales" Width="120" 
-                               HorizontalAlignment="Stretch"
-                               FontWeight="Bold"/>
-                    </Border>
-                </ListBoxItem>
-            </ListBox>
-            <ListBox Grid.Row="1"
-                     Background="AliceBlue"
-                     Grid.Column="1">
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
-                            BorderThickness="0,0,0,1">
-                        <TextBlock Text="Total Sales"
-                           HorizontalAlignment="Stretch"
-                               Width="100" FontWeight="Bold"/>
-                    </Border>
-
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
-                            BorderThickness="0,0,0,1">
-                        <TextBlock Width="100"
-                            Text="{Binding TotalSlopingPrice,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
-                            BorderThickness="0,0,0,1">
-                        <TextBlock Width="100" Text="{Binding TotalMetalPrice,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
-                            BorderThickness="0,0,0,1">
-                        <TextBlock Width="100" Text="{Binding TotalSystemPrice,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
-                            BorderThickness="0,0,0,2">
-                        <TextBlock Width="100"
-                            Text="{Binding TotalSubcontractLabor,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center"  Margin="0,5,0,0">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
-                            BorderThickness="0,0,0,0">
-                        <TextBlock HorizontalAlignment="Stretch" Width="100"
-                                   FontWeight="Bold" Background="#FFE7BA0A" FontSize="14"
-                        Text="{Binding TotalSale,StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </ListBoxItem>
-            </ListBox>
-
-            <ListBox Grid.Row="1"  Background="AliceBlue"
-                     Grid.Column="2">
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
-                            BorderThickness="0,0,0,1">
-                        <TextBlock Text="Labor" HorizontalAlignment="Stretch"
+                                    <TextBlock Text="Labor" HorizontalAlignment="Stretch"
                                FontWeight="Bold" Width="100"
                            />
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" 
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                             HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock  HorizontalAlignment="Stretch"
+                                    <TextBlock  HorizontalAlignment="Stretch"
                                      Width="100"
                         Text="{Binding SlopeTotals.LaborExtTotal,
                              StringFormat=N2,
                             UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock HorizontalAlignment="Stretch"
+                                    <TextBlock HorizontalAlignment="Stretch"
                                     Width="100"
                         Text="{Binding MetalTotals.LaborExtTotal,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock Text="{Binding TotalLaborExtension, StringFormat=N2,UpdateSourceTrigger=PropertyChanged
+                                    <TextBlock Text="{Binding TotalLaborExtension, StringFormat=N2,UpdateSourceTrigger=PropertyChanged
                             }"
                                     Width="100"
                                HorizontalAlignment="Stretch"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
-                            Background="Yellow"
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
+                            Background="{StaticResource SecondaryHueMidBrush}"
                             BorderThickness="0,0,0,2">
-                        <TextBlock HorizontalAlignment="Stretch" Width="100"
-                        Text="{Binding DriveLaborValue}"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center"  Margin="0,5,0,0">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                                    <TextBlock HorizontalAlignment="Stretch" Width="100"
+                                               Text="{Binding DriveLaborValue}"/>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"  Margin="0,5,0,0">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,0">
-                        <TextBlock HorizontalAlignment="Stretch" Width="100"
+                                    <TextBlock HorizontalAlignment="Stretch" Width="100"
                                    FontWeight="Bold"
                         Text="{Binding AllTabsLaborTotal,StringFormat='c',
                             UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </ListBoxItem>
-            </ListBox>
-            <ListBox Grid.Row="1"  Background="AliceBlue"
-                     Grid.Column="3">
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                                </Border>
+                            </ListBoxItem>
+                        </ListBox>
+                        <ListBox Grid.Row="1"  Background="{StaticResource PrimaryHueDarkForegroundBrush}"
+                     Grid.Column="1">
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock Text="Material"  Width="100"
+                                    <TextBlock Text="Material"  Width="100"
                            HorizontalAlignment="Stretch"
                                FontWeight="Bold"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock Width="100" Text="{Binding SlopeTotals.MaterialExtTotal,
+                                    <TextBlock Width="100" Text="{Binding SlopeTotals.MaterialExtTotal,
                             UpdateSourceTrigger=PropertyChanged,StringFormat=N2}"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock Width="100" Text="{Binding MetalTotals.MaterialExtTotal,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                                    <TextBlock Width="100" Text="{Binding MetalTotals.MaterialExtTotal,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock Width="100" 
+                                    <TextBlock Width="100" 
                                    Text="{Binding TotalMaterialCostbrkp
                             , StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,2">
-                        <TextBlock  Width="100" Text="0"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center"  Margin="0,5,0,0">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                                    <TextBlock  Width="100" Text="0"/>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"  Margin="0,5,0,0">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,0">
-                        <TextBlock HorizontalAlignment="Stretch" Width="100"
+                                    <TextBlock HorizontalAlignment="Stretch" Width="100"
                                    FontWeight="Bold"
                         Text="{Binding AllTabsMaterialTotal,
                             StringFormat='c',UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </ListBoxItem>
-            </ListBox>
-            <ListBox Grid.Row="1"  Background="AliceBlue"
-                     Grid.Column="4">
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                                </Border>
+                            </ListBoxItem>
+                        </ListBox>
+                        <ListBox Grid.Row="1"  Background="{StaticResource PrimaryHueDarkForegroundBrush}"
+                                    Grid.Column="2">
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock Text="Freight"
+                                    <TextBlock Text="Freight"
                            HorizontalAlignment="Stretch"
                                Width="100" FontWeight="Bold"/>
-                    </Border>
+                                </Border>
 
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock Width="100"
+                                    <TextBlock Width="100"
                             Text="{Binding SlopeTotals.MaterialFreightTotal,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock Width="100" Text="{Binding MetalTotals.MaterialFreightTotal,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                                    <TextBlock Width="100" Text="{Binding MetalTotals.MaterialFreightTotal,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock Width="100"
+                                    <TextBlock Width="100"
                                    Text="{Binding TotalFreightCostBrkp, StringFormat=N2
                             ,UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,2">
-                        <TextBlock Width="100"
+                                    <TextBlock Width="100"
                             Text="0"/>
-                    </Border>
+                                </Border>
 
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center"  Margin="0,5,0,0">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"  Margin="0,5,0,0">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,0">
-                        <TextBlock HorizontalAlignment="Stretch" Width="100"
+                                    <TextBlock HorizontalAlignment="Stretch" Width="100"
                                    FontWeight="Bold"
                         Text="{Binding AllTabsFreightTotal,StringFormat='c'}"/>
-                    </Border>
-                </ListBoxItem>
-            </ListBox>
-            <ListBox Grid.Row="1"  Background="AliceBlue"
-                     Grid.Column="5">
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                                </Border>
+                            </ListBoxItem>
+                        </ListBox>
+                        <ListBox Grid.Row="1"  Background="{StaticResource PrimaryHueDarkForegroundBrush}"
+                     Grid.Column="3">
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock Text="Sub-Contract Labor"
+                                    <TextBlock Text="Sub-Contract Labor"
                            HorizontalAlignment="Stretch"
                                Width="100" FontWeight="Bold"/>
-                    </Border>
+                                </Border>
 
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock Width="100"
+                                    <TextBlock Width="100"
                             Text="{Binding SlopeTotals.SubContractLabor,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock Width="100" Text="{Binding MetalTotals.SubContractLabor,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                                    <TextBlock Width="100" Text="{Binding MetalTotals.SubContractLabor,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock Width="100"
+                                    <TextBlock Width="100"
                                    Text="0"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,2">
-                        <TextBlock Width="100"
+                                    <TextBlock Width="100"
                             Text="{Binding TotalSubContractLaborCostBrkp,
                             StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
+                                </Border>
 
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center"  Margin="0,5,0,0">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"  Margin="0,5,0,0">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,0">
-                        <TextBlock HorizontalAlignment="Stretch" Width="100"
+                                    <TextBlock HorizontalAlignment="Stretch" Width="100"
                                    FontWeight="Bold"
                         Text="{Binding AllTabsSubContractTotal,StringFormat='c'}"/>
-                    </Border>
-                </ListBoxItem>
-            </ListBox>
-            <ListBox Grid.Row="1"  Background="AliceBlue"
-                     Grid.Column="6">
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                                </Border>
+                            </ListBoxItem>
+                        </ListBox>
+                        <ListBox Grid.Row="1"  Background="{StaticResource PrimaryHueDarkForegroundBrush}"
+                                Grid.Column="4">
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock Text="Total Cost Per Sqft"
+                                    <TextBlock Text="Total Cost Per Sqft"
                            HorizontalAlignment="Stretch"
                                Width="100" FontWeight="Bold"/>
-                    </Border>
+                                </Border>
 
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="Black" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock Width="100"
+                                    <TextBlock Width="100"
                             Text="{Binding CostperSqftSlope,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock Width="100" Text="{Binding CostperSqftMetal ,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                                    <TextBlock Width="100" Text="{Binding CostperSqftMetal ,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}"/>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,1">
-                        <TextBlock Width="100"
+                                    <TextBlock Width="100"
                                    Text="{Binding CostperSqftMaterial,StringFormat=N2}"/>
-                    </Border>
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,2">
-                        <TextBlock Width="100"
+                                    <TextBlock Width="100"
                             Text="{Binding CostperSqftSubContract,
                             StringFormat=N2}"/>
-                    </Border>
+                                </Border>
 
-                </ListBoxItem>
-                <ListBoxItem HorizontalAlignment="Center"  Margin="0,5,0,0">
-                    <Border BorderBrush="Black" HorizontalAlignment="Stretch"
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"  Margin="0,5,0,0">
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" HorizontalAlignment="Stretch"
                             BorderThickness="0,0,0,0">
-                        <TextBlock HorizontalAlignment="Stretch" Width="100"
+                                    <TextBlock HorizontalAlignment="Stretch" Width="100"
                                    FontWeight="Bold"
                         Text="{Binding TotalCostperSqft,StringFormat='c'}"/>
-                    </Border>
-                </ListBoxItem>
-            </ListBox>
+                                </Border>
+                            </ListBoxItem>
+                        </ListBox>
+                    </Grid>
+                    
+                </materialDesign:Card>
+                
+
+           
+           
+
+            
         </Grid>
         </ScrollViewer>
-        <Grid Grid.Row="2" Background="Aquamarine">
+        <Grid Grid.Row="2" Margin="5,0,5,0" Background="{StaticResource PrimaryHueLightBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -878,7 +897,7 @@
                             FontWeight="SemiBold"/>
                 <TextBlock Margin="20,0,0,0" Text="{Binding LaborPerc}"/>
             </StackPanel>
-            <TextBlock Background="Yellow" Grid.Column="3"
+            <TextBlock Background="{StaticResource SecondaryHueMidBrush}" Grid.Column="3"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Text="Drive Labor"/>

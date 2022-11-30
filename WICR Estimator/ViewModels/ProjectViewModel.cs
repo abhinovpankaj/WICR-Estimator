@@ -6,7 +6,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Input;
+using System.Windows.Threading;
+using WICR_Estimator.DBModels;
 using WICR_Estimator.Models;
+using WICR_Estimator.Services;
 
 namespace WICR_Estimator.ViewModels
 {
@@ -16,6 +20,7 @@ namespace WICR_Estimator.ViewModels
         //Retain the active tab
         public int ActiveTabIndex { get; set; }
         private ObservableCollection<Project> enabledProjects;
+
         public ProjectViewModel(ObservableCollection<Project> enabledProjects)
             :this()
         {
@@ -26,18 +31,22 @@ namespace WICR_Estimator.ViewModels
         private void HomeViewModel_OnLoggedAsAdmin(object sender, EventArgs e)
         {
             //IsAdminloggedIn = (bool)sender ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden; 
-            IsAdminloggedIn = (bool)sender;
+            var user = (UserDB)sender;
+            IsAdminloggedIn = user.IsAdmin;
+            
+        
         }
-
+         
         public ProjectViewModel()
         {
             EnabledProjects = new ObservableCollection<Project>();
             EnabledProjects = HomeViewModel.MyselectedProjects;
             
-            HomeViewModel.OnLoggedAsAdmin += HomeViewModel_OnLoggedAsAdmin;
+            LoginPageViewModel.OnLoggedIn += HomeViewModel_OnLoggedAsAdmin;
             HomeViewModel.OnProjectSelectionChange += HomeViewModel_OnProjectSelectionChange;
+
             
-            
+
         }
         List<Project> newlyAddedProjects;
         private void EnabledProjects_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -59,19 +68,40 @@ namespace WICR_Estimator.ViewModels
             //}
         }
 
-        private void HomeViewModel_OnProjectSelectionChange(object sender, EventArgs e)
+        private void HomeViewModel_OnProjectSelectionChange(object sender, ProjectLoadEventArgs e)
         {
 
 
             EnabledProjects = sender as ObservableCollection<Project>;
 
+            //if (EnabledProjects.Count>0)
+            //{
+            //    foreach (var item in EnabledProjects)
+            //    {
+            //        item.RegisterForUndoRedo(item);
+            //    }
+            //}
             //if (EnabledProjects != null)
             //{
             //    EnabledProjects.CollectionChanged += EnabledProjects_CollectionChanged;
             //}
-            initializeApp();
+            if (!e.IsProjectLoadedfromEstimate)
+            {
+                if (e.IsReshuffled)
+                {
+                    ShuffleProjects();
+                }
+                else
+                    initializeApp();
+            }
+            
         }
-
+        private void ShuffleProjects()
+        {
+            
+            EnabledProjects = HomeViewModel.MyselectedProjects;
+            
+        }
 
         #region Properties
         private static bool isAdminloggedIn;
@@ -127,9 +157,10 @@ namespace WICR_Estimator.ViewModels
 
             if (EnabledProjects!=null)
             {
-                 
+               
                 foreach (Project prj in EnabledProjects)
                 {
+                    
                     prj.ActiveTabIndex = 0;
                     if (prj.ProjectJobSetUp == null)
                     {
@@ -140,54 +171,58 @@ namespace WICR_Estimator.ViewModels
                         prj.ProjectJobSetUp.UpdateJobSetup();
                     }
                     string originalProjectname=prj.OriginalProjectName;
+
+                    #region Google
                     //if (prj.Name.Contains('.'))
                     //{
                     //    originalProjectname = prj.Name.Split('.')[0];
                     //}
                     //else
                     //    originalProjectname = prj.Name;
-                        #region Google
-                    var values = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, originalProjectname);
-                    if (values == null)
-                    {
-                        DataSerializer.DSInstance.googleData = new GSData();
-                        //IList<IList<object>> LaborRate=await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Rate);
-                        DataSerializer.DSInstance.googleData.LaborRate = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Rate);
+                    //       var values = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, originalProjectname);
+                    //       if (values == null)
+                    //       {
+                    //           DataSerializer.DSInstance.googleData = new GSData();
+                    //           //IList<IList<object>> LaborRate=await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Rate);
+                    //           DataSerializer.DSInstance.googleData.LaborRate = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Rate);
 
-                        DataSerializer.DSInstance.googleData.MetalData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Metal);
+                    //           DataSerializer.DSInstance.googleData.MetalData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Metal);
 
-                        Thread.Sleep(1000);
-                        DataSerializer.DSInstance.googleData.SlopeData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(originalProjectname, DataType.Slope);
+                    //           Thread.Sleep(1000);
+                    //           DataSerializer.DSInstance.googleData.SlopeData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(originalProjectname, DataType.Slope);
 
-                        
-                        DataSerializer.DSInstance.googleData.MaterialData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(originalProjectname, DataType.Material);
 
-                        Thread.Sleep(1000);
-                        DataSerializer.DSInstance.googleData.LaborData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(originalProjectname, DataType.Labor);
-                        DataSerializer.DSInstance.googleData.FreightData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Freight);
+                    //           DataSerializer.DSInstance.googleData.MaterialData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(originalProjectname, DataType.Material);
 
-                        Thread.Sleep(2000);
-                        DataSerializer.DSInstance.serializeGoogleData(DataSerializer.DSInstance.googleData, originalProjectname);
+                    //           Thread.Sleep(1000);
+                    //           DataSerializer.DSInstance.googleData.LaborData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(originalProjectname, DataType.Labor);
+                    //           DataSerializer.DSInstance.googleData.FreightData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Freight);
 
-                    }
+                    //           Thread.Sleep(2000);
+                    //           DataSerializer.DSInstance.serializeGoogleData(DataSerializer.DSInstance.googleData, originalProjectname);
+
+                    //       }
 
                     #endregion
 
-                    double laborRate = 0;
-                    var rate = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, originalProjectname);
-                    if (rate!=null)
+                    #region DBConnectAndSaveDataLocally
+
+                    var dbValues = DataSerializerService.DSInstance.deserializeDbData(originalProjectname);
+                    if (dbValues == null)
                     {
-                        double.TryParse(rate[0][0].ToString(), out laborRate);
-                        prj.ProjectJobSetUp.LaborRate = laborRate;
+                        //Create dat file locally
+                        prj.ProjectJobSetUp.dbData = await HTTPHelper.FetchFromDbAndSave(originalProjectname);
 
                     }
-                    
+                    else
+                        prj.ProjectJobSetUp.dbData = dbValues;
+
+                    #endregion
 
                     if (originalProjectname == "Paraseal")
                     {
                         if (prj.MaterialViewModel == null)
                         {
-
                             prj.MaterialViewModel = ViewModelInstanceFactory.GetMaterialViewModelInstance(originalProjectname, null,
                                 null, prj.ProjectJobSetUp);
                         }
@@ -202,10 +237,10 @@ namespace WICR_Estimator.ViewModels
                         if (prj.MaterialViewModel == null)
                         {
                             prj.MaterialViewModel = ViewModelInstanceFactory.GetMaterialViewModelInstance(originalProjectname, null,
-                                  prj.SlopeViewModel.SlopeTotals, prj.ProjectJobSetUp);
+                                  prj.SlopeViewModel.SlopeTotals,prj.ProjectJobSetUp);
                         }
                     }
-                    else if (originalProjectname=="Paraseal LG"|| originalProjectname == "Westcoat Epoxy"||originalProjectname== "Polyurethane Injection Block" || originalProjectname == "Block Wall")
+                    else if (originalProjectname=="Paraseal LG"|| originalProjectname == "Paraseal GM" || originalProjectname == "Westcoat Epoxy"||originalProjectname== "Polyurethane Injection Block" || originalProjectname == "Block Wall")
                     {
                         if (prj.MetalViewModel == null)
                         {
@@ -243,11 +278,13 @@ namespace WICR_Estimator.ViewModels
                         }
                     }
                     prj.ProjectJobSetUp.TotalSalesCostTemp = prj.MaterialViewModel.TotalSale;
-                    
+                    prj.RegisterForUndoRedo(prj);
                 }
             }          
 
         }
+
+        
 
         private void ProjectJobSetUp_OnProjectNameChange(object sender, EventArgs e)
         {
@@ -290,6 +327,7 @@ namespace WICR_Estimator.ViewModels
 
         #endregion
 
-       
+        
+
     }
 }

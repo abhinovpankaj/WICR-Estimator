@@ -180,19 +180,24 @@ namespace WICR_Estimator.ViewModels
                     double sp = SystemMaterials[i].SpecialMaterialPricing;
                     bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
                     bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
-                    SystemMaterials[i] = sysMat[i];
+                    //SystemMaterials[i] = sysMat[i];
+                    UpdateMe(sysMat[i]);
+                    
                     if (iscbEnabled)
                     {
-                        SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                        SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                        //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                        //SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                        SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
                     }
-                    SystemMaterials[i].SpecialMaterialPricing = sp;
+                    //SystemMaterials[i].SpecialMaterialPricing = sp;
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
                     
                     if (SystemMaterials[i].Name == "CALCIUM CHLORIDE TEST (MINIMUM OF 3 FOR EACH JOB)")
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
-                            SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            //SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
                         }
                     }
                 }
@@ -270,7 +275,7 @@ namespace WICR_Estimator.ViewModels
             switch (materialName)
             {
                 case "MURIATIC ACID WASH":
-                case "CALCIUM CHLORIDE TEST (MINIMUM OF 3 FOR EACH JOB)":
+                //case "CALCIUM CHLORIDE TEST (MINIMUM OF 3 FOR EACH JOB)":
                 case "EC-12 Epoxy Primer":
                     return false;
                 case "A-81 underlayment for coved base (non-wet areas)":
@@ -314,6 +319,7 @@ namespace WICR_Estimator.ViewModels
 
         public override void ApplyCheckUnchecks(object obj)
         {
+            lastCheckedMat = obj.ToString();
             SystemMaterial sysmat = null;
             bool ischecked = false;
             if (obj.ToString() == "1 COAT (6 MILS) OF VC 200 PRIMER IN LIEU OF BONDCOAT (FOR HYDROSTATIC up to 10 lbs.)")

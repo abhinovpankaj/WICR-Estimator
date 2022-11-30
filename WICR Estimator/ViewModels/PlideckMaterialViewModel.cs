@@ -85,21 +85,26 @@ namespace WICR_Estimator.ViewModels
                     double sp = SystemMaterials[i].SpecialMaterialPricing;
                     bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
                     bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
-                    SystemMaterials[i] = sysMat[i];
+                    //SystemMaterials[i] = sysMat[i];
 
-                    SystemMaterials[i].SpecialMaterialPricing = sp;
+                    //SystemMaterials[i].SpecialMaterialPricing = sp;
+                    UpdateMe(sysMat[i]);
+
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
+
                     if (iscbEnabled)
                     {
-                        SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                        SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                        //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                        //SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                        SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
                     }
                     if (SystemMaterials[i].Name == "Extra stair nosing lf" || SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
                         SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)")
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
-                            SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
-
+                            //SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
                         }
                     }                    
 
@@ -135,7 +140,7 @@ namespace WICR_Estimator.ViewModels
             //CalculateAllMaterial();
         }
 
-        bool prevStatus;
+        bool prevStatus=true;
         public override bool getCheckboxCheckStatus(string materialName)
         {
             switch (materialName)
@@ -145,7 +150,8 @@ namespace WICR_Estimator.ViewModels
                 case "Stucco Material Remove and replace (LF)":
                 case "GS13 Clear Sealer":
                 case "Select Y for protection coat over membrane below tile (GU80-1 TOP COAT)":
-                //case "Color Jar Pigment, 1 JAR per PAIL OF GS88":
+                case "Caulk, dymonic 100":
+                    //case "Color Jar Pigment, 1 JAR per PAIL OF GS88":
                     return false;
                 case "2.5 Galvanized Lathe":
                 case "Staples":
@@ -161,6 +167,7 @@ namespace WICR_Estimator.ViewModels
         {
             switch (materialName)
             {
+                case "Caulk, dymonic 100":
                 case "PD Resin (If dimension exceeds 20 ft in any direction or for below tile)":
                 case "2.5 Galvanized Lathe":
                 case "GS13 Clear Sealer":
@@ -348,6 +355,7 @@ namespace WICR_Estimator.ViewModels
         }
         public override void ApplyCheckUnchecks(object obj)
         {
+            lastCheckedMat = obj.ToString();
             bool isChecked;
             if (obj.ToString() == "2.5 Galvanized Lathe")
             {

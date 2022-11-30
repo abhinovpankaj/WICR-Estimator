@@ -22,6 +22,11 @@ using System.Runtime.Remoting.Contexts;
 using System.Diagnostics;
 using System.Threading;
 using System.Drawing;
+using System.Windows.Interop;
+using System.Runtime.InteropServices;
+using WICR_Estimator.DBModels;
+using WICR_Estimator.Services;
+using System.IO.Compression;
 
 namespace WICR_Estimator.ViewModels
 {
@@ -29,8 +34,8 @@ namespace WICR_Estimator.ViewModels
     class HomeViewModel:BaseViewModel,IPageViewModel
     {
         
-        public static event EventHandler OnLoggedAsAdmin;
-        public static event EventHandler OnProjectSelectionChange;
+        //public static event EventHandler OnLoggedAsAdmin;
+        public static event EventHandler<ProjectLoadEventArgs> OnProjectSelectionChange;
         public static string filePath;
         public static bool isEstimateLoaded;
         //private static NotifyIcon statusNotifier;
@@ -38,22 +43,56 @@ namespace WICR_Estimator.ViewModels
         public HomeViewModel()
         {
             FillProjects();
+            
             Project.OnSelectedProjectChange += Project_OnSelectedProjectChange;
-            HidePasswordSection = System.Windows.Visibility.Collapsed;
-            ShowCalculationDetails = new DelegateCommand(CanShowCalculationDetails, canShow);
+            
             SaveEstimate = new DelegateCommand(SaveProjectEstimate, canSaveEstimate);
             LoadEstimate = new DelegateCommand(LoadProjectEstimate, canLoadEstimate);
             ReplicateProject = new DelegateCommand(Replicate, canReplicate);
             ReplicateIndependentProject = new DelegateCommand(ReplicateIndependent, canReplicate);
-            ClearProjects = new DelegateCommand(Clear, canClear);
+            
             CreateSummary = new DelegateCommand(GenerateSummary, canCreateSummary);
-            RefreshGoogleData = new DelegateCommand(DeleteGoogleData, canDelete);
+            //RefreshGoogleData = new DelegateCommand(DeleteGoogleData, canDelete);
             ProjectTotals = new ProjectsTotal();
+            LoginPageViewModel.OnLoggedIn += LoginPage_OnLoggedIn;
             //statusNotifier = new NotifyIcon();
 
-        }
-        
+            CheckPriceUpdate();
 
+        }
+
+        private void LoginPage_OnLoggedIn(object sender, EventArgs e)
+        {
+            var user = (UserDB)sender;
+            
+            PreparedBy = user.Username;
+            OnPropertyChanged("PreparedBy");
+            
+        }
+
+        private async void CheckPriceUpdate()
+        {
+            
+            //Check If GoogleSheet has been Updated
+            try
+            {
+                if (await IsDBUpated())
+                {
+                    //MessageBox.Show("Material prices and values for materials/metals have been changed,Tool will restart once google data is refreshed.");
+                    Thread.Sleep(1000);
+                    
+                    DeleteGoogleData(null);
+                    
+                }
+
+            }
+            catch (Exception)
+            {
+
+            }
+           
+
+        }
         private void ReplicateIndependent(object obj)
         {
             Project prj = obj as Project;
@@ -92,19 +131,93 @@ namespace WICR_Estimator.ViewModels
                 {
                     applylatestPrice = value;
                     OnPropertyChanged("ApplyLatestPrice");
-                    if (SelectedProjects != null)
+                    
+                    if (applylatestPrice==true)
                     {
-                        foreach (Project item in SelectedProjects)
-                        {
-                            item.ApplyLatestPrices = applylatestPrice;
-                            ApplyLatestGoogleData(item);
-                        }
+                        ApplyLatestPrices();
                     }
+                    
                     CanApplyLatestPrice = false;
                     OnPropertyChanged("CanApplyLatestPrice");
+                   
                 }
             }
         }
+
+        private async void ApplyLatestPrices()
+        {
+            OnTaskStarted("Applying latest prices for selected projects.");
+            try
+            {
+                if (SelectedProjects != null)
+                {
+                    foreach (Project item in SelectedProjects)
+                    {
+                        bool ischecked = false, ischecked2 = false;
+
+                        if (item.OriginalProjectName == "Pedestrian System")
+                        {
+                            SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL");
+                            if (sm != null)
+                            {
+                                ischecked = sm.IsMaterialChecked;
+                            }
+                            //7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL
+                            sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "UI 7118 CONCRETE PRIMER 1-1/2 GAL KIT");
+                            if (sm != null)
+                            {
+                                ischecked2 = sm.IsMaterialChecked;
+                            }
+                        }
+
+                        item.ApplyLatestPrices = applylatestPrice;
+                        //ApplyLatestGoogleData(item);
+                        var dbValues = DataSerializerService.DSInstance.deserializeDbData(item.OriginalProjectName);
+                        if (dbValues == null)
+                        {
+                            item.ProjectJobSetUp.dbData = await HTTPHelper.FetchFromDbAndSave(item.OriginalProjectName);
+                        }
+                        else
+                            item.ProjectJobSetUp.dbData = dbValues;
+
+                        item.ProjectJobSetUp.UpdateJobSetup();
+                        if (item.OriginalProjectName=="Paraseal LG")
+                        {
+                            item.MaterialViewModel.CalculateCost(null); 
+                        }
+                        
+                        UpdateProjectTotals();
+                        if (item.OriginalProjectName == "Pedestrian System")
+                        {
+                            SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL");
+                            if (sm != null)
+                            {
+                                sm.IsMaterialChecked = ischecked;
+                            }
+                            sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "UI 7118 CONCRETE PRIMER 1-1/2 GAL KIT");
+                            if (sm != null)
+                            {
+                                sm.IsMaterialChecked = ischecked2;
+                            }
+                            item.MaterialViewModel.setUnitChangeValues();
+                            item.MaterialViewModel.CalculateCost(null);
+                        }
+                        item.ProjectJobSetUp.TotalSalesCostTemp = item.MaterialViewModel.TotalSale;
+                    }
+                    //OnTaskCompleted("Prices Refreshed for all selected projects.");
+                }
+                //Create dat file locally
+
+            OnTaskCompleted("Prices Refreshed for all selected projects.");
+            }
+            catch (Exception ex)
+            {
+                 
+               OnTaskCompleted("Prices Refresh Failed"+ "\n" + ex.Message);
+            }
+            
+        }
+
         private string _filterString = string.Empty;
         public string FilterString
         {
@@ -196,7 +309,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
-        private DateTime? jobCreationdate;
+        private DateTime? jobCreationdate=DateTime.Now;
         public DateTime? JobCreationDate
         {
             get
@@ -214,34 +327,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         public string LoginMessage { get; set; }
-        private bool showLogin;
-        public bool ShowLogin
-        {
-            get { return showLogin; }
-            set
-            {
-                if (value!=showLogin)
-                {
-                    showLogin = value;                    
-                    if (!value)
-                    {                    
-                        LoginMessage = "";
-                        HidePasswordSection = System.Windows.Visibility.Collapsed;
-                        if (OnLoggedAsAdmin != null)
-                        {
-                            OnLoggedAsAdmin(false, EventArgs.Empty);
-                        }
-                    }
-                    else
-                        HidePasswordSection = System.Windows.Visibility.Visible;
-
-                    OnPropertyChanged("HidePasswordSection");
-                    OnPropertyChanged("LoginMessage");
-                    OnPropertyChanged("ShowLogin");
-                }
-            }
-        }
-        public System.Windows.Visibility HidePasswordSection { get; set; }
+       
         public ICollectionView ProjectView { get; set; }
         private ObservableCollection<Project> projects;
         public ObservableCollection<Project> Projects
@@ -267,7 +353,7 @@ namespace WICR_Estimator.ViewModels
         {
             get
             {
-                var selected = Projects.Where(p => p.IsSelectedProject == true).ToList();
+                var selected = Projects.Where(p => p.IsSelectedProject == true).OrderBy(x=>x.Sequence).ToList();
                 return new ObservableCollection<Project>(selected);
             }
             set
@@ -310,14 +396,29 @@ namespace WICR_Estimator.ViewModels
         
         private void DeleteGoogleData(object obj)
         {
-            IsProcessing = true;
-            StatusMessage = "Deleting the previous Google data";
+            
 
-            if (System.IO.Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR"))
+            try
             {
-                Directory.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR", true);
+                if (System.IO.Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR1"))
+                {
+                    Directory.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR1", true);
+                    Thread.Sleep(2000);
+                }
+
+                //DownloadGoogleData();
+                Task.Run(async () =>
+                {
+                    await RefreshDataFromDB();
+                });
+                
             }
-            DownloadGoogleData();
+            catch (Exception ex)
+            {
+
+                System.Windows.Forms.MessageBox.Show( ex.Message);
+            }
+            
             
         }
         private bool canDelete(object obj)
@@ -332,41 +433,17 @@ namespace WICR_Estimator.ViewModels
 
         private void GenerateSummary(object obj)
         {
+           // OnTaskStarted("Summary Sheet ");
+           //Task.Run(()=>WriteToSummary());
+            //OnTaskCompleted("Summary Created.");
+
             WriteToSummary();
-        }
-        private bool canClear(object obj)
-        {
-            if (SelectedProjects.Count > 0)
-            {
-                return true;
-            }
-            else
-                return false;
-        }
-       
-       private void Clear(object obj)
-        {
-            string message = "All the Project selection and values will be cleared. \nDo you want to proceed?";
-            string caption = "Refresh WICR Tool";
-            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-            DialogResult result;
-
-            // Displays the MessageBox.
             
-            result = MessageBox.Show(message, caption, buttons);
-            if (result == System.Windows.Forms.DialogResult.Yes)
-            {
-
-                Process.Start(Application.ExecutablePath);
-                
-                
-                Thread.Sleep(1000);
-                Environment.Exit(-1);
-            }
-            
-
         }
-        
+
+
+
+
         private bool canReplicate(object obj)
         {
             bool isEnabled = false;
@@ -380,6 +457,7 @@ namespace WICR_Estimator.ViewModels
             }
             return isEnabled;
         }
+
         private void Replicate(object obj)
         {
             Project prj = obj as Project;
@@ -390,7 +468,8 @@ namespace WICR_Estimator.ViewModels
                     Project replicatedProject = new Project();
                     
                     prj.CopyCount++;
-                    replicatedProject.Name = prj.Name + "." + prj.CopyCount;
+                    string prjName = prj.WorkArea == null ? prj.Name + "." + prj.CopyCount : prj.WorkArea;
+                    replicatedProject.Name = prjName.Replace(prj.Sequence+".",""); 
                     replicatedProject.OriginalProjectName = prj.OriginalProjectName;
                     replicatedProject.GrpName = "Copied";
                     replicatedProject.MainGroup = "Replicated Projects";
@@ -402,6 +481,7 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        //Double click open Estimate
         public void OpenEstimateFile(string filePath)
         {
             Project savedProject = null;
@@ -418,10 +498,19 @@ namespace WICR_Estimator.ViewModels
 
                 foreach (Project item in est)
                 {
+                    string ver = item.ProductVersion;
                     bool adminLabor = item.MaterialViewModel.ZAddLaborMinCharge;
-                    savedProject = Projects.Where(x => x.Name == item.OriginalProjectName).FirstOrDefault();
-                    Projects.Remove(savedProject);
-                    Projects.Add(item);
+                    if (item.GrpName == "Copied")
+                    {
+                        Projects.Add(item);
+                    }
+                    else
+                    {
+                        savedProject = Projects.Where(x => x.Name == item.OriginalProjectName).FirstOrDefault();
+                        Projects.Remove(savedProject);
+                        Projects.Add(item);
+                    }
+                    
                     //code to rename the Material Name for paraseal LG, to make sure old estimates work.
                     if (item.OriginalProjectName == "Paraseal LG")
                     {
@@ -432,6 +521,32 @@ namespace WICR_Estimator.ViewModels
                         }
                         
                     }
+
+                    bool ischecked = false,ischecked2=false;
+                    if (item.OriginalProjectName == "Pedestrian System")
+                    {
+                        SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL");
+                        if (sm != null)
+                        {
+                            ischecked = sm.IsMaterialChecked;
+                        }
+                        //7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL
+                        sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "UI 7118 CONCRETE PRIMER 1-1/2 GAL KIT");
+                        if (sm != null)
+                        {
+                            ischecked2 = sm.IsMaterialChecked;
+                        }
+                    }
+                    else if (item.OriginalProjectName == "Pli-Dek")
+                    {
+                        SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "2.5 Galvanized Lathe");
+                        if (sm != null)
+                        {
+                            ischecked = sm.IsMaterialChecked;
+                        }
+                        item.MaterialViewModel.ApplyCheckUnchecks("2.5 Galvanized Lathe");
+                    }
+
                     if (item.CreationDetails != null)
                     {
                         //fill the Creaters Details
@@ -451,12 +566,22 @@ namespace WICR_Estimator.ViewModels
                     }
 
                     item.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
+                    SystemMaterial.OnQTyChanged += (s, e) => { item.MaterialViewModel.setExceptionValues(s); };
+                    SystemMaterial.OnUnitChanged += (s, e) => { item.MaterialViewModel.setUnitChangeValues(); };
+                    if (item.MetalViewModel != null)
+                    {
+                        Metal.onUnitChanged += (s, e) => { item.MetalViewModel.Metal_onUnitChanged(s, e); };
+                    }
+
                     SelectedProjects.Add(item);
+                   
+                   
                     if (item.ProjectJobSetUp != null)
                     {
                         item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
+                        item.ProjectJobSetUp.EnableMoreMarkupCommand = new DelegateCommand(item.ProjectJobSetUp.CanAddMoreMarkup, item.ProjectJobSetUp.canAdd);
                         item.ProjectJobSetUp.GetOriginalName();
-                        item.ProjectJobSetUp.UpdateJobSetup();
+                        //item.ProjectJobSetUp.UpdateJobSetup();
                     }
                     if (item.MetalViewModel != null)
                     {
@@ -467,29 +592,98 @@ namespace WICR_Estimator.ViewModels
                     {
                         item.SlopeViewModel.SlopeTotals.OnTotalsChange += item.MaterialViewModel.MetalTotals_OnTotalsChange;
                         item.ProjectJobSetUp.JobSetupChange += item.SlopeViewModel.JobSetup_OnJobSetupChange;
+
                     }
                     item.MaterialViewModel.CheckboxCommand = new DelegateCommand(item.MaterialViewModel.ApplyCheckUnchecks, item.MaterialViewModel.canApply);
-                    SystemMaterial.OnQTyChanged += (s, e) => { item.MaterialViewModel.setExceptionValues(s); };
 
+                    item.ProjectJobSetUp.UpdateJobSetup();
                     //keep other material and other labor materials in sync
+
                     var ot = item.MaterialViewModel.OtherLaborMaterials;
-                    item.MaterialViewModel.OtherLaborMaterials = item.MaterialViewModel.OtherMaterials;
+                    //if (item.OriginalProjectName == "Blank")
+                    //{
+                    //    item.MaterialViewModel.OtherLaborMaterials = item.MaterialViewModel.OtherMaterials.Where(x => x.Name != "").ToObservableCollection();
+                    //}
+                    //else
+                        item.MaterialViewModel.OtherLaborMaterials = item.MaterialViewModel.OtherMaterials;
                     int k = 0;
-                    foreach (OtherItem olm in item.MaterialViewModel.OtherLaborMaterials)
+                    try
                     {
-                        //olm.Name = ot[k].Name;
-                        olm.LQuantity = ot[k].LQuantity;
-                        olm.LMaterialPrice = ot[k].LMaterialPrice;
-                        k++;
+                        foreach (OtherItem olm in item.MaterialViewModel.OtherLaborMaterials)
+                        {
+                            //olm.Name = ot[k].Name;
+                            olm.LQuantity = ot[k].LQuantity;
+                            olm.LMaterialPrice = ot[k].LMaterialPrice;
+                            k++;
+                        }
                     }
+                    catch (Exception)
+                    {
+
+                        
+                    }
+                    
+                    
                     //ends
 
                     //item.MaterialViewModel.CalculateCost(null);
+                    
+                    item.ProductVersion = ver;
+                    //if (item.OriginalProjectName == "Reseal all systems" || item.OriginalProjectName == "Weather Wear" || item.OriginalProjectName == "Weather Wear Rehab" || item.OriginalProjectName == "Paraseal LG" || item.OriginalProjectName == "Barrier Guard")
+                    //{
+                        item.MaterialViewModel.CalculateCost(null);
+                        //item.MaterialViewModel.CalculateLaborMinCharge(false);
+                        //item.MaterialViewModel.calculateLaborTotalsWithMinLabor();
+                    //}
+
+                    //pedestrian
+                    if (item.OriginalProjectName == "Pedestrian System")
+                    {
+                        SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL");
+                        if (sm != null)
+                        {
+                            sm.IsMaterialChecked = ischecked;
+                        }
+                        sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "UI 7118 CONCRETE PRIMER 1-1/2 GAL KIT");
+                        if (sm != null)
+                        {
+                            sm.IsMaterialChecked = ischecked2;
+                        }
+                        item.MaterialViewModel.setUnitChangeValues();
+                        item.MaterialViewModel.CalculateCost(null);
+                    }
+                    else if (item.OriginalProjectName == "Pli-Dek")
+                    {
+                        SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "2.5 Galvanized Lathe");
+                        if (sm != null)
+                        {
+                            sm.IsMaterialChecked = ischecked;
+                        }
+                        sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "Staples");
+                        if (sm != null)
+                        {
+                            sm.IsMaterialChecked = ischecked;
+                        }
+                        item.MaterialViewModel.CalculateCost(null);
+                    }
+                    else if (item.OriginalProjectName== "Parking Garage")
+                    {
+                        item.MaterialViewModel.setUnitChangeValues();
+                        item.MaterialViewModel.CalculateCost(null);
+                    }
+                    else
+                        item.MaterialViewModel.CalculateCost(null);
+
+                    
+                    item.RegisterForUndoRedo(item);
                     item.MaterialViewModel.ZAddLaborMinCharge = adminLabor;
+                    item.MaterialViewModel.CalculateCost(null);
+                    item.ProjectJobSetUp.TotalSalesCostTemp = item.MaterialViewModel.TotalSale;
                 }
-                Project_OnSelectedProjectChange(Projects[0], null);
+                
+                Project_OnSelectedProjectChange(null, null);
                 reader.Close();
-                ClearProjects.RaiseCanExecuteChanged();
+               
                 CreateSummary.RaiseCanExecuteChanged();
                 CanApplyLatestPrice = true;
                 OnPropertyChanged("CanApplyLatestPrice");
@@ -498,28 +692,30 @@ namespace WICR_Estimator.ViewModels
                 OnPropertyChanged("Projects");
 
             }
-            catch
+            catch(Exception ex)
             {
-                MessageBox.Show("Your estimate seems to be created in Older version of WICR Estimator. \n\nPlease re-create the estimates, Or Contact the manufacturer.");
+                MessageBox.Show(ex.Message + "Your estimate seems to be created in Older version of WICR Estimator. \n\nPlease re-create the estimates, Or Contact the manufacturer.");
+                throw;
             }
         }
+        //Browse Open Estimate.
         private void LoadProjectEstimate(object obj)
         {
             Project savedProject = null;
-              OpenFileDialog openFileDialog1 = new OpenFileDialog
-                {
-                    InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    Title = "Browse Estimate File",
-                    CheckFileExists = true,
-                    CheckPathExists = true,
+            OpenFileDialog openFileDialog1 = new OpenFileDialog
+            {
+                InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                Title = "Browse Estimate File",
+                CheckFileExists = true,
+                CheckPathExists = true,
 
-                    DefaultExt = "est",
-                    Filter = "Estimator files (*.est)|*.est",
-                    FilterIndex = 2,
-                    RestoreDirectory = true,
-                    ReadOnlyChecked = true,
-                    ShowReadOnly = true
-                };
+                DefaultExt = "est",
+                Filter = "Estimator files (*.est)|*.est",
+                FilterIndex = 2,
+                RestoreDirectory = true,
+                //ReadOnlyChecked = true,
+                ShowReadOnly = true
+            };
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
@@ -529,34 +725,75 @@ namespace WICR_Estimator.ViewModels
             {
                 return;
             }
-            
-            DataContractSerializer deserializer = new DataContractSerializer(typeof(ObservableCollection<Project>));
-                
-            FileStream fs = new FileStream(filePath, FileMode.Open);
-            XmlDictionaryReader reader = XmlDictionaryReader.CreateTextReader(fs, new XmlDictionaryReaderQuotas());
 
+            //OpenEstimateFile(filePath);
+            //return;
+            DataContractSerializer deserializer = new DataContractSerializer(typeof(ObservableCollection<Project>));
+
+            FileStream fs = new FileStream(filePath, FileMode.Open);                         
+            
+            XmlDictionaryReader reader = XmlDictionaryReader.CreateTextReader(fs, new XmlDictionaryReaderQuotas());
+            //XmlDictionaryReader reader = XmlDictionaryReader.CreateTextReader(gZipStream, new XmlDictionaryReaderQuotas());
             try
             {
                 ObservableCollection<Project> est = (ObservableCollection<Project>)deserializer.ReadObject(reader);
 
                 //SelectedProjects = (ObservableCollection<Project>)deserializer.ReadObject(reader);//est.ToObservableCollection();
-
+                
                 foreach (Project item in est)
                 {
+                    string ver = item.ProductVersion;
                     bool adminLabor = item.MaterialViewModel.ZAddLaborMinCharge;
-                    savedProject = Projects.Where(x => x.Name == item.OriginalProjectName).FirstOrDefault();
-                    Projects.Remove(savedProject);
-                    Projects.Add(item);
+                    if (item.GrpName=="Copied")
+                    {
+                        Projects.Add(item);
+                    }
+                    else
+                    {
+                        savedProject = Projects.Where(x => x.Name == item.OriginalProjectName).FirstOrDefault();
+                        Projects.Remove(savedProject);
+                        Projects.Add(item);
+                    }
+
+                    
                     //code to rename the Material Name for paraseal LG, to make sure old estimates work.
                     if (item.OriginalProjectName=="Paraseal LG")
                     {
-                        SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "SUPER STOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT\"");
-                        if (sm!=null)
+                        SystemMaterial sm1 = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "SUPER STOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT\"");
+                        if (sm1!=null)
                         {
-                            sm.Name = "SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT";
+                            sm1.Name = "SUPERSTOP (FOUNDATIONS AND WALLS) 1/2\" X 1\"X 20 FT";
                         }
                         
                     }
+                    //code for UPI Pedestrian 
+                    
+                    bool ischecked=false,ischecked2=false;
+                    if (item.OriginalProjectName == "Pedestrian System")
+                    {
+                        SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL");
+                        if (sm != null)
+                        {
+                            ischecked = sm.IsMaterialChecked;
+                        }
+                        //7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL
+                        sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "UI 7118 CONCRETE PRIMER 1-1/2 GAL KIT");
+                        if (sm != null)
+                        {
+                            ischecked2 = sm.IsMaterialChecked;
+                        }
+                    
+                    }
+                    else if(item.OriginalProjectName == "Pli-Dek")
+                    {
+                        SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "2.5 Galvanized Lathe");
+                        if (sm != null)
+                        {
+                            ischecked = sm.IsMaterialChecked;
+                        }
+                        item.MaterialViewModel.ApplyCheckUnchecks("2.5 Galvanized Lathe");
+                    }
+
                     if (item.CreationDetails != null)
                     {
                         //fill the Creaters Details
@@ -574,15 +811,25 @@ namespace WICR_Estimator.ViewModels
                         OnPropertyChanged("JobCreationDate");
                         OnPropertyChanged("PreparedBy");
                     }
-
+                    SystemMaterial.OnQTyChanged += (s, e) => { item.MaterialViewModel.setExceptionValues(s); };
+                    SystemMaterial.OnUnitChanged += (s, e) => { item.MaterialViewModel.setUnitChangeValues(); };
+                    if (item.MetalViewModel!=null)
+                    {
+                        Metal.onUnitChanged += (s, e) => { item.MetalViewModel.Metal_onUnitChanged(s, e); };
+                    }
+                    
+                 
                     item.ProjectJobSetUp.OnProjectNameChange += ProjectJobSetUp_OnProjectNameChange;
                     SelectedProjects.Add(item);
+                   
+                    
                     if (item.ProjectJobSetUp != null)
                     {
+                        //item.ProjectJobSetUp.JobSetupChange -= item.MaterialViewModel.JobSetup_OnJobSetupChange;
                         item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
                         item.ProjectJobSetUp.EnableMoreMarkupCommand = new DelegateCommand(item.ProjectJobSetUp.CanAddMoreMarkup, item.ProjectJobSetUp.canAdd);
                         item.ProjectJobSetUp.GetOriginalName();
-                        item.ProjectJobSetUp.UpdateJobSetup();
+                        //item.ProjectJobSetUp.UpdateJobSetup(ver);
                     }
                     if (item.MetalViewModel != null)
                     {
@@ -596,27 +843,96 @@ namespace WICR_Estimator.ViewModels
                     }
                     item.MaterialViewModel.CheckboxCommand = new DelegateCommand(item.MaterialViewModel.ApplyCheckUnchecks, item.MaterialViewModel.canApply);
 
-                    SystemMaterial.OnQTyChanged += (s, e) => { item.MaterialViewModel.setExceptionValues(s); };
+                    item.ProjectJobSetUp.UpdateJobSetup(ver);
                     
                     //keep other material and other labor materials in sync
                     var ot= item.MaterialViewModel.OtherLaborMaterials;
-                    item.MaterialViewModel.OtherLaborMaterials= item.MaterialViewModel.OtherMaterials;
+                    //if (item.OriginalProjectName=="Blank")
+                    //{
+                    //    item.MaterialViewModel.OtherLaborMaterials = item.MaterialViewModel.OtherMaterials.Where(x => x.Name != "").ToObservableCollection();
+
+                    //}
+                    //else
+                        item.MaterialViewModel.OtherLaborMaterials= item.MaterialViewModel.OtherMaterials;
                     int k = 0;
-                    foreach (OtherItem olm in item.MaterialViewModel.OtherLaborMaterials)
+                    try
                     {
-                        //olm.Name = ot[k].Name;
-                        olm.LQuantity = ot[k].LQuantity;
-                        olm.LMaterialPrice = ot[k].LMaterialPrice;
-                        k++;
+                        foreach (OtherItem olm in item.MaterialViewModel.OtherLaborMaterials)
+                        {
+                            //olm.Name = ot[k].Name;
+                            olm.LQuantity = ot[k].LQuantity;
+                            olm.LMaterialPrice = ot[k].LMaterialPrice;
+                            k++;
+                        }
                     }
+                    catch (Exception)
+                    {
+
+                       
+                    }
+                    
                     //ends
 
                     //item.MaterialViewModel.CalculateCost(null);
+                    
+                    item.ProductVersion = ver;
+                    //if (item.OriginalProjectName == "Reseal all systems" || item.OriginalProjectName=="Weather Wear"||item.OriginalProjectName=="Weather Wear Rehab"
+                    //    ||item.OriginalProjectName=="Paraseal LG" || item.OriginalProjectName == "Barrier Guard")
+                    //{
+                        item.MaterialViewModel.CalculateCost(null);
+                        //item.MaterialViewModel.CalculateLaborMinCharge(false);
+                        //item.MaterialViewModel.calculateLaborTotalsWithMinLabor();
+                    //}
+
+                    //pedestrian
+                    if (item.OriginalProjectName == "Pedestrian System")
+                    {
+                        SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL");
+                        if (sm != null)
+                        {
+                            sm.IsMaterialChecked = ischecked;
+                        }
+                        sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "UI 7118 CONCRETE PRIMER 1-1/2 GAL KIT");
+                        if (sm != null)
+                        {
+                             sm.IsMaterialChecked= ischecked2 ;
+                        }
+                        item.MaterialViewModel.setUnitChangeValues();
+                        item.MaterialViewModel.CalculateCost(null);
+                    }
+                    else if (item.OriginalProjectName == "Pli-Dek")
+                    {
+                        SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "2.5 Galvanized Lathe");
+                        if (sm != null)
+                        {
+                            sm.IsMaterialChecked = ischecked;
+                        }
+                        sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "Staples");
+                        if (sm != null)
+                        {
+                            sm.IsMaterialChecked = ischecked;
+                        }
+                        item.MaterialViewModel.CalculateCost(null);
+                    }
+                    else if (item.OriginalProjectName == "Parking Garage")
+                    {
+                        item.MaterialViewModel.setUnitChangeValues();
+                        item.MaterialViewModel.CalculateCost(null);
+                    }
+                    else
+                        item.MaterialViewModel.CalculateCost(null);
+                    
+
+                    item.RegisterForUndoRedo(item);
                     item.MaterialViewModel.ZAddLaborMinCharge = adminLabor;
+                    item.MaterialViewModel.CalculateCost(null);
+                    item.ProjectJobSetUp.TotalSalesCostTemp = item.MaterialViewModel.TotalSale;
                 }
-                Project_OnSelectedProjectChange(Projects[0], null);
+
+
+                Project_OnSelectedProjectChange(null, null);
                 reader.Close();
-                ClearProjects.RaiseCanExecuteChanged();
+                
                 CreateSummary.RaiseCanExecuteChanged();
                 CanApplyLatestPrice = true;
                 OnPropertyChanged("CanApplyLatestPrice");
@@ -624,17 +940,23 @@ namespace WICR_Estimator.ViewModels
                 OnPropertyChanged("Projects");
                 OnPropertyChanged("SelectedProjects");
 
-
+               // OnTaskCompleted("Estimate Loaded");
             }
             catch(Exception ex)
             {
-                MessageBox.Show("Your estimate seems to be created in Older version of WICR Estimator. \n\nPlease re-create the estimates, Or Contact the manufacturer."
-                    +ex.Message);
+                //MessageBox.Show("Your estimate seems to be created in Older version of WICR Estimator. \n\nPlease re-create the estimates, Or Contact the manufacturer."
+                //    +ex.Message);
+                OnTaskCompleted("Your estimate seems to be created in Older version of WICR Estimator. \n\nPlease re-create the estimates, Or Contact the manufacturer.\n" + ex.Message);
             }  
             finally
             {
                 reader.Close();
             }
+        }
+
+        private void SlopeViewModel_GraphPropertyChanged1(object sender, PropertyChangedEventArgs e)
+        {
+           // throw new NotImplementedException();
         }
 
         
@@ -653,8 +975,15 @@ namespace WICR_Estimator.ViewModels
                 return false;
         }
 
-        private void SaveProjectEstimate(object obj)
+        private async void SaveProjectEstimate(object obj)
         {
+            if (PreparedBy==null || JobName == null || JobName == string.Empty)
+            {
+                OnTaskCompleted("Please fill JobName & Prepared by and then save the estimate.");
+
+                return;
+            }
+
             ////serialize Enabled Project Data and Save
 
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
@@ -668,36 +997,126 @@ namespace WICR_Estimator.ViewModels
             saveFileDialog1.RestoreDirectory = true;
             saveFileDialog1.ShowDialog();
 
-            if (saveFileDialog1.FileName != "")
+            try
             {
-                //// Insert code to set properties and fields of the object.  
-                //XmlSerializer mySerializer = new XmlSerializer(typeof(ObservableCollection<Project>));
-                //// To write to a file, create a StreamWriter object.  
-                //StreamWriter myWriter = new StreamWriter(saveFileDialog1.FileName);
-                //mySerializer.Serialize(myWriter, SelectedProjects);
-                //myWriter.Close();
-                var serializer = new DataContractSerializer(typeof(ObservableCollection<Project>));
-                
-                using (var sw = new StringWriter())
+                if (saveFileDialog1.FileName != "")
                 {
-                    using (var writer = new XmlTextWriter(saveFileDialog1.FileName,null))
-                    {
-                        writer.Formatting = Formatting.Indented; // indent the Xml so it's human readable
-                        foreach (Project item in SelectedProjects)
-                        {
-                            item.CreationDetails = JobName + ":;" + PreparedBy + ":;" + JobCreationDate.ToString();
-                        }
-                        serializer.WriteObject(writer,SelectedProjects );
-                        
-                        writer.Flush();
-                        MessageBox.Show("Project Estimate Saved Succesfully","Success");
-                    }
-                }
+                    OnTaskStarted("Wait! Saving Estimate...");
 
+                    int myEstimateID;
+                    var serializer = new DataContractSerializer(typeof(ObservableCollection<Project>));
+                    if (SelectedProjects[0].EstimateID != 0)
+                    {
+                        myEstimateID = SelectedProjects[0].EstimateID;
+                    }
+                    else
+                    {
+                        //var createdOn = JobCreationDate == null ? DateTime.UtcNow : JobCreationDate;
+                        EstimateDB myEstimate = new EstimateDB(JobName, PreparedBy, JobCreationDate, ProjectTotals);
+                        //Add Estimate to DB, get EstimateID
+                        var estimate = await HTTPHelper.PostEstimate(myEstimate);
+                        myEstimateID = estimate.EstimateID;
+                        UpdateTaskStatus("Saving Estimate to DB");
+                    }
+
+                    using (var sw = new StringWriter())
+                    {
+                        using (var writer = new XmlTextWriter(saveFileDialog1.FileName, null))
+                        {
+
+                            writer.Formatting = Formatting.Indented; // indent the Xml so it's human readable
+                            
+                                foreach (Project item in SelectedProjects)
+                                {
+                                    item.MaterialViewModel.CalculateCost(null);
+                                    item.UpdateMainTable();
+
+
+                                    item.CreationDetails = JobName + ":;" + PreparedBy + ":;" + JobCreationDate.ToString();
+                                    item.ProductVersion = "5.0";
+                                    //Update DB
+
+
+                                    if (item.EstimateID != 0)
+                                    {
+                                        //Get the estimate from DB
+
+                                        ProjectDetailsDB prjDB = new ProjectDetailsDB();
+                                        prjDB.EstimateID = item.EstimateID;
+                                        prjDB.LaborCost = item.LaborCost;
+                                        prjDB.LaborPercentage = item.LaborPercentage;
+                                        prjDB.MaterialCost = item.MaterialCost;
+                                        prjDB.SlopeCost = item.SlopeCost;
+                                        prjDB.MetalCost = item.MetalCost;
+                                        prjDB.SystemCost = item.SystemNOther;
+                                        prjDB.CostPerSqFoot = item.CostPerSqFoot;
+                                        prjDB.TotalCost = item.TotalCost;
+                                        prjDB.ProjectDetailID = item.ProjectID;
+                                        prjDB.HasContingencyDisc = item.ProjectJobSetUp.VHasContingencyDisc;
+                                        prjDB.HasPrevailingWage = item.ProjectJobSetUp.IsPrevalingWage;
+                                        prjDB.ProjectProfitMargin = item.MaterialViewModel.ProjectProfitMargin;
+                                        prjDB.ProjectName = item.ProjectJobSetUp.ProjectName;
+                                        prjDB.IsNewProject = item.ProjectJobSetUp.IsNewProject;
+                                        await HTTPHelper.PutProjectDetails(item.ProjectID, prjDB);
+                                        UpdateTaskStatus("Updating project details for Project :" + item.Name);
+                                    }
+                                    else
+                                    {
+                                        ProjectDetailsDB prjDB = new ProjectDetailsDB();
+                                        prjDB.EstimateID = myEstimateID;
+                                        prjDB.LaborCost = item.LaborCost;
+                                        prjDB.LaborPercentage = item.LaborPercentage;
+                                        prjDB.MaterialCost = item.MaterialCost;
+                                        prjDB.SlopeCost = item.SlopeCost;
+                                        prjDB.MetalCost = item.MetalCost;
+                                        prjDB.SystemCost = item.SystemNOther;
+                                        prjDB.CostPerSqFoot = item.CostPerSqFoot;
+                                        prjDB.TotalCost = item.TotalCost;
+                                        prjDB.HasContingencyDisc = item.ProjectJobSetUp.VHasContingencyDisc;
+                                        prjDB.HasPrevailingWage = item.ProjectJobSetUp.IsPrevalingWage;
+                                        prjDB.ProjectProfitMargin = item.MaterialViewModel.ProjectProfitMargin;
+                                        prjDB.ProjectName = item.ProjectJobSetUp.ProjectName;
+                                        prjDB.IsNewProject = item.ProjectJobSetUp.IsNewProject;
+                                        ProjectDetailsDB prj = await HTTPHelper.PostProjectDetails(prjDB);
+                                        UpdateTaskStatus("Adding project details for Project: " + item.Name);
+                                        if (prj != null)
+                                        {
+                                            item.ProjectID = prj.ProjectDetailID;
+                                        }
+                                        else
+                                        {
+                                            //MessageBox.Show("Failed to Post the project to DB", "Failure");
+                                            UpdateTaskStatus("Failed to Add the project: " + item.Name);
+                                        }
+
+                                    }
+                                    item.EstimateID = myEstimateID;
+                                }
+                                UpdateTaskStatus("Saving Estimate locally.");
+                                UpdateProjectTotals();
+                                var updatedEstimate = new EstimateDB(JobName, PreparedBy, JobCreationDate, ProjectTotals);
+                                updatedEstimate.EstimateID = myEstimateID;
+                                await HTTPHelper.PutEstimate(myEstimateID, updatedEstimate);
+
+                                serializer.WriteObject(writer, SelectedProjects);
+
+                                writer.Flush();
+                                //UpdateTaskStatus("Project Estimate Saved Succesfully");
+                            
+                        }
+                    }
+                    OnTaskCompleted("Project Estimate Saved Succesfully");
+                }
             }
+            catch (Exception ex)
+            {
+
+                OnTaskCompleted("Project Estimate failed to Save.\n"+ ex.Message);
+            }
+            
 
         }
-        public DelegateCommand ClearProjects { get; set; }
+        
         public DelegateCommand CreateSummary { get; set; }
         public DelegateCommand RefreshGoogleData { get; set; }
         public DelegateCommand ReplicateProject { get; set; }
@@ -746,65 +1165,83 @@ namespace WICR_Estimator.ViewModels
 
         #region Private Methods
         private void Project_OnSelectedProjectChange(object sender, EventArgs e)
-        {
+        {          
             if (OnProjectSelectionChange != null)
             {
-                OnProjectSelectionChange(SelectedProjects, EventArgs.Empty);
-            }
+                ProjectLoadEventArgs args = new ProjectLoadEventArgs();
+                if (sender!=null)
+                {
+                    var proj = sender as Project;
+                    if (proj.EstimateID==0)
+                    {
+                        args.IsProjectLoadedfromEstimate = false;
+                    }
+                    else
+                        args.IsProjectLoadedfromEstimate = true;
 
-            MyselectedProjects = SelectedProjects;
+                }
+                else
+                {
+                    args.IsProjectLoadedfromEstimate = true;                
+                }
+                AddProjectSequence();
+                
+                OnProjectSelectionChange(SelectedProjects, args);
+            }
+            
             OnPropertyChanged("SelectedProjects");
             if (SelectedProjects != null)
             {
+                
                 UpdateProjectTotals();
             }
         }
-
-        private void ApplyLatestGoogleData(Project item)
+        public void fireEvent(Project sender)
         {
-            double laborRate;
-            var rate = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, item.OriginalProjectName);
-            var freightData = DataSerializer.DSInstance.deserializeGoogleData(DataType.Freight, item.OriginalProjectName);
-            var laborData = DataSerializer.DSInstance.deserializeGoogleData(DataType.Labor, item.OriginalProjectName);
-
-            if (rate != null)
+            ProjectLoadEventArgs args = new ProjectLoadEventArgs();
+            if (sender != null)
             {
-                double.TryParse(rate[0][0].ToString(), out laborRate);
-                item.ProjectJobSetUp.LaborRate = laborRate;
+                var proj = sender as Project;
+                if (proj.EstimateID == 0)
+                {
+                    args.IsProjectLoadedfromEstimate = false;
+                }
+                else
+                    args.IsProjectLoadedfromEstimate = true;
+
             }
             else
             {
-                MessageBox.Show("Latest Price data for this Project is not Available,Please refresh Data or generate new estimate for this project.");
-                return;
+                args.IsProjectLoadedfromEstimate = true;
             }
-            
-            if (item.MetalViewModel != null)
-            {
-                item.MetalViewModel.laborRate = laborRate;
-                item.MetalViewModel.metalDetails = DataSerializer.DSInstance.deserializeGoogleData(DataType.Metal, item.OriginalProjectName);
-                item.MetalViewModel.freightDetails =freightData ;
-                item.MetalViewModel.pWage = laborData;
-                item.MetalViewModel.OnJobSetupChange(null);
-            }
-            if (item.SlopeViewModel != null)
-            {
-                item.SlopeViewModel.pWage =laborData ;
-                item.SlopeViewModel.freightData = freightData;
-                item.SlopeViewModel.perMixRates = DataSerializer.DSInstance.deserializeGoogleData(DataType.Slope, item.OriginalProjectName);
-                item.SlopeViewModel.JobSetup_OnJobSetupChange(item.ProjectJobSetUp, null);
-                //item.SlopeViewModel.CalculateAll();
-            }
-            if (item.MaterialViewModel!=null)
-            {
-                item.MaterialViewModel.freightData = freightData;
-                item.MaterialViewModel.laborDetails= laborData;
-                item.MaterialViewModel.laborRate = laborRate;
-                item.MaterialViewModel.materialDetails= DataSerializer.DSInstance.deserializeGoogleData(DataType.Material, item.OriginalProjectName);
-                item.MaterialViewModel.JobSetup_OnJobSetupChange(item.ProjectJobSetUp, null);
-                //item.MaterialViewModel.CalculateCost(null);
-            }
-            item.UpdateMainTable();
+            args.IsReshuffled = true;
+            selectedProjects = HomeViewModel.MyselectedProjects;
+            OnProjectSelectionChange(SelectedProjects, args);
         }
+        public void AddProjectSequence()
+        {
+            int k = 1;
+            foreach (var item in SelectedProjects)
+            {
+                item.Sequence = k;
+                k++;
+                item.RefreshProjectName();
+                //item.OriginalProjectName = item.Sequence +"."+ item.OriginalProjectName;
+            }
+
+            if (SelectedProjects.Count>1)
+            {
+                var result = from item in SelectedProjects
+                             orderby item.Sequence ascending
+                             select item;
+
+               
+                SelectedProjects = (ObservableCollection<Project>)result.ToObservableCollection();
+            }
+            OnPropertyChanged("SelectedProjects");
+            MyselectedProjects = SelectedProjects;
+        }
+
         private void ProjectJobSetUp_OnProjectNameChange(object sender, EventArgs e)
         {
             JobSetup js = sender as JobSetup;
@@ -829,10 +1266,10 @@ namespace WICR_Estimator.ViewModels
                 {
                     if (item.ProjectJobSetUp.WorkArea != "")
                     {
-                        item.Name = item.ProjectJobSetUp.WorkArea;
+                        item.Name = item.Sequence+"."+ item.ProjectJobSetUp.WorkArea;
                     }
                     else
-                        item.Name = item.ProjectJobSetUp.ProjectName;
+                        item.Name = item.Sequence + "." + item.ProjectJobSetUp.ProjectName;
                 }
 
 
@@ -847,127 +1284,203 @@ namespace WICR_Estimator.ViewModels
         //    statusNotifier.BalloonTipIcon = ToolTipIcon.Info;
         //    statusNotifier.Visible = true;
         //}
-        private async void DownloadGoogleData()
+        private async Task DownloadGoogleData(Project prj)
         {
-            //SetBalloonTip();
+            IsProcessing = true;
+            StatusMessage = "Please Wait! Refreshing Google Data for " + prj.OriginalProjectName;
+            CompletedProjects+=4;
             IList<IList<object>> LaborRate = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Rate);
-            
+            CompletedProjects+=4;
             IList<IList<object>> MetalData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Metal);
+            CompletedProjects+=4;
             IList<IList<object>> FreightData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync("Weather Wear", DataType.Freight);
-
-            foreach (var prj in Projects)
+            CompletedProjects+=4;
+            try
             {
-                
-                var values = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, prj.Name);
-                if (values == null)
-                {
-                    StatusMessage = "Please Wait! Refreshing Google Data for " + prj.Name;
-                                        
-                    //statusNotifier.BalloonTipText = StatusMessage;
-                    //statusNotifier.ShowBalloonTip(2000);
-                    CompletedProjects++;
-                    DataSerializer.DSInstance.googleData = new GSData();
-                    
-                    DataSerializer.DSInstance.googleData.LaborRate = LaborRate;
 
-                    //Thread.Sleep(1000);
-                    DataSerializer.DSInstance.googleData.MetalData = MetalData;
+                var values = DataSerializer.DSInstance.deserializeGoogleData(DataType.Rate, prj.OriginalProjectName);
+                  
+                   
+                DataSerializer.DSInstance.googleData = new GSData();
 
-                    //Thread.Sleep(1000);
-                    DataSerializer.DSInstance.googleData.SlopeData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Slope);
-                    Thread.Sleep(1000);
+                DataSerializer.DSInstance.googleData.LaborRate = LaborRate;
 
-                    DataSerializer.DSInstance.googleData.MaterialData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Material);
+                //Thread.Sleep(1000);
+                DataSerializer.DSInstance.googleData.MetalData = MetalData;
 
-                    //Thread.Sleep(1000);
-                    DataSerializer.DSInstance.googleData.LaborData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Labor);
-                    //Thread.Sleep(1000);
-                    DataSerializer.DSInstance.googleData.FreightData = FreightData;
+                //Thread.Sleep(1000);
+                DataSerializer.DSInstance.googleData.SlopeData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.OriginalProjectName, DataType.Slope);
+                Thread.Sleep(1000);
+                CompletedProjects += 4;
+                DataSerializer.DSInstance.googleData.MaterialData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.OriginalProjectName, DataType.Material);
 
-                    DataSerializer.DSInstance.serializeGoogleData(DataSerializer.DSInstance.googleData, prj.Name);
-                    Thread.Sleep(3000);
-                }
+                //Thread.Sleep(1000);`
+                DataSerializer.DSInstance.googleData.LaborData = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.OriginalProjectName, DataType.Labor);
+                //Thread.Sleep(1000);
+                CompletedProjects += 4;
+                DataSerializer.DSInstance.googleData.FreightData = FreightData;
+
+                DataSerializer.DSInstance.serializeGoogleData(DataSerializer.DSInstance.googleData, prj.OriginalProjectName);
+                Thread.Sleep(2000);
+                CompletedProjects += 4;
+            }
+            catch (Exception)
+            {
+
+                //throw;
             }
             IsProcessing = false;
             CompletedProjects = 0;
+        }
+
+        private async Task RefreshDataFromDB()
+        {
+            OnTaskStarted("Prices have been updated, Fetching latest prices from DB ...");
+            
+            foreach (var prj in Projects)
+            {
+                
+                try
+                {
+                    UpdateTaskStatus("Wait! Refreshing data for Project : " + prj.OriginalProjectName);
+                    var dbData=await HTTPHelper.FetchFromDbAndSave(prj.OriginalProjectName);
+                    //Thread.Sleep(1000);
+                    DataSerializerService.DSInstance.serializeDbData(dbData, prj.OriginalProjectName);
+     
+                }
+                catch (Exception ex)
+                {
+                }
+
+            }
+            UpdateLastDate(lastUpdate);
+            OnTaskCompleted("Prices Refreshed Successfully.");
 
         }
+        
         private bool canShow(object obj)
         {
             return true;
         }
-        private void CanShowCalculationDetails(object obj)
-        {
-            var passwordBox = obj as PasswordBox;
-            var password = passwordBox.Password;
-            if (password == "737373")
-            {
-                passwordBox.Password = "";
-                LoginMessage = "Calculation Details Are Visible Now.";
 
-                HidePasswordSection = System.Windows.Visibility.Collapsed;
-                OnPropertyChanged("HidePasswordSection");
-                if (OnLoggedAsAdmin!=null)
-                {
-                    OnLoggedAsAdmin(true, EventArgs.Empty);
-                }
-                
+        #region GoogleDataUpdateCheck
+        private DateTime GetLastUpdateDate()
+        {
+            DateTime updateTime;
+            string txtVal = string.Empty;
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\WICR\\";
+            //+ "DBLastUpdatedOn.txt";
+            if (!Directory.Exists(filePath))
+            {
+                return DateTime.Parse("01-01-1900");
             }
             else
             {
-                passwordBox.Password = "";
-                LoginMessage = "Incorrect Password.";
-                if (OnLoggedAsAdmin != null)
+                if (File.Exists(Path.Combine(filePath, "DBLastUpdatedOn.txt")))
                 {
-                    OnLoggedAsAdmin(false, EventArgs.Empty);
+                    txtVal = System.IO.File.ReadAllText(Path.Combine(filePath, "DBLastUpdatedOn.txt"));
+                }
+                else
+                    return DateTime.Parse("01-01-1900");
+            }
+               
+
+            DateTime.TryParse(txtVal,out updateTime);
+            return updateTime;
+        }
+        private readonly object fileLock = new object();
+        private void UpdateLastDate(DateTime date)
+        {
+            
+            lock (fileLock)
+            {
+                try
+                {
+                    string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\WICR\\";
+                    if (!System.IO.Directory.Exists(folderPath))
+                    {
+                        System.IO.Directory.CreateDirectory(folderPath);
+                    }
+                    Thread.Sleep(200);
+                    System.IO.File.WriteAllText(Path.Combine(folderPath, "DBLastUpdatedOn.txt"), date.ToString());
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.Forms.MessageBox.Show(ex.Message);
                 }
             }
-            OnPropertyChanged("LoginMessage");
+        }
+        DateTime lastUpdate;
+
+        
+
+        private async Task<bool> IsDBUpated()
+        {
+            //IList<IList<object>> LaborRate=await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheetsAsync(prj.Name, DataType.Rate);
+            var lastVersion = await HTTPHelper.GetPriceVersionsAsync();
+
+            if (lastVersion!=null)
+            {
+                var updateVersion = lastVersion.FirstOrDefault();
+                if (GetLastUpdateDate().ToString() != updateVersion.LastUpdatedOn.ToString())
+                {
+                    if (updateVersion.ApplyPrice)
+                    {
+                        lastUpdate = updateVersion.LastUpdatedOn;
+
+                        return true;
+                    }
+                }
+            }            
+            return false;
         }
 
+        #endregion
         void FillProjects()
         {
+            
             Projects = new ObservableCollection<Project>();
             //SelectedProjects = new List<Project>();
-            Projects.Add(new Project { Name = "Weather Wear", OriginalProjectName= "Weather Wear",GrpName= "Dexotex" ,MainGroup="Deck Coatings"});
-            Projects.Add(new Project { Name = "Weather Wear Rehab", OriginalProjectName = "Weather Wear Rehab", GrpName = "Dexotex", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Barrier Guard", OriginalProjectName = "Barrier Guard", GrpName = "Dexotex", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Endurokote", OriginalProjectName = "Endurokote",GrpName= "Endurokote", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Desert Crete", OriginalProjectName = "Desert Crete", GrpName = "Hill Brothers", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Paraseal", OriginalProjectName = "Paraseal", Rank = 6, GrpName = "Tremco", MainGroup = "Below Grade" });
-            Projects.Add(new Project { Name = "Paraseal LG", OriginalProjectName = "Paraseal LG", Rank = 17, GrpName = "Tremco", MainGroup = "Below Grade" });
-            Projects.Add(new Project { Name = "860 Carlisle", OriginalProjectName = "860 Carlisle", Rank = 18, GrpName = "Carlisle", MainGroup = "Below Grade" });
-            Projects.Add(new Project { Name = "201", OriginalProjectName = "201", Rank = 18, GrpName = "Tremco", MainGroup = "Below Grade" });
-            Projects.Add(new Project { Name = "250 GC", OriginalProjectName = "250 GC", Rank = 19, GrpName = "Tremco", MainGroup = "Below Grade" });
-            Projects.Add(new Project { Name = "Pli-Dek", OriginalProjectName = "Pli-Dek", Rank = 7, GrpName = "Pli -Dek", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Pedestrian System", OriginalProjectName = "Pedestrian System", Rank = 8,GrpName= "UPI", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Parking Garage", OriginalProjectName = "Parking Garage", Rank = 9, GrpName = "UPI", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Tufflex", OriginalProjectName = "Tufflex", Rank = 10, GrpName = "UPI", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Color Wash Reseal", OriginalProjectName = "Color Wash Reseal", Rank = 11, GrpName = "Westcoat", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "ALX", OriginalProjectName = "ALX", Rank = 12, GrpName = "Westcoat", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "MACoat", OriginalProjectName = "MACoat", Rank = 13, GrpName = "Westcoat", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Reseal all systems", OriginalProjectName = "Reseal all systems", Rank = 14, GrpName = "Reseal", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Resistite", OriginalProjectName = "Resistite", Rank = 15, GrpName = "Dexotex", MainGroup = "Concrete On Grade" });
-            Projects.Add(new Project { Name = "Multicoat", OriginalProjectName = "Multicoat", Rank = 16, GrpName = "Multicoat", MainGroup = "Concrete On Grade" });
-            Projects.Add(new Project { Name = "Dexcellent II", OriginalProjectName = "Dexcellent II", Rank = 16, GrpName = "Nevada Coatings", MainGroup = "Deck Coatings" });
-            Projects.Add(new Project { Name = "Westcoat BT", OriginalProjectName = "Westcoat BT", Rank = 19, GrpName = "Westcoat", MainGroup = "Below Tile" });
-            Projects.Add(new Project { Name = "UPI BT", OriginalProjectName = "UPI BT", Rank = 20, GrpName = "UPI", MainGroup = "Below Tile" });
-            Projects.Add(new Project { Name = "Dual Flex", OriginalProjectName = "Dual Flex", Rank = 21, GrpName = "Dexotex", MainGroup = "Below Tile" });
-            Projects.Add(new Project { Name = "Westcoat Epoxy", OriginalProjectName = "Westcoat Epoxy", Rank = 22, GrpName = "Westcoat", MainGroup = "Epoxy Coatings" });
-            Projects.Add(new Project { Name = "Polyurethane Injection Block", OriginalProjectName = "Polyurethane Injection Block", Rank = 23, GrpName = "DeNeef", MainGroup = "Below Grade" });
-            Projects.Add(new Project { Name = "Xypex", OriginalProjectName ="Xypex", Rank = 24, GrpName = "Negative side coating", MainGroup = "Below Grade" });
-            Projects.Add(new Project { Name = "Blank", OriginalProjectName = "Blank", Rank = 25, GrpName = "Independent", MainGroup = "Blank Template" });
+            Projects.Add(new Project { Name = "Weather Wear", OriginalProjectName= "Weather Wear", GrpName= "Dexotex" ,MainGroup="Deck Coatings",ProductVersion="5.0"});
+            Projects.Add(new Project { Name = "Weather Wear Rehab", OriginalProjectName = "Weather Wear Rehab", GrpName = "Dexotex", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Barrier Guard", OriginalProjectName = "Barrier Guard", GrpName = "Dexotex", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Endurokote", OriginalProjectName = "Endurokote",GrpName= "Endurokote", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Desert Crete", OriginalProjectName = "Desert Crete", GrpName = "Hill Brothers", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Paraseal", OriginalProjectName = "Paraseal", Rank = 6, GrpName = "Tremco", MainGroup = "Below Grade", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Paraseal LG", OriginalProjectName = "Paraseal LG", Rank = 17, GrpName = "Tremco", MainGroup = "Below Grade", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Paraseal GM", OriginalProjectName = "Paraseal GM", Rank = 17, GrpName = "Tremco", MainGroup = "Below Grade", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "860 Carlisle", OriginalProjectName = "860 Carlisle", Rank = 18, GrpName = "Carlisle", MainGroup = "Below Grade", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "201", OriginalProjectName = "201", Rank = 18, GrpName = "Tremco", MainGroup = "Below Grade", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "250 GC", OriginalProjectName = "250 GC", Rank = 19, GrpName = "Tremco", MainGroup = "Below Grade", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Pli-Dek", OriginalProjectName = "Pli-Dek", Rank = 7, GrpName = "Pli -Dek", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Pedestrian System", OriginalProjectName = "Pedestrian System", Rank = 8,GrpName= "UPI", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Parking Garage", OriginalProjectName = "Parking Garage", Rank = 9, GrpName = "UPI", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Tufflex", OriginalProjectName = "Tufflex", Rank = 10, GrpName = "UPI", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Color Wash Reseal", OriginalProjectName = "Color Wash Reseal", Rank = 11, GrpName = "Westcoat", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "ALX", OriginalProjectName = "ALX", Rank = 12, GrpName = "Westcoat", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "MACoat", OriginalProjectName = "MACoat", Rank = 13, GrpName = "Westcoat", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Reseal all systems", OriginalProjectName = "Reseal all systems", Rank = 14, GrpName = "Reseal", ProductVersion = "5.0", MainGroup = "Deck Coatings" });
+            Projects.Add(new Project { Name = "Resistite", OriginalProjectName = "Resistite", Rank = 15, GrpName = "Dexotex", MainGroup = "Concrete On Grade", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Multicoat", OriginalProjectName = "Multicoat", Rank = 16, GrpName = "Multicoat", MainGroup = "Concrete On Grade", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Dexcellent II", OriginalProjectName = "Dexcellent II", Rank = 16, GrpName = "Nevada Coatings", MainGroup = "Deck Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Westcoat BT", OriginalProjectName = "Westcoat BT", Rank = 19, GrpName = "Westcoat", MainGroup = "Below Tile", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "UPI BT", OriginalProjectName = "UPI BT", Rank = 20, GrpName = "UPI", MainGroup = "Below Tile", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Dual Flex", OriginalProjectName = "Dual Flex", Rank = 21, GrpName = "Dexotex", MainGroup = "Below Tile", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Westcoat Epoxy", OriginalProjectName = "Westcoat Epoxy", Rank = 22, GrpName = "Westcoat", MainGroup = "Epoxy Coatings", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Polyurethane Injection Block", OriginalProjectName = "Polyurethane Injection Block", Rank = 23, GrpName = "DeNeef", MainGroup = "Below Grade", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Xypex", OriginalProjectName ="Xypex", Rank = 24, GrpName = "Negative side coating", MainGroup = "Below Grade", ProductVersion = "5.0" });
+            Projects.Add(new Project { Name = "Blank", OriginalProjectName = "Blank", Rank = 25, GrpName = "Independent", MainGroup = "Blank Template", ProductVersion = "5.0" });
             ProjectView = CollectionViewSource.GetDefaultView(Projects);
             
             ProjectView.GroupDescriptions.Add(new PropertyGroupDescription("MainGroup"));
             ProjectView.SortDescriptions.Add(new SortDescription("MainGroup", ListSortDirection.Ascending));
             ProjectView.GroupDescriptions.Add(new PropertyGroupDescription("GrpName"));
             ProjectView.SortDescriptions.Add(new SortDescription("GrpName", ListSortDirection.Ascending));
-            ProjectView.Filter = FilterProject;
+            ProjectView.Filter = FilterProject;           
         }
 
         
-       
+        
         private bool FilterProject(object item)
         {
             Project prj = item as Project;
@@ -989,6 +1502,8 @@ namespace WICR_Estimator.ViewModels
             return node.InnerText;
         }
 
+
+
         #region SummaryCreationRegion
         private static XmlDocument doc;
         Microsoft.Office.Interop.Excel.Application exlApp;
@@ -1000,12 +1515,15 @@ namespace WICR_Estimator.ViewModels
         
         private int writeMetals(MetalBaseViewModel MVM)
         {
+            UpdateTaskStatus("Writing Metal costs to Estimate summary file.");
             int k = 2;
             string startRange = getStartRange("Metals");
             Excel.Range dataRange = exlWs.Range[startRange].Offset[k, 0];
             k = 0;
+           
             foreach (Metal item in MVM.Metals)
             {
+                
                 dataRange.Offset[k,0].Value = item.Name;
                 dataRange.Offset[k, 1].Value = item.Size;
                 if (item.Name.Equals("STAIR METAL"))
@@ -1028,9 +1546,10 @@ namespace WICR_Estimator.ViewModels
             //k = 0;
             //startRange = getStartRange("AddonMetals");
             //dataRange = exlWs.Range[startRange].Offset[2, 0];
-
+            UpdateTaskStatus("Writing Add-on Metal");
             foreach (AddOnMetal item in MVM.AddOnMetals)
             {
+                
                 dataRange.Offset[k, 0].Value = item.Name;
                 dataRange.Offset[k, 1].Value = item.Size;
                 dataRange.Offset[k, 2].Value = item.IsMetalChecked ? item.Units : 0;
@@ -1046,15 +1565,19 @@ namespace WICR_Estimator.ViewModels
                 k = k + 1;
             }
             k = 0;
+            UpdateTaskStatus("Writing Misc Metal.");
+
             startRange = getStartRange("MiscMetals");
             dataRange = exlWs.Range[startRange].Offset[2, 0];
             foreach (MiscMetal item in MVM.MiscMetals)
             {
+                
                 dataRange.Offset[k, 0].Value = item.Name + " " + item.Size;
                 
                 dataRange.Offset[k, 1].Value = item.Units;
-                dataRange.Offset[k, 2].Value = item.UnitPrice;
+                dataRange.Offset[k, 2].Value = item.LaborExtension;
                 dataRange.Offset[k, 3].Value = item.MaterialPrice;
+                dataRange.Offset[k, 4].Value = item.MaterialExtension;
                 k = k + 1;
             }
 
@@ -1064,7 +1587,8 @@ namespace WICR_Estimator.ViewModels
         }
         private int writeSlope(SlopeBaseViewModel SVM)
         {
-            
+
+            UpdateTaskStatus("Writing Slope costs to Estimate Summary file.");
             int k = 2;
             string startRange;
             Excel.Range dataRange;
@@ -1085,6 +1609,7 @@ namespace WICR_Estimator.ViewModels
                 k = 0;
                 foreach (Slope item in SVM.Slopes)
                 {
+                    
                     dataRange.Offset[k,0].Value = item.Thickness;
                     dataRange.Offset[k, 1].Value = item.Sqft;
                     dataRange.Offset[k, 2].Value = item.DeckCount;
@@ -1170,6 +1695,7 @@ namespace WICR_Estimator.ViewModels
         }
         private string WriteMaterials(MaterialBaseViewModel MVM)
         {
+            UpdateTaskStatus("Writing Material Costs to Estimate Summary File");
             string rowString;
             int k = 2;
             string startRange = getStartRange("OtherSystemMaterials");
@@ -1194,17 +1720,17 @@ namespace WICR_Estimator.ViewModels
             foreach (SystemMaterial item in MVM.SystemMaterials)
             {
                 dataRange.Offset[k, 0].Value = item.Name;
-                dataRange.Offset[k, 1].Value = item.SMUnits;
-                dataRange.Offset[k, 2].Value = item.IsMaterialChecked ? item.Qty:0;
+                dataRange.Offset[k, 1].Value = item.MaterialExtension!=0?item.SMUnits:"0";
+                dataRange.Offset[k, 2].Value = item.MaterialExtension != 0 ? (item.IsMaterialChecked ? item.Qty:0):0;
                 if (item.SpecialMaterialPricing!=0)
                 {
                     dataRange.Offset[k, 3].Value = item.SpecialMaterialPricing;
                     dataRange.Offset[k, 3].Interior.Color = Excel.XlRgbColor.rgbYellow;
                 }
                 else
-                    dataRange.Offset[k, 3].Value = item.MaterialPrice;
+                    dataRange.Offset[k, 3].Value = item.MaterialExtension != 0 ? item.MaterialPrice:0;
 
-                dataRange.Offset[k, 4].Value = item.MaterialExtension;
+                dataRange.Offset[k, 4].Value = item.IsMaterialChecked? item.MaterialExtension:0;
                 k = k + 1;
             }
             k = k + dataRange.Row;
@@ -1231,6 +1757,7 @@ namespace WICR_Estimator.ViewModels
         private string currentProjectName;
         private int WriteJobSetup(JobSetup Js)
         {
+            UpdateTaskStatus("Writing Jobsetup details to Estimate Summary File");
             int k = 2;
             currentProjectName = Js.ProjectName;
             string jobSetupRange = getStartRange("JobSetup");
@@ -1240,6 +1767,8 @@ namespace WICR_Estimator.ViewModels
             }
             else
                 exlWs.Range[jobSetupRange].Offset[1, 0].Value = Js.SpecialProductName + "(" + Js.WorkArea + ")";
+
+            exlWs.Range["G99"].Value = Js.NotesToBill==null?"":Js.NotesToBill;
 
             Excel.Range dataRange = exlWs.Range[jobSetupRange].Offset[k, 0];
             k = 0;
@@ -1470,6 +1999,7 @@ namespace WICR_Estimator.ViewModels
 
         private void writeCalculationDetails(MaterialBaseViewModel MVM)
         {
+            UpdateTaskStatus("Writing Calculation factors to Estimate Summary File");
             int k = 2;
             string startRange = getStartRange("CostCalculationDetails");
 
@@ -1514,6 +2044,7 @@ namespace WICR_Estimator.ViewModels
         }
         private int WriteLabor(MaterialBaseViewModel MVM)
         {
+            UpdateTaskStatus("Writing Labor Costs to Estimate Summary File");
             int rowN;
             int k = 2;
             string startRange = getStartRange("LaborOtherCosts");
@@ -1816,14 +2347,19 @@ namespace WICR_Estimator.ViewModels
                 System.Windows.Forms.MessageBox.Show("Failed to clear Empty Rows" + "\n" + ex.Message, "Failure");
             }
         }
+        
         private void WriteToSummary()
         {
-            WaitWindow ww = new WaitWindow();
-            ww.Show();
+            //WaitWindow ww = new WaitWindow();
+            //ww.Show();
+            //OnTaskStarted("Creating WICR Estimate Summary File.");
+            //Thread.Sleep(1000);
+            
             Excel.Workbook summaryWb;
             Excel.Worksheet ws;
             try
             {
+                 //UpdateTaskStatus("Creating WICR Estimate Summary Template File.");
                 if (exlApp == null)
                 {
                     exlApp = new Microsoft.Office.Interop.Excel.Application();
@@ -1855,6 +2391,7 @@ namespace WICR_Estimator.ViewModels
                     else
                         exlWs.Name = item.Name + " Summary";
                     
+
                     item.lastUsedRows.Add("JobSetup",  WriteJobSetup(item.ProjectJobSetUp));
 
                     if (item.MetalViewModel != null)
@@ -1890,10 +2427,11 @@ namespace WICR_Estimator.ViewModels
                 saveFileDialog.FilterIndex = 0;
                 saveFileDialog.RestoreDirectory = true;
                 saveFileDialog.CreatePrompt = false;
-                if (JobCreationDate != null)
-                {
-                    saveFileDialog.FileName = JobName + " " + string.Format(JobCreationDate.Value.ToShortDateString(), "mm-dd-yyyy");
-                }
+                
+                //if (JobCreationDate != null)
+                //{
+                //    saveFileDialog.FileName = JobName + " " + string.Format(JobCreationDate.Value.ToShortDateString(), "mm-dd-yyyy");
+                //}
                 
                 saveFileDialog.Title = "Save WICR Estimator Summary";
 
@@ -1901,16 +2439,19 @@ namespace WICR_Estimator.ViewModels
                 {
                     //Save. The selected path can be got with saveFileDialog.FileName.ToString()
                     summaryWb.SaveAs(saveFileDialog.FileName.ToString());
+                    OnTaskCompleted("Estimate Summary file created successfully.");
                 }
                 else
                 {
-                    System.Windows.MessageBox.Show("Summary Sheet won't be saved now", "Save Cancelled",
-                        System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                    //System.Windows.MessageBox.Show("Summary Sheet won't be saved now", "Save Cancelled",
+                    //    System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                   OnTaskCompleted("User canceled file save,Summary Sheet won't be saved now.");
                 }
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show(ex.Message +"\n\n"+ "Please SaveAs different name or close the file before Saving the Summary File.", "Summary File Save", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //System.Windows.Forms.MessageBox.Show(ex.Message +"\n\n"+ "Please SaveAs different name or close the file before Saving the Summary File.", "Summary File Save", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                OnTaskCompleted("Please SaveAs different name or close the file before Saving the Summary File.\n" + ex.Message);
             }
             finally
             {
@@ -1926,7 +2467,8 @@ namespace WICR_Estimator.ViewModels
                     GC.WaitForPendingFinalizers();
                     
                 }
-                ww.Close();
+                
+                //ww.Close();
             }
             
         }
@@ -1954,8 +2496,6 @@ namespace WICR_Estimator.ViewModels
                 {
                     tabsLaborTotal = tabsLaborTotal + item.MaterialViewModel.AllTabsLaborTotal;
                 }
-
-
             }
             if (ProjectTotals.TotalCost != 0)
             {
@@ -1979,8 +2519,18 @@ namespace WICR_Estimator.ViewModels
             
             get
             {
-                return "Version 1.0";
+                return "Version 5.0";
             }
-        }       
+        }
+
+       
+
+    }
+
+    public class ProjectLoadEventArgs:EventArgs
+    {
+        public bool IsProjectLoadedfromEstimate { get; set; }
+
+        public bool IsReshuffled { get; set; }
     }
 }

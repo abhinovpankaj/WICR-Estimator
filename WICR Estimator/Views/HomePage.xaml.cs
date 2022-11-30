@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -34,7 +37,12 @@ namespace WICR_Estimator.Views
             //HomeVM = new HomeViewModel();
             //this.DataContext = HomeVM;
             
+            projectsDatagrid.PreviewMouseLeftButtonDown += new MouseButtonEventHandler(projectsDatagrid_PreviewMouseLeftButtonDown);
+            projectsDatagrid.Drop += new DragEventHandler(projectsDatagrid_Drop);
+
         }
+
+        HomeViewModel vm;
 
         private void refreshGData_Click(object sender, RoutedEventArgs e)
         {
@@ -121,7 +129,126 @@ namespace WICR_Estimator.Views
         //    HomeVM.SelectedProjects = HomeVM.SelectedProjects.OrderBy(project => project.Rank).ToList();
         //}
 
-        
-        
+        #region native
+        public void HideCloseButton()
+        {
+            var hwnd = new WindowInteropHelper(this.Parent as Window).Handle;
+            SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_SYSMENU);
+        }
+        private const int GWL_STYLE = -16;
+        private const int WS_SYSMENU = 0x80000;
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+        [DllImport("user32.dll")]
+        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+        #endregion
+
+        #region dragandDrop
+        public delegate Point GetPosition(IInputElement element);
+        int rowIndex = -1;
+
+        void projectsDatagrid_Drop(object sender, DragEventArgs e)
+        {
+            if (vm==null)
+            {
+                vm = this.DataContext as HomeViewModel;
+            }
+            if (rowIndex < 0)
+                return;
+            int index = this.GetCurrentRowIndex(e.GetPosition);
+            if (index < 0)
+                return;
+            if (index == rowIndex)
+                return;
+            if (index == projectsDatagrid.Items.Count - 1)
+            {
+                MessageBox.Show("This row-index cannot be drop");
+                return;
+            }
+            ObservableCollection<Project> projects = projectsDatagrid.ItemsSource as ObservableCollection<Project>;
+            Project changedProduct = projects[rowIndex];
+            projects.RemoveAt(rowIndex);
+            projects.Insert(index, changedProduct);
+            //vm.AddProjectSequence();
+            //vm.fireEvent(changedProduct);
+            AddProjectSequence(projects,index);
+        }
+        public void AddProjectSequence(ObservableCollection<Project> selectedProjects,int index)
+        {
+            int k = 1;
+            foreach (var item in selectedProjects)
+            {
+                item.Sequence = k;
+                k++;
+                item.RefreshProjectName();                
+                //item.OriginalProjectName = item.Sequence +"."+ item.OriginalProjectName;
+            }
+
+            
+            if (selectedProjects.Count > 1)
+            {
+                var result = from item in selectedProjects
+                             orderby item.Sequence ascending
+                             select item;
+
+                selectedProjects = (ObservableCollection<Project>)result.ToObservableCollection();
+            }
+            //vm.SelectedProjects=selectedProjects; 
+            HomeViewModel.MyselectedProjects = selectedProjects;
+            projectsDatagrid.InvalidateVisual();
+            vm.fireEvent(selectedProjects[index]);
+        }
+        void projectsDatagrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            rowIndex = GetCurrentRowIndex(e.GetPosition);
+            if (rowIndex<0)
+            {
+                return;
+            }
+            projectsDatagrid.SelectedIndex = rowIndex;
+            Project selectedProject = projectsDatagrid.Items[rowIndex] as Project;
+            if (selectedProject==null)
+            {
+                return;
+            }
+            DragDropEffects dragDropEffects = DragDropEffects.Move;
+            if (DragDrop.DoDragDrop(projectsDatagrid,selectedProject,dragDropEffects)!= DragDropEffects.None)
+            {
+                projectsDatagrid.SelectedItem = selectedProject;
+            }
+
+        }
+
+        private bool GetMouseTargetRow(Visual theTarget, GetPosition position)
+        {
+            Rect rect = VisualTreeHelper.GetDescendantBounds(theTarget);
+            Point point = position((IInputElement)theTarget);
+            return rect.Contains(point);
+        }
+
+        private DataGridRow GetRowItem(int index)
+        {
+            if (projectsDatagrid.ItemContainerGenerator.Status
+                    != GeneratorStatus.ContainersGenerated)
+                return null;
+            return projectsDatagrid.ItemContainerGenerator.ContainerFromIndex(index)
+                                                            as DataGridRow;
+        }
+
+        private int GetCurrentRowIndex(GetPosition pos)
+        {
+            int curIndex = -1;
+            for (int i = 0; i < projectsDatagrid.Items.Count; i++)
+            {
+                DataGridRow itm = GetRowItem(i);
+                if (GetMouseTargetRow(itm, pos))
+                {
+                    curIndex = i;
+                    break;
+                }
+            }
+            return curIndex;
+        }
+        #endregion
     }
 }

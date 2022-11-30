@@ -36,7 +36,7 @@ namespace WICR_Estimator.ViewModels
         {
             double sumVal = totalSqft + totalSqftVertical;
             TotalLaborUnitPrice = sumVal == 0 ? 0 : TotalLaborWithoutDrive / sumVal;
-            OnPropertyChanged("TotalLaborUnitPrice");
+            RaisePropertyChanged("TotalLaborUnitPrice");
         }
         private void FillMaterialList()
         {
@@ -132,13 +132,18 @@ namespace WICR_Estimator.ViewModels
                     double sp = SystemMaterials[i].SpecialMaterialPricing;
                     bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
                     bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
-                    SystemMaterials[i] = sysMat[i];
+                    //SystemMaterials[i] = sysMat[i];
 
-                    SystemMaterials[i].SpecialMaterialPricing = sp;
+                    //SystemMaterials[i].SpecialMaterialPricing = sp;
+                    UpdateMe(sysMat[i]);
+
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
+
                     if (iscbEnabled)
                     {
-                        SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                        SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                        //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                        //SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                        SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
                     }
 
                     if (SystemMaterials[i].Name == "ENTER # OF DECKS TO WATER TEST \"NO DAM'S NEEDED\"" || SystemMaterials[i].Name == "ADD LF FOR DAMMING @ DRIP EDGE"
@@ -146,7 +151,8 @@ namespace WICR_Estimator.ViewModels
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
-                            SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            //SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
 
                         }
                     }
@@ -213,9 +219,9 @@ namespace WICR_Estimator.ViewModels
             switch (materialName)
             {
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
-                case "ADD LF FOR DAMMING @ DRIP EDGE":
+               // case "ADD LF FOR DAMMING @ DRIP EDGE":
                 case "Stucco Material Remove and replace (LF)":
-                case "ENTER # OF DECKS TO WATER TEST \"NO DAM'S NEEDED\"":
+                //case "ENTER # OF DECKS TO WATER TEST \"NO DAM'S NEEDED\"":
                     return false;
                 case "INTERLAMINATE PRIMER (XYLENE FROM LOWRYS)":
                 case "ELASTATEX 500 RESIN AND CATALYST (2 COATS/ HORIZONTAL SURFACES ONLY) 40 MILS":
@@ -437,7 +443,7 @@ namespace WICR_Estimator.ViewModels
         public override void ApplyCheckUnchecks(object obj)
         {
 
-            
+            lastCheckedMat = obj.ToString();
         }
 
         public override double CalculateLabrExtn(double calhrs, double setupMin, string matName = "")

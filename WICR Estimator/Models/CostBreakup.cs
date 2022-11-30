@@ -7,7 +7,7 @@ using WICR_Estimator.ViewModels;
 
 namespace WICR_Estimator.Models
 {
-    public class CostBreakup: BaseViewModel
+    public class CostBreakup: NotifiableObject
     {
         public CostBreakup() { }
         public string Name { get; set; }
@@ -19,7 +19,7 @@ namespace WICR_Estimator.Models
                 if (value!=calFactor)
                 {
                     calFactor = value;
-                    OnPropertyChanged("CalFactor");
+                    RaisePropertyChanged("CalFactor");
                 }
             }
         }

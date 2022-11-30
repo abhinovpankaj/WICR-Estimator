@@ -17,6 +17,7 @@ namespace WICR_Estimator.ViewModels
         {
             materialNames = new Dictionary<string, string>();
             FillMaterialList();
+            dbData = Js.dbData;
             FetchMaterialValuesAsync(false);
             //set  resititeLiquid QTY
             resistiteQty();
@@ -72,7 +73,7 @@ namespace WICR_Estimator.ViewModels
                 materialNames = new Dictionary<string, string>();
                 FillMaterialList();
             }
-            var sysMat = GetSystemMaterial();
+            var sysMat = GetSystemMaterial(materialNames);
 
             #region  Update Special Material Pricing and QTY
             if (hasSetupChanged)
@@ -83,11 +84,18 @@ namespace WICR_Estimator.ViewModels
                     double sp = SystemMaterials[i].SpecialMaterialPricing;
                     bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
                     bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
-                    SystemMaterials[i] = sysMat[i];
 
-                    SystemMaterials[i].SpecialMaterialPricing = sp;
-                    SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                    SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                    //SystemMaterials[i] = sysMat[i];
+
+                    //SystemMaterials[i].SpecialMaterialPricing = sp;
+                    UpdateMe(sysMat[i]);
+
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
+
+                    //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                    //SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                    SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
+
                     if (SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)" || 
                         SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
                     SystemMaterials[i].Name == "Extra stair nosing lf"
@@ -95,7 +103,8 @@ namespace WICR_Estimator.ViewModels
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
-                            SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            //SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
                         }
                     }
 
@@ -127,7 +136,7 @@ namespace WICR_Estimator.ViewModels
             //CalculateLaborMinCharge(hasSetupChanged);
             //CalculateAllMaterial();
         }
-
+        private DBData dbData;
         public override void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {          
             base.JobSetup_OnJobSetupChange(sender, e);
@@ -142,6 +151,7 @@ namespace WICR_Estimator.ViewModels
                 {
                     SystemMaterials.Where(x => x.Name == "RP FABRIC 10 INCH WIDE X (300 LF)").First().IsMaterialChecked = false;
                 }
+                dbData = js.dbData;
             }
         }
         public override ObservableCollection<SystemMaterial> GetSystemMaterial()
@@ -151,6 +161,7 @@ namespace WICR_Estimator.ViewModels
             foreach (string key in materialNames.Keys)
             {
                 SystemMaterial sm = getSMObject(k, key, materialNames[key]);
+                
                 smCollection.Add(sm);
                 if (key == "Resistite textured knockdown finish (smooth or regular per customer)Gray"||
                     key== "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)")
@@ -300,7 +311,8 @@ namespace WICR_Estimator.ViewModels
             {
                 bool isChecked = skipMat.IsMaterialChecked;
                 skipMat.Qty = qty1;
-                skipMat.IsMaterialChecked = isChecked;
+                //skipMat.IsMaterialChecked = isChecked;
+                skipMat.UpdateCheckStatus(isChecked);
             }
         }
 
@@ -445,6 +457,7 @@ namespace WICR_Estimator.ViewModels
             {
                 return;
             }
+            lastCheckedMat = obj.ToString();
             //set RL Qty
             if (obj.ToString() == "Underlay over membrane (Resistite regular 150 sq ft per mix )" ||
                 obj.ToString() == "Underlay over rough surface (Resistite regular 150 sq ft per mix)" ||
@@ -464,20 +477,32 @@ namespace WICR_Estimator.ViewModels
                 {
                     if (mat.Name == "Lip Color")
                     {
+                        mat.IsMaterialChecked = true;
                         mat.IsMaterialEnabled = false;
-
+                        
                     }
 
                     if (mat.Name == "Vista Paint Acripoxy" || mat.Name == "Aj-44A Dressing(Sealer)")
                     {
+                        if (mat.IsMaterialChecked)
+                        {
+                            lastCheckedMat = mat.Name;
+                        }
                         mat.IsMaterialChecked = false;
+                        //mat.UpdateCheckStatus(false);
                         mat.IsMaterialEnabled = true;
                     }
 
                     if (mat.Name == "Resistite textured knockdown finish (smooth or regular per customer)Gray")
                     {
-
-                        SystemMaterial matWhite = getSMObject(7, "Resistite textured knockdown finish (smooth or regular per customer)White", "55 LB BAG");
+                        SystemMaterial matWhite;
+                        if (dbData == null)
+                        {
+                            matWhite = getSMObject(7, "Resistite textured knockdown finish (smooth or regular per customer)White", "55 LB BAG");
+                        }
+                        else
+                            matWhite = createSMObjectDB("Resistite textured knockdown finish (smooth or regular per customer)White", "55 LB BAG");
+                        
                         
                         mat.MaterialPrice = matWhite.MaterialPrice;
                         mat.Name = matWhite.Name;
@@ -488,7 +513,7 @@ namespace WICR_Estimator.ViewModels
                         mat.StairsProductionRate = matWhite.StairsProductionRate * (1 + prPerc);
                         
                         mat.SetupMinCharge = mat.SetupMinCharge;
-                        OnPropertyChanged("SetupMinCharge");
+                        RaisePropertyChanged("SetupMinCharge");
                         mat.Hours = matWhite.Hours;
                         mat.LaborExtension = matWhite.LaborExtension;
                         mat.LaborUnitPrice = matWhite.LaborUnitPrice;
@@ -496,7 +521,13 @@ namespace WICR_Estimator.ViewModels
                     }
                     if (mat.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)")
                     {
-                        SystemMaterial matWhite = getSMObject(9, "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)", "40 LB BAG");
+                        SystemMaterial matWhite;
+                        if (dbData==null)
+                        {
+                            matWhite = getSMObject(9, "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)", "40 LB BAG");
+                        }
+                        else
+                            matWhite = createSMObjectDB("CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)", "40 LB BAG");
 
                         mat.MaterialPrice = matWhite.MaterialPrice;
                         mat.Name = matWhite.Name;
@@ -507,7 +538,7 @@ namespace WICR_Estimator.ViewModels
                         mat.StairsProductionRate = matWhite.StairsProductionRate * (1 + prPerc);
 
                         mat.SetupMinCharge = mat.SetupMinCharge;
-                        OnPropertyChanged("SetupMinCharge");
+                        RaisePropertyChanged("SetupMinCharge");
                         mat.Hours = matWhite.Hours;
                         mat.LaborExtension = matWhite.LaborExtension;
                         mat.LaborUnitPrice = matWhite.LaborUnitPrice;
@@ -523,18 +554,31 @@ namespace WICR_Estimator.ViewModels
                 {
                     if (mat.Name == "Vista Paint Acripoxy")
                     {
+                        mat.IsMaterialChecked = true;
                         mat.IsMaterialEnabled = false;
 
                     }
                     if (mat.Name == "Lip Color" || mat.Name == "Aj-44A Dressing(Sealer)")
                     {
+                        if (mat.IsMaterialChecked)
+                        {
+                            lastCheckedMat = mat.Name;
+                        }
+                        //mat.UpdateCheckStatus(false);
                         mat.IsMaterialChecked = false;
                         mat.IsMaterialEnabled = true;
                     }
 
                     if (mat.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)")
                     {
-                        SystemMaterial matWhite = getSMObject(8, "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)", "40 LB BAG");
+                        SystemMaterial matWhite;
+                        if (dbData==null)
+                        {
+                            matWhite = getSMObject(8, "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)", "40 LB BAG");
+                        }
+                        else
+                            matWhite = createSMObjectDB( "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)", "40 LB BAG");
+
 
                         mat.MaterialPrice = matWhite.MaterialPrice;
                         mat.Name = matWhite.Name;
@@ -545,14 +589,21 @@ namespace WICR_Estimator.ViewModels
                         mat.StairsProductionRate = matWhite.StairsProductionRate * (1 + prPerc);
 
                         mat.SetupMinCharge = mat.SetupMinCharge;
-                        OnPropertyChanged("SetupMinCharge");
+                        RaisePropertyChanged("SetupMinCharge");
                         mat.Hours = matWhite.Hours;
                         mat.LaborExtension = matWhite.LaborExtension;
                         mat.LaborUnitPrice = matWhite.LaborUnitPrice;
                     }
                     if (mat.Name == "Resistite textured knockdown finish (smooth or regular per customer)White")
                     {
-                        SystemMaterial matWhite = getSMObject(6, "Resistite textured knockdown finish (smooth or regular per customer)Gray", "55 LB BAG");
+                        SystemMaterial matWhite;
+                        if (dbData==null)
+                        {
+                            matWhite = getSMObject(6, "Resistite textured knockdown finish (smooth or regular per customer)Gray", "55 LB BAG");
+                        }
+                        else
+                            matWhite = createSMObjectDB( "Resistite textured knockdown finish (smooth or regular per customer)Gray", "55 LB BAG");
+
 
                         mat.MaterialPrice = matWhite.MaterialPrice;
 
@@ -563,7 +614,7 @@ namespace WICR_Estimator.ViewModels
                         mat.StairsProductionRate = matWhite.StairsProductionRate * (1 + prPerc);
 
                         mat.SetupMinCharge = mat.SetupMinCharge;
-                        OnPropertyChanged("SetupMinCharge");
+                        RaisePropertyChanged("SetupMinCharge");
                         mat.Hours = matWhite.Hours;
                         mat.LaborExtension = matWhite.LaborExtension;
                         mat.LaborUnitPrice = matWhite.LaborUnitPrice;
@@ -579,19 +630,31 @@ namespace WICR_Estimator.ViewModels
                 {
                     if (mat.Name == "Aj-44A Dressing(Sealer)")
                     {
+                        mat.IsMaterialChecked = true;
                         mat.IsMaterialEnabled = false;
 
                     }
 
                     if (mat.Name == "Lip Color" || mat.Name == "Vista Paint Acripoxy")
                     {
+                        if (mat.IsMaterialChecked)
+                        {
+                            lastCheckedMat = mat.Name;
+                        }
                         mat.IsMaterialChecked = false;
+                        //mat.UpdateCheckStatus(false);
                         mat.IsMaterialEnabled = true;
                     }
 
                     if (mat.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)")
                     {
-                        SystemMaterial matWhite = getSMObject(8, "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)", "40 LB BAG");
+                        SystemMaterial matWhite;
+                        if (dbData==null)
+                        {
+                            matWhite = getSMObject(8, "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)", "40 LB BAG");
+                        }
+                        else
+                            matWhite = createSMObjectDB( "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)", "40 LB BAG");
 
                         mat.MaterialPrice = matWhite.MaterialPrice;
 
@@ -602,14 +665,21 @@ namespace WICR_Estimator.ViewModels
                         mat.StairsProductionRate = matWhite.StairsProductionRate * (1 + prPerc);
 
                         mat.SetupMinCharge = mat.SetupMinCharge;
-                        OnPropertyChanged("SetupMinCharge");
+                        RaisePropertyChanged("SetupMinCharge");
                         mat.Hours = matWhite.Hours;
                         mat.LaborExtension = matWhite.LaborExtension;
                         mat.LaborUnitPrice = matWhite.LaborUnitPrice;
                     }
                     if (mat.Name == "Resistite textured knockdown finish (smooth or regular per customer)White")
                     {
-                        SystemMaterial matWhite = getSMObject(6, "Resistite textured knockdown finish (smooth or regular per customer)Gray", "55 LB BAG");
+                        SystemMaterial matWhite;
+                        if (dbData==null)
+                        {
+                             matWhite = getSMObject(6, "Resistite textured knockdown finish (smooth or regular per customer)Gray", "55 LB BAG");
+                        }
+                        else
+                            matWhite = createSMObjectDB("Resistite textured knockdown finish (smooth or regular per customer)Gray", "55 LB BAG");
+
 
                         mat.MaterialPrice = matWhite.MaterialPrice;
                         mat.Name = matWhite.Name;
@@ -620,7 +690,7 @@ namespace WICR_Estimator.ViewModels
                         mat.StairsProductionRate = matWhite.StairsProductionRate * (1 + prPerc);
 
                         mat.SetupMinCharge = mat.SetupMinCharge;
-                        OnPropertyChanged("SetupMinCharge");
+                        RaisePropertyChanged("SetupMinCharge");
                         mat.Hours = matWhite.Hours;
                         mat.LaborExtension = matWhite.LaborExtension;
                         mat.LaborUnitPrice = matWhite.LaborUnitPrice;

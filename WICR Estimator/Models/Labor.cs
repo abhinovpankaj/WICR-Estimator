@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyToolkit.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ using WICR_Estimator.ViewModels;
 namespace WICR_Estimator.Models
 {
     
-    public class Labor : BaseViewModel
+    public class Labor : UndoRedoObservableObject
     {
         public Labor()
         {
@@ -46,7 +47,7 @@ namespace WICR_Estimator.Models
                 if (value != ismaterialchecked)
                 {
                     ismaterialchecked = value;
-                    OnPropertyChanged("IsMaterialChecked");
+                    RaisePropertyChanged("IsMaterialChecked");
                 }
             }
         }
@@ -61,7 +62,7 @@ namespace WICR_Estimator.Models
                 if (value != isMaterialEnabled)
                 {
                     isMaterialEnabled = value;
-                    OnPropertyChanged("IsMaterialEnabled");
+                    RaisePropertyChanged("IsMaterialEnabled");
                 }
             }
         }
@@ -76,7 +77,7 @@ namespace WICR_Estimator.Models
                 if (value != sMSqftH)
                 {
                     sMSqftH = value;
-                    OnPropertyChanged("SMSqftH");
+                    RaisePropertyChanged("SMSqftH");
                 }
             }
         }
@@ -90,7 +91,7 @@ namespace WICR_Estimator.Models
                 if (value != horizontalProductionRate)
                 {
                     horizontalProductionRate = value;
-                    OnPropertyChanged("HorizontalProductionRate");
+                    RaisePropertyChanged("HorizontalProductionRate");
                 }
             }
         }
@@ -104,7 +105,7 @@ namespace WICR_Estimator.Models
                 if (value != sMSqftV)
                 {
                     sMSqftV = value;
-                    OnPropertyChanged("SMSqftV");
+                    RaisePropertyChanged("SMSqftV");
                 }
             }
         }
@@ -118,7 +119,7 @@ namespace WICR_Estimator.Models
                 if (value != verticleProductionRate)
                 {
                     verticleProductionRate = value;
-                    OnPropertyChanged("VerticleProductionRate");
+                    RaisePropertyChanged("VerticleProductionRate");
                 }
             }
         }
@@ -132,7 +133,7 @@ namespace WICR_Estimator.Models
                 if (value != stairsProductionRate)
                 {
                     stairsProductionRate = value;
-                    OnPropertyChanged("StairsProductionRate");
+                    RaisePropertyChanged("StairsProductionRate");
                 }
             }
         }
@@ -146,7 +147,7 @@ namespace WICR_Estimator.Models
                 if (value != stairSqft)
                 {
                     stairSqft = value;
-                    OnPropertyChanged("StairSqft");
+                    RaisePropertyChanged("StairSqft");
                 }
             }
         }
@@ -160,7 +161,7 @@ namespace WICR_Estimator.Models
                 if (value != hours)
                 {
                     hours = value;
-                    OnPropertyChanged("Hours");
+                    RaisePropertyChanged("Hours");
                 }
             }
         }
@@ -177,7 +178,7 @@ namespace WICR_Estimator.Models
                 if (value != laborUnitPrice)
                 {
                     laborUnitPrice = value;
-                    OnPropertyChanged("LaborUnitPrice");
+                    RaisePropertyChanged("LaborUnitPrice");
                 }
             }
         }

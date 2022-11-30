@@ -1,5 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Projects>
+  <IsSheetUpdated>
+    <MetalRange>A2</MetalRange>
+    <RateRange>A3</RateRange>
+  </IsSheetUpdated>
   <Blank>
     <RateRange>E2</RateRange>
     <MetalRange>F3:M43</MetalRange>
@@ -151,7 +155,7 @@
     <MetalRange>F3:M43</MetalRange>
     <LaborRange>E1490:E1510</LaborRange>
     <SlopeRange>P1425:Q1442</SlopeRange>
-    <MaterialRange>H1450:N1482</MaterialRange>
+    <MaterialRange>H1450:N1485</MaterialRange>
     <FreightRange>E48:F54</FreightRange>
   </Tremco201>
 <Dexcellent>

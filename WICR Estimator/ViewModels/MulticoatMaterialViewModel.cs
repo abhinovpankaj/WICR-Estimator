@@ -86,11 +86,16 @@ namespace WICR_Estimator.ViewModels
                     double sp = SystemMaterials[i].SpecialMaterialPricing;
                     bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
                     bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
-                    SystemMaterials[i] = sysMat[i];
+                    //SystemMaterials[i] = sysMat[i];
 
-                    SystemMaterials[i].SpecialMaterialPricing = sp;
-                    SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                    SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                    //SystemMaterials[i].SpecialMaterialPricing = sp;
+                    //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                    //SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                    UpdateMe(sysMat[i]);
+
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
+                    SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
+
                     if (SystemMaterials[i].Name == "Caulk 1/2 to 3/4 inch control joints (SIKA 2C)" ||
                         SystemMaterials[i].Name == "Remove and Replace Expansion joints- backer rod and sealant (SIKA 2C)" ||
                         SystemMaterials[i].Name == "Large cracks with reseal (route, fill with speed bond/sand and spot texture)" ||
@@ -101,7 +106,8 @@ namespace WICR_Estimator.ViewModels
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
-                            SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            //SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
                         }
                     }
 
@@ -241,6 +247,7 @@ namespace WICR_Estimator.ViewModels
         }
         public override void ApplyCheckUnchecks(object obj)
         {
+            lastCheckedMat = obj.ToString();
             if (obj.ToString() == "Slurry Coat for repairs" || obj.ToString() == "Slurry coat over texture (Krete Kote 120 sq ft per mix)")
             {
                 SystemMaterial sysMat1 = SystemMaterials.Where(x => x.Name == "Slurry Coat for repairs").FirstOrDefault();
@@ -283,15 +290,15 @@ namespace WICR_Estimator.ViewModels
         }
         public override void setExceptionValues(object s)
         {
-            if (s==null)
-            {
-                return;
-            }
-            if (s.ToString()== "Slurry Coat for repairs" || s.ToString()== "Slurry coat over texture (Krete Kote 120 sq ft per mix)"
-                ||s.ToString()== "Texture for repairs" || s.ToString()== "Krete Kote or Top Cote texture")
-            {
-                return;
-            }
+            //if (s==null)
+            //{
+            //    return;
+            //}
+            //if (s.ToString()== "Slurry Coat for repairs" || s.ToString()== "Slurry coat over texture (Krete Kote 120 sq ft per mix)"
+            //    ||s.ToString()== "Texture for repairs" || s.ToString()== "Krete Kote or Top Cote texture")
+            //{
+            //    return;
+            //}
             double val1 = 0, val2 = 0;
             if (SystemMaterials.Count > 0)
             {
@@ -424,28 +431,50 @@ namespace WICR_Estimator.ViewModels
                         sysMat1.IsMaterialEnabled = true;
                         SystemMaterials.Where(x => x.Name == "Light crack and repairs- speed bond (no more than 1% of area)").FirstOrDefault().IsMaterialChecked
                             = true;
-                        sysMat1.SMSqft = totalSqft + (stairWidth * riserCount * 2);
+                        
                     }
+                    sysMat1.SMSqft = totalSqft + (stairWidth * riserCount * 2);
                     if (!sysMat2.IsMaterialEnabled)
                     {
                         sysMat2.IsMaterialChecked = false;
                         sysMat2.IsMaterialEnabled = true;
-                        sysMat2.SMSqft = totalSqft + (riserCount * stairWidth * 2);
+                        
                     }
-                   
+                    sysMat2.SMSqft = totalSqft + (riserCount * stairWidth * 2);
+
                 }
 
                 if (val2 > 0 || val1 > 0)
                 {
-                    sysMat2.Name = "Texture for repairs";
                     sysMat1.Name = "Slurry Coat for repairs";
+                    
+                    sysMat1.Hours = 0;
+                    sysMat1.LaborExtension = 0;
+                    sysMat1.LaborUnitPrice = 0;
+                    sysMat2.Name = "Texture for repairs";
+                    sysMat2.Hours = 0;
+                    sysMat2.LaborExtension = 0;
+                    sysMat2.LaborUnitPrice = 0;
+                    
                     
                 }
                 else
                 {
                     sysMat2.Name = "Krete Kote or Top Cote texture";
+                    sysMat2.SMSqftH = getSqFtAreaH("Krete Kote or Top Cote texture");
+                    sysMat2.StairSqft = getSqFtStairs("Krete Kote or Top Cote texture");
+                    sysMat2.Hours = CalculateHrs(sysMat2.SMSqftH, sysMat2.HorizontalProductionRate, sysMat2.StairSqft, sysMat2.StairsProductionRate);
+
+                    sysMat2.LaborExtension = (sysMat2.Hours != 0) ? (sysMat2.SetupMinCharge + sysMat2.Hours) * laborRate : 0;
+                    sysMat2.LaborUnitPrice = sysMat2.LaborExtension / (riserCount + totalSqft);
                     sysMat1.Name = "Slurry coat over texture (Krete Kote 120 sq ft per mix)";
-                    
+                    sysMat1.SMSqftH = getSqFtAreaH("Slurry coat over texture (Krete Kote 120 sq ft per mix)");
+                    sysMat1.StairSqft = getSqFtStairs("Slurry coat over texture (Krete Kote 120 sq ft per mix)");
+                    sysMat1.Hours = CalculateHrs(sysMat1.SMSqftH, sysMat1.HorizontalProductionRate, sysMat1.StairSqft, sysMat1.StairsProductionRate);
+
+                    sysMat1.LaborExtension = (sysMat1.Hours != 0) ? (sysMat1.SetupMinCharge + sysMat1.Hours) * laborRate : 0;
+                    sysMat1.LaborUnitPrice = sysMat1.LaborExtension / (riserCount + totalSqft);
+
                 }
                 //new updates formula
                 item = SystemMaterials.Where(x => x.Name == "Caulk 1/2 to 3/4 inch control joints (SIKA 2C)").FirstOrDefault();

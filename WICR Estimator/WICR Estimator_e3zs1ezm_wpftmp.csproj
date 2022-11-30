@@ -1,0 +1,339 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D516A4E2-3DFE-4AF8-BE2D-AEA2D0F6124B}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WICR_Estimator</RootNamespace>
+    <AssemblyName>WICR Estimator</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Images\WICR Logo.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CollectionExtensions.cs" />
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\CheckboxVisibilityConverter.cs" />
+    <Compile Include="Converters\EnableTextboxConverter.cs" />
+    <Compile Include="Converters\HasFieldEdited.cs" />
+    <Compile Include="Converters\IsNull.cs" />
+    <Compile Include="Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="Converters\QtyTextboxConv.cs" />
+    <Compile Include="Converters\RoundUpConverter.cs" />
+    <Compile Include="Converters\UnitTextboxConverter.cs" />
+    <Compile Include="DataSerializer.cs" />
+    <Compile Include="DelegateCommand.cs" />
+    <Compile Include="GoogleUtility\SpreadSheetConnect.cs" />
+    <Compile Include="GSData.cs" />
+    <Compile Include="IPageViewModel.cs" />
+    <Compile Include="LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="Models\AddOnMetal.cs" />
+    <Compile Include="Models\CostBreakup.cs" />
+    <Compile Include="Models\Labor.cs" />
+    <Compile Include="Models\SystemMaterial.cs" />
+    <Compile Include="Models\Metal.cs" />
+    <Compile Include="Models\Project.cs" />
+    <Compile Include="Models\Slope.cs" />
+    <Compile Include="Models\Totals.cs" />
+    <Compile Include="ObjectExtension.cs" />
+    <Compile Include="ViewModelInstanceFactory.cs" />
+    <Compile Include="ViewModels\250MaterialViewModel.cs" />
+    <Compile Include="ViewModels\201MaterialViewModel.cs" />
+    <Compile Include="ViewModels\ALXMaterialViewModel.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\Carlisle860MaterialViewModel.cs" />
+    <Compile Include="ViewModels\DeneefMaterialViewModel.cs" />
+    <Compile Include="ViewModels\DesertbrandMaterialViewModel.cs" />
+    <Compile Include="ViewModels\DexellentIIMaterialViewModel.cs" />
+    <Compile Include="ViewModels\DexoColorFlakeMaterialViewModel.cs" />
+    <Compile Include="ViewModels\DexoMaterialViewModel.cs" />
+    <Compile Include="ViewModels\DexoMetalViewModel.cs" />
+    <Compile Include="ViewModels\DexoSlopeViewModel.cs" />
+    <Compile Include="ViewModels\DualFlexMaterialViewModel.cs" />
+    <Compile Include="ViewModels\DualFlexSlopeViewModel.cs" />
+    <Compile Include="ViewModels\EnduroKoteMaterialViewModel.cs" />
+    <Compile Include="ViewModels\EnduroKoteSlopeViewModel.cs" />
+    <Compile Include="ViewModels\HomeViewModel.cs" />
+    <Compile Include="ViewModels\IndependentMaterialViewModel.cs" />
+    <Compile Include="ViewModels\MACoatMaterialViewModel.cs" />
+    <Compile Include="ViewModels\MaterialBaseViewModel.cs" />
+    <Compile Include="ViewModels\MaterialViewModel.cs" />
+    <Compile Include="ViewModels\MetalBaseViewModel.cs" />
+    <Compile Include="ViewModels\MetalViewModel.cs" />
+    <Compile Include="ViewModels\MulticoatMaterialViewModel.cs" />
+    <Compile Include="ViewModels\ParasealLGMaterialViewModel.cs" />
+    <Compile Include="ViewModels\ParasealMaterialViewModel.cs" />
+    <Compile Include="ViewModels\ParkingMaterialViewModel.cs" />
+    <Compile Include="ViewModels\PedestrianMaterialViewModel.cs" />
+    <Compile Include="ViewModels\PedestrianSlopeViewModel.cs" />
+    <Compile Include="ViewModels\PlideckMaterialViewModel.cs" />
+    <Compile Include="ViewModels\ProjectViewModel.cs" />
+    <Compile Include="ViewModels\ResistiteConcreteMaterialViewModel.cs" />
+    <Compile Include="ViewModels\SlopeBaseViewModel.cs" />
+    <Compile Include="ViewModels\SlopeViewModel.cs" />
+    <Compile Include="ViewModels\TufflexMaterialViewModel.cs" />
+    <Compile Include="ViewModels\UPIBelowTileMaterialViewModel.cs" />
+    <Compile Include="ViewModels\WestcoatColorMaterialViewModel.cs" />
+    <Compile Include="ViewModels\WestcoatdualMaterialViewModel.cs" />
+    <Compile Include="ViewModels\WWRehabMaterialViewModel.cs" />
+    <Compile Include="ViewModels\WWResealMaterialViewModel.cs" />
+    <Compile Include="ViewModels\XypexMaterialViewModel.cs" />
+    <Compile Include="ViewModels\ZeroMetalViewModel.cs" />
+    <Compile Include="ViewModels\ZeroSlopeViewModel.cs" />
+    <Compile Include="Views\CalculationDetailsPage.xaml.cs">
+      <DependentUpon>CalculationDetailsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\HomePage.xaml.cs">
+      <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\JobSetupPage.xaml.cs">
+      <DependentUpon>JobSetupPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\IndependentLaborPage.xaml.cs">
+      <DependentUpon>IndependentLaborPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LaborPage.xaml.cs">
+      <DependentUpon>LaborPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MetalPage.xaml.cs">
+      <DependentUpon>MetalPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SelectedProjectsPage.xaml.cs">
+      <DependentUpon>SelectedProjectsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\IndependentSystemMaterialPage.xaml.cs">
+      <DependentUpon>IndependentSystemMaterialPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\URISlopePage.xaml.cs">
+      <DependentUpon>URISlopePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SlopePage.xaml.cs">
+      <DependentUpon>SlopePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SystemMaterialPage.xaml.cs">
+      <DependentUpon>SystemMaterialPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WaitWindow.xaml.cs">
+      <DependentUpon>WaitWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\JobSetup.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="GoogleUtility\client_secret.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+    <None Include="SummaryTemplate.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GoogleUtility\ProjectGoogleRangeInfo.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <SplashScreen Include="appicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SummaryRange.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <ReferencePath Include="D:\Freelancer\WICR\packages\Google.Apis.Auth.1.38.0\lib\net45\Google.Apis.Auth.dll" />
+    <ReferencePath Include="D:\Freelancer\WICR\packages\Google.Apis.Auth.1.38.0\lib\net45\Google.Apis.Auth.PlatformServices.dll" />
+    <ReferencePath Include="D:\Freelancer\WICR\packages\Google.Apis.Core.1.38.0\lib\net45\Google.Apis.Core.dll" />
+    <ReferencePath Include="D:\Freelancer\WICR\packages\Google.Apis.1.38.0\lib\net45\Google.Apis.dll" />
+    <ReferencePath Include="D:\Freelancer\WICR\packages\Google.Apis.1.38.0\lib\net45\Google.Apis.PlatformServices.dll" />
+    <ReferencePath Include="D:\Freelancer\WICR\packages\Google.Apis.Sheets.v4.1.38.0.1537\lib\net45\Google.Apis.Sheets.v4.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\Microsoft.CSharp.dll" />
+    <ReferencePath Include="C:\WINDOWS\assembly\GAC_MSIL\Microsoft.Office.Interop.Excel\15.0.0.0__71e9bce111e9429c\Microsoft.Office.Interop.Excel.dll">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </ReferencePath>
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\mscorlib.dll" />
+    <ReferencePath Include="D:\Freelancer\WICR\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\PresentationCore.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\PresentationFramework.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Core.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Data.DataSetExtensions.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Data.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Drawing.dll" />
+    <ReferencePath Include="D:\Freelancer\WICR\packages\System.Net.Http.4.3.1\lib\net46\System.Net.Http.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Runtime.Serialization.dll" />
+    <ReferencePath Include="D:\Freelancer\WICR\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll" />
+    <ReferencePath Include="D:\Freelancer\WICR\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll" />
+    <ReferencePath Include="D:\Freelancer\WICR\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll" />
+    <ReferencePath Include="D:\Freelancer\WICR\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Windows.Forms.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Xaml.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Xml.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Xml.Linq.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\WindowsBase.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="D:\Freelancer\WICR\WICR Estimator\obj\Debug\LoginWindow.g.cs" />
+    <Compile Include="D:\Freelancer\WICR\WICR Estimator\obj\Debug\MainWindow.g.cs" />
+    <Compile Include="D:\Freelancer\WICR\WICR Estimator\obj\Debug\Views\CalculationDetailsPage.g.cs" />
+    <Compile Include="D:\Freelancer\WICR\WICR Estimator\obj\Debug\Views\HomePage.g.cs" />
+    <Compile Include="D:\Freelancer\WICR\WICR Estimator\obj\Debug\Views\JobSetupPage.g.cs" />
+    <Compile Include="D:\Freelancer\WICR\WICR Estimator\obj\Debug\Views\IndependentLaborPage.g.cs" />
+    <Compile Include="D:\Freelancer\WICR\WICR Estimator\obj\Debug\Views\LaborPage.g.cs" />
+    <Compile Include="D:\Freelancer\WICR\WICR Estimator\obj\Debug\Views\MetalPage.g.cs" />
+    <Compile Include="D:\Freelancer\WICR\WICR Estimator\obj\Debug\Views\SelectedProjectsPage.g.cs" />
+    <Compile Include="D:\Freelancer\WICR\WICR Estimator\obj\Debug\Views\IndependentSystemMaterialPage.g.cs" />
+    <Compile Include="D:\Freelancer\WICR\WICR Estimator\obj\Debug\Views\URISlopePage.g.cs" />
+    <Compile Include="D:\Freelancer\WICR\WICR Estimator\obj\Debug\Views\SlopePage.g.cs" />
+    <Compile Include="D:\Freelancer\WICR\WICR Estimator\obj\Debug\Views\SystemMaterialPage.g.cs" />
+    <Compile Include="D:\Freelancer\WICR\WICR Estimator\obj\Debug\WaitWindow.g.cs" />
+    <Compile Include="D:\Freelancer\WICR\WICR Estimator\obj\Debug\App.g.cs" />
+    <Compile Include="D:\Freelancer\WICR\WICR Estimator\obj\Debug\GeneratedInternalTypeHelper.g.cs" />
+  </ItemGroup>
+</Project>

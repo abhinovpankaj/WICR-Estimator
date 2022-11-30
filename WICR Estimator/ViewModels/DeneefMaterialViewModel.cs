@@ -46,7 +46,7 @@ namespace WICR_Estimator.ViewModels
         {
             double sumVal = totalSqft  + totalVerticalSqft;
             TotalLaborUnitPrice = sumVal == 0 ? 0 : TotalLaborWithoutDrive / sumVal;
-            OnPropertyChanged("TotalLaborUnitPrice");
+            RaisePropertyChanged("TotalLaborUnitPrice");
         }
         public override double getSqftAreaVertical(string materialName)
         {
@@ -133,17 +133,21 @@ namespace WICR_Estimator.ViewModels
             {
                 for (int i = 0; i < SystemMaterials.Count; i++)
                 {
-
                     double sp = SystemMaterials[i].SpecialMaterialPricing;
                     bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
                     bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
-                    SystemMaterials[i] = sysMat[i];
+                    //SystemMaterials[i] = sysMat[i];
 
-                    SystemMaterials[i].SpecialMaterialPricing = sp;
+                    //SystemMaterials[i].SpecialMaterialPricing = sp;
+                    UpdateMe(sysMat[i]);
+
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
+
                     if (iscbEnabled)
                     {
-                        SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                        SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                        //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                        //SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                        SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
 
                     }
 
@@ -289,27 +293,9 @@ namespace WICR_Estimator.ViewModels
         }
 
         public override void ApplyCheckUnchecks(object obj)
-        {
-            ////base.ApplyCheckUnchecks(obj);
-
-            //if (obj.ToString()== "ENDURO ELA-98 BINDER (2 COATS)")
-            //{
-            //    bool isChecked = SystemMaterials.Where(x => x.Name == "ENDURO ELA-98 BINDER (2 COATS)").FirstOrDefault().IsMaterialChecked;
-            //    SystemMaterials.Where(x => x.Name == "3/4 oz. Fiberglass (2000 sq ft rolls Purchased from Hill Brothers )").FirstOrDefault().IsMaterialChecked = isChecked;
-            //    if (!isChecked)
-            //    {
-            //        SystemMaterials.Where(x => x.Name == "Caulk, dymonic 100").FirstOrDefault().IsMaterialChecked = true;
-            //    }
-            //}
-            //if (obj.ToString() == "2.5 Galvanized Lathe (18 s.f.) no less than 12 per sq ft.")
-            //{
-            //    bool isChecked = SystemMaterials.Where(x => x.Name == "2.5 Galvanized Lathe (18 s.f.) no less than 12 per sq ft.").FirstOrDefault().IsMaterialChecked;
-            //    SystemMaterials.Where(x => x.Name == "Staples (3/4 Inch Crown, Box of 13,500)").FirstOrDefault().IsMaterialChecked = isChecked;                
-            //}
-            getEKLQnty();
-            ////update Add labor for minimum cost
-            //CalculateLaborMinCharge(false);
-
+        {            
+            lastCheckedMat = obj.ToString();
+            getEKLQnty();         
         }
         public override void CalculateTotalSqFt()
         {
@@ -328,11 +314,11 @@ namespace WICR_Estimator.ViewModels
                 CostperSqftSubContract = TotalSubcontractLabor / (totalSqft + totalVerticalSqft + linearCoping);
             }
             TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
-            OnPropertyChanged("CostperSqftSlope");
-            OnPropertyChanged("CostperSqftMetal");
-            OnPropertyChanged("CostperSqftMaterial");
-            OnPropertyChanged("CostperSqftSubContract");
-            OnPropertyChanged("TotalCostperSqft");
+            RaisePropertyChanged("CostperSqftSlope");
+            RaisePropertyChanged("CostperSqftMetal");
+            RaisePropertyChanged("CostperSqftMaterial");
+            RaisePropertyChanged("CostperSqftSubContract");
+            RaisePropertyChanged("TotalCostperSqft");
         }
 
     }

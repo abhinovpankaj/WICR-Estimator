@@ -8,7 +8,7 @@ using System.Windows.Data;
 
 namespace WICR_Estimator.Converters
 {
-    class QtyTextboxConverter : IValueConverter
+    public class QtyTextboxConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -40,11 +40,13 @@ namespace WICR_Estimator.Converters
                     case "Add for removing and replacing concrete (no more than 100 sq ft)":
                     case "UNIVERSAL OUTLET":
                     case "TOTAL DRAIN 2' x 50' ( In lieu of rock & pipe) \"LINEAR FEET\"":
+                    case "TOTAL DRAIN 2' x 50' ( In lieu of rock & pipe) LINEAR FEET":
+                   // case "4 INCH SCHEDULE 40 PIPE FOR ROCK POCKETS":
                     case "VISQUINE PROTECTION FOR INCLEMENT WEATHER":
                     case "UNIVERSAL OUTLETS":
                     case "TOTAL DRAIN MINUS BOTTOM TD 1000(IN LIEU OF ROCK & PIPE)":
                     case "SIDE OUTLET 6\"":
-                    case "MIRADRAIN HC 1\" DRAIN - PUNCHED 12\" X 100'  (QUICK DRAIN)":
+                    case "MIRADRAIN HC 1\" DRAIN-PUNCHED 12\" X 100'  (QUICK DRAIN)":
                     case "2 COATS VULKEM 350R/951  @ WALL (LF DECK TO WALL)":
                     case "ENTER # OF DECKS TO WATER TEST \"NO DAM'S NEEDED\"":
                     case "ADD LF FOR DAMMING @ DRIP EDGE":

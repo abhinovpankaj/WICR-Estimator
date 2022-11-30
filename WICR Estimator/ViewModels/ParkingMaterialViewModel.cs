@@ -24,12 +24,77 @@ namespace WICR_Estimator.ViewModels
             IsNewPlaywood = Js.IsNewPlywood;
             RequireFlashing = Js.IsFlashingRequired;
             FillMaterialList();
-            SystemMaterial.OnUnitChanged += (s, e) => { setUnitChangeValues(); };
+            SystemMaterial.OnUnitChanged += (s, e) => { setUnitChangeValues(s); };
             FetchMaterialValuesAsync(false);
 
         }
+
+        private void setUnitChangeValues(object s)
+        {
+            SystemMaterial item = SystemMaterials.Where(x => x.Name == s.ToString()).FirstOrDefault();
+            if (item != null)
+            {
+
+                double unit = 0;
+
+                Double.TryParse(item.SMUnits, out unit);
+                item.SMSqft = unit;
+                item.SMSqftH = unit;
+                item.Qty = unit / item.Coverage;
+                item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
+                item.LaborExtension = item.Hours == 0 ? 0 : item.Hours > item.SetupMinCharge ? item.Hours * laborRate : item.SetupMinCharge * laborRate;
+                item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft + TotalSqftPlywood);
+
+            }
+            //item = SystemMaterials.Where(x => x.Name == "Striping for small cracKs (less than 1/8\")").FirstOrDefault();
+            //if (item != null)
+            //{
+
+            //    double unit = 0;
+
+            //    Double.TryParse(item.SMUnits, out unit);
+            //    item.SMSqftH = unit;
+            //    item.SMSqft = unit;
+            //    item.Qty = unit / item.Coverage;
+            //    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
+            //    item.LaborExtension = item.Hours == 0 ? 0 : item.Hours > item.SetupMinCharge ? item.Hours * laborRate : item.SetupMinCharge * laborRate;
+            //    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft + TotalSqftPlywood);
+
+            //}
+            //item = SystemMaterials.Where(x => x.Name == "Route and caulk moving cracks (greater than 1/8\")").FirstOrDefault();
+            //if (item != null)
+            //{
+
+            //    double unit = 0;
+
+            //    Double.TryParse(item.SMUnits, out unit);
+            //    item.SMSqftH = unit;
+            //    item.SMSqft = unit;
+            //    item.Qty = unit / item.Coverage;
+            //    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
+            //    item.LaborExtension = item.Hours == 0 ? 0 : item.Hours > item.SetupMinCharge ? item.Hours * laborRate : item.SetupMinCharge * laborRate;
+            //    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft + TotalSqftPlywood);
+
+            //}
+
+            //item = SystemMaterials.Where(x => x.Name == "SECOND INTERMEDIATE COAT FOR HIGH TRAFFIC").FirstOrDefault();
+            //if (item != null)
+            //{
+            //    double unit = 0;
+            //    Double.TryParse(item.SMUnits, out unit);
+            //    item.SMSqftH = unit;
+            //    item.SMSqft = unit;
+            //    item.Qty = unit / item.Coverage;
+            //    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
+            //    item.LaborExtension = item.Hours == 0 ? 0 : item.Hours > item.SetupMinCharge ? item.Hours * laborRate : item.SetupMinCharge * laborRate;
+            //    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft + TotalSqftPlywood);
+
+            //}
+        }
+
         public override void ApplyCheckUnchecks(object obj)
         {
+            lastCheckedMat = obj.ToString();
             //base.ApplyCheckUnchecks(obj);
             calculateRLqty();
             CalculateLaborMinCharge(false);
@@ -38,7 +103,7 @@ namespace WICR_Estimator.ViewModels
         {
             double sumVal = totalSqft + TotalSqftPlywood;
             TotalLaborUnitPrice = sumVal == 0 ? 0 : TotalLaborWithoutDrive / sumVal;
-            OnPropertyChanged("TotalLaborUnitPrice");
+            RaisePropertyChanged("TotalLaborUnitPrice");
         }
         
         public void FillMaterialList()
@@ -130,17 +195,25 @@ namespace WICR_Estimator.ViewModels
                     double sp = SystemMaterials[i].SpecialMaterialPricing;
                     bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
                     bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
-                    SystemMaterials[i] = sysMat[i];
+                    //SystemMaterials[i] = sysMat[i];
 
-                    SystemMaterials[i].SpecialMaterialPricing = sp;
-                    SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                    SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                    //SystemMaterials[i].SpecialMaterialPricing = sp;
+
+                    //    SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                    //    SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                    UpdateMe(sysMat[i]);
+
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
+                    SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
+
+
                     if (SystemMaterials[i].Name == "EXTRA STAIR NOSING" || SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
                         SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)")
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
-                            SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            //SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
 
                         }
                     }
@@ -151,8 +224,8 @@ namespace WICR_Estimator.ViewModels
                     {
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
-                            SystemMaterials[i].SMUnits = qtyList[SystemMaterials[i].Name].ToString();
-
+                            //SystemMaterials[i].SMUnits = qtyList[SystemMaterials[i].Name].ToString();
+                            SystemMaterials[i].UpdateUnits(qtyList[SystemMaterials[i].Name].ToString());
                         }
                     }
 
@@ -184,7 +257,7 @@ namespace WICR_Estimator.ViewModels
             //CalculateAllMaterial();
 
         }
-        private void setUnitChangeValues()
+        public override void setUnitChangeValues()
         {
             SystemMaterial item = SystemMaterials.Where(x => x.Name == "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH) UPI 7013 SC BASE COAT").FirstOrDefault();
             if (item != null)
@@ -273,6 +346,9 @@ namespace WICR_Estimator.ViewModels
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
                 case "INTERLAMINATE PRIMER (XYLENE) FROM LOWRYS":
                 case "Stucco Material Remove and replace (LF)":
+                case "Route and caulk moving cracks (greater than 1/8\")":
+                case "SECOND INTERMEDIATE COAT FOR HIGH TRAFFIC":
+                case "Striping for small cracKs (less than 1/8\")":
                     return false;
                 case "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL":
                     return IsReseal;
@@ -327,6 +403,8 @@ namespace WICR_Estimator.ViewModels
                 case "EXTRA STAIR NOSING":
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
                 case "Stucco Material Remove and replace (LF)":
+                case "Route and caulk moving cracks (greater than 1/8\")":
+                case "SECOND INTERMEDIATE COAT FOR HIGH TRAFFIC":
                     return 0;
                 case "3 IN. WHITE GLASS TAPE (PERIMETER)":
                 case "SIKA 1-A CAULKING (PERIMETER)":
@@ -426,11 +504,11 @@ namespace WICR_Estimator.ViewModels
                 CostperSqftSubContract = TotalSubcontractLabor / (totalSqft + TotalSqftPlywood);
             }
             TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
-            OnPropertyChanged("CostperSqftSlope");
-            OnPropertyChanged("CostperSqftMetal");
-            OnPropertyChanged("CostperSqftMaterial");
-            OnPropertyChanged("CostperSqftSubContract");
-            OnPropertyChanged("TotalCostperSqft");
+            RaisePropertyChanged("CostperSqftSlope");
+            RaisePropertyChanged("CostperSqftMetal");
+            RaisePropertyChanged("CostperSqftMaterial");
+            RaisePropertyChanged("CostperSqftSubContract");
+            RaisePropertyChanged("TotalCostperSqft");
         }
 
         public override void setExceptionValues(object s)

@@ -14,12 +14,17 @@ namespace WICR_Estimator.Models
             get { return isMetalChecked; }
             set
             {
-                if (value!=isMetalChecked)
-                {
-                    isMetalChecked = value;
-                    OnPropertyChanged("IsMetalChecked");
-                }
+                //if (value != isMetalChecked)
+                //{
+                //    isMetalChecked = value;
+                //    RaisePropertyChanged("IsMetalChecked");
+                //}
+                Set(ref isMetalChecked, value);
             }
+        }
+        internal void UpdateIsChecked(bool isSelected)
+        {
+            isMetalChecked = isSelected;
         }
         public AddOnMetal(string name,string size, double productionRate, double laborRate, double units, double materialPrice, bool isStairMetal, double specialPricing = 0)
             :base(name,size,  productionRate,  laborRate,  units,  materialPrice,  isStairMetal,  specialPricing = 0)

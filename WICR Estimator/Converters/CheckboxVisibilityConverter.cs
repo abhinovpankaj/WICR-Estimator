@@ -8,7 +8,7 @@ using System.Windows.Data;
 
 namespace WICR_Estimator.Converters
 {
-    class CheckBoxVisibilityConverter : IValueConverter
+    public class CheckBoxVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

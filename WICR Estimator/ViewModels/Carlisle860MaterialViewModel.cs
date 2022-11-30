@@ -35,7 +35,7 @@ namespace WICR_Estimator.ViewModels
         {
             double sumVal = totalSqft + totalSqftPlywood + totalSqftVertical;
             TotalLaborUnitPrice = sumVal == 0 ? 0 : TotalLaborWithoutDrive / sumVal;
-            OnPropertyChanged("TotalLaborUnitPrice");
+            RaisePropertyChanged("TotalLaborUnitPrice");
         }
         private void FillMaterialList()
         {
@@ -53,7 +53,7 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("MIRADRAIN 6000 XL  (HORIZONTAL ONLY)", "200 SF ROLL");
             materialNames.Add("MIRASTICK ADHESIVE (GLUE DOWN DRAIN MAT)", "5 GAL PAIL");
             materialNames.Add("SIDE OUTLET 6\"", "EACH");
-            materialNames.Add("MIRADRAIN HC 1\" DRAIN - PUNCHED 12\" X 100'  (QUICK DRAIN)", "LINEAR FEET");
+            materialNames.Add("MIRADRAIN HC 1\" DRAIN-PUNCHED 12\" X 100'  (QUICK DRAIN)", "LINEAR FEET");
             materialNames.Add("TERM BAR", "LINEAR FEET");
             materialNames.Add("WATERSTOP (MIRASTOP)", "LINEAR FEET");
             materialNames.Add("INSIDE AND OUTSIDE CORNER DETAILS (MIRADRI 860)", "ROLLS");
@@ -68,7 +68,7 @@ namespace WICR_Estimator.ViewModels
 
             foreach (SystemMaterial item in SystemMaterials)
             {
-                if (item.Name == "SIDE OUTLET 6\"" || item.Name == "MIRADRAIN HC 1\" DRAIN - PUNCHED 12\" X 100'  (QUICK DRAIN)"
+                if (item.Name == "SIDE OUTLET 6\"" || item.Name == "MIRADRAIN HC 1\" DRAIN-PUNCHED 12\" X 100'  (QUICK DRAIN)"
                     ||item.Name== "Plywood 3/4 & blocking (# of 4x8 sheets)" || item.Name == "Stucco Material Remove and replace (LF)")
                 {
                     qtyList.Add(item.Name, item.Qty);
@@ -91,21 +91,27 @@ namespace WICR_Estimator.ViewModels
                     double sp = SystemMaterials[i].SpecialMaterialPricing;
                     bool iscbChecked = SystemMaterials[i].IsMaterialChecked;
                     bool iscbEnabled = SystemMaterials[i].IsMaterialEnabled;
-                    SystemMaterials[i] = sysMat[i];
+                    //SystemMaterials[i] = sysMat[i];
 
-                    SystemMaterials[i].SpecialMaterialPricing = sp;
+                    //SystemMaterials[i].SpecialMaterialPricing = sp;
+                    UpdateMe(sysMat[i]);
+
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
+
                     if (iscbEnabled)
                     {
-                        SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                        SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                        //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
+                        //SystemMaterials[i].IsMaterialChecked = iscbChecked;
+                        SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
                     }
 
-                    if (SystemMaterials[i].Name == "SIDE OUTLET 6\"" || SystemMaterials[i].Name == "MIRADRAIN HC 1\" DRAIN - PUNCHED 12\" X 100'  (QUICK DRAIN)"
+                    if (SystemMaterials[i].Name == "SIDE OUTLET 6\"" || SystemMaterials[i].Name == "MIRADRAIN HC 1\" DRAIN-PUNCHED 12\" X 100'  (QUICK DRAIN)"
                     || SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" || SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)")
                     { 
                         if (qtyList.ContainsKey(SystemMaterials[i].Name))
                         {
-                            SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            //SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
 
                         }
                     }
@@ -190,7 +196,7 @@ namespace WICR_Estimator.ViewModels
                 case "200 V PROTECTION (VERTICAL ONLY)":
                 case "300 HV PROTECTION (HORIZONTAL ONLY)":
                 case "SIDE OUTLET 6\"":
-                case "MIRADRAIN HC 1\" DRAIN - PUNCHED 12\" X 100'  (QUICK DRAIN)":
+                case "MIRADRAIN HC 1\" DRAIN-PUNCHED 12\" X 100'  (QUICK DRAIN)":
                     return false;
                 default:
                     return true;
@@ -377,10 +383,12 @@ namespace WICR_Estimator.ViewModels
             if (SystemMaterials.Count != 0)
             {
                 
-                SystemMaterial item = SystemMaterials.Where(x => x.Name == "MIRADRAIN HC 1\" DRAIN - PUNCHED 12\" X 100'  (QUICK DRAIN)").FirstOrDefault();
+                SystemMaterial item = SystemMaterials.Where(x => x.Name == "MIRADRAIN HC 1\" DRAIN-PUNCHED 12\" X 100'  (QUICK DRAIN)").FirstOrDefault();
 
                 if (item != null)
                 {
+                    
+
                     item.SMSqftV = item.Qty;                   
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate,item.SMSqftV,item.VerticalProductionRate);
 
@@ -432,11 +440,12 @@ namespace WICR_Estimator.ViewModels
         
         public override void ApplyCheckUnchecks(object obj)
         {
-
+            lastCheckedMat = obj.ToString();
             SystemMaterial sysmat = null;
             bool ischecked = false, ischecked1 = false;
             if (obj.ToString() == "MIRADRAIN 6000 XL (VERTICAL ONLY)" || obj.ToString() == "MIRADRAIN 6000 XL  (HORIZONTAL ONLY)")
             {
+
                 sysmat = SystemMaterials.Where(x => x.Name == "MIRADRAIN 6000 XL (VERTICAL ONLY)").FirstOrDefault();
                 ischecked = sysmat.IsMaterialChecked;
                 sysmat = SystemMaterials.Where(x => x.Name == "MIRADRAIN 6000 XL  (HORIZONTAL ONLY)").FirstOrDefault();
@@ -485,11 +494,11 @@ namespace WICR_Estimator.ViewModels
                 CostperSqftSubContract = TotalSubcontractLabor / (totalSqft + totalSqftVertical + totalSqftPlywood);
             }
             TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
-            OnPropertyChanged("CostperSqftSlope");
-            OnPropertyChanged("CostperSqftMetal");
-            OnPropertyChanged("CostperSqftMaterial");
-            OnPropertyChanged("CostperSqftSubContract");
-            OnPropertyChanged("TotalCostperSqft");
+            RaisePropertyChanged("CostperSqftSlope");
+            RaisePropertyChanged("CostperSqftMetal");
+            RaisePropertyChanged("CostperSqftMaterial");
+            RaisePropertyChanged("CostperSqftSubContract");
+            RaisePropertyChanged("TotalCostperSqft");
         }
     }
 }
