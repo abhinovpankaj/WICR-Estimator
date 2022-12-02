@@ -1266,7 +1266,7 @@ namespace WICR_Estimator.ViewModels
                 {
                     if (item.ProjectJobSetUp.WorkArea != "")
                     {
-                        item.Name = item.Sequence+"."+ item.ProjectJobSetUp.WorkArea;
+                        item.Name = item.ProjectJobSetUp.WorkArea;
                     }
                     else
                         item.Name = item.Sequence + "." + item.ProjectJobSetUp.ProjectName;
@@ -2379,13 +2379,22 @@ namespace WICR_Estimator.ViewModels
                     exlWs = (Excel.Worksheet)summaryWb.Worksheets["Summary"];
                     if (item.Name.Length>22)
                     {
-                        string suffix = item.Name.Contains(".") ? new string(item.Name.Reverse().ToArray()).Split('.')[0]:"";
+                        string onlyName = item.Name.Replace(item.Sequence + ".", "");
+                        string suffix = onlyName.Contains(".") ? new string(onlyName.Reverse().ToArray()).Split('.')[0]:"";
                         if (suffix=="")
                         {
                             exlWs.Name = item.Name.Substring(0, 21) ;
                         }
                         else
-                            exlWs.Name = item.Name.Substring(0, 17) + "." + suffix;
+                        {
+                            if (suffix.Length>3)
+                            {
+                                exlWs.Name = item.Name.Substring(0, 17);
+                            }
+                            else
+                                exlWs.Name = item.Name.Substring(0, 17) + "." + suffix;
+                        }
+                            
 
                     }
                     else
@@ -2519,7 +2528,7 @@ namespace WICR_Estimator.ViewModels
             
             get
             {
-                return "Version 5.0";
+                return "Version 5.1";
             }
         }
 
