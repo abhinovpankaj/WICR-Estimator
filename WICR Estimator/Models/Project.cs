@@ -262,12 +262,26 @@ namespace WICR_Estimator.Models
 
         public int CopyCount { get; set; }
 
+        private string _sequenceName;
+        public string SequenceName
+        {
+            get
+            {
+                return Sequence == 0 ? _name : Sequence + "." + _name;
+            }
+            set
+            {
+                _sequenceName = value;
+                RaisePropertyChanged("SequenceName");
+            }
+        }
+
         private string _name;
         public string Name
         {
             get
             {
-                return Sequence==0?_name:Sequence + "." + _name;
+                return _name;// Sequence==0?_name:Sequence + "." + _name;
             }
             set
             {
@@ -280,6 +294,7 @@ namespace WICR_Estimator.Models
         {
             var nme = OriginalProjectName;
             RaisePropertyChanged("OriginalProjectName");
+            RaisePropertyChanged("SequenceName");
         }
         public void UpdateMainTable()
         {

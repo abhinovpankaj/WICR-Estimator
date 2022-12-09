@@ -119,7 +119,7 @@
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Name}" />
+                        <TextBlock Text="{Binding SequenceName}" />
                     </StackPanel>
                 </DataTemplate>
             </TabControl.ItemTemplate>

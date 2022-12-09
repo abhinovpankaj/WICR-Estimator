@@ -253,9 +253,11 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn
                                 Width="200"
-                                Binding="{Binding Name}"
-                                Header="Name"
-                                IsReadOnly="True" />
+                                Binding="{Binding SequenceName}"
+                                Header="Name" 
+                                IsReadOnly="True" >
+                                
+                            </DataGridTextColumn>
                             <DataGridTextColumn
                                 Width="150"
                                 Binding="{Binding WorkArea}"

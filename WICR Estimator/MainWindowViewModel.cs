@@ -789,6 +789,8 @@ namespace WICR_Estimator
                         foreach (Project item in SelectedProjects)
                         {
                             item.MaterialViewModel.CalculateCost(null);
+                            item.Name = item.Name.Replace(item.Sequence + ".", "");
+                            //item.Sequence = 0;
                             item.UpdateMainTable();
                             if (hm != null)
                                 hm.UpdateProjectTotals();

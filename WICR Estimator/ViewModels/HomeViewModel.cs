@@ -1191,8 +1191,7 @@ namespace WICR_Estimator.ViewModels
             
             OnPropertyChanged("SelectedProjects");
             if (SelectedProjects != null)
-            {
-                
+            {                
                 UpdateProjectTotals();
             }
         }
