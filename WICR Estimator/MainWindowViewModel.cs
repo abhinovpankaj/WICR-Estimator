@@ -130,6 +130,7 @@ namespace WICR_Estimator
             PageViewModels.Add(new LaborFactorDetailsPageViewModel());
             PageViewModels.Add(new HomeViewModel());
             PageViewModels.Add(new LoginPageViewModel());
+            PageViewModels.Add(new UserPageViewModel());
 
 
 
@@ -996,6 +997,9 @@ namespace WICR_Estimator
                     break;
                 case "ChangePalette":
                     ChangeViewModel(PageViewModels[0]);
+                    break;
+                case "Users":
+                    ChangeViewModel(PageViewModels[8]);
                     break;
                 default:
                     break;

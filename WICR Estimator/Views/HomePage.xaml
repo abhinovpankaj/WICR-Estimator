@@ -449,6 +449,8 @@
                     <ComboBoxItem Content="aracelim" />
                     <ComboBoxItem Content="matts" />
                     <ComboBoxItem Content="deionr" />
+                    <ComboBoxItem Content="gregh" />
+                    <ComboBoxItem Content="ryand" />
                 </ComboBox>
             </StackPanel>
             <DatePicker

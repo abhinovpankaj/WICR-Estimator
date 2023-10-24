@@ -1,24 +1,26 @@
-﻿<UserControl x:Class="WICR_Estimator.Views.URISlopePage"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WICR_Estimator.Views"
-              xmlns:conv="clr-namespace:WICR_Estimator.Converters"
-             xmlns:sysglb="clr-namespace:System.Globalization;assembly=mscorlib"
-             mc:Ignorable="d" 
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-     TextElement.FontWeight="Regular"
-     TextElement.FontSize="13"
-     TextOptions.TextFormattingMode="Ideal"
-     TextOptions.TextRenderingMode="Auto"
-             d:DesignHeight="700" d:DesignWidth="900">
+﻿<UserControl
+    x:Class="WICR_Estimator.Views.URISlopePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:conv="clr-namespace:WICR_Estimator.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WICR_Estimator.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sysglb="clr-namespace:System.Globalization;assembly=mscorlib"
+    d:DesignHeight="700"
+    d:DesignWidth="900"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
     <UserControl.Resources>
 
-        <conv:CheckBoxVisibilityConverter x:Key="checkBoxConv"/>
-        <conv:EnableTextboxConverter x:Key="textboxConv"/>
-        <conv:HasFieldEdited x:Key="HasFieldEdited"/>
+        <conv:CheckBoxVisibilityConverter x:Key="checkBoxConv" />
+        <conv:EnableTextboxConverter x:Key="textboxConv" />
+        <conv:HasFieldEdited x:Key="HasFieldEdited" />
         <!--<Style TargetType="Label" x:Key="LabelStyle1">
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="FontFamily" Value="Arial"/>
@@ -35,68 +37,73 @@
             <Setter Property="HorizontalAlignment"  Value="Right"/>
 
         </Style>-->
-        <Style TargetType="{x:Type TextBox}" x:Key="editableTextbox" BasedOn="{StaticResource MaterialDesignTextBox }">
+        <Style
+            x:Key="editableTextbox"
+            BasedOn="{StaticResource MaterialDesignTextBox}"
+            TargetType="{x:Type TextBox}">
 
-            <Style.Triggers >
+            <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="True">
                     <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
                 </Trigger>
-                <DataTrigger Binding="{Binding Tag,RelativeSource={RelativeSource Self}
-                                        }" 
-                             Value="True">
+                <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="True">
                     <Setter Property="FontWeight" Value="Bold" />
                     <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
                     <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
                 </DataTrigger>
             </Style.Triggers>
-            
+
         </Style>
-        
+
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            
-            <RowDefinition Height="auto"/>
-            
+
+            <RowDefinition Height="auto" />
+
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
 
         </Grid.RowDefinitions>
         <StackPanel>
-            <Label Content="{Binding SlopeHeaderText}" Style="{StaticResource MaterialDesignLabel}"
-                   FontSize="14"
-                   FontWeight="Bold"
-                   Margin="10,0,0,10"/>
-            <DataGrid AutoGenerateColumns="False" 
-                  HorizontalAlignment="Left"
-                  CanUserSortColumns="False"
-                  Name="SlopeGrid" 
-                  Margin="10,0,0,0"
-                  VerticalAlignment="Top" 
-                  CanUserAddRows="False"
-                  ItemsSource="{Binding Slopes,UpdateSourceTrigger=PropertyChanged}">
+            <Label
+                Margin="10,0,0,10"
+                Content="{Binding SlopeHeaderText}"
+                FontSize="14"
+                FontWeight="Bold"
+                Style="{StaticResource MaterialDesignLabel}" />
+            <DataGrid
+                Name="SlopeGrid"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                AutoGenerateColumns="False"
+                CanUserAddRows="False"
+                CanUserSortColumns="False"
+                ItemsSource="{Binding Slopes, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.ColumnHeaderStyle>
-                    <Style BasedOn="{StaticResource {x:Type  DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                    <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
                         <Setter Property="Background" Value="{StaticResource AccentColorBrush}" />
-                        <Setter Property="Foreground" Value="{StaticResource  IdealForegroundColorBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource IdealForegroundColorBrush}" />
                     </Style>
                 </DataGrid.ColumnHeaderStyle>
                 <DataGrid.Columns>
 
-                    <DataGridTemplateColumn Header="Thickness"
-                                        FocusManager.IsFocusScope="False">
+                    <DataGridTemplateColumn FocusManager.IsFocusScope="False" Header="Thickness">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Thickness}" Width="Auto"
-                                           IsEnabled="False"/>
+                                    <TextBlock
+                                        Width="Auto"
+                                        IsEnabled="False"
+                                        Text="{Binding Thickness}" />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -105,163 +112,164 @@
                     <DataGridTemplateColumn Header="Sq ft">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Tag="{Binding Sqft,Converter={StaticResource HasFieldEdited}}"
-                                         Text="{Binding Sqft,UpdateSourceTrigger=LostFocus}"
-                                     Style="{StaticResource editableTextbox}"
-                            >
-                                </TextBox>
+                                <TextBox
+                                    Style="{StaticResource editableTextbox}"
+                                    Tag="{Binding Sqft, Converter={StaticResource HasFieldEdited}}"
+                                    Text="{Binding Sqft, UpdateSourceTrigger=LostFocus}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="#Decks or areas">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Tag="{Binding DeckCount,Converter={StaticResource HasFieldEdited}}"
-                                         Text="{Binding DeckCount,UpdateSourceTrigger=LostFocus}"
-                                     Style="{StaticResource editableTextbox}">
-
-                                </TextBox>
+                                <TextBox
+                                    Style="{StaticResource editableTextbox}"
+                                    Tag="{Binding DeckCount, Converter={StaticResource HasFieldEdited}}"
+                                    Text="{Binding DeckCount, UpdateSourceTrigger=LostFocus}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTextColumn Binding="{Binding Total}"
-                                    IsReadOnly="True">
+                    <DataGridTextColumn Binding="{Binding Total}" IsReadOnly="True">
                         <DataGridTextColumn.Header>
-                            <TextBlock Text="Total" 
-                                   TextWrapping="Wrap"  Width="Auto"/>
+                            <TextBlock
+                                Width="Auto"
+                                Text="Total"
+                                TextWrapping="Wrap" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding TotalMixes,StringFormat=N2}"
-                                    IsReadOnly="True">
+                    <DataGridTextColumn Binding="{Binding TotalMixes, StringFormat=N2}" IsReadOnly="True">
                         <DataGridTextColumn.Header>
-                            <TextBlock Text="Total Mixes" 
-                                   TextWrapping="Wrap"  Width="Auto"/>
+                            <TextBlock
+                                Width="Auto"
+                                Text="Total Mixes"
+                                TextWrapping="Wrap" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
-                    <!--07-10-18-->
-                    <DataGridTextColumn Binding="{Binding MaterialExtensionSlope ,StringFormat={}{0:C}}"
-                                    IsReadOnly="True">
+                    <!--  07-10-18  -->
+                    <DataGridTextColumn Binding="{Binding MaterialExtensionSlope, StringFormat={}{0:C}}" IsReadOnly="True">
 
                         <DataGridTextColumn.Header>
-                            <TextBlock Text="Material Extension $" 
-                                   TextWrapping="Wrap" Width="Auto"/>
+                            <TextBlock
+                                Width="Auto"
+                                Text="Material Extension $"
+                                TextWrapping="Wrap" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
-                    <!--07-10-18-->
-                    <DataGridTextColumn Binding="{Binding LaborExtensionSlope ,StringFormat={}{0:C}}"
-                                    IsReadOnly="true">
+                    <!--  07-10-18  -->
+                    <DataGridTextColumn Binding="{Binding LaborExtensionSlope, StringFormat={}{0:C}}" IsReadOnly="true">
                         <DataGridTextColumn.Header>
-                            <TextBlock Text="Labour Extension $"  
-                                   TextWrapping="Wrap"  Width="Auto"/>
+                            <TextBlock
+                                Width="Auto"
+                                Text="Labour Extension $"
+                                TextWrapping="Wrap" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                 </DataGrid.Columns>
 
             </DataGrid>
         </StackPanel>
-        
-        <GroupBox x:Name="grp1" 
-                  Grid.Row="1" 
-                  Margin="10,20,10,10"
-                  Style="{StaticResource   MaterialDesignCardGroupBox}"
-                  Header="Total ($)"
-                  BorderBrush="Black" 
-                  BorderThickness="1" >
-            <Grid >
+
+        <GroupBox
+            x:Name="grp1"
+            Grid.Row="1"
+            Margin="10,20,10,10"
+            BorderBrush="Black"
+            BorderThickness="1"
+            Header="Total ($)"
+            Style="{StaticResource MaterialDesignCardGroupBox}">
+            <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
 
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Margin="10">
-                    <TextBlock Text="Sum" 
-                               HorizontalAlignment="Center"/>
-                    <!--07-10-18-->
-                    <TextBox Text="{Binding SumTotal,UpdateSourceTrigger=PropertyChanged}" 
-                             IsReadOnly="True"
-                             FontWeight="Bold"
-                             HorizontalContentAlignment="Center"
-                             Background="Transparent"
-                             BorderBrush="Black"
-                             BorderThickness="1"/>
+                    <TextBlock HorizontalAlignment="Center" Text="Sum" />
+                    <!--  07-10-18  -->
+                    <TextBox
+                        HorizontalContentAlignment="Center"
+                        Background="Transparent"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        FontWeight="Bold"
+                        IsReadOnly="True"
+                        Text="{Binding SumTotal, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" Margin="5,10,10,10">
-                    <TextBlock Text="Mixes" 
-                               HorizontalAlignment="Center"/>
-                    <!--07-10-18-->
-                    <TextBox Text="{Binding SumTotalMixes,StringFormat=N2,
-                        UpdateSourceTrigger=PropertyChanged }" 
-                             IsReadOnly="True"
-                             FontWeight="Bold" 
-                             HorizontalContentAlignment="Center"
-                             Background="Transparent"
-                             BorderBrush="Black"
-                             BorderThickness="1"/>
+                    <TextBlock HorizontalAlignment="Center" Text="Mixes" />
+                    <!--  07-10-18  -->
+                    <TextBox
+                        HorizontalContentAlignment="Center"
+                        Background="Transparent"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        FontWeight="Bold"
+                        IsReadOnly="True"
+                        Text="{Binding SumTotalMixes, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
-                <StackPanel Grid.Column="2" Margin="5,10,10,10" >
-                    <TextBlock Text="Material Extn ($)" 
-                               HorizontalAlignment="Center"/>
-                    <!--07-10-18-->
-                    <TextBox Text="{Binding SumTotalMatExt,UpdateSourceTrigger=PropertyChanged ,StringFormat={}{0:C}}" 
-                             IsReadOnly="True" 
-                             FontWeight="Bold"
-                             Background="Transparent"
-                             HorizontalContentAlignment="Center"
-                             BorderBrush="Black" 
-                             BorderThickness="1"/>
+                <StackPanel Grid.Column="2" Margin="5,10,10,10">
+                    <TextBlock HorizontalAlignment="Center" Text="Material Extn ($)" />
+                    <!--  07-10-18  -->
+                    <TextBox
+                        HorizontalContentAlignment="Center"
+                        Background="Transparent"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        FontWeight="Bold"
+                        IsReadOnly="True"
+                        Text="{Binding SumTotalMatExt, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:C}}" />
                 </StackPanel>
                 <StackPanel Grid.Column="3" Margin="5,10,10,10">
-                    <TextBlock Text="Labor Extn($)" 
-                               HorizontalAlignment="Center"/>
-                    <!--07-10-18-->
-                    <TextBox Text="{Binding SumTotalLaborExt,UpdateSourceTrigger=PropertyChanged  ,StringFormat={}{0:C}}"
-                             IsReadOnly="True"
-                             FontWeight="Bold"
-                             HorizontalContentAlignment="Center"
-                             Background="Transparent"
-                             BorderBrush="Black"
-                             BorderThickness="1"/>
+                    <TextBlock HorizontalAlignment="Center" Text="Labor Extn($)" />
+                    <!--  07-10-18  -->
+                    <TextBox
+                        HorizontalContentAlignment="Center"
+                        Background="Transparent"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        FontWeight="Bold"
+                        IsReadOnly="True"
+                        Text="{Binding SumTotalLaborExt, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:C}}" />
                 </StackPanel>
             </Grid>
         </GroupBox>
-        <StackPanel Grid.Column="1"
-                    Visibility="{Binding IsUrethaneVisible}">
-            <Label Content="{Binding UrethaneText}" 
-                   
-                   Style="{StaticResource MaterialDesignLabel}"
-                   FontSize="14"
-                   FontWeight="Bold"
-                   Margin="10,0,0,10"/>
-            <DataGrid AutoGenerateColumns="False" 
-                  HorizontalAlignment="Left"
-                  CanUserSortColumns="False"
-                  Name="SlopeGrid1" 
-                  
-                  Margin="10,0,0,0"
-                  VerticalAlignment="Top" 
-                  CanUserAddRows="False"
-                  ItemsSource="{Binding UrethaneSlopes,
-            UpdateSourceTrigger=PropertyChanged}">
+        <StackPanel Grid.Column="1" Visibility="{Binding IsUrethaneVisible}">
+            <Label
+                Margin="10,0,0,10"
+                Content="{Binding UrethaneText}"
+                FontSize="14"
+                FontWeight="Bold"
+                Style="{StaticResource MaterialDesignLabel}" />
+            <DataGrid
+                Name="SlopeGrid1"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                AutoGenerateColumns="False"
+                CanUserAddRows="False"
+                CanUserSortColumns="False"
+                ItemsSource="{Binding UrethaneSlopes, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.ColumnHeaderStyle>
-                    <Style BasedOn="{StaticResource {x:Type  DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                    <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
                         <Setter Property="Background" Value="{StaticResource AccentColorBrush}" />
-                        <Setter Property="Foreground" Value="{StaticResource  IdealForegroundColorBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource IdealForegroundColorBrush}" />
                     </Style>
                 </DataGrid.ColumnHeaderStyle>
                 <DataGrid.Columns>
 
-                    <DataGridTemplateColumn Header="Thickness"
-                                        FocusManager.IsFocusScope="False">
+                    <DataGridTemplateColumn FocusManager.IsFocusScope="False" Header="Thickness">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Thickness}" Width="Auto"
-                                           IsEnabled="False"/>
+                                    <TextBlock
+                                        Width="Auto"
+                                        IsEnabled="False"
+                                        Text="{Binding Thickness}" />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -270,399 +278,435 @@
                     <DataGridTemplateColumn Header="Sq ft">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Tag="{Binding Sqft,Converter={StaticResource HasFieldEdited}}"
-                                         Text="{Binding Sqft,UpdateSourceTrigger=LostFocus}"
-                                     Style="{StaticResource editableTextbox}"
-                            >
-                                </TextBox>
+                                <TextBox
+                                    Style="{StaticResource editableTextbox}"
+                                    Tag="{Binding Sqft, Converter={StaticResource HasFieldEdited}}"
+                                    Text="{Binding Sqft, UpdateSourceTrigger=LostFocus}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="#Decks or areas">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Tag="{Binding DeckCount,Converter={StaticResource HasFieldEdited}}"
-                                         Text="{Binding DeckCount,UpdateSourceTrigger=LostFocus}"
-                                     Style="{StaticResource editableTextbox}">
-
-                                </TextBox>
+                                <TextBox
+                                    Style="{StaticResource editableTextbox}"
+                                    Tag="{Binding DeckCount, Converter={StaticResource HasFieldEdited}}"
+                                    Text="{Binding DeckCount, UpdateSourceTrigger=LostFocus}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTextColumn Binding="{Binding Total}"
-                                    IsReadOnly="True">
+                    <DataGridTextColumn Binding="{Binding Total}" IsReadOnly="True">
                         <DataGridTextColumn.Header>
-                            <TextBlock Text="Total" 
-                                   TextWrapping="Wrap"  Width="Auto"/>
+                            <TextBlock
+                                Width="Auto"
+                                Text="Total"
+                                TextWrapping="Wrap" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding TotalMixes,StringFormat=N2}"
-                                    IsReadOnly="True">
+                    <DataGridTextColumn Binding="{Binding TotalMixes, StringFormat=N2}" IsReadOnly="True">
                         <DataGridTextColumn.Header>
-                            <TextBlock Text="Total Mixes" 
-                                   TextWrapping="Wrap"  Width="Auto"/>
+                            <TextBlock
+                                Width="Auto"
+                                Text="Total Mixes"
+                                TextWrapping="Wrap" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
-                    <!--07-10-18-->
-                    <DataGridTextColumn Binding="{Binding MaterialExtensionSlope ,StringFormat={}{0:C}}"
-                                    IsReadOnly="True">
+                    <!--  07-10-18  -->
+                    <DataGridTextColumn Binding="{Binding MaterialExtensionSlope, StringFormat={}{0:C}}" IsReadOnly="True">
 
                         <DataGridTextColumn.Header>
-                            <TextBlock Text="Material Extension $" 
-                                   TextWrapping="Wrap" Width="Auto"/>
+                            <TextBlock
+                                Width="Auto"
+                                Text="Material Extension $"
+                                TextWrapping="Wrap" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
-                    <!--07-10-18-->
-                    <DataGridTextColumn Binding="{Binding LaborExtensionSlope ,StringFormat={}{0:C}}"
-                                    IsReadOnly="true">
+                    <!--  07-10-18  -->
+                    <DataGridTextColumn Binding="{Binding LaborExtensionSlope, StringFormat={}{0:C}}" IsReadOnly="true">
                         <DataGridTextColumn.Header>
-                            <TextBlock Text="Labour Extension $"  
-                                   TextWrapping="Wrap"  Width="Auto"/>
+                            <TextBlock
+                                Width="Auto"
+                                Text="Labour Extension $"
+                                TextWrapping="Wrap" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                 </DataGrid.Columns>
 
             </DataGrid>
         </StackPanel>
-        
-        <GroupBox x:Name="grp2" 
-                  Visibility="{Binding IsUrethaneVisible}"
-                  Grid.Row="1" 
-                  Margin="10,20,10,10"
-                  Grid.Column="1"
-                  Header="Total ($)"
-                  BorderBrush="Black" 
-                  BorderThickness="1" >
+
+        <GroupBox
+            x:Name="grp2"
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="10,20,10,10"
+            BorderBrush="Black"
+            BorderThickness="1"
+            Header="Total ($)"
+            Visibility="{Binding IsUrethaneVisible}">
             <GroupBox.Style>
-                <Style TargetType="GroupBox" BasedOn="{StaticResource   MaterialDesignCardGroupBox}">
+                <Style BasedOn="{StaticResource MaterialDesignCardGroupBox}" TargetType="GroupBox">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsChecked,ElementName=OverrideCheckbox}" Value="True">
-                            <Setter Property="Visibility" Value="Hidden"/>
+                        <DataTrigger Binding="{Binding IsChecked, ElementName=OverrideCheckbox}" Value="True">
+                            <Setter Property="Visibility" Value="Hidden" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </GroupBox.Style>
-            <Grid >
+            <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
 
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Margin="10">
-                    <TextBlock Text="Sum" 
-                               HorizontalAlignment="Center"/>
-                    <!--07-10-18-->
-                    <TextBox Text="{Binding UrethaneSumTotal,UpdateSourceTrigger=PropertyChanged}" 
-                             IsReadOnly="True"
-                             FontWeight="Bold"
-                             HorizontalContentAlignment="Center"
-                             Background="Transparent"
-                             BorderBrush="Black"
-                             BorderThickness="1"/>
+                    <TextBlock HorizontalAlignment="Center" Text="Sum" />
+                    <!--  07-10-18  -->
+                    <TextBox
+                        HorizontalContentAlignment="Center"
+                        Background="Transparent"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        FontWeight="Bold"
+                        IsReadOnly="True"
+                        Text="{Binding UrethaneSumTotal, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" Margin="5,10,10,10">
-                    <TextBlock Text="Mixes" 
-                               HorizontalAlignment="Center"/>
-                    <!--07-10-18-->
-                    <TextBox Text="{Binding UrethaneSumTotalMixes,StringFormat=N2,
-                        UpdateSourceTrigger=PropertyChanged }" 
-                             IsReadOnly="True"
-                             FontWeight="Bold" 
-                             HorizontalContentAlignment="Center"
-                             Background="Transparent"
-                             BorderBrush="Black"
-                             BorderThickness="1"/>
+                    <TextBlock HorizontalAlignment="Center" Text="Mixes" />
+                    <!--  07-10-18  -->
+                    <TextBox
+                        HorizontalContentAlignment="Center"
+                        Background="Transparent"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        FontWeight="Bold"
+                        IsReadOnly="True"
+                        Text="{Binding UrethaneSumTotalMixes, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
-                <StackPanel Grid.Column="2" Margin="5,10,10,10" >
-                    <TextBlock Text="Material Extn ($)" 
-                               HorizontalAlignment="Center"/>
-                    <!--07-10-18-->
-                    <TextBox Text="{Binding UrethaneSumTotalMatExt,UpdateSourceTrigger=PropertyChanged ,StringFormat={}{0:C}}" 
-                             IsReadOnly="True" 
-                             FontWeight="Bold"
-                             Background="Transparent"
-                             HorizontalContentAlignment="Center"
-                             BorderBrush="Black" 
-                             BorderThickness="1"/>
+                <StackPanel Grid.Column="2" Margin="5,10,10,10">
+                    <TextBlock HorizontalAlignment="Center" Text="Material Extn ($)" />
+                    <!--  07-10-18  -->
+                    <TextBox
+                        HorizontalContentAlignment="Center"
+                        Background="Transparent"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        FontWeight="Bold"
+                        IsReadOnly="True"
+                        Text="{Binding UrethaneSumTotalMatExt, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:C}}" />
                 </StackPanel>
                 <StackPanel Grid.Column="3" Margin="5,10,10,10">
-                    <TextBlock Text="Labor Extn($)" 
-                               HorizontalAlignment="Center"/>
-                    <!--07-10-18-->
-                    <TextBox Text="{Binding UrethaneSumTotalLaborExt,UpdateSourceTrigger=PropertyChanged  ,StringFormat={}{0:C}}"
-                             IsReadOnly="True"
-                             FontWeight="Bold"
-                             HorizontalContentAlignment="Center"
-                             Background="Transparent"
-                             BorderBrush="Black"
-                             BorderThickness="1"/>
+                    <TextBlock HorizontalAlignment="Center" Text="Labor Extn($)" />
+                    <!--  07-10-18  -->
+                    <TextBox
+                        HorizontalContentAlignment="Center"
+                        Background="Transparent"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        FontWeight="Bold"
+                        IsReadOnly="True"
+                        Text="{Binding UrethaneSumTotalLaborExt, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:C}}" />
                 </StackPanel>
             </Grid>
         </GroupBox>
-        
+
         <Grid Grid.Row="3" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <GroupBox x:Name="groupBox2"
-                      
-                  Margin="10"
-                  Style="{StaticResource   MaterialDesignCardGroupBox}"
-                  Grid.Column="0" 
-                  BorderBrush="Blue"
-                  BorderThickness="0,0.5,0,0"  >
+            <GroupBox
+                x:Name="groupBox2"
+                Grid.Column="0"
+                Margin="10"
+                BorderBrush="Blue"
+                BorderThickness="0,0.5,0,0"
+                Style="{StaticResource MaterialDesignCardGroupBox}">
                 <GroupBox.Header>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Override Manually" Foreground="White"/>
-                        <ToggleButton x:Name="OverrideCheckbox"
-                              Margin="10,0,0,0"
-                              Style="{StaticResource MaterialDesignSwitchAccentToggleButton}"
-                          ToolTip="MaterialDesignSwitchToggleButton"
-                          IsChecked="{Binding OverrideManually}" />
+                        <TextBlock Foreground="White" Text="Override Manually" />
+                        <ToggleButton
+                            x:Name="OverrideCheckbox"
+                            Margin="10,0,0,0"
+                            IsChecked="{Binding OverrideManually}"
+                            Style="{StaticResource MaterialDesignSwitchAccentToggleButton}"
+                            ToolTip="MaterialDesignSwitchToggleButton" />
                     </StackPanel>
-                    
+
                 </GroupBox.Header>
-                <Grid IsEnabled="{Binding ElementName=OverrideCheckbox,
-                      Path=IsChecked}"
-                   >
+                <Grid IsEnabled="{Binding ElementName=OverrideCheckbox, Path=IsChecked}">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <Label Content="Total Mixes : "
-                       Style="{StaticResource MaterialDesignLabel}"
-                       HorizontalAlignment="Right"/>
+                    <Label
+                        HorizontalAlignment="Right"
+                        Content="Total Mixes : "
+                        Style="{StaticResource MaterialDesignLabel}" />
 
-                    <Label Content="Average Mixes Price ($) : " 
-                       Grid.Column="0" Grid.Row="1"
-                       Style="{StaticResource MaterialDesignLabel}" 
-                       HorizontalAlignment="Right"/>
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        HorizontalAlignment="Right"
+                        Content="Average Mixes Price ($) : "
+                        Style="{StaticResource MaterialDesignLabel}" />
 
-                    <TextBox x:Name="TotalMixesMan"
-                         Grid.Column="2"
-                         Margin="5"
-                         Tag="{Binding TotalMixesMan,Converter={StaticResource HasFieldEdited}}"
-                         Style="{StaticResource editableTextbox}"
-                         VerticalContentAlignment="Center"
-                         Height="25" Width="100"  
-                         Text="{Binding TotalMixesMan,UpdateSourceTrigger=LostFocus}">
-
-                    </TextBox>
-                    <!--07-10-18-->
-                    <TextBox x:Name="AverageMixesPrice"
-                         Grid.Row="1" 
-                         Grid.Column="2"
-                          Style="{StaticResource editableTextbox}"
-                         VerticalContentAlignment="Center"
-                         Height="25"
-                         Margin="5,0,5,5"
-                         Width="100"
-                         Tag="{Binding AverageMixesPrice,Converter={StaticResource HasFieldEdited}}"
-                         Text="{Binding AverageMixesPrice,UpdateSourceTrigger=LostFocus}">
-                    </TextBox>
+                    <TextBox
+                        x:Name="TotalMixesMan"
+                        Grid.Column="2"
+                        Width="100"
+                        Height="25"
+                        Margin="5"
+                        VerticalContentAlignment="Center"
+                        Style="{StaticResource editableTextbox}"
+                        Tag="{Binding TotalMixesMan, Converter={StaticResource HasFieldEdited}}"
+                        Text="{Binding TotalMixesMan, UpdateSourceTrigger=LostFocus}" />
+                    <!--  07-10-18  -->
+                    <TextBox
+                        x:Name="AverageMixesPrice"
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Width="100"
+                        Height="25"
+                        Margin="5,0,5,5"
+                        VerticalContentAlignment="Center"
+                        Style="{StaticResource editableTextbox}"
+                        Tag="{Binding AverageMixesPrice, Converter={StaticResource HasFieldEdited}}"
+                        Text="{Binding AverageMixesPrice, UpdateSourceTrigger=LostFocus}" />
 
                 </Grid>
             </GroupBox>
-            <GroupBox x:Name="groupBoxMisc" 
-                  HorizontalAlignment="Left"
-                  Margin="10"
-                      Style="{StaticResource   MaterialDesignCardGroupBox}"
-                  Grid.Column="1"
-                  Grid.Row="3"
-                  
-                  Header="Slope Totals"
-                  Foreground="Blue"
-                  FontFamily="Arial"
-                  FontSize="14"
-                  FontWeight="Bold"
-                  BorderBrush="DarkBlue"
-                  BorderThickness="1" >
+            <GroupBox
+                x:Name="groupBoxMisc"
+                Grid.Row="3"
+                Grid.Column="1"
+                Margin="10"
+                HorizontalAlignment="Left"
+                BorderBrush="DarkBlue"
+                BorderThickness="1"
+                FontFamily="Arial"
+                FontSize="14"
+                FontWeight="Bold"
+                Foreground="Blue"
+                Header="Slope Totals"
+                Style="{StaticResource MaterialDesignCardGroupBox}">
 
                 <Grid x:Name="grid5">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <!--<RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>-->
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <Label Content="Total Weight"
-                       VerticalAlignment="Center"
-                       Style="{StaticResource MaterialDesignLabel}"
-                       />
-                    <Label Content="Total Freight Cost ($)" 
-                       Grid.Row="1"
-                       VerticalAlignment="Center"
-                       Style="{StaticResource  MaterialDesignLabel}"
-                       />
-                    <!--07-10-18-->
-                    <TextBox x:Name="TotalWeight" IsEnabled="False"
-                         Grid.Column="1"
-                         
-                         Style="{StaticResource MaterialDesignTextBox}"
-                         Height="25" Width="100" 
-                         Text="{Binding TotalWeight,UpdateSourceTrigger=PropertyChanged }"/>
-                    <TextBox x:Name="TotalFrightCost" 
-                         IsEnabled="False"
-                         Grid.Row="1"
-                         
-                         Style="{StaticResource MaterialDesignTextBox}"
-                         Margin="5,10,5,5"
-                         VerticalContentAlignment="Center"
-                         Grid.Column="1"
-                         Text="{Binding TotalFrightCost,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:C}}" Height="25" Width="100" />
+                    <Label
+                        VerticalAlignment="Center"
+                        Content="Total Weight"
+                        Style="{StaticResource MaterialDesignLabel}" />
+                    <Label
+                        Grid.Row="1"
+                        VerticalAlignment="Center"
+                        Content="Total Freight Cost ($)"
+                        Style="{StaticResource MaterialDesignLabel}" />
+                    <!--  07-10-18  -->
+                    <TextBox
+                        x:Name="TotalWeight"
+                        Grid.Column="1"
+                        Width="100"
+                        Height="25"
+                        IsEnabled="False"
+                        Style="{StaticResource MaterialDesignTextBox}"
+                        Text="{Binding TotalWeight, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox
+                        x:Name="TotalFrightCost"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Width="100"
+                        Height="25"
+                        Margin="5,10,5,5"
+                        VerticalContentAlignment="Center"
+                        IsEnabled="False"
+                        Style="{StaticResource MaterialDesignTextBox}"
+                        Text="{Binding TotalFrightCost, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:C}}" />
 
 
-                    <Label Content="Total Material Cost ($)"
-                               Grid.Column="2"
-                              VerticalAlignment="Center"
-                               Style="{StaticResource MaterialDesignLabel}"
-                       />
-                    <Label Content="Total Labor Cost ($)"
-                           VerticalAlignment="Center" Grid.Column="2" Grid.Row="1"
-                           Margin="0,0,0,0"
-                           Style="{StaticResource MaterialDesignLabel}" 
-                           />
+                    <Label
+                        Grid.Column="2"
+                        VerticalAlignment="Center"
+                        Content="Total Material Cost ($)"
+                        Style="{StaticResource MaterialDesignLabel}" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Margin="0,0,0,0"
+                        VerticalAlignment="Center"
+                        Content="Total Labor Cost ($)"
+                        Style="{StaticResource MaterialDesignLabel}" />
 
-                    <TextBox x:Name="TotalMaterialCost"
-                         IsEnabled="False" 
-                         Style="{StaticResource MaterialDesignTextBox}"
-                                 VerticalContentAlignment="Center"
-                         Grid.Column="3"
-                         Height="25" Width="120"
-                         Text="{Binding TotalMaterialCost,UpdateSourceTrigger=PropertyChanged ,StringFormat={} {0:C}}"/>
-                    <TextBox x:Name="TotalLaborCost"
-                             IsEnabled="False"
-                             Grid.Column="3" Grid.Row="1"
-                             Style="{StaticResource MaterialDesignTextBox}"
-                             VerticalContentAlignment="Center"
-                             Margin="5,10,5,5"
-                             Text="{Binding TotalLaborCost,UpdateSourceTrigger=PropertyChanged  ,StringFormat={}{0:C}}" Height="25" Width="120" />
+                    <TextBox
+                        x:Name="TotalMaterialCost"
+                        Grid.Column="3"
+                        Width="120"
+                        Height="25"
+                        VerticalContentAlignment="Center"
+                        IsEnabled="False"
+                        Style="{StaticResource MaterialDesignTextBox}"
+                        Text="{Binding TotalMaterialCost, UpdateSourceTrigger=PropertyChanged, StringFormat={} {0:C}}" />
+                    <TextBox
+                        x:Name="TotalLaborCost"
+                        Grid.Row="1"
+                        Grid.Column="3"
+                        Width="120"
+                        Height="25"
+                        Margin="5,10,5,5"
+                        VerticalContentAlignment="Center"
+                        IsEnabled="False"
+                        Style="{StaticResource MaterialDesignTextBox}"
+                        Text="{Binding TotalLaborCost, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:C}}" />
 
                 </Grid>
             </GroupBox>
-            <GroupBox x:Name="groupBox3"  Visibility="{Binding IsUrethaneVisible}"
-                   Style="{StaticResource   MaterialDesignCardGroupBox}"
-                  Margin="10"
-                  
-                 
-                  Grid.Column="2" 
-                  BorderBrush="Blue"
-                  BorderThickness="0,0.5,0,0"  >
+            <GroupBox
+                x:Name="groupBox3"
+                Grid.Column="2"
+                Margin="10"
+                BorderBrush="Blue"
+                BorderThickness="0,0.5,0,0"
+                Style="{StaticResource MaterialDesignCardGroupBox}"
+                Visibility="{Binding IsUrethaneVisible}">
                 <GroupBox.Header>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Override Manually" Foreground="White"/>
-                        <ToggleButton x:Name="OverrideCheckboxUrethan"
-                              Margin="10,0,0,0"
-                              Style="{StaticResource MaterialDesignSwitchAccentToggleButton}"
-                          ToolTip="Override manually"
-                          IsChecked="{Binding UrethaneOverrideManually}" />
+                        <TextBlock Foreground="White" Text="Override Manually" />
+                        <ToggleButton
+                            x:Name="OverrideCheckboxUrethan"
+                            Margin="10,0,0,0"
+                            IsChecked="{Binding UrethaneOverrideManually}"
+                            Style="{StaticResource MaterialDesignSwitchAccentToggleButton}"
+                            ToolTip="Override manually" />
                     </StackPanel>
 
                 </GroupBox.Header>
-                <Grid  IsEnabled="{Binding ElementName=OverrideCheckboxUrethan,
-            Path=IsChecked}">
+                <Grid IsEnabled="{Binding ElementName=OverrideCheckboxUrethan, Path=IsChecked}">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <Label Content="Total Mixes : "
-                       Style="{StaticResource MaterialDesignLabel}"
-                       HorizontalAlignment="Right"/>
+                    <Label
+                        HorizontalAlignment="Right"
+                        Content="Total Mixes : "
+                        Style="{StaticResource MaterialDesignLabel}" />
 
-                    <Label Content="Average Mixes Price ($) : " 
-                       Grid.Column="0" Grid.Row="1"
-                       Style="{StaticResource MaterialDesignLabel}" 
-                       HorizontalAlignment="Right"/>
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        HorizontalAlignment="Right"
+                        Content="Average Mixes Price ($) : "
+                        Style="{StaticResource MaterialDesignLabel}" />
 
-                    <TextBox x:Name="TotalMixesMan1"
-                         Grid.Column="2"
-                         Margin="5"
-                         Style="{StaticResource editableTextbox}"
-                         VerticalContentAlignment="Center"
-                         Height="25" Width="100"  
-                         Tag="{Binding UrethaneTotalMixesMan,Converter={StaticResource HasFieldEdited} }"
-                         Text="{Binding UrethaneTotalMixesMan,UpdateSourceTrigger=LostFocus}">
-
-                    </TextBox>
-                    <!--07-10-18-->
-                    <TextBox x:Name="AverageMixesPrice1"
-                         Grid.Row="1" 
-                         Grid.Column="2"
-                          Style="{StaticResource editableTextbox}"
-                         VerticalContentAlignment="Center"
-                         Height="25"
-                         Margin="5,0,5,5"
-                         Width="100"
-                         Tag="{Binding UrethaneAverageMixesPrice,Converter={StaticResource HasFieldEdited} }"
-                         Text="{Binding UrethaneAverageMixesPrice,UpdateSourceTrigger=LostFocus}">
-                    </TextBox>
+                    <TextBox
+                        x:Name="TotalMixesMan1"
+                        Grid.Column="2"
+                        Width="100"
+                        Height="25"
+                        Margin="5"
+                        VerticalContentAlignment="Center"
+                        Style="{StaticResource editableTextbox}"
+                        Tag="{Binding UrethaneTotalMixesMan, Converter={StaticResource HasFieldEdited}}"
+                        Text="{Binding UrethaneTotalMixesMan, UpdateSourceTrigger=LostFocus}" />
+                    <!--  07-10-18  -->
+                    <TextBox
+                        x:Name="AverageMixesPrice1"
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Width="100"
+                        Height="25"
+                        Margin="5,0,5,5"
+                        VerticalContentAlignment="Center"
+                        Style="{StaticResource editableTextbox}"
+                        Tag="{Binding UrethaneAverageMixesPrice, Converter={StaticResource HasFieldEdited}}"
+                        Text="{Binding UrethaneAverageMixesPrice, UpdateSourceTrigger=LostFocus}" />
 
                 </Grid>
             </GroupBox>
-            
-        </Grid>
-        
-        <StackPanel Grid.Column="0" Background="{StaticResource PrimaryHueDarkBrush}"
-                    
-                    Margin="10,5,10,5" VerticalAlignment="Bottom"
-                    Grid.Row="5" Orientation="Horizontal">
-            <TextBlock Text="Slope Material" 
-                       VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
-                       Margin="10" Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"/>
-            <TextBlock Text="{ Binding SlopeMaterialName}"  Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
-                       VerticalAlignment="Center" Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
-                       Margin="10" Width="220"/>
-        </StackPanel>
-        
 
-        <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal"
-                    VerticalAlignment="Bottom"
-                    HorizontalAlignment="Right">
+        </Grid>
+
+        <StackPanel
+            Grid.Row="5"
+            Grid.Column="0"
+            Margin="10,5,10,5"
+            VerticalAlignment="Bottom"
+            Background="{StaticResource PrimaryHueDarkBrush}"
+            Orientation="Horizontal">
+            <TextBlock
+                Margin="10"
+                VerticalAlignment="Center"
+                Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
+                Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
+                Text="Slope Material" />
+            <TextBlock
+                Width="220"
+                Margin="10"
+                VerticalAlignment="Center"
+                Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
+                Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
+                Text="{Binding SlopeMaterialName}" />
+        </StackPanel>
+
+
+        <StackPanel
+            Grid.Row="5"
+            Grid.Column="1"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Orientation="Horizontal">
             <!--<Button Content="Fill Grid" Command="{Binding FillValues}"
-                    Height="30" 
+                    Height="30"
                     Margin="10,5,25,5"
                     VerticalAlignment="Bottom"
                     HorizontalAlignment="Right"
                     Width="100" Background="LightGreen"/>-->
-            <Button Command="{Binding CalculateCostCommand}" 
-                    VerticalAlignment="Bottom"                  
-                    Margin="10,5,10,5"
-                    HorizontalAlignment="Right"
-                   
-                    IsEnabled="{Binding AddRowCommand}">
+            <Button
+                Margin="10,5,10,5"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Command="{Binding CalculateCostCommand}"
+                IsEnabled="{Binding AddRowCommand}">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Calculator"
-                                             HorizontalAlignment="Left"
-                                             VerticalAlignment="Center"/>
-                        <TextBlock Text="Calculate" VerticalAlignment="Center"
-                                   HorizontalAlignment="Left"
-                                   Margin="5" FontWeight="bold"/>
+                        <materialDesign:PackIcon
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Kind="Calculator" />
+                        <TextBlock
+                            Margin="5"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            FontWeight="bold"
+                            Text="Calculate" />
 
                     </StackPanel>
                 </Button.Content>

@@ -1,26 +1,28 @@
-﻿<UserControl x:Class="WICR_Estimator.Views.IndependentSystemMaterialPage"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WICR_Estimator.Views"
-              xmlns:conv="clr-namespace:WICR_Estimator.Converters"
-             mc:Ignorable="d" 
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-     TextElement.FontWeight="Regular"
-     TextElement.FontSize="13"
-     TextOptions.TextFormattingMode="Ideal"
-     TextOptions.TextRenderingMode="Auto"
-             d:DesignHeight="700" d:DesignWidth="1200">
+﻿<UserControl
+    x:Class="WICR_Estimator.Views.IndependentSystemMaterialPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:conv="clr-namespace:WICR_Estimator.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WICR_Estimator.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="700"
+    d:DesignWidth="1200"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
     <UserControl.Resources>
-        <conv:CheckBoxVisibilityConverter x:Key="checkBoxConv"/>
-        <conv:EnableTextboxConverter x:Key="textboxConv"/>
-        <conv:QtyTextboxConverter x:Key="qtyTextboxConv"/>
-        <conv:UnitTextboxConverter x:Key="unitTextboxConv"/>
+        <conv:CheckBoxVisibilityConverter x:Key="checkBoxConv" />
+        <conv:EnableTextboxConverter x:Key="textboxConv" />
+        <conv:QtyTextboxConverter x:Key="qtyTextboxConv" />
+        <conv:UnitTextboxConverter x:Key="unitTextboxConv" />
         <Style BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}" TargetType="{x:Type DataGridColumnHeader}">
             <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
-            <Setter Property="Foreground" Value="{StaticResource  PrimaryHueDarkForegroundBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
             <Setter Property="Padding" Value="10" />
 
         </Style>
@@ -49,64 +51,67 @@
             <Setter Property="BorderBrush" Value="Black"/>
             <Setter Property="BorderThickness"  Value="1"/>
         </Style>-->
-        <Style x:Key="cbTB" TargetType="{x:Type CheckBox}"
-               BasedOn="{StaticResource MaterialDesignAccentCheckBox}">
+        <Style
+            x:Key="cbTB"
+            BasedOn="{StaticResource MaterialDesignAccentCheckBox}"
+            TargetType="{x:Type CheckBox}">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding ElementName=qtyTb, Path=IsEnabled,TargetNullValue=false}" Value="True">
-                    <Setter Property="CheckBox.IsChecked" Value="True"/>
+                <DataTrigger Binding="{Binding ElementName=qtyTb, Path=IsEnabled, TargetNullValue=false}" Value="True">
+                    <Setter Property="CheckBox.IsChecked" Value="True" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding ElementName=unitTb, Path=IsEnabled,TargetNullValue=false}" Value="True">
-                    <Setter Property="CheckBox.IsChecked" Value="True"/>
+                <DataTrigger Binding="{Binding ElementName=unitTb, Path=IsEnabled, TargetNullValue=false}" Value="True">
+                    <Setter Property="CheckBox.IsChecked" Value="True" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-        <Style TargetType="{x:Type TextBox}" x:Key="editableTextbox" BasedOn="{StaticResource  MaterialDesignTextBox}">
+        <Style
+            x:Key="editableTextbox"
+            BasedOn="{StaticResource MaterialDesignTextBox}"
+            TargetType="{x:Type TextBox}">
 
-            <Style.Triggers >
-                
+            <Style.Triggers>
+
                 <DataTrigger Binding="{Binding IsMaterialChecked}" Value="False">
                     <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
                     <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightForegroundBrush}" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding AllEditable}" Value="True">
-                    <Setter Property="IsEnabled" Value="True"/>
+                    <Setter Property="IsEnabled" Value="True" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding AllEditable}" Value="False">
-                    <Setter Property="IsEnabled" Value="{Binding Path=Name,
-                                Converter={StaticResource unitTextboxConv}}"/>
+                    <Setter Property="IsEnabled" Value="{Binding Path=Name, Converter={StaticResource unitTextboxConv}}" />
                 </DataTrigger>
-                
+
                 <Trigger Property="IsEnabled" Value="True">
-                    <Setter Property="Background" Value="{StaticResource   PrimaryHueLightBrush}" />
-                    <Setter Property="Foreground" Value="{StaticResource   PrimaryHueLightForegroundBrush}" />
-                    <Setter Property="ToolTip" Value="Please enter a numeric value."/>
+                    <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
+                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightForegroundBrush}" />
+                    <Setter Property="ToolTip" Value="Please enter a numeric value." />
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <Style TargetType="{x:Type TextBox}" x:Key="editableTextboxQTY">
+        <Style x:Key="editableTextboxQTY" TargetType="{x:Type TextBox}">
 
-            <Style.Triggers >
+            <Style.Triggers>
 
                 <DataTrigger Binding="{Binding IsMaterialChecked}" Value="False">
-                    <Setter Property="Background" Value="Gray"/>
-                    <Setter Property="Foreground" Value="Gray"/>
+                    <Setter Property="Background" Value="Gray" />
+                    <Setter Property="Foreground" Value="Gray" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding AllEditable}" Value="True">
-                    <Setter Property="IsEnabled" Value="True"/>
+                    <Setter Property="IsEnabled" Value="True" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding AllEditable}" Value="False">
-                    <Setter Property="IsEnabled" Value="{Binding Path=Name,
-                                Converter={StaticResource qtyTextboxConv}}"/>
+                    <Setter Property="IsEnabled" Value="{Binding Path=Name, Converter={StaticResource qtyTextboxConv}}" />
                 </DataTrigger>
 
                 <Trigger Property="IsEnabled" Value="True">
                     <Setter Property="Background" Value="LightYellow" />
-                    <Setter Property="ToolTip" Value="Please enter a numeric value."/>
+                    <Setter Property="ToolTip" Value="Please enter a numeric value." />
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <Style TargetType="{x:Type DataGridCell}" x:Key="editableCell">
-            <Style.Triggers >
+        <Style x:Key="editableCell" TargetType="{x:Type DataGridCell}">
+            <Style.Triggers>
                 <Trigger Property="IsReadOnly" Value="False">
                     <Setter Property="Background" Value="LightYellow" />
                 </Trigger>
@@ -115,29 +120,30 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width=".7*"/>
-            <ColumnDefinition Width=".3*"/>
+            <ColumnDefinition Width=".7*" />
+            <ColumnDefinition Width=".3*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+
         </Grid.RowDefinitions>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <DataGrid AutoGenerateColumns="False" 
-                  HorizontalAlignment="Left"
-                  Name="MaterialGridX" 
-                  CanUserSortColumns="False"
-                  Margin="10"
-                      materialDesign:DataGridAssist.CellPadding="4"
-                  Grid.RowSpan="5"
-                  VerticalAlignment="Top" 
-                  CanUserAddRows="False"
-                  FrozenColumnCount ="2"                 
-                  ItemsSource="{Binding SystemMaterials,UpdateSourceTrigger=PropertyChanged}" >
+            <DataGrid
+                Name="MaterialGridX"
+                Grid.RowSpan="5"
+                Margin="10"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                materialDesign:DataGridAssist.CellPadding="4"
+                AutoGenerateColumns="False"
+                CanUserAddRows="False"
+                CanUserSortColumns="False"
+                FrozenColumnCount="2"
+                ItemsSource="{Binding SystemMaterials, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
 
@@ -153,15 +159,12 @@
                     <DataGridTemplateColumn Header="" KeyboardNavigation.IsTabStop="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox x:Name="includeMeX" Command="{Binding DataContext.CheckboxCommand,
-                                ElementName=MaterialGrid}"
-                                      CommandParameter="{Binding Name}"
-                                      IsChecked="{Binding IsMaterialChecked,
-                                UpdateSourceTrigger=PropertyChanged}"
-                                      IsEnabled="{Binding IsMaterialEnabled,
-                                UpdateSourceTrigger=PropertyChanged}">
-
-                                </CheckBox>
+                                <CheckBox
+                                    x:Name="includeMeX"
+                                    Command="{Binding DataContext.CheckboxCommand, ElementName=MaterialGrid}"
+                                    CommandParameter="{Binding Name}"
+                                    IsChecked="{Binding IsMaterialChecked, UpdateSourceTrigger=PropertyChanged}"
+                                    IsEnabled="{Binding IsMaterialEnabled, UpdateSourceTrigger=PropertyChanged}" />
                             </DataTemplate>
 
                         </DataGridTemplateColumn.CellTemplate>
@@ -169,20 +172,21 @@
                     <DataGridTemplateColumn Header="Select Project for Estimate" KeyboardNavigation.IsTabStop="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding Name}"
-                                     IsReadOnly="True"
-                                     KeyboardNavigation.IsTabStop="False">
-
-                                </TextBox>
+                                <TextBox
+                                    IsReadOnly="True"
+                                    KeyboardNavigation.IsTabStop="False"
+                                    Text="{Binding Name}" />
 
                             </DataTemplate>
 
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Units" IsReadOnly="True"
-                                    Binding="{Binding SMUnits}" KeyboardNavigation.IsTabStop="False">
-                    </DataGridTextColumn>
-                    <!--For creating editable Units for Independent Material ViewModel.-->
+                    <DataGridTextColumn
+                        Binding="{Binding SMUnits}"
+                        Header="Units"
+                        IsReadOnly="True"
+                        KeyboardNavigation.IsTabStop="False" />
+                    <!--  For creating editable Units for Independent Material ViewModel.  -->
                     <!--<DataGridTemplateColumn Header="Units">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -194,54 +198,58 @@
 
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>-->
-                    <DataGridTextColumn Header="Sq ft or Lf Area" IsReadOnly="True"
-                                    Binding="{Binding SMSqft,StringFormat={}{0:n2}}"
-                                     KeyboardNavigation.IsTabStop="False">
-                    </DataGridTextColumn>
+                    <DataGridTextColumn
+                        Binding="{Binding SMSqft, StringFormat={}{0:n2}}"
+                        Header="Sq ft or Lf Area"
+                        IsReadOnly="True"
+                        KeyboardNavigation.IsTabStop="False" />
 
-                    <DataGridTextColumn Binding="{Binding Coverage,StringFormat={}{0:n2}}" Header="Coverage"
-                                    IsReadOnly="True" KeyboardNavigation.IsTabStop="False">
-
-                    </DataGridTextColumn>
+                    <DataGridTextColumn
+                        Binding="{Binding Coverage, StringFormat={}{0:n2}}"
+                        Header="Coverage"
+                        IsReadOnly="True"
+                        KeyboardNavigation.IsTabStop="False" />
                     <DataGridTemplateColumn Header="Qty">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding Qty,UpdateSourceTrigger=PropertyChanged,
-                                StringFormat={}{0:n2}}"
-                                     Name="qtyTb"
-                                     Style="{StaticResource editableTextboxQTY}"                                   
-                                     KeyboardNavigation.IsTabStop="{Binding Path=Name,
-                                Converter={StaticResource qtyTextboxConv}}"/>
+                                <TextBox
+                                    Name="qtyTb"
+                                    KeyboardNavigation.IsTabStop="{Binding Path=Name, Converter={StaticResource qtyTextboxConv}}"
+                                    Style="{StaticResource editableTextboxQTY}"
+                                    Text="{Binding Qty, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}" />
 
                             </DataTemplate>
 
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Binding="{Binding MaterialPrice,
-                    UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"
-                                    IsReadOnly="True" KeyboardNavigation.IsTabStop="False"
-                                    Header="Material Price $">
-                    </DataGridTextColumn>
+                    <DataGridTextColumn
+                        Binding="{Binding MaterialPrice, UpdateSourceTrigger=PropertyChanged, StringFormat='c'}"
+                        Header="Material Price $"
+                        IsReadOnly="True"
+                        KeyboardNavigation.IsTabStop="False" />
 
-                    <DataGridTextColumn Header="Material Extension" Binding="{Binding MaterialExtension,
-                    UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"
-                                    IsReadOnly="True" KeyboardNavigation.IsTabStop="False">
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Header="Weight" Binding="{Binding Weight,UpdateSourceTrigger=PropertyChanged}"
-                                    IsReadOnly="True" KeyboardNavigation.IsTabStop="False">
-
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Header="Extension" Binding="{Binding FreightExtension,
-                    UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:n2}}"
-                                    IsReadOnly="True" KeyboardNavigation.IsTabStop="False">
-
-                    </DataGridTextColumn>
+                    <DataGridTextColumn
+                        Binding="{Binding MaterialExtension, UpdateSourceTrigger=PropertyChanged, StringFormat='c'}"
+                        Header="Material Extension"
+                        IsReadOnly="True"
+                        KeyboardNavigation.IsTabStop="False" />
+                    <DataGridTextColumn
+                        Binding="{Binding Weight, UpdateSourceTrigger=PropertyChanged}"
+                        Header="Weight"
+                        IsReadOnly="True"
+                        KeyboardNavigation.IsTabStop="False" />
+                    <DataGridTextColumn
+                        Binding="{Binding FreightExtension, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"
+                        Header="Extension"
+                        IsReadOnly="True"
+                        KeyboardNavigation.IsTabStop="False" />
                     <DataGridTemplateColumn Header="Special Pricing($)">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding SpecialMaterialPricing,UpdateSourceTrigger=LostFocus}"
-                             Style="{StaticResource editableTextbox}" IsEnabled="True">
-                                </TextBox>
+                                <TextBox
+                                    IsEnabled="True"
+                                    Style="{StaticResource editableTextbox}"
+                                    Text="{Binding SpecialMaterialPricing, UpdateSourceTrigger=LostFocus}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -249,37 +257,42 @@
 
             </DataGrid>
         </ScrollViewer>
-        
-       
+
+
         <!--<Grid Grid.Column="0" Grid.Row="1"
               HorizontalAlignment="Center"
               >-->
-            <GroupBox x:Name="OtherCostX"  
-                      HorizontalContentAlignment="Stretch"
-                      Header="Other Cost" Foreground="{StaticResource SecondaryAccentForegroundBrush}"
-                      FontFamily="Arial"
-                      FontSize="12"
-                      Grid.RowSpan="2"
-                      Grid.Row="1"
-                      Margin="0,20,0,0"
-                      FontWeight="Bold"
-                      BorderBrush="{StaticResource AccentColorBrush}"
-                      BorderThickness="0.5" >
+        <GroupBox
+            x:Name="OtherCostX"
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Margin="0,20,0,0"
+            HorizontalContentAlignment="Stretch"
+            BorderBrush="{StaticResource AccentColorBrush}"
+            BorderThickness="0.5"
+            FontFamily="Arial"
+            FontSize="12"
+            FontWeight="Bold"
+            Foreground="{StaticResource SecondaryAccentForegroundBrush}"
+            Header="Other Cost">
 
 
-                <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Stretch"
-                      Name="OtherCostGridX" VerticalAlignment="Top"
-                          CanUserSortColumns="False"
-                          materialDesign:DataGridAssist.CellPadding="4"
-                      Margin="0,10,10,10"
-                      Grid.Column="1"
-                      CanUserAddRows="false" 
-                      CellStyle="{StaticResource editableCell}"
-                  ItemsSource="{Binding OtherMaterials,UpdateSourceTrigger=PropertyChanged}">
-                    
-                    <DataGrid.Columns>
-                        
-                        <!--<DataGridTemplateColumn Header="Items">
+            <DataGrid
+                Name="OtherCostGridX"
+                Grid.Column="1"
+                Margin="0,10,10,10"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                materialDesign:DataGridAssist.CellPadding="4"
+                AutoGenerateColumns="False"
+                CanUserAddRows="false"
+                CanUserSortColumns="False"
+                CellStyle="{StaticResource editableCell}"
+                ItemsSource="{Binding OtherMaterials, UpdateSourceTrigger=PropertyChanged}">
+
+                <DataGrid.Columns>
+
+                    <!--<DataGridTemplateColumn Header="Items">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox Text="{Binding Name,UpdateSourceTrigger=LostFocus}"
@@ -289,80 +302,91 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>-->
-                        <DataGridTextColumn Header="Items"
-                                            Width=".6*"
-                                            Binding="{Binding Name,
-                        Mode=TwoWay,UpdateSourceTrigger=LostFocus}"/>
-                        <DataGridTextColumn Header="Quantity"
-                                            Width=".2*"
-                                    Binding="{Binding Quantity,
-                        Mode=TwoWay,UpdateSourceTrigger=LostFocus}"/>
-                        <DataGridTextColumn Header="Material Price ($)"
-                                            Width=".2*"
-                                    Binding="{Binding MaterialPrice,
-                        Mode=TwoWay,UpdateSourceTrigger=LostFocus}"/>
-                        <DataGridTextColumn Header="Extension($)" 
-                                            Width=".2*"
-                                        IsReadOnly="True"
-                                        Binding="{Binding Extension,Mode=OneWay,
-                        UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
-                    </DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width=".6*"
+                        Binding="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                        Header="Items" />
+                    <DataGridTextColumn
+                        Width=".2*"
+                        Binding="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                        Header="Quantity" />
+                    <DataGridTextColumn
+                        Width=".2*"
+                        Binding="{Binding MaterialPrice, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                        Header="Material Price ($)" />
+                    <DataGridTextColumn
+                        Width=".2*"
+                        Binding="{Binding Extension, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat='c'}"
+                        Header="Extension($)"
+                        IsReadOnly="True" />
+                </DataGrid.Columns>
 
-                </DataGrid>
+            </DataGrid>
 
-            </GroupBox>
+        </GroupBox>
         <!--</Grid>-->
-        
-        <!--Row 0 ELement-->
-        <!--Row 1 ELement-->
-        <GroupBox Header ="Other Cost Total " HorizontalAlignment="Center"
-                  Grid.Column="0"
-                  Grid.Row="3" 
-                  VerticalAlignment="Top"
-                  Foreground="Blue" 
-                  FontSize="12" FontWeight="Bold">
-            <StackPanel 
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Bottom">
-                <Button Name="AddButtonX"
+
+        <!--  Row 0 ELement  -->
+        <!--  Row 1 ELement  -->
+        <GroupBox
+            Grid.Row="3"
+            Grid.Column="0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            FontSize="12"
+            FontWeight="Bold"
+            Foreground="Blue"
+            Header="Other Cost Total ">
+            <StackPanel
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Orientation="Horizontal">
+                <Button
+                    Name="AddButtonX"
+                    Width="25"
+                    Height="25"
                     HorizontalAlignment="Right"
-                         Style="{StaticResource MaterialDesignFloatingActionButton}"
-                                        Height="25" Width="25"
-                    Command="{Binding AddRowCommand}">
+                    Command="{Binding AddRowCommand}"
+                    Style="{StaticResource MaterialDesignFloatingActionButton}">
                     <Button.Content>
-                        <materialDesign:PackIcon Kind="Add"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"/>
+                        <materialDesign:PackIcon
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="Add" />
                     </Button.Content>
                 </Button>
-                <Button Command="{Binding RemoveCommand}"                   
+                <Button
+                    Width="25"
                     Height="25"
-                        Width="25"
-                         Style="{StaticResource MaterialDesignFloatingActionButton}"
                     Margin="5"
-                    
                     HorizontalAlignment="Right"
-                   >
+                    Command="{Binding RemoveCommand}"
+                    Style="{StaticResource MaterialDesignFloatingActionButton}">
                     <Button.Content>
-                        <materialDesign:PackIcon Kind="Remove"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"/>
+                        <materialDesign:PackIcon
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="Remove" />
                     </Button.Content>
                 </Button>
                 <StackPanel>
-                    <Label Content="Total ($) :" Grid.Row="0" Grid.Column="1"  
-                       Margin="5"
-                         FontSize="12" Background="FloralWhite"
-                       />
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="5"
+                        Background="FloralWhite"
+                        Content="Total ($) :"
+                        FontSize="12" />
                 </StackPanel>
-                <StackPanel >
-                    <TextBox x:Name="TotalOCExtensionX"
-                             IsEnabled="False"                        
-                             Margin="5"    
-                             VerticalContentAlignment="Center"
-                             Height="25"  Width="100"                 
-                             Text="{Binding TotalOCExtension, UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
+                <StackPanel>
+                    <TextBox
+                        x:Name="TotalOCExtensionX"
+                        Width="100"
+                        Height="25"
+                        Margin="5"
+                        VerticalContentAlignment="Center"
+                        IsEnabled="False"
+                        Text="{Binding TotalOCExtension, UpdateSourceTrigger=PropertyChanged, StringFormat='c'}" />
                 </StackPanel>
                 <!--<Button Command="{Binding CalculateCostCommand}"
                     Content="Calculate"
@@ -372,216 +396,234 @@
                     Margin="30,10,10,10"/>-->
             </StackPanel>
         </GroupBox>
-        <!--Row 1 ELement End-->
-        <!--Row 2 ELement-->
-        <GroupBox x:Name="SubContractX" Grid.Column="1" 
-                  Grid.Row="1"
-                  Grid.RowSpan="2"
-                  Margin="0,20,0,0"
-                  Header="Sub Contract Labor"
-                  FontFamily="Arial"
-                  FontWeight="Bold"
-                  Foreground="Blue"
-                  FontSize="12" 
-                  BorderBrush="DarkBlue"
-                  BorderThickness="0.5"  >
+        <!--  Row 1 ELement End  -->
+        <!--  Row 2 ELement  -->
+        <GroupBox
+            x:Name="SubContractX"
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Grid.Column="1"
+            Margin="0,20,0,0"
+            BorderBrush="DarkBlue"
+            BorderThickness="0.5"
+            FontFamily="Arial"
+            FontSize="12"
+            FontWeight="Bold"
+            Foreground="Blue"
+            Header="Sub Contract Labor">
             <StackPanel>
-                <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Left"
-                      Name="SubConlbrcstGridX" VerticalAlignment="Top"
-                          CanUserSortColumns="False"
-                          materialDesign:DataGridAssist.CellPadding="4"
-                     CellStyle="{StaticResource editableCell}"
-                       Margin="0,10,10,10" Grid.Column="1"
-                      CanUserAddRows="false"                      
-                  ItemsSource="{Binding SubContractLaborItems,UpdateSourceTrigger=PropertyChanged}">
+                <DataGrid
+                    Name="SubConlbrcstGridX"
+                    Grid.Column="1"
+                    Margin="0,10,10,10"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    materialDesign:DataGridAssist.CellPadding="4"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="false"
+                    CanUserSortColumns="False"
+                    CellStyle="{StaticResource editableCell}"
+                    ItemsSource="{Binding SubContractLaborItems, UpdateSourceTrigger=PropertyChanged}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Enter Labor Details" 
-                                    IsReadOnly="False"
-                                    Binding="{Binding Name}"/>
-                        <DataGridTextColumn Header="Units"
-                                    IsReadOnly="{Binding IsReadOnly,Source= UnitConlbrcst}"
-                                    Binding="{Binding UnitConlbrcst}"/>
-                        <DataGridTextColumn Header="Unit Price ($)"
-                                    IsReadOnly="{Binding IsReadOnly}"
-                                    Binding="{Binding UnitPriceConlbrcst}"/>
-                        <DataGridTextColumn Header="Extension($)" 
-                                        IsReadOnly="True"
-                                        Binding="{Binding MaterialExtensionConlbrcst,
-                        UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
+                        <DataGridTextColumn
+                            Binding="{Binding Name}"
+                            Header="Enter Labor Details"
+                            IsReadOnly="False" />
+                        <DataGridTextColumn
+                            Binding="{Binding UnitConlbrcst}"
+                            Header="Units"
+                            IsReadOnly="{Binding IsReadOnly, Source=UnitConlbrcst}" />
+                        <DataGridTextColumn
+                            Binding="{Binding UnitPriceConlbrcst}"
+                            Header="Unit Price ($)"
+                            IsReadOnly="{Binding IsReadOnly}" />
+                        <DataGridTextColumn
+                            Binding="{Binding MaterialExtensionConlbrcst, UpdateSourceTrigger=PropertyChanged, StringFormat='c'}"
+                            Header="Extension($)"
+                            IsReadOnly="True" />
                     </DataGrid.Columns>
 
                 </DataGrid>
-                <StackPanel Orientation="Horizontal"  Background="FloralWhite">
-                    <Label Content="Total($):" Grid.Row="0" Grid.Column="1"  
-                       Margin="5,5,0,5"
-                        FontSize="12"
-                          
-                       />
-                    <TextBox x:Name="TotalSCExtensionX"
-                         IsEnabled="False" 
-                             VerticalContentAlignment="Center"
-                         Margin="0,5,5,5"                       
-                         Height="25"  Width="80"                
-                         Text="{Binding TotalSCExtension, 
-                        UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
-                    <!--<Label Content="SubContract Markup%" Grid.Column="1"  
+                <StackPanel Background="FloralWhite" Orientation="Horizontal">
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="5,5,0,5"
+                        Content="Total($):"
+                        FontSize="12" />
+                    <TextBox
+                        x:Name="TotalSCExtensionX"
+                        Width="80"
+                        Height="25"
+                        Margin="0,5,5,5"
+                        VerticalContentAlignment="Center"
+                        IsEnabled="False"
+                        Text="{Binding TotalSCExtension, UpdateSourceTrigger=PropertyChanged, StringFormat='c'}" />
+                    <!--<Label Content="SubContract Markup%" Grid.Column="1"
                        Margin="5,5,0,5"
                        Style="{StaticResource LabelStyle1}"
-                           FontSize="12" 
+                           FontSize="12"
                            Background="FloralWhite"
                        />
-                    <TextBox Margin="0,5,5,5" 
+                    <TextBox Margin="0,5,5,5"
                              VerticalContentAlignment="Center"
-                             Height="25"  Width="50"  Style="{StaticResource editableTextbox}"                
-                             Text="{Binding SubContractMarkup, 
+                             Height="25"  Width="50"  Style="{StaticResource editableTextbox}"
+                             Text="{Binding SubContractMarkup,
                             UpdateSourceTrigger=LostFocus}"/>-->
-                    <StackPanel VerticalAlignment="Center"
-                                HorizontalAlignment="Left"
-                                Grid.Column="1"
-                                Margin="5">
-                        <TextBlock Text="SubContract Markup%" 
-                                   HorizontalAlignment="Center"/>
-                        <TextBox Text="{Binding ElementName=slWidthX,
-                                 Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                 TextAlignment="Right"
-                                 Width="40" 
-                                 HorizontalAlignment="Center"
-                                 Margin="5"/>
-                        <Slider Maximum="1" Value="{Binding SubContractMarkup}"
-                                Width="200"
-                                LargeChange=".2"
-                                Minimum="0"
-                                TickPlacement="Both"
-                                TickFrequency=".05" 
-                                IsSnapToTickEnabled="True"
-                                Name="slWidthX"
-                    />
+                    <StackPanel
+                        Grid.Column="1"
+                        Margin="5"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+                        <TextBlock HorizontalAlignment="Center" Text="SubContract Markup%" />
+                        <TextBox
+                            Width="40"
+                            Margin="5"
+                            HorizontalAlignment="Center"
+                            Text="{Binding ElementName=slWidthX, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                            TextAlignment="Right" />
+                        <Slider
+                            Name="slWidthX"
+                            Width="200"
+                            IsSnapToTickEnabled="True"
+                            LargeChange=".2"
+                            Maximum="1"
+                            Minimum="0"
+                            TickFrequency=".05"
+                            TickPlacement="Both"
+                            Value="{Binding SubContractMarkup}" />
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
-            
+
         </GroupBox>
-        
-        <GroupBox x:Name="groupBoxMiscX" 
-                  Margin="10"
-                  Grid.Column="1"
-                Grid.Row="3"
-                  Header="Total Material Cost Breakup"
-                  Foreground="Blue"
-                  FontFamily="Arial"
-                  FontSize="14"
-                  FontWeight="Bold"
-                  BorderBrush="DarkBlue"
-                  BorderThickness="0.5" >
+
+        <GroupBox
+            x:Name="groupBoxMiscX"
+            Grid.Row="3"
+            Grid.Column="1"
+            Margin="10"
+            BorderBrush="DarkBlue"
+            BorderThickness="0.5"
+            FontFamily="Arial"
+            FontSize="14"
+            FontWeight="Bold"
+            Foreground="Blue"
+            Header="Total Material Cost Breakup">
             <Grid x:Name="grid5X">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+
                 </Grid.RowDefinitions>
 
-                <Label Content="Total Material Cost ($)" Grid.Row="0"
-                       Margin="0,15,5,5"
-                       
-                       />
-                <Label Content="Total Weight "
-                       Grid.Row="1"
-                       
-                       />
-                <Label Content="Total Freight Cost ($)"
-                       Grid.Row="2"
-                        
-                       />
-                
-                <Label Content="Total Sub Contract Labor Cost ($)"
-                       Grid.Row="3"
-                        
-                       />
-                <Label Content="Cost per Square Foot ($)"
-                       Grid.Row="4"
-                        
-                       />
-                <TextBox x:Name="TotalMaterialCostbrkpX"
-                         IsEnabled="False"
-                         VerticalContentAlignment="Center"
-                         Grid.Row="0"
-                         Margin="5,16,5,6"
-                         Grid.Column="2"
-                         Height="25" Width="150"
-                         Text="{Binding TotalMaterialCost,
-                    UpdateSourceTrigger=PropertyChanged,StringFormat='c'}"/>
-                <TextBox x:Name="TotalWeightbrkpX"
-                         IsEnabled="False" Grid.Row="1" 
-                         Grid.Column="2"
-                         Margin="5,1,5,6"
-                         VerticalContentAlignment="Center"
-                         Text="{Binding TotalWeightbrkp,StringFormat=N2,
-                    UpdateSourceTrigger=PropertyChanged}" Height="25" Width="150" />
-                <TextBox x:Name="TotalFreightCostBrkpX"
-                         IsEnabled="False"
-                         Grid.Row="2"
-                         Margin="5,0,5,5"
-                         Grid.Column="2"
-                         VerticalContentAlignment="Center"
-                         Text="{Binding TotalFreightCostBrkp,
-                    UpdateSourceTrigger=PropertyChanged,StringFormat='c'}" Height="25" Width="150" />
-                <TextBox x:Name="TotalSubContractLaborCostBrkpX"
-                         IsEnabled="False"
-                         Grid.Row="3"
-                         Margin="5,0,5,5"
-                         VerticalContentAlignment="Center"
-                         Grid.Column="2"
-                         Text="{Binding TotalSubContractLaborCostBrkp,StringFormat='c',
-                    UpdateSourceTrigger=PropertyChanged}" Height="25" Width="150" />
-                <TextBox x:Name="CostpersqFeetX"
-                         IsEnabled="False"
-                         Grid.Row="4"
-                         Margin="5,0,5,5"
-                         VerticalContentAlignment="Center"
-                         Grid.Column="2"
-                         Text="{Binding CostPerSquareFeet,StringFormat='c',
-                    UpdateSourceTrigger=PropertyChanged}" Height="25" Width="150" />
+                <Label
+                    Grid.Row="0"
+                    Margin="0,15,5,5"
+                    Content="Total Material Cost ($)" />
+                <Label Grid.Row="1" Content="Total Weight " />
+                <Label Grid.Row="2" Content="Total Freight Cost ($)" />
+
+                <Label Grid.Row="3" Content="Total Sub Contract Labor Cost ($)" />
+                <Label Grid.Row="4" Content="Cost per Square Foot ($)" />
+                <TextBox
+                    x:Name="TotalMaterialCostbrkpX"
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Width="150"
+                    Height="25"
+                    Margin="5,16,5,6"
+                    VerticalContentAlignment="Center"
+                    IsEnabled="False"
+                    Text="{Binding TotalMaterialCost, UpdateSourceTrigger=PropertyChanged, StringFormat='c'}" />
+                <TextBox
+                    x:Name="TotalWeightbrkpX"
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Width="150"
+                    Height="25"
+                    Margin="5,1,5,6"
+                    VerticalContentAlignment="Center"
+                    IsEnabled="False"
+                    Text="{Binding TotalWeightbrkp, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox
+                    x:Name="TotalFreightCostBrkpX"
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    Width="150"
+                    Height="25"
+                    Margin="5,0,5,5"
+                    VerticalContentAlignment="Center"
+                    IsEnabled="False"
+                    Text="{Binding TotalFreightCostBrkp, UpdateSourceTrigger=PropertyChanged, StringFormat='c'}" />
+                <TextBox
+                    x:Name="TotalSubContractLaborCostBrkpX"
+                    Grid.Row="3"
+                    Grid.Column="2"
+                    Width="150"
+                    Height="25"
+                    Margin="5,0,5,5"
+                    VerticalContentAlignment="Center"
+                    IsEnabled="False"
+                    Text="{Binding TotalSubContractLaborCostBrkp, StringFormat='c', UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox
+                    x:Name="CostpersqFeetX"
+                    Grid.Row="4"
+                    Grid.Column="2"
+                    Width="150"
+                    Height="25"
+                    Margin="5,0,5,5"
+                    VerticalContentAlignment="Center"
+                    IsEnabled="False"
+                    Text="{Binding CostPerSquareFeet, StringFormat='c', UpdateSourceTrigger=PropertyChanged}" />
 
             </Grid>
         </GroupBox>
-        <!--Row 4 ELement End -->
+        <!--  Row 4 ELement End  -->
 
-        <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal"
-                    HorizontalAlignment="Right">
+        <StackPanel
+            Grid.Row="4"
+            Grid.Column="1"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
             <!--<Button Content="Fill Grid" Command="{Binding FillValues}"
-                    Height="30" 
+                    Height="30"
                     Margin="10,5,25,5"
                     VerticalAlignment="Bottom"
                     HorizontalAlignment="Right"
                     Width="100" Background="LightGreen"/>-->
-            <Button Command="{Binding CalculateCostCommand}"                   
-                    Height="35" Margin="0,5,22,5"
-                    
-                    HorizontalAlignment="Right"
-                    >
+            <Button
+                Height="35"
+                Margin="0,5,22,5"
+                HorizontalAlignment="Right"
+                Command="{Binding CalculateCostCommand}">
 
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Calculator"
-                                            HorizontalAlignment="Left"
-                                            VerticalAlignment="Center"/>
-                        <TextBlock Text="Calculate" VerticalAlignment="Center"
-                                HorizontalAlignment="Left"
-                                Margin="5" FontWeight="bold"/>
+                        <materialDesign:PackIcon
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Kind="Calculator" />
+                        <TextBlock
+                            Margin="5"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            FontWeight="bold"
+                            Text="Calculate" />
 
                     </StackPanel>
                 </Button.Content>
             </Button>
         </StackPanel>
-            
-        
-        <!--Column 1 Element-->
+
+
+        <!--  Column 1 Element  -->
     </Grid>
 </UserControl>

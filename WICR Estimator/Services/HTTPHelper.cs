@@ -625,6 +625,98 @@ namespace WICR_Estimator.Services
                 }
             }
         }
+
+        public async static Task<SuccessResponse> AddAdminUser(UserModel user)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BASEURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await client.PostAsJsonAsync<UserModel>("authenticate/register-admin", user);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<SuccessResponse>();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+        
+        public async static Task<SuccessResponse> AddUser(UserModel user)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BASEURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await client.PostAsJsonAsync<UserModel>("authenticate/register", user);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<SuccessResponse>();
+                }
+                else
+                {
+                    return await response.Content.ReadAsAsync<SuccessResponse>();
+                }
+            }
+        }
+        public async static Task<IList<UserWithRoles>> GetAllUsers()
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BASEURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await client.GetAsync("authenticate/users");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<IList<UserWithRoles>>();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+        public async static Task<SuccessResponse> UpdateUser(UpdateUserModel updateUserModel, string userType)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BASEURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await client.PutAsJsonAsync<UpdateUserModel>("authenticate/" + userType,updateUserModel);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<SuccessResponse>();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+        public async static Task<SuccessResponse> DeleteUser( string username)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BASEURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await client.DeleteAsync("authenticate/" + username);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<SuccessResponse>();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
         #endregion
 
 

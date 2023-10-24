@@ -37,6 +37,7 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("Staples", "BOX");
             materialNames.Add("PD Resin (If dimension exceeds 20 ft in any direction or for below tile)", "5 GAL PAIL");
             materialNames.Add("3/4 oz. Fiberglass", "2000 SQFT ROLL");
+            materialNames.Add("Underlay over rough surface (Resistite regular 150 sq ft per mix)", "55 LB BAG");
             materialNames.Add("GU80-1 grey Base Coat", "50LB BAG");
             materialNames.Add("GU80-1 grey skim coat", "50LB BAG");
             materialNames.Add("GU80-1 top coat texture coat semi-smooth or knockdown", "50LB BAG");
@@ -172,6 +173,7 @@ namespace WICR_Estimator.ViewModels
                 case "2.5 Galvanized Lathe":
                 case "GS13 Clear Sealer":
                 case "Select Y for protection coat over membrane below tile (GU80-1 TOP COAT)":
+                case "Underlay over rough surface (Resistite regular 150 sq ft per mix)":
                     return true;
                 default:
                     return false;   

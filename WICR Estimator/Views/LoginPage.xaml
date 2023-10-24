@@ -1,68 +1,93 @@
-﻿<UserControl x:Class="WICR_Estimator.Views.LoginPage"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WICR_Estimator"
-             mc:Ignorable="d" 
-             Background="{DynamicResource MaterialDesignPaper}"
-              FontFamily="{DynamicResource MaterialDesignFont}"
-              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-              TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-             TextElement.FontWeight="Regular"
-             TextElement.FontSize="13"
-             TextOptions.TextFormattingMode="Ideal"
-             TextOptions.TextRenderingMode="Auto"
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="{StaticResource  PrimaryHueDarkBrush}">
-        
-        <Rectangle Width="380" Height="400" 
-                   Fill="{StaticResource   PrimaryHueLightBrush}"
-                   Effect="{DynamicResource MaterialDesignShadowDepth5}"
-                   RadiusX="13.66" RadiusY="13.66" >
-           
-        </Rectangle>
-        <Ellipse Width="140" Height="140" Margin="0,0,0,400"
-                 Effect="{DynamicResource MaterialDesignShadowDepth5}">
+﻿<UserControl
+    x:Class="WICR_Estimator.Views.LoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WICR_Estimator"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
+    <Grid Background="{StaticResource PrimaryHueDarkBrush}">
+
+        <Rectangle
+            Width="380"
+            Height="400"
+            Effect="{DynamicResource MaterialDesignShadowDepth5}"
+            Fill="{StaticResource PrimaryHueLightBrush}"
+            RadiusX="13.66"
+            RadiusY="13.66" />
+        <Ellipse
+            Width="140"
+            Height="140"
+            Margin="0,0,0,400"
+            Effect="{DynamicResource MaterialDesignShadowDepth5}">
             <Ellipse.Fill>
                 <ImageBrush ImageSource="/Images/wicr_bg.png" />
             </Ellipse.Fill>
         </Ellipse>
-        
-        
-        <Grid Width="280" Height="350" VerticalAlignment="Center" 
-              Margin="0,150,0,0" >
+
+
+        <Grid
+            Width="280"
+            Height="350"
+            Margin="0,150,0,0"
+            VerticalAlignment="Center">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <TextBlock Text="LOGIN" VerticalAlignment="top" 
-                       HorizontalAlignment="Center" 
-                        FontWeight="Bold" FontSize="20"
-                       Foreground="{StaticResource PrimaryHueDarkBrush}" />
-            <StackPanel VerticalAlignment="Center"  Height="170" Grid.Row="1">
-                <TextBox materialDesign:HintAssist.Hint="Username" Margin="5,10,5,5"
-                         Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
-                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"  />
-                <PasswordBox materialDesign:HintAssist.Hint="Password" Margin="5,20,5,5"
-                             x:Name="passwordbox" 
-                         
-                             Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" />
-                <TextBlock Text="{Binding ErrorMessage}" TextWrapping="Wrap" HorizontalAlignment="Center"
-                           Margin="0,5,0,0"/>
-                <CheckBox Content="Save credentials" 
-                          HorizontalAlignment="Left"
-                          Style="{StaticResource MaterialDesignAccentCheckBox}"
-                          IsChecked="{Binding SaveCredentials}"/>
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="top"
+                FontSize="20"
+                FontWeight="Bold"
+                Foreground="{StaticResource PrimaryHueDarkBrush}"
+                Text="LOGIN" />
+            <StackPanel
+                Grid.Row="1"
+                Height="170"
+                VerticalAlignment="Center">
+                <TextBox
+                    Margin="5,10,5,5"
+                    materialDesign:HintAssist.Hint="Username"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                    Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" />
+                <PasswordBox
+                    x:Name="passwordbox"
+                    Margin="5,20,5,5"
+                    materialDesign:HintAssist.Hint="Password"
+                    Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" />
+                <TextBlock
+                    Margin="0,5,0,0"
+                    HorizontalAlignment="Center"
+                    Text="{Binding ErrorMessage}"
+                    TextWrapping="Wrap" />
+                <CheckBox
+                    HorizontalAlignment="Left"
+                    Content="Save credentials"
+                    IsChecked="{Binding SaveCredentials}"
+                    Style="{StaticResource MaterialDesignAccentCheckBox}" />
             </StackPanel>
-            <Button VerticalAlignment="Center" Content="Login"  Grid.Row="2" 
-                    Width="120"
-                    Margin="0,10"
-                    Command="{Binding SignInCommand}"
-                    CommandParameter="{Binding ElementName=passwordbox}"
-                    Height="37" Effect="{DynamicResource MaterialDesignShadowDepth2}" 
-                     />
+            <Button
+                Grid.Row="2"
+                Width="120"
+                Height="37"
+                Margin="0,10"
+                VerticalAlignment="Center"
+                Command="{Binding SignInCommand}"
+                CommandParameter="{Binding ElementName=passwordbox}"
+                Content="Login"
+                Effect="{DynamicResource MaterialDesignShadowDepth2}" />
         </Grid>
 
         <!--<Button  Background="White" Foreground="#FF391678" Content="Signup" Margin="76,437,76,15" Effect="{DynamicResource MaterialDesignShadowDepth2}" BorderBrush="#FF391678" />-->

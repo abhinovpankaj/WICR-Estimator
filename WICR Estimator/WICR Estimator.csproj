@@ -34,7 +34,7 @@
     <MinimumRequiredVersion>1.0.0.90</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>99</ApplicationRevision>
+    <ApplicationRevision>100</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -245,6 +245,7 @@
     <Compile Include="ViewModels\PaletteSpecifics\PaletteHelperExtension.cs" />
     <Compile Include="ViewModels\PaletteSpecifics\PaletteSelectorViewModel.cs" />
     <Compile Include="ViewModels\ParasealGMMaterialViewModel.cs" />
+    <Compile Include="ViewModels\UserPageViewModel.cs" />
     <Compile Include="Views\DataViews\LaborFactorsDetailsPage.xaml.cs">
       <DependentUpon>LaborFactorsDetailsPage.xaml</DependentUpon>
     </Compile>
@@ -355,6 +356,9 @@
     <Compile Include="Views\SystemMaterialPage.xaml.cs">
       <DependentUpon>SystemMaterialPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\UsersPage.xaml.cs">
+      <DependentUpon>UsersPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WaitWindow.xaml.cs">
       <DependentUpon>WaitWindow.xaml</DependentUpon>
     </Compile>
@@ -447,6 +451,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SystemMaterialPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UsersPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

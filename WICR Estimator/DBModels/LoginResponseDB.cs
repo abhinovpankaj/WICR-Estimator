@@ -13,4 +13,10 @@ namespace WICR_Estimator.DBModels
         public List<string> Roles { get; set; }
 
     }
+
+    public class SuccessResponse
+    {
+        public string Status { get; set; }
+        public string Message { get; set; }
+    }   
 }

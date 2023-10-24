@@ -34,6 +34,7 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("Base Coat w Dexcelcrete Gray Powder", "50 LB BAG");
             materialNames.Add("Slurry with Dexcelcrete Gray Powder", "50 LB BAG");
             materialNames.Add("Texture with Dexcelcrete Gray Powder", "50 LB BAG");
+            materialNames.Add("Underlay over rough surface (Resistite regular 150 sq ft per mix)", "55 LB BAG");
             materialNames.Add("Dexcelcrete Liquid Adhesive", "5 GAL PAIL");
             materialNames.Add("(Stairs Only) Base Coat with Sand Cement and Acrylic Binder", "50LB BAG");
             materialNames.Add("(Stairs Only) Base Coat with Dexcelcrete Gray Powder", "50LB BAG");
@@ -201,6 +202,7 @@ namespace WICR_Estimator.ViewModels
                 case "(Stairs Only) Texture with Dexcelcrete Gray Powder and Liquid Adhesive":
                 case "Texture with Dexcelcrete Gray Powder":
                 case "Vista Paint Acripoxy (TOPCOAT)":
+                case "Underlay over rough surface (Resistite regular 150 sq ft per mix)":
                     return true;
                 default:
                     return false;
@@ -289,6 +291,7 @@ namespace WICR_Estimator.ViewModels
                 case "Vista Paint Acripoxy (TOPCOAT)":
                 case "(Stairs Only) Texture with Dexcelcrete Gray Powder and Liquid Adhesive":
                 case "Dexcelent II Final Coat (TOPCOAT)":
+                case "Underlay over rough surface (Resistite regular 150 sq ft per mix)":
                     return riserCount*stairWidth*2;
                 case "Stair Nosing":
                     return riserCount * stairWidth;

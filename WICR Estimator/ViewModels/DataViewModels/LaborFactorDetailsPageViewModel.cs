@@ -524,6 +524,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
         public LaborFactorDetailsPageViewModel()
         {
             getdata();
+            
         }
         private async void getdata()
         {
@@ -533,6 +534,7 @@ namespace WICR_Estimator.ViewModels.DataViewModels
                 await GetProjects();
                 await GetLaborFactors();
                 await GetFreightFactors();
+                var result = await HTTPHelper.GetAllUsers();
             }
             foreach (var item in Projects)
             {

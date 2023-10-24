@@ -1,19 +1,21 @@
-﻿<UserControl x:Class="WICR_Estimator.Views.DataViews.MetalDetailsPage"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WICR_Estimator.Views.DataViews"
-             mc:Ignorable="d" 
-             d:DesignHeight="1000" d:DesignWidth="1300"
-             Background="{DynamicResource MaterialDesignPaper}"
-              FontFamily="{DynamicResource MaterialDesignFont}"
-              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-              TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-             TextElement.FontWeight="Regular"
-             TextElement.FontSize="13"
-             TextOptions.TextFormattingMode="Ideal"
-             TextOptions.TextRenderingMode="Auto">
+﻿<UserControl
+    x:Class="WICR_Estimator.Views.DataViews.MetalDetailsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WICR_Estimator.Views.DataViews"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="1000"
+    d:DesignWidth="1300"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
     <UserControl.Resources>
         <Style TargetType="{x:Type Slider}">
             <Style.Resources>
@@ -40,14 +42,28 @@
                                 <ColumnDefinition />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox Grid.RowSpan="2"  Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                             Height="Auto" materialDesign:HintAssist.Hint="%" 
-                             Margin="0" Padding="0" VerticalAlignment="Stretch" VerticalContentAlignment="Center"
-                             Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Value,StringFormat=N2}" />
-                            <RepeatButton Grid.Row="0" Grid.Column="1" Command="{x:Static Slider.IncreaseSmall}" Style="{StaticResource RepeatButtonStyle}">
+                            <TextBox
+                                Grid.RowSpan="2"
+                                Height="Auto"
+                                Margin="0"
+                                Padding="0"
+                                VerticalAlignment="Stretch"
+                                VerticalContentAlignment="Center"
+                                materialDesign:HintAssist.Hint="%"
+                                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Value, StringFormat=N2}" />
+                            <RepeatButton
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Command="{x:Static Slider.IncreaseSmall}"
+                                Style="{StaticResource RepeatButtonStyle}">
                                 <Path Data="M4,0 L0,4 8,4 Z" Fill="Black" />
                             </RepeatButton>
-                            <RepeatButton Grid.Row="1" Grid.Column="1" Command="{x:Static Slider.DecreaseSmall}" Style="{StaticResource RepeatButtonStyle}">
+                            <RepeatButton
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Command="{x:Static Slider.DecreaseSmall}"
+                                Style="{StaticResource RepeatButtonStyle}">
                                 <Path Data="M0,0 L4,4 8,0 Z" Fill="Black" />
                             </RepeatButton>
                             <Border x:Name="TrackBackground" Visibility="Collapsed">
@@ -60,69 +76,77 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-    <Grid >
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <materialDesign:ColorZone Margin="10"
-                      Mode="PrimaryLight"
-                      Padding="16">
-            <StackPanel
-                            Orientation="Horizontal">
-                <materialDesign:PackIcon Kind="Update"
-                                             VerticalAlignment="Center"/>
-                <TextBlock VerticalAlignment="Center"
-                          Margin="16 0 0 0">
-                       Manage Metal Prices
+        <materialDesign:ColorZone
+            Margin="10"
+            Padding="16"
+            Mode="PrimaryLight">
+            <StackPanel Orientation="Horizontal">
+                <materialDesign:PackIcon VerticalAlignment="Center" Kind="Update" />
+                <TextBlock Margin="16,0,0,0" VerticalAlignment="Center">
+                    Manage Metal Prices
                 </TextBlock>
-              
+
             </StackPanel>
         </materialDesign:ColorZone>
-        <StackPanel Orientation="Horizontal"
-                         Grid.Row="1" Margin="10">
-            
-            <TextBox Text="{Binding   SearchText,UpdateSourceTrigger=PropertyChanged}"
-                                 Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                                 VerticalContentAlignment="Center"
-                          materialDesign:HintAssist.Hint="Metal Name"
-                                 materialDesign:TextFieldAssist.HasClearButton="True"
-                         Width="350"
-                         Margin="100,10,10,10"
-                         HorizontalAlignment="Left"/>
+        <StackPanel
+            Grid.Row="1"
+            Margin="10"
+            Orientation="Horizontal">
+
+            <TextBox
+                Width="350"
+                Margin="100,10,10,10"
+                HorizontalAlignment="Left"
+                VerticalContentAlignment="Center"
+                materialDesign:HintAssist.Hint="Metal Name"
+                materialDesign:TextFieldAssist.HasClearButton="True"
+                Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
             <StackPanel>
-                <TextBlock Margin="10" FontWeight="SemiBold"
-                       Text="Metal Material Type"/>
-                <ComboBox Text="{Binding MetalType,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left"
-                          Margin="10,0,0,10"
-                          
-                          Width="180">
-                    <ComboBoxItem Content="16oz Copper"/>
-                    <ComboBoxItem Content="24ga. Galvanized Primed Steel" 
-                                  IsSelected="True"/>
-                    <ComboBoxItem Content="26 ga. Type 304 Stainless Steel"/>
+                <TextBlock
+                    Margin="10"
+                    FontWeight="SemiBold"
+                    Text="Metal Material Type" />
+                <ComboBox
+                    Width="180"
+                    Margin="10,0,0,10"
+                    HorizontalAlignment="Left"
+                    Text="{Binding MetalType, UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBoxItem Content="16oz Copper" />
+                    <ComboBoxItem Content="24ga. Galvanized Primed Steel" IsSelected="True" />
+                    <ComboBoxItem Content="26 ga. Type 304 Stainless Steel" />
                 </ComboBox>
             </StackPanel>
             <StackPanel>
-                <TextBlock  Margin="10" FontWeight="SemiBold" 
-                       Text="Metal Vendor Name"/>
-                <ComboBox Width="180" HorizontalAlignment="Left"
-                          Margin="10,0,0,10"
-                          Text="{Binding VendorName,UpdateSourceTrigger=PropertyChanged}">
-                    <ComboBoxItem Content="Chivon"/>
-                    <ComboBoxItem Content="Thunder Bird"/>
+                <TextBlock
+                    Margin="10"
+                    FontWeight="SemiBold"
+                    Text="Metal Vendor Name" />
+                <ComboBox
+                    Width="180"
+                    Margin="10,0,0,10"
+                    HorizontalAlignment="Left"
+                    Text="{Binding VendorName, UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBoxItem Content="Chivon" />
+                    <ComboBoxItem Content="Thunder Bird" />
                 </ComboBox>
-                
+
             </StackPanel>
-            
-            <Button Margin="30,10" HorizontalAlignment="Right"
-                                Command="{Binding SearchCommand}">
+
+            <Button
+                Margin="30,10"
+                HorizontalAlignment="Right"
+                Command="{Binding SearchCommand}">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Check"
-                                             VerticalAlignment="Center"/>
-                        <TextBlock Text=" Apply" Margin="10,0"/>
+                        <materialDesign:PackIcon VerticalAlignment="Center" Kind="Check" />
+                        <TextBlock Margin="10,0" Text=" Apply" />
                     </StackPanel>
 
                 </Button.Content>
@@ -132,72 +156,78 @@
         </StackPanel>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width=".35*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width=".35*" />
             </Grid.ColumnDefinitions>
             <StackPanel>
-                <ScrollViewer VerticalScrollBarVisibility="Auto"
-                                  Height="450">
-                    <DataGrid AutoGenerateColumns="False" 
+                <ScrollViewer Height="450" VerticalScrollBarVisibility="Auto">
+                    <DataGrid
+                        Name="MaterialGrid"
+                        Margin="10"
                         HorizontalAlignment="Left"
-                        Name="MaterialGrid" 
-                        CanUserSortColumns="True"
-                        Margin="10"        
-                          
-                        VerticalAlignment="Top" 
+                        VerticalAlignment="Top"
+                        AutoGenerateColumns="False"
                         CanUserAddRows="False"
-                        FrozenColumnCount ="1" 
-                        SelectedItem="{Binding SelectedMetal}"
-                        ItemsSource="{Binding FilteredSystemMetals,UpdateSourceTrigger=PropertyChanged}" >
+                        CanUserSortColumns="True"
+                        FrozenColumnCount="1"
+                        ItemsSource="{Binding FilteredSystemMetals, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding SelectedMetal}">
                         <DataGrid.Columns>
                             <DataGridCheckBoxColumn Binding="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}">
                                 <DataGridCheckBoxColumn.Header>
-                                    <CheckBox IsChecked="{Binding Path=DataContext.AllSelected,
-                                                           UpdateSourceTrigger=PropertyChanged,
-                                                           RelativeSource={RelativeSource FindAncestor,
-                                                               AncestorType={x:Type DataGrid}}}" />
+                                    <CheckBox IsChecked="{Binding Path=DataContext.AllSelected, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" />
                                 </DataGridCheckBoxColumn.Header>
                                 <DataGridCheckBoxColumn.ElementStyle>
-                                    <Style TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}">
-
-                                    </Style>
+                                    <Style BasedOn="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}" TargetType="CheckBox" />
                                 </DataGridCheckBoxColumn.ElementStyle>
                             </DataGridCheckBoxColumn>
-                            
-                            <materialDesign:DataGridTextColumn Header="Metal Name"
-                                                               IsReadOnly="True"
-                                                        Binding="{ Binding MetalName}"/>
-                            <materialDesign:DataGridTextColumn Header="Units" IsReadOnly="True"
-                                                               ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
-      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
-                                                        Binding="{ Binding Units}"/>
-                            <materialDesign:DataGridTextColumn Header="Metal Price" IsReadOnly="True"
-                                                               ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
-      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
-                                                        Binding="{ Binding MetalPrice}"/>
-                            <materialDesign:DataGridTextColumn Header="Prouction Rate" IsReadOnly="True"
-                                                               ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
-      EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
-                                                        Binding="{ Binding ProductionRate}"/>
-                            <materialDesign:DataGridTextColumn Header="Metal Type"
-                                                               IsReadOnly="True"
-                                                        Binding="{ Binding MetalType}"/>
-                            <materialDesign:DataGridTextColumn Header="Vendor"
-                                                               IsReadOnly="True"
-                                                        Binding="{ Binding Vendor}"/>
-                            
+
+                            <materialDesign:DataGridTextColumn
+                                Binding="{Binding MetalName}"
+                                Header="Metal Name"
+                                IsReadOnly="True" />
+                            <materialDesign:DataGridTextColumn
+                                Binding="{Binding Units}"
+                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                Header="Units"
+                                IsReadOnly="True" />
+                            <materialDesign:DataGridTextColumn
+                                Binding="{Binding MetalPrice}"
+                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                Header="Metal Price"
+                                IsReadOnly="True" />
+                            <materialDesign:DataGridTextColumn
+                                Binding="{Binding ProductionRate}"
+                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                Header="Prouction Rate"
+                                IsReadOnly="True" />
+                            <materialDesign:DataGridTextColumn
+                                Binding="{Binding MetalType}"
+                                Header="Metal Type"
+                                IsReadOnly="True" />
+                            <materialDesign:DataGridTextColumn
+                                Binding="{Binding Vendor}"
+                                Header="Vendor"
+                                IsReadOnly="True" />
+
                         </DataGrid.Columns>
 
                     </DataGrid>
                 </ScrollViewer>
-                <StackPanel Orientation="Horizontal" Grid.Row="1"
-                            HorizontalAlignment="Right">
-                    <ComboBox Width="200" Margin="10"
-                              
-                                  materialDesign:HintAssist.Hint="Select Factor"
-                                  materialDesign:HintAssist.HintOpacity=".5"
-                                  IsEditable="False"
-                                  SelectedItem="{Binding SelectedFactor}">
+                <StackPanel
+                    Grid.Row="1"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+                    <ComboBox
+                        Width="200"
+                        Margin="10"
+                        materialDesign:HintAssist.Hint="Select Factor"
+                        materialDesign:HintAssist.HintOpacity=".5"
+                        IsEditable="False"
+                        SelectedItem="{Binding SelectedFactor}">
                         <ComboBoxItem IsSelected="True" Opacity=".5">
                             Select Factor
                         </ComboBoxItem>
@@ -207,85 +237,134 @@
                         <ComboBoxItem>
                             Production Rate
                         </ComboBoxItem>
-                        
+
                     </ComboBox>
-                    <Slider Maximum="100" Minimum="-50"
-                                Foreground="Black"  TickFrequency="0.05"
-                                Width="100" Value="{Binding UpdateFactor}"
-                                Margin="10"></Slider>
-                    <Button 
-                        Margin="10" Command="{Binding UpdateMetalsCommand}"
-                                HorizontalAlignment="Right" Width="150">
+                    <Slider
+                        Width="100"
+                        Margin="10"
+                        Foreground="Black"
+                        Maximum="100"
+                        Minimum="-50"
+                        TickFrequency="0.05"
+                        Value="{Binding UpdateFactor}" />
+                    <Button
+                        Width="150"
+                        Margin="10"
+                        HorizontalAlignment="Right"
+                        Command="{Binding UpdateMetalsCommand}">
                         <Button.Content>
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Update"
-                                                VerticalAlignment="Center"/>
-                                <TextBlock Text="Update All" Margin="5,0"/>
+                                <materialDesign:PackIcon VerticalAlignment="Center" Kind="Update" />
+                                <TextBlock Margin="5,0" Text="Update All" />
                             </StackPanel>
 
                         </Button.Content>
                     </Button>
                 </StackPanel>
-                
+
             </StackPanel>
 
-            <StackPanel Grid.Column="1" HorizontalAlignment="Center"
-                            Margin="10,0,10,0">
-                <TextBlock Text="{Binding SelectedMetal.MetalName}"
-                            FontWeight="Bold" TextWrapping="Wrap"
-                                HorizontalAlignment="Center"/>
+            <StackPanel
+                Grid.Column="1"
+                Margin="10,0,10,0"
+                HorizontalAlignment="Center">
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    FontWeight="Bold"
+                    Text="{Binding SelectedMetal.MetalName}"
+                    TextWrapping="Wrap" />
                 <Grid HorizontalAlignment="Center">
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width=".6*"/>
-                        <ColumnDefinition Width=".4*"/>
+                        <ColumnDefinition Width=".6*" />
+                        <ColumnDefinition Width=".4*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <Label Content="Metal Price" Margin="2" VerticalAlignment="Center"
-                                    HorizontalAlignment="Center"/>
-                    <Label Content="Units"  Margin="2" VerticalAlignment="Center"
-                                    Grid.Row="1"
-                                    HorizontalAlignment="Center"/>
-                    <Label Content="Production Rate"  Margin="2" VerticalAlignment="Center"
-                                    Grid.Row="2"
-                                    HorizontalAlignment="Center"/>
-                    <Label Content="Metal Type"  Margin="2" VerticalAlignment="Center" Grid.Row="3"
-                                    HorizontalAlignment="Center"/>
-                    <Label Content="Vendor"  Margin="2" VerticalAlignment="Center" Grid.Row="4"
-                                    HorizontalAlignment="Center"/>
-                    
+                    <Label
+                        Margin="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="Metal Price" />
+                    <Label
+                        Grid.Row="1"
+                        Margin="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="Units" />
+                    <Label
+                        Grid.Row="2"
+                        Margin="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="Production Rate" />
+                    <Label
+                        Grid.Row="3"
+                        Margin="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="Metal Type" />
+                    <Label
+                        Grid.Row="4"
+                        Margin="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="Vendor" />
 
-                    <TextBox Text="{Binding SelectedMetal.MetalPrice}"
-                                        Margin="2" VerticalAlignment="Center"
-                                        Grid.Column="1"  
-                                    HorizontalAlignment="Center" Width="100"/>
-                    <TextBox Text="{Binding SelectedMetal.Units}" Width="100"
-                                        VerticalAlignment="Center" Grid.Column="1" Grid.Row="1"
-                                    HorizontalAlignment="Center"/>
-                    <TextBox Text="{Binding SelectedMetal.ProductionRate}" Width="100"
-                                        VerticalAlignment="Center"  Grid.Column="1" Grid.Row="2"
-                                    HorizontalAlignment="Center"/>
-                    <TextBox Text="{ Binding SelectedMetal.MetalType}" Width="100" VerticalAlignment="Center"  Grid.Column="1" Grid.Row="3"
-                                    HorizontalAlignment="Center"/>
-                    <TextBox Text="{ Binding SelectedMetal.Vendor}" Width="100" VerticalAlignment="Center"  Grid.Column="1" Grid.Row="4"
-                                    HorizontalAlignment="Center"/>
-                   
+
+                    <TextBox
+                        Grid.Column="1"
+                        Width="100"
+                        Margin="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Text="{Binding SelectedMetal.MetalPrice}" />
+                    <TextBox
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Width="100"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Text="{Binding SelectedMetal.Units}" />
+                    <TextBox
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Width="100"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Text="{Binding SelectedMetal.ProductionRate}" />
+                    <TextBox
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Width="100"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Text="{Binding SelectedMetal.MetalType}" />
+                    <TextBox
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Width="100"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Text="{Binding SelectedMetal.Vendor}" />
+
 
                 </Grid>
-                <Button Margin="10" Command="{Binding UpdateMetalCommand}"
-                            HorizontalAlignment="Right" Width="100">
+                <Button
+                    Width="100"
+                    Margin="10"
+                    HorizontalAlignment="Right"
+                    Command="{Binding UpdateMetalCommand}">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Update"
-                                            VerticalAlignment="Center"/>
-                            <TextBlock Text="Update" Margin="5,0"/>
+                            <materialDesign:PackIcon VerticalAlignment="Center" Kind="Update" />
+                            <TextBlock Margin="5,0" Text="Update" />
                         </StackPanel>
 
                     </Button.Content>
