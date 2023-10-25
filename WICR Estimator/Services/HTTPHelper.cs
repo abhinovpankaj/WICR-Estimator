@@ -634,14 +634,9 @@ namespace WICR_Estimator.Services
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 HttpResponseMessage response = await client.PostAsJsonAsync<UserModel>("authenticate/register-admin", user);
-                if (response.IsSuccessStatusCode)
-                {
-                    return await response.Content.ReadAsAsync<SuccessResponse>();
-                }
-                else
-                {
-                    return null;
-                }
+                
+                return await response.Content.ReadAsAsync<SuccessResponse>();
+                
             }
         }
         
@@ -689,14 +684,9 @@ namespace WICR_Estimator.Services
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 HttpResponseMessage response = await client.PutAsJsonAsync<UpdateUserModel>("authenticate/" + userType,updateUserModel);
-                if (response.IsSuccessStatusCode)
-                {
-                    return await response.Content.ReadAsAsync<SuccessResponse>();
-                }
-                else
-                {
-                    return null;
-                }
+                
+                return await response.Content.ReadAsAsync<SuccessResponse>();
+                
             }
         }
         public async static Task<SuccessResponse> DeleteUser( string username)
@@ -707,14 +697,9 @@ namespace WICR_Estimator.Services
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 HttpResponseMessage response = await client.DeleteAsync("authenticate/" + username);
-                if (response.IsSuccessStatusCode)
-                {
-                    return await response.Content.ReadAsAsync<SuccessResponse>();
-                }
-                else
-                {
-                    return null;
-                }
+                
+                return await response.Content.ReadAsAsync<SuccessResponse>();
+                
             }
         }
         #endregion

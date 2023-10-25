@@ -21,8 +21,11 @@ namespace WICR_Estimator.ViewModels
         {
             ActiveUsers = await HTTPHelper.GetAllUsers();
             ActiveUsers.ToList().ForEach(c => c.User.UserType = c.Roles.Contains("Admin")?"Admin":"User");
-            
+            UpdateStatusMessage = "";
+            AddStatusMessage="";
             OnPropertyChanged("ActiveUsers");
+            OnPropertyChanged("UpdateStatusMessage");
+            OnPropertyChanged("AddStatusMessage");
         }
 
         public IList<UserWithRoles> ActiveUsers { get; set; }
@@ -51,13 +54,14 @@ namespace WICR_Estimator.ViewModels
                         IsNewUser = true;
                         Email = "";
                         UserName = "";
-                        UserType = "User";
+                        MakeAdmin=false;
                     }
                     else
                     {
                         Email = _userWithRoles.User.Email;
                         UserName = _userWithRoles.User.Username;
                         UserType = _userWithRoles.User.UserType;
+                        MakeAdmin = _userWithRoles.User.UserType == "Admin";
                         Header = "Edit User";
                         ButtonText = "Save user";
                         IsNewUser = false;
@@ -67,6 +71,7 @@ namespace WICR_Estimator.ViewModels
                     OnPropertyChanged("Header");
                     OnPropertyChanged("ButtonText");
                     OnPropertyChanged("UpdateStatusMessage");
+                    OnPropertyChanged("MakeAdmin");
                 }
             }
         }
@@ -118,7 +123,7 @@ namespace WICR_Estimator.ViewModels
             var passwordBox = parameter as PasswordBox;
             var password = passwordBox.Password;
             UserModel userModel = new UserModel() { Username =NewUserName, Email = NewEmail, Password = password };
-            if (UserType == "Admin")
+            if (IsAdmin)
             {
                 response = await HTTPHelper.AddAdminUser(userModel);
             }
@@ -133,7 +138,19 @@ namespace WICR_Estimator.ViewModels
                 
             }
             else
+            {
                 AddStatusMessage = response.Message;
+                if (response.Status == "Success")
+                {
+                    FetchUsers();
+                    NewEmail = "";
+                    NewUserName = "";
+                    passwordBox.Clear();
+                    OnPropertyChanged("NewEmail");
+                    OnPropertyChanged("NewUserName");
+                }
+            }
+                
             OnPropertyChanged("AddStatusMessage");
         }
         private string _newUserName;
@@ -168,20 +185,30 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
+        
+        public bool MakeAdmin { get; set; }
         public bool IsAdmin { get; set; }
         private async void DeleteUser(object obj)
         {
             var user = obj as UserWithRoles;
-            if (user!=null)
+            
+            var response = await HTTPHelper.DeleteUser(UserName);
+            if (response == null)
             {
-                var response = await HTTPHelper.DeleteUser(user.User.Username);
-                if (response == null)
-                {
-                    UpdateStatusMessage = "Failed to delete the user";
-                    return;
-                }
+                UpdateStatusMessage = "Failed to delete the user";
+                    
+            }
+            else
+            {
                 UpdateStatusMessage = response.Message;
-            }            
+                if (response.Status=="Success")
+                {
+                    FetchUsers();
+                }
+                
+            }
+                    
+                       
         }
 
         private bool CanDeleteUser(object obj)
@@ -275,9 +302,9 @@ namespace WICR_Estimator.ViewModels
         {
             var passwordBox = parameter as PasswordBox;
             var password = passwordBox.Password;
-             
+            string userType = MakeAdmin ? "Admin" : "User"; 
             UpdateUserModel userModel = new UpdateUserModel() { NewEmail = Email, NewPassword = password, Username = UserName };
-            SuccessResponse response = await HTTPHelper.UpdateUser(userModel, UserType);
+            SuccessResponse response = await HTTPHelper.UpdateUser(userModel, userType);
             if (response == null)
             {
                 UpdateStatusMessage = "Failed to update the user";
@@ -286,9 +313,14 @@ namespace WICR_Estimator.ViewModels
             else
             {
                 UpdateStatusMessage = response.Message;
+                if (response.Status == "Success")
+                {
+                    FetchUsers();
+                   
+                }
             }
             
-           
+
             OnPropertyChanged("UpdateStatusMessage");
         }
     }
