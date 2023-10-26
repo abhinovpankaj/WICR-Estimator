@@ -39,11 +39,11 @@ namespace WICR_Estimator.ViewModels
         public static string filePath;
         public static bool isEstimateLoaded;
         //private static NotifyIcon statusNotifier;
-
+        public IList<string> ActiveUsers { get; set; }
         public HomeViewModel()
         {
             FillProjects();
-            
+            FetchUsers();
             Project.OnSelectedProjectChange += Project_OnSelectedProjectChange;
             
             SaveEstimate = new DelegateCommand(SaveProjectEstimate, canSaveEstimate);
@@ -59,6 +59,14 @@ namespace WICR_Estimator.ViewModels
 
             CheckPriceUpdate();
 
+        }
+        private async void FetchUsers()
+        {
+            var users = await HTTPHelper.GetAllUsers();
+            ActiveUsers= users.ToList().Select(c => c.User.Username).ToList();
+            
+            OnPropertyChanged("ActiveUsers");
+            
         }
 
         private void LoginPage_OnLoggedIn(object sender, EventArgs e)
@@ -581,7 +589,7 @@ namespace WICR_Estimator.ViewModels
                         item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
                         item.ProjectJobSetUp.EnableMoreMarkupCommand = new DelegateCommand(item.ProjectJobSetUp.CanAddMoreMarkup, item.ProjectJobSetUp.canAdd);
                         item.ProjectJobSetUp.GetOriginalName();
-                        //item.ProjectJobSetUp.UpdateJobSetup();
+                        item.ProjectJobSetUp.UpdateJobSetup();
                     }
                     if (item.MetalViewModel != null)
                     {
@@ -596,7 +604,6 @@ namespace WICR_Estimator.ViewModels
                     }
                     item.MaterialViewModel.CheckboxCommand = new DelegateCommand(item.MaterialViewModel.ApplyCheckUnchecks, item.MaterialViewModel.canApply);
 
-                    item.ProjectJobSetUp.UpdateJobSetup();
                     //keep other material and other labor materials in sync
 
                     var ot = item.MaterialViewModel.OtherLaborMaterials;
@@ -622,12 +629,13 @@ namespace WICR_Estimator.ViewModels
 
                         
                     }
-                    
-                    
+
+                    item.ProjectJobSetUp.UpdateJobSetup();
+
                     //ends
 
                     //item.MaterialViewModel.CalculateCost(null);
-                    
+
                     item.ProductVersion = ver;
                     //if (item.OriginalProjectName == "Reseal all systems" || item.OriginalProjectName == "Weather Wear" || item.OriginalProjectName == "Weather Wear Rehab" || item.OriginalProjectName == "Paraseal LG" || item.OriginalProjectName == "Barrier Guard")
                     //{

@@ -41,7 +41,7 @@
             Grid.Column="1"
             Margin="10,5"
             Style="{StaticResource MaterialDesignHeadline6TextBlock}"
-            Text="{Binding Header}" />
+            Text="Edit User" />
         <DataGrid
             Name="UsersGrid"
             Grid.Row="1"
@@ -156,21 +156,21 @@
                     Text="Username" />
                 <TextBlock
                     Grid.Row="1"
-                    Margin="2,10"
+                    Margin="2,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
                     Text="Email" />
                 <TextBlock
                     Grid.Row="2"
-                    Margin="2,10"
+                    Margin="2,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
                     Text="Password" />
                 <TextBlock
                     Grid.Row="3"
-                    Margin="2,10"
+                    Margin="2,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
@@ -178,7 +178,7 @@
                 <TextBox
                     Grid.Column="1"
                     Width="200"
-                    Margin="2,10"
+                    Margin="2,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     FontSize="16"
@@ -188,7 +188,7 @@
                     Grid.Row="1"
                     Grid.Column="1"
                     Width="200"
-                    Margin="2,10"
+                    Margin="2,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     FontSize="16"
@@ -198,7 +198,7 @@
                     Grid.Row="2"
                     Grid.Column="1"
                     Width="200"
-                    Margin="2,10"
+                    Margin="2,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     FontSize="16"
@@ -207,7 +207,7 @@
                     Grid.Row="3"
                     Grid.Column="1"
                     Width="200"
-                    Margin="2,10"
+                    Margin="2,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Content="Is Admin"
@@ -236,18 +236,19 @@
                     Grid.Row="5"
                     Grid.ColumnSpan="2"
                     Width="200"
-                    Margin="10,10"
+                    Margin="10,5"
                     Background="Red"
                     Command="{Binding DeleteUserCommand}"
                     Content="Delete User" />
-                <Label
+                <TextBlock
                     Grid.Row="6"
                     Grid.ColumnSpan="2"
                     Margin="5"
                     Background="LightYellow"
-                    Content="{Binding UpdateStatusMessage}"
                     FontSize="15"
-                    Style="{StaticResource MaterialDesignLabel}" />
+                    Style="{StaticResource MaterialDesignTextBlock}"
+                    Text="{Binding UpdateStatusMessage}"
+                    TextWrapping="Wrap" />
 
             </Grid>
             <TextBlock
@@ -272,28 +273,28 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock
-                    Margin="2,10"
+                    Margin="2,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
                     Text="Username" />
                 <TextBlock
                     Grid.Row="1"
-                    Margin="2,10"
+                    Margin="2,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
                     Text="Email" />
                 <TextBlock
                     Grid.Row="2"
-                    Margin="2,10"
+                    Margin="2,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
                     Text="Password" />
                 <TextBlock
                     Grid.Row="3"
-                    Margin="2,10"
+                    Margin="2,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
@@ -301,7 +302,7 @@
                 <TextBox
                     Grid.Column="1"
                     Width="200"
-                    Margin="2,10"
+                    Margin="2,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     FontSize="16"
@@ -310,7 +311,7 @@
                     Grid.Row="1"
                     Grid.Column="1"
                     Width="200"
-                    Margin="2,10"
+                    Margin="2,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     FontSize="16"
@@ -320,7 +321,7 @@
                     Grid.Row="2"
                     Grid.Column="1"
                     Width="200"
-                    Margin="2,10"
+                    Margin="2,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     FontSize="16"
@@ -330,7 +331,7 @@
                     Grid.Row="3"
                     Grid.Column="1"
                     Width="200"
-                    Margin="2,10"
+                    Margin="2,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Content="Is Admin"
@@ -341,18 +342,19 @@
                     Grid.Row="4"
                     Grid.ColumnSpan="2"
                     Width="200"
-                    Margin="10,20"
+                    Margin="10,5"
                     Command="{Binding AddUserCommand}"
                     CommandParameter="{Binding ElementName=newtxtPassword}"
                     Content="Add User" />
-                <Label
+                <TextBlock
                     Grid.Row="6"
                     Grid.ColumnSpan="2"
                     Margin="5"
                     Background="LightYellow"
-                    Content="{Binding AddStatusMessage}"
                     FontSize="15"
-                    Style="{StaticResource MaterialDesignLabel}" />
+                    Style="{StaticResource MaterialDesignTextBlock}"
+                    Text="{Binding AddStatusMessage}"
+                    TextWrapping="Wrap" />
 
             </Grid>
         </Grid>

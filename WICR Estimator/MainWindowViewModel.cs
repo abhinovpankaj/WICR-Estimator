@@ -80,7 +80,7 @@ namespace WICR_Estimator
         public MainWindowViewModel()
         {
             // Add available pages
-
+            IsUserAdmin = false;
             PageViewModels.Add(new HomeViewModel());
             PageViewModels.Add(new ProjectViewModel(HomeViewModel.MyselectedProjects));
             PageViewModels.Add(new MaterialDetailsPageViewModel());
@@ -276,13 +276,10 @@ namespace WICR_Estimator
 
                 IsUserLoggedIn = true;
                 LoginEnabled = false;
+                IsUserAdmin = user.IsAdmin;
+                Username = user.Username;
                 OnPropertyChanged("LoginEnabled");
                 OnPropertyChanged("IsUserLoggedIn");
-
-                IsUserAdmin = user.IsAdmin;
-
-
-                Username = user.Username;
                 OnPropertyChanged("Username");
                 OnPropertyChanged("IsUserAdmin");
 

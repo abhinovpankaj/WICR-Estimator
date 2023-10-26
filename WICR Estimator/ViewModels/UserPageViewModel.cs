@@ -207,8 +207,8 @@ namespace WICR_Estimator.ViewModels
                 }
                 
             }
-                    
-                       
+            OnPropertyChanged("UpdateStatusMessage");
+
         }
 
         private bool CanDeleteUser(object obj)

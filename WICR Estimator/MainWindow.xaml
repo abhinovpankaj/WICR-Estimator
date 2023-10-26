@@ -87,14 +87,18 @@
             </Style>
         </materialDesign:DrawerHost.Style>
         <materialDesign:DrawerHost.LeftDrawerContent>
-            <StackPanel Width="250" Background="{StaticResource PrimaryHueLightBrush}">
-
+            <Grid Width="250" Background="{StaticResource PrimaryHueLightBrush}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
                 <Image
                     Height="140"
                     Source="Images/WICR Logo.ico"
                     Stretch="Uniform" />
                 <ListView
                     x:Name="MenuList"
+                    Grid.Row="1"
                     Margin="10,20,0,0"
                     FontSize="18"
                     IsEnabled="{Binding IsUserLoggedIn}">
@@ -248,9 +252,19 @@
                     <ListViewItem
                         x:Name="Users"
                         Height="45"
-                        Padding="0"
+                        Padding="0" 
                         IsEnabled="{Binding IsUserAdmin}">
-                        <StackPanel Margin="25,0" Orientation="Horizontal">
+                        <ListViewItem.Style>
+                            <Style TargetType="ListViewItem">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsUserAdmin}" Value="False">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListViewItem.Style>
+                        <StackPanel Margin="25,0" Orientation="Horizontal"
+                                    IsEnabled="{Binding IsUserAdmin}">
                             <materialDesign:PackIcon
                                 Width="20"
                                 Height="20"
@@ -379,7 +393,7 @@
                         </StackPanel>
                     </ListViewItem>
                 </ListView>
-            </StackPanel>
+            </Grid>
         </materialDesign:DrawerHost.LeftDrawerContent>
 
         <materialDesign:DialogHost

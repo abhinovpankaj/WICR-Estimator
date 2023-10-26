@@ -428,9 +428,9 @@
                 <ComboBox
                     Width="180"
                     Margin="10,0,0,10"
-                    HorizontalAlignment="Left"
+                    HorizontalAlignment="Left" ItemsSource="{Binding ActiveUsers}"
                     Text="{Binding PreparedBy, UpdateSourceTrigger=PropertyChanged}">
-                    <ComboBoxItem Content="seank" />
+                    <!--<ComboBoxItem Content="seank" />
                     <ComboBoxItem Content="admin" />
                     <ComboBoxItem Content="stevend" />
                     <ComboBoxItem Content="mikes" />
@@ -450,7 +450,7 @@
                     <ComboBoxItem Content="matts" />
                     <ComboBoxItem Content="deionr" />
                     <ComboBoxItem Content="gregh" />
-                    <ComboBoxItem Content="ryand" />
+                    <ComboBoxItem Content="ryand" />-->
                 </ComboBox>
             </StackPanel>
             <DatePicker
