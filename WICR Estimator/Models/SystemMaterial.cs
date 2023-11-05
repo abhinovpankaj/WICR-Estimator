@@ -505,12 +505,10 @@ namespace WICR_Estimator.Models
                     Int32.TryParse(this.smunits, out unit);
                     if (unit != 0)
                     {
-                        ismaterialchecked = true;
-
+                        IsMaterialChecked = true;
                     }
                     else
-                        ismaterialchecked = false;
-                   
+                        IsMaterialChecked = false;                   
                 }
 
             
@@ -541,8 +539,11 @@ namespace WICR_Estimator.Models
         #endregion
         public void UpdateCheckStatus(bool isMatEnabled,bool isMaterialChecked)
         {
-            this.isMaterialEnabled = isMatEnabled;
             this.ismaterialchecked = isMaterialChecked;
+            this.isMaterialEnabled = isMatEnabled;
+            RaisePropertyChanged("IsMaterialChecked");
+            RaisePropertyChanged("IsMaterialEnabled");
+
         }
 
         public void UpdateSpecialPricing(double price)

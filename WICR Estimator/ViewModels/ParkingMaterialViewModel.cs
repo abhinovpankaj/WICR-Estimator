@@ -230,7 +230,7 @@ namespace WICR_Estimator.ViewModels
                     }
 
                 }
-
+                setUnitChangeValues();
             }
             #endregion
 
