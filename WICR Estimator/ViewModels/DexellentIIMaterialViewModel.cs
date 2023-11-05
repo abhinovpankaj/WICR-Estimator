@@ -22,6 +22,7 @@ namespace WICR_Estimator.ViewModels
             materialNames = new Dictionary<string, string>();
             FillMaterialList();
             FetchMaterialValuesAsync(false);
+            resistiteQty();
         }
         
         private void FillMaterialList()
@@ -41,6 +42,7 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("(Stairs Only) Dexcelcrete Liquid Adhesive", "5 GAL PAIL");
             materialNames.Add("(Stairs Only) Texture with Dexcelcrete Gray Powder and Liquid Adhesive", "50LB BAG");
             materialNames.Add("Vista Paint Acripoxy (TOPCOAT)", "5 GAL PAIL");
+            materialNames.Add("Resistite Liquid", "5 GAL PAIL");
             materialNames.Add("Dexcelent II Final Coat (TOPCOAT)", "5 GAL PAIL");
             materialNames.Add("Stair Nosing", "EA");
             materialNames.Add("Extra stair nosing lf", "LF");
@@ -136,7 +138,7 @@ namespace WICR_Estimator.ViewModels
                 SubContractLaborItems = GetLaborItems();
             }
             calculateRLqty();
-
+            resistiteQty();
             CalculateCost(null);
         }
 
@@ -251,6 +253,8 @@ namespace WICR_Estimator.ViewModels
                     return riserCount * stairWidth * 2;
                 case "Stair Nosing":
                     return riserCount*stairWidth;
+                case "Resistite Liquid":
+                    return (riserCount * stairWidth * 2) + totalSqft;
                 default:
                     
                     return totalSqft + riserCount * stairWidth * 2;
@@ -295,6 +299,8 @@ namespace WICR_Estimator.ViewModels
                     return riserCount*stairWidth*2;
                 case "Stair Nosing":
                     return riserCount * stairWidth;
+                case "Resistite Liquid":
+                    return 0.0000001;
                 default:
                     return 0;
 
@@ -327,6 +333,17 @@ namespace WICR_Estimator.ViewModels
         
         public override void ApplyCheckUnchecks(object obj)
         {
+            //set RL Qty
+            if (obj.ToString() == "Underlay over membrane (Resistite regular 150 sq ft per mix )" ||
+                obj.ToString() == "Underlay over rough surface (Resistite regular 150 sq ft per mix)" ||
+                obj.ToString() == "Resistite textured knockdown finish (smooth or regular per customer)Gray" ||
+                obj.ToString() == "Resistite textured knockdown finish (smooth or regular per customer)White" ||
+                obj.ToString() == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)" ||
+                obj.ToString() == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)")
+            {
+                resistiteQty();
+            }
+
             lastCheckedMat = obj.ToString();
             if (obj.ToString() == "Vista Paint Acripoxy (TOPCOAT)")
             {
@@ -395,6 +412,50 @@ namespace WICR_Estimator.ViewModels
             bool ischecked = SystemMaterials.Where(x => x.Name == "Vista Paint Acripoxy (TOPCOAT)").FirstOrDefault().IsMaterialChecked;
             SystemMaterials.Where(x => x.Name == "Dexcelent II Final Coat (TOPCOAT)").FirstOrDefault().IsMaterialChecked = !ischecked;
 
+        }
+
+        private void resistiteQty()
+        {
+            double qty = 0, qty1 = 0;
+            foreach (var item in SystemMaterials)
+            {
+                if (item.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)" ||
+                    item.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)" ||
+                    item.Name == "Resistite textured knockdown finish (smooth or regular per customer)Gray" ||
+                    item.Name == "Underlay over rough surface (Resistite regular 150 sq ft per mix)" ||
+                    item.Name == "Resistite textured knockdown finish (smooth or regular per customer)White")
+                {
+                    if (item.IsMaterialChecked)
+                    {
+                        qty = qty + item.Qty;
+                    }
+
+                }
+                //if (item.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)" ||
+                //    item.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)" ||
+                //    item.Name == "Resistite textured knockdown finish (smooth or regular per customer)Gray" ||
+                //    item.Name == "Resistite textured knockdown finish (smooth or regular per customer)White")
+                //{
+                //    if (item.IsMaterialChecked)
+                //    {
+                //        qty1 = qty1 + item.Qty;
+                //    }
+
+                //}
+            }
+            double val1 = SystemMaterials.Where(x => x.Name == "Underlay over rough surface (Resistite regular 150 sq ft per mix)").FirstOrDefault().Qty;
+            SystemMaterials.Where(x => x.Name == "Resistite Liquid").FirstOrDefault().Qty = (qty * 0.33) + val1 / 5;
+
+            //SystemMaterials.Where(x => x.Name == "Weather Seal XL Coat").FirstOrDefault().IsMaterialEnabled = true;
+
+            //SystemMaterial skipMat = SystemMaterials.Where(x => x.Name == "Lip Color").FirstOrDefault();
+            //if (skipMat != null)
+            //{
+            //    bool isChecked = skipMat.IsMaterialChecked;
+            //    skipMat.Qty = qty1;
+            //    //skipMat.IsMaterialChecked = isChecked;
+            //    skipMat.UpdateCheckStatus(isChecked);
+            //}
         }
     }
 }

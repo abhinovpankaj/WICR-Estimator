@@ -209,6 +209,8 @@ namespace WICR_Estimator.ViewModels
             {
                 case "Supplies (veg. oil, pump wash, rub gloves, tyvex suit, sheeting, goggles, buckets)":
                     return coverage;
+                case "DeNeef Flex LV/SLV urethane resin":
+                    return coverage == 0 ? 0 : Math.Ceiling(lfArea / coverage);
                 default:
                     return coverage==0 ? 0 : lfArea / coverage;
             }

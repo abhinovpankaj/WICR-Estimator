@@ -20,6 +20,7 @@ namespace WICR_Estimator.ViewModels
             FillMaterialList();
 
             FetchMaterialValuesAsync(false);
+            resistiteQty();
 
         }
         public override void JobSetup_OnJobSetupChange(object sender, EventArgs e)
@@ -48,6 +49,7 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("Caulk, dymonic 100", "TUBE 11 OZ.");
             materialNames.Add("Preparation after construction and 50/50 primer", "5 GAL PAIL");
             materialNames.Add("Select Y for protection coat over membrane below tile (GU80-1 TOP COAT)", "50LB BAG");
+            materialNames.Add("Resistite Liquid", "5 GAL PAIL");
             materialNames.Add("Stair Nosing", "LF");
             materialNames.Add("Extra stair nosing lf", "LF");
             materialNames.Add("Plywood 3/4 & blocking (# of 4x8 sheets)", "4x8 sheets");
@@ -136,6 +138,7 @@ namespace WICR_Estimator.ViewModels
                 SubContractLaborItems = GetLaborItems();
             }
             calculateRLqty();
+            resistiteQty();
             CalculateCost(null);
             //CalculateLaborMinCharge(hasSetupChanged);
             //CalculateAllMaterial();
@@ -193,6 +196,8 @@ namespace WICR_Estimator.ViewModels
                     return riserCount * stairWidth;
                 case "Caulk, dymonic 100":
                     return totalSqft + deckPerimeter * 4;
+                case "Resistite Liquid":
+                    return (riserCount * stairWidth * 2) + totalSqft;
                 default:
                     return totalSqft + riserCount * stairWidth * 2;
             }
@@ -245,6 +250,8 @@ namespace WICR_Estimator.ViewModels
                     return 0;
                 case "Stair Nosing":
                     return riserCount * stairWidth;
+                case "Resistite Liquid":
+                    return 0.0000001;
                 default:
                     return riserCount * stairWidth * 2; 
 
@@ -357,6 +364,16 @@ namespace WICR_Estimator.ViewModels
         }
         public override void ApplyCheckUnchecks(object obj)
         {
+            //set RL Qty
+            if (obj.ToString() == "Underlay over membrane (Resistite regular 150 sq ft per mix )" ||
+                obj.ToString() == "Underlay over rough surface (Resistite regular 150 sq ft per mix)" ||
+                obj.ToString() == "Resistite textured knockdown finish (smooth or regular per customer)Gray" ||
+                obj.ToString() == "Resistite textured knockdown finish (smooth or regular per customer)White" ||
+                obj.ToString() == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)" ||
+                obj.ToString() == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)")
+            {
+                resistiteQty();
+            }
             lastCheckedMat = obj.ToString();
             bool isChecked;
             if (obj.ToString() == "2.5 Galvanized Lathe")
@@ -399,5 +416,49 @@ namespace WICR_Estimator.ViewModels
                 //}
             }
         }
+        private void resistiteQty()
+        {
+            double qty = 0, qty1 = 0;
+            foreach (var item in SystemMaterials)
+            {
+                if (item.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)" ||
+                    item.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)" ||
+                    item.Name == "Resistite textured knockdown finish (smooth or regular per customer)Gray" ||
+                    item.Name == "Underlay over rough surface (Resistite regular 150 sq ft per mix)" ||
+                    item.Name == "Resistite textured knockdown finish (smooth or regular per customer)White")
+                {
+                    if (item.IsMaterialChecked)
+                    {
+                        qty = qty + item.Qty;
+                    }
+
+                }
+                //if (item.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)" ||
+                //    item.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)" ||
+                //    item.Name == "Resistite textured knockdown finish (smooth or regular per customer)Gray" ||
+                //    item.Name == "Resistite textured knockdown finish (smooth or regular per customer)White")
+                //{
+                //    if (item.IsMaterialChecked)
+                //    {
+                //        qty1 = qty1 + item.Qty;
+                //    }
+
+                //}
+            }
+            double val1 = SystemMaterials.Where(x => x.Name == "Underlay over rough surface (Resistite regular 150 sq ft per mix)").FirstOrDefault().Qty;
+            SystemMaterials.Where(x => x.Name == "Resistite Liquid").FirstOrDefault().Qty = (qty * 0.33) + val1 / 5;
+
+            //SystemMaterials.Where(x => x.Name == "Weather Seal XL Coat").FirstOrDefault().IsMaterialEnabled = true;
+
+            //SystemMaterial skipMat = SystemMaterials.Where(x => x.Name == "Lip Color").FirstOrDefault();
+            //if (skipMat != null)
+            //{
+            //    bool isChecked = skipMat.IsMaterialChecked;
+            //    skipMat.Qty = qty1;
+            //    //skipMat.IsMaterialChecked = isChecked;
+            //    skipMat.UpdateCheckStatus(isChecked);
+            //}
+        }
+
     }
 }

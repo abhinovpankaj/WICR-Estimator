@@ -17,6 +17,7 @@ namespace WICR_Estimator.Converters
                 switch (value.ToString())
                 {
                     case "Bubble Repair(Measure Sq Ft)":
+                    case "METAL LATH SYSTEM R&R":
                     case "Large Crack Repair":
                     case "Extra Stair Nosing Lf":
                     case "Extra stair nosing lf":
@@ -53,6 +54,7 @@ namespace WICR_Estimator.Converters
                     case "CALCIUM CHLORIDE TEST (MINIMUM OF 3 FOR EACH JOB)":
                     case "PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL WITH SAND BROADCAST":
                     case "Add for penetrations  -customer to determine qty":
+                    case "Add labor for additional injection material":
                         return true;
                     default:
                         return false;                       

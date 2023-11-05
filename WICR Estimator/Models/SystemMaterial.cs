@@ -605,6 +605,7 @@ namespace WICR_Estimator.Models
                 case "R&R Sealant 1/2 to 3/4 inch control joints (Sonneborn NP-2)":
                 case "LARGE CRACK REPAIR":
                 case "BUBBLE REPAIR (MEASURE SQ FT)":
+                case "METAL LATH SYSTEM R&R":
                 case "System Large cracks Repair":
                 case "EXTRA STAIR NOSING":
                 case "System bubbled and failed texture repair":
@@ -631,6 +632,7 @@ namespace WICR_Estimator.Models
                 case "PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL WITH SAND BROADCAST":
                 case "Add for penetrations  -customer to determine qty":
                 //case "4 INCH SCHEDULE 40 PIPE FOR ROCK POCKETS":
+                case "Add labor for additional injection material":
                     return true;
                 default:
                     return false;
