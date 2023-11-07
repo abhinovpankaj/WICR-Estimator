@@ -274,6 +274,8 @@ namespace WICR_Estimator.ViewModels
                     return totalSqft < 1 ? false : !IsReseal;
                 case "STAIR NOSING OVER CONCRETE":
                     return totalSqft > 0 || RequireFlashing == true ? true : false;
+                case "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)":
+                    return riserCount > 0;
                 default:
                     return true;
             }
@@ -288,7 +290,7 @@ namespace WICR_Estimator.ViewModels
                 case "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL":
                 case "1/20 SAND/ #100 LB":
                 case "7016 - AR - INTERMEDIATE COAT / 5 GAL PAILS 20 MILS":
-                case "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)":
+                //case "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)":
                     return true;
                 default:
                     return false;
@@ -301,7 +303,7 @@ namespace WICR_Estimator.ViewModels
             foreach (SystemMaterial item in SystemMaterials)
             {
                 if (item.Name == "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)"
-                    || item.Name == "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)"
+                    
                     || item.Name == "EXTRA STAIR NOSING"
                     || item.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)"
                     || item.Name == "1/20 SAND/ #100 LB"

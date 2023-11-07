@@ -1272,12 +1272,14 @@ namespace WICR_Estimator.ViewModels
                 case "LIP COLOR":
                 //case "AJ-44A DRESSING (SEALER)":
                 case "RESISTITE UNIVERSAL PRIMER(ADD 50% WATER)":
-                case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
+                //case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
                 //case "VISTA PAINT ACRIPOXY":
-                case "STAIR NOSING FROM DEXOTEX":
-                case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
-                case "WEATHER SEAL XL TWO COATS":
+                
+                //case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
+                //case "WEATHER SEAL XL TWO COATS":
                     return true;
+                case "STAIR NOSING FROM DEXOTEX":
+                    return riserCount > 0;
                 default:
                     return false;
             }

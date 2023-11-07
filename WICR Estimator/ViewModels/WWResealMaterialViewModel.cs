@@ -220,6 +220,8 @@ namespace WICR_Estimator.ViewModels
                 case "RESISTITE LIQUID":
                 case "RESISTITE REGULAR OR SMOOTH GRAY (KNOCK DOWN OR SMOOTH)":
                 case "RESISTITE REGULAR GRAY":
+                case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)":
+                case "OPTIONAL FOR WEATHER SEAL XL":
                     return false;
                 default:
                     return true;

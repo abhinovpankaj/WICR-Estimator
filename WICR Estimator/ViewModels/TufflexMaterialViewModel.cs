@@ -156,7 +156,7 @@ namespace WICR_Estimator.ViewModels
                 case "Tuff Poxy #3 Primer":
                     return false;
                 case "Stair Nosing":
-                    return true;
+                    return riserCount > 0 ;
                 default:
                     return riserCount+TotalSqftPlywood>0?true:false;
             }
@@ -166,6 +166,7 @@ namespace WICR_Estimator.ViewModels
         {
             switch (materialName)
             {
+                case "Stair Nosing":
                 case "Prep to remove existing urethane":
                 case "Tuff Poxy #3 Primer":
                     return true;

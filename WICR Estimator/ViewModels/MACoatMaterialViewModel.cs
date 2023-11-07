@@ -151,6 +151,7 @@ namespace WICR_Estimator.ViewModels
                 case "SC-35 Water based stain":
                 case "TC-40 Liquid Colorant":
                 case "SC-70 clear acrylic lacquer":
+                case "Stair Nosing":
                     return true;
                 default:
                     return false;
@@ -170,10 +171,11 @@ namespace WICR_Estimator.ViewModels
                 case "Knock Down Texture: Grey TC-3 Cement":
                 case "WP-81 Liquid":
                 case "WP-90 Liquid":
-                case "SC-10 Topcoat":
-                case "Stair Nosing":
+                case "SC-10 Topcoat": 
+                
                     return true;
-                    
+                case "Stair Nosing":
+                    return riserCount > 0;  
                 default:
                     return false;
             }

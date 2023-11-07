@@ -26,6 +26,11 @@ namespace WICR_Estimator.ViewModels
                 Metals = GetMetalsDB("LG");
                 AddOnMetals = GetAddOnMetalsDB("LG");
             }
+            if (js.ProjectName == "Reseal all systems")
+            {
+                Metals = GetMetalsDB("Reseal");
+                AddOnMetals = GetAddOnMetalsDB();
+            }
             else
             {               
                 Metals = GetMetalsDB();

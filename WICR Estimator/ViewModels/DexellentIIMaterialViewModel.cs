@@ -57,6 +57,7 @@ namespace WICR_Estimator.ViewModels
             {
                 linearFootageCoping = js.DeckPerimeter;
                 IsSystemOverConcrete = js.IsSystemOverConcrete;
+                riserCount = js.RiserCount;
             }
 
             base.JobSetup_OnJobSetupChange(sender, e);
@@ -205,6 +206,8 @@ namespace WICR_Estimator.ViewModels
                 case "Texture with Dexcelcrete Gray Powder":
                 case "Vista Paint Acripoxy (TOPCOAT)":
                 case "Underlay over rough surface (Resistite regular 150 sq ft per mix)":
+                case "Stair Nosing":
+                    
                     return true;
                 default:
                     return false;
@@ -224,6 +227,8 @@ namespace WICR_Estimator.ViewModels
                 case "Staples (3/4 Inch Crown, Box of 13,500)":
                 
                     return !IsSystemOverConcrete;
+                case "Stair Nosing":
+                    return riserCount > 0 ? true : false;
                 default:
                     return true;
             }

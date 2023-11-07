@@ -180,6 +180,8 @@ namespace WICR_Estimator.ViewModels
                 case "2.5 Galvanized Lathe (18 s.f.)":
                 case "Staples":
                     return !IsSystemOverConcrete;
+                case "Stair Nosing":
+                    return riserCount > 0 ? true : false;
                 default:
                     return true;
             }
@@ -193,6 +195,7 @@ namespace WICR_Estimator.ViewModels
                 //case "BASE COAT 50 lb Desert Crete Level Max 20/30":
                 case "BASE COAT Desert Crete poly base mixed with water":
                 case "2.5 Galvanized Lathe (18 s.f.)":
+                case "Stair Nosing":
                      return true;
                 default:
                     return false;

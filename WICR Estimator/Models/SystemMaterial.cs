@@ -634,6 +634,8 @@ namespace WICR_Estimator.Models
                 case "Add for penetrations  -customer to determine qty":
                 //case "4 INCH SCHEDULE 40 PIPE FOR ROCK POCKETS":
                 case "Add labor for additional injection material":
+                case "Stair Nosing From Dexotex":
+                case "Stair Nosing":
                     return true;
                 default:
                     return false;

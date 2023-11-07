@@ -162,6 +162,8 @@ namespace WICR_Estimator.ViewModels
                     return IsSystemOverConcrete == true ? false:prevStatus;
                 case "GU80-1 grey Base Coat":
                     return !IsSystemOverConcrete;
+                case "Stair Nosing":
+                    return riserCount > 0 ? true : false;
                 default:
                     return true;
             }
@@ -177,6 +179,8 @@ namespace WICR_Estimator.ViewModels
                 case "GS13 Clear Sealer":
                 case "Select Y for protection coat over membrane below tile (GU80-1 TOP COAT)":
                 case "Underlay over rough surface (Resistite regular 150 sq ft per mix)":
+                case "Stair Nosing":
+                    
                     return true;
                 default:
                     return false;   

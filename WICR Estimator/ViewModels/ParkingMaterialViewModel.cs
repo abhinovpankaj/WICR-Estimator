@@ -349,6 +349,7 @@ namespace WICR_Estimator.ViewModels
                 case "Route and caulk moving cracks (greater than 1/8\")":
                 case "SECOND INTERMEDIATE COAT FOR HIGH TRAFFIC":
                 case "Striping for small cracKs (less than 1/8\")":
+                case "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)":
                     return false;
                 case "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL":
                     return IsReseal;
@@ -370,7 +371,16 @@ namespace WICR_Estimator.ViewModels
 
         public override bool getCheckboxEnabledStatus(string materialName)
         {
-            return false;
+            switch (materialName)
+            {
+
+
+                case "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)":
+                    return true;
+                default:
+                    return false;
+            }
+            
             
         }
 

@@ -397,15 +397,14 @@ namespace WICR_Estimator.ViewModels
                 case "RESISTITE UNIVERSAL PRIMER (ADD 50% WATER)":
                 case "Resistite textured knockdown finish (smooth or regular per customer)Gray":
                 case "Resistite textured knockdown finish (smooth or regular per customer)White":
-                case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)":
-                case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)":
+                
                 case "Aj-44A Dressing(Sealer)":
                
                 case "RP FABRIC 10 INCH WIDE X (300 LF)":
                 case "Glass mat #4 1200 SF ROLL FROM ACME":
-                case "Stair Nosing From Dexotex":
+                
                 case "Resistite Liquid":
-                case "Weather Seal XL Coat":
+                
                     return true;
                 case "R&R Sealant 1/2 to 3/4 inch control joints (Sonneborn NP-2)":
                 case "Plywood 3/4 & blocking (# of 4x8 sheets)":
@@ -413,7 +412,10 @@ namespace WICR_Estimator.ViewModels
                 case "Extra stair nosing lf":
                 case "Vista Paint Acripoxy":
                 case "Lip Color":
-                
+                case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)":
+                case "Stair Nosing From Dexotex":
+                case "Weather Seal XL Coat":
+                case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)":
                     return false;
                 default:
                     return true;
