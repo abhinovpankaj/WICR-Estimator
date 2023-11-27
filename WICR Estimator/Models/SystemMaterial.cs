@@ -1,4 +1,5 @@
-﻿using MyToolkit.Model;
+﻿using ControlzEx.Standard;
+using MyToolkit.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -318,13 +319,14 @@ namespace WICR_Estimator.Models
                 
                 if (allowHooking(Name))
                 {
+                    
                     if (qtysm != 0)
                     {
                         IsMaterialChecked = true;
                     }
                     else
                         IsMaterialChecked = false;
-
+                    
                     if (OnQTyChanged != null )
                     {
                         OnQTyChanged(this.Name, EventArgs.Empty);
@@ -551,7 +553,7 @@ namespace WICR_Estimator.Models
             this.specialMaterialPricing = price;
             if (specialMaterialPricing != 0)
             {
-                matExt = SpecialMaterialPricing * Qty;
+                matExt = SpecialMaterialPricing * qtysm;
             }
             else
             {
@@ -576,13 +578,15 @@ namespace WICR_Estimator.Models
             RaisePropertyChanged("Qty");
             if (allowHooking(Name))
             {
-
-                if (qtysm != 0)
-                {
-                    ismaterialchecked = true;
-                }
-                else
-                    ismaterialchecked = false;              
+                
+                    if (qtysm != 0)
+                    {
+                        ismaterialchecked = true;
+                    }
+                    else
+                        ismaterialchecked = false;
+                
+                                            
             }
             
             MaterialExtension = qty * materialPrice;
@@ -634,7 +638,7 @@ namespace WICR_Estimator.Models
                 case "Add for penetrations  -customer to determine qty":
                 //case "4 INCH SCHEDULE 40 PIPE FOR ROCK POCKETS":
                 case "Add labor for additional injection material":
-                case "Stair Nosing From Dexotex":
+                //case "Stair Nosing From Dexotex":
                 case "Stair Nosing":
                     return true;
                 default:

@@ -69,12 +69,10 @@ namespace WICR_Estimator.ViewModels
                     //SystemMaterials[i].SpecialMaterialPricing = sp;
                     UpdateMe(sysMat[i]);
 
-                    SystemMaterials[i].UpdateSpecialPricing(sp);
-                    
 
                     if (iscbEnabled)
                     {
-                        SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
+                        //SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
                         //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
                         //SystemMaterials[i].IsMaterialChecked = iscbChecked;
                     }
@@ -88,7 +86,7 @@ namespace WICR_Estimator.ViewModels
 
                         }
                     }
-                    
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
                 }
 
             }
@@ -309,6 +307,15 @@ namespace WICR_Estimator.ViewModels
         public override void ApplyCheckUnchecks(object obj)
         {
             lastCheckedMat = obj.ToString();
+            if (obj.ToString() == "Stair Nosing")
+            {
+                var material = SystemMaterials.FirstOrDefault(x => x.Name == "Stair Nosing");
+                if (material != null)
+                {
+                    stairNosingCheckValue = material.IsMaterialChecked;
+                }
+
+            }
             calculateRLqty();
             //CalculateLaborMinCharge(false);
         }

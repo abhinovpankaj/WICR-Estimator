@@ -58,11 +58,11 @@ namespace WICR_Estimator.ViewModels
                     //SystemMaterials[i].SpecialMaterialPricing = sp;
                     UpdateMe(sysMat[i]);
 
-                    SystemMaterials[i].UpdateSpecialPricing(sp);
+                    
 
                     //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
                     //SystemMaterials[i].IsMaterialChecked = iscbChecked;
-                    SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
+                    //SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
 
                     if (SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)" || SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
                     SystemMaterials[i].Name == "Extra stair nosing lf")
@@ -74,7 +74,7 @@ namespace WICR_Estimator.ViewModels
 
                         }
                     }
-
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
                 }
 
             }
@@ -175,6 +175,15 @@ namespace WICR_Estimator.ViewModels
 
         public override void ApplyCheckUnchecks(object obj)
         {
+            if (obj.ToString() == "Stair Nosing")
+            {
+                var material = SystemMaterials.FirstOrDefault(x => x.Name == "Stair Nosing");
+                if (material != null)
+                {
+                    stairNosingCheckValue = material.IsMaterialChecked;
+                }
+
+            }
             lastCheckedMat = obj.ToString();
             if (obj.ToString()== "Sheet Membrane; WP-40 for entire deck (10-YEAR MANUFACTURER WARRANTY REQ)")
             {

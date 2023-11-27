@@ -71,7 +71,7 @@ namespace WICR_Estimator.ViewModels
         [DataMember]
         public IList<IList<object>> freightData { get; set; }
 
-
+        public bool? stairNosingCheckValue=null;
         #region privatefields
         private ObservableCollection<CostBreakup> lCostBreakUp;
         private ObservableCollection<SystemMaterial> systemMaterials;
@@ -392,10 +392,31 @@ namespace WICR_Estimator.ViewModels
             firstMat.LaborUnitPrice = sm.LaborUnitPrice;
             firstMat.FreightExtension = sm.FreightExtension;
             firstMat.MaterialExtension = sm.MaterialExtension;  //chnage for independent projects
+            
             if (!sm.IsMaterialEnabled)
             {
                 firstMat.IsMaterialChecked = sm.IsMaterialChecked;
                 firstMat.IsMaterialEnabled = sm.IsMaterialEnabled;
+            }
+            if (sm.Name == "Stair Nosing From Dexotex" || sm.Name == "Stair Nosing")
+            {
+                if (stairNosingCheckValue==null)
+                {
+                    if (sm.Qty>0)
+                    {
+                        firstMat.IsMaterialChecked = true;
+                    }
+                    else
+                    {
+                        firstMat.IsMaterialChecked = sm.IsMaterialChecked;
+                    }
+                    
+                }
+                else
+                {
+                    firstMat.IsMaterialChecked = (bool)stairNosingCheckValue;
+                }
+                
             }
 
             firstMat.IncludeInLaborMinCharge = sm.IncludeInLaborMinCharge;
@@ -887,6 +908,15 @@ namespace WICR_Estimator.ViewModels
                 return;
             }
             lastCheckedMat = obj.ToString();
+            if (obj.ToString() == "Stair Nosing From Dexotex")
+            {
+                var material = SystemMaterials.FirstOrDefault(x => x.Name == "Stair Nosing From Dexotex");
+                if (material != null)
+                {
+                    stairNosingCheckValue = material.IsMaterialChecked;
+                }
+
+            }
             if (obj.ToString() == "Lip Color")
             {
                 
@@ -1509,7 +1539,7 @@ namespace WICR_Estimator.ViewModels
             }
             else
             {
-                SystemMaterials = sysMat;
+                SystemMaterials.ToList().AddRange(sysMat);
                 setCheckBoxes();
             }
 
@@ -2097,6 +2127,7 @@ namespace WICR_Estimator.ViewModels
                 case "LIP COLOR":
                 case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
                 case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
+                //case "STAIR NOSING FROM DEXOTEX":
                     return true;
                 default:
                     return false;

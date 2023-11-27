@@ -143,7 +143,7 @@ namespace WICR_Estimator.ViewModels
                     //    SystemMaterials[i].IsMaterialChecked = iscbChecked;
                     UpdateMe(sysMat[i]);
 
-                    SystemMaterials[i].UpdateSpecialPricing(sp);
+                    
                     SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
 
                     if (SystemMaterials[i].Name == "EXTRA STAIR NOSING" || SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
@@ -163,6 +163,7 @@ namespace WICR_Estimator.ViewModels
                             SystemMaterials[i].UpdateUnits(qtyList[SystemMaterials[i].Name].ToString());
                         }
                     }
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
                 }
             }
             #endregion
@@ -290,7 +291,7 @@ namespace WICR_Estimator.ViewModels
                 case "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL":
                 case "1/20 SAND/ #100 LB":
                 case "7016 - AR - INTERMEDIATE COAT / 5 GAL PAILS 20 MILS":
-                //case "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)":
+                case "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)":
                     return true;
                 default:
                     return false;

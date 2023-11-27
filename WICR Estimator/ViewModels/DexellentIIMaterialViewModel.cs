@@ -97,13 +97,13 @@ namespace WICR_Estimator.ViewModels
 
                     UpdateMe(sysMat[i]);
 
-                    SystemMaterials[i].UpdateSpecialPricing(sp);
+                    
 
                     if (iscbEnabled)
                     {
                         //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
                         //SystemMaterials[i].IsMaterialChecked = iscbChecked;
-                        SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
+                        //SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
                     }                   
                     if (SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)" || SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
                     SystemMaterials[i].Name == "Extra stair nosing lf")
@@ -115,6 +115,7 @@ namespace WICR_Estimator.ViewModels
                         }
                     }
 
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
                 }
 
             }
@@ -338,6 +339,15 @@ namespace WICR_Estimator.ViewModels
         
         public override void ApplyCheckUnchecks(object obj)
         {
+            if (obj.ToString() == "Stair Nosing")
+            {
+                var material = SystemMaterials.FirstOrDefault(x => x.Name == "Stair Nosing");
+                if (material != null)
+                {
+                    stairNosingCheckValue = material.IsMaterialChecked;
+                }
+
+            }
             //set RL Qty
             if (obj.ToString() == "Underlay over membrane (Resistite regular 150 sq ft per mix )" ||
                 obj.ToString() == "Underlay over rough surface (Resistite regular 150 sq ft per mix)" ||

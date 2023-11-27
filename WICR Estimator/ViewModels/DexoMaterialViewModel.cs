@@ -90,11 +90,8 @@ namespace WICR_Estimator.ViewModels
                     //SystemMaterials[i].SpecialMaterialPricing = sp;
                     UpdateMe(sysMat[i]);
 
-                    SystemMaterials[i].UpdateSpecialPricing(sp);
-
-                    //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
-                    //SystemMaterials[i].IsMaterialChecked = iscbChecked;
-                    SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
+                    
+                    //SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
 
                     if (SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)" || 
                         SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
@@ -107,14 +104,16 @@ namespace WICR_Estimator.ViewModels
                             SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
                         }
                     }
-
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
                 }
 
             }
             #endregion
 
             else
-                SystemMaterials = sysMat;
+                SystemMaterials = sysMat; //SystemMaterials = new ObservableCollection<SystemMaterial>(sysMat);
+
+
 
             setExceptionValues(null);
             setCheckBoxes();
@@ -124,8 +123,6 @@ namespace WICR_Estimator.ViewModels
                 OtherMaterials = GetOtherMaterials();
                 OtherLaborMaterials = OtherMaterials;
             }
-
-
             if (SubContractLaborItems.Count == 0)
             {
                 SubContractLaborItems = GetLaborItems();
@@ -137,9 +134,10 @@ namespace WICR_Estimator.ViewModels
             //CalculateAllMaterial();
         }
         private DBData dbData;
+        
         public override void JobSetup_OnJobSetupChange(object sender, EventArgs e)
         {          
-            base.JobSetup_OnJobSetupChange(sender, e);
+            
             JobSetup js = sender as JobSetup;
             if (js != null)
             {
@@ -151,8 +149,11 @@ namespace WICR_Estimator.ViewModels
                 {
                     SystemMaterials.Where(x => x.Name == "RP FABRIC 10 INCH WIDE X (300 LF)").First().IsMaterialChecked = false;
                 }
-                dbData = js.dbData;
+                //dbData = js.dbData;
+                
             }
+            
+            base.JobSetup_OnJobSetupChange(sender, e);
         }
         public override ObservableCollection<SystemMaterial> GetSystemMaterial()
         {
@@ -387,6 +388,7 @@ namespace WICR_Estimator.ViewModels
         public override bool getCheckboxCheckStatus(string materialName)
         {
             //return base.getCheckboxCheckStatus(materialName);
+            
             switch (materialName)
             {
 
@@ -413,10 +415,12 @@ namespace WICR_Estimator.ViewModels
                 case "Vista Paint Acripoxy":
                 case "Lip Color":
                 case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)":
-                case "Stair Nosing From Dexotex":
+                
                 case "Weather Seal XL Coat":
                 case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH WHITE)":
                     return false;
+                case "Stair Nosing From Dexotex":
+                    return  riserCount > 0?true:false;
                 default:
                     return true;
             }
@@ -426,9 +430,7 @@ namespace WICR_Estimator.ViewModels
         {
             //return base.getCheckboxEnabledStatus(materialName);
             switch (materialName)
-            {
-
-                
+            {               
                 case "Barrier Guard membrane over smooth surface":
                 
                 case "Underlay over rough surface (Resistite regular 150 sq ft per mix)":
@@ -458,6 +460,15 @@ namespace WICR_Estimator.ViewModels
             if (obj == null)
             {
                 return;
+            }
+            if (obj.ToString()== "Stair Nosing From Dexotex") 
+            {
+                var material = SystemMaterials.FirstOrDefault(x => x.Name == "Stair Nosing From Dexotex");
+                if (material!=null)
+                {
+                    stairNosingCheckValue = material.IsMaterialChecked;
+                }
+                
             }
             lastCheckedMat = obj.ToString();
             //set RL Qty

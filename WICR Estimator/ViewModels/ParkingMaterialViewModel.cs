@@ -203,7 +203,7 @@ namespace WICR_Estimator.ViewModels
                     //    SystemMaterials[i].IsMaterialChecked = iscbChecked;
                     UpdateMe(sysMat[i]);
 
-                    SystemMaterials[i].UpdateSpecialPricing(sp);
+                    
                     SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
 
 
@@ -228,7 +228,7 @@ namespace WICR_Estimator.ViewModels
                             SystemMaterials[i].UpdateUnits(qtyList[SystemMaterials[i].Name].ToString());
                         }
                     }
-
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
                 }
                 setUnitChangeValues();
             }
