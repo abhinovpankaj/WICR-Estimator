@@ -54,7 +54,7 @@ namespace WICR_Estimator.Converters
                     case "CALCIUM CHLORIDE TEST (MINIMUM OF 3 FOR EACH JOB)":
                     case "PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL WITH SAND BROADCAST":
                     case "Add for penetrations  -customer to determine qty":
-                    case "Add labor for additional injection material":
+                    case "Add labor for additional injection material (enter quantity of pails)":
                         return true;
                     default:
                         return false;                       
