@@ -121,6 +121,15 @@ namespace WICR_Estimator.ViewModels
         public override void FetchMaterialValuesAsync(bool hasSetupChanged)
         {
             Dictionary<string, double> qtyList = new Dictionary<string, double>();
+            foreach (SystemMaterial item in SystemMaterials)
+            {
+                if (item.Name == "Add labor for additional injection material (enter quantity of pails)")
+                {
+                    qtyList.Add(item.Name, item.Qty);
+                    break;
+                }
+
+            }
             if (materialNames == null)
             {
                 materialNames = new Dictionary<string, string>();
@@ -149,7 +158,14 @@ namespace WICR_Estimator.ViewModels
                         SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
 
                     }
-
+                    if (SystemMaterials[i].Name == "Add labor for additional injection material (enter quantity of pails)")
+                    {
+                        if (qtyList.ContainsKey(SystemMaterials[i].Name))
+                        {
+                            //SystemMaterials[i].Qty = qtyList[SystemMaterials[i].Name];
+                            SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
+                        }
+                    }
                     SystemMaterials[i].UpdateSpecialPricing(sp);
                 }
 
