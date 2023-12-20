@@ -76,6 +76,7 @@ namespace WICR_Estimator.ViewModels
                 case "DeNeef Flex LV/SLV urethane resin":
                 case "1/2 inch yellow packers (3000 psi)":
                 case "Add labor for additional injection material (enter quantity of pails)":
+                case "Add labor for additional injection material":
                     return 0;
                 case "Inject resin":
                 case "Labor to drill holes and install packers":
@@ -148,9 +149,11 @@ namespace WICR_Estimator.ViewModels
                     //SystemMaterials[i] = sysMat[i];
 
                     //SystemMaterials[i].SpecialMaterialPricing = sp;
-                    UpdateMe(sysMat[i]);
-
-
+                    if (i<sysMat.Count)
+                    {
+                        UpdateMe(sysMat[i]);
+                    }
+                    
                     if (iscbEnabled)
                     {
                         //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
@@ -207,6 +210,7 @@ namespace WICR_Estimator.ViewModels
                 case "Labor to drill holes and install packers":
                 case "Inject resin":
                 case "Add labor for additional injection material (enter quantity of pails)":
+                case "Add labor for additional injection material":
                 case "set up and clean up":
                     return 0;
                 case "1/2 inch yellow packers (3000 psi)":
@@ -251,7 +255,7 @@ namespace WICR_Estimator.ViewModels
             SystemMaterial sysmat = SystemMaterials.Where(x => x.Name == "Inject resin").FirstOrDefault();
             if (sysmat!=null)
             {
-                SystemMaterial mat = SystemMaterials.Where(x => x.Name == "Add labor for additional injection material (enter quantity of pails)").FirstOrDefault();
+                SystemMaterial mat = SystemMaterials.Where(x => x.Name == "Add labor for additional injection material (enter quantity of pails)" ||x.Name== "Add labor for additional injection material").FirstOrDefault();
                 bool ischecked = mat.IsMaterialChecked;
                 mat.Hours =sysmat.LaborExtension*0.3 /25;
                 mat.LaborExtension = mat.Hours== 0 ? 0:mat.Hours >= mat.SetupMinCharge ? mat.Hours * laborRate : mat.SetupMinCharge * laborRate;
@@ -277,6 +281,7 @@ namespace WICR_Estimator.ViewModels
             switch (materialName)
             {
                 case "Add labor for additional injection material (enter quantity of pails)":
+                case "Add labor for additional injection material":
                 case "Add material/labor for patch and plug holes/EA HOLE":
                 
                     return false;
@@ -294,6 +299,7 @@ namespace WICR_Estimator.ViewModels
                 
             {
                 case "Add labor for additional injection material (enter quantity of pails)":
+                case "Add labor for additional injection material":
                 case "Add material/labor for patch and plug holes/EA HOLE":
                 
                     return true;

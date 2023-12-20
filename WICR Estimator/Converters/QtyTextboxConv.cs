@@ -55,6 +55,7 @@ namespace WICR_Estimator.Converters
                     case "PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL WITH SAND BROADCAST":
                     case "Add for penetrations  -customer to determine qty":
                     case "Add labor for additional injection material (enter quantity of pails)":
+                    case "Add labor for additional injection material":
                         return true;
                     default:
                         return false;                       
