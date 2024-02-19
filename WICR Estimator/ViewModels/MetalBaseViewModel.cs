@@ -485,7 +485,10 @@ namespace WICR_Estimator.ViewModels
                 bool isSelected = Metals[i].IsStairMetalChecked;
 
                 //Metals[i] = met[i];
-                UpdateMe(met[i],i);
+                
+                    UpdateMe(met[i], i);
+               
+                
                 if (!Metals[i].Name.Contains("STAIR METAL"))
                 {
                     //Metals[i].Units = units;
@@ -542,7 +545,11 @@ namespace WICR_Estimator.ViewModels
                 bool ischecked = AddOnMetals[i].IsMetalChecked;
 
                 //AddOnMetals[i] = addOnMet[i];
-                UpdateAddonMe(addOnMet[i],i);
+                if (i < addOnMet.Count)
+                {
+                    UpdateAddonMe(addOnMet[i], i);
+                }
+                
                 if (!AddOnMetals[i].Name.Contains("STAIR METAL"))
                 {
                     // AddOnMetals[i].Units = units;

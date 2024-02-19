@@ -180,6 +180,16 @@ namespace WICR_Estimator.ViewModels
                         else
                             item.ProjectJobSetUp.dbData = dbValues;
 
+                        //item.MaterialViewModel.SubContractMarkup = item.ProjectJobSetUp.dbData.LaborDBData.First(x => x.Name == "Profit Margin on subcontract labor").Value;
+
+                        item.MaterialViewModel.MetalMarkup = 1 - item.ProjectJobSetUp.dbData.LaborDBData.First(x => x.Name == "Profit Margin Metal").Value; ;
+
+                        item.MaterialViewModel.SlopeMarkup = 1 - item.ProjectJobSetUp.dbData.LaborDBData.First(x => x.Name == "Profit Margin Slope").Value; ;
+
+                        item.MaterialViewModel.MaterialMarkup = 1 - item.ProjectJobSetUp.dbData.LaborDBData.First(x => x.Name == "Profit Margin Material").Value;
+
+                        // item.MaterialViewModel.SubContractProfitMargin = item.ProjectJobSetUp.dbData.LaborDBData.First(x => x.Name == "Profit Margin SubContract").Value;
+
                         item.ProjectJobSetUp.UpdateJobSetup();
                         if (item.OriginalProjectName=="Paraseal LG")
                         {

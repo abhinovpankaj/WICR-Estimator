@@ -458,9 +458,17 @@ namespace WICR_Estimator.ViewModels
 
                 //}
             }
-            double val1 = SystemMaterials.Where(x => x.Name == "Underlay over rough surface (Resistite regular 150 sq ft per mix)").FirstOrDefault().Qty;
-            SystemMaterials.Where(x => x.Name == "Resistite Liquid").FirstOrDefault().Qty = (qty * 0.33) + val1 / 5;
-
+            double val1 = 0;
+            var item150 = SystemMaterials.Where(x => x.Name == "Underlay over rough surface (Resistite regular 150 sq ft per mix)").FirstOrDefault();
+            if (item150 != null)
+            {
+                val1 = item150.Qty;
+            }
+            var resistiteElement = SystemMaterials.Where(x => x.Name == "Resistite Liquid").FirstOrDefault();
+            if (resistiteElement != null)
+            {
+                resistiteElement.Qty = (qty * 0.33) + val1 / 5;
+            }
             //SystemMaterials.Where(x => x.Name == "Weather Seal XL Coat").FirstOrDefault().IsMaterialEnabled = true;
 
             //SystemMaterial skipMat = SystemMaterials.Where(x => x.Name == "Lip Color").FirstOrDefault();
