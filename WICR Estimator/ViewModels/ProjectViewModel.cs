@@ -211,8 +211,9 @@ namespace WICR_Estimator.ViewModels
                     if (dbValues == null)
                     {
                         //Create dat file locally
-                        prj.ProjectJobSetUp.dbData = await HTTPHelper.FetchFromDbAndSave(originalProjectname);
-
+                        var dbData = await HTTPHelper.FetchFromDbAndSave(originalProjectname);
+                        prj.ProjectJobSetUp.dbData = dbData;
+                        DataSerializerService.DSInstance.serializeDbData(dbData, originalProjectname);
                     }
                     else
                         prj.ProjectJobSetUp.dbData = dbValues;

@@ -93,7 +93,7 @@ namespace WICR_Estimator.ViewModels
                     //SystemMaterials[i].IsMaterialChecked = iscbChecked;
                     UpdateMe(sysMat[i]);
 
-                    SystemMaterials[i].UpdateSpecialPricing(sp);
+                    
                     SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
 
                     if (SystemMaterials[i].Name == "Caulk 1/2 to 3/4 inch control joints (SIKA 2C)" ||
@@ -111,6 +111,7 @@ namespace WICR_Estimator.ViewModels
                         }
                     }
 
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
                 }
 
             }

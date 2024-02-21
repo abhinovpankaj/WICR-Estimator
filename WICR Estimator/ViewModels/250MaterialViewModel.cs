@@ -168,7 +168,7 @@ namespace WICR_Estimator.ViewModels
                     //SystemMaterials[i].SpecialMaterialPricing = sp;
                     UpdateMe(sysMat[i]);
 
-                    SystemMaterials[i].UpdateSpecialPricing(sp);
+                    
 
                     if (iscbEnabled)
                     {
@@ -201,7 +201,7 @@ namespace WICR_Estimator.ViewModels
                             SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
                         }
                     }
-
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
                 }
 
             }

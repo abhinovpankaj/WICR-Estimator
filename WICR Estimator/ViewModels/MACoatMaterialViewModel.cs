@@ -83,8 +83,7 @@ namespace WICR_Estimator.ViewModels
                     //SystemMaterials[i].IsMaterialChecked = iscbChecked;
                     UpdateMe(sysMat[i]);
 
-                    SystemMaterials[i].UpdateSpecialPricing(sp);
-                    SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
+                    //SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
 
                     if (SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)" || SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
                     SystemMaterials[i].Name == "Extra stair nosing lf")
@@ -95,7 +94,7 @@ namespace WICR_Estimator.ViewModels
                             SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
                         }
                     }
-
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
                 }
 
             }
@@ -151,6 +150,7 @@ namespace WICR_Estimator.ViewModels
                 case "SC-35 Water based stain":
                 case "TC-40 Liquid Colorant":
                 case "SC-70 clear acrylic lacquer":
+                case "Stair Nosing":
                     return true;
                 default:
                     return false;
@@ -170,10 +170,11 @@ namespace WICR_Estimator.ViewModels
                 case "Knock Down Texture: Grey TC-3 Cement":
                 case "WP-81 Liquid":
                 case "WP-90 Liquid":
-                case "SC-10 Topcoat":
-                case "Stair Nosing":
+                case "SC-10 Topcoat": 
+                
                     return true;
-                    
+                case "Stair Nosing":
+                    return riserCount > 0;  
                 default:
                     return false;
             }
@@ -181,6 +182,15 @@ namespace WICR_Estimator.ViewModels
 
         public override void ApplyCheckUnchecks(object obj)
         {
+            if (obj.ToString() == "Stair Nosing")
+            {
+                var material = SystemMaterials.FirstOrDefault(x => x.Name == "Stair Nosing");
+                if (material != null)
+                {
+                    stairNosingCheckValue = material.IsMaterialChecked;
+                }
+
+            }
             lastCheckedMat = obj.ToString();
             if (obj.ToString()== "Primer if needed:  EC-11 primer")
             {

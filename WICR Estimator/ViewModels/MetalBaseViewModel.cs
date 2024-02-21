@@ -485,7 +485,10 @@ namespace WICR_Estimator.ViewModels
                 bool isSelected = Metals[i].IsStairMetalChecked;
 
                 //Metals[i] = met[i];
-                UpdateMe(met[i],i);
+                
+                    UpdateMe(met[i], i);
+               
+                
                 if (!Metals[i].Name.Contains("STAIR METAL"))
                 {
                     //Metals[i].Units = units;
@@ -542,7 +545,11 @@ namespace WICR_Estimator.ViewModels
                 bool ischecked = AddOnMetals[i].IsMetalChecked;
 
                 //AddOnMetals[i] = addOnMet[i];
-                UpdateAddonMe(addOnMet[i],i);
+                if (i < addOnMet.Count)
+                {
+                    UpdateAddonMe(addOnMet[i], i);
+                }
+                
                 if (!AddOnMetals[i].Name.Contains("STAIR METAL"))
                 {
                     // AddOnMetals[i].Units = units;
@@ -911,8 +918,14 @@ namespace WICR_Estimator.ViewModels
             met.Add(new Metal("DRIP EDGE METAL", "2X4", getMetalPR("Drip Edge Metal 2\" x 4\""), laborRate, 0, getMetalMP("Drip Edge Metal 2\" x 4\""), false));
             if (type=="")
             {
+               
                 met.Add(new Metal("STAIR METAL", "4X6", getMetalPR("Stair Metal 4X6"), laborRate, getUnits(0), getMetalMP("Stair Metal 4X6"), true));
                 met.Add(new Metal("STAIR METAL", "3X3", getMetalPR("Stair Metal 3X3"), laborRate, getUnits(1), getMetalMP("Stair Metal 3X3"), true));
+            }
+            else if(type=="Reseal")
+            {
+                met.Add(new Metal("STAIR METAL", "4X6", getMetalPR("Stair Metal 4X6"), laborRate, getUnits(0), getMetalMP("Stair Metal 4X6"), false));
+                met.Add(new Metal("STAIR METAL", "3X3", getMetalPR("Stair Metal 3X3"), laborRate, getUnits(1), getMetalMP("Stair Metal 3X3"), false));
             }
             else
             {

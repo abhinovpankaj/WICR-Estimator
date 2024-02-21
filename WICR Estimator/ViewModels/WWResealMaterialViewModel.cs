@@ -27,7 +27,8 @@ namespace WICR_Estimator.ViewModels
 
             materialNames.Add("LIGHT CRACK REPAIR", "SQ FT");
             materialNames.Add("LARGE CRACK REPAIR", "LF");
-            materialNames.Add("BUBBLE REPAIR (MEASURE SQ FT)", "SQ FT");
+            materialNames.Add("METAL LATH SYSTEM R&R", "SQ FT");
+            materialNames.Add("BUBBLE REPAIR (MEASURE SQ FT)", "SQ FT");          
             materialNames.Add("RESISTITE LIQUID", "5 GAL PAIL");
             materialNames.Add("RESISTITE REGULAR GRAY", "55 LB BAG");
             materialNames.Add("RESISTITE REGULAR OR SMOOTH GRAY (KNOCK DOWN OR SMOOTH)", "40 LB BAG");
@@ -35,7 +36,7 @@ namespace WICR_Estimator.ViewModels
             materialNames.Add("RESISTITE UNIVERSAL PRIMER (ADD 50% WATER)", "5 GAL PAIL");
             materialNames.Add("VISTA PAINT ACRAPOXY SEALER", "5 GAL PAIL");
             materialNames.Add("DEXOTEX AJ-44", "5 GAL PAIL");
-            materialNames.Add("WESTCOAT SC-10", "5 GAL PAIL");
+            materialNames.Add("WESTCOAT SC-10", "5 GAL PAIL"); 
             materialNames.Add("UPI PERMASHIELD", "5 GAL PAIL");
             materialNames.Add("PLI DEK GS88 WITH COLOR JAR 1 PER PAIL", "5 GAL PAIL");
             materialNames.Add("OPTIONAL FOR WEATHER SEAL XL", "5 GAL PAIL");
@@ -64,7 +65,7 @@ namespace WICR_Estimator.ViewModels
 
             foreach (SystemMaterial item in SystemMaterials)
             {
-                if (item.Name == "LARGE CRACK REPAIR" || item.Name == "BUBBLE REPAIR (MEASURE SQ FT)")
+                if (item.Name == "LARGE CRACK REPAIR" || item.Name == "BUBBLE REPAIR (MEASURE SQ FT)" || item.Name== "METAL LATH SYSTEM R&R")
                 {
                     qtyList.Add(item.Name, item.Qty);
                 }
@@ -94,13 +95,13 @@ namespace WICR_Estimator.ViewModels
                         //SystemMaterials[i].SpecialMaterialPricing = sp;
                         UpdateMe(sysMat[i]);
 
-                        SystemMaterials[i].UpdateSpecialPricing(sp);
+                       
 
                         //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
                         //SystemMaterials[i].IsMaterialChecked = iscbChecked;
                         SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
 
-                        if (SystemMaterials[i].Name == "LARGE CRACK REPAIR" || SystemMaterials[i].Name == "BUBBLE REPAIR (MEASURE SQ FT)")
+                        if (SystemMaterials[i].Name == "LARGE CRACK REPAIR" || SystemMaterials[i].Name == "BUBBLE REPAIR (MEASURE SQ FT)"|| SystemMaterials[i].Name == "METAL LATH SYSTEM R&R")
                         {
                             if (qtyList.ContainsKey(SystemMaterials[i].Name))
                             {
@@ -108,7 +109,7 @@ namespace WICR_Estimator.ViewModels
                                 SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
                             }
                         }
-
+                        SystemMaterials[i].UpdateSpecialPricing(sp);
                     }
                 }
                 catch (Exception ex)
@@ -215,9 +216,12 @@ namespace WICR_Estimator.ViewModels
                 case "SLURRY COAT (RESISTITE) OVER TEXTURE":
                 case "LARGE CRACK REPAIR":
                 case "BUBBLE REPAIR (MEASURE SQ FT)":
+                case "METAL LATH SYSTEM R&R":
                 case "RESISTITE LIQUID":
                 case "RESISTITE REGULAR OR SMOOTH GRAY (KNOCK DOWN OR SMOOTH)":
                 case "RESISTITE REGULAR GRAY":
+                case "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)":
+                case "OPTIONAL FOR WEATHER SEAL XL":
                     return false;
                 default:
                     return true;
@@ -235,6 +239,7 @@ namespace WICR_Estimator.ViewModels
                     //return totalSqft;
                 case "LARGE CRACK REPAIR":
                 case "BUBBLE REPAIR (MEASURE SQ FT)":
+                case "METAL LATH SYSTEM R&R":
                 case "RESISTITE LIQUID":
                     return 0;
                 default:
@@ -288,6 +293,7 @@ namespace WICR_Estimator.ViewModels
                 case "LIGHT CRACK REPAIR":
                 case "LARGE CRACK REPAIR":
                 case "BUBBLE REPAIR (MEASURE SQ FT)":
+                case "METAL LATH SYSTEM R&R":
                     return 0;
                 default:
                     return riserCount*stairWidth*2;
@@ -454,7 +460,17 @@ namespace WICR_Estimator.ViewModels
                     item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate; 
                     item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
                 }
-
+                
+                item = SystemMaterials.Where(x => x.Name == "METAL LATH SYSTEM R&R").FirstOrDefault();
+                if (item != null)
+                {
+                    //item.IsMaterialChecked = item.Qty > 0 ? true : false;
+                    item.SMSqftH = item.Qty;
+                    item.SMSqft = item.Qty;
+                    item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
+                    item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
+                    item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
+                }
                 item = SystemMaterials.Where(x => x.Name == "BUBBLE REPAIR (MEASURE SQ FT)").FirstOrDefault();
                 if (item != null)
                 {

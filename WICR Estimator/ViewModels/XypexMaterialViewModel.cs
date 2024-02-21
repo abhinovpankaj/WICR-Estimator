@@ -156,7 +156,7 @@ namespace WICR_Estimator.ViewModels
                     //SystemMaterials[i].IsMaterialChecked = iscbChecked;
                     UpdateMe(sysMat[i]);
 
-                    SystemMaterials[i].UpdateSpecialPricing(sp);
+                    
                     SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
 
                     if (SystemMaterials[i].Name == "Add for penetrations  -customer to determine qty")
@@ -167,6 +167,7 @@ namespace WICR_Estimator.ViewModels
                             SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
                         }
                     }
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
                 }
 
             }

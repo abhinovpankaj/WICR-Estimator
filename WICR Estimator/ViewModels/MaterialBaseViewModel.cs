@@ -1,11 +1,8 @@
-﻿using MyToolkit.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml.Serialization;
 using WICR_Estimator.DBModels;
@@ -45,7 +42,7 @@ namespace WICR_Estimator.ViewModels
     [KnownType(typeof(UPIBelowTileMaterialViewModel))]
     [KnownType(typeof(IndependentMaterialViewModel))]
     [KnownType(typeof(ParasealGMMaterialViewModel))]
-    public class MaterialBaseViewModel:UndoRedoObservableObject
+    public class MaterialBaseViewModel : UndoRedoObservableObject
     {
         [DataMember]
         public Totals MetalTotals { set; get; }
@@ -59,7 +56,7 @@ namespace WICR_Estimator.ViewModels
         public double riserCount;
         public double deckPerimeter;
         public bool isApprovedforCement;
-       
+
         public bool isPrevailingWage;
         public bool isDiscounted;
         public double deckCount;
@@ -71,7 +68,7 @@ namespace WICR_Estimator.ViewModels
         [DataMember]
         public IList<IList<object>> freightData { get; set; }
 
-
+        public bool? stairNosingCheckValue = null;
         #region privatefields
         private ObservableCollection<CostBreakup> lCostBreakUp;
         private ObservableCollection<SystemMaterial> systemMaterials;
@@ -82,11 +79,11 @@ namespace WICR_Estimator.ViewModels
         private bool isDataAvailable;
         private double markUpPerc;
         private double previousLaborCharges;
-        private bool previousMinLaborCheckboxStatus=true;
+        private bool previousMinLaborCheckboxStatus = true;
         private bool isSpecialMetal;
         private bool hasSpecialPricing;
-        
-        
+
+
         private double costPerSquareFeet;
         private ICommand _addRowCommand;
         private ICommand _calculateCostCommand;
@@ -108,7 +105,7 @@ namespace WICR_Estimator.ViewModels
 
             OtherLaborMaterials = new ObservableCollection<OtherItem>();
             SubContractLaborItems = new ObservableCollection<LaborContract>();
-            
+
             weatherWearType = "Weather Wear";
             IncludeDriveHours = true;
             //totalSqft = 1000;
@@ -124,7 +121,7 @@ namespace WICR_Estimator.ViewModels
             actualPreWage = Js.ActualPrevailingWage;
             if (!Js.IsProjectIndependent)
             {
-                
+
                 Js.JobSetupChange += JobSetup_OnJobSetupChange;
                 SystemMaterial.OnQTyChanged += (s, e) => { setExceptionValues(s); };
                 CheckboxCommand = new DelegateCommand(ApplyCheckUnchecks, canApply);
@@ -133,22 +130,22 @@ namespace WICR_Estimator.ViewModels
         }
 
 
-        public MaterialBaseViewModel(Totals metalTotals, Totals slopeTotals,JobSetup Js)
-            :this(Js)
+        public MaterialBaseViewModel(Totals metalTotals, Totals slopeTotals, JobSetup Js)
+            : this(Js)
         {
 
             MetalTotals = metalTotals;
             SlopeTotals = slopeTotals;
-            if (MetalTotals!=null)
+            if (MetalTotals != null)
             {
                 MetalTotals.OnTotalsChange += MetalTotals_OnTotalsChange;
             }
 
-            if (SlopeTotals!=null)
+            if (SlopeTotals != null)
             {
                 SlopeTotals.OnTotalsChange += MetalTotals_OnTotalsChange;
             }
-            
+
             //getDatafromGoogle(Js.ProjectName);          
             getDatafromDB(Js.ProjectName);
 
@@ -158,22 +155,22 @@ namespace WICR_Estimator.ViewModels
         {
 
         }
-        public virtual double CalculateLabrExtn(double calhrs,double setupMin,string matName="")
+        public virtual double CalculateLabrExtn(double calhrs, double setupMin, string matName = "")
         {
             return (calhrs != 0) ? (setupMin + calhrs) * laborRate : 0;
         }
-        public virtual double getLaborUnitPrice(double laborExtension,double riserCount,
-            double totalSqft, double sqftVert = 0, double sqftHor = 0,double sqftStairs = 0,string matName="")
+        public virtual double getLaborUnitPrice(double laborExtension, double riserCount,
+            double totalSqft, double sqftVert = 0, double sqftHor = 0, double sqftStairs = 0, string matName = "")
         {
             return laborExtension / (riserCount + totalSqft);
         }
-        
-        public  virtual SystemMaterial getSMObject(int seq, string matName, string unit)
+
+        public virtual SystemMaterial getSMObject(int seq, string matName, string unit)
         {
             double cov;
             double mp;
             double w;
-            double lfArea=0;
+            double lfArea = 0;
             double setUpMin = 0; // Setup minimum charges from google sheet, col 6
             double pRateStairs = 0; ///Production rate stairs from google sheet, col 5
             double hprRate = 0;///Horizontal Production rate  from google sheet, col 4
@@ -205,7 +202,7 @@ namespace WICR_Estimator.ViewModels
                 ////pRateStairs = matdb.ProdRateStair;
                 ////hprRate = matdb.ProdRateHorizontal;
                 //
-                
+
                 double.TryParse(materialDetails[seq][1].ToString(), out vprRate);
                 double.TryParse(materialDetails[seq][2].ToString(), out cov);
                 double.TryParse(materialDetails[seq][0].ToString(), out mp);
@@ -266,16 +263,16 @@ namespace WICR_Estimator.ViewModels
                     IsMaterialChecked = getCheckboxCheckStatus(matName),
                     IsMaterialEnabled = getCheckboxEnabledStatus(matName),
                     IncludeInLaborMinCharge = IncludedInLaborMin(matName),
-                    IsCheckboxDependent= GetCheckBoxDependency(matName),
+                    IsCheckboxDependent = GetCheckBoxDependency(matName),
                     AllEditable = getEditable()
                 });
             }
             catch (Exception e)
             {
                 return null;
-                
+
             }
-            
+
         }
         public virtual bool getEditable()
         {
@@ -292,7 +289,7 @@ namespace WICR_Estimator.ViewModels
             return true;
         }
 
-        public void  MetalTotals_OnTotalsChange(object sender, EventArgs e)
+        public void MetalTotals_OnTotalsChange(object sender, EventArgs e)
         {
             Totals tabTotals = sender as Totals;
             if (tabTotals != null)
@@ -311,13 +308,13 @@ namespace WICR_Estimator.ViewModels
                 BaseViewModel.IsDirty = true;
             }
             CalculateCost(null);
-            if (_js!=null)
+            if (_js != null)
             {
                 _js.TotalSalesCostTemp = TotalSale;
             }
-            
+
         }
-        
+
 
         #region Material Properties
         [IgnoreDataMember]
@@ -357,9 +354,9 @@ namespace WICR_Estimator.ViewModels
         }
         public void UpdateMe(SystemMaterial sm)
         {
-            SystemMaterial firstMat= SystemMaterials.FirstOrDefault(x => x.Name == sm.Name);
+            SystemMaterial firstMat = SystemMaterials.FirstOrDefault(x => x.Name == sm.Name);
 
-            if (firstMat==null)
+            if (firstMat == null)
             {
                 if (sm.Name.Contains("White"))
                 {
@@ -392,15 +389,36 @@ namespace WICR_Estimator.ViewModels
             firstMat.LaborUnitPrice = sm.LaborUnitPrice;
             firstMat.FreightExtension = sm.FreightExtension;
             firstMat.MaterialExtension = sm.MaterialExtension;  //chnage for independent projects
+
             if (!sm.IsMaterialEnabled)
             {
                 firstMat.IsMaterialChecked = sm.IsMaterialChecked;
                 firstMat.IsMaterialEnabled = sm.IsMaterialEnabled;
             }
+            if (sm.Name == "Stair Nosing From Dexotex" || sm.Name == "Stair Nosing")
+            {
+                if (stairNosingCheckValue == null)
+                {
+                    if (sm.Qty > 0)
+                    {
+                        firstMat.IsMaterialChecked = true;
+                    }
+                    else
+                    {
+                        firstMat.IsMaterialChecked = sm.IsMaterialChecked;
+                    }
+
+                }
+                else
+                {
+                    firstMat.IsMaterialChecked = (bool)stairNosingCheckValue;
+                }
+
+            }
 
             firstMat.IncludeInLaborMinCharge = sm.IncludeInLaborMinCharge;
             firstMat.IsCheckboxDependent = sm.IsCheckboxDependent;
-                   
+
 
         }
         [DataMember]
@@ -609,7 +627,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
         [DataMember]
-        
+
         private double subContractprofitMargin;
         [DataMember]
         public double SubContractProfitMargin
@@ -678,7 +696,7 @@ namespace WICR_Estimator.ViewModels
         #endregion
 
         #region Labor Properties
-        
+
 
         private bool addLaborMinCharge;
         [DataMember]
@@ -690,10 +708,10 @@ namespace WICR_Estimator.ViewModels
             {
                 //if (value != addLaborMinCharge)
                 //{
-                    addLaborMinCharge = value;
-                    previousMinLaborCheckboxStatus = addLaborMinCharge;
+                addLaborMinCharge = value;
+                previousMinLaborCheckboxStatus = addLaborMinCharge;
                 RaisePropertyChanged("ZAddLaborMinCharge");
-                    
+
                 //}
             }
         }
@@ -791,50 +809,50 @@ namespace WICR_Estimator.ViewModels
                 }
             }
         }
-        
+
 
         public virtual void calculateLaborHrs()
         {
-            calLaborHrs(10,totalSqft);
+            calLaborHrs(10, totalSqft);
         }
-        public virtual void driveHrs(int hrs,double tSqft)
+        public virtual void driveHrs(int hrs, double tSqft)
         {
-            TotalHrsDriveLabor = tSqft < 1001 ? hrs : Math.Ceiling(tSqft / 1000 ) * hrs;
+            TotalHrsDriveLabor = tSqft < 1001 ? hrs : Math.Ceiling(tSqft / 1000) * hrs;
 
             //DriveLaborValue = Math.Round(TotalHrsDriveLabor * laborRate,2);
             //OnPropertyChanged("DriveLaborValue");
             RaisePropertyChanged("TotalHrsDriveLabor");
         }
         double tempTotalLaborExtension = 0;
-        public void calLaborHrs(int hrs,double tSqft)
+        public void calLaborHrs(int hrs, double tSqft)
         {
-            if ( laborRate == 0)
+            if (laborRate == 0)
             {
                 return;
             }
 
             TotalHrsSystemLabor = isPrevailingWage ? (tempTotalLaborExtension / actualPreWage) :  //change TotalLaborExtension with private field
-                                                  (tempTotalLaborExtension / laborRate) ;
+                                                  (tempTotalLaborExtension / laborRate);
             if (TotalHrsSystemLabor < 0)
             {
                 TotalHrsSystemLabor = 0;
             }
             RaisePropertyChanged("TotalHrsSystemLabor");
-            if (SlopeTotals != null )
+            if (SlopeTotals != null)
             {
-                
+
                 TotalHrsSlopeLabor = isPrevailingWage ? (SlopeTotals.LaborExtTotal / actualPreWage) :
                                                       (SlopeTotals.LaborExtTotal / laborRate);
                 RaisePropertyChanged("TotalHrsSlopeLabor");
             }
-            if (MetalTotals!=null)
+            if (MetalTotals != null)
             {
                 TotalHrsMetalLabor = isPrevailingWage ? (MetalTotals.LaborExtTotal / actualPreWage) :
                                                   (MetalTotals.LaborExtTotal / laborRate);
                 RaisePropertyChanged("TotalHrsMetalLabor");
             }
             TotalHrsDriveLabor = Math.Ceiling((TotalHrsSystemLabor + TotalHrsMetalLabor + TotalHrsSlopeLabor) / 10 * 2);
-            if (TotalHrsDriveLabor<4)
+            if (TotalHrsDriveLabor < 4)
             {
                 TotalHrsDriveLabor = 4;
             }
@@ -844,10 +862,10 @@ namespace WICR_Estimator.ViewModels
                 double.TryParse(freightData[6][0].ToString(), out DHLR);
             }
             else
-                DHLR=dbData.FreightDBData.First(x => x.FactorName == "DriveHourLaborRate").FactorValue;
-            
+                DHLR = dbData.FreightDBData.First(x => x.FactorName == "DriveHourLaborRate").FactorValue;
 
-            DriveLaborValue =IncludeDriveHours ? TotalHrsDriveLabor * DHLR:0;
+
+            DriveLaborValue = IncludeDriveHours ? TotalHrsDriveLabor * DHLR : 0;
 
             TotalHrsLabor = TotalHrsSystemLabor + TotalHrsMetalLabor + TotalHrsSlopeLabor;
 
@@ -856,10 +874,10 @@ namespace WICR_Estimator.ViewModels
             RaisePropertyChanged("TotalHrsLabor");
 
         }
-        
+
         #endregion
 
-        
+
 
 
         #region commands
@@ -875,21 +893,30 @@ namespace WICR_Estimator.ViewModels
             //        return getCheckboxCheckStatus(obj.ToString());
             //}
             //else
-                return true;
-            
+            return true;
+
         }
         public string lastCheckedMat;
         public virtual void ApplyCheckUnchecks(object obj)
         {
-            
+
             if (obj == null)
             {
                 return;
             }
             lastCheckedMat = obj.ToString();
+            if (obj.ToString() == "Stair Nosing From Dexotex")
+            {
+                var material = SystemMaterials.FirstOrDefault(x => x.Name == "Stair Nosing From Dexotex");
+                if (material != null)
+                {
+                    stairNosingCheckValue = material.IsMaterialChecked;
+                }
+
+            }
             if (obj.ToString() == "Lip Color")
             {
-                
+
                 #region ifLipcolor
                 var materials = SystemMaterials.Where(x => x.IsCheckboxDependent == true).ToList();
 
@@ -907,13 +934,13 @@ namespace WICR_Estimator.ViewModels
                         if (mat.IsMaterialChecked)
                         {
                             lastCheckedMat = mat.Name;
-                        } 
+                        }
                         mat.IsMaterialChecked = false;
                         //mat.UpdateCheckStatus(false);
                         mat.IsMaterialEnabled = true;
                     }
 
-                    if (mat.Name == "Resistite Regular Gray" ||mat.Name== "Resistite Regular White")
+                    if (mat.Name == "Resistite Regular Gray" || mat.Name == "Resistite Regular White")
                     {
                         if (dbData == null)
                         {
@@ -952,12 +979,12 @@ namespace WICR_Estimator.ViewModels
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
                         }
-                        
+
 
                     }
-                    if (mat.Name == "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)"|| mat.Name == "Resistite Regular Or Smooth White(Knock Down Or Smooth)")
+                    if (mat.Name == "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)" || mat.Name == "Resistite Regular Or Smooth White(Knock Down Or Smooth)")
                     {
-                        if (dbData==null)
+                        if (dbData == null)
                         {
                             mat.Name = "Resistite Regular Or Smooth White(Knock Down Or Smooth)";
                             double matVal = 0;
@@ -994,11 +1021,11 @@ namespace WICR_Estimator.ViewModels
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
                         }
-                        
+
                     }
-                    if (mat.Name == "Custom Texture Skip Trowel(Resistite Smooth Gray)"|| mat.Name == "Custom Texture Skip Trowel(Resistite Smooth White)")
+                    if (mat.Name == "Custom Texture Skip Trowel(Resistite Smooth Gray)" || mat.Name == "Custom Texture Skip Trowel(Resistite Smooth White)")
                     {
-                        if (dbData==null)
+                        if (dbData == null)
                         {
                             mat.Name = "Custom Texture Skip Trowel(Resistite Smooth White)";
                             double matVal = 0;
@@ -1035,7 +1062,7 @@ namespace WICR_Estimator.ViewModels
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
                         }
-                        
+
                     }
 
                 }
@@ -1043,7 +1070,7 @@ namespace WICR_Estimator.ViewModels
             }
             if (obj.ToString() == "Vista Paint Acripoxy")
             {
-                
+
                 #region ifVista
                 var materials = SystemMaterials.Where(x => x.IsCheckboxDependent == true).ToList();
                 foreach (SystemMaterial mat in materials)
@@ -1067,7 +1094,7 @@ namespace WICR_Estimator.ViewModels
 
                     if (mat.Name == "Resistite Regular White")
                     {
-                        if (dbData==null)
+                        if (dbData == null)
                         {
                             mat.Name = "Resistite Regular Gray";
                             double matVal = 0;
@@ -1105,11 +1132,11 @@ namespace WICR_Estimator.ViewModels
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
                         }
-                        
+
                     }
                     if (mat.Name == "Resistite Regular Or Smooth White(Knock Down Or Smooth)")
                     {
-                        if (dbData==null)
+                        if (dbData == null)
                         {
                             mat.Name = "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)";
                             double matVal = 0;
@@ -1146,11 +1173,11 @@ namespace WICR_Estimator.ViewModels
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
                         }
-                        
+
                     }
                     if (mat.Name == "Custom Texture Skip Trowel(Resistite Smooth White)")
                     {
-                        if (dbData==null)
+                        if (dbData == null)
                         {
                             mat.Name = "Custom Texture Skip Trowel(Resistite Smooth Gray)";
                             double matVal = 0;
@@ -1193,7 +1220,7 @@ namespace WICR_Estimator.ViewModels
             }
             if (obj.ToString() == "Aj-44A Dressing(Sealer)")
             {
-                
+
                 #region Aj44
                 var materials = SystemMaterials.Where(x => x.IsCheckboxDependent == true).ToList();
                 foreach (SystemMaterial mat in materials)
@@ -1218,7 +1245,7 @@ namespace WICR_Estimator.ViewModels
 
                     if (mat.Name == "Resistite Regular White")
                     {
-                        if (dbData==null)
+                        if (dbData == null)
                         {
                             mat.Name = "Resistite Regular Gray";
                             double matVal = 0;
@@ -1240,16 +1267,16 @@ namespace WICR_Estimator.ViewModels
                         else
                         {
                             mat.Name = "Resistite Regular Gray";
-                            mat.MaterialPrice = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "RESISTITE REGULAR GRAY").MaterialPrice; 
-                            
-                            mat.Weight = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "RESISTITE REGULAR GRAY").Weight; 
-                            double matVal= dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "RESISTITE REGULAR GRAY").ProdRateHorizontal;
+                            mat.MaterialPrice = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "RESISTITE REGULAR GRAY").MaterialPrice;
+
+                            mat.Weight = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "RESISTITE REGULAR GRAY").Weight;
+                            double matVal = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "RESISTITE REGULAR GRAY").ProdRateHorizontal;
                             mat.HorizontalProductionRate = matVal * (1 + prPerc);
                             matVal = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "RESISTITE REGULAR GRAY").ProdRateStair;
-                            
+
                             mat.StairsProductionRate = matVal * (1 + prPerc);
-                            
-                            mat.SetupMinCharge = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "RESISTITE REGULAR GRAY").LaborMinCharge ;
+
+                            mat.SetupMinCharge = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "RESISTITE REGULAR GRAY").LaborMinCharge;
                             RaisePropertyChanged("SetupMinCharge");
                             mat.Hours = CalculateHrs(mat.SMSqftH, mat.HorizontalProductionRate, mat.StairSqft, mat.StairsProductionRate);
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
@@ -1258,7 +1285,7 @@ namespace WICR_Estimator.ViewModels
                     }
                     if (mat.Name == "Resistite Regular Or Smooth White(Knock Down Or Smooth)")
                     {
-                        if (dbData==null)
+                        if (dbData == null)
                         {
                             mat.Name = "Resistite Regular Or Smooth Gray(Knock Down Or Smooth)";
                             double matVal = 0;
@@ -1295,11 +1322,11 @@ namespace WICR_Estimator.ViewModels
                             mat.LaborExtension = (mat.Hours != 0) ? (mat.SetupMinCharge + mat.Hours) * laborRate : 0;
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
                         }
-                        
+
                     }
                     if (mat.Name == "Custom Texture Skip Trowel(Resistite Smooth White)")
                     {
-                        if (dbData==null)
+                        if (dbData == null)
                         {
                             mat.Name = "Custom Texture Skip Trowel(Resistite Smooth Gray)";
                             double matVal = 0;
@@ -1338,7 +1365,7 @@ namespace WICR_Estimator.ViewModels
                             mat.LaborUnitPrice = mat.LaborExtension / (riserCount + totalSqft);
                             mat.StairSqft = getSqFtStairs(mat.Name);
                         }
-                        
+
                     }
 
                 }
@@ -1382,10 +1409,10 @@ namespace WICR_Estimator.ViewModels
                 }
             }
 
-            SystemMaterials.Where(x=>x.Name== "Neotex-38 Paste").FirstOrDefault().Qty=neotaxQty();
+            SystemMaterials.Where(x => x.Name == "Neotex-38 Paste").FirstOrDefault().Qty = neotaxQty();
             //SystemMaterials.Where(x => x.Name == "Neotex-38 Paste").FirstOrDefault().IsMaterialChecked = true;
-        
-            if (obj.ToString() == "Resistite Regular Gray"|| obj.ToString() == "Resistite Regular White")
+
+            if (obj.ToString() == "Resistite Regular Gray" || obj.ToString() == "Resistite Regular White")
             {
                 var materials = SystemMaterials.Where(x => x.IsCheckboxDependent == true).ToList();
                 bool checkStatus = false;
@@ -1410,13 +1437,13 @@ namespace WICR_Estimator.ViewModels
                 }
 
             }
-            if (obj.ToString()== "Custom Texture Skip Trowel(Resistite Smooth Gray)"||
-                obj.ToString()== "Custom Texture Skip Trowel(Resistite Smooth White)"||
-                obj.ToString()== "Resistite Regular Over Texture(#55 Bag)" ||
-                obj.ToString()== "Resistite Regular Gray")
+            if (obj.ToString() == "Custom Texture Skip Trowel(Resistite Smooth Gray)" ||
+                obj.ToString() == "Custom Texture Skip Trowel(Resistite Smooth White)" ||
+                obj.ToString() == "Resistite Regular Over Texture(#55 Bag)" ||
+                obj.ToString() == "Resistite Regular Gray")
             {
                 calculateRLqty();
-            }           
+            }
         }
 
         #endregion
@@ -1433,7 +1460,7 @@ namespace WICR_Estimator.ViewModels
             if (materialDetails == null)
             {
                 //materialDetails = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "H33:K59");
-                
+
                 GSData gData = DataSerializer.DSInstance.deserializeGoogleData(prjName);
                 laborDetails = gData.LaborData;
                 materialDetails = gData.MaterialData;
@@ -1444,11 +1471,11 @@ namespace WICR_Estimator.ViewModels
                 double.TryParse(laborDetails[7][0].ToString(), out facVal);
                 SubContractMarkup = facVal;
                 double.TryParse(laborDetails[17][0].ToString(), out facVal);
-                MetalMarkup = 1-facVal;
+                MetalMarkup = 1 - facVal;
                 double.TryParse(laborDetails[19][0].ToString(), out facVal);
-                SlopeMarkup = 1-facVal;
+                SlopeMarkup = 1 - facVal;
                 double.TryParse(laborDetails[18][0].ToString(), out facVal);
-                MaterialMarkup = 1-facVal;
+                MaterialMarkup = 1 - facVal;
 
                 double facValue = 0;
                 double.TryParse(laborDetails[20][0].ToString(), out facValue);
@@ -1463,7 +1490,7 @@ namespace WICR_Estimator.ViewModels
         {
             Dictionary<string, double> qtyList = new Dictionary<string, double>();
 
-                      
+
             foreach (SystemMaterial item in SystemMaterials)
             {
                 if (item.Name == "Stucco Material Remove And Replace (Lf)" || item.Name == "Plywood 3/4 & Blocking(# Of 4X8 Sheets)" ||
@@ -1473,7 +1500,7 @@ namespace WICR_Estimator.ViewModels
                 }
 
             }
-          
+
             var sysMat = GetSystemMaterial();
 
             if (hasSetupChanged)
@@ -1509,7 +1536,7 @@ namespace WICR_Estimator.ViewModels
             }
             else
             {
-                SystemMaterials = sysMat;
+                SystemMaterials.ToList().AddRange(sysMat);
                 setCheckBoxes();
             }
 
@@ -1526,14 +1553,14 @@ namespace WICR_Estimator.ViewModels
             }
 
             setExceptionValues(null);
-            
+
             calculateRLqty();
 
             if (OtherMaterials.Count == 0)
             {
                 OtherMaterials = GetOtherMaterials();
 
-                OtherLaborMaterials = OtherMaterials; 
+                OtherLaborMaterials = OtherMaterials;
             }
 
 
@@ -1541,12 +1568,12 @@ namespace WICR_Estimator.ViewModels
             {
                 SubContractLaborItems = GetLaborItems();
             }
-            
+
             //CalculateAllMaterial();
             //CalculateLaborMinCharge(hasSetupChanged);
             //calculateLaborTotalsWithMinLabor();
             CalculateCost(null);
-            
+
         }
 
         public void CalculateAllMaterial()
@@ -1554,39 +1581,39 @@ namespace WICR_Estimator.ViewModels
             calculateMaterialTotals();
             CalOCTotal();
             calculateLaborTotals();
-            
+
             calculateLaborHrs();
-            CalculateCostBreakup();            
+            CalculateCostBreakup();
             populateCalculation();
         }
-       
+
 
         public virtual void setExceptionValues(object s)
         {
-            if (s!=null)
+            if (s != null)
             {
                 SystemMaterial item = SystemMaterials.Where(x => x.Name == s.ToString()).FirstOrDefault();
-                if (item!=null)
+                if (item != null)
                 {
                     item.IsMaterialChecked = item.Qty > 0 ? true : false;
                 }
-                
+
             }
 
             if (SystemMaterials.Count != 0)
             {
                 SystemMaterial item = SystemMaterials.Where(x => x.Name == "Extra stair nosing lf").FirstOrDefault();
-                if (item!=null)
+                if (item != null)
                 {
                     item.StairSqft = item.Qty;
                     item.Hours = CalculateHrs(0, 0, item.StairSqft, item.StairsProductionRate);
                     item.LaborExtension = (item.Hours + item.SetupMinCharge) * laborRate;
                     item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
-                    
+
                 }
 
                 item = SystemMaterials.Where(x => x.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)").FirstOrDefault();
-                if (item!=null)
+                if (item != null)
                 {
                     item.SMSqftH = item.Qty * 32;
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
@@ -1595,44 +1622,44 @@ namespace WICR_Estimator.ViewModels
                 }
 
                 item = SystemMaterials.Where(x => x.Name == "Stucco Material Remove and replace (LF)").FirstOrDefault();
-                if (item!=null)
+                if (item != null)
                 {
                     item.SMSqftH = item.Qty;
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
                     item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
                     item.LaborUnitPrice = item.LaborExtension / item.Qty;
                 }
-                
+
                 //=======================================
                 item = SystemMaterials.Where(x => x.Name == "Extra Stair Nosing Lf").FirstOrDefault();
-                if (item!=null)
+                if (item != null)
                 {
                     item.StairSqft = item.Qty;
                     item.Hours = CalculateHrs(0, 0, item.StairSqft, item.StairsProductionRate);
                     item.LaborExtension = (item.Hours + item.SetupMinCharge) * laborRate;
                     item.LaborUnitPrice = item.LaborExtension / (riserCount + totalSqft);
                 }
-                
+
 
                 item = SystemMaterials.Where(x => x.Name == "Plywood 3/4 & Blocking(# Of 4X8 Sheets)").FirstOrDefault();
-                if (item!=null)
+                if (item != null)
                 {
                     item.SMSqftH = item.Qty * 32;
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
                     item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
                     item.LaborUnitPrice = item.LaborExtension / item.Qty;
                 }
-                
+
 
                 item = SystemMaterials.Where(x => x.Name == "Stucco Material Remove And Replace (Lf)").FirstOrDefault();
-                if (item!=null)
+                if (item != null)
                 {
                     item.SMSqftH = item.Qty;
                     item.Hours = CalculateHrs(item.SMSqftH, item.HorizontalProductionRate, item.StairSqft, item.StairsProductionRate);
                     item.LaborExtension = item.SetupMinCharge > item.Hours ? item.SetupMinCharge * laborRate : item.Hours * laborRate;
                     item.LaborUnitPrice = item.LaborExtension / item.Qty;
                 }
-                
+
             }
 
         }
@@ -1647,7 +1674,7 @@ namespace WICR_Estimator.ViewModels
 
             return om;
         }
-        
+
         public virtual ObservableCollection<LaborContract> GetLaborItems()
         {
             ObservableCollection<LaborContract> SC = new ObservableCollection<LaborContract>();
@@ -1733,8 +1760,8 @@ namespace WICR_Estimator.ViewModels
         double previousSale = 0;
         public void CalculateCost(object obj)
         {
-            
-            
+
+
             calculateMaterialTotals();
             CalOCTotal();
             CalSCTotal();
@@ -1742,15 +1769,15 @@ namespace WICR_Estimator.ViewModels
             calculateLaborTotals();
 
             calculateLaborHrs();
-            
-            
+
+
             CalculateCostBreakup();
             calculateLaborTotals();
 
             CalculateLaborMinCharge(false);
             calculateLaborTotalsWithMinLabor();
             populateCalculation();
-            if (TotalSale!=previousSale)
+            if (TotalSale != previousSale)
             {
                 BaseViewModel.IsDirty = true;
                 previousSale = TotalSale;
@@ -1761,7 +1788,7 @@ namespace WICR_Estimator.ViewModels
             }
         }
 
-        
+
 
         private bool CanAddRows(object obj)
         {
@@ -1806,16 +1833,16 @@ namespace WICR_Estimator.ViewModels
             }
             //if (dbData == null)
             //{
-                dbData = js.dbData;
+            dbData = js.dbData;
             //}
-            
-             FetchMaterialValuesAsync(true);
-            
+
+            FetchMaterialValuesAsync(true);
+
             CalculateCost(null);
-            
-            js.TotalSalesCostTemp = TotalSale;           
+
+            js.TotalSalesCostTemp = TotalSale;
             //});
-                    
+
         }
 
         public double getMaterialDiscount(string delay)
@@ -1837,7 +1864,7 @@ namespace WICR_Estimator.ViewModels
         public virtual void CalculateLaborMinCharge(bool hasSetupChanged)
         {
             //update Add labor for minimum cost
-            if (SystemMaterials==null)
+            if (SystemMaterials == null)
             {
                 return;
             }
@@ -1849,12 +1876,12 @@ namespace WICR_Estimator.ViewModels
             //LaborMinChargeLaborExtension = (LaborMinChargeMinSetup + LaborMinChargeHrs) > 20 ? 0 :
             //                                    (20 - LaborMinChargeMinSetup - LaborMinChargeHrs) * laborRate;
 
-            LaborMinChargeLaborExtension = TotalHrsSystemLabor > 20 ? 0 : isPrevailingWage ? actualPreWage * (20 - TotalHrsSystemLabor) : 
+            LaborMinChargeLaborExtension = TotalHrsSystemLabor > 20 ? 0 : isPrevailingWage ? actualPreWage * (20 - TotalHrsSystemLabor) :
                 laborRate * (20 - TotalHrsSystemLabor);
 
             LaborMinChargeLaborUnitPrice = TotalHrsSystemLabor > 20 ? 0 : (20 - TotalHrsSystemLabor);//(riserCount + totalSqft) == 0 ? 0 : LaborMinChargeLaborExtension / (riserCount + totalSqft);
 
-            if (previousLaborCharges != SystemMaterials.Where(x=>x.IsMaterialChecked).ToList().Select(x => x.MaterialExtension).Sum()+ 
+            if (previousLaborCharges != SystemMaterials.Where(x => x.IsMaterialChecked).ToList().Select(x => x.MaterialExtension).Sum() +
                 SystemMaterials.Where(x => x.IsMaterialChecked).ToList().Select(x => x.LaborExtension).Sum())
             {
                 //if (LaborMinChargeMinSetup + LaborMinChargeHrs < 20)
@@ -1865,12 +1892,12 @@ namespace WICR_Estimator.ViewModels
                 else
                     ZAddLaborMinCharge = false;
 
-                previousLaborCharges = SystemMaterials.Where(x => x.IsMaterialChecked).ToList().Select(x => x.MaterialExtension).Sum()+
+                previousLaborCharges = SystemMaterials.Where(x => x.IsMaterialChecked).ToList().Select(x => x.MaterialExtension).Sum() +
                                         SystemMaterials.Where(x => x.IsMaterialChecked).ToList().Select(x => x.LaborExtension).Sum();
                 previousMinLaborCheckboxStatus = ZAddLaborMinCharge;
             }
             //if (LaborMinChargeMinSetup + LaborMinChargeHrs==0)
-            if (TotalHrsSystemLabor ==0)
+            if (TotalHrsSystemLabor == 0)
             {
                 ZAddLaborMinCharge = previousMinLaborCheckboxStatus;
             }
@@ -1883,7 +1910,7 @@ namespace WICR_Estimator.ViewModels
 
         }
         public virtual bool getCheckboxCheckStatus(string materialName)
-        {            
+        {
             switch (materialName.ToUpper())
             {
                 case "RESISTITE REGULAR OVER TEXTURE(#55 BAG)":
@@ -1898,17 +1925,19 @@ namespace WICR_Estimator.ViewModels
                 case "LIP COLOR":
                 case "RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)":
                 case "RESISTITE UNIVERSAL PRIMER(ADD 50% WATER)":
-                case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
-                case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
-                case "WEATHER SEAL XL TWO COATS":
-                case "STAIR NOSING FROM DEXOTEX":
+                //case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
+                //case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
+                //case "WEATHER SEAL XL TWO COATS":
+
                 case "RESISTITE REGULAR GRAY":
                 case "RESISTITE REGULAR WHITE":
                     return true;
+                case "STAIR NOSING FROM DEXOTEX":
+                    return riserCount > 0;
                 default:
                     return false;
             }
-            
+
             //else if (weatherWearType == "Weather Wear Rehab")
             //{
             //    switch (materialName.ToUpper())
@@ -1946,7 +1975,7 @@ namespace WICR_Estimator.ViewModels
         }
         public virtual bool getCheckboxEnabledStatus(string materialName)
         {
-           
+
             switch (materialName.ToUpper())
             {
                 case "RESISTITE REGULAR OVER TEXTURE(#55 BAG)":
@@ -1958,25 +1987,25 @@ namespace WICR_Estimator.ViewModels
                 case "STAIR NOSING FROM DEXOTEX":
                 case "RESISTITE REGULAR GRAY":
                 case "RESISTITE REGULAR WHITE":
-                return true;
+                    return true;
                 default:
                     return false;
             }
-           
+
         }
-        
-        public virtual double CalculateHrs(double horzSft, double prodHor, double stairSqft, double prodStair, double vertSqft=0, double prodVert=0)
+
+        public virtual double CalculateHrs(double horzSft, double prodHor, double stairSqft, double prodStair, double vertSqft = 0, double prodVert = 0)
         {
             double val1 = prodHor != 0 ? horzSft / prodHor : 0;
             double val2 = prodStair != 0 ? stairSqft / prodStair : 0;
-            double val3=prodVert!=0 ? vertSqft / prodVert : 0;
-            return (val1 + val2+val3);
+            double val3 = prodVert != 0 ? vertSqft / prodVert : 0;
+            return (val1 + val2 + val3);
         }
         public virtual ObservableCollection<SystemMaterial> GetSystemMaterial(Dictionary<string, string> materialNames)
         {
             ObservableCollection<SystemMaterial> smCollection = new ObservableCollection<SystemMaterial>();
             int k = 0;
-            if (dbData==null)
+            if (dbData == null)
             {
                 double minLCharge = 0;
                 double.TryParse(materialDetails[k][6].ToString(), out minLCharge);
@@ -2020,11 +2049,11 @@ namespace WICR_Estimator.ViewModels
                     else
                     {
                         var sm = createSMObjectDB(key, materialNames[key]);
-                        if (sm!=null)
+                        if (sm != null)
                         {
                             smCollection.Add(sm);
                         }
-                        
+
                         if (key == "RP FABRIC 10 INCH WIDE X (300 LF)")
                         {
                             sm.VerticalProductionRate = 100 * (1 + prPerc);
@@ -2040,15 +2069,15 @@ namespace WICR_Estimator.ViewModels
                 }
                 LaborMinChargeMinSetup = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Minimum Labor charge").Value;
             }
-                
-            
-            
-            
-            
-                return smCollection;
+
+
+
+
+
+            return smCollection;
 
         }
-        
+
         private void FillMaterialList()
         {
             Dictionary<string, string> materialNames = new Dictionary<string, string>();
@@ -2095,12 +2124,13 @@ namespace WICR_Estimator.ViewModels
                 case "LIP COLOR":
                 case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
                 case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
+                    //case "STAIR NOSING FROM DEXOTEX":
                     return true;
                 default:
                     return false;
             }
         }
-        public  virtual ObservableCollection<SystemMaterial> GetSystemMaterial()
+        public virtual ObservableCollection<SystemMaterial> GetSystemMaterial()
         {
 
             ObservableCollection<SystemMaterial> smP = new ObservableCollection<SystemMaterial>();
@@ -2121,7 +2151,7 @@ namespace WICR_Estimator.ViewModels
             if (isPrevailingWage) { double.TryParse(freightData[5][0].ToString(), out prPerc); }
             else
                 prPerc = 0;
-            
+
             #region rehab
             if (weatherWearType == "Weather Wear Rehab")
             {
@@ -2286,7 +2316,7 @@ namespace WICR_Estimator.ViewModels
                 LaborUnitPrice = labrExt / (riserCount + totalSqft),
                 FreightExtension = w * qty,
                 MaterialExtension = mp * qty,
-                IncludeInLaborMinCharge=true
+                IncludeInLaborMinCharge = true
 
             });
             int.TryParse(materialDetails[4][2].ToString(), out cov);
@@ -2600,7 +2630,7 @@ namespace WICR_Estimator.ViewModels
                 MaterialExtension = mp * qty,
                 IncludeInLaborMinCharge = true
             });
-            
+
             int.TryParse(materialDetails[13][2].ToString(), out cov);
             double.TryParse(materialDetails[13][0].ToString(), out mp);
             double.TryParse(materialDetails[13][3].ToString(), out w);
@@ -2641,7 +2671,7 @@ namespace WICR_Estimator.ViewModels
                 IncludeInLaborMinCharge = true
             });
 
-            
+
             int.TryParse(materialDetails[15][2].ToString(), out cov);
             double.TryParse(materialDetails[15][0].ToString(), out mp);
             double.TryParse(materialDetails[15][3].ToString(), out w);
@@ -2845,9 +2875,9 @@ namespace WICR_Estimator.ViewModels
             IEnumerable<SystemMaterial> selected = smP.Where(x => x.IsMaterialChecked).ToList();
             LaborMinChargeHrs = smP.Where(x => x.IsMaterialChecked).ToList().Select(x => x.Hours).Sum();
             LaborMinChargeLaborExtension = (LaborMinChargeMinSetup + LaborMinChargeHrs) > 20 ? 0 : (20 - (LaborMinChargeMinSetup + LaborMinChargeHrs)) * laborRate;
-            LaborMinChargeLaborUnitPrice = (riserCount + totalSqft) == 0 ? 0: LaborMinChargeLaborExtension / (riserCount + totalSqft);
+            LaborMinChargeLaborUnitPrice = (riserCount + totalSqft) == 0 ? 0 : LaborMinChargeLaborExtension / (riserCount + totalSqft);
 
-            
+
             int.TryParse(materialDetails[21][2].ToString(), out cov);
             double.TryParse(materialDetails[21][0].ToString(), out mp);
             double.TryParse(materialDetails[21][3].ToString(), out w);
@@ -2867,7 +2897,7 @@ namespace WICR_Estimator.ViewModels
             smP.Add(new SystemMaterial
             {
                 IsCheckboxDependent = true,
-                
+
                 IsMaterialEnabled = getCheckboxEnabledStatus("Custom Texture Skip Trowel(Resistite Smooth White)"),
                 Name = "Custom Texture Skip Trowel(Resistite Smooth White)",
                 SMUnits = "Sq Ft",
@@ -2928,7 +2958,7 @@ namespace WICR_Estimator.ViewModels
                 LaborUnitPrice = labrExt / (riserCount + totalSqft),
                 FreightExtension = w * qty,
                 MaterialExtension = mp * qty,
-                
+
             });
             int.TryParse(materialDetails[23][2].ToString(), out cov);
             double.TryParse(materialDetails[23][0].ToString(), out mp);
@@ -3096,7 +3126,7 @@ namespace WICR_Estimator.ViewModels
 
         public virtual void setCheckBoxes()
         {
-            
+
             var materials = SystemMaterials.Where(x => x.IsCheckboxDependent == true).ToList();
             SystemMaterial lipMat1 = null;
             SystemMaterial lipMat2 = null;
@@ -3104,7 +3134,7 @@ namespace WICR_Estimator.ViewModels
             {
                 return;
             }
-            
+
             foreach (SystemMaterial mat in materials)
             {
                 if (mat.Name == "Lip Color")
@@ -3128,7 +3158,7 @@ namespace WICR_Estimator.ViewModels
                 lipMat2.IsMaterialChecked = true;
                 ApplyCheckUnchecks(lipMat2.Name);
                 SystemMaterials.Where(x => x.Name == "Custom Texture Skip Trowel(Resistite Smooth Gray)").FirstOrDefault().IsMaterialEnabled = true;
-                
+
             }
             else
             {
@@ -3136,7 +3166,7 @@ namespace WICR_Estimator.ViewModels
                 ApplyCheckUnchecks(lipMat1.Name);
             }
             SystemMaterials.Where(x => x.Name == "Neotex-38 Paste").FirstOrDefault().IsMaterialChecked = true;
- 
+
         }
 
 
@@ -3157,7 +3187,7 @@ namespace WICR_Estimator.ViewModels
                 case "RESISTITE REGULAR GRAY":
                 case "RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)":
                 case "RESISTITE REGULAR OR SMOOTH GRAY(KNOCK DOWN OR SMOOTH)":
-                
+
                 case "RESISTITE UNIVERSAL PRIMER(ADD 50% WATER)":
                 case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
                 case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
@@ -3166,9 +3196,9 @@ namespace WICR_Estimator.ViewModels
                 case "LIP COLOR":
                 case "AJ-44A DRESSING(SEALER)":
                 case "VISTA PAINT ACRIPOXY":
-                    return coverage==0 ? 0.5:lfArea / coverage < 0.5 ? 0.5 : lfArea / coverage;
+                    return coverage == 0 ? 0.5 : lfArea / coverage < 0.5 ? 0.5 : lfArea / coverage;
                 case "STAIR NOSING FROM DEXOTEX":
-                    return lfArea*stairWidth ;
+                    return lfArea * stairWidth;
                 case "NEOTEX-38 PASTE":
                     return neotaxQty();
                 case "RESISTITE LIQUID":
@@ -3180,10 +3210,10 @@ namespace WICR_Estimator.ViewModels
 
         public virtual void calculateRLqty()
         {
-            double val1=0, val2=0, val3 = 0, val4 = 0;
+            double val1 = 0, val2 = 0, val3 = 0, val4 = 0;
             double qty = 0;
             SystemMaterial skipMat;
-            if (dbData==null)
+            if (dbData == null)
             {
                 double.TryParse(materialDetails[13][2].ToString(), out val1);
                 double.TryParse(materialDetails[15][2].ToString(), out val2);
@@ -3193,7 +3223,7 @@ namespace WICR_Estimator.ViewModels
                 val1 = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "RESISTITE REGULAR WHITE").Coverage;
                 val2 = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)").Coverage;
             }
-                
+
             val1 = getQuantity("RESISTITE REGULAR WHITE", val1, getlfArea("RESISTITE REGULAR WHITE"));
             val2 = getQuantity("RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)", val2, getlfArea("RESISTITE REGULAR OR SMOOTH WHITE(KNOCK DOWN OR SMOOTH)"));
 
@@ -3231,15 +3261,15 @@ namespace WICR_Estimator.ViewModels
 
             qty = (val1 + val2 + val3) * 0.33 + val4 / 5;
 
-           
+
             skipMat = SystemMaterials.Where(x => x.Name == "Resistite Liquid").FirstOrDefault();
             if (skipMat != null)
             {
                 skipMat.Qty = qty;
             }
 
-            skipMat=SystemMaterials.Where(x => x.Name == "Lip Color").FirstOrDefault();
-            if (skipMat!=null)
+            skipMat = SystemMaterials.Where(x => x.Name == "Lip Color").FirstOrDefault();
+            if (skipMat != null)
             {
                 bool isChecked = skipMat.IsMaterialChecked;
                 skipMat.Qty = val3 + val2;
@@ -3250,19 +3280,19 @@ namespace WICR_Estimator.ViewModels
         private double neotaxQty()
         {
             double val1, val2;
-            if (SystemMaterials.Count==0)
+            if (SystemMaterials.Count == 0)
             {
                 return 0;
             }
-            if (dbData==null)
+            if (dbData == null)
             {
                 double.TryParse(materialDetails[9][2].ToString(), out val1);
                 double.TryParse(materialDetails[10][2].ToString(), out val2);
-               
+
             }
             else
             {
-                val1= dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "NEOTEX STANDARD POWDER(BODY COAT)").Coverage;
+                val1 = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "NEOTEX STANDARD POWDER(BODY COAT)").Coverage;
                 val2 = dbData.MaterialDBData.FirstOrDefault(x => x.MaterialName == "NEOTEX STANDARD POWDER(BODY COAT) 1").Coverage;
             }
             val1 = getQuantity("NEOTEX STANDARD POWDER(BODY COAT)", val1, getlfArea("NEOTEX STANDARD POWDER(BODY COAT)"));
@@ -3315,7 +3345,7 @@ namespace WICR_Estimator.ViewModels
             {
                 if (OtherMaterials.Count > 0)
                 {
-                    TotalOCExtension = OtherMaterials.Select(x => x.Extension).Sum();               
+                    TotalOCExtension = OtherMaterials.Select(x => x.Extension).Sum();
 
                 }
                 if (OtherLaborMaterials.Count > 0)
@@ -3329,7 +3359,7 @@ namespace WICR_Estimator.ViewModels
         /// SubContract Cost
         private void CalSCTotal()
         {
-            if (SubContractLaborItems==null)
+            if (SubContractLaborItems == null)
             {
                 return;
             }
@@ -3345,7 +3375,7 @@ namespace WICR_Estimator.ViewModels
         }
         private void calculateMaterialTotals()
         {
-            if (systemMaterials==null)
+            if (systemMaterials == null)
             {
                 return;
             }
@@ -3390,7 +3420,7 @@ namespace WICR_Estimator.ViewModels
                 {
                     if (weight > 10000)
                     {
-                        if (dbData==null)
+                        if (dbData == null)
                         {
                             double.TryParse(freightData[0][1].ToString(), out factor);
                         }
@@ -3460,10 +3490,10 @@ namespace WICR_Estimator.ViewModels
 
             return frCalc;
         }
-        
+
         private void CalculateCostBreakup()
         {
-            if (SystemMaterials==null)
+            if (SystemMaterials == null)
             {
                 return;
             }
@@ -3472,10 +3502,10 @@ namespace WICR_Estimator.ViewModels
             if (systemCBMaterial != null)
             {
                 TotalMaterialCostbrkp = (SumTotalMatExt + TotalOCExtension);
-                
+
                 TotalMaterialCost = TotalMaterialCostbrkp;
                 RaisePropertyChanged("TotalMaterialCost");
-                TotalMaterialCostbrkp = TotalMaterialCostbrkp*(1+MaterialPerc);
+                TotalMaterialCostbrkp = TotalMaterialCostbrkp * (1 + MaterialPerc);
                 TotalWeightbrkp = SumWeight;
                 TotalFreightCostBrkp = FreightCalculator(TotalWeightbrkp);
                 TotalSubContractLaborCostBrkp = TotalSCExtension;
@@ -3505,13 +3535,13 @@ namespace WICR_Estimator.ViewModels
             }
             set
             {
-                if (value!=includeDriveHrs)
+                if (value != includeDriveHrs)
                 {
                     //includeDriveHrs = value;
                     //if (isDataAvailable)
                     //{
-                        CalculateCost(null);
-                        CalculateCost(null);
+                    CalculateCost(null);
+                    CalculateCost(null);
                     //CalculateAllMaterial();
                     //}
                     Set(ref includeDriveHrs, value);
@@ -3548,7 +3578,7 @@ namespace WICR_Estimator.ViewModels
                 case "AJ-44A DRESSING(SEALER)":
                 case "WEATHER SEAL XL TWO COATS":
                     return totalSqft;
-                
+
                 case "BUBBLE REPAIR MAJOR SQFT":
                 case "NEOTEX-38 PASTE":
                 case "EXTRA STAIR NOSING LF":
@@ -3556,7 +3586,7 @@ namespace WICR_Estimator.ViewModels
                 case "RP FABRIC 10 INCH WIDE X(300 LF) FROM ACME":
                 case "STAIR NOSING FROM DEXOTEX":
                     return 0;
-                 
+
                 default:
                     return 0;
             }
@@ -3606,14 +3636,14 @@ namespace WICR_Estimator.ViewModels
         //New change for LaborUnitPricePer square Feet
         private void calculateLaborTotals()
         {
-            if (SystemMaterials==null)
+            if (SystemMaterials == null)
             {
                 return;
             }
             double additonalLaborMetalSlope = 0;
-            double  laborDeduction = 0;
+            double laborDeduction = 0;
             AllTabsLaborTotal = 0;
-            AllTabsMaterialTotal =0;
+            AllTabsMaterialTotal = 0;
             AllTabsFreightTotal = 0;
             AllTabsSubContractTotal = 0;
             if (isPrevailingWage)
@@ -3623,7 +3653,7 @@ namespace WICR_Estimator.ViewModels
             }
             if (isDiscounted)
             {
-                if (dbData==null)
+                if (dbData == null)
                 {
                     double.TryParse(laborDetails[1][0].ToString(), out laborDeduction);
                 }
@@ -3632,10 +3662,10 @@ namespace WICR_Estimator.ViewModels
             }
             IEnumerable<SystemMaterial> selectedLabors = SystemMaterials.Where(x => x.IsMaterialChecked == true).ToList();
 
-          
+
             TotalLaborExtension = selectedLabors.Select(x => x.LaborExtension).Sum() * (1 + preWage + laborDeduction);
             //Ends
-            
+
             TotalLaborExtension = TotalLaborExtension + TotalOCLaborExtension * (1 + preWage + laborDeduction);
             tempTotalLaborExtension = TotalLaborExtension;
             if (SlopeTotals != null && MetalTotals != null)
@@ -3647,7 +3677,7 @@ namespace WICR_Estimator.ViewModels
             }
             //,
             TotalSystemPrice = getTotals(TotalLaborExtension, TotalMaterialCostbrkp, TotalFreightCostBrkp, TotalSubContractLaborCostBrkp);
-            
+
             TotalSale = TotalSlopingPrice + TotalMetalPrice + TotalSystemPrice + TotalSubcontractLabor;
             AllTabsLaborTotal = TotalLaborExtension + DriveLaborValue;
             AllTabsMaterialTotal = TotalMaterialCostbrkp;
@@ -3656,23 +3686,23 @@ namespace WICR_Estimator.ViewModels
 
             if (SlopeTotals != null)
             {
-               additonalLaborMetalSlope = (totalSqft + riserCount)==0 ? 0:SlopeTotals.LaborExtTotal / (totalSqft + riserCount);
-               AllTabsLaborTotal = SlopeTotals.LaborExtTotal+AllTabsLaborTotal;
-                AllTabsMaterialTotal = SlopeTotals.MaterialExtTotal +  AllTabsMaterialTotal;
-                AllTabsFreightTotal = SlopeTotals.MaterialFreightTotal +AllTabsFreightTotal;
-                AllTabsSubContractTotal = SlopeTotals.SubContractLabor +  AllTabsSubContractTotal;
+                additonalLaborMetalSlope = (totalSqft + riserCount) == 0 ? 0 : SlopeTotals.LaborExtTotal / (totalSqft + riserCount);
+                AllTabsLaborTotal = SlopeTotals.LaborExtTotal + AllTabsLaborTotal;
+                AllTabsMaterialTotal = SlopeTotals.MaterialExtTotal + AllTabsMaterialTotal;
+                AllTabsFreightTotal = SlopeTotals.MaterialFreightTotal + AllTabsFreightTotal;
+                AllTabsSubContractTotal = SlopeTotals.SubContractLabor + AllTabsSubContractTotal;
                 TotalLaborUnitPrice = TotalLaborUnitPrice + additonalLaborMetalSlope;
             }
-            if (MetalTotals!=null)
+            if (MetalTotals != null)
             {
                 additonalLaborMetalSlope = (totalSqft + riserCount) == 0 ? 0 : MetalTotals.LaborExtTotal / (totalSqft + riserCount);
 
-                AllTabsLaborTotal = AllTabsLaborTotal+ MetalTotals.LaborExtTotal ;
-                AllTabsMaterialTotal = AllTabsMaterialTotal+ MetalTotals.MaterialExtTotal ;
-                AllTabsFreightTotal = AllTabsFreightTotal+ MetalTotals.MaterialFreightTotal ;
-                AllTabsSubContractTotal = AllTabsSubContractTotal+ MetalTotals.SubContractLabor ;
+                AllTabsLaborTotal = AllTabsLaborTotal + MetalTotals.LaborExtTotal;
+                AllTabsMaterialTotal = AllTabsMaterialTotal + MetalTotals.MaterialExtTotal;
+                AllTabsFreightTotal = AllTabsFreightTotal + MetalTotals.MaterialFreightTotal;
+                AllTabsSubContractTotal = AllTabsSubContractTotal + MetalTotals.SubContractLabor;
                 TotalLaborUnitPrice = TotalLaborUnitPrice + additonalLaborMetalSlope;
-            }   
+            }
 
             TotalLaborWithoutDrive = AllTabsLaborTotal - DriveLaborValue;
             //OtherLaborMaterials.FirstOrDefault(x => x.Name == "Access issues?").LMaterialPrice = Math.Round(selectedLabors.Select(x => x.LaborExtension).Sum(),2);
@@ -3686,7 +3716,7 @@ namespace WICR_Estimator.ViewModels
             double laborDeduction = 0;
             if (isDiscounted)
             {
-                if (dbData==null)
+                if (dbData == null)
                 {
                     double.TryParse(laborDetails[1][0].ToString(), out laborDeduction);
                 }
@@ -3696,9 +3726,9 @@ namespace WICR_Estimator.ViewModels
             if (ZAddLaborMinCharge)
             {
 
-                
+
                 TotalLaborExtension = TotalLaborExtension + LaborMinChargeLaborExtension * (1 + preWage + laborDeduction);
-                extrHrs= TotalHrsSystemLabor<20?20 - TotalHrsSystemLabor:0;
+                extrHrs = TotalHrsSystemLabor < 20 ? 20 - TotalHrsSystemLabor : 0;
                 AllTabsLaborTotal = AllTabsLaborTotal + LaborMinChargeLaborExtension * (1 + preWage + laborDeduction); ;
                 RaisePropertyChanged("AllTabsLaborTotal");
                 RaisePropertyChanged("TotalLaborExtension");
@@ -3716,7 +3746,7 @@ namespace WICR_Estimator.ViewModels
             RaisePropertyChanged("TotalLaborUnitPrice");
         }
 
-        public double  TotalLaborWithoutDrive { get; set; }
+        public double TotalLaborWithoutDrive { get; set; }
 
         public void UpdateUILaborCost()
         {
@@ -3738,7 +3768,7 @@ namespace WICR_Estimator.ViewModels
         }
         private double getTotals(double laborCost, double materialCost, double freightCost, double subcontractLabor)
         {
-            if (dbData==null)
+            if (dbData == null)
             {
                 if (laborDetails == null)
                 {
@@ -3834,14 +3864,14 @@ namespace WICR_Estimator.ViewModels
                 res = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Profit Margin on subcontract labor").Value;
                 double subCLabor = subcontractLabor * res;
                 //profitMarginAdd
-                double pmAdd = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Profit Margin add").Value; 
-                
+                double pmAdd = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Profit Margin add").Value;
+
                 //double.TryParse(laborDetails[8][0].ToString(), out pmAdd);
 
                 double profitMarginAdd = (slopeTotal * pmAdd) * (1 + pmAdd);
-                
+
                 //profit margin
-                double pm=dbData.LaborDBData.FirstOrDefault(x => x.Name == "Profit Margin").Value; ;
+                double pm = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Profit Margin").Value; ;
                 ProjectProfitMargin = pm;
                 //double.TryParse(laborDetails[10][0].ToString(), out pm);
 
@@ -3877,7 +3907,7 @@ namespace WICR_Estimator.ViewModels
                 //double.TryParse(laborDetails[16][0].ToString(), out addup);
                 addup = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Add mark up to total job price").Value;
                 double restTotal = TotalCost * (ins + fuel + addup);
-                
+
                 //calculated Profit Margin,currently not being used.
                 double ProfitMargin = TotalCost - slopeTotal;
 
@@ -3890,7 +3920,7 @@ namespace WICR_Estimator.ViewModels
 
         public virtual void populateCalculation()
         {
-            if (dbData == null&& laborDetails==null)
+            if (dbData == null && laborDetails == null)
                 return;
 
             LCostBreakUp = new ObservableCollection<CostBreakup>();
@@ -3898,18 +3928,18 @@ namespace WICR_Estimator.ViewModels
             double totalJobCostM = 0;
             double totalJobCostS = 0;
             double totalJobCostSy = 0;
-            
-            
+
+
             //double.TryParse(laborDetails[0][0].ToString(), out facValue);
-            facValue = Math.Round(preWage,4);
+            facValue = Math.Round(preWage, 4);
             double fac1 = isPrevailingWage ? facValue : 0;
-            if (dbData==null)
+            if (dbData == null)
             {
                 double.TryParse(laborDetails[1][0].ToString(), out facValue);
             }
             else
                 facValue = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Deduct on Labor for large jobs").Value;
-            
+
             double fac2 = isDiscounted ? facValue : 0;
             double calbackfactor = 1 + fac1 + fac2;
 
@@ -3917,8 +3947,8 @@ namespace WICR_Estimator.ViewModels
             {
                 Name = "Total Labor",
                 CalFactor = 0,
-                MetalCost = MetalTotals!=null?(MetalTotals.LaborExtTotal / calbackfactor):0,
-                SlopeCost = SlopeTotals!=null?(SlopeTotals.LaborExtTotal / calbackfactor):0,
+                MetalCost = MetalTotals != null ? (MetalTotals.LaborExtTotal / calbackfactor) : 0,
+                SlopeCost = SlopeTotals != null ? (SlopeTotals.LaborExtTotal / calbackfactor) : 0,
                 SystemCost = (TotalLaborExtension / calbackfactor),
                 HideCalFactor = System.Windows.Visibility.Hidden
             });
@@ -3927,8 +3957,8 @@ namespace WICR_Estimator.ViewModels
             {
                 Name = "Prevailing Wage (Including Marina's Salary)",
                 CalFactor = fac1,
-                MetalCost = MetalTotals != null ? (MetalTotals.LaborExtTotal / calbackfactor) * fac1:0,
-                SlopeCost = SlopeTotals!=null?(SlopeTotals.LaborExtTotal / calbackfactor) * fac1:0,
+                MetalCost = MetalTotals != null ? (MetalTotals.LaborExtTotal / calbackfactor) * fac1 : 0,
+                SlopeCost = SlopeTotals != null ? (SlopeTotals.LaborExtTotal / calbackfactor) * fac1 : 0,
                 SystemCost = (TotalLaborExtension / calbackfactor) * fac1
             });
 
@@ -3938,31 +3968,31 @@ namespace WICR_Estimator.ViewModels
             {
                 Name = "Deduct on Labor for large jobs",
                 CalFactor = fac2,
-                MetalCost = MetalTotals != null ? (MetalTotals.LaborExtTotal / calbackfactor) * fac2:0,
-                SlopeCost = SlopeTotals!=null?(SlopeTotals.LaborExtTotal / calbackfactor) * fac2:0,
+                MetalCost = MetalTotals != null ? (MetalTotals.LaborExtTotal / calbackfactor) * fac2 : 0,
+                SlopeCost = SlopeTotals != null ? (SlopeTotals.LaborExtTotal / calbackfactor) * fac2 : 0,
                 SystemCost = (TotalLaborExtension / calbackfactor) * fac2
             });
             LCostBreakUp.Add(new CostBreakup
             {
                 Name = "Total Labor including prevailing wage",
                 CalFactor = 0,
-                MetalCost = MetalTotals != null ? MetalTotals.LaborExtTotal:0,
-                SlopeCost = SlopeTotals != null ? SlopeTotals.LaborExtTotal:0,
-                SystemCost = (TotalLaborExtension+DriveLaborValue),
+                MetalCost = MetalTotals != null ? MetalTotals.LaborExtTotal : 0,
+                SlopeCost = SlopeTotals != null ? SlopeTotals.LaborExtTotal : 0,
+                SystemCost = (TotalLaborExtension + DriveLaborValue),
                 HideCalFactor = System.Windows.Visibility.Hidden
             });
-            
+
             if (dbData == null)
             {
                 double.TryParse(laborDetails[2][0].ToString(), out facValue);
             }
             else
                 facValue = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Workers Comp TL > $24.00").Value;
-            
+
 
             double actVal = isPrevailingWage ? 0 : facValue;
-            double metalLabor = MetalTotals != null ? (MetalTotals.LaborExtTotal / calbackfactor + (MetalTotals.LaborExtTotal / calbackfactor * fac2)):0;
-            double slopeLabor = SlopeTotals != null ? (SlopeTotals.LaborExtTotal / calbackfactor + (SlopeTotals.LaborExtTotal / calbackfactor * fac2)):0;
+            double metalLabor = MetalTotals != null ? (MetalTotals.LaborExtTotal / calbackfactor + (MetalTotals.LaborExtTotal / calbackfactor * fac2)) : 0;
+            double slopeLabor = SlopeTotals != null ? (SlopeTotals.LaborExtTotal / calbackfactor + (SlopeTotals.LaborExtTotal / calbackfactor * fac2)) : 0;
             //double systemLabor = (TotalLaborExtension / calbackfactor + (TotalLaborExtension / calbackfactor * fac2))+DriveLaborValue;
             double systemLabor = TotalLaborExtension + DriveLaborValue;
             LCostBreakUp.Add(new CostBreakup
@@ -4002,9 +4032,9 @@ namespace WICR_Estimator.ViewModels
             {
                 Name = "Workers Comp Prevailing Wage",
                 CalFactor = facValue,
-                MetalCost = isPrevailingWage && MetalTotals != null  ? facValue * MetalTotals.LaborExtTotal : 0,
-                SlopeCost = isPrevailingWage&& SlopeTotals != null ?  facValue * SlopeTotals.LaborExtTotal : 0,
-                SystemCost = isPrevailingWage ? facValue * (TotalLaborExtension+DriveLaborValue) : 0
+                MetalCost = isPrevailingWage && MetalTotals != null ? facValue * MetalTotals.LaborExtTotal : 0,
+                SlopeCost = isPrevailingWage && SlopeTotals != null ? facValue * SlopeTotals.LaborExtTotal : 0,
+                SystemCost = isPrevailingWage ? facValue * (TotalLaborExtension + DriveLaborValue) : 0
             });
             if (dbData == null)
             {
@@ -4025,8 +4055,8 @@ namespace WICR_Estimator.ViewModels
             {
                 Name = "Materials",
                 CalFactor = 0,
-                MetalCost = MetalTotals != null ? MetalTotals.MaterialExtTotal:0,
-                SlopeCost = SlopeTotals != null ? SlopeTotals.MaterialExtTotal:0,
+                MetalCost = MetalTotals != null ? MetalTotals.MaterialExtTotal : 0,
+                SlopeCost = SlopeTotals != null ? SlopeTotals.MaterialExtTotal : 0,
                 SystemCost = TotalMaterialCostbrkp,
                 HideCalFactor = System.Windows.Visibility.Hidden
 
@@ -4035,8 +4065,8 @@ namespace WICR_Estimator.ViewModels
             {
                 Name = "Freight",
                 CalFactor = 0,
-                MetalCost = MetalTotals != null ? MetalTotals.MaterialFreightTotal:0,
-                SlopeCost = SlopeTotals != null ? SlopeTotals.MaterialFreightTotal:0,
+                MetalCost = MetalTotals != null ? MetalTotals.MaterialFreightTotal : 0,
+                SlopeCost = SlopeTotals != null ? SlopeTotals.MaterialFreightTotal : 0,
                 SystemCost = TotalFreightCostBrkp,
                 HideCalFactor = System.Windows.Visibility.Hidden
             });
@@ -4051,8 +4081,8 @@ namespace WICR_Estimator.ViewModels
             {
                 Name = "Tax",
                 CalFactor = facValue,
-                MetalCost = MetalTotals != null ? facValue * (MetalTotals.MaterialExtTotal + MetalTotals.MaterialFreightTotal):0,
-                SlopeCost = SlopeTotals != null ? facValue * (SlopeTotals.MaterialExtTotal + SlopeTotals.MaterialFreightTotal):0,
+                MetalCost = MetalTotals != null ? facValue * (MetalTotals.MaterialExtTotal + MetalTotals.MaterialFreightTotal) : 0,
+                SlopeCost = SlopeTotals != null ? facValue * (SlopeTotals.MaterialExtTotal + SlopeTotals.MaterialFreightTotal) : 0,
                 SystemCost = facValue * (TotalMaterialCostbrkp + TotalFreightCostBrkp)
             });
 
@@ -4060,8 +4090,8 @@ namespace WICR_Estimator.ViewModels
             {
                 Name = "SubContract Labor",
                 CalFactor = 0,
-                MetalCost = MetalTotals != null ? MetalTotals.SubContractLabor:0,
-                SlopeCost = SlopeTotals != null ? SlopeTotals.SubContractLabor:0,
+                MetalCost = MetalTotals != null ? MetalTotals.SubContractLabor : 0,
+                SlopeCost = SlopeTotals != null ? SlopeTotals.SubContractLabor : 0,
                 SystemCost = 0,
                 SubContractLaborCost = TotalSubContractLaborCostBrkp,
                 HideCalFactor = System.Windows.Visibility.Hidden
@@ -4092,11 +4122,12 @@ namespace WICR_Estimator.ViewModels
             {
                 Name = "Individual Cost",
                 CalFactor = 0,
-                MetalCost = 1-MetalMarkup,
-                SlopeCost = 1-SlopeMarkup,
-                SystemCost = 1-MaterialMarkup,
+                MetalCost = 1 - MetalMarkup,
+                SlopeCost = 1 - SlopeMarkup,
+                SystemCost = 1 - MaterialMarkup,
                 HideCalFactor = System.Windows.Visibility.Hidden
             });
+            
             LCostBreakUp.Add(new CostBreakup
             {
                 Name = "Individual Profit Margin",
@@ -4104,7 +4135,7 @@ namespace WICR_Estimator.ViewModels
                 MetalCost = MetalMarkup,
                 SlopeCost = SlopeMarkup,
                 SystemCost = MaterialMarkup,
-                SubContractLaborCost= SubContractProfitMargin,
+                SubContractLaborCost = SubContractProfitMargin,
                 HideCalFactor = System.Windows.Visibility.Hidden
             });
 
@@ -4126,7 +4157,7 @@ namespace WICR_Estimator.ViewModels
             }
             else
                 facValue = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Profit Margin add").Value;
-            
+
             double pm2, ps2, psy2;
             pm2 = totalJobCostM * facValue * (1 + facValue);
             ps2 = totalJobCostS * facValue * (1 + facValue);
@@ -4147,7 +4178,7 @@ namespace WICR_Estimator.ViewModels
             else
                 facValue = dbData.LaborDBData.FirstOrDefault(x => x.Name == "Profit deduct for special metal").Value;
 
-            double pm3 = hasSpecialPricing && MetalTotals != null  ? facValue * MetalTotals.MaterialExtTotal : 0;
+            double pm3 = hasSpecialPricing && MetalTotals != null ? facValue * MetalTotals.MaterialExtTotal : 0;
             LCostBreakUp.Add(new CostBreakup
             {
                 Name = "Profit deduct for special metal",
@@ -4159,17 +4190,17 @@ namespace WICR_Estimator.ViewModels
             //double pm;
             //double.TryParse(laborDetails[10][0].ToString(), out pm);
             double totalCostM = 0, totalCostS = 0;
-            if (MetalTotals != null )
+            if (MetalTotals != null)
             {
                 totalCostM = (totalJobCostM - MetalTotals.SubContractLabor) / MetalMarkup + (MetalTotals.SubContractLabor +
                 pm2 + pm3);
             }
-            if (SlopeTotals!=null)
+            if (SlopeTotals != null)
             {
                 totalCostS = (totalJobCostS - SlopeTotals.SubContractLabor) / SlopeMarkup + (SlopeTotals.SubContractLabor +
                 ps2);
             }
-            
+
             double totalCostSy = (totalJobCostSy) / MaterialMarkup + (psy2); //psy4+ psy6
             double totalCostSbLabor = TotalSubContractLaborCostBrkp + psy1;
             LCostBreakUp.Add(new CostBreakup
@@ -4331,8 +4362,8 @@ namespace WICR_Estimator.ViewModels
             TotalSubcontractLabor = finalSubLabCost; // * (1 + markUpPerc / 100);
             CalculateTotalSqFt();
             TotalSale = TotalMetalPrice + TotalSlopingPrice + TotalSystemPrice + TotalSubcontractLabor;
-            LaborPerc= Math.Round(AllTabsLaborTotal / TotalSale,2);
-            ProjectProfitMargin = Math.Round(((totalCostM - totalJobCostM) + (totalCostS - totalJobCostS) + (totalCostSy - totalJobCostSy)) / TotalSale,2);
+            LaborPerc = Math.Round(AllTabsLaborTotal / TotalSale, 2);
+            ProjectProfitMargin = Math.Round(((totalCostM - totalJobCostM) + (totalCostS - totalJobCostS) + (totalCostSy - totalJobCostSy)) / TotalSale, 2);
             RaisePropertyChanged("MaterialPerc");
             RaisePropertyChanged("LaborPerc");
             RaisePropertyChanged("TotalMetalPrice");
@@ -4344,12 +4375,12 @@ namespace WICR_Estimator.ViewModels
 
         public virtual void CalculateTotalSqFt()
         {
-            if ((totalSqft + riserCount)==0)
+            if ((totalSqft + riserCount) == 0)
             {
                 CostperSqftSlope = 0;
-                CostperSqftMetal =0;
+                CostperSqftMetal = 0;
                 CostperSqftMaterial = 0;
-                CostperSqftSubContract =0;
+                CostperSqftSubContract = 0;
             }
             else
             {
@@ -4357,7 +4388,7 @@ namespace WICR_Estimator.ViewModels
                 CostperSqftMetal = TotalMetalPrice / (totalSqft + riserCount);
                 CostperSqftMaterial = TotalSystemPrice / (totalSqft + riserCount);
                 CostperSqftSubContract = TotalSubcontractLabor / (totalSqft + riserCount);
-            }           
+            }
             TotalCostperSqft = CostperSqftSlope + CostperSqftMetal + CostperSqftMaterial + CostperSqftSubContract;
             RaisePropertyChanged("CostperSqftSlope");
             RaisePropertyChanged("CostperSqftMetal");
@@ -4375,30 +4406,30 @@ namespace WICR_Estimator.ViewModels
                 prjName = prjName.Split('.')[0];
             }
 
-           
+
             isDataAvailable = true;
             if (dbData == null)
             {
                 //materialDetails = await GoogleUtility.SpreadSheetConnect.GetDataFromGoogleSheets("Pricing", "H33:K59");
 
                 dbData = DataSerializerService.DSInstance.deserializeDbData(prjName);
-            }   
-                laborRate = dbData.FreightDBData.First(x => x.FreightID == 8).FactorValue;
-                
-                SubContractMarkup =  dbData.LaborDBData.First(x => x.Name == "Profit Margin on subcontract labor").Value; 
-               
-                MetalMarkup = 1 - dbData.LaborDBData.First(x => x.Name == "Profit Margin Metal").Value; ;
+            }
+            laborRate = dbData.FreightDBData.First(x => x.FreightID == 8).FactorValue;
 
-                SlopeMarkup = 1 - dbData.LaborDBData.First(x => x.Name == "Profit Margin Slope").Value; ;
+            SubContractMarkup = dbData.LaborDBData.First(x => x.Name == "Profit Margin on subcontract labor").Value;
 
-                MaterialMarkup = 1 - dbData.LaborDBData.First(x => x.Name == "Profit Margin Material").Value; 
+            MetalMarkup = 1 - dbData.LaborDBData.First(x => x.Name == "Profit Margin Metal").Value; ;
 
-                SubContractProfitMargin = dbData.LaborDBData.First(x => x.Name == "Profit Margin SubContract").Value; 
+            SlopeMarkup = 1 - dbData.LaborDBData.First(x => x.Name == "Profit Margin Slope").Value; ;
 
-            
+            MaterialMarkup = 1 - dbData.LaborDBData.First(x => x.Name == "Profit Margin Material").Value;
+
+            SubContractProfitMargin = dbData.LaborDBData.First(x => x.Name == "Profit Margin SubContract").Value;
+
+
         }
 
-        public virtual SystemMaterial createSMObjectDB(string matName,string units)
+        public virtual SystemMaterial createSMObjectDB(string matName, string units)
         {
             double cov;
             double mp;
@@ -4418,14 +4449,14 @@ namespace WICR_Estimator.ViewModels
             try
             {
                 if (isPrevailingWage)
-                {                    
+                {
                     prPerc = dbData.FreightDBData.FirstOrDefault(x => x.FactorName == "SlopeProdRate").FactorValue;
                 }
                 else
                     prPerc = 0;
 
                 //Get Material Data from DB
-                MaterialDB matdb = dbData.MaterialDBData.First(x=>x.MaterialName.ToLower()==matName.ToLower());
+                MaterialDB matdb = dbData.MaterialDBData.First(x => x.MaterialName.ToLower() == matName.ToLower());
                 vprRate = matdb.ProdRateVertical;
                 cov = matdb.Coverage;
                 mp = matdb.MaterialPrice;
@@ -4433,7 +4464,7 @@ namespace WICR_Estimator.ViewModels
                 setUpMin = matdb.LaborMinCharge;
                 pRateStairs = matdb.ProdRateStair;
                 hprRate = matdb.ProdRateHorizontal;
-                
+
                 pRateStairs = pRateStairs * (1 + prPerc);
                 hprRate = hprRate * (1 + prPerc);
                 vprRate = vprRate * (1 + prPerc);
@@ -4523,7 +4554,7 @@ namespace WICR_Estimator.ViewModels
             int i = 0;
             foreach (LaborContract item in SubContractLaborItems)
             {
-                if (i>1)
+                if (i > 1)
                 {
                     break;
                 }
@@ -4532,7 +4563,7 @@ namespace WICR_Estimator.ViewModels
                 i++;
                 item.Name = "SubContractLaborItem " + i;
             }
-             i = 0;
+            i = 0;
             foreach (OtherItem item in OtherMaterials)
             {
                 item.Quantity = i + 1;
@@ -4546,7 +4577,7 @@ namespace WICR_Estimator.ViewModels
                 item.MaterialPrice = i + 6;
                 i++;
             }
-            
+
 
         }
         #endregion

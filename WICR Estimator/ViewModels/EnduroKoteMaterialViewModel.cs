@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -125,11 +125,10 @@ namespace WICR_Estimator.ViewModels
                     //SystemMaterials[i].SpecialMaterialPricing = sp;
                     UpdateMe(sysMat[i]);
 
-                    SystemMaterials[i].UpdateSpecialPricing(sp);
 
                     //SystemMaterials[i].IsMaterialEnabled = iscbEnabled;
                     //SystemMaterials[i].IsMaterialChecked = iscbChecked;
-                    SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
+                    //SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
 
 
                     if (SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)" || SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
@@ -142,6 +141,7 @@ namespace WICR_Estimator.ViewModels
                         }
                     }
 
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
                 }
 
             }
@@ -378,6 +378,15 @@ namespace WICR_Estimator.ViewModels
         {
             //base.ApplyCheckUnchecks(obj);
             lastCheckedMat = obj.ToString();
+            if (obj.ToString() == "Stair Nosing")
+            {
+                var material = SystemMaterials.FirstOrDefault(x => x.Name == "Stair Nosing");
+                if (material != null)
+                {
+                    stairNosingCheckValue = material.IsMaterialChecked;
+                }
+
+            }
             if (obj.ToString()== "ENDURO ELA-98 BINDER (2 COATS)")
             {
                 bool isChecked = SystemMaterials.Where(x => x.Name == "ENDURO ELA-98 BINDER (2 COATS)").FirstOrDefault().IsMaterialChecked;
@@ -403,7 +412,7 @@ namespace WICR_Estimator.ViewModels
             foreach (SystemMaterial item in SystemMaterials)
             {
                 if (item.Name== "2.5 Galvanized Lathe (18 s.f.) no less than 12 per sq ft."|| item.Name == "Base Coat EKC Cementitious Mix"
-                    || item.Name == "Staples (3/4 Inch Crown, Box of 13,500)" || item.Name=="Stair Nosing")
+                    || item.Name == "Staples (3/4 Inch Crown, Box of 13,500)" )
                 {
                     item.IsMaterialChecked = getCheckboxCheckStatus(item.Name);
                 }
