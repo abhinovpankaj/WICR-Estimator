@@ -143,7 +143,7 @@ namespace WICR_Estimator.ViewModels
                     //    SystemMaterials[i].IsMaterialChecked = iscbChecked;
                     UpdateMe(sysMat[i]);
 
-                    SystemMaterials[i].UpdateSpecialPricing(sp);
+                    
                     SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
 
                     if (SystemMaterials[i].Name == "EXTRA STAIR NOSING" || SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
@@ -163,6 +163,7 @@ namespace WICR_Estimator.ViewModels
                             SystemMaterials[i].UpdateUnits(qtyList[SystemMaterials[i].Name].ToString());
                         }
                     }
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
                 }
             }
             #endregion
@@ -274,6 +275,8 @@ namespace WICR_Estimator.ViewModels
                     return totalSqft < 1 ? false : !IsReseal;
                 case "STAIR NOSING OVER CONCRETE":
                     return totalSqft > 0 || RequireFlashing == true ? true : false;
+                case "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)":
+                    return riserCount > 0;
                 default:
                     return true;
             }
@@ -301,7 +304,7 @@ namespace WICR_Estimator.ViewModels
             foreach (SystemMaterial item in SystemMaterials)
             {
                 if (item.Name == "REPAIR AREAS (ENTER SQ FT OF FILL @ 1/4 INCH)"
-                    || item.Name == "SLOPING FOR TREADS IF NOT PROVIDED FOR IN FRAMING (MOST CASES NEED SLOPE)"
+                    
                     || item.Name == "EXTRA STAIR NOSING"
                     || item.Name == "Plywood 3/4 & blocking (# of 4x8 sheets)"
                     || item.Name == "1/20 SAND/ #100 LB"

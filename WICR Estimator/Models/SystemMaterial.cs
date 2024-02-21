@@ -1,4 +1,5 @@
-﻿using MyToolkit.Model;
+﻿using ControlzEx.Standard;
+using MyToolkit.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -318,13 +319,14 @@ namespace WICR_Estimator.Models
                 
                 if (allowHooking(Name))
                 {
+                    
                     if (qtysm != 0)
                     {
                         IsMaterialChecked = true;
                     }
                     else
                         IsMaterialChecked = false;
-
+                    
                     if (OnQTyChanged != null )
                     {
                         OnQTyChanged(this.Name, EventArgs.Empty);
@@ -505,12 +507,10 @@ namespace WICR_Estimator.Models
                     Int32.TryParse(this.smunits, out unit);
                     if (unit != 0)
                     {
-                        ismaterialchecked = true;
-
+                        IsMaterialChecked = true;
                     }
                     else
-                        ismaterialchecked = false;
-                   
+                        IsMaterialChecked = false;                   
                 }
 
             
@@ -541,8 +541,11 @@ namespace WICR_Estimator.Models
         #endregion
         public void UpdateCheckStatus(bool isMatEnabled,bool isMaterialChecked)
         {
-            this.isMaterialEnabled = isMatEnabled;
             this.ismaterialchecked = isMaterialChecked;
+            this.isMaterialEnabled = isMatEnabled;
+            RaisePropertyChanged("IsMaterialChecked");
+            RaisePropertyChanged("IsMaterialEnabled");
+
         }
 
         public void UpdateSpecialPricing(double price)
@@ -550,7 +553,7 @@ namespace WICR_Estimator.Models
             this.specialMaterialPricing = price;
             if (specialMaterialPricing != 0)
             {
-                matExt = SpecialMaterialPricing * Qty;
+                matExt = SpecialMaterialPricing * qtysm;
             }
             else
             {
@@ -575,13 +578,15 @@ namespace WICR_Estimator.Models
             RaisePropertyChanged("Qty");
             if (allowHooking(Name))
             {
-
-                if (qtysm != 0)
-                {
-                    ismaterialchecked = true;
-                }
-                else
-                    ismaterialchecked = false;              
+                
+                    if (qtysm != 0)
+                    {
+                        ismaterialchecked = true;
+                    }
+                    else
+                        ismaterialchecked = false;
+                
+                                            
             }
             
             MaterialExtension = qty * materialPrice;
@@ -605,6 +610,7 @@ namespace WICR_Estimator.Models
                 case "R&R Sealant 1/2 to 3/4 inch control joints (Sonneborn NP-2)":
                 case "LARGE CRACK REPAIR":
                 case "BUBBLE REPAIR (MEASURE SQ FT)":
+                case "METAL LATH SYSTEM R&R":
                 case "System Large cracks Repair":
                 case "EXTRA STAIR NOSING":
                 case "System bubbled and failed texture repair":
@@ -631,6 +637,10 @@ namespace WICR_Estimator.Models
                 case "PRIME AND ONE COAT OF VULKEM 801 ALUMINUM ROOF COATING @ WALL WITH SAND BROADCAST":
                 case "Add for penetrations  -customer to determine qty":
                 //case "4 INCH SCHEDULE 40 PIPE FOR ROCK POCKETS":
+                case "Add labor for additional injection material (enter quantity of pails)":
+                case "Add labor for additional injection material":
+                //case "Stair Nosing From Dexotex":
+                case "Stair Nosing":
                     return true;
                 default:
                     return false;

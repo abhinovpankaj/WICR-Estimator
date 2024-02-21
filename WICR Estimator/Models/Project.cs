@@ -724,7 +724,16 @@ namespace WICR_Estimator.Models
 
         private bool canRedo(object obj)
         {
-            return undoRedoManager.CanRedo;
+            try
+            {
+                return undoRedoManager.CanRedo;
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+            
         }
 
         public ICommand UndoCommand
@@ -744,7 +753,16 @@ namespace WICR_Estimator.Models
 
         private bool canUndo(object obj)
         {
-            return undoRedoManager.CanUndo;
+            try
+            {
+                return undoRedoManager.CanUndo;
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+            
             //if (undoRedoManager.CurrentIndex>3)
             //{
             //    return undoRedoManager.CanUndo;

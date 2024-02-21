@@ -190,7 +190,7 @@ namespace WICR_Estimator.ViewModels
                         SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
                     }
                     //SystemMaterials[i].SpecialMaterialPricing = sp;
-                    SystemMaterials[i].UpdateSpecialPricing(sp);
+                    
                     
                     if (SystemMaterials[i].Name == "CALCIUM CHLORIDE TEST (MINIMUM OF 3 FOR EACH JOB)")
                     {
@@ -200,6 +200,7 @@ namespace WICR_Estimator.ViewModels
                             SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
                         }
                     }
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
                 }
 
             }

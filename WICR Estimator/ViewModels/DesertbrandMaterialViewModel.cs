@@ -120,8 +120,8 @@ namespace WICR_Estimator.ViewModels
 
                     UpdateMe(sysMat[i]);
 
-                    SystemMaterials[i].UpdateSpecialPricing(sp);
-                    SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
+                    
+                    //SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
 
                     if (SystemMaterials[i].Name == "Extra stair nosing lf" || SystemMaterials[i].Name == "Plywood 3/4 & blocking (# of 4x8 sheets)" ||
                         SystemMaterials[i].Name == "Stucco Material Remove and replace (LF)")
@@ -132,6 +132,8 @@ namespace WICR_Estimator.ViewModels
                             SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
                         }
                     }
+
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
 
                 }
 
@@ -180,6 +182,8 @@ namespace WICR_Estimator.ViewModels
                 case "2.5 Galvanized Lathe (18 s.f.)":
                 case "Staples":
                     return !IsSystemOverConcrete;
+                case "Stair Nosing":
+                    return riserCount > 0 ? true : false;
                 default:
                     return true;
             }
@@ -193,6 +197,7 @@ namespace WICR_Estimator.ViewModels
                 //case "BASE COAT 50 lb Desert Crete Level Max 20/30":
                 case "BASE COAT Desert Crete poly base mixed with water":
                 case "2.5 Galvanized Lathe (18 s.f.)":
+                case "Stair Nosing":
                      return true;
                 default:
                     return false;
@@ -370,6 +375,15 @@ namespace WICR_Estimator.ViewModels
         public override void ApplyCheckUnchecks(object obj)
         {
             lastCheckedMat = obj.ToString();
+            if (obj.ToString() == "Stair Nosing")
+            {
+                var material = SystemMaterials.FirstOrDefault(x => x.Name == "Stair Nosing");
+                if (material != null)
+                {
+                    stairNosingCheckValue = material.IsMaterialChecked;
+                }
+
+            }
             if (obj.ToString() == "2.5 Galvanized Lathe (18 s.f.)")
             {
                 bool isChecked = SystemMaterials.Where(x => x.Name == "2.5 Galvanized Lathe (18 s.f.)").FirstOrDefault().IsMaterialChecked;

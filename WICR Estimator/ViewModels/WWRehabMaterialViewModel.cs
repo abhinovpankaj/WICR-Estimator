@@ -78,9 +78,6 @@ namespace WICR_Estimator.ViewModels
                     //SystemMaterials[i].IsMaterialChecked = iscbChecked;
                     UpdateMe(sysMat[i]);
 
-                    SystemMaterials[i].UpdateSpecialPricing(sp);
-                    SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
-
                     if (SystemMaterials[i].Name == "Stucco Material Remove And Replace (Lf)" || SystemMaterials[i].Name == "Plywood 3/4 & Blocking(# Of 4X8 Sheets)" ||
                     SystemMaterials[i].Name == "Extra Stair Nosing Lf" || SystemMaterials[i].Name == "Bubble Repair(Measure Sq Ft)"
                             || SystemMaterials[i].Name == "Large Crack Repair")
@@ -92,6 +89,8 @@ namespace WICR_Estimator.ViewModels
 
                         }
                     }
+                    // SystemMaterials[i].UpdateCheckStatus(iscbEnabled, iscbChecked);
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
 
                 }
 
@@ -1272,12 +1271,14 @@ namespace WICR_Estimator.ViewModels
                 case "LIP COLOR":
                 //case "AJ-44A DRESSING (SEALER)":
                 case "RESISTITE UNIVERSAL PRIMER(ADD 50% WATER)":
-                case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
+                //case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH WHITE)":
                 //case "VISTA PAINT ACRIPOXY":
-                case "STAIR NOSING FROM DEXOTEX":
-                case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
-                case "WEATHER SEAL XL TWO COATS":
+                
+                //case "CUSTOM TEXTURE SKIP TROWEL(RESISTITE SMOOTH GRAY)":
+                //case "WEATHER SEAL XL TWO COATS":
                     return true;
+                case "STAIR NOSING FROM DEXOTEX":
+                    return riserCount > 0;
                 default:
                     return false;
             }

@@ -268,7 +268,7 @@ namespace WICR_Estimator.ViewModels
                     UpdateMe(sysMat[i]);
 
                     //SystemMaterials[i].SpecialMaterialPricing = sp;
-                    SystemMaterials[i].UpdateSpecialPricing(sp);
+                    
                     if (iscbEnabled)
                     {
                         if (SystemMaterials[i].Name == "Vulkem Tremproof 201 L 30 MILS" || SystemMaterials[i].Name== "Vulkem Tremproof 201 L 30 MILS(Additional)"
@@ -301,7 +301,7 @@ namespace WICR_Estimator.ViewModels
                             SystemMaterials[i].UpdateQuantity(qtyList[SystemMaterials[i].Name]);
                         }
                     }
-
+                    SystemMaterials[i].UpdateSpecialPricing(sp);
                 }
 
             }
