@@ -447,7 +447,7 @@ namespace WICR_Estimator.Models
 
         }
 
-        
+        [IgnoreDataMember]
         public double MinMarkUp { get; set; }
         
         private DelegateCommand enableMMCommand;
@@ -955,8 +955,17 @@ namespace WICR_Estimator.Models
                 //    OnPropertyChanged("MarkupPercentage");
                 //    UpdateJobSetup();
                 //}
+                if (!allowMoreMarkup)
+                {
+                    if (value < -10)
+                    {
+                        MinMarkUp = value;
+                        RaisePropertyChanged("MinMarkup");
+                    }
+                }
+                
                 Set(ref markupPercentage, value);
-
+                
                 UpdateJobSetup();
             }
         }

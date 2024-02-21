@@ -711,7 +711,7 @@
                                 Text="Mark Up %" />
                             <StackPanel Orientation="Horizontal">
                                 <TextBox
-                                    Width="50"
+                                    Width="80"
                                     Margin="5"
                                     HorizontalAlignment="Left"
                                     Style="{StaticResource TextBoxStyle}"
