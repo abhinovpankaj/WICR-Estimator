@@ -541,6 +541,8 @@ namespace WICR_Estimator.ViewModels
                     }
 
                     bool ischecked = false,ischecked2=false;
+                    bool? isnosingchecked = null;
+                    isnosingchecked = item.MaterialViewModel.stairNosingCheckValue;
                     if (item.OriginalProjectName == "Pedestrian System")
                     {
                         SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL");
@@ -650,10 +652,17 @@ namespace WICR_Estimator.ViewModels
                     //if (item.OriginalProjectName == "Reseal all systems" || item.OriginalProjectName == "Weather Wear" || item.OriginalProjectName == "Weather Wear Rehab" || item.OriginalProjectName == "Paraseal LG" || item.OriginalProjectName == "Barrier Guard")
                     //{
                         item.MaterialViewModel.CalculateCost(null);
-                        //item.MaterialViewModel.CalculateLaborMinCharge(false);
-                        //item.MaterialViewModel.calculateLaborTotalsWithMinLabor();
+                    //item.MaterialViewModel.CalculateLaborMinCharge(false);
+                    //item.MaterialViewModel.calculateLaborTotalsWithMinLabor();
                     //}
-
+                    SystemMaterial stairNosingM = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "Stair Nosing");
+                    if (stairNosingM != null)
+                    {
+                        if (isnosingchecked != null)
+                        {
+                            stairNosingM.IsMaterialChecked = (bool)isnosingchecked;
+                        }
+                    }
                     //pedestrian
                     if (item.OriginalProjectName == "Pedestrian System")
                     {
@@ -787,6 +796,8 @@ namespace WICR_Estimator.ViewModels
                     //code for UPI Pedestrian 
                     
                     bool ischecked=false,ischecked2=false;
+                    bool? isnosingchecked=null;
+                    isnosingchecked = item.MaterialViewModel.stairNosingCheckValue;
                     if (item.OriginalProjectName == "Pedestrian System")
                     {
                         SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "7012 EPOXY PRIMER AND PREPARATION FOR RE-SEAL");
@@ -805,6 +816,8 @@ namespace WICR_Estimator.ViewModels
                     else if(item.OriginalProjectName == "Pli-Dek")
                     {
                         SystemMaterial sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "2.5 Galvanized Lathe");
+                        
+                        
                         if (sm != null)
                         {
                             ischecked = sm.IsMaterialChecked;
@@ -898,10 +911,17 @@ namespace WICR_Estimator.ViewModels
                     //    ||item.OriginalProjectName=="Paraseal LG" || item.OriginalProjectName == "Barrier Guard")
                     //{
                         item.MaterialViewModel.CalculateCost(null);
-                        //item.MaterialViewModel.CalculateLaborMinCharge(false);
-                        //item.MaterialViewModel.calculateLaborTotalsWithMinLabor();
+                    //item.MaterialViewModel.CalculateLaborMinCharge(false);
+                    //item.MaterialViewModel.calculateLaborTotalsWithMinLabor();
                     //}
-
+                    SystemMaterial stairNosingM = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "Stair Nosing");
+                    if (stairNosingM != null)
+                    {
+                        if (isnosingchecked != null)
+                        {
+                            stairNosingM.IsMaterialChecked = (bool)isnosingchecked;
+                        }
+                    }
                     //pedestrian
                     if (item.OriginalProjectName == "Pedestrian System")
                     {
@@ -929,6 +949,14 @@ namespace WICR_Estimator.ViewModels
                         if (sm != null)
                         {
                             sm.IsMaterialChecked = ischecked;
+                        }
+                        sm = item.MaterialViewModel.SystemMaterials.FirstOrDefault(x => x.Name == "Stair Nosing");
+                        if (sm != null)
+                        {
+                            if (isnosingchecked != null)
+                            {
+                                sm.IsMaterialChecked = (bool)isnosingchecked;
+                            }
                         }
                         item.MaterialViewModel.CalculateCost(null);
                     }

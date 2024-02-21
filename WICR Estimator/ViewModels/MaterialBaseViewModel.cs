@@ -67,7 +67,7 @@ namespace WICR_Estimator.ViewModels
         public IList<IList<object>> materialDetails { get; set; }
         [DataMember]
         public IList<IList<object>> freightData { get; set; }
-
+        [DataMember]
         public bool? stairNosingCheckValue = null;
         #region privatefields
         private ObservableCollection<CostBreakup> lCostBreakUp;
