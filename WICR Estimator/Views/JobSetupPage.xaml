@@ -223,6 +223,26 @@
                             Text="{Binding TotalSalesCostTemp, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </materialDesign:Card>
+                <materialDesign:Card
+                    Margin="10,10"
+                    Padding="10,5,10,10"
+                    materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                    Background="{StaticResource PrimaryHueDarkBrush}"
+                    UniformCornerRadius="5">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock
+                            HorizontalAlignment="Left"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Text="Profit Percentage" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Foreground="{StaticResource PrimaryHueLightBrush}"
+                            Text="{Binding ProfitPercentage, StringFormat={}{0}%, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </materialDesign:Card>
             </StackPanel>
 
 

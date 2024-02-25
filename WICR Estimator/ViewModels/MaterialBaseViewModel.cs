@@ -311,6 +311,7 @@ namespace WICR_Estimator.ViewModels
             if (_js != null)
             {
                 _js.TotalSalesCostTemp = TotalSale;
+                _js.ProfitPercentage = ProfitMarginPercentage;
             }
 
         }
@@ -780,7 +781,9 @@ namespace WICR_Estimator.ViewModels
         [DataMember]
         public double TotalSale { get; set; }
         [DataMember]
-
+        public string ProfitMarginPercentage { get; set; }
+        [DataMember]
+        public double TotalProfitMarginValue { get; set; }
         public double AllTabsLaborTotal { get; set; }
         [DataMember]
         public double AllTabsMaterialTotal { get; set; }
@@ -1785,6 +1788,7 @@ namespace WICR_Estimator.ViewModels
             if (_js != null)
             {
                 _js.TotalSalesCostTemp = TotalSale;
+                _js.ProfitPercentage = ProfitMarginPercentage;
             }
         }
 
@@ -1841,6 +1845,7 @@ namespace WICR_Estimator.ViewModels
             CalculateCost(null);
 
             js.TotalSalesCostTemp = TotalSale;
+            _js.ProfitPercentage = ProfitMarginPercentage;
             //});
 
         }
@@ -4281,6 +4286,7 @@ namespace WICR_Estimator.ViewModels
             finalMCost = finalMCost + (totalCostM * facValue / MetalMarkup);
             finalSCost = finalSCost + (totalCostS * facValue / SlopeMarkup);
             finalSyCost = finalSyCost + (totalCostSy * facValue / MaterialMarkup);
+            double totalContingency = (totalCostM * facValue / MetalMarkup) + (totalCostS * facValue / SlopeMarkup) + (totalCostSy * facValue / MaterialMarkup);
             finalSubLabCost = finalSubLabCost + (totalCostSbLabor * facValue / SubContractProfitMargin);
             if (dbData == null)
             {
@@ -4355,13 +4361,15 @@ namespace WICR_Estimator.ViewModels
                 SystemCost = totalCostSy - totalJobCostSy,
                 HideCalFactor = System.Windows.Visibility.Hidden
             });
-
+            double totalProfitMarginValue = totalCostM - totalJobCostM + totalCostS - totalJobCostS + totalCostSy - totalJobCostSy;
             TotalMetalPrice = finalMCost; //*(1+markUpPerc/100);
             TotalSlopingPrice = finalSCost; //* (1 + markUpPerc / 100);
             TotalSystemPrice = finalSyCost; //* (1 + mar2kUpPerc / 100);
             TotalSubcontractLabor = finalSubLabCost; // * (1 + markUpPerc / 100);
             CalculateTotalSqFt();
             TotalSale = TotalMetalPrice + TotalSlopingPrice + TotalSystemPrice + TotalSubcontractLabor;
+            ProfitMarginPercentage = Math.Round((totalContingency + totalProfitMarginValue) / TotalSale * 100, 2).ToString() + " %";
+            TotalProfitMarginValue = totalContingency + totalProfitMarginValue;
             LaborPerc = Math.Round(AllTabsLaborTotal / TotalSale, 2);
             ProjectProfitMargin = Math.Round(((totalCostM - totalJobCostM) + (totalCostS - totalJobCostS) + (totalCostSy - totalJobCostSy)) / TotalSale, 2);
             RaisePropertyChanged("MaterialPerc");
@@ -4371,6 +4379,7 @@ namespace WICR_Estimator.ViewModels
             RaisePropertyChanged("TotalSystemPrice");
             RaisePropertyChanged("TotalSubcontractLabor");
             RaisePropertyChanged("TotalSale");
+            RaisePropertyChanged("ProfitMarginPercentage");
         }
 
         public virtual void CalculateTotalSqFt()

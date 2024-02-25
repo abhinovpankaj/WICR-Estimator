@@ -221,6 +221,7 @@ namespace WICR_Estimator.ViewModels
                             item.MaterialViewModel.CalculateCost(null);
                         }
                         item.ProjectJobSetUp.TotalSalesCostTemp = item.MaterialViewModel.TotalSale;
+                        item.ProjectJobSetUp.ProfitPercentage = item.MaterialViewModel.ProfitMarginPercentage;
                     }
                     //OnTaskCompleted("Prices Refreshed for all selected projects.");
                 }
@@ -706,6 +707,7 @@ namespace WICR_Estimator.ViewModels
                     item.MaterialViewModel.ZAddLaborMinCharge = adminLabor;
                     item.MaterialViewModel.CalculateCost(null);
                     item.ProjectJobSetUp.TotalSalesCostTemp = item.MaterialViewModel.TotalSale;
+                    item.ProjectJobSetUp.ProfitPercentage = item.MaterialViewModel.ProfitMarginPercentage;
                 }
                 
                 Project_OnSelectedProjectChange(null, null);
@@ -973,6 +975,7 @@ namespace WICR_Estimator.ViewModels
                     item.MaterialViewModel.ZAddLaborMinCharge = adminLabor;
                     item.MaterialViewModel.CalculateCost(null);
                     item.ProjectJobSetUp.TotalSalesCostTemp = item.MaterialViewModel.TotalSale;
+                    item.ProjectJobSetUp.ProfitPercentage = item.MaterialViewModel.ProfitMarginPercentage;
                 }
 
 
@@ -1079,7 +1082,7 @@ namespace WICR_Estimator.ViewModels
 
 
                                     item.CreationDetails = JobName + ":;" + PreparedBy + ":;" + JobCreationDate.ToString();
-                                    item.ProductVersion = "5.0";
+                                    item.ProductVersion = "5.2";
                                     //Update DB
 
 
@@ -2543,7 +2546,7 @@ namespace WICR_Estimator.ViewModels
             ProjectTotals.SystemCost = Math.Round(SelectedProjects.Sum(x => x.SystemNOther), 2);
             ProjectTotals.MaterialCost = Math.Round(SelectedProjects.Sum(x => x.MaterialCost), 2);
             ProjectTotals.TotalCost = Math.Round(SelectedProjects.Sum(x => x.TotalCost), 2);
-
+            ProjectTotals.TotalProfitMarginPercentage = Math.Round(SelectedProjects.Sum(x => x.MaterialViewModel.TotalProfitMarginValue)/ SelectedProjects.Sum(x => x.MaterialViewModel.TotalSale)*100, 2).ToString() + " %";
             foreach (Project item in SelectedProjects)
             {
                 if (item.MaterialViewModel != null)
@@ -2573,7 +2576,7 @@ namespace WICR_Estimator.ViewModels
             
             get
             {
-                return "Version 5.1";
+                return "Version 5.2";
             }
         }
 

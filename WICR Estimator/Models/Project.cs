@@ -27,7 +27,7 @@ namespace WICR_Estimator.Models
         private double laborCost;
         private double totalCost;
         private string laborPerc;
-
+        private string totalProfitMarginPercentage;
         public string Name
         {
             get { return name; }
@@ -141,7 +141,18 @@ namespace WICR_Estimator.Models
             }
         }
         
-
+        public string TotalProfitMarginPercentage
+        {
+            get { return totalProfitMarginPercentage; }
+            set
+            {
+                if (value != totalProfitMarginPercentage)
+                {
+                    totalProfitMarginPercentage = value;
+                    RaisePropertyChanged("TotalProfitMarginPercentage");
+                }
+            }
+        }
     }
     
     

@@ -286,6 +286,10 @@
                                 Header="Labor %"
                                 IsReadOnly="False" />
                             <DataGridTextColumn
+                                Binding="{Binding MaterialViewModel.ProfitMarginPercentage, UpdateSourceTrigger=PropertyChanged}"
+                                Header="Profit Margin %"
+                                IsReadOnly="False" />
+                            <DataGridTextColumn
                                 Binding="{Binding MaterialViewModel.TotalSale, StringFormat='c', UpdateSourceTrigger=PropertyChanged}"
                                 Header="Total Cost"
                                 IsReadOnly="False" />
@@ -515,6 +519,10 @@
                             FontWeight="SemiBold"
                             Text="Labor %" />
                         <TextBlock
+                            Margin="0,0,5,5"
+                            FontWeight="SemiBold"
+                            Text="Profit Margin %" />
+                        <TextBlock
                             Margin="0,5,5,5"
                             FontSize="15"
                             FontWeight="Bold"
@@ -550,7 +558,10 @@
                             Margin="5,0,5,5"
                             FontWeight="SemiBold"
                             Text="{Binding LaborPercentage}" />
-
+                        <TextBlock
+                            Margin="5,0,5,5"
+                            FontWeight="SemiBold"
+                            Text="{Binding TotalProfitMarginPercentage}" />
                         <TextBlock
                             Margin="5,5,5,5"
                             Background="{StaticResource SecondaryHueMidBrush}"

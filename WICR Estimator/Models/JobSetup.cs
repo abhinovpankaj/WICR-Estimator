@@ -380,7 +380,19 @@ namespace WICR_Estimator.Models
                 RaisePropertyChanged("TotalSalesCostTemp");
             }
         }
-
+        private string profitPercentage;
+        public string ProfitPercentage
+        {
+            get
+            {
+                return profitPercentage;
+            }
+            set
+            {
+                profitPercentage = value;               
+                RaisePropertyChanged("ProfitPercentage");
+            }
+        }
         protected virtual void OnJobSetupChanged(EventArgs e)
         {
             JobSetupChange?.Invoke(this, e);
@@ -955,11 +967,11 @@ namespace WICR_Estimator.Models
                 //    OnPropertyChanged("MarkupPercentage");
                 //    UpdateJobSetup();
                 //}
-                if (!allowMoreMarkup)
+                if (allowMoreMarkup)
                 {
                     if (value < -10)
                     {
-                        MinMarkUp = value;
+                        MinMarkUp = -50;
                         RaisePropertyChanged("MinMarkup");
                     }
                 }
