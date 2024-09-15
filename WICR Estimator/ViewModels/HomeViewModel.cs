@@ -601,6 +601,11 @@ namespace WICR_Estimator.ViewModels
                     {
                         item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
                         item.ProjectJobSetUp.EnableMoreMarkupCommand = new DelegateCommand(item.ProjectJobSetUp.CanAddMoreMarkup, item.ProjectJobSetUp.canAdd);
+                        //update values as per formula
+                        foreach (DataPresentor dataPresenter in item.ProjectJobSetUp.ZData)
+                        {
+                            item.ProjectJobSetUp[dataPresenter.Key] = dataPresenter.CalculatedValue;
+                        }
                         item.ProjectJobSetUp.GetOriginalName();
                         item.ProjectJobSetUp.UpdateJobSetup();
                     }
@@ -861,6 +866,11 @@ namespace WICR_Estimator.ViewModels
                         //item.ProjectJobSetUp.JobSetupChange -= item.MaterialViewModel.JobSetup_OnJobSetupChange;
                         item.ProjectJobSetUp.JobSetupChange += item.MaterialViewModel.JobSetup_OnJobSetupChange;
                         item.ProjectJobSetUp.EnableMoreMarkupCommand = new DelegateCommand(item.ProjectJobSetUp.CanAddMoreMarkup, item.ProjectJobSetUp.canAdd);
+                        //update values as per formula
+                        foreach (DataPresentor dataPresenter in item.ProjectJobSetUp.ZData)
+                        {
+                            item.ProjectJobSetUp[dataPresenter.Key] = dataPresenter.CalculatedValue;
+                        }
                         item.ProjectJobSetUp.GetOriginalName();
                         //item.ProjectJobSetUp.UpdateJobSetup(ver);
                     }

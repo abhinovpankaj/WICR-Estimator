@@ -240,7 +240,7 @@
                             FontSize="18"
                             FontWeight="Bold"
                             Foreground="{StaticResource PrimaryHueLightBrush}"
-                            Text="{Binding ProfitPercentage, StringFormat={}{0}%, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding ProfitPercentage, StringFormat={}{0}, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </materialDesign:Card>
             </StackPanel>

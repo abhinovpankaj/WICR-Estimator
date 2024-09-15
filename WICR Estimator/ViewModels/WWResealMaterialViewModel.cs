@@ -158,6 +158,7 @@ namespace WICR_Estimator.ViewModels
                 val3 = sysmat1.IsMaterialChecked?sysmat1.Qty:0;
             }
             SystemMaterial sysmat = SystemMaterials.Where(x => x.Name == "CUSTOM TEXTURE SKIP TROWEL (RESISTITE SMOOTH GRAY)").FirstOrDefault();
+           
             if (sysmat!=null)
             {
                 val1 =sysmat.IsMaterialChecked?sysmat.Qty:0;
@@ -168,6 +169,7 @@ namespace WICR_Estimator.ViewModels
                 val2 = sysmat.IsMaterialChecked ? sysmat.Qty : 0;
             }
             sysmat = SystemMaterials.Where(x => x.Name == "RESISTITE REGULAR OR SMOOTH GRAY (KNOCK DOWN OR SMOOTH)").FirstOrDefault();
+            sysmat.IsMaterialChecked = sysmat1.IsMaterialChecked;
             if (sysmat != null)
             {
                 val4 = sysmat.IsMaterialChecked ? sysmat.Qty : 0;
@@ -177,6 +179,7 @@ namespace WICR_Estimator.ViewModels
             qty= sysmat1.IsMaterialChecked ? (val3 + val4 + val1) * 0.33 + val2 / 5 : val1 * 0.33 + val2 / 5;
             bool ischecked = SystemMaterials.Where(x => x.Name == "RESISTITE LIQUID").FirstOrDefault().IsMaterialChecked;
             SystemMaterial RL = SystemMaterials.Where(x => x.Name == "RESISTITE LIQUID").FirstOrDefault();
+            RL.IsMaterialChecked = sysmat1.IsMaterialChecked;
             if (RL!=null)
             {
                 RL.Qty = qty;
