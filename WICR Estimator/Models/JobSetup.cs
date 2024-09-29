@@ -147,9 +147,7 @@ namespace WICR_Estimator.Models
                 new DataPresentor { Key = "RebarPrepWallsLF"},
                 new DataPresentor { Key = "SuperStopLF"},
                 new DataPresentor { Key = "Penetrations"},
-                new DataPresentor { Key = "ParasealFoundation"},
-                new DataPresentor { Key = "RearMidLagging"}
-                
+                //new DataPresentor { Key = "ParasealFoundation"},               
             };
         }
         #endregion
@@ -1572,7 +1570,8 @@ namespace WICR_Estimator.Models
                         {
                             mydata.Formula = value.ToString();
                         }
-                    }
+                    } 
+                   
                 }
                 
 
