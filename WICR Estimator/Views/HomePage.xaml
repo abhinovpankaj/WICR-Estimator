@@ -184,7 +184,7 @@
                                 <MultiTrigger.Setters>
                                     <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
                                     <Setter Property="BorderBrush" Value="{StaticResource SecondaryHueMidBrush}" />
-                                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
+                                    <Setter Property="Foreground" Value="{StaticResource SecondaryHueMidForegroundBrush}" />
                                 </MultiTrigger.Setters>
                             </MultiTrigger>
                         </Style.Triggers>
@@ -254,10 +254,8 @@
                             <DataGridTextColumn
                                 Width="200"
                                 Binding="{Binding SequenceName}"
-                                Header="Name" 
-                                IsReadOnly="True" >
-                                
-                            </DataGridTextColumn>
+                                Header="Name"
+                                IsReadOnly="True" />
                             <DataGridTextColumn
                                 Width="150"
                                 Binding="{Binding WorkArea}"
@@ -432,7 +430,8 @@
                 <ComboBox
                     Width="180"
                     Margin="10,0,0,10"
-                    HorizontalAlignment="Left" ItemsSource="{Binding ActiveUsers}"
+                    HorizontalAlignment="Left"
+                    ItemsSource="{Binding ActiveUsers}"
                     Text="{Binding PreparedBy, UpdateSourceTrigger=PropertyChanged}">
                     <!--<ComboBoxItem Content="seank" />
                     <ComboBoxItem Content="admin" />
