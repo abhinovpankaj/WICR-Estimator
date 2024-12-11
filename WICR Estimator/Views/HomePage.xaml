@@ -369,7 +369,20 @@
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
-
+                                <Button Command="{Binding CreateSummaryShort}" CommandParameter="{Binding ElementName=projectsDatagrid}">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon
+                                                VerticalAlignment="Center"
+                                                Foreground="{StaticResource PrimaryHueDarkBrush}"
+                                                Kind="FileExcel" />
+                                            <TextBlock
+                                                Margin="10,0,0,0"
+                                                VerticalAlignment="Center"
+                                                Text="Create Total Summary" />
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
                                 <!--<Button x:Name="refreshGData"
                                 Command="{Binding RefreshGoogleData}">
                                     <Button.Content>

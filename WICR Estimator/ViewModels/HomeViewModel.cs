@@ -27,6 +27,8 @@ using System.Runtime.InteropServices;
 using WICR_Estimator.DBModels;
 using WICR_Estimator.Services;
 using System.IO.Compression;
+using System.Data;
+using System.Reflection;
 
 namespace WICR_Estimator.ViewModels
 {
@@ -52,14 +54,173 @@ namespace WICR_Estimator.ViewModels
             ReplicateIndependentProject = new DelegateCommand(ReplicateIndependent, canReplicate);
             
             CreateSummary = new DelegateCommand(GenerateSummary, canCreateSummary);
+            CreateSummaryShort = new DelegateCommand(GenerateHighLevelSummary, canCreateHighLevelSummary);
             //RefreshGoogleData = new DelegateCommand(DeleteGoogleData, canDelete);
             ProjectTotals = new ProjectsTotal();
             LoginPageViewModel.OnLoggedIn += LoginPage_OnLoggedIn;
-            //statusNotifier = new NotifyIcon();
+            //statusNotifier = new NotifyIcon();5
 
             CheckPriceUpdate();
 
         }
+
+        private bool canCreateHighLevelSummary(object obj)
+        {
+            if (SelectedProjects.Count > 0)
+            {
+                return true;
+            }
+            else
+                return false;
+        }
+        public DataTable ToDataTable<T>(List<T> items)
+        {
+            DataTable dataTable = new DataTable(typeof(T).Name);
+            PropertyInfo[] Props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (PropertyInfo prop in Props)
+            {
+                dataTable.Columns.Add(prop.Name);
+            }
+            foreach (T item in items)
+            {
+                var values = new object[Props.Length];
+                for (int i = 0; i < Props.Length; i++)
+                {
+                    values[i] = Props[i].GetValue(item, null);
+                }
+                dataTable.Rows.Add(values);
+            }
+            return dataTable;
+        }
+        private void GenerateHighLevelSummary(object obj)
+        {
+            Microsoft.Office.Interop.Excel.Application excel = null;
+            Microsoft.Office.Interop.Excel.Workbook wb = null;
+            object missing = Type.Missing;
+            Microsoft.Office.Interop.Excel.Worksheet ws = null;
+            
+            try
+            {
+                // collection of DataGrid Items
+                var dataGrid = obj as System.Windows.Controls.DataGrid;
+                var list = new List<Project>(dataGrid.ItemsSource as IEnumerable<Project>);
+                //DataTable dtExcelDataTable = ToDataTable(list);
+
+                excel = new Microsoft.Office.Interop.Excel.Application();
+                wb = excel.Workbooks.Add();
+                ws = (Microsoft.Office.Interop.Excel.Worksheet)wb.ActiveSheet;
+                ws.Columns.AutoFit();
+                ws.Columns.EntireColumn.ColumnWidth = 25;
+
+                // Header row
+                for (int Idx = 0; Idx < dataGrid.Columns.Count; Idx++)
+                {
+                    ws.Range["A1"].Offset[0, Idx].Value = dataGrid.Columns[Idx].Header;
+                    ws.Range["A1"].Offset[0, Idx].Font.Bold = true;
+                }
+
+                // Data Rows
+                for (int Idx = 0; Idx < list.Count; Idx++)
+                {
+                    ws.Range["A2"].Offset[Idx].Value = list[Idx].Name;
+                    ws.Range["B2"].Offset[Idx].Value = list[Idx].WorkArea;
+                    ws.Range["C2"].Offset[Idx].Value = list[Idx].MaterialViewModel.TotalMetalPrice;
+                    ws.Range["D2"].Offset[Idx].Value = list[Idx].MaterialViewModel.TotalSlopingPrice;
+                    ws.Range["E2"].Offset[Idx].Value = list[Idx].MaterialViewModel.TotalSystemPrice;
+                    ws.Range["F2"].Offset[Idx].Value = list[Idx].MaterialViewModel.AllTabsMaterialTotal;
+                    ws.Range["G2"].Offset[Idx].Value = list[Idx].MaterialViewModel.AllTabsLaborTotal;
+                    ws.Range["H2"].Offset[Idx].Value = list[Idx].LaborPercentage;
+                    ws.Range["I2"].Offset[Idx].Value = list[Idx].MaterialViewModel.ProfitMarginPercentage;
+                    ws.Range["J2"].Offset[Idx].Value = list[Idx].MaterialViewModel.TotalSale;
+                    ws.Range["K2"].Offset[Idx].Value = list[Idx].MaterialViewModel.TotalCostperSqft;
+                    ws.Range["A2","K2"].Offset[Idx].NumberFormat = "[$$-en-US] #,##0.00";
+                    ws.Range["H2"].Offset[Idx].NumberFormat = "0.00%";
+                    ws.Range["I2"].Offset[Idx].NumberFormat = "0.00%";
+                }
+                //add new sheet
+                wb.Sheets.Add();
+                ws = (Microsoft.Office.Interop.Excel.Worksheet)wb.ActiveSheet;
+                ws.Columns.AutoFit();
+                ws.Columns.EntireColumn.ColumnWidth = 25;
+
+                ws.Range["A1"].Value = "Metal Cost";
+                ws.Range["A1"].Font.Bold = true;
+                ws.Range["B1"].Value = Math.Round(ProjectTotals.MetalCost,2);
+                ws.Range["A2"].Value = "Slope Cost";
+                ws.Range["A2"].Font.Bold = true;
+                ws.Range["B2"].Value = Math.Round(ProjectTotals.SlopeCost, 2);
+                ws.Range["A3"].Value = "System Cost";
+                ws.Range["A3"].Font.Bold = true;
+                ws.Range["B3"].Value = Math.Round(ProjectTotals.SystemCost, 2);
+                ws.Range["A4"].Value = "Material Cost";
+                ws.Range["A4"].Font.Bold = true;
+                ws.Range["B4"].Value = Math.Round(ProjectTotals.MaterialCost, 2);
+                ws.Range["A5"].Value = "Labor Cost";
+                ws.Range["A5"].Font.Bold = true;
+                ws.Range["B5"].Value = Math.Round(ProjectTotals.LaborCost, 2);
+                ws.Range["A6"].Value = "Labor %";
+                ws.Range["A6"].Font.Bold = true;
+                ws.Range["B6"].Value = ProjectTotals.LaborPercentage;
+                ws.Range["A7"].Value = "Profit Margin %";
+                ws.Range["A7"].Font.Bold = true;
+                ws.Range["B7"].Value = ProjectTotals.TotalProfitMarginPercentage;
+                ws.Range["A8"].Value = "Total Cost";
+                ws.Range["A8"].Font.Bold = true;
+                ws.Range["B8"].Value = Math.Round(ProjectTotals.TotalCost, 2);
+
+                ws.Range["B1", "B8"].NumberFormat = "[$$-en-US] #,##0.00";
+                ws.Range["B6", "B7"].NumberFormat = "0.00%";
+                //excel.Visible = true;
+                //Ask user to save the File 
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "Execl files (*.xlsx)|*.xlsx";
+                saveFileDialog.FilterIndex = 0;
+                saveFileDialog.RestoreDirectory = true;
+                saveFileDialog.CreatePrompt = false;
+
+                //if (JobCreationDate != null)
+                //{
+                //    saveFileDialog.FileName = JobName + " " + string.Format(JobCreationDate.Value.ToShortDateString(), "mm-dd-yyyy");
+                //}
+
+                saveFileDialog.Title = "Save WICR Estimator Overall Summary";
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    //Save. The selected path can be got with saveFileDialog.FileName.ToString()
+                    wb.SaveAs(saveFileDialog.FileName.ToString());
+                    OnTaskCompleted("Estimate Summary file created successfully.");
+                }
+                else
+                {
+                    //System.Windows.MessageBox.Show("Summary Sheet won't be saved now", "Save Cancelled",
+                    //    System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                    OnTaskCompleted("User canceled file save,Summary Sheet won't be saved now.");
+                }
+            }
+            catch (Exception)
+            {
+
+                OnTaskCompleted("Exception occurred while saving overall Summary Sheet.");
+            }
+            finally
+            {
+                //Close Excel file
+                if (excel != null)
+                {
+                    ws = null;
+                    wb.Close(false);
+                    wb = null;
+                    excel.Quit();
+                    excel = null;
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+
+                }
+            }
+            
+        }
+
         private async void FetchUsers()
         {
             var users = await HTTPHelper.GetAllUsers();
@@ -1176,6 +1337,7 @@ namespace WICR_Estimator.ViewModels
 
         }
         
+        public DelegateCommand CreateSummaryShort { get; set; }
         public DelegateCommand CreateSummary { get; set; }
         public DelegateCommand RefreshGoogleData { get; set; }
         public DelegateCommand ReplicateProject { get; set; }
