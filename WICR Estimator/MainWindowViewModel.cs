@@ -751,8 +751,7 @@ namespace WICR_Estimator
                         JobName = hm.JobName;
                         PreparedBy = hm.PreparedBy;
                         JobCreationDate = hm.JobCreationDate;
-                        ProjectTotals = hm.ProjectTotals;
-
+                        ProjectTotals = hm.ProjectTotals;                        
                     }
                 }
                 var serializer = new DataContractSerializer(typeof(ObservableCollection<Project>));
@@ -791,8 +790,10 @@ namespace WICR_Estimator
                             //item.Sequence = 0;
                             item.UpdateMainTable();
                             if (hm != null)
+                            {
                                 hm.UpdateProjectTotals();
-
+                                item.OverallDiscount = hm.MarkupPercentage;
+                            }
                             item.CreationDetails = JobName + ":;" + PreparedBy + ":;" + JobCreationDate.ToString();
                             item.ProductVersion = "5.0";
                             //Update DB

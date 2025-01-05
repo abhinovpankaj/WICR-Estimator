@@ -127,8 +127,20 @@ namespace WICR_Estimator.ViewModels
                 CheckboxCommand = new DelegateCommand(ApplyCheckUnchecks, canApply);
             }
             dbData = Js.dbData;
+            HomeViewModel.OverallProjectDiscountChange += HomeViewModel_OverallProjectDiscountChange;
         }
-
+        int overallDisc = 0;
+        public void HomeViewModel_OverallProjectDiscountChange(object sender, int e)
+        {
+            overallDisc=e;
+            populateCalculation();
+            if (_js!=null)
+            {
+                _js.TotalSalesCostTemp = TotalSale;
+                _js.ProfitPercentage = ProfitMarginPercentage;
+            }
+            
+        }
 
         public MaterialBaseViewModel(Totals metalTotals, Totals slopeTotals, JobSetup Js)
             : this(Js)
@@ -4352,6 +4364,22 @@ namespace WICR_Estimator.ViewModels
             finalSCost = finalSCost + (totalCostS * facValue);
             finalSyCost = finalSyCost + (totalCostSy * facValue);
             finalSubLabCost = finalSubLabCost + (totalCostSbLabor * facValue);
+            
+            
+            
+            LCostBreakUp.Add(new CostBreakup
+            {
+                Name = "Overall project discount",
+                CalFactor =  ((double)overallDisc / 100),
+                MetalCost =  totalCostM * overallDisc/100,
+                SlopeCost =  totalCostS * overallDisc / 100,
+                SystemCost =  totalCostSy * overallDisc / 100,
+                SubContractLaborCost = totalCostSbLabor * overallDisc / 100
+            });
+            finalMCost = finalMCost - (totalCostM * overallDisc / 100);
+            finalSCost = finalSCost - (totalCostS * overallDisc / 100);
+            finalSyCost = finalSyCost - (totalCostSy * overallDisc / 100);
+            finalSubLabCost = finalSubLabCost - (totalCostSbLabor * overallDisc / 100);
             LCostBreakUp.Add(new CostBreakup
             {
                 Name = "Profit Margin",

@@ -24,6 +24,7 @@
     <UserControl.Resources>
         <conv:BoolToVisibilityConverter x:Key="VisibilityConv" />
         <conv:OriginalProjectnameConverter x:Key="projectNameConv" />
+        <conv:HasFieldEdited x:Key="HasFieldEdited" />
         <DataTemplate x:Key="ProjectTemplate">
             <DockPanel VerticalAlignment="Center">
                 <Image
@@ -63,7 +64,33 @@
             <Setter Property="Height" Value="35" />
             <Setter Property="Width" Value="170" />
         </Style>
+        <Style
+            x:Key="TextBoxStyle"
+            BasedOn="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+            TargetType="{x:Type TextBox}">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Margin" Value="5,0,5,10" />
+            <!--<Setter Property="Height" Value="40"/>-->
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Style.Triggers>
 
+                <Trigger Property="IsEnabled" Value="True">
+                    <Setter Property="Background" Value="{StaticResource SecondaryHueMidBrush}" />
+                    <Setter Property="ToolTip" Value="Please enter a numeric value." />
+                </Trigger>
+                <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource Self}, Converter={StaticResource HasFieldEdited}}" Value="True">
+                    <Setter Property="FontWeight" Value="Bold" />
+                    <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
+                </DataTrigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="FontWeight" Value="Normal" />
+                    <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
+                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightForegroundBrush}" />
+                </Trigger>
+            </Style.Triggers>
+
+        </Style>
         <Style x:Key="ContainerStyle" TargetType="{x:Type GroupItem}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -445,29 +472,7 @@
                     Margin="10,0,0,10"
                     HorizontalAlignment="Left"
                     ItemsSource="{Binding ActiveUsers}"
-                    Text="{Binding PreparedBy, UpdateSourceTrigger=PropertyChanged}">
-                    <!--<ComboBoxItem Content="seank" />
-                    <ComboBoxItem Content="admin" />
-                    <ComboBoxItem Content="stevend" />
-                    <ComboBoxItem Content="mikes" />
-                    <ComboBoxItem Content="davidm" />
-                    <ComboBoxItem Content="chriss" />
-                    <ComboBoxItem Content="davidd" />
-                    <ComboBoxItem Content="erniep" />
-                    <ComboBoxItem Content="guestuser1" />
-                    <ComboBoxItem Content="guestuser2" />
-                    <ComboBoxItem Content="guestuser3" />
-                    <ComboBoxItem Content="guestadmin" />
-                    <ComboBoxItem Content="admin" />
-                    <ComboBoxItem Content="feliciab" />
-                    <ComboBoxItem Content="tammya" />
-                    <ComboBoxItem Content="nancyr" />
-                    <ComboBoxItem Content="aracelim" />
-                    <ComboBoxItem Content="matts" />
-                    <ComboBoxItem Content="deionr" />
-                    <ComboBoxItem Content="gregh" />
-                    <ComboBoxItem Content="ryand" />-->
-                </ComboBox>
+                    Text="{Binding PreparedBy, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
             <DatePicker
                 Width="200"
@@ -479,113 +484,153 @@
                 SelectedDate="{Binding JobCreationDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static System:DateTime.Now}}" />
 
         </StackPanel>
-        <materialDesign:Card
+        <StackPanel
             Grid.RowSpan="2"
             Grid.Column="2"
             Margin="10"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
-            HorizontalContentAlignment="Center"
-            materialDesign:ShadowAssist.ShadowDepth="Depth3"
-            Background="{StaticResource SecondaryHueMidBrush}"
-            ToolTip="Project Totals"
-            UniformCornerRadius="15">
-            <materialDesign:Card
-                Name="Totals"
-                Padding="10"
-                HorizontalAlignment="Center">
+            materialDesign:ShadowAssist.ShadowDepth="Depth1"
+            ToolTip="Project Totals">
+            <StackPanel>
+                <materialDesign:Card                    
+                    Margin="0,0,0,10"
+                    Padding="10"
+                    materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                    UniformCornerRadius="5"
+                    Visibility="{Binding IsAdminLoggedin, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel Margin="5" VerticalAlignment="Center">
+                        <TextBlock
+                            Margin="5,2"
+                            HorizontalAlignment="Left"
+                            FontWeight="SemiBold"
+                            Text="Overall Project Discount %" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox
+                                Width="80"
+                                Margin="5"
+                                HorizontalAlignment="Left"
+                                Style="{StaticResource TextBoxStyle}"
+                                Text="{Binding ElementName=markup, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                TextAlignment="Center" />
+                            <Slider
+                                x:Name="markup"
+                                Width="250"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                IsSnapToTickEnabled="True"
+                                LargeChange="5"
+                                Maximum="100"
+                                Minimum="{Binding MinMarkUp}"
+                                SmallChange="0.5"
+                                Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                TickFrequency="1"
+                                TickPlacement="BottomRight"
+                                Value="{Binding MarkupPercentage}" />
+                        </StackPanel>
 
-                <Grid
-                    Grid.Row="1"
+                    </StackPanel>
+                </materialDesign:Card>
+                <materialDesign:Card
+                    Name="Totals"
                     MinWidth="200"
-                    Margin="10,0,10,10"
-                    HorizontalAlignment="Stretch"
-                    DataContext="{Binding ProjectTotals, UpdateSourceTrigger=PropertyChanged}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <StackPanel>
-                        <TextBlock
-                            Margin="0,0,5,5"
-                            FontWeight="SemiBold"
-                            Text="Metal Cost" />
-                        <TextBlock
-                            Margin="0,0,5,5"
-                            FontWeight="SemiBold"
-                            Text="Slope Cost" />
-                        <TextBlock
-                            Margin="0,0,5,5"
-                            FontWeight="SemiBold"
-                            Text="System Cost" />
-                        <TextBlock
-                            Margin="0,0,5,5"
-                            FontWeight="SemiBold"
-                            Text="Material Cost" />
-                        <TextBlock
-                            Margin="0,0,5,5"
-                            FontWeight="SemiBold"
-                            Text="Labor Cost" />
-                        <TextBlock
-                            Margin="0,0,5,5"
-                            FontWeight="SemiBold"
-                            Text="Labor %" />
-                        <TextBlock
-                            Margin="0,0,5,5"
-                            FontWeight="SemiBold"
-                            Text="Profit Margin %" />
-                        <TextBlock
-                            Margin="0,5,5,5"
-                            FontSize="15"
-                            FontWeight="Bold"
-                            Text="Total Cost" />
-                    </StackPanel>
-                    <StackPanel Grid.Column="1">
-                        <TextBlock
-                            Margin="5,0,5,5"
-                            FontWeight="SemiBold"
-                            Text="{Binding MetalCost}" />
+                    Margin="0,0,0,10"
+                    Padding="10"
+                    materialDesign:ShadowAssist.ShadowDepth="Depth1">
 
-                        <TextBlock
-                            Margin="5,0,5,5"
-                            FontWeight="SemiBold"
-                            Text="{Binding SlopeCost}" />
+                    <Grid
+                        Grid.Row="1"
+                        MinWidth="200"
+                        Margin="10,0,10,10"
+                        HorizontalAlignment="Stretch"
+                        DataContext="{Binding ProjectTotals, UpdateSourceTrigger=PropertyChanged}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock
+                                Margin="0,0,5,5"
+                                FontWeight="SemiBold"
+                                Text="Metal Cost" />
+                            <TextBlock
+                                Margin="0,0,5,5"
+                                FontWeight="SemiBold"
+                                Text="Slope Cost" />
+                            <TextBlock
+                                Margin="0,0,5,5"
+                                FontWeight="SemiBold"
+                                Text="System Cost" />
+                            <TextBlock
+                                Margin="0,0,5,5"
+                                FontWeight="SemiBold"
+                                Text="Material Cost" />
+                            <TextBlock
+                                Margin="0,0,5,5"
+                                FontWeight="SemiBold"
+                                Text="Labor Cost" />
+                            <TextBlock
+                                Margin="0,0,5,5"
+                                FontWeight="SemiBold"
+                                Text="Labor %" />
+                            <TextBlock
+                                Margin="0,0,5,5"
+                                FontWeight="SemiBold"
+                                Text="Profit Margin %" />
+                            <TextBlock
+                                Margin="0,5,5,5"
+                                FontSize="15"
+                                FontWeight="Bold"
+                                Text="Total Cost" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock
+                                Margin="5,0,5,5"
+                                FontWeight="SemiBold"
+                                Text="{Binding MetalCost}" />
 
-                        <TextBlock
-                            Margin="5,0,5,5"
-                            FontWeight="SemiBold"
-                            Text="{Binding SystemCost}" />
+                            <TextBlock
+                                Margin="5,0,5,5"
+                                FontWeight="SemiBold"
+                                Text="{Binding SlopeCost}" />
 
-                        <TextBlock
-                            Margin="5,0,5,5"
-                            FontWeight="SemiBold"
-                            Text="{Binding MaterialCost}" />
+                            <TextBlock
+                                Margin="5,0,5,5"
+                                FontWeight="SemiBold"
+                                Text="{Binding SystemCost}" />
 
-                        <TextBlock
-                            Margin="5,0,5,5"
-                            FontWeight="SemiBold"
-                            Text="{Binding LaborCost}" />
+                            <TextBlock
+                                Margin="5,0,5,5"
+                                FontWeight="SemiBold"
+                                Text="{Binding MaterialCost}" />
 
-                        <TextBlock
-                            Margin="5,0,5,5"
-                            FontWeight="SemiBold"
-                            Text="{Binding LaborPercentage}" />
-                        <TextBlock
-                            Margin="5,0,5,5"
-                            FontWeight="SemiBold"
-                            Text="{Binding TotalProfitMarginPercentage}" />
-                        <TextBlock
-                            Margin="5,5,5,5"
-                            Background="{StaticResource SecondaryHueMidBrush}"
-                            FontSize="15"
-                            FontWeight="Bold"
-                            Text="{Binding TotalCost}" />
-                    </StackPanel>
+                            <TextBlock
+                                Margin="5,0,5,5"
+                                FontWeight="SemiBold"
+                                Text="{Binding LaborCost}" />
 
-                </Grid>
-                <!--</GroupBox>-->
-            </materialDesign:Card>
-        </materialDesign:Card>
+                            <TextBlock
+                                Margin="5,0,5,5"
+                                FontWeight="SemiBold"
+                                Text="{Binding LaborPercentage}" />
+                            <TextBlock
+                                Margin="5,0,5,5"
+                                FontWeight="SemiBold"
+                                Text="{Binding TotalProfitMarginPercentage}" />
+                            <TextBlock
+                                Margin="5,5,5,5"
+                                Background="{StaticResource SecondaryHueMidBrush}"
+                                FontSize="15"
+                                FontWeight="Bold"
+                                Text="{Binding TotalCost}" />
+                        </StackPanel>
+
+                    </Grid>
+                    <!--</GroupBox>-->
+                </materialDesign:Card>
+            </StackPanel>
+
+        </StackPanel>
 
     </Grid>
 </UserControl>

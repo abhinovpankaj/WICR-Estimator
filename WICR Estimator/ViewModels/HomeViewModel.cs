@@ -38,10 +38,13 @@ namespace WICR_Estimator.ViewModels
         
         //public static event EventHandler OnLoggedAsAdmin;
         public static event EventHandler<ProjectLoadEventArgs> OnProjectSelectionChange;
+        public static event EventHandler<int> OverallProjectDiscountChange;
         public static string filePath;
         public static bool isEstimateLoaded;
         //private static NotifyIcon statusNotifier;
         public IList<string> ActiveUsers { get; set; }
+        public bool IsAdminLoggedin { get; set; }
+        
         public HomeViewModel()
         {
             FillProjects();
@@ -224,10 +227,8 @@ namespace WICR_Estimator.ViewModels
         private async void FetchUsers()
         {
             var users = await HTTPHelper.GetAllUsers();
-            ActiveUsers= users.ToList().Select(c => c.User.Username).ToList();
-            
-            OnPropertyChanged("ActiveUsers");
-            
+            ActiveUsers= users.ToList().Select(c => c.User.Username).ToList();            
+            OnPropertyChanged("ActiveUsers");            
         }
 
         private void LoginPage_OnLoggedIn(object sender, EventArgs e)
@@ -235,6 +236,8 @@ namespace WICR_Estimator.ViewModels
             var user = (UserDB)sender;
             
             PreparedBy = user.Username;
+            IsAdminLoggedin = user.IsAdmin;
+            OnPropertyChanged("IsAdminLoggedin");
             OnPropertyChanged("PreparedBy");
             
         }
@@ -460,7 +463,21 @@ namespace WICR_Estimator.ViewModels
         }
         
         public bool CanApplyLatestPrice { get; set; }
-
+        private int markupPercentage;
+        public int MarkupPercentage
+        {
+            get { return markupPercentage; }
+            set
+            {
+                //if (value!=markupPercentage)
+                //{
+                    markupPercentage = value;
+                    OnPropertyChanged("MarkupPercentage");
+                    OverallProjectDiscountChange?.Invoke(this, markupPercentage);
+                    UpdateProjectTotals();
+                //}
+            }
+        }
         private string jobname;
         public string JobName
         {
@@ -679,7 +696,10 @@ namespace WICR_Estimator.ViewModels
                 foreach (Project item in est)
                 {
                     string ver = item.ProductVersion;
+                    OverallProjectDiscountChange += (s, e) => item.MaterialViewModel.HomeViewModel_OverallProjectDiscountChange(s, MarkupPercentage);
+                    
                     bool adminLabor = item.MaterialViewModel.ZAddLaborMinCharge;
+                    
                     if (item.GrpName == "Copied")
                     {
                         Projects.Add(item);
@@ -872,6 +892,7 @@ namespace WICR_Estimator.ViewModels
                     item.RegisterForUndoRedo(item);
                     item.MaterialViewModel.ZAddLaborMinCharge = adminLabor;
                     item.MaterialViewModel.CalculateCost(null);
+                    MarkupPercentage = item.OverallDiscount;
                     item.ProjectJobSetUp.TotalSalesCostTemp = item.MaterialViewModel.TotalSale;
                     item.ProjectJobSetUp.ProfitPercentage = item.MaterialViewModel.ProfitMarginPercentage;
                 }
@@ -938,6 +959,8 @@ namespace WICR_Estimator.ViewModels
                 foreach (Project item in est)
                 {
                     string ver = item.ProductVersion;
+                    OverallProjectDiscountChange += (s, e) => item.MaterialViewModel.HomeViewModel_OverallProjectDiscountChange(s, MarkupPercentage);
+                    
                     bool adminLabor = item.MaterialViewModel.ZAddLaborMinCharge;
                     if (item.GrpName=="Copied")
                     {
@@ -1145,6 +1168,7 @@ namespace WICR_Estimator.ViewModels
                     item.RegisterForUndoRedo(item);
                     item.MaterialViewModel.ZAddLaborMinCharge = adminLabor;
                     item.MaterialViewModel.CalculateCost(null);
+                    MarkupPercentage = item.OverallDiscount;
                     item.ProjectJobSetUp.TotalSalesCostTemp = item.MaterialViewModel.TotalSale;
                     item.ProjectJobSetUp.ProfitPercentage = item.MaterialViewModel.ProfitMarginPercentage;
                 }
@@ -2713,11 +2737,11 @@ namespace WICR_Estimator.ViewModels
             double tabsLaborTotal = 0;
             ProjectTotals.Name = "Totals";
             ProjectTotals.LaborCost = Math.Round(SelectedProjects.Sum(x => x.LaborCost), 2);
-            ProjectTotals.SlopeCost = Math.Round(SelectedProjects.Sum(x => x.SlopeCost), 2);
-            ProjectTotals.MetalCost = Math.Round(SelectedProjects.Sum(x => x.MetalCost), 2);
+            ProjectTotals.SlopeCost = Math.Round(SelectedProjects.Sum(x => x.SlopeCost), 2) ;
+            ProjectTotals.MetalCost = Math.Round(SelectedProjects.Sum(x => x.MetalCost), 2) ;
             ProjectTotals.SystemCost = Math.Round(SelectedProjects.Sum(x => x.SystemNOther), 2);
-            ProjectTotals.MaterialCost = Math.Round(SelectedProjects.Sum(x => x.MaterialCost), 2);
-            ProjectTotals.TotalCost = Math.Round(SelectedProjects.Sum(x => x.TotalCost), 2);
+            ProjectTotals.MaterialCost = Math.Round(SelectedProjects.Sum(x => x.MaterialCost), 2) ;
+            ProjectTotals.TotalCost = Math.Round(SelectedProjects.Sum(x => x.TotalCost), 2) ;
             ProjectTotals.TotalProfitMarginPercentage = Math.Round(SelectedProjects.Sum(x => x.MaterialViewModel.TotalProfitMarginValue)/ SelectedProjects.Sum(x => x.MaterialViewModel.TotalSale)*100, 2).ToString() + " %";
             foreach (Project item in SelectedProjects)
             {

@@ -181,7 +181,7 @@ namespace WICR_Estimator.Models
         public int ProjectID { get; set; }
         public int EstimateID { get; set; }
         public string CreationDetails { get; set; }
-
+        public int OverallDiscount { get; set; }
         private int activeTabIndex;
         public int ActiveTabIndex
         {
