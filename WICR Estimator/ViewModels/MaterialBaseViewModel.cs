@@ -4389,7 +4389,8 @@ namespace WICR_Estimator.ViewModels
                 SystemCost = totalCostSy - totalJobCostSy,
                 HideCalFactor = System.Windows.Visibility.Hidden
             });
-            double totalProfitMarginValue = totalCostM - totalJobCostM + totalCostS - totalJobCostS + totalCostSy - totalJobCostSy+ totalCostM * facValue+ totalCostSy * facValue+totalCostS * facValue;
+            double totalProfitMarginValue = totalCostM - totalJobCostM + totalCostS - totalJobCostS + totalCostSy - totalJobCostSy+ totalCostM * facValue+ totalCostSy * facValue+totalCostS * facValue
+                - (totalCostM  *overallDisc / 100) - (totalCostSy * overallDisc / 100) - (totalCostS  *overallDisc / 100);
             TotalMetalPrice = finalMCost; //*(1+markUpPerc/100);
             TotalSlopingPrice = finalSCost; //* (1 + markUpPerc / 100);
             TotalSystemPrice = finalSyCost; //* (1 + mar2kUpPerc / 100);

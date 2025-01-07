@@ -493,7 +493,7 @@
             materialDesign:ShadowAssist.ShadowDepth="Depth1"
             ToolTip="Project Totals">
             <StackPanel>
-                <materialDesign:Card                    
+                <materialDesign:Card
                     Margin="0,0,0,10"
                     Padding="10"
                     materialDesign:ShadowAssist.ShadowDepth="Depth1"
@@ -520,8 +520,8 @@
                                 VerticalAlignment="Center"
                                 IsSnapToTickEnabled="True"
                                 LargeChange="5"
-                                Maximum="100"
-                                Minimum="{Binding MinMarkUp}"
+                                Maximum="{Binding MaxMarkUp}"
+                                Minimum="0"
                                 SmallChange="0.5"
                                 Style="{StaticResource MaterialDesignDiscreteSlider}"
                                 TickFrequency="1"
@@ -529,6 +529,46 @@
                                 Value="{Binding MarkupPercentage}" />
                         </StackPanel>
 
+                    </StackPanel>
+                </materialDesign:Card>
+                <CheckBox
+                    x:Name="cbpasswordSection"
+                    Margin="10,5"
+                    Content="Enter more than 35%"
+                    Foreground="#FF2A6DCD"
+                    IsChecked="{Binding AllowMoreMarkUp}" />
+                <materialDesign:Card
+                    Margin="10,5"
+                    Padding="10"
+                    materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                    UniformCornerRadius="5"
+                    Visibility="{Binding HidePasswordSection}">
+
+                    <StackPanel>
+                        <TextBlock
+                            Margin="10,0,0,0"
+                            Foreground="Red"
+                            Text="{Binding LoginMessage}" />
+                        <StackPanel>
+                            <TextBlock
+                                Margin="10,0,0,0"
+                                FontWeight="SemiBold"
+                                Foreground="#FF2A6DCD"
+                                Text="Enter Password" />
+                            <PasswordBox
+                                x:Name="passwordbox"
+                                Width="140"
+                                Margin="10"
+                                HorizontalAlignment="Left" />
+                            <Button
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Left"
+                                Command="{Binding EnableMoreMarkupCommand}"
+                                CommandParameter="{Binding ElementName=passwordbox}"
+                                Content="OK" />
+
+
+                        </StackPanel>
                     </StackPanel>
                 </materialDesign:Card>
                 <materialDesign:Card

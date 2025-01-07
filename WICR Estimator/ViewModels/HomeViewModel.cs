@@ -50,12 +50,14 @@ namespace WICR_Estimator.ViewModels
             FillProjects();
             FetchUsers();
             Project.OnSelectedProjectChange += Project_OnSelectedProjectChange;
-            
+            AllowMoreMarkUp = false;
+            MaxMarkUp = 35;
+            HidePasswordSection = System.Windows.Visibility.Collapsed;
             SaveEstimate = new DelegateCommand(SaveProjectEstimate, canSaveEstimate);
             LoadEstimate = new DelegateCommand(LoadProjectEstimate, canLoadEstimate);
             ReplicateProject = new DelegateCommand(Replicate, canReplicate);
             ReplicateIndependentProject = new DelegateCommand(ReplicateIndependent, canReplicate);
-            
+            EnableMoreMarkupCommand = new DelegateCommand(CanAddMoreMarkup, canAdd);
             CreateSummary = new DelegateCommand(GenerateSummary, canCreateSummary);
             CreateSummaryShort = new DelegateCommand(GenerateHighLevelSummary, canCreateHighLevelSummary);
             //RefreshGoogleData = new DelegateCommand(DeleteGoogleData, canDelete);
@@ -66,7 +68,33 @@ namespace WICR_Estimator.ViewModels
             CheckPriceUpdate();
 
         }
+        public bool canAdd(object obj)
+        {
+            return true;
+        }
+        public void CanAddMoreMarkup(object obj)
+        {
+            var passwordBox = obj as PasswordBox;
+            var password = passwordBox.Password;
+            if (password == "737373")
+            {
+                MaxMarkUp = 100;
+                passwordBox.Password = "";
+                OnPropertyChanged("MaxMarkUp");
+                LoginMessage = "You can add discount more than 35%";
+                HidePasswordSection = System.Windows.Visibility.Hidden;
+                OnPropertyChanged("HidePasswordSection");
+                
+            }
+            else
+            {
+                passwordBox.Password = "";
+                LoginMessage = "Incorrect Password.";
 
+            }
+            OnPropertyChanged("LoginMessage");
+            
+        }
         private bool canCreateHighLevelSummary(object obj)
         {
             if (SelectedProjects.Count > 0)
@@ -471,11 +499,59 @@ namespace WICR_Estimator.ViewModels
             {
                 //if (value!=markupPercentage)
                 //{
-                    markupPercentage = value;
+                if (allowMoreMarkup)
+                {
+                    if (value >35 )
+                    {
+                        MaxMarkUp = 100;
+                        OnPropertyChanged("MinMarkup");
+                    }
+                }
+                markupPercentage = value;
                     OnPropertyChanged("MarkupPercentage");
                     OverallProjectDiscountChange?.Invoke(this, markupPercentage);
                     UpdateProjectTotals();
                 //}
+            }
+        }
+        private bool allowMoreMarkup;
+        public bool AllowMoreMarkUp
+        {
+            get { return allowMoreMarkup; }
+            set
+            {
+                allowMoreMarkup = value;
+                if (!value)
+                {
+                    MaxMarkUp = 35;
+                    LoginMessage = "";
+                    OnPropertyChanged("MaxMarkUp");
+                    OnPropertyChanged("LoginMessage");
+                    HidePasswordSection = System.Windows.Visibility.Collapsed;
+
+                }
+                else
+                    HidePasswordSection = System.Windows.Visibility.Visible;
+                OnPropertyChanged("HidePasswordSection");
+            }
+        }
+        public System.Windows.Visibility HidePasswordSection { get; set; }
+        [IgnoreDataMember]
+        public double MaxMarkUp { get; set; }
+
+        private DelegateCommand enableMMCommand;
+
+        [IgnoreDataMember]
+        public DelegateCommand EnableMoreMarkupCommand
+        {
+            get { return enableMMCommand; }
+            set
+            {
+                if (value != enableMMCommand)
+                {
+                    enableMMCommand = value;
+                    OnPropertyChanged("EnableMoreMarkupCommand");
+                }
             }
         }
         private string jobname;
