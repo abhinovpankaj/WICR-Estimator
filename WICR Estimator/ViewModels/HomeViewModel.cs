@@ -673,9 +673,9 @@ namespace WICR_Estimator.ViewModels
 
             try
             {
-                if (System.IO.Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR1"))
+                if (System.IO.Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\WICR1"))
                 {
-                    Directory.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WICR1", true);
+                    Directory.Delete(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\WICR1", true);
                     Thread.Sleep(2000);
                 }
 
@@ -2811,27 +2811,34 @@ namespace WICR_Estimator.ViewModels
         public void UpdateProjectTotals()
         {
             double tabsLaborTotal = 0;
-            ProjectTotals.Name = "Totals";
-            ProjectTotals.LaborCost = Math.Round(SelectedProjects.Sum(x => x.LaborCost), 2);
-            ProjectTotals.SlopeCost = Math.Round(SelectedProjects.Sum(x => x.SlopeCost), 2) ;
-            ProjectTotals.MetalCost = Math.Round(SelectedProjects.Sum(x => x.MetalCost), 2) ;
-            ProjectTotals.SystemCost = Math.Round(SelectedProjects.Sum(x => x.SystemNOther), 2);
-            ProjectTotals.MaterialCost = Math.Round(SelectedProjects.Sum(x => x.MaterialCost), 2) ;
-            ProjectTotals.TotalCost = Math.Round(SelectedProjects.Sum(x => x.TotalCost), 2) ;
-            ProjectTotals.TotalProfitMarginPercentage = Math.Round(SelectedProjects.Sum(x => x.MaterialViewModel.TotalProfitMarginValue)/ SelectedProjects.Sum(x => x.MaterialViewModel.TotalSale)*100, 2).ToString() + " %";
-            foreach (Project item in SelectedProjects)
+            try
             {
-                if (item.MaterialViewModel != null)
+                ProjectTotals.Name = "Totals";
+                ProjectTotals.LaborCost = Math.Round(SelectedProjects.Sum(x => x.LaborCost), 2);
+                ProjectTotals.SlopeCost = Math.Round(SelectedProjects.Sum(x => x.SlopeCost), 2);
+                ProjectTotals.MetalCost = Math.Round(SelectedProjects.Sum(x => x.MetalCost), 2);
+                ProjectTotals.SystemCost = Math.Round(SelectedProjects.Sum(x => x.SystemNOther), 2);
+                ProjectTotals.MaterialCost = Math.Round(SelectedProjects.Sum(x => x.MaterialCost), 2);
+                ProjectTotals.TotalCost = Math.Round(SelectedProjects.Sum(x => x.TotalCost), 2);
+                ProjectTotals.TotalProfitMarginPercentage = Math.Round(SelectedProjects.Sum(x => x.MaterialViewModel.TotalProfitMarginValue) / SelectedProjects.Sum(x => x.MaterialViewModel.TotalSale) * 100, 2).ToString() + " %";
+                foreach (Project item in SelectedProjects)
                 {
-                    tabsLaborTotal = tabsLaborTotal + item.MaterialViewModel.AllTabsLaborTotal;
+                    if (item.MaterialViewModel != null)
+                    {
+                        tabsLaborTotal = tabsLaborTotal + item.MaterialViewModel.AllTabsLaborTotal;
+                    }
                 }
+                if (ProjectTotals.TotalCost != 0)
+                {
+                    ProjectTotals.LaborPercentage = Math.Round(tabsLaborTotal / ProjectTotals.TotalCost * 100, 2).ToString() + "%";
+                }
+                else
+                    ProjectTotals.LaborPercentage = "0%";
             }
-            if (ProjectTotals.TotalCost != 0)
+            catch (Exception)
             {
-                ProjectTotals.LaborPercentage = Math.Round(tabsLaborTotal / ProjectTotals.TotalCost * 100, 2).ToString() + "%";
             }
-            else
-                ProjectTotals.LaborPercentage = "0%";
+            
         }
         #endregion
 
